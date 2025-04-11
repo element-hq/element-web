@@ -22,11 +22,13 @@ import { MediaPreviewValue } from "../../../@types/media_preview";
 import { useRoomAvatar } from "../../../hooks/room/useRoomAvatar";
 import { useSettingValue } from "../../../hooks/useSettings";
 
-interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
+    // Optional here.
+    size?: ComponentProps<typeof BaseAvatar>["size"];
     oobData?: IOOBData & {
         roomId?: string;
     };
@@ -47,14 +49,7 @@ export function idNameForRoom(room: Room): string {
     return room.roomId;
 }
 
-export const RoomAvatar: React.FC<IProps> = ({
-    room,
-    viewAvatarOnClick,
-    onClick,
-    className,
-    oobData,
-    ...otherProps
-}) => {
+const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, className, oobData, ...otherProps }) => {
     const size = otherProps.size ?? "36px";
 
     const roomName = room?.name ?? oobData?.name ?? "?";

@@ -22,7 +22,7 @@ import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
 describe("RoomAvatar", () => {
     let client: MatrixClient;
-    let showAvatarsSetting: MediaPreviewValue = MediaPreviewValue.On;
+    let showAvatarsSetting: MediaPreviewValue.On | MediaPreviewValue.Off = MediaPreviewValue.On;
 
     filterConsole(
         // unrelated for this test
