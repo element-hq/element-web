@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017, 2018 New Vector Ltd
@@ -22,7 +22,7 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { filterImg, sanitizeHtmlParams, transformTags } from "./Linkify";
+import { sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
@@ -302,8 +302,15 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
     if (opts.forComposerQuote) {
         sanitizeParams = composerSanitizeHtmlParams;
     }
-    if (!opts.mediaIsVisible) {
-        sanitizeParams.exclusiveFilter = filterImg;
+
+    if (opts.mediaIsVisible === false && sanitizeParams.transformTags?.["img"]) {
+        // Prevent mutating the source of sanitizeParams.
+        sanitizeParams.transformTags = {
+            ...sanitizeParams.transformTags,
+            img: (tagName) => {
+                return { tagName, attribs: {} };
+            },
+        };
     }
 
     try {

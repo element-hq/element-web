@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement } from "react";
-import sanitizeHtml, { IFrame, type IOptions } from "sanitize-html";
+import sanitizeHtml, { type IOptions } from "sanitize-html";
 import { merge } from "lodash";
 import _Linkify from "linkify-react";
 
@@ -46,8 +46,6 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
-        // Filtering out images now happens as a exlusive filter so we can conditionally apply this
-        // based on settings.
         if (!src) {
             return { tagName, attribs: {} };
         }
@@ -76,7 +74,6 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-
         attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };
     },
@@ -196,7 +193,6 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
-
 /* Wrapper around linkify-react merging in our default linkify options */
 export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
     return (
@@ -226,8 +222,4 @@ export function linkifyString(str: string, options = linkifyMatrixOptions): stri
  */
 export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
-}
-
-export function filterImg(frame: IFrame): boolean {
-    return frame.tag === "img";
 }
