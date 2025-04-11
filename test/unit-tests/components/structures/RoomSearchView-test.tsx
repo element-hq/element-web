@@ -335,7 +335,7 @@ describe("<RoomSearchView/>", () => {
         try {
             // Wait for RoomSearchView to process the promise
             await deferred.promise;
-        } catch (e) {}
+        } catch (_) {}
 
         expect(onUpdate).toHaveBeenCalledWith(false, null, "Some error");
         expect(onUpdate).toHaveBeenCalledTimes(2);
