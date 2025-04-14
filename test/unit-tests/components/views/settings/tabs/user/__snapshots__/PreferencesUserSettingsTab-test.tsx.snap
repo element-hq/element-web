@@ -1187,7 +1187,9 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
+                  aria-label="Show media in timeline"
                   class="_field_19upo_26"
+                  id="mx_media_previews"
                   role="radiogroup"
                 >
                   <label
@@ -1213,6 +1215,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
+                          id="mx_media_previews_off"
                           type="radio"
                         />
                         <div
@@ -1225,7 +1228,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:rb:"
+                        for="mx_media_previews_off"
                       >
                         Always hide
                       </label>
@@ -1242,6 +1245,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
+                          id="mx_media_previews_private"
                           type="radio"
                         />
                         <div
@@ -1254,7 +1258,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:rc:"
+                        for="mx_media_previews_private"
                       >
                         In private rooms
                       </label>
@@ -1272,6 +1276,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         <input
                           checked=""
                           class="_input_1e0uz_18"
+                          id="mx_media_previews_on"
                           type="radio"
                         />
                         <div
@@ -1284,7 +1289,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:rd:"
+                        for="mx_media_previews_on"
                       >
                         Always show
                       </label>

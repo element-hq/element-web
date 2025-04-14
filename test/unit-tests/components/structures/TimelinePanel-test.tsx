@@ -313,8 +313,7 @@ describe("TimelinePanel", () => {
             describe("and sending receipts is disabled", () => {
                 beforeEach(async () => {
                     // Ensure this setting is supported, otherwise it will use the default value.
-                    client.isVersionSupported.mockResolvedValue(true);
-                    client.doesServerSupportUnstableFeature.mockResolvedValue(true);
+                    client.isVersionSupported.mockImplementation(async (v) => v === "v1.4");
                     MatrixClientBackedController.matrixClient = client;
                     SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 });

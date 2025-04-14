@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
 import parse from "html-react-parser";
 
@@ -15,16 +14,13 @@ import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/Htm
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils";
 import { SettingLevel } from "../../src/settings/SettingLevel";
-
-jest.mock("../../src/settings/SettingsStore");
-
-const enableHtmlTopicFeature = () => {
-    mocked(SettingsStore).getValue.mockImplementation((arg): any => {
-        return arg === "feature_html_topic";
-    });
-};
+import SdkConfig from "../../src/SdkConfig";
 
 describe("topicToHtml", () => {
+    afterEach(() => {
+        SettingsStore.reset();
+    });
+
     function getContent() {
         return screen.getByRole("contentinfo").children[0].innerHTML;
     }
@@ -40,19 +36,19 @@ describe("topicToHtml", () => {
     });
 
     it("converts literal HTML topic to HTML", async () => {
-        enableHtmlTopicFeature();
+        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("<b>pizza</b>", undefined, null, false)}</div>);
         expect(getContent()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
     });
 
     it("converts true HTML topic to HTML", async () => {
-        enableHtmlTopicFeature();
+        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
         expect(getContent()).toEqual("<b>pizza</b>");
     });
 
     it("converts true HTML topic with emoji to HTML", async () => {
-        enableHtmlTopicFeature();
+        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
         expect(getContent()).toEqual('<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });
@@ -109,11 +105,12 @@ describe("bodyToHtml", () => {
 
     describe("feature_latex_maths", () => {
         beforeEach(() => {
-            SettingsStore.setValue("feature_latex_maths", null, SettingLevel.ACCOUNT, true);
+            SettingsStore.setValue("feature_latex_maths", null, SettingLevel.DEVICE, true);
         });
 
         afterEach(() => {
             SettingsStore.reset();
+            SdkConfig.reset();
         });
 
         it("should render inline katex", () => {

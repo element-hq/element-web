@@ -360,7 +360,7 @@ describe("RoomHeader", () => {
             SdkConfig.put({
                 features: {
                     feature_group_calls: true,
-                }
+                },
             });
         });
 
@@ -422,7 +422,7 @@ describe("RoomHeader", () => {
                 },
                 features: {
                     feature_group_calls: false,
-                }
+                },
             });
             // allow calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
@@ -475,9 +475,9 @@ describe("RoomHeader", () => {
             jest.spyOn(room, "canInvite").mockReturnValue(false);
             SdkConfig.add({
                 element_call: {
-                    guest_spa_url: "https://guest_spa_url.com"
-                }
-            })
+                    guest_spa_url: "https://guest_spa_url.com",
+                },
+            });
             const { container: containerNoInviteNotPublicCanUpgradeAccess } = render(
                 <RoomHeader room={room} />,
                 getWrapper(),
@@ -696,7 +696,7 @@ describe("RoomHeader", () => {
 
         afterEach(() => {
             SdkConfig.reset();
-        })
+        });
 
         it.each([
             [ShieldUtils.E2EStatus.Verified, "Verified"],
@@ -712,8 +712,8 @@ describe("RoomHeader", () => {
         it("does not show the face pile for DMs", () => {
             SdkConfig.put({
                 features: {
-                    feature_notifications: false
-                }
+                    feature_notifications: false,
+                },
             });
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 

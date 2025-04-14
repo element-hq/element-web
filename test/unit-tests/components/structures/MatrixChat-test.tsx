@@ -486,7 +486,7 @@ describe("<MatrixChat />", () => {
 
             afterEach(() => {
                 SettingsStore.reset();
-            })
+            });
 
             it("should persist login credentials", async () => {
                 getComponent({ realQueryParams });
