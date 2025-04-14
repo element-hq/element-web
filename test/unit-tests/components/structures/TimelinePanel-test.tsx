@@ -51,6 +51,7 @@ import ScrollPanel from "../../../../src/components/structures/ScrollPanel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -311,9 +312,11 @@ describe("TimelinePanel", () => {
 
             describe("and sending receipts is disabled", () => {
                 beforeEach(async () => {
+                    // Ensure this setting is supported, otherwise it will use the default value.
                     client.isVersionSupported.mockResolvedValue(true);
                     client.doesServerSupportUnstableFeature.mockResolvedValue(true);
-                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
+                    MatrixClientBackedController.matrixClient = client;
+                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 });
 
                 afterEach(() => {
