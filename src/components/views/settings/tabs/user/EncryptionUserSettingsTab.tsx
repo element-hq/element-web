@@ -20,7 +20,8 @@ import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDial
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
-import { ResetIdentityPanel, type ResetIdentityPanelVariant } from "../../encryption/ResetIdentityPanel";
+import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
+import { type ResetIdentityBodyVariant } from "../../encryption/ResetIdentityBody";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
@@ -147,7 +148,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
  * Given what state we want the tab to be in, what variant of the
  * ResetIdentityPanel do we need?
  */
-function findResetVariant(state: State): ResetIdentityPanelVariant {
+function findResetVariant(state: State): ResetIdentityBodyVariant {
     switch (state) {
         case "reset_identity_compromised":
             return "compromised";
