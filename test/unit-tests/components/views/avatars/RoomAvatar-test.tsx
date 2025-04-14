@@ -17,12 +17,12 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import * as AvatarModule from "../../../../../src/Avatar";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("RoomAvatar", () => {
     let client: MatrixClient;
-    let showAvatarsSetting: MediaPreviewValue.On | MediaPreviewValue.Off = MediaPreviewValue.On;
 
     filterConsole(
         // unrelated for this test
@@ -35,16 +35,15 @@ describe("RoomAvatar", () => {
         jest.spyOn(dmRoomMap, "getUserIdForRoomId");
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
         jest.spyOn(AvatarModule, "defaultAvatarUrlForString");
-        const origFn = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
-            if (setting === "mediaPreviewConfig") {
-                return { invite_avatars: showAvatarsSetting, media_previews: MediaPreviewValue.Off };
-            }
-            return origFn(setting, ...args);
-        });
     });
 
     afterAll(() => {
+        SettingsStore.setValue(
+            "mediaPreviewConfig",
+            null,
+            SettingLevel.ACCOUNT,
+            SettingsStore.getDefaultValue("mediaPreviewConfig"),
+        );
         jest.restoreAllMocks();
     });
 
@@ -82,7 +81,9 @@ describe("RoomAvatar", () => {
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
     });
     it("should not render an invite avatar if the user has disabled it", () => {
-        showAvatarsSetting = MediaPreviewValue.Off;
+        SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            invite_avatars: MediaPreviewValue.Off,
+        });
         const room = new Room("!room:example.com", client, client.getSafeUserId());
         room.name = "test room";
         room.updateMyMembership("invite");

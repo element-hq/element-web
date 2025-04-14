@@ -14,6 +14,7 @@ import parse from "html-react-parser";
 import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils";
+import { SettingLevel } from "../../src/settings/SettingLevel";
 
 jest.mock("../../src/settings/SettingsStore");
 
@@ -108,7 +109,11 @@ describe("bodyToHtml", () => {
 
     describe("feature_latex_maths", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_latex_maths");
+            SettingsStore.setValue("feature_latex_maths", null, SettingLevel.ACCOUNT, true);
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
         });
 
         it("should render inline katex", () => {

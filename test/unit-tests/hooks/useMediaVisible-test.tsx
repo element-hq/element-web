@@ -9,10 +9,10 @@ import { act, renderHook, waitFor } from "jest-matrix-react";
 import { JoinRule, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { useMediaVisible } from "../../../src/hooks/useMediaVisible";
-import SettingsStore from "../../../src/settings/SettingsStore";
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../test-utils";
 import { type MediaPreviewConfig, MediaPreviewValue } from "../../../src/@types/media_preview";
 import MediaPreviewConfigController from "../../../src/settings/controllers/MediaPreviewConfigController";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 const EVENT_ID = "$fibble:example.org";
 const ROOM_ID = "!foobar:example.org";

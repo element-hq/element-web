@@ -33,6 +33,7 @@ import { getMockClientWithEventEmitter } from "../../test-utils/client";
 import { mkMessage, stubClient } from "../../test-utils/test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 jest.mock("../../../src/settings/SettingsStore");
 
@@ -116,7 +117,11 @@ describe("notifications", () => {
         const ROOM_ID = "123";
         const USER_ID = "@bob:example.org";
         let message: MatrixEvent;
-        let sendReceiptsSetting = true;
+        const sendReceiptsSetting = true;
+
+        afterEach(() => {
+            SettingsStore.reset();
+        });
 
         beforeEach(() => {
             stubClient();
@@ -131,9 +136,7 @@ describe("notifications", () => {
             room.addLiveEvents([message], { addToState: true });
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                return name === "sendReadReceipts" && sendReceiptsSetting;
-            });
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, sendReceiptsSetting);
         });
 
         it("sends a request even if everything has been read", async () => {
@@ -152,11 +155,8 @@ describe("notifications", () => {
         });
 
         describe("when sendReadReceipts setting is disabled", () => {
-            beforeEach(() => {
-                sendReceiptsSetting = false;
-            });
-
             it("should send a private read receipt", async () => {
+                SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, sendReceiptsSetting);
                 await clearRoomNotification(room, client);
                 expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.ReadPrivate, true);
             });
@@ -177,9 +177,11 @@ describe("notifications", () => {
             room = new Room(ROOM_ID, client, USER_ID);
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                return name === "sendReadReceipts";
-            });
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
         });
 
         it("does not send any requests if everything has been read", () => {
@@ -212,7 +214,7 @@ describe("notifications", () => {
             room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
-            jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
 
             await clearAllNotifications(client);
 

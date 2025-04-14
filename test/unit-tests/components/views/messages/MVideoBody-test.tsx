@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { act } from "react";
+import React from "react";
 import { EventType, getHttpUriForMxc, type IContent, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, type RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
@@ -25,7 +25,6 @@ import {
 } from "../../../../test-utils";
 import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
 import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
@@ -70,6 +69,7 @@ describe("MVideoBody", () => {
         room_id: "!room:server",
         sender: userId,
         type: EventType.RoomMessage,
+        event_id: "$foo:bar",
         content: {
             body: "alt for a test video",
             info: {
@@ -114,14 +114,7 @@ describe("MVideoBody", () => {
         });
 
         afterEach(() => {
-            act(() => {
-                SettingsStore.setValue(
-                    "showMediaEventIds",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showMediaEventIds"),
-                );
-            });
+            SettingsStore.reset();
             jest.restoreAllMocks();
         });
 

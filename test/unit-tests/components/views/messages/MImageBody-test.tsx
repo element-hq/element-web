@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { act } from "react";
+import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
@@ -28,7 +28,6 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
 jest.mock("matrix-encrypt-attachment", () => ({
@@ -88,6 +87,7 @@ describe("<MImageBody/>", () => {
     });
 
     afterEach(() => {
+        SettingsStore.reset();
         mocked(encrypt.decryptAttachment).mockReset();
     });
 
@@ -145,17 +145,6 @@ describe("<MImageBody/>", () => {
                     return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off };
                 }
                 return origFn(setting, ...args);
-            });
-        });
-
-        afterEach(() => {
-            act(() => {
-                SettingsStore.setValue(
-                    "showMediaEventIds",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showMediaEventIds"),
-                );
             });
         });
 

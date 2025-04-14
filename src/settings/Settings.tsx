@@ -430,7 +430,7 @@ export const SETTINGS: Settings = {
     },
     "mediaPreviewConfig": {
         controller: new MediaPreviewConfigController(),
-        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        supportedLevels: LEVELS_ROOM_SETTINGS,
         default: MediaPreviewConfigController.default,
     },
     "feature_report_to_moderators": {

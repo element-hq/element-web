@@ -50,6 +50,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import ScrollPanel from "../../../../src/components/structures/ScrollPanel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -312,16 +313,11 @@ describe("TimelinePanel", () => {
                 beforeEach(async () => {
                     client.isVersionSupported.mockResolvedValue(true);
                     client.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string): any => {
-                        if (setting === "sendReadReceipts") return false;
-
-                        return undefined;
-                    });
+                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
                 });
 
                 afterEach(() => {
-                    mocked(SettingsStore.getValue).mockReset();
+                    SettingsStore.reset();
                 });
 
                 it("should send a fully read marker and a private receipt", async () => {
