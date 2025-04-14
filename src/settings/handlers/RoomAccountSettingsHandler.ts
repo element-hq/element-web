@@ -111,7 +111,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         await deferred.promise;
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         switch (settingName) {
             // Special case URL previews
             case "urlPreviewsEnabled":
@@ -120,7 +120,9 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             // Special case allowed widgets
             case "allowedWidgets":
                 return this.setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, null, newValue);
-
+            case "mediaPreviewConfig":
+                // Handled in MediaPreviewConfigController.
+                return;
             default:
                 return this.setRoomAccountData(roomId, DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }

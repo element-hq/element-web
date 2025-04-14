@@ -18,8 +18,9 @@ import {
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import MatrixClientBackedSettingsHandler from "../../../../../../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 import type { MockedObject } from "jest-mock";
-import type { MatrixClient } from "matrix-js-sdk/src/client";
-import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewValue } from "../../../../../../../src/@types/media_preview";
+import { type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewConfig, MediaPreviewValue } from "../../../../../../../src/@types/media_preview";
+import MediaPreviewConfigController from "../../../../../../../src/settings/controllers/MediaPreviewConfigController";
 
 describe("MediaPreviewAccountSettings", () => {
     let client: MockedObject<MatrixClient>;
@@ -57,20 +58,40 @@ describe("MediaPreviewAccountSettings", () => {
             invite_avatars: MediaPreviewValue.Off,
             media_previews: MediaPreviewValue.On,
         });
+        // Ensure we don't double set the account data.
+        expect(client.setAccountData).toHaveBeenCalledTimes(1);
     });
 
     // Skip the default.
     it.each([
         ["Always hide", MediaPreviewValue.Off],
         ["In private rooms", MediaPreviewValue.Private],
-    ])("should be able to toggle media preview %s", async (key, value) => {
+        ["Always show", MediaPreviewValue.On],
+    ])("should be able to toggle media preview option %s", async (key, value) => {
+        if (value === MediaPreviewConfigController.default.media_previews) {
+            // This is the default, so switch away first.
+            client.getAccountData.mockImplementation((type) => {
+                if (type === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+                    return new MatrixEvent({
+                        content: {
+                            media_previews: MediaPreviewValue.Off
+                        } satisfies Partial<MediaPreviewConfig>
+                    });
+                }
+                return undefined;
+            })
+        }
         const { getByLabelText } = render(<MediaPreviewAccountSettings />);
-        // Defaults
+
         const element = getByLabelText(key);
         await userEvent.click(element);
         expect(client.setAccountData).toHaveBeenCalledWith(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, {
             invite_avatars: MediaPreviewValue.On,
             media_previews: value,
         });
+        // Ensure we don't double set the account data.
+        expect(client.setAccountData).toHaveBeenCalledTimes(1);
     });
+
+    
 });
