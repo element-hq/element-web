@@ -13,13 +13,13 @@ import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
 import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
-import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
+import { useDmMember } from "./WithPresenceIndicator";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
@@ -35,29 +35,23 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
     onClick?(): void;
 }
 
-export function idNameForRoom(room: Room): string {
-    const dmMapUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    // If the room is a DM, we use the other user's ID for the color hash
-    // in order to match the room avatar with their avatar
-    if (dmMapUserId) return dmMapUserId;
-
-    if (room instanceof LocalRoom && room.targets.length === 1) {
-        return room.targets[0].userId;
-    }
-
-    return room.roomId;
-}
-
 const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, size = "36px", ...otherProps }) => {
     const roomName = room?.name ?? oobData?.name ?? "?";
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
+    const dmMember = useDmMember(room);
     const roomIdName = useMemo(() => {
-        if (room) {
-            return idNameForRoom(room);
+        if (dmMember) {
+            // If the room is a DM, we use the other user's ID for the color hash
+            // in order to match the room avatar with their avatar
+            return dmMember.userId;
+        } else if (room instanceof LocalRoom && room.targets.length === 1) {
+            return room.targets[0].userId;
+        } else if (room) {
+            return room.roomId;
         } else {
             return oobData?.roomId;
         }
-    }, [oobData, room]);
+    }, [dmMember, oobData, room]);
 
     const showAvatarsOnInvites = useSettingValue("showAvatarsOnInvites", room?.roomId);
 
