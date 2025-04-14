@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useMemo, type ComponentProps } from "react";
-import { type Room, RoomType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomType, KnownMembership, EventType } from "matrix-js-sdk/src/matrix";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
@@ -18,8 +18,8 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
-import { useRoomAvatar } from "../../../hooks/room/useRoomAvatar";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { useRoomState } from "../../../hooks/useRoomState";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
@@ -52,7 +52,7 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
     const size = otherProps.size ?? "36px";
 
     const roomName = room?.name ?? oobData?.name ?? "?";
-    const roomAvatarMxc = useRoomAvatar(room);
+    const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
     const roomIdName = useMemo(() => {
         if (room) {
             return idNameForRoom(room);
@@ -64,7 +64,7 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
     const showAvatarsOnInvites = useSettingValue("showAvatarsOnInvites", room?.roomId);
 
     const onRoomAvatarClick = useCallback(() => {
-        const avatarUrl = Avatar.avatarUrlForRoom(room ?? null, undefined, undefined, undefined);
+        const avatarUrl = Avatar.avatarUrlForRoom(room ?? null);
         if (!avatarUrl) return;
         const params = {
             src: avatarUrl,
@@ -75,23 +75,27 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
     }, [room]);
 
     const urls = useMemo(() => {
-        // Apparently parseInt ignores suffixes.
-        const sizeInt = parseInt(size, 10);
         const myMembership = room?.getMyMembership();
         if (!showAvatarsOnInvites && (myMembership === KnownMembership.Invite || !myMembership)) {
             // The user has opted out of showing avatars, so return no urls here.
             return [];
         }
+
+        // parseInt ignores suffixes.
+        const sizeInt = parseInt(size, 10);
         let oobAvatar: string | null = null;
+
         if (oobData?.avatarUrl) {
             oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }
 
         return filterBoolean([
             oobAvatar, // highest priority
-            roomAvatarMxc && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
+            avatarEvent && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
         ]);
-    }, [showAvatarsOnInvites, room, size, roomAvatarMxc, oobData]);
+    }, [showAvatarsOnInvites, room, size, avatarEvent, oobData]);
+
+    console.log(size, urls);
 
     return (
         <BaseAvatar
