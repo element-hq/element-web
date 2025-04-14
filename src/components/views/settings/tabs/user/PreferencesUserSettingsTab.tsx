@@ -32,7 +32,7 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
-import { MediaPreviewAccountSettings } from "./MediaPreviewSetting.tsx";
+import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;

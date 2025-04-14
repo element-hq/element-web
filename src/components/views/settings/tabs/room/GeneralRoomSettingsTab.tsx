@@ -22,7 +22,7 @@ import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
-import { MediaPreviewAccountSettings } from "../user/MediaPreviewSetting";
+import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
 
 interface IProps {
     room: Room;
