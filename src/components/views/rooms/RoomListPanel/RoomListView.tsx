@@ -19,11 +19,18 @@ import Spinner from "../../elements/Spinner";
 export function RoomListView(): JSX.Element {
     const vm = useRoomListViewModel();
     const isRoomListEmpty = vm.rooms.length === 0;
-
+    let listBody;
+    if (vm.isLoadingRooms) {
+        listBody = <Spinner />;
+    } else if (isRoomListEmpty) {
+        listBody = <EmptyRoomList vm={vm} />;
+    } else {
+        listBody = <RoomList vm={vm} />;
+    }
     return (
         <>
             <RoomListPrimaryFilters vm={vm} />
-            {vm.isLoadingRooms ? <Spinner /> : isRoomListEmpty ? <EmptyRoomList vm={vm} /> : <RoomList vm={vm} />}
+            {listBody}
         </>
     );
 }
