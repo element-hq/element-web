@@ -48,9 +48,7 @@ export function idNameForRoom(room: Room): string {
     return room.roomId;
 }
 
-const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, ...otherProps }) => {
-    const size = otherProps.size ?? "36px";
-
+const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, size = "36px", ...otherProps }) => {
     const roomName = room?.name ?? oobData?.name ?? "?";
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
     const roomIdName = useMemo(() => {
@@ -94,8 +92,6 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
             avatarEvent && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
         ]);
     }, [showAvatarsOnInvites, room, size, avatarEvent, oobData]);
-
-    console.log(size, urls);
 
     return (
         <BaseAvatar
