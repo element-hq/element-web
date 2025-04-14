@@ -26,18 +26,14 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         invite_avatars: MediaPreviewValue.On,
     };
 
-    private static getValidSettingData(content: IContent): MediaPreviewConfig {
+    private static getValidSettingData(content: IContent): Partial<MediaPreviewConfig> {
         const mediaPreviews: MediaPreviewConfig["media_previews"] = content.media_previews;
         const inviteAvatars: MediaPreviewConfig["invite_avatars"] = content.invite_avatars;
         const validMediaPreviews = Object.values(MediaPreviewValue);
         const validInviteAvatars = [MediaPreviewValue.Off, MediaPreviewValue.On];
         return {
-            invite_avatars: validMediaPreviews.includes(inviteAvatars)
-                ? inviteAvatars
-                : MediaPreviewConfigController.default.invite_avatars,
-            media_previews: validInviteAvatars.includes(mediaPreviews)
-                ? mediaPreviews
-                : MediaPreviewConfigController.default.media_previews,
+            invite_avatars: validMediaPreviews.includes(inviteAvatars) ? inviteAvatars : undefined,
+            media_previews: validInviteAvatars.includes(mediaPreviews) ? mediaPreviews : undefined,
         };
     }
 
@@ -45,15 +41,36 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         super();
     }
 
-    private getValue = (roomId?: string): MediaPreviewConfig | null => {
+    private getValue = (roomId?: string): MediaPreviewConfig => {
         const source = roomId ? this.client?.getRoom(roomId) : this.client;
-        const value = source?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>();
+        const accountData =
+            source?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>() ?? {};
 
-        if (!value) {
-            return null;
-        } else {
-            return MediaPreviewConfigController.getValidSettingData(value);
+        const calculatedConfig = MediaPreviewConfigController.getValidSettingData(accountData);
+
+        // Save an account data fetch if we have all the values.
+        if (calculatedConfig.invite_avatars && calculatedConfig.media_previews) {
+            return calculatedConfig as MediaPreviewConfig;
         }
+
+        // We're missing some keys.
+        if (roomId) {
+            const globalConfig = this.getValue();
+            return {
+                invite_avatars:
+                    calculatedConfig.invite_avatars ??
+                    globalConfig.invite_avatars ??
+                    MediaPreviewConfigController.default.invite_avatars,
+                media_previews:
+                    calculatedConfig.media_previews ??
+                    globalConfig.media_previews ??
+                    MediaPreviewConfigController.default.media_previews,
+            };
+        }
+        return {
+            invite_avatars: calculatedConfig.invite_avatars ?? MediaPreviewConfigController.default.invite_avatars,
+            media_previews: calculatedConfig.media_previews ?? MediaPreviewConfigController.default.media_previews,
+        };
     };
 
     protected async initMatrixClient(): Promise<void> {
@@ -61,12 +78,7 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
     }
 
     public getValueOverride(_level: SettingLevel, roomId: string | null): MediaPreviewConfig {
-        const roomConfig = roomId && this.getValue(roomId);
-        if (roomConfig) {
-            return roomConfig;
-        }
-        // If no room config, or global settings request then return global.
-        return this.getValue() ?? MediaPreviewConfigController.default;
+        return this.getValue(roomId ?? undefined);
     }
 
     public get settingDisabled(): false {

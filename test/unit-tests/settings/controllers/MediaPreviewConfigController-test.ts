@@ -55,7 +55,7 @@ describe("MediaPreviewConfigController", () => {
                 new MatrixEvent({
                     type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                     content: {
-                        [key]: MediaPreviewValue.Private,
+                        [key]: MediaPreviewValue.Off,
                     },
                 }),
             ),
@@ -65,11 +65,11 @@ describe("MediaPreviewConfigController", () => {
         });
 
         const globalValue = controller.getValueOverride(SettingLevel.ACCOUNT, null);
-        expect(globalValue[key]).toEqual(MediaPreviewValue.Private);
+        expect(globalValue[key]).toEqual(MediaPreviewValue.Off);
 
         // Should follow the global value.
         const roomValue = controller.getValueOverride(SettingLevel.ROOM_ACCOUNT, ROOM_ID);
-        expect(roomValue[key]).toEqual(MediaPreviewValue.Private);
+        expect(roomValue[key]).toEqual(MediaPreviewValue.Off);
     });
 
     it.each([["media_previews"], ["invite_avatars"]])("gets the correct value for %s at the room level", (key) => {
@@ -83,7 +83,7 @@ describe("MediaPreviewConfigController", () => {
                     new MatrixEvent({
                         type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                         content: {
-                            [key]: MediaPreviewValue.Private,
+                            [key]: MediaPreviewValue.Off,
                         },
                     }),
                 ),
@@ -95,7 +95,7 @@ describe("MediaPreviewConfigController", () => {
 
         // Should follow the global value.
         const roomValue = controller.getValueOverride(SettingLevel.ROOM_ACCOUNT, ROOM_ID);
-        expect(roomValue[key]).toEqual(MediaPreviewValue.Private);
+        expect(roomValue[key]).toEqual(MediaPreviewValue.Off);
     });
 
     it.each([["media_previews"], ["invite_avatars"]])(
@@ -137,7 +137,7 @@ describe("MediaPreviewConfigController", () => {
                     new MatrixEvent({
                         type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                         content: {
-                            [key]: MediaPreviewValue.Private,
+                            [key]: MediaPreviewValue.Off,
                         },
                     }),
                 ),
@@ -154,11 +154,11 @@ describe("MediaPreviewConfigController", () => {
             });
 
             const globalValue = controller.getValueOverride(SettingLevel.ACCOUNT, null);
-            expect(globalValue[key]).toEqual(MediaPreviewValue.Private);
+            expect(globalValue[key]).toEqual(MediaPreviewValue.Off);
 
             // Should follow the global value.
             const roomValue = controller.getValueOverride(SettingLevel.ROOM_ACCOUNT, ROOM_ID);
-            expect(roomValue[key]).toEqual(MediaPreviewValue.On);
+            expect(roomValue[key]).toEqual(MediaPreviewValue.Off);
         },
     );
 });
