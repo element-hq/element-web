@@ -413,6 +413,7 @@
         "attachment": "附件",
         "authentication": "授權",
         "avatar": "大頭照",
+        "beta": "試用版",
         "camera": "相機",
         "cameras": "相機",
         "capabilities": "功能",
@@ -1049,8 +1050,10 @@
         "format": "格式",
         "from_the_beginning": "從一開始",
         "generating_zip": "產生 ZIP",
+        "html": "HTML",
         "html_title": "已匯出的資料",
         "include_attachments": "包含附件",
+        "json": "JSON",
         "media_omitted": "媒體省略",
         "media_omitted_file_size": "媒體省略 - 超過檔案大小限制",
         "messages": "訊息",
@@ -1215,6 +1218,7 @@
     },
     "keyboard": {
         "activate_button": "啟動已選取按鈕",
+        "alt": "Alt",
         "autocomplete_cancel": "取消自動完成",
         "autocomplete_force": "強制完成",
         "autocomplete_navigate_next": "下一個自動完成建議",
@@ -1240,6 +1244,8 @@
         "composer_undo": "復原編輯",
         "dismiss_read_marker_and_jump_bottom": "清除讀取標記並跳至底部",
         "end": "",
+        "enter": "你好",
+        "escape": "Esc",
         "go_home_view": "前往主畫面",
         "home": "首頁",
         "jump_first_message": "跳至第一則訊息",
@@ -2365,6 +2371,7 @@
             "voip": "音訊與視訊通話"
         },
         "preferences": {
+            "Electron.enableHardwareAcceleration": "啟用硬體加速 (重新啟動%(appName)s以生效)",
             "always_show_menu_bar": "總是顯示視窗選單列",
             "autocomplete_delay": "自動完成延遲（毫秒）",
             "code_blocks_heading": "程式碼區塊",
@@ -2388,6 +2395,7 @@
         "prompt_invite": "在傳送邀請給潛在的無效 Matrix ID 前提示",
         "replace_plain_emoji": "自動取代純文字為表情符號",
         "security": {
+            "analytics_description": "共享匿名資料以幫助我們識別問題。沒有個人資料。沒有第三方。",
             "bulk_options_accept_all_invites": "接受所有 %(invitedRooms)s 邀請",
             "bulk_options_reject_all_invites": "拒絕所有 %(invitedRooms)s 邀請",
             "bulk_options_section": "大量選項",
@@ -2537,6 +2545,7 @@
             "metaspaces_orphans_description": "將所有不屬於某個聊天空間的聊天室集中在同一個地方。",
             "metaspaces_people_description": "將您所有的夥伴集中在同一個地方。",
             "metaspaces_subsection": "要顯示的聊天空間",
+            "spaces_explainer": "空間是將房間和人群分組的方式。除了您所在的空間之外，您也可以使用一些預先構建的空間。",
             "title": "側邊欄"
         },
         "start_automatically": "在系統登入後自動開始",
@@ -2835,9 +2844,13 @@
         "n_hours_ago": "%(num)s 小時前",
         "n_minutes_ago": "%(num)s 分鐘前",
         "seconds_left": "剩 %(seconds)s 秒",
+        "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)s 天 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
+        "short_hours": "%(value)sh",
         "short_hours_minutes_seconds": "%(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
-        "short_minutes_seconds": "%(minutes)s 分鐘 %(seconds)s 秒"
+        "short_minutes": "%(value)sm",
+        "short_minutes_seconds": "%(minutes)s 分鐘 %(seconds)s 秒",
+        "short_seconds": "%(value)sS"
     },
     "timeline": {
         "context_menu": {

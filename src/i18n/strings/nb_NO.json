@@ -55,6 +55,8 @@
         "create_a_room": "Opprett rom",
         "create_account": "Opprett konto",
         "decline": "Avslå",
+        "decline_and_block": "Avvise og blokkere",
+        "decline_invite": "Avvis invitasjon",
         "delete": "Slett",
         "deny": "Avvis",
         "disable": "Slå av",
@@ -743,6 +745,13 @@
         "default_cover_photo": "<photo>Standard forsidebilde </photo> er © av<author> Jesús Roncero </author>og brukt under vilkårene i CC-BY-SA 4.0. <terms> </terms>.",
         "twemoji": "Emoji-grafikken <twemoji>Twemoji</twemoji> er © av <author>Twitter, Inc og andre bidragsytere</author> og brukt under vilkårene i <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Fonten <colr>twemoji-colr</colr> er © <author>Mozilla Foundation</author> kan brukes under vilkårene i <terms>Apache 2.0</terms>."
+    },
+    "decline_invitation_dialog": {
+        "confirm": "Er du sikker på at du vil takke nei til invitasjonen om å bli med i \"%(roomName)s\"?",
+        "ignore_user_help": "Du vil ikke se noen meldinger eller rominvitasjoner fra denne brukeren.",
+        "reason_description": "Beskriv årsaken for å rapportere rommet.",
+        "report_room_description": "Rapporter dette rommet til din kontoleverandør.",
+        "title": "Avvis invitasjon"
     },
     "desktop_default_device_name": "%(brand)sSkrivebordet: %(platformName)s",
     "devtools": {
@@ -2518,6 +2527,7 @@
                 "breadcrumb_third_description": "Du må bekrefte alle eksisterende enheter og kontakter på nytt",
                 "breadcrumb_title": "Er du sikker på at du vil tilbakestille identiteten din?",
                 "breadcrumb_title_forgot": "Har du glemt gjenopprettingsnøkkelen din? Du må tilbakestille identiteten din.",
+                "breadcrumb_title_sync_failed": "Kunne ikke synkronisere nøkkellageret. Du må tilbakestille identiteten din.",
                 "breadcrumb_warning": "Gjør dette bare hvis du tror at kontoen din har blitt kompromittert.",
                 "details_title": "Krypteringsdetaljer",
                 "do_not_close_warning": "Ikke lukk dette vinduet før tilbakestillingen er fullført",

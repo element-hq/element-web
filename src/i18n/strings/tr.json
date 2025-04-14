@@ -80,12 +80,14 @@
         "maximise": "Maksimize",
         "mention": "Sizden bahsediyor",
         "minimise": "Minimize",
+        "new_message": "Yeni mesaj",
         "new_room": "Yeni oda",
         "new_video_room": "Yeni video odası",
         "next": "İleri",
         "no": "Hayır",
         "ok": "Tamam",
         "open": "Aç",
+        "open_menu": "Menüyü aç",
         "pause": "Durdur",
         "pin": "PIN Kodu",
         "play": "Oynat",
@@ -404,6 +406,15 @@
         "download_logs": "Günlükleri indir",
         "downloading_logs": "Günlükler indiriliyor",
         "error_empty": "Lütfen neyin yanlış gittiğini bize bildirin ya da en güzeli problemi tanımlayan bir GitHub talebi oluşturun.",
+        "failed_download_logs": "Hata ayıklama günlükleri indirilemedi: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Hata raporunuz reddedildi. rageshake sunucusu bu uygulamayı desteklemiyor.",
+            "rejected_generic": "Hata raporunuz reddedildi. Rageshake sunucusu, bir politika nedeniyle raporun içeriğini reddetti.",
+            "rejected_recovery_key": "Hata raporunuz bir kurtarma anahtarı içerdiği için güvenlik nedeniyle reddedildi.",
+            "rejected_version": "Çalıştırdığınız sürüm çok eski olduğu için hata raporunuz reddedildi.",
+            "server_unknown_error": "Rageshake sunucusu bilinmeyen bir hatayla karşılaştı ve raporu işleyemedi.",
+            "unknown_error": "Günlükler gönderilemedi."
+        },
         "github_issue": "GitHub sorunu",
         "introduction": "GitHub aracılığıyla bir hata bildirdiyseniz, hata ayıklama günlükleri sorunu bulmamızda yardımcı olabilir. ",
         "log_request": "Bunun gelecekte de olmasının önüne geçmek için lütfen <a>günceleri bize gönderin</a>.",
@@ -1226,6 +1237,7 @@
         "change": "Kimlik sunucusunu değiştir",
         "change_prompt": "<current /> kimlik sunucusundan bağlantı kesilip <new /> kimlik sunucusuna bağlanılsın mı?",
         "change_server_prompt": "Eğer <server /> kimlik sunucusunu kullanarak başkalarını bulmak ve başkalarını tarafından bulunabilmek istemiyorsanız aşağıya bir başka kimlik sunucusu giriniz.",
+        "changed": "Kimlik sunucunuz değiştirildi",
         "checking": "Sunucu kontrol ediliyor",
         "description_connected": "Şu anda <server></server> kimlik sunucusunu kullanarak başkalarını buluyorsunuz ve başkalarını tarafından bulunabiliyorsunuz. Aşağıdan kimlik sunucunuzu değiştirebilirsiniz.",
         "description_disconnected": "Şu anda herhangi bir kimlik sunucusu kullanmıyorsunuz. Başkalarını bulmak ve başkaları tarafından bulunabilmek için aşağıya bir kimlik sunucusu ekleyin.",
@@ -1268,7 +1280,9 @@
         "title": "%(brand)s bu tarayıcıyı desteklemiyor",
         "use_desktop_heading": "Bunun yerine %(brand)s Masaüstü kullanın",
         "use_mobile_heading": "Bunun yerine mobil cihazlarda %(brand)s kullanın",
-        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın"
+        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın",
+        "windows_64bit": "Windows (64 bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Bilgi",
     "integration_manager": {
@@ -1277,6 +1291,7 @@
         "error_connecting_heading": "Entegrasyon yöneticisine bağlanılamadı",
         "explainer": "Bütünleştirme yöneticileri yapılandırma verilerini alır ve sizin adınıza widget'ları değiştirebilir, oda davetleri gönderebilir ve güç düzeylerini ayarlayabilir.",
         "manage_title": "Entegrasyonları yönet",
+        "toggle_label": "Entegrasyon yöneticisini etkinleştirin",
         "use_im": "Botları, görsel bileşenleri ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.",
         "use_im_default": "Botları, widget'ları ve çıkartma paketlerini yönetmek için bir bütünleştirme yöneticisi <b>(%(serverName)s)</b> kullanın."
     },
@@ -1478,6 +1493,7 @@
         "location_share_live_description": "Geçici uygulama. Konumlar oda geçmişinde kalır.",
         "mjolnir": "İnsanları görmezden gelmenin yeni yolları",
         "msc3531_hide_messages_pending_moderation": "Moderatörlerin onay bekleyen mesajları gizlemesine izin verin.",
+        "new_room_list": "Yeni oda listesini etkinleştir",
         "notification_settings": "Yeni Bildirim Ayarları",
         "notification_settings_beta_caption": "Bildirim ayarlarınızı değiştirmenin daha basit bir yolunu sunuyoruz. %(brand)s istediğiniz gibi özelleştirin.",
         "notification_settings_beta_title": "Bildirim Ayarları",
@@ -2062,16 +2078,28 @@
         "failed_add_tag": "%(tagName)s etiketi odaya eklenemedi",
         "failed_remove_tag": "Odadan %(tagName)s etiketi kaldırılamadı",
         "failed_set_dm_tag": "Doğrudan mesaj etiketi ayarlanamadı",
+        "filters": {
+            "favourite": "Favoriler",
+            "people": "Kişiler",
+            "rooms": "Odalar",
+            "unread": "Okunmamış"
+        },
         "home_menu_label": "Ana sayfa seçenekleri",
         "join_public_room_label": "Herkese açık odaya katıl",
         "joining_rooms_status": {
             "one": "Şu anda %(count)s odaya katılıyor",
             "other": "Şu anda %(count)s odaya katılıyor"
         },
+        "list_title": "Oda listesi",
         "notification_options": "Bildirim ayarları",
+        "open_space_menu": "Açık alan menüsü",
+        "primary_filters": "Oda listesi filtreleri",
         "redacting_messages_status": {
             "one": "Şu anda %(count)s odadaki mesajlar kaldırılıyor",
             "other": "Şu anda %(count)s odadaki mesajlar kaldırılıyor"
+        },
+        "room": {
+            "open_room": "Açık oda %(roomName)s"
         },
         "show_less": "Daha az göster",
         "show_n_more": {
@@ -2083,6 +2111,10 @@
         "sort_by_activity": "Aktivite",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
+        "space_menu": {
+            "home": "Alan ana sayfa",
+            "space_settings": "Alan Ayarları"
+        },
         "space_menu_label": "%(spaceName)s menü",
         "sublist_options": "Liste seçenekleri",
         "suggested_rooms_heading": "Önerilen Odalar"
@@ -2445,15 +2477,24 @@
                 "breadcrumb_title_forgot": "Kurtarma anahtarınızı mı unuttunuz? Kimliğinizi sıfırlamanız gerekecek.",
                 "breadcrumb_warning": "Bunu yalnızca hesabınızın tehlikeye girdiğini düşünüyorsanız yapın.",
                 "details_title": "Şifreleme detayları",
+                "do_not_close_warning": "Sıfırlama işlemi bitene kadar bu pencereyi kapatmayın",
                 "export_keys": "Anahtarları dışa aktar",
                 "import_keys": "Anahtarları içe aktar",
                 "other_people_device_description": "Şifrelenmiş odalarda varsayılan olarak, doğrulayana kadar kimseye şifrelenmiş mesajlar göndermeyin",
                 "other_people_device_label": "Doğrulanmamış cihazlara asla şifrelenmiş mesajlar göndermeyin",
                 "other_people_device_title": "Diğer kişilerin cihazları",
                 "reset_identity": "Şifreleme kimliğini sıfırla",
+                "reset_in_progress": "Sıfırlama devam ediyor...",
                 "session_id": "Oturum Kimliği:",
                 "session_key": "Oturum anahtarı:",
                 "title": "Gelişmiş"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Anahtar depolamasını sil",
+                "confirm": "Anahtar depolamasını sil",
+                "description": "Anahtar depolamanın silinmesi kriptografik kimliğinizi ve mesaj anahtarlarınızı sunucudan kaldıracak ve aşağıdaki güvenlik özelliklerini kapatacaktır:",
+                "list_first": "Yeni cihazlarda şifrelenmiş mesaj geçmişine sahip olmayacaksınız",
+                "list_second": "%(brand)s adresinden her yerde oturumunuzu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz"
             },
             "device_not_verified_button": "Bu cihazı doğrulayın",
             "device_not_verified_description": "Şifreleme ayarlarınızı görüntülemek için bu cihazı doğrulamanız gerekiyor.",
@@ -3390,6 +3431,7 @@
             "left_reason": "%(targetName)s odadan çıktı: %(reason)s",
             "no_change": "%(senderName)s hiçbir değişiklik yapmadı",
             "reject_invite": "%(targetName)s daveti geri çevirdi",
+            "reject_invite_reason": "%(targetName)s daveti reddetti: %(reason)s",
             "remove_avatar": "%(senderName)s profil resmini kaldırdı",
             "remove_name": "%(senderName)s, %(oldDisplayName)s görünür adını kaldırdı",
             "set_avatar": "%(senderName)s profil resmi belirledi",
@@ -3772,6 +3814,7 @@
         "unban_space_specific": "Yasaklarını kaldırabileceğim belirli yerlerden yasaklarını kaldır",
         "unban_space_warning": "Yönetici olmadığınız hiçbir şeye erişemezler.",
         "unignore_button": "Görmezden Gelmeyi Kaldır",
+        "verification_unavailable": "Kullanıcı doğrulaması kullanılamıyor",
         "verify_button": "Kullanıcıyı Doğrula",
         "verify_explainer": "Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek bu kullanıcıyı doğrulayın."
     },
@@ -3978,7 +4021,7 @@
         "error_need_to_be_logged_in": "Oturum açmanız gerekiyor.",
         "error_unable_start_audio_stream_description": "Ses akışı başlatılamıyor.",
         "error_unable_start_audio_stream_title": "Canlı yayın başlatılamadı",
-        "modal_data_warning": "Bu ekrandaki veriler %(widgetDomain)s ile paylaşılıyor.",
+        "modal_data_warning": "Aşağıdaki veriler şu kişilerle paylaşılmaktadır:%(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Bilinmeyen uygulama",
         "open_id_permissions_dialog": {

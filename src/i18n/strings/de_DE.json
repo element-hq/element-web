@@ -12,7 +12,7 @@
             "one": "1 ungelesene Erwähnung."
         },
         "recent_rooms": "Kürzlich besuchte Chatrooms",
-        "room_messsage_not_sent": "Öffnen Sie den %(roomName)s Raum mit einer nicht gesetzten Nachricht.",
+        "room_messsage_not_sent": "Öffnen Sie den Chatroom %(roomName)s mit einer nicht gesendeten Nachricht.",
         "room_n_unread_invite": "%(roomName)s Einladung zum Raum öffnen.",
         "room_n_unread_messages": {
             "one": "Raum %(roomName)s öffnen mit 1 ungelesenen Nachricht.",
@@ -55,6 +55,8 @@
         "create_a_room": "Raum erstellen",
         "create_account": "Konto erstellen",
         "decline": "Ablehnen",
+        "decline_and_block": "Ablehnen und blockieren",
+        "decline_invite": "Einladung ablehnen",
         "delete": "Löschen",
         "deny": "Ablehnen",
         "disable": "Deaktivieren",
@@ -744,6 +746,13 @@
         "twemoji": "Die <twemoji>Twemoji</twemoji>-Emojis sind © <author>Twitter, Inc und weitere Mitwirkende</author> und wird unter den Bedingungen von <terms>CC-BY 4.0</terms> verwendet.",
         "twemoji_colr": "Die Schriftart <colr>twemoji-colr</colr> ist © <author>Mozilla Foundation</author> und wird unter den Bedingungen von <terms>Apache 2.0</terms> verwendet."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Sind Sie sicher, dass Sie die Einladung zur Teilnahme an \"%(roomName)s\" ablehnen möchten?",
+        "ignore_user_help": "Von diesem Benutzer werden Ihnen keine Nachrichten oder Chatroomeinladungen angezeigt.",
+        "reason_description": "Beschreiben Sie den Grund für die Meldung dieses Chatrooms.",
+        "report_room_description": "Melden Sie diesen Raum Ihrem Kontoanbieter.",
+        "title": "Einladung ablehnen"
+    },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktive Widgets",
@@ -844,6 +853,9 @@
         "setting_colon": "Einstellung:",
         "setting_definition": "Definition der Einstellung:",
         "setting_id": "Einstellungs-ID",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Einstellungsübersicht",
         "show_hidden_events": "Versteckte Ereignisse im Verlauf anzeigen",
         "spaces": {
@@ -1660,6 +1672,7 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
+        "default_settings": "Passen Sie die Standardeinstellungen an",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1678,7 +1691,8 @@
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
-        "mute_description": "Du wirst keine Benachrichtigungen erhalten"
+        "mute_description": "Du wirst keine Benachrichtigungen erhalten",
+        "mute_room": "Chatroom stumm stellen"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -1803,7 +1817,8 @@
         "toxic_behaviour": "Toxisches Verhalten"
     },
     "report_room": {
-        "description": "Melden Sie diesen Raum Ihrem Homeserver-Administrator. Dadurch wird die eindeutige ID des Raums gesendet. Wenn Nachrichten verschlüsselt sind, kann der Administrator sie jedoch nicht lesen oder geteilte Dateien anzeigen."
+        "description": "Melden Sie diesen Raum Ihrem Kontoanbieter. Wenn die Nachrichten verschlüsselt sind, kann Ihr Administrator sie nicht lesen.",
+        "reason_label": "Beschreiben Sie den Grund"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Konnte %(failedCount)s Sitzungen nicht entschlüsseln!",
@@ -2512,6 +2527,7 @@
                 "breadcrumb_third_description": "Sie müssen alle Ihre vorhandenen Geräte und Kontakte erneut verifizieren",
                 "breadcrumb_title": "Sind Sie sicher, dass Sie Ihre Identität zurücksetzen möchten?",
                 "breadcrumb_title_forgot": "Haben Sie Ihren Wiederherstellungsschlüssel vergessen? Sie müssen Ihre Identität zurücksetzen.",
+                "breadcrumb_title_sync_failed": "Der Schlüsselspeicher konnte nicht synchronisiert werden. Sie müssen Ihre Identität zurücksetzen.",
                 "breadcrumb_warning": "Tun Sie dies nur, wenn Sie glauben, dass Ihr Konto kompromittiert wurde.",
                 "details_title": "Angaben zur Verschlüsselung",
                 "do_not_close_warning": "Schließen Sie dieses Fenster nicht, bis der Reset abgeschlossen ist",

@@ -49,7 +49,7 @@ export function idNameForRoom(room: Room): string {
     return room.roomId;
 }
 
-const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, className, oobData, ...otherProps }) => {
+const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, ...otherProps }) => {
     const size = otherProps.size ?? "36px";
 
     const roomName = room?.name ?? oobData?.name ?? "?";
