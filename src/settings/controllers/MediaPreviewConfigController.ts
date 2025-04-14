@@ -73,10 +73,6 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         };
     };
 
-    protected async initMatrixClient(): Promise<void> {
-        // Unused
-    }
-
     public getValueOverride(_level: SettingLevel, roomId: string | null): MediaPreviewConfig {
         return this.getValue(roomId ?? undefined);
     }
