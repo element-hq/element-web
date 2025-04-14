@@ -840,8 +840,7 @@
         "room_status": "Stav místnosti",
         "room_unread_status_count": {
             "one": "Stav nepřečtení místnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
-            "few": "",
-            "other": "Stav nepřečtení místnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>"
+            "other": "Stav nepřečtení místností: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Uložit hodnoty nastavení",
         "see_history": "Prohlédnout historii",
@@ -916,7 +915,7 @@
                 "invalid_security_key": "Neplatný klíč pro obnovení",
                 "recovery_key_is_correct": "To vypadá dobře!",
                 "wrong_file_type": "Špatný typ souboru",
-                "wrong_security_key": "Špatný klíč pro obnovení"
+                "wrong_security_key": "Nesprávný klíč pro obnovení"
             },
             "reset_title": "Resetovat vše",
             "reset_warning_1": "Udělejte to, pouze pokud nemáte žádné jiné zařízení, se kterým byste mohli dokončit ověření.",
@@ -1070,7 +1069,7 @@
             "verify_reset_warning_2": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a klíč pro obnovení.",
             "verify_using_device": "Ověřit pomocí jiného zařízení",
             "verify_using_key": "Ověřit pomocí klíče pro obnovení",
-            "verify_using_key_or_phrase": "Ověřit pomocí klíče pro obnovení nebo fráze",
+            "verify_using_key_or_phrase": "Ověření pomocí klíče pro obnovení nebo fráze",
             "waiting_for_user_accept": "Čekáme, než %(displayName)s výzvu přijme…",
             "waiting_other_device": "Čekáme na ověření na jiném zařízení…",
             "waiting_other_device_details": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
@@ -1676,7 +1675,7 @@
         "class_global": "Globální",
         "class_other": "Další možnosti",
         "default": "Výchozí",
-        "default_settings": "Odpovídá výchozímu nastavení",
+        "default_settings": "Shoda výchozího nastavení",
         "email_pusher_app_display_name": "E-mailová oznámení",
         "enable_prompt_toast_description": "Povolit oznámení na ploše",
         "enable_prompt_toast_title": "Oznámení",
@@ -2120,9 +2119,9 @@
             "no_favourites": "Zatím nemáte oblíbený chat",
             "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
             "no_people": "Zatím s nikým nemáte přímé chaty",
-            "no_people_description": "Můžete zrušit filtry, abyste viděli své další chaty",
+            "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
             "no_rooms": "Ještě nejste v žádné místnosti",
-            "no_rooms_description": "Můžete zrušit filtry, abyste viděli své další chaty",
+            "no_rooms_description": "Můžete zrušit výběr filtrů, abyste viděli své další chaty",
             "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
             "show_chats": "Zobrazit všechny chaty"
         },
@@ -2535,6 +2534,7 @@
                 "breadcrumb_third_description": "Budete muset znovu ověřit všechna svá stávající zařízení a kontakty",
                 "breadcrumb_title": "Opravdu chcete obnovit svou identitu?",
                 "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
+                "breadcrumb_title_sync_failed": "Synchronizace úložiště klíčů se nezdařila. Musíte obnovit svou identitu.",
                 "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
                 "details_title": "Podrobnosti o šifrování",
                 "do_not_close_warning": "Nezavírejte toto okno, dokud není resetování dokončeno",
@@ -2577,7 +2577,7 @@
                 "enter_key_error": "Zadaný klíč pro obnovení není správný.",
                 "enter_recovery_key": "Zadejte klíč pro obnovení",
                 "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
-                "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Kliknutím na jedno z níže uvedených tlačítek problém vyřešte.",
+                "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Klikněte na jedno z níže uvedených tlačítek a problém vyřešte.",
                 "save_key_description": "Nesdílejte ho s nikým!",
                 "save_key_title": "Klíč pro obnovení",
                 "set_up_recovery": "Nastavení obnovy",
@@ -2701,7 +2701,7 @@
                 "enter_phrase_title": "Zadání bezpečnostní fráze",
                 "enter_phrase_to_confirm": "Zadejte bezpečnostní frázi podruhé a potvrďte ji.",
                 "generate_security_key_description": "Vygenerujeme klíč pro obnovení, který můžete uložit někde v bezpečí, jako je správce hesel nebo trezor.",
-                "generate_security_key_title": "Vygenerovat klíč pro obnovení",
+                "generate_security_key_title": "Vygenerujte klíč pro obnovení",
                 "pass_phrase_match_failed": "To nesedí.",
                 "pass_phrase_match_success": "To odpovídá!",
                 "phrase_strong_enough": "Skvělé! Tato bezpečnostní fráze vypadá dostatečně silně.",
@@ -2710,7 +2710,7 @@
                 "set_phrase_again": "Nastavit heslo znovu.",
                 "settings_reminder": "Zabezpečené zálohování a správu klíčů můžete také nastavit v Nastavení.",
                 "title_confirm_phrase": "Potvrďte bezpečnostní frázi",
-                "title_save_key": "Uložit klíč pro obnovení",
+                "title_save_key": "Uložte si klíč pro obnovení",
                 "title_set_phrase": "Nastavit bezpečnostní frázi",
                 "unable_to_setup": "Nepovedlo se nastavit bezpečné úložiště",
                 "use_different_passphrase": "Použít jinou přístupovou frázi?",
@@ -3122,7 +3122,7 @@
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },
-    "sliding_sync_legacy_no_longer_supported": "Starší klouzavá synchronizace již není podporována: odhlaste se a znovu přihlaste, abyste povolili nový způsob posuvné synchronizace",
+    "sliding_sync_legacy_no_longer_supported": "Starší klouzavá synchronizace již není podporována: odhlaste se a znovu přihlaste, abyste povolili nový příznak klouzavé synchronizace",
     "space": {
         "add_existing_room_space": {
             "create": "Chcete místo toho přidat novou místnost?",
@@ -3158,7 +3158,7 @@
         "invite_link": "Sdílet odkaz na pozvánku",
         "joining_space": "Připojování",
         "landing_welcome": "Vítejte v <name/>",
-        "leave_dialog_action": "Opusit prostor",
+        "leave_dialog_action": "Opustit prostor",
         "leave_dialog_description": "Odcházíte z <spaceName/>.",
         "leave_dialog_only_admin_room_warning": "Jste jediným správcem některých místností nebo prostorů, které chcete opustit. Jejich opuštěním zůstanou bez správců.",
         "leave_dialog_only_admin_warning": "Jste jediným správcem tohoto prostoru. Jeho opuštění bude znamenat, že nad ním nebude mít nikdo kontrolu.",
