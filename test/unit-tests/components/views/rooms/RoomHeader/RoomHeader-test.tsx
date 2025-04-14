@@ -229,7 +229,7 @@ describe("RoomHeader", () => {
     describe("UIFeature.Widgets enabled (default)", () => {
         beforeEach(() => {
             SdkConfig.put({
-                features: {
+                setting_defaults: {
                     [UIFeature.Widgets]: true,
                 },
             });
@@ -257,8 +257,8 @@ describe("RoomHeader", () => {
     describe("UIFeature.Widgets disabled", () => {
         beforeEach(() => {
             SdkConfig.put({
-                features: {
-                    [UIFeature.Widgets]: true,
+                setting_defaults: {
+                    [UIFeature.Widgets]: false,
                 },
             });
         });
@@ -285,7 +285,7 @@ describe("RoomHeader", () => {
     describe("groups call disabled", () => {
         beforeEach(() => {
             SdkConfig.put({
-                features: {
+                setting_defaults: {
                     [UIFeature.Widgets]: true,
                 },
             });
@@ -359,21 +359,21 @@ describe("RoomHeader", () => {
         beforeEach(() => {
             SdkConfig.put({
                 features: {
-                    [UIFeature.Widgets]: true,
                     feature_group_calls: true,
-                },
+                }
             });
         });
 
         afterEach(() => {
             SdkConfig.reset();
+            jest.restoreAllMocks();
         });
 
         it("renders only the video call element", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            SdkConfig.put({
-                features: {
+            SdkConfig.add({
+                element_call: {
                     use_exclusively: true,
                 },
             });
@@ -394,8 +394,8 @@ describe("RoomHeader", () => {
         });
 
         it("can't call if there's an ongoing (pinned) call", () => {
-            SdkConfig.put({
-                features: {
+            SdkConfig.add({
+                element_call: {
                     use_exclusively: true,
                 },
             });
@@ -416,10 +416,13 @@ describe("RoomHeader", () => {
         it("clicking on ongoing (unpinned) call re-pins it", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            SdkConfig.put({
-                features: {
+            SdkConfig.add({
+                setting_defaults: {
                     [UIFeature.Widgets]: true,
                 },
+                features: {
+                    feature_group_calls: false,
+                }
             });
             // allow calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
@@ -470,9 +473,11 @@ describe("RoomHeader", () => {
             jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(true);
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
             jest.spyOn(room, "canInvite").mockReturnValue(false);
-            const guestSpaUrlMock = jest.spyOn(SdkConfig, "get").mockImplementation((key) => {
-                return { guest_spa_url: "https://guest_spa_url.com", url: "https://spa_url.com" };
-            });
+            SdkConfig.add({
+                element_call: {
+                    guest_spa_url: "https://guest_spa_url.com"
+                }
+            })
             const { container: containerNoInviteNotPublicCanUpgradeAccess } = render(
                 <RoomHeader room={room} />,
                 getWrapper(),
@@ -485,7 +490,7 @@ describe("RoomHeader", () => {
             jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(false);
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
             jest.spyOn(room, "canInvite").mockReturnValue(false);
-            SdkConfig.put({
+            SdkConfig.add({
                 element_call: {
                     guest_spa_url: "https://guest_spa_url.com",
                 },
@@ -508,8 +513,9 @@ describe("RoomHeader", () => {
             const { container: containerInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
             expect(queryAllByLabelText(containerInvitePublic, "There's no one here to call")).toHaveLength(0);
 
+            // Clear guest_spa_url
+            SdkConfig.reset();
             // last we can allow everything but without guest_spa_url nothing will work
-            guestSpaUrlMock.mockRestore();
             const { container: containerAllAllowedButNoGuestSpaUrl } = render(<RoomHeader room={room} />, getWrapper());
             expect(
                 queryAllByLabelText(containerAllAllowedButNoGuestSpaUrl, "There's no one here to call"),
@@ -688,6 +694,10 @@ describe("RoomHeader", () => {
             ]);
         });
 
+        afterEach(() => {
+            SdkConfig.reset();
+        })
+
         it.each([
             [ShieldUtils.E2EStatus.Verified, "Verified"],
             [ShieldUtils.E2EStatus.Warning, "Untrusted"],
@@ -700,6 +710,11 @@ describe("RoomHeader", () => {
         });
 
         it("does not show the face pile for DMs", () => {
+            SdkConfig.put({
+                features: {
+                    feature_notifications: false
+                }
+            });
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 
             expect(asFragment()).toMatchSnapshot();
