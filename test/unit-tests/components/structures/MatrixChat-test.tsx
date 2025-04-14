@@ -321,7 +321,7 @@ describe("<MatrixChat />", () => {
             await flushPromises();
             const dialog = await screen.findByRole("dialog");
 
-            expect(within(dialog).getByText(errorMessage)).toBeInTheDocument();
+            await waitFor(() => expect(within(dialog).getByText(errorMessage)).toBeInTheDocument());
         };
 
         beforeEach(() => {
