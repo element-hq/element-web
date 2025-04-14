@@ -18,6 +18,8 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
+import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
+import { type ConnectionState } from "../../../models/Call";
 
 export interface RoomListItemViewState {
     /**
@@ -40,6 +42,19 @@ export interface RoomListItemViewState {
      * Whether the room should be bolded.
      */
     isBold: boolean;
+    /**
+     * Whether the room is a video room
+     */
+    isVideoRoom: boolean;
+    /**
+     * The connection state of the call.
+     * `null` if there is no call in the room.
+     */
+    callConnectionState: ConnectionState | null;
+    /**
+     * Whether there are participants in the call.
+     */
+    hasParticipantInCall: boolean;
 }
 
 /**
@@ -57,6 +72,14 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const a11yLabel = getA11yLabel(room, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
 
+    // Video room
+    const isVideoRoom = room.isElementVideoRoom() || room.isCallRoom();
+    // EC video call or video room
+    const call = useCall(room.roomId);
+    const connectionState = useConnectionState(call);
+    const hasParticipantInCall = useParticipantCount(call) > 0;
+    const callConnectionState = call ? connectionState : null;
+
     // Actions
 
     const openRoom = useCallback((): void => {
@@ -73,6 +96,9 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         openRoom,
         a11yLabel,
         isBold,
+        isVideoRoom,
+        callConnectionState,
+        hasParticipantInCall,
     };
 }
 

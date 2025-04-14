@@ -42,6 +42,9 @@ describe("<RoomListItemView />", () => {
             notificationState: new RoomNotificationState(room, false),
             a11yLabel: "Open room room1",
             isBold: false,
+            isVideoRoom: false,
+            callConnectionState: null,
+            hasParticipantInCall: false,
         };
 
         mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);

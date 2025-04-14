@@ -295,7 +295,7 @@
             "scan_qr_code": "Zaloguj się kodem QR",
             "security_code": "Kod bezpieczeństwa",
             "security_code_prompt": "Jeśli zostaniesz poproszony, wprowadź poniższy kod na drugim urządzeniu.",
-            "select_qr_code": "Wybierz \"%(scanQRCode)s\"",
+            "select_qr_code": "Wybierz '%(scanQRCode)s'",
             "unsupported_explainer": "Twój dostawca konta nie obsługuje logowania nowego urządzenia za pomocą kodu QR.",
             "unsupported_heading": "Kod QR nie jest wspierany",
             "waiting_for_device": "Oczekiwanie na logowanie urządzenia"
@@ -841,9 +841,9 @@
         "room_notifications_type": "Typ: ",
         "room_status": "Status pokoju",
         "room_unread_status_count": {
-            "one": "Status nieprzeczytanej w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>",
-            "few": "Status nieprzeczytanych w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>",
-            "many": "Status nieprzeczytanych w pokoju: <strong>%(status)s</strong>, liczba: <strong>%(count)s</strong>"
+            "one": "Status nieprzeczytanej pokoju: <strong>%(status)s</strong>, ilość: <strong>%(count)s</strong>",
+            "few": "Status nieprzeczytanych pokoju: <strong>%(status)s</strong>, ilość: <strong>%(count)s</strong>",
+            "many": "Status nieprzeczytanych pokoju: <strong>%(status)s</strong>, ilość: <strong>%(count)s</strong>"
         },
         "save_setting_values": "Zapisz ustawione wartości",
         "see_history": "Pokaż historię",
@@ -1399,8 +1399,9 @@
         "many": "Zapraszanie %(user)s i %(count)s innych"
     },
     "items_and_n_others": {
-        "other": "<Items/> i %(count)s innych",
-        "one": "<Items/> i jedna inna osoba"
+        "one": "<Items/> i jeszcze jedna osoba",
+        "few": "<Items/> i %(count)s inne",
+        "many": "<Items/> i %(count)s innych"
     },
     "keyboard": {
         "activate_button": "Aktywuj wybrany przycisk",
@@ -2090,7 +2091,7 @@
             "monthly_user_limit_reached": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył miesięczny limit aktywnych użytkowników. <a>Skontaktuj się z administratorem serwisu</a>, aby kontynuować.",
             "requires_consent_agreement": "Nie możesz wysłać żadnej wiadomości, dopóki nie zaakceptujesz <consentLink>naszych warunków i kondycji</consentLink>.",
             "retry_all": "Spróbuj ponownie wszystkie",
-            "select_messages_to_retry": "Możesz zaznaczyć wszystkie lub wybrane wiadomości aby spróbować ponownie lub usunąć je",
+            "select_messages_to_retry": "Możesz zaznaczyć wszystkie lub wybrane wiadomości, aby spróbować ponownie lub je usunąć",
             "server_connectivity_lost_description": "Wysłane wiadomości będą przechowywane aż do momentu odzyskania połączenia.",
             "server_connectivity_lost_title": "Połączenie z serwerem zostało utracone.",
             "some_messages_not_sent": "Niektóre z Twoich wiadomości nie zostały wysłane"
@@ -2942,7 +2943,7 @@
             "security_recommendations_description": "Zwiększ bezpieczeństwo swojego konta kierując się tymi rekomendacjami.",
             "session_id": "Identyfikator sesji",
             "show_details": "Pokaż szczegóły",
-            "sign_in_with_qr": "Połącz nowe urządzenie",
+            "sign_in_with_qr": "Powiąż nowe urządzenie",
             "sign_in_with_qr_button": "Pokaż kod QR",
             "sign_in_with_qr_description": "Użyj kodu QR, aby zalogować się na innym urządzeniu i skonfigurować bezpieczne przesyłanie wiadomości.",
             "sign_in_with_qr_unsupported": "Nieobsługiwane przez dostawcę konta",
@@ -3676,16 +3677,19 @@
                 "other": "zostało zaproszonych %(count)s razy"
             },
             "joined": {
-                "other": "%(oneUser)s dołączył %(count)s razy",
-                "one": "%(oneUser)s dołączył"
+                "one": "%(oneUser)s dołączył",
+                "few": "%(oneUser)s dołączył %(count)s raz",
+                "many": "%(oneUser)s dołączył %(count)s razy"
             },
             "joined_and_left": {
-                "other": "%(oneUser)s dołączył i wyszedł %(count)s razy",
-                "one": "%(oneUser)s dołączył i wyszedł"
+                "one": "%(oneUser)s dołączył i wyszedł",
+                "few": "%(oneUser)s dołączył i wyszedł %(count)s razy",
+                "many": "%(oneUser)s dołączył i wyszedł %(count)s razy"
             },
             "joined_and_left_multiple": {
                 "one": "%(severalUsers)s dołączyło i wyszło",
-                "other": "%(severalUsers)s dołączyło i wyszło %(count)s razy"
+                "few": "%(severalUsers)s dołączyło i wyszło %(count)s razy",
+                "many": "%(severalUsers)s dołączyło i wyszło %(count)s razy"
             },
             "joined_multiple": {
                 "one": "%(severalUsers)s dołączył",
@@ -3741,12 +3745,14 @@
                 "other": "%(severalUsers)sodrzuciło ich zaproszenia %(count)s razy"
             },
             "rejoined": {
-                "other": "%(oneUser)s wyszedł i dołączył ponownie %(count)s razy",
-                "one": "%(oneUser)s wyszedł i dołączył ponownie"
+                "one": "%(oneUser)s wyszedł i dołączył ponownie",
+                "few": "%(oneUser)s wyszedł i dołączył ponownie %(count)s razy",
+                "many": "%(oneUser)s wyszedł i dołączył ponownie %(count)s razy"
             },
             "rejoined_multiple": {
-                "other": "%(severalUsers)swyszło i dołączyło ponownie %(count)s razy",
-                "one": "%(severalUsers)swyszło i dołączyło ponownie"
+                "one": "%(severalUsers)s wyszło i dołączyło ponownie",
+                "few": "%(severalUsers)s wyszło i dołączyło ponownie %(count)s razy",
+                "many": "%(severalUsers)s wyszło i dołączyło ponownie %(count)s razy"
             },
             "server_acls": {
                 "one": "%(oneUser)szmienił ACL serwera",
@@ -3969,7 +3975,8 @@
         "msisdn_transfer_failed": "Nie udało się przekazać połączenia",
         "n_people_joined": {
             "one": "%(count)s osoba dołączyła",
-            "other": "%(count)s osób dołączyło"
+            "few": "%(count)s osoby dołączyły",
+            "many": "%(count)s osób dołączyło"
         },
         "no_audio_input_description": "Nie udało się znaleźć żadnego mikrofonu w twoim urządzeniu. Sprawdź ustawienia i spróbuj ponownie.",
         "no_audio_input_title": "Nie znaleziono mikrofonu",

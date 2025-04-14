@@ -369,6 +369,7 @@
     },
     "common": {
         "access_token": "Token truy cập",
+        "accessibility": "Trợ năng",
         "advanced": "Nâng cao",
         "analytics": "Về dữ liệu phân tích",
         "and_n_others": {
@@ -515,6 +516,8 @@
         "edit_composer_label": "Chỉnh sửa tin nhắn",
         "format_bold": "In đậm",
         "format_code_block": "Khối mã",
+        "format_decrease_indent": "Giảm thụt lề",
+        "format_increase_indent": "Tăng thụt lề",
         "format_inline_code": "Mã",
         "format_insert_link": "Chèn liên kết",
         "format_italic": "Nghiêng",
@@ -624,7 +627,9 @@
         "subspace_join_rule_restricted_description": "Bất kỳ ai trong <SpaceName/> đều có thể tìm và tham gia."
     },
     "credits": {
-        "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>."
+        "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji": "Bộ <twemoji>Twemoji</twemoji> được © <author>Twitter, Inc and other contributors</author> sử dụng dưới các điều khoản trong giấy phép <terms>CC-BY 4.0</terms>.",
+        "twemoji_colr": "<colr>twemoji-colr</colr> được Quỹ ©<author>Mozilla Foundation</author> sử dụng dựa trên các điều khoản trong giấy phép <terms>Apache 2.0</terms>."
     },
     "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "devtools": {
@@ -977,6 +982,7 @@
         "generating_zip": "Tạo ZIP",
         "html_title": "Dữ liệu được trích xuất",
         "include_attachments": "Bao gồm các đính kèm",
+        "json": "JSON",
         "media_omitted": "Phương tiện bị bỏ qua",
         "media_omitted_file_size": "Phương tiện bị bỏ qua - kích thước tệp vượt quá giới hạn",
         "messages": "Tin nhắn",
@@ -1141,6 +1147,7 @@
     },
     "keyboard": {
         "activate_button": "Kích hoạt nút đã chọn",
+        "alt": "Alt",
         "autocomplete_cancel": "Hủy tự động hoàn thành",
         "backspace": "Phím lùi",
         "cancel_reply": "Hủy trả lời tin nhắn",
@@ -1161,6 +1168,7 @@
         "composer_toggle_link": "Chuyển đổi liên kết",
         "composer_toggle_quote": "Chuyển sang Trích dẫn",
         "composer_undo": "Hoàn tác chỉnh sửa",
+        "control": "Phím Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Bỏ qua điểm đánh dấu đã đọc và chuyển xuống cuối",
         "end": "Kết thúc",
         "enter": "Vào",
@@ -1182,6 +1190,7 @@
         "scroll_up_timeline": "Cuộn lên trong dòng thời gian",
         "search": "Tìm kiếm (phải được bật)",
         "send_sticker": "Gửi nhãn dán",
+        "shift": "Phím Shift",
         "space": "space",
         "toggle_microphone_mute": "Chuyển đổi chế độ tắt tiếng micrô",
         "toggle_right_panel": "Chuyển đổi bảng điều khiển bên phải",

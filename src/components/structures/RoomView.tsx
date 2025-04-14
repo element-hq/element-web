@@ -1716,11 +1716,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.onSearch(this.state.search?.term ?? "", scope);
     };
 
-    private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null): void => {
+    private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
         this.setState({
             search: {
                 ...this.state.search!,
                 count: searchResults?.count,
+                error: error ?? undefined,
                 inProgress,
             },
         });

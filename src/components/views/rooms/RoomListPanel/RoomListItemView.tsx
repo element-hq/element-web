@@ -10,10 +10,10 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
-import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Flex } from "../../../utils/Flex";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
+import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 
 interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
@@ -39,7 +39,8 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
     const showHoverDecoration = (isMenuOpen || isHover) && vm.showHoverMenu;
 
     const isNotificationDecorationVisible =
-        !showHoverDecoration && (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted);
+        !showHoverDecoration &&
+        (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted || vm.hasParticipantInCall);
 
     return (
         <button
@@ -62,7 +63,7 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
         >
             {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
             <Flex className="mx_RoomListItemView_container" gap="var(--cpd-space-3x)" align="center">
-                <DecoratedRoomAvatar room={room} size="32px" />
+                <RoomAvatarView room={room} />
                 <Flex
                     className="mx_RoomListItemView_content"
                     gap="var(--cpd-space-3x)"
@@ -85,7 +86,11 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                     ) : (
                         <>
                             {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                            <NotificationDecoration notificationState={vm.notificationState} aria-hidden={true} />
+                            <NotificationDecoration
+                                notificationState={vm.notificationState}
+                                aria-hidden={true}
+                                hasVideoCall={vm.hasParticipantInCall}
+                            />
                         </>
                     )}
                 </Flex>

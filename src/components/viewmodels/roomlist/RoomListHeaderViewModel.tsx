@@ -128,8 +128,8 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const isSpaceRoom = Boolean(activeSpace);
 
     const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
-    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
-    const displayComposeMenu = canCreateRoom || canCreateVideoRoom;
+    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms") && canCreateRoom;
+    const displayComposeMenu = canCreateRoom;
     const displaySpaceMenu = isSpaceRoom;
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),

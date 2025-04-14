@@ -1014,7 +1014,7 @@
             "incoming_sas_dialog_waiting": "Waiting for partner to confirm…",
             "incoming_sas_user_dialog_text_1": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
             "incoming_sas_user_dialog_text_2": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
-            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
+            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
             "prompt_encrypted": "Verify all users in a room to ensure it's secure.",
@@ -1133,11 +1133,7 @@
             "title": "Unable to copy room link"
         },
         "error_loading_user_profile": "Could not load user profile",
-        "forget_room_failed": "Failed to forget room %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server may be unavailable, overloaded, or search timed out :(",
-            "title": "Search failed"
-        }
+        "forget_room_failed": "Failed to forget room %(errCode)s"
     },
     "error_user_not_logged_in": "User is not logged in",
     "event_preview": {
@@ -2098,6 +2094,7 @@
             },
             "uploading_single_file": "Uploading %(filename)s"
         },
+        "video_room": "This room is a video room",
         "waiting_for_join_subtitle": "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted",
         "waiting_for_join_title": "Waiting for users to join %(brand)s"
     },
@@ -2126,7 +2123,7 @@
             "favourite": "Favourites",
             "people": "People",
             "rooms": "Rooms",
-            "unread": "Unread"
+            "unread": "Unreads"
         },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",

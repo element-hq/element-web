@@ -321,7 +321,7 @@ describe("<MatrixChat />", () => {
             await flushPromises();
             const dialog = await screen.findByRole("dialog");
 
-            expect(within(dialog).getByText(errorMessage)).toBeInTheDocument();
+            await waitFor(() => expect(within(dialog).getByText(errorMessage)).toBeInTheDocument());
         };
 
         beforeEach(() => {
@@ -487,17 +487,17 @@ describe("<MatrixChat />", () => {
             it("should persist login credentials", async () => {
                 getComponent({ realQueryParams });
 
-                await waitFor(() => expect(localStorage.getItem("mx_hs_url")).toEqual(homeserverUrl));
+                await waitFor(() => expect(localStorage.getItem("mx_device_id")).toEqual(deviceId));
+                expect(localStorage.getItem("mx_hs_url")).toEqual(homeserverUrl);
                 expect(localStorage.getItem("mx_user_id")).toEqual(userId);
                 expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
             });
 
             it("should store clientId and issuer in session storage", async () => {
                 getComponent({ realQueryParams });
 
                 await waitFor(() => expect(localStorage.getItem("mx_oidc_client_id")).toEqual(clientId));
-                expect(localStorage.getItem("mx_oidc_token_issuer")).toEqual(issuer);
+                await waitFor(() => expect(localStorage.getItem("mx_oidc_token_issuer")).toEqual(issuer));
             });
 
             it("should set logged in and start MatrixClient", async () => {

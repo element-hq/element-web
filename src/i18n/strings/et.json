@@ -12,6 +12,16 @@
             "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
         },
         "recent_rooms": "Hiljuti kasutatud jututoad",
+        "room_messsage_not_sent": "Ava „%(roomName)s“ jututuba saatmata sõnumiga.",
+        "room_n_unread_invite": "Ava %(roomName)s jututoa kutse.",
+        "room_n_unread_messages": {
+            "one": "Ava %(roomName)s jututuba 1 lugemata sõnumiga.",
+            "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Ava %(roomName)s jututuba 1 lugemata mainimisega.",
+            "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga, mille hulgas on ka mainimisi."
+        },
         "room_name": "Jututuba %(name)s",
         "room_status_bar": "Jututoa olekuriba",
         "seek_bar_label": "Heli kerimisriba",
@@ -45,6 +55,8 @@
         "create_a_room": "Loo jututuba",
         "create_account": "Loo konto",
         "decline": "Keeldu",
+        "decline_and_block": "Keeldu ja blokeeri",
+        "decline_invite": "Lükka kutse tagasi",
         "delete": "Kustuta",
         "deny": "Keeldu",
         "disable": "Lülita välja",
@@ -64,6 +76,7 @@
         "go": "Mine",
         "go_back": "Mine tagasi",
         "got_it": "Selge lugu",
+        "hide": "Peida",
         "hide_advanced": "Peida lisaseadistused",
         "hold": "Pane ootele",
         "ignore": "Eira",
@@ -80,12 +93,14 @@
         "maximise": "Suurenda maksimaalseks",
         "mention": "Maini",
         "minimise": "Väike vaade",
+        "new_message": "Uus sõnum",
         "new_room": "Uus jututuba",
         "new_video_room": "Uus videotuba",
         "next": "Järgmine",
         "no": "Ei",
         "ok": "Sobib",
         "open": "Ava",
+        "open_menu": "Ava menüü",
         "pause": "Peata",
         "pin": "Tõsta esile",
         "play": "Esita",
@@ -100,6 +115,7 @@
         "reply": "Vasta",
         "reply_in_thread": "Vasta jutulõngas",
         "report_content": "Teata sisust haldurile",
+        "report_room": "Teata jututoast",
         "resend": "Saada uuesti",
         "reset": "Taasta algolek",
         "resume": "Jätka",
@@ -404,6 +420,15 @@
         "download_logs": "Laadi logikirjed alla",
         "downloading_logs": "Laadin logisid alla",
         "error_empty": "Palun kirjelda seda, mis läks valesti ja loo GitHub'is veateade.",
+        "failed_download_logs": "Silumislogide allalaadimine ei õnnestunud: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Sinu veateadet ei võetud vastu. Ägedal raputamisel põhinev vigadest teatamise teenus ei toeta seda rakendust.",
+            "rejected_generic": "Sinu veateadet ei võetud vastu. Ägedal raputamisel põhinev vigadest teatamise teenus keeldus päringu sisust oma reeglite alusel.",
+            "rejected_recovery_key": "Kuna veateade sisaldas sinu taastevõtit, siis turvakaalutlustel sinu veateadet ei võetud vastu.",
+            "rejected_version": "Kuna kasutad rakenduse liiga vana versiooni, siis sinu veateadet ei võetud vastu.",
+            "server_unknown_error": "Ägedal raputamisel põhinev vigadest teatamise teenuses tekkis teadmata probleem, mille käigus ta ei osanud seda veateadet töödelda.",
+            "unknown_error": "Logikirjete saatmine ei õnnestunud."
+        },
         "github_issue": "Veateade GitHub'is",
         "introduction": "Kui sa oled GitHub'is teinud meile veateate, siis silumislogid võivad aidata vea lahendamisel. ",
         "log_request": "Tagamaks et sama ei juhtuks tulevikus, palun <a>saada meile salvestatud logid</a>.",
@@ -443,6 +468,7 @@
         "access_token": "Pääsuluba",
         "accessibility": "Ligipääsetavus",
         "advanced": "Teave arendajatele",
+        "all_chats": "Kõik vestlused",
         "analytics": "Analüütika",
         "and_n_others": {
             "other": "ja %(count)s muud...",
@@ -720,6 +746,13 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emotikonide autoriõiguste omanik on <author>Twitter, Inc koos kaasautoritega</author> ning neid kasutame vastavalt <terms>CC-BY 4.0</terms> litsentsi tingimustele.",
         "twemoji_colr": "<colr>Twemoji-colr</colr> kirjatüübi autoriõiguste omanik on <author>Mozilla Foundation</author> seda kasutame vastavalt <terms>Apache 2.0</terms> litsentsi tingimustele."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Kas sa oled kindel, et soovid keelduda kutsest liituda „%(roomName)s“ jututoaga?",
+        "ignore_user_help": "Sa ei näe enam selle kasutaja saadetud sõnumeid või jututubade kutseid",
+        "reason_description": "Kirjelda jututoast teatamise põhjust",
+        "report_room_description": "Teata sellest jututoast oma teenusepakkujale.",
+        "title": "Lükka kutse tagasi"
+    },
     "desktop_default_device_name": "%(brand)s töölaud: %(platformName)s",
     "devtools": {
         "active_widgets": "Kasutusel vidinad",
@@ -820,6 +853,9 @@
         "setting_colon": "Seadistus:",
         "setting_definition": "Seadistuse määratlus:",
         "setting_id": "Seadistuse tunnus",
+        "settings": {
+            "elementCallUrl": "Element Calli võrguaadress"
+        },
         "settings_explorer": "Seadistuste haldur",
         "show_hidden_events": "Näita peidetud sündmusi ajajoonel",
         "spaces": {
@@ -872,22 +908,22 @@
     "empty_room_was_name": "Tühi jututuba (varasema nimega %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma turvavõtit</button>.",
+            "enter_phrase_or_key_prompt": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma taastevõtit</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Vigane turvavõti",
+                "invalid_security_key": "Vigane taastevõti",
                 "recovery_key_is_correct": "Tundub õige!",
                 "wrong_file_type": "Vale failitüüp",
-                "wrong_security_key": "Vale turvavõti"
+                "wrong_security_key": "Vale taastevõti"
             },
             "reset_title": "Alusta kõigega algusest",
             "reset_warning_1": "Toimi nii vaid siis, kui sul pole jäänud ühtegi seadet, millega verifitseerimist lõpuni teha.",
             "reset_warning_2": "Kui sa kõik krüptoseosed lähtestad, siis sul esimese hooga pole ühtegi usaldusväärseks tunnistatud sessiooni ega kasutajat ning ilmselt ei saa sa lugeda vanu sõnumeid.",
             "restoring": "Taastan võtmed varundusest",
-            "security_key_title": "Turvavõti",
+            "security_key_title": "Taastevõti",
             "security_phrase_incorrect_error": "Ei õnnestu saada ligipääsu turvahoidlale. Palun kontrolli, et sa oleksid sisestanud õige turvafraasi.",
             "security_phrase_title": "Turvafraas",
             "separator": "%(securityKey)s või %(recoveryFile)s",
-            "use_security_key_prompt": "Jätkamiseks kasuta turvavõtit."
+            "use_security_key_prompt": "Jätkamiseks kasuta oma taastevõtit."
         },
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "cancel_entering_passphrase_description": "Kas oled kindel et sa soovid katkestada paroolifraasi sisestamise?",
@@ -900,6 +936,7 @@
         "cross_signing_user_normal": "Sa ei ole seda kasutajat verifitseerinud.",
         "cross_signing_user_verified": "Sa oled selle kasutaja verifitseerinud. See kasutaja on verifitseerinud kõik nende sessioonid.",
         "cross_signing_user_warning": "See kasutaja ei ole verifitseerinud kõiki oma sessioone.",
+        "enter_recovery_key": "Sisesta taastevõti",
         "event_shield_reason_authenticity_not_guaranteed": "Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.",
         "event_shield_reason_mismatched_sender_key": "Krüptitud verifitseerimata sessiooni poolt",
         "event_shield_reason_unknown_device": "Krüptitud tundmatu või kustutatud seadme poolt.",
@@ -925,8 +962,8 @@
             "title": "Uus taastamise meetod",
             "warning": "Kui sa ei ole ise uusi taastamise meetodeid lisanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
-        "pinned_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) võrguidentiteet tundub olema muutunud. <a>Lisateave</a>",
-        "pinned_identity_changed_no_displayname": "Kasutaja <b>%(userId)s</b> võrguidentiteet tundub olema muutunud. <a>Lisateave</a>",
+        "pinned_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) võrguidentiteet on lähtestatud. <a>Lisateave</a>",
+        "pinned_identity_changed_no_displayname": "Kasutaja <b>%(userId)s</b> võrguidentiteet on lähtestatud. <a>Lisateave</a>",
         "recovery_method_removed": {
             "description_1": "Oleme tuvastanud, et selles sessioonis ei leidu turvafraasi ega krüptitud sõnumite turvavõtit.",
             "description_2": "Kui sa tegid seda juhuslikult, siis sa võid selles sessioonis uuesti seadistada sõnumite krüptimise, mille tulemusel krüptime uuesti kõik sõnumid ja loome uue taastamise meetodi.",
@@ -977,7 +1014,7 @@
             "incoming_sas_dialog_waiting": "Ootan teise osapoole kinnitust…",
             "incoming_sas_user_dialog_text_1": "Selle kasutaja usaldamiseks peaksid ta verifitseerima. Kui sa pruugid läbivalt krüptitud sõnumeid, siis kasutajate verifitseerimine tagab sulle täiendava meelerahu.",
             "incoming_sas_user_dialog_text_2": "Selle kasutaja verifitseerimisel märgitakse tema sessioon usaldusväärseks ning samuti märgitakse sinu sessioon tema jaoks usaldusväärseks.",
-            "no_key_or_device": "Tundub, et sul ei ole ei turvavõtit ega muid seadmeid, mida saaksid verifitseerimiseks kasutada. Siin seadmes ei saa lugeda vanu krüptitud sõnumeid. Enda tuvastamiseks selles seadmed pead oma vanad verifitseerimisvõtmed kustutama.",
+            "no_key_or_device": "Tundub, et sul ei ole ei taastevõtit ega muid seadmeid, mida saaksid verifitseerimiseks kasutada. Siin seadmes ei saa lugeda vanu krüptitud sõnumeid. Enda tuvastamiseks selles seadmes pead oma vanad verifitseerimisvõtmed kustutama.",
             "no_support_qr_emoji": "See seade, mida sa tahad verifitseerida ei toeta QR-koodi ega emoji-põhist verifitseerimist, aga just neid %(brand)s oskab kasutada. Proovi mõne muu Matrix'i kliendiga.",
             "other_party_cancelled": "Teine osapool tühistas verifitseerimise.",
             "prompt_encrypted": "Tagamaks, et jututuba on turvaline, verifitseeri kõik selle kasutajad.",
@@ -1027,18 +1064,21 @@
             "verify_emoji_prompt_qr": "Kui sa ei saa skaneerida eespool kuvatud koodi, siis verifitseeri unikaalsete emoji'de võrdlemise teel.",
             "verify_later": "Ma verifitseerin hiljem",
             "verify_reset_warning_1": "Verifitseerimisvõtmete kustutamist ei saa hiljem tagasi võtta. Peale seda sul puudub ligipääs vanadele krüptitud sõnumitele ja kõik sinu verifitseeritud sõbrad-tuttavad näevad turvahoiatusi seni kuni sa uuesti nad verifitseerid.",
-            "verify_reset_warning_2": "Palun jätka ainult siis, kui sa oled kaotanud ligipääsu kõikidele oma seadmetele ning oma turvavõtmele.",
+            "verify_reset_warning_2": "Palun jätka ainult siis, kui sa oled kaotanud ligipääsu oma kõikidele muudele seadmetele ning oma taastevõtmele.",
             "verify_using_device": "Verifitseeri teise seadmega",
-            "verify_using_key": "Verifitseeri turvavõtmega",
-            "verify_using_key_or_phrase": "Verifitseeri turvavõtme või turvafraasiga",
+            "verify_using_key": "Verifitseeri taastevõtmega",
+            "verify_using_key_or_phrase": "Verifitseeri taastevõtme või -fraasiga",
             "waiting_for_user_accept": "Ootan, et %(displayName)s nõustuks…",
             "waiting_other_device": "Ootan, et sa verifitseeriksid oma teises seadmes…",
             "waiting_other_device_details": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…",
             "waiting_other_user": "Ootan kasutaja %(displayName)s verifitseerimist…"
         },
         "verification_requested_toast_title": "Verifitseerimistaotlus on saadetud",
+        "verified_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) verifitseeritud identiteet on muutunud. <a>Lisateave</a>",
+        "verified_identity_changed_no_displayname": "Kasutaja <b>%(userId)s</b> verifitseeritud identiteet on muutunud. <a>Lisateave</a>",
         "verify_toast_description": "Teised kasutajad ei pruugi seda usaldada",
-        "verify_toast_title": "Verifitseeri see sessioon"
+        "verify_toast_title": "Verifitseeri see sessioon",
+        "withdraw_verification_action": "Eemalda verifitseerimine"
     },
     "error": {
         "admin_contact": "Jätkamaks selle teenuse kasutamist palun <a>võta ühendust oma teenuse haldajaga</a>.",
@@ -1222,6 +1262,7 @@
         "change": "Muuda isikutuvastusserverit",
         "change_prompt": "Kas katkestame ühenduse <current /> isikutuvastusserveriga ning selle asemel loome uue ühenduse serveriga <new />?",
         "change_server_prompt": "Kui sa ei soovi kasutada <server /> serverit, et olla leitav ja ise leida sinule teadaolevaid inimesi, siis sisesta alljärgnevalt mõni teine isikutuvastusserver.",
+        "changed": "Sinu kasutatav isikutuvastusserver on muutunud",
         "checking": "Kontrollin serverit",
         "description_connected": "Sa hetkel kasutad <server></server> serverit, et olla leitav ja ise leida sinule teadaolevaid inimesi. Alljärgnevalt saad sa muuta oma isikutuvastusserverit.",
         "description_disconnected": "Sa hetkel ei kasuta isikutuvastusserverit. Et olla leitav ja ise leida sinule teadaolevaid inimesi seadista ta alljärgnevalt.",
@@ -1264,7 +1305,9 @@
         "title": "Sellele brauserile puudub tugi",
         "use_desktop_heading": "Selle asemel kasuta %(brand)s töölauaversiooni",
         "use_mobile_heading": "Selle asemel kasuta %(brand)s nutiseadmeversiooni",
-        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele"
+        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele",
+        "windows_64bit": "Windows (64-bitine)",
+        "windows_arm_64bit": "Windows (64-bitine ARM-platvormil)"
     },
     "info_tooltip_title": "Teave",
     "integration_manager": {
@@ -1273,6 +1316,7 @@
         "error_connecting_heading": "Ei saa ühendust lõiminguhalduriga",
         "explainer": "Lõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi.",
         "manage_title": "Halda lõiminguid",
+        "toggle_label": "Kasuta lõimingute haldurit",
         "use_im": "Robotite, vidinate ja kleepsupakkide seadistamiseks kasuta lõiminguhaldurit.",
         "use_im_default": "Robotite, vidinate ja kleepsupakkide jaoks kasuta lõiminguhaldurit <b>(%(serverName)s)</b>."
     },
@@ -1474,6 +1518,7 @@
         "location_share_live_description": "Tegemist on ajutise ja esialgse lahendusega: asukohad on jututoa ajaloos näha.",
         "mjolnir": "Uued võimalused osalejate eiramiseks",
         "msc3531_hide_messages_pending_moderation": "Luba modereerimist ootavate sõnumite peitmist.",
+        "new_room_list": "Võta kasutusele uus jututubade loend",
         "notification_settings": "Uued teavituste seadistused",
         "notification_settings_beta_caption": "Võtame kasutusele senisest lihtsama viisi teavituste seadistamiseks. Kohanda rakendust %(brand)s nii nagu soovid.",
         "notification_settings_beta_title": "Teavituste seadistused",
@@ -1627,6 +1672,7 @@
         "class_global": "Üldised",
         "class_other": "Muud",
         "default": "Tavaline",
+        "default_settings": "Sobita vaikimisi seadistustega",
         "email_pusher_app_display_name": "E-posti teel saadetavad teavitused",
         "enable_prompt_toast_description": "Võta kasutusele töölauakeskkonna teavitused",
         "enable_prompt_toast_title": "Teavitused",
@@ -1645,7 +1691,8 @@
         "mentions_and_keywords_description": "Soovin teavitusi sellisena mainimiste ja võtmesõnade puhul, nagu ma neid olen <a>seadistanud</a>",
         "mentions_keywords": "Mainimised ja märksõnad",
         "message_didnt_send": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi.",
-        "mute_description": "Sa ei saa üldse teavitusi"
+        "mute_description": "Sa ei saa üldse teavitusi",
+        "mute_room": "Summuta jututuba"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s soovib verifitseerimist"
@@ -1769,27 +1816,31 @@
         "spam_or_propaganda": "Spämm või propaganda",
         "toxic_behaviour": "Ebasobilik käitumine"
     },
+    "report_room": {
+        "description": "Teata sellest jututoast oma koduserveri haldajale. Kui sõnumid on krüptitud, ei saa haldaja neid lugeda ega jagatud faile vaadata.",
+        "reason_label": "Palun kirjelda põhjust"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s sessiooni dekrüptimine ei õnnestunud!",
         "count_of_successfully_restored_keys": "%(sessionCount)s sessiooni võtme taastamine õnnestus",
-        "enter_key_description": "Sisestades turvavõtme pääsed ligi oma turvatud sõnumitele ning sätid tööle krüptitud sõnumivahetuse.",
-        "enter_key_title": "Sisesta turvavõti",
+        "enter_key_description": "Sisestades taastevõtme pääsed ligi oma turvatud sõnumitele ning sätid tööle krüptitud sõnumivahetuse.",
+        "enter_key_title": "Sisesta taastevõti",
         "enter_phrase_description": "Sisestades turvafraasi, saad ligipääsu oma turvatud sõnumitele ning sätid toimima krüptitud sõnumivahetuse.",
         "enter_phrase_title": "Sisesta turvafraas",
         "incorrect_security_phrase_dialog": "Selle turvafraasiga ei õnnestunud varundust dekrüptida: palun kontrolli, kas sa kasutad õiget turvafraasi.",
         "incorrect_security_phrase_title": "Vigane turvafraas",
         "key_backup_warning": "<b>Hoiatus</b>: sa peaksid võtmete varunduse seadistama vaid usaldusväärsest arvutist.",
         "key_fetch_in_progress": "Laadin serverist võtmeid…",
-        "key_forgotten_text": "Kui sa oled unustanud oma turvavõtme, siis sa võid <button>seadistada uued taastamise võimalused</button>",
-        "key_is_invalid": "Vigane turvavõti",
-        "key_is_valid": "See tundub olema õige turvavõti!",
+        "key_forgotten_text": "Kui sa oled unustanud oma taastevõtme, siis sa võid <button>seadistada uued taastamise võimalused</button>",
+        "key_is_invalid": "See pole korrektne taastevõti",
+        "key_is_valid": "See tundub olema õige taastevõti!",
         "keys_restored_title": "Krüptimise võtmed on taastatud",
         "load_error_content": "Varunduse oleku laadimine ei õnnestunud",
         "load_keys_progress": "%(completed)s / %(total)s võtit taastatud",
         "no_backup_error": "Varukoopiat ei leidunud!",
-        "phrase_forgotten_text": "Kui sa oled unustanud turvafraasi, siis sa saad <button1>kasutada oma turvavõtit</button1> või <button2>seadistada uued taastamise võimalused</button2>",
-        "recovery_key_mismatch_description": "Selle turvavõtmega ei õnnestunud varundust dekrüptida: palun kontrolli, kas sa kasutad õiget turvavõtit.",
-        "recovery_key_mismatch_title": "Turvavõtmed ei klapi",
+        "phrase_forgotten_text": "Kui sa oled unustanud turvafraasi, siis sa saad <button1>kasutada oma taastevõtit</button1> või <button2>seadistada uued taastamise võimalused</button2>",
+        "recovery_key_mismatch_description": "Selle taastevõtmega ei õnnestunud varukoopiat dekrüptida: palun kontrolli, kas sa kasutad õiget taastevõtit.",
+        "recovery_key_mismatch_title": "Taastevõtmed ei klapi",
         "restore_failed_error": "Varukoopiast taastamine ei õnnestu"
     },
     "right_panel": {
@@ -2055,19 +2106,53 @@
         "add_space_label": "Lisa kogukonnakeskus",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
+        "empty": {
+            "no_chats": "Vestlusi veel ei leidu",
+            "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
+            "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
+            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
+            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
+            "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
+            "no_people_description": "Kõikide muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_rooms": "Sa veel ei osale mitte üheski jututoas",
+            "no_rooms_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_unread": "Õnnitlused! Sul pole ühtegi lugemata sõnumit",
+            "show_chats": "Näita kõiki vestlusi"
+        },
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
+        "filters": {
+            "favourite": "Lemmikud",
+            "people": "Inimesed",
+            "rooms": "Jututoad",
+            "unread": "Lugemata"
+        },
         "home_menu_label": "Avalehe valikud",
         "join_public_room_label": "Liitu avaliku jututoaga",
         "joining_rooms_status": {
             "other": "Parasjagu liitun %(count)s jututoaga",
             "one": "Parasjagu liitun %(count)s jututoaga"
         },
+        "list_title": "Jututubade loend",
+        "more_options": {
+            "copy_link": "Kopeeri jututoa link",
+            "favourited": "Määratud lemmikuks",
+            "leave_room": "Lahku jututoast",
+            "low_priority": "Vähetähtis",
+            "mark_read": "Märgi loetuks",
+            "mark_unread": "Märgi mitteloetuks"
+        },
         "notification_options": "Teavituste eelistused",
+        "open_space_menu": "Ava kogukonna menüü",
+        "primary_filters": "Jututubade loendi filtrid",
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
+        },
+        "room": {
+            "more_options": "Täiendavad seadistused",
+            "open_room": "Ava jututuba: %(roomName)s"
         },
         "show_less": "Näita vähem",
         "show_n_more": {
@@ -2079,6 +2164,10 @@
         "sort_by_activity": "Aktiivsuse alusel",
         "sort_by_alphabet": "Tähestiku järjekorras",
         "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
+        "space_menu": {
+            "home": "Kogukonna avaleht",
+            "space_settings": "Kogukonna seadistused"
+        },
         "space_menu_label": "%(spaceName)s menüü",
         "sublist_options": "Loendi valikud",
         "suggested_rooms_heading": "Soovitatud jututoad"
@@ -2307,7 +2396,7 @@
             "public_without_alias_warning": "Sellele jututoale viitamiseks palun lisa talle aadress.",
             "publish_room": "Tee see jututuba nähtavaks avalikus jututubade kataloogis.",
             "publish_space": "Tee see kogukond nähtavaks avalikus jututubade kataloogis.",
-            "strict_encryption": "Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse selles jututoas",
+            "strict_encryption": "Saada sõnumeid vaid verifitseeritud kasutajatele.",
             "title": "Turvalisus ja privaatsus"
         },
         "title": "Jututoa seadistused - %(roomName)s",
@@ -2438,35 +2527,60 @@
                 "breadcrumb_second_description": "Sa kaotad ligipääsu sõnumite ajalooole, mis on salvestatud vaid serveris",
                 "breadcrumb_third_description": "Sa pead kõik oma olemasolevad seadmed ja kontaktid uuesti verifitseerima",
                 "breadcrumb_title": "Kas sa oled kindel, et soovid oma krüptoidentiteeti lähtestada?",
+                "breadcrumb_title_forgot": "Kas unustasid oma taastevõtme? Pead oma identiteedi lähtestama.",
+                "breadcrumb_title_sync_failed": "Võtmehoidla sünkroniseerimine ei õnnestunud. Sa pead võrguidentiteedi lähtestama.",
                 "breadcrumb_warning": "Tee seda ainult siis, kui arvad, et sinu kasutajakonto võib olla ohustatud kolmandate osapoolet poolt.",
                 "details_title": "Krüptimise üksikasjad",
+                "do_not_close_warning": "Ära sulge seda akent enne, kui lähtestamine on lõppenud",
                 "export_keys": "Ekspordi võtmed",
                 "import_keys": "Impordi võtmed",
-                "other_people_device_description": "Vaikimisi ei saadeta krüptitud jututubadest sõnumeid verifitseerimata kasutajatele",
-                "other_people_device_label": "Ära iialgi saada krüptitud sõnumeid verifitseerimata seadmetesse",
+                "other_people_device_description": "Hoiatus: kui kasutaja pole sinuga verifitseerimist läbi teinud (näiteks emojide võrdlemise abil), siis ta ei saa sinu krüptitud sõnumeid. Lisaks ei saadeta krüptitud sõnumeid verifitseeritud kasutajate verifitseerimata seadmetesse.",
+                "other_people_device_label": "Krüptitud jututubades saada sõnumeid vaid verifitseeritud kasutajatele",
                 "other_people_device_title": "Teiste kasutajate seadmed",
                 "reset_identity": "Lähtesta krüptoidentiteet",
+                "reset_in_progress": "Lähtestamine on töös...",
                 "session_id": "Sessiooni tunnus:",
                 "session_key": "Sessioonivõti:",
                 "title": "Täiendav teave"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Kustuta krüptovõtmete hoidla",
+                "confirm": "Kustuta krüptovõtmete hoidla",
+                "description": "Krüptovõtmete hoidla hoidla kustutamisega eemaldad serverist oma krüptoidentiteedi ja sõnumite võtmed ning lülitad välja järgnevad turvalisusega seotud funktsionaalsused:",
+                "list_first": "Sa ei saa uutes seadmetes lugeda varasemaid krüptitud sõnumeid",
+                "list_second": "Kui logid kõikjal %(brand)s rakendusest välja, siis kaotad ligipääsu kõikidele oma krüptitud sõnumitele",
+                "title": "Kas sa oled kindel, et soovid krüptovõtmete hoidla välja lülitada ning seejärel kustutada?"
             },
             "device_not_verified_button": "Verifitseeri see seade",
             "device_not_verified_description": "Oma krüptoseadistuste nägemiseks palun verifitseeri see seade.",
             "device_not_verified_title": "Seade on verifitseerimata",
             "dialog_title": "<strong>Seadistused:</strong>Krüptimine",
+            "key_storage": {
+                "allow_key_storage": "Kasuta krüptovõtmete hoidlat",
+                "description": "Hoia oma krüptoidentiteeti ja sõnumite krüptovõtmeid turvaliselt serveris. See võimaldab sul lugeda oma varasemaid sõnumeid kõikides uutes seadmetes. <a>Lisateave</a>",
+                "title": "Krüptovõtmete hoidla"
+            },
             "recovery": {
+                "change_recovery_confirm_button": "Korda uut taastevõtit",
                 "change_recovery_confirm_description": "Toimingu lõpetamiseks palun sisesta alljärgnevalt oma uus taastevõti. Senine taastevõti enam ei toimi.",
+                "change_recovery_confirm_title": "Sisesta oma uus taastevõti",
+                "change_recovery_key": "Muuda taastevõtit",
                 "change_recovery_key_description": "Palun salvesta see taastevõti turvalisel viisil. Muutuse kinnitamiseks klõpsi „Jätka“.",
                 "change_recovery_key_title": "Kas muudame taastevõtit?",
                 "description": "Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma krüptoidentiteedile ja sõnumite ajaloole.",
                 "enter_key_error": "Sinu sisestatud taastevõti pole korrektne.",
-                "key_storage_warning": "Sinu võtmehoidla pole sünkroonis. Vea parandamiseks palun klõpsi järgnevat nuppu.",
+                "enter_recovery_key": "Sisesta taastevõti",
+                "forgot_recovery_key": "Kas unustasid taastevõtme?",
+                "key_storage_warning": "Sinu võtmehoidla pole sünkroonis. Vea parandamiseks palun klõpsi ühte järgnevatest nuppudest.",
                 "save_key_description": "Ära jaga seda mitte kellegagi!",
+                "save_key_title": "Taastevõti",
                 "set_up_recovery": "Seadista taastamine",
                 "set_up_recovery_confirm_button": "Lõpeta seadistamine",
                 "set_up_recovery_confirm_description": "Taastamise seadistamise lõpetamiseks palun sisesta eelmises vaates näidatud taastevõti.",
+                "set_up_recovery_confirm_title": "Kinnitamiseks sisesta oma taastevõti",
                 "set_up_recovery_description": "Sinu krüptovõtmete hoidlat kaitseb taastevõti. Kui peale seadistamist peaksid vajama uut taastevõtit, siis saad ta uuesti luua valikust „%(changeRecoveryKeyButton)s“.",
                 "set_up_recovery_save_key_description": "Palun märgi see taastevõti üles ja hoia teda turvaliselt, näiteks digitaalses salasõnalaekas, krüptitud märkmetes või vana kooli seifis.",
+                "set_up_recovery_save_key_title": "Salvesta oma taastevõti turvalisel viisil",
                 "set_up_recovery_secondary_description": "Kui klõpsid nuppu „Jätka“, loome me sulle uue taastevõtme.",
                 "title": "Taastamine"
             },
@@ -2562,6 +2676,7 @@
         "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
         "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
+        "invite_avatars": "Näita nende jututubade tunnuspilte, kuhu oled saanud kutse",
         "jump_to_bottom_on_send": "Sõnumi saatmiseks hüppa ajajoone lõppu",
         "key_backup": {
             "backup_in_progress": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
@@ -2585,15 +2700,15 @@
                 "pass_phrase_match_success": "Klapib!",
                 "phrase_strong_enough": "Suurepärane! Turvafraas on piisavalt kange.",
                 "secret_storage_query_failure": "Ei õnnestu tuvastada turvahoidla olekut",
-                "security_key_safety_reminder": "Kuna seda kasutatakse sinu krüptitud andmete kaitsmiseks, siis hoia oma turvavõtit kaitstud ja turvalises kohas, nagu näiteks arvutis salasõnade halduris või vana kooli seifis.",
+                "security_key_safety_reminder": "Kuna seda kasutatakse sinu krüptitud andmete kaitsmiseks, siis hoia oma taastevõtit kaitstud ja turvalises kohas, nagu näiteks arvutis salasõnade halduris või vana kooli seifis.",
                 "set_phrase_again": "Mine tagasi ja sisesta nad uuesti.",
                 "settings_reminder": "Samuti võid sa seadetes võtta kasutusse turvalise varunduse ning hallata oma krüptovõtmeid.",
                 "title_confirm_phrase": "Kinnita turvafraas",
-                "title_save_key": "Salvesta turvavõti",
+                "title_save_key": "Salvesta oma taastevõti",
                 "title_set_phrase": "Määra turvafraas",
                 "unable_to_setup": "Turvahoidla kasutuselevõtmine ei õnnestu",
                 "use_different_passphrase": "Kas kasutame muud paroolifraasi?",
-                "use_phrase_only_you_know": "Sisesta turvafraas, mida vaid sina tead ning lisaks võid salvestada varunduse turvavõtme."
+                "use_phrase_only_you_know": "Sisesta turvafraas, mida vaid sina tead ning lisaks võid salvestada varunduse taastevõtme."
             }
         },
         "key_export_import": {
@@ -3000,6 +3115,7 @@
         "view": "Vaata sellise aadressiga jututuba",
         "whois": "Näitab teavet kasutaja kohta"
     },
+    "sliding_sync_legacy_no_longer_supported": "Järkjärgulise sünkroniseerimise (Sliding sync) varasem lahendus pole enam toetatud: uue lahenduse kasutamiseks palun logi rakendusest välja ja uuesti sisse",
     "space": {
         "add_existing_room_space": {
             "create": "Kas sa selle asemel soovid lisada jututuba?",
@@ -3213,7 +3329,7 @@
             "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
             "historical_event_unverified_device": "Varasemate sõnumite nägemiseks pead selle seadme verifitseerima",
             "historical_event_user_not_joined": "Sul puudub ligipääs sellele sõnumile",
-            "sender_identity_previously_verified": "Verifitseeritud võrguidentiteet on muutunud",
+            "sender_identity_previously_verified": "Saatja verifitseeritud võrguidentiteet on lähtestatud",
             "sender_unsigned_device": "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.",
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
@@ -3377,6 +3493,7 @@
             "left_reason": "%(targetName)s lahkus jututoast: %(reason)s",
             "no_change": "%(senderName)s ei teinud muutusi",
             "reject_invite": "%(targetName)s lükkas kutse tagasi",
+            "reject_invite_reason": "%(targetName)s lükkas kutse tagasi: %(reason)s",
             "remove_avatar": "%(senderName)s eemaldas oma profiilipildi",
             "remove_name": "%(senderName)s eemaldas oma kuvatava nime (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s määras oma profiilipildi",
@@ -3413,11 +3530,13 @@
         },
         "m.room.tombstone": "%(senderDisplayName)s uuendas seda jututuba.",
         "m.room.topic": {
-            "changed": "%(senderDisplayName)s muutis uueks teemaks „%(topic)s“."
+            "changed": "%(senderDisplayName)s muutis uueks teemaks „%(topic)s“.",
+            "removed": "%(senderDisplayName)s eemaldas teema."
         },
         "m.sticker": "%(senderDisplayName)s saatis kleepsu.",
         "m.video": {
-            "error_decrypting": "Viga videovoo dekrüptimisel"
+            "error_decrypting": "Viga videovoo dekrüptimisel",
+            "show_video": "Näita videot"
         },
         "m.widget": {
             "added": "%(senderName)s lisas vidina %(widgetName)s",
@@ -3762,6 +3881,7 @@
         "unban_space_specific": "Eemalda kasutajalt suhtluskeeld valitud kohtadest, kust ma saan",
         "unban_space_warning": "Kasutaja ei saa ligi kohtadele, kus sul pole peakasutaja õigusi.",
         "unignore_button": "Lõpeta eiramine",
+        "verification_unavailable": "Kasutaja verifitseerimine pole saadaval",
         "verify_button": "Verifitseeri kasutaja",
         "verify_explainer": "Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes."
     },
@@ -3968,7 +4088,7 @@
         "error_need_to_be_logged_in": "Sa peaksid olema sisse loginud.",
         "error_unable_start_audio_stream_description": "Audiovoo käivitamine ei õnnestu.",
         "error_unable_start_audio_stream_title": "Videovoo käivitamine ei õnnestu",
-        "modal_data_warning": "Andmeid selles vaates jagatakse %(widgetDomain)s serveriga",
+        "modal_data_warning": "Alljärgnevaid andmeid jagatakse %(widgetDomain)s serveriga",
         "modal_title_default": "Modaalne vidin",
         "no_name": "Tundmatu rakendus",
         "open_id_permissions_dialog": {

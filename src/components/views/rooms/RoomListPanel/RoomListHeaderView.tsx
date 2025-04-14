@@ -47,7 +47,7 @@ export function RoomListHeaderView(): JSX.Element {
                 <ComposeMenu vm={vm} />
             ) : (
                 <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
-                    <ComposeIcon />
+                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
                 </IconButton>
             )}
         </Flex>
@@ -76,7 +76,7 @@ function SpaceMenu({ vm }: SpaceMenuProps): JSX.Element {
             align="start"
             trigger={
                 <IconButton className="mx_SpaceMenu_button" aria-label={_t("room_list|open_space_menu")} size="20px">
-                    <ChevronDownIcon />
+                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
                 </IconButton>
             }
         >
@@ -135,7 +135,7 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
             align="start"
             trigger={
                 <IconButton aria-label={_t("action|add")}>
-                    <ComposeIcon />
+                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
                 </IconButton>
             }
         >
