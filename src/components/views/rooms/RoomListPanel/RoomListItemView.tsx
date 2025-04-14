@@ -63,7 +63,7 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
         >
             {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
             <Flex className="mx_RoomListItemView_container" gap="var(--cpd-space-3x)" align="center">
-                <RoomAvatarView room={room} />
+                <RoomAvatarView room={room} key={room.roomId} />
                 <Flex
                     className="mx_RoomListItemView_content"
                     gap="var(--cpd-space-3x)"
