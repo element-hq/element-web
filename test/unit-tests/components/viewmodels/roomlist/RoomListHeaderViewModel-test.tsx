@@ -80,14 +80,6 @@ describe("useRoomListHeaderViewModel", () => {
         expect(result.current.canCreateRoom).toBe(true);
     });
 
-    it("should be displayComposeMenu=true if the user can creates video room", () => {
-        mocked(hasCreateRoomRights).mockReturnValue(false);
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-
-        const { result } = render();
-        expect(result.current.displayComposeMenu).toBe(true);
-    });
-
     it("should be displaySpaceMenu=true if the user is in a space", () => {
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
         const { result } = render();
@@ -118,8 +110,10 @@ describe("useRoomListHeaderViewModel", () => {
         expect(result.current.canAccessSpaceSettings).toBe(true);
     });
 
-    it("should be canCreateVideoRoom=true if feature_video_rooms is enabled", () => {
+    it("should be canCreateVideoRoom=true if feature_video_rooms is enabled and can create room", () => {
+        mocked(hasCreateRoomRights).mockReturnValue(true);
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+
         const { result } = render();
         expect(result.current.canCreateVideoRoom).toBe(true);
     });

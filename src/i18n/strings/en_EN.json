@@ -2098,6 +2098,7 @@
             },
             "uploading_single_file": "Uploading %(filename)s"
         },
+        "video_room": "This room is a video room",
         "waiting_for_join_subtitle": "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted",
         "waiting_for_join_title": "Waiting for users to join %(brand)s"
     },
