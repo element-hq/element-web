@@ -14,7 +14,7 @@ import {
     type User,
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -81,6 +81,11 @@ function useIsPublic(room: Room): boolean {
 
         setIsPublic(isRoomPublic(_room));
     });
+
+    // Reset the value when the room changes
+    useEffect(() => {
+        setIsPublic(isRoomPublic(room));
+    }, [room]);
 
     return isPublic;
 }
