@@ -44,6 +44,16 @@ describe("<RoomListView />", () => {
         jest.resetAllMocks();
     });
 
+    it("should render the loading room list", () => {
+        mocked(useRoomListViewModel).mockReturnValue({
+            ...defaultValue,
+            isLoadingRooms: true,
+        });
+
+        const roomList = render(<RoomListView />);
+        expect(roomList.container.querySelector(".mx_Spinner")).toBeDefined();
+    });
+
     it("should render an empty room list", () => {
         mocked(useRoomListViewModel).mockReturnValue(defaultValue);
 
