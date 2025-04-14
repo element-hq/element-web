@@ -63,6 +63,17 @@ describe("RoomAvatarViewModel", () => {
         expect(vm.current.hasDecoration).toBe(true);
     });
 
+    it("should recompute isPublic when room changed", async () => {
+        const { result: vm, rerender } = renderHook((props) => useRoomAvatarViewModel(props), { initialProps: room });
+        expect(vm.current.isPublic).toBe(false);
+
+        const publicRoom = mkStubRoom("roomId2", "roomName2", matrixClient);
+        jest.spyOn(publicRoom, "getJoinRule").mockReturnValue(JoinRule.Public);
+        rerender(publicRoom);
+
+        await waitFor(() => expect(vm.current.isPublic).toBe(true));
+    });
+
     describe("presence", () => {
         let user: User;
 
