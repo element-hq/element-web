@@ -420,12 +420,12 @@
         "download_logs": "Naplók letöltése",
         "downloading_logs": "Naplók letöltése folyamatban",
         "error_empty": "Mondja el nekünk, hogy mi az, ami nem működött, vagy még jobb, ha egy GitHub-jegyben írja le a problémát.",
-        "failed_download_logs": "A hibakeresési naplók letöltése sikertelen: ",
+        "failed_download_logs": "Nem sikerült letölteni a hibakeresési naplókat: ",
         "failed_send_logs_causes": {
             "disallowed_app": "A hibajelentését elutasították. A rageshake kiszolgáló nem támogatja ezt az alkalmazást.",
-            "rejected_generic": "A hibajelentését elutasították. A rageshake kiszolgáló egy irányelv miatt elutasította a jelentés tartalmát.",
-            "rejected_recovery_key": "A hibajelentését biztonsági okokból elutasították, mivel helyreállítási kulcsot tartalmazott.",
-            "rejected_version": "A hibajelentését elutasították, mivel a futtatott verziója túl régi.",
+            "rejected_generic": "A hibajelentését elutasították. A rageshake kiszolgáló egy házirend miatt elutasította a jelentés tartalmát.",
+            "rejected_recovery_key": "A hibajelentést biztonsági okokból elutasították, mivel helyreállítási kulcsot tartalmazott.",
+            "rejected_version": "Hibajelentését elutasították, mivel az Ön által használt verzió túl régi.",
             "server_unknown_error": "A rageshake kiszolgáló ismeretlen hibát észlelt, és nem tudta kezelni a jelentést.",
             "unknown_error": "A naplók elküldése sikertelen."
         },
@@ -1663,7 +1663,7 @@
         "class_global": "Globális",
         "class_other": "Egyéb",
         "default": "Alapértelmezett",
-        "default_settings": "Egyezzen meg az alapértelmezett beállításokkal",
+        "default_settings": "Megegyezik az alapértelmezett beállításokkal",
         "email_pusher_app_display_name": "E-mail értesítések",
         "enable_prompt_toast_description": "Asztali értesítések engedélyezése",
         "enable_prompt_toast_title": "Értesítések",
@@ -2508,16 +2508,17 @@
                 "breadcrumb_third_description": "Újra ellenőriznie kell az összes meglévő eszközét és névjegyét",
                 "breadcrumb_title": "Biztos, hogy alaphelyzetbe állítja a személyazonosságát?",
                 "breadcrumb_title_forgot": "Elfelejtette a helyreállítási kulcsot? Újra be kell állítania a személyazonosságát.",
+                "breadcrumb_title_sync_failed": "A kulcstár szinkronizálása sikertelen. Vissza kell állítania személyazonosságát.",
                 "breadcrumb_warning": "Csak akkor tegye ezt, ha úgy gondolja, hogy fiókját feltörték.",
                 "details_title": "Titkosítás részletei",
-                "do_not_close_warning": "Ne zárja be ezt az ablakot, amíg az alaphelyzetbe állítás be nem fejeződik",
+                "do_not_close_warning": "Ne zárja be ezt az ablakot, amíg a visszaállítás be nem fejeződik",
                 "export_keys": "Kulcsok exportálása",
                 "import_keys": "Kulcsok importálása",
                 "other_people_device_description": "Figyelmeztetés: azok a felhasználók, akikkel nem ellenőrizték kölcsönösen egymást (például emodzsik használatával), nem kapják meg a titkosított üzeneteket. Ezenkívül az ellenőrzött felhasználók nem ellenőrzött eszközei sem kapják meg a titkosított üzeneteket.",
                 "other_people_device_label": "Titkosított szobákban csak az ellenőrzött felhasználók kapják meg az üzeneteket",
                 "other_people_device_title": "Mások eszközei",
                 "reset_identity": "Kriptográfiai személyazonosság alaphelyzetbe állítása",
-                "reset_in_progress": "Alaphelyzetbe állítás folyamatban…",
+                "reset_in_progress": "Visszaállítás folyamatban…",
                 "session_id": "Munkamenet-azonosító:",
                 "session_key": "Munkamenetkulcs:",
                 "title": "Speciális"
@@ -2525,9 +2526,9 @@
             "delete_key_storage": {
                 "breadcrumb_page": "Kulcstároló törlése",
                 "confirm": "Kulcstároló törlése",
-                "description": "A kulcstároló törlése eltávolítja a kriptográfiai személyazonosságát és üzenetkulcsait a kiszolgálóról, és kikapcsolja a következő biztonsági funkciókat:",
+                "description": "A kulcstároló törlése eltávolítja a kriptográfiai személyazonosságát és üzenetkulcsát a kiszolgálóról, és kikapcsolja a következő biztonsági funkciókat:",
                 "list_first": "Nem lesznek meg a titkosított üzenetek előzményei az új eszközein",
-                "list_second": "Elveszíti a titkosított üzenetekhez való hozzáférését, ha mindenhol kijelentkezik az %(brand)sből.",
+                "list_second": "Elveszíti hozzáférését titkosított üzeneteihez, ha mindenhol kijelentkezett az %(brand)sből.",
                 "title": "Biztos, hogy kikapcsolja a kulcstárolót és törli azt?"
             },
             "device_not_verified_button": "Az eszköz ellenőrzése",
@@ -2536,7 +2537,7 @@
             "dialog_title": "<strong>Beállítások:</strong> Titkosítás",
             "key_storage": {
                 "allow_key_storage": "Kulcstárolás engedélyezése",
-                "description": "Tárolja biztonságosan a kriptográfiai személyazonosságát és az üzenetkulcsokat a kiszolgálón. Ez lehetővé teszi az üzenetek előzményeinek megtekintését bármely új eszközön. <a>További információk</a>",
+                "description": "Tárolja biztonságosan a kriptográfiai személyazonosságát és az üzenetkulcsait a kiszolgálón. Ez lehetővé teszi az üzenetek előzményeinek megtekintését bármely új eszközön. <a>További információ</a>",
                 "title": "Kulcstároló"
             },
             "recovery": {
@@ -4056,7 +4057,7 @@
         "error_need_to_be_logged_in": "Be kell jelentkeznie.",
         "error_unable_start_audio_stream_description": "A hangközvetítés indítása sikertelen.",
         "error_unable_start_audio_stream_title": "Az élő adás indítása sikertelen",
-        "modal_data_warning": "A lenti adatok megosztásra kerülnek ezzel: %(widgetDomain)s",
+        "modal_data_warning": "Az alábbi adatok a következővel vannak megosztva: %(widgetDomain)s",
         "modal_title_default": "Előugró kisalkalmazás",
         "no_name": "Ismeretlen alkalmazás",
         "open_id_permissions_dialog": {
