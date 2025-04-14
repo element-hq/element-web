@@ -487,10 +487,10 @@ describe("<MatrixChat />", () => {
             it("should persist login credentials", async () => {
                 getComponent({ realQueryParams });
 
-                await waitFor(() => expect(localStorage.getItem("mx_hs_url")).toEqual(homeserverUrl));
+                await waitFor(() => expect(localStorage.getItem("mx_device_id")).toEqual(deviceId));
+                expect(localStorage.getItem("mx_hs_url")).toEqual(homeserverUrl);
                 expect(localStorage.getItem("mx_user_id")).toEqual(userId);
                 expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
-                expect(localStorage.getItem("mx_device_id")).toEqual(deviceId);
             });
 
             it("should store clientId and issuer in session storage", async () => {
