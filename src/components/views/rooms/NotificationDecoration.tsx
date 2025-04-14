@@ -7,7 +7,7 @@
 
 import React, { type HTMLProps, type JSX } from "react";
 import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-off-solid";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
 

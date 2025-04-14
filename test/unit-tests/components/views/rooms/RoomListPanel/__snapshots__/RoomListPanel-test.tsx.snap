@@ -35,6 +35,7 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            color="var(--cpd-color-icon-secondary)"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -69,7 +70,7 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           role="button"
           tabindex="0"
         >
-          Unread
+          Unreads
         </button>
       </li>
       <li
@@ -255,6 +256,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            color="var(--cpd-color-icon-secondary)"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -289,7 +291,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           role="button"
           tabindex="0"
         >
-          Unread
+          Unreads
         </button>
       </li>
       <li
