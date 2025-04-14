@@ -6,8 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as fs from "node:fs";
-import { type EventType, type MsgType } from "matrix-js-sdk/src/types";
-import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { type EventType, type MsgType, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 
 import { test, expect } from "../../element-web-test";
 
@@ -77,10 +76,10 @@ test.describe("Media preview settings", () => {
         await app.viewRoomById(room.roomId);
         await page.getByRole("button", { name: "Accept" }).click();
         await expect(page.getByText("Show image")).toBeVisible();
-        for (const joinRule of [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted]) {
+        for (const joinRule of ["invite", "knock", "restricted"] as RoomJoinRulesEventContent["join_rule"][]) {
             await bot.sendStateEvent(room.roomId, "m.room.join_rules", {
                 join_rule: joinRule,
-            });
+            } satisfies RoomJoinRulesEventContent);
             await expect(page.getByText("Show image")).not.toBeVisible();
         }
     });
