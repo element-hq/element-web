@@ -6,19 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps } from "react";
-import {
-    type Room,
-    RoomStateEvent,
-    type MatrixEvent,
-    EventType,
-    RoomType,
-    KnownMembership,
-} from "matrix-js-sdk/src/matrix";
+import React, { useCallback, useMemo, type ComponentProps } from "react";
+import { type Room, RoomType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -26,22 +18,21 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
-import SettingsStore from "../../../settings/SettingsStore";
+import { useRoomAvatar } from "../../../hooks/room/useRoomAvatar";
+import { useSettingValue } from "../../../hooks/useSettings";
 
-interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    oobData: IOOBData & {
+    // Optional here.
+    size?: ComponentProps<typeof BaseAvatar>["size"];
+    oobData?: IOOBData & {
         roomId?: string;
     };
     viewAvatarOnClick?: boolean;
     onClick?(): void;
-}
-
-interface IState {
-    urls: string[];
 }
 
 export function idNameForRoom(room: Room): string {
@@ -57,105 +48,62 @@ export function idNameForRoom(room: Room): string {
     return room.roomId;
 }
 
-export default class RoomAvatar extends React.Component<IProps, IState> {
-    public static defaultProps = {
-        size: "36px",
-        oobData: {},
-    };
+const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, ...otherProps }) => {
+    const size = otherProps.size ?? "36px";
 
-    public constructor(props: IProps) {
-        super(props);
+    const roomName = room?.name ?? oobData?.name ?? "?";
+    const roomAvatarMxc = useRoomAvatar(room);
+    const roomIdName = useMemo(() => {
+        if (room) {
+            return idNameForRoom(room);
+        } else {
+            return oobData?.roomId;
+        }
+    }, [oobData, room]);
 
-        this.state = {
-            urls: RoomAvatar.getImageUrls(this.props),
+    const showAvatarsOnInvites = useSettingValue("showAvatarsOnInvites", room?.roomId);
+
+    const onRoomAvatarClick = useCallback(() => {
+        const avatarUrl = Avatar.avatarUrlForRoom(room ?? null, undefined, undefined, undefined);
+        if (!avatarUrl) return;
+        const params = {
+            src: avatarUrl,
+            name: room?.name,
         };
-    }
 
-    public componentDidMount(): void {
-        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
-    }
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+    }, [room]);
 
-    public componentWillUnmount(): void {
-        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
-    }
-
-    public static getDerivedStateFromProps(nextProps: IProps): IState {
-        return {
-            urls: RoomAvatar.getImageUrls(nextProps),
-        };
-    }
-
-    private onRoomStateEvents = (ev: MatrixEvent): void => {
-        if (ev.getRoomId() !== this.props.room?.roomId || ev.getType() !== EventType.RoomAvatar) return;
-
-        this.setState({
-            urls: RoomAvatar.getImageUrls(this.props),
-        });
-    };
-
-    private static getImageUrls(props: IProps): string[] {
-        const myMembership = props.room?.getMyMembership();
-        if (myMembership === KnownMembership.Invite || !myMembership) {
-            if (SettingsStore.getValue("showAvatarsOnInvites") === false) {
-                // The user has opted out of showing avatars, so return no urls here.
-                return [];
-            }
+    const urls = useMemo(() => {
+        // Apparently parseInt ignores suffixes.
+        const sizeInt = parseInt(size, 10);
+        const myMembership = room?.getMyMembership();
+        if (!showAvatarsOnInvites && (myMembership === KnownMembership.Invite || !myMembership)) {
+            // The user has opted out of showing avatars, so return no urls here.
+            return [];
         }
         let oobAvatar: string | null = null;
-        if (props.oobData.avatarUrl) {
-            oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(
-                parseInt(props.size, 10),
-                parseInt(props.size, 10),
-                "crop",
-            );
+        if (oobData?.avatarUrl) {
+            oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }
 
         return filterBoolean([
             oobAvatar, // highest priority
-            RoomAvatar.getRoomAvatarUrl(props),
+            roomAvatarMxc && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
         ]);
-    }
+    }, [showAvatarsOnInvites, room, size, roomAvatarMxc, oobData]);
 
-    private static getRoomAvatarUrl(props: IProps): string | null {
-        if (!props.room) return null;
+    return (
+        <BaseAvatar
+            {...otherProps}
+            size={size}
+            type={(room?.getType() ?? oobData?.roomType) === RoomType.Space ? "square" : "round"}
+            name={roomName}
+            idName={roomIdName}
+            urls={urls}
+            onClick={viewAvatarOnClick && urls[0] ? onRoomAvatarClick : onClick}
+        />
+    );
+};
 
-        return Avatar.avatarUrlForRoom(props.room, parseInt(props.size, 10), parseInt(props.size, 10), "crop");
-    }
-
-    private onRoomAvatarClick = (): void => {
-        const avatarUrl = Avatar.avatarUrlForRoom(this.props.room ?? null, undefined, undefined, undefined);
-        if (!avatarUrl) return;
-        const params = {
-            src: avatarUrl,
-            name: this.props.room?.name,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
-    };
-
-    private get roomIdName(): string | undefined {
-        const room = this.props.room;
-
-        if (room) {
-            return idNameForRoom(room);
-        } else {
-            return this.props.oobData?.roomId;
-        }
-    }
-
-    public render(): React.ReactNode {
-        const { room, oobData, viewAvatarOnClick, onClick, ...otherProps } = this.props;
-        const roomName = room?.name ?? oobData.name ?? "?";
-
-        return (
-            <BaseAvatar
-                {...otherProps}
-                type={(room?.getType() ?? this.props.oobData?.roomType) === RoomType.Space ? "square" : "round"}
-                name={roomName}
-                idName={this.roomIdName}
-                urls={this.state.urls}
-                onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
-            />
-        );
-    }
-}
+export default RoomAvatar;
