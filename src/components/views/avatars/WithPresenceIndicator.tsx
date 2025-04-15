@@ -52,14 +52,14 @@ function getDmMember(room: Room): RoomMember | null {
     return otherUserId ? room.getMember(otherUserId) : null;
 }
 
-export const useDmMember = (room: Room): RoomMember | null => {
-    const [dmMember, setDmMember] = useState<RoomMember | null>(getDmMember(room));
+export const useDmMember = (room?: Room): RoomMember | null => {
+    const [dmMember, setDmMember] = useState<RoomMember | null>(room ? getDmMember(room) : null);
     const updateDmMember = (): void => {
-        setDmMember(getDmMember(room));
+        setDmMember(room ? getDmMember(room) : null);
     };
 
-    useEventEmitter(room.currentState, RoomStateEvent.Members, updateDmMember);
-    useEventEmitter(room.client, ClientEvent.AccountData, updateDmMember);
+    useEventEmitter(room?.currentState, RoomStateEvent.Members, updateDmMember);
+    useEventEmitter(room?.client, ClientEvent.AccountData, updateDmMember);
     useEffect(updateDmMember, [room]);
 
     return dmMember;
