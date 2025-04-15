@@ -20,7 +20,7 @@ test.describe("Invites", () => {
         await bot.inviteUser(roomId, user.userId);
         await app.viewRoomByName("Bob");
         await expect(page.locator(".mx_RoomView")).toMatchScreenshot("Invites_room_view.png", {
-            // Hide the mxid, which is hot stable.
+            // Hide the mxid, which is not stable.
             mask: [page.locator(".mx_RoomPreviewBar_inviter_mxid")],
         });
     });
