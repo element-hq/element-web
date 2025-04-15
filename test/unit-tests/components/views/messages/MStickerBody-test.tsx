@@ -19,6 +19,7 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    withClientContextRenderOptions,
 } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import MStickerBody from "../../../../../src/components/views/messages/MStickerBody";
@@ -31,6 +32,7 @@ describe("<MStickerBody/>", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
+        getRoom: jest.fn(),
         getRooms: jest.fn().mockReturnValue([]),
         getIgnoredUsers: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({
@@ -76,7 +78,7 @@ describe("<MStickerBody/>", () => {
     it("should show a tooltip on hover", async () => {
         fetchMock.getOnce(url, { status: 200 });
 
-        render(<MStickerBody {...props} mxEvent={mediaEvent} />);
+        render(<MStickerBody {...props} mxEvent={mediaEvent} />, withClientContextRenderOptions(cli));
 
         expect(screen.queryByRole("tooltip")).toBeNull();
         await userEvent.hover(screen.getByRole("img"));

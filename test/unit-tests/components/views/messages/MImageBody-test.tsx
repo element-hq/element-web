@@ -100,6 +100,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         // thumbnail with dimensions present
@@ -115,6 +116,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         expect(fetchMock).toHaveBeenCalledWith(url);
@@ -132,6 +134,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         await screen.findByText("Error decrypting image");
@@ -212,6 +215,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         const img = container.querySelector(".mx_MImageBody_thumbnail")!;
@@ -265,6 +269,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         // Wait for spinners to go away
@@ -290,6 +295,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         const img = container.querySelector(".mx_MImageBody_thumbnail")!;

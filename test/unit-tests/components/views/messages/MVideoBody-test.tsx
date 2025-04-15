@@ -98,6 +98,7 @@ describe("MVideoBody", () => {
         fetchMock.getOnce(thumbUrl, { status: 200 });
         const { asFragment } = render(
             <MVideoBody mxEvent={encryptedMediaEvent} mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)} />,
+            withClientContextRenderOptions(cli),
         );
         expect(asFragment()).toMatchSnapshot();
     });
