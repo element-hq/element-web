@@ -57,7 +57,7 @@ describe("useMediaVisible", () => {
         "should display media when media previews are Private and the join rule is %s",
         async (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
-            room.getJoinRule = jest.fn().mockReturnValue(rule);
+            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
             const { result } = render();
             expect(result.current[0]).toEqual(true);
         },
@@ -67,7 +67,7 @@ describe("useMediaVisible", () => {
         "should hide media when media previews are Private and the join rule is %s",
         async (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
-            room.getJoinRule = jest.fn().mockReturnValue(rule);
+            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
             const { result } = render();
             expect(result.current[0]).toEqual(false);
         },
