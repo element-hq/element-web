@@ -292,7 +292,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^10.20.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.8.2",
+        "typescript": "5.8.3",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
