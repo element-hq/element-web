@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { ContentHelpers, EventType, Room } from "matrix-js-sdk/src/matrix";
+import { ContentHelpers, EventType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
