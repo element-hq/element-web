@@ -17,9 +17,8 @@ import {
 import { useEffect, useState } from "react";
 
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
-import DMRoomMap from "../../../utils/DMRoomMap";
-import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 import { BUSY_PRESENCE_NAME } from "../../views/rooms/PresenceLabel";
+import { useDmMember } from "../../views/avatars/WithPresenceIndicator";
 import { isPresenceEnabled } from "../../../utils/presence";
 
 /**
@@ -103,27 +102,21 @@ function isRoomPublic(room: Room): boolean {
  * @param room
  */
 function useDMPresence(room: Room): Presence {
-    const dmUser = getDMUser(room);
+    const roomMember = useDmMember(room);
+    const isEnabled = isPresenceEnabled(room.client);
+
+    // If the presence is not enabled, we don't need to listen to the DM user presence.
+    const dmUser = isEnabled ? roomMember?.user : undefined;
     const [presence, setPresence] = useState<Presence>(getPresence(dmUser));
     useTypedEventEmitter(dmUser, UserEvent.Presence, () => setPresence(getPresence(dmUser)));
     useTypedEventEmitter(dmUser, UserEvent.CurrentlyActive, () => setPresence(getPresence(dmUser)));
 
+    // Reset the value when the room dmUser changes
+    useEffect(() => {
+        setPresence(getPresence(dmUser));
+    }, [dmUser]);
+
     return presence;
-}
-
-/**
- * Get the DM user of the room.
- * Return undefined if the room is not a DM room, if we can't find the user or if the presence is not enabled.
- * @param room
- * @returns found user
- */
-function getDMUser(room: Room): User | undefined {
-    const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    if (!otherUserId) return;
-    if (getJoinedNonFunctionalMembers(room).length !== 2) return;
-    if (!isPresenceEnabled(room.client)) return;
-
-    return room.client.getUser(otherUserId) || undefined;
 }
 
 /**

@@ -11,7 +11,7 @@ import {
     type MatrixClient,
     MatrixEvent,
     type Room,
-    type RoomMember,
+    RoomMember,
     User,
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -20,11 +20,15 @@ import { mocked } from "jest-mock";
 import { useRoomAvatarViewModel } from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { getJoinedNonFunctionalMembers } from "../../../../../src/utils/room/getJoinedNonFunctionalMembers";
 import { isPresenceEnabled } from "../../../../../src/utils/presence";
+import { useDmMember } from "../../../../../src/components/views/avatars/WithPresenceIndicator";
 
 jest.mock("../../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
     getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([]),
+}));
+
+jest.mock("../../../../../src/components/views/avatars/WithPresenceIndicator", () => ({
+    useDmMember: jest.fn().mockReturnValue(null),
 }));
 
 jest.mock("../../../../../src/utils/presence", () => ({
@@ -78,16 +82,15 @@ describe("RoomAvatarViewModel", () => {
         let user: User;
 
         beforeEach(() => {
-            jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue("userId");
-            mocked(getJoinedNonFunctionalMembers).mockReturnValue([{}, {}] as RoomMember[]);
-            mocked(isPresenceEnabled).mockReturnValue(true);
-
             user = User.createUser("userId", matrixClient);
-            jest.spyOn(matrixClient, "getUser").mockReturnValue(user);
+            const roomMember = new RoomMember(room.roomId, "userId");
+            roomMember.user = user;
+            mocked(useDmMember).mockReturnValue(roomMember);
+            mocked(isPresenceEnabled).mockReturnValue(true);
         });
 
         it("should has presence set to null", () => {
-            jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+            mocked(useDmMember).mockReturnValue(null);
 
             const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
             expect(vm.current.presence).toBe(null);
@@ -130,6 +133,24 @@ describe("RoomAvatarViewModel", () => {
         it("should has hasDecoration to true", async () => {
             const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
             expect(vm.current.hasDecoration).toBe(true);
+        });
+
+        it("should recompute presence when room changed", async () => {
+            user.presence = "busy";
+            const { result: vm, rerender } = renderHook((props) => useRoomAvatarViewModel(props), {
+                initialProps: room,
+            });
+            expect(vm.current.presence).toBe("busy");
+
+            const otherRoom = mkStubRoom("roomId2", "roomName2", matrixClient);
+            const otherMember = new RoomMember(otherRoom.roomId, "userId2");
+            const otherUser = User.createUser("userId2", matrixClient);
+            otherUser.presence = "online";
+            otherMember.user = otherUser;
+            mocked(useDmMember).mockReturnValue(otherMember);
+
+            rerender(otherRoom);
+            expect(vm.current.presence).toBe("online");
         });
     });
 });
