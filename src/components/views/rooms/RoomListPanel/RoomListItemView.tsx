@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useState } from "react";
+import React, { type JSX, memo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
@@ -29,7 +29,11 @@ interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElem
 /**
  * An item in the room list
  */
-export function RoomListItemView({ room, isSelected, ...props }: RoomListItemViewPropsProps): JSX.Element {
+export const RoomListItemView = memo(function RoomListItemView({
+    room,
+    isSelected,
+    ...props
+}: RoomListItemViewPropsProps): JSX.Element {
     const vm = useRoomListItemViewModel(room);
 
     const [isHover, setIsHover] = useState(false);
@@ -97,4 +101,4 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
             </Flex>
         </button>
     );
-}
+});
