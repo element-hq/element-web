@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useMemo, type ComponentProps } from "react";
 import { type Room, RoomType, KnownMembership, EventType } from "matrix-js-sdk/src/matrix";
+import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
@@ -67,9 +68,17 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
             oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }
 
+        console.log(avatarEvent, oobAvatar);
+
         return filterBoolean([
             oobAvatar, // highest priority
-            avatarEvent && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
+            Avatar.avatarUrlForRoom(
+                room ?? null,
+                sizeInt,
+                sizeInt,
+                "crop",
+                avatarEvent?.getContent<RoomAvatarEventContent>().url,
+            ),
         ]);
     }, [showAvatarsOnInvites, room, size, avatarEvent, oobData]);
 

@@ -16,10 +16,7 @@ import { LocalRoom } from "../../models/LocalRoom.ts";
  * @param oobData - out-of-band information about the room
  * @returns An ID string, or undefined if the room and oobData are undefined.
  */
-export function useRoomIdName(
-    room?: Room,
-    oobData?: { roomId?: string },
-): string|undefined {
+export function useRoomIdName(room?: Room, oobData?: { roomId?: string }): string | undefined {
     const dmMember = useDmMember(room);
     if (dmMember) {
         // If the room is a DM, we use the other user's ID for the color hash
