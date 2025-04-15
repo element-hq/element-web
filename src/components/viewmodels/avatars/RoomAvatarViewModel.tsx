@@ -5,31 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    EventType,
-    JoinRule,
-    type MatrixEvent,
-    type Room,
-    RoomEvent,
-    type User,
-    UserEvent,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { useEffect, useState } from "react";
 
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
-import { BUSY_PRESENCE_NAME } from "../../views/rooms/PresenceLabel";
-import { useDmMember } from "../../views/avatars/WithPresenceIndicator";
-import { isPresenceEnabled } from "../../../utils/presence";
-
-/**
- * The presence of a user in a DM room.
- * - "online": The user is online.
- * - "offline": The user is offline.
- * - "busy": The user is busy.
- * - "unavailable": the presence is unavailable.
- * - null: the user is not in a DM room or presence is not enabled.
- */
-export type Presence = "online" | "offline" | "busy" | "unavailable" | null;
+import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
 
 export interface RoomAvatarViewState {
     /**
@@ -49,7 +29,7 @@ export interface RoomAvatarViewState {
      * The presence of the user in the DM room.
      * If null, the user is not in a DM room or presence is not enabled.
      */
-    presence: Presence;
+    presence: Presence | null;
 }
 
 /**
@@ -58,7 +38,8 @@ export interface RoomAvatarViewState {
  */
 export function useRoomAvatarViewModel(room: Room): RoomAvatarViewState {
     const isVideoRoom = room.isElementVideoRoom() || room.isCallRoom();
-    const presence = useDMPresence(room);
+    const roomMember = useDmMember(room);
+    const presence = usePresence(room, roomMember);
     const isPublic = useIsPublic(room);
 
     const hasDecoration = isPublic || isVideoRoom || presence !== null;
@@ -95,43 +76,4 @@ function useIsPublic(room: Room): boolean {
  */
 function isRoomPublic(room: Room): boolean {
     return room.getJoinRule() === JoinRule.Public;
-}
-
-/**
- * Hook listening to the presence of the DM user.
- * @param room
- */
-function useDMPresence(room: Room): Presence {
-    const roomMember = useDmMember(room);
-    const isEnabled = isPresenceEnabled(room.client);
-
-    // If the presence is not enabled, we don't need to listen to the DM user presence.
-    const dmUser = isEnabled ? roomMember?.user : undefined;
-    const [presence, setPresence] = useState<Presence>(getPresence(dmUser));
-    useTypedEventEmitter(dmUser, UserEvent.Presence, () => setPresence(getPresence(dmUser)));
-    useTypedEventEmitter(dmUser, UserEvent.CurrentlyActive, () => setPresence(getPresence(dmUser)));
-
-    // Reset the value when the room dmUser changes
-    useEffect(() => {
-        setPresence(getPresence(dmUser));
-    }, [dmUser]);
-
-    return presence;
-}
-
-/**
- * Get the presence of the DM user.
- * @param dmUser
- */
-function getPresence(dmUser: User | undefined): Presence {
-    if (!dmUser) return null;
-    if (BUSY_PRESENCE_NAME.matches(dmUser.presence)) return "busy";
-
-    const isOnline = dmUser.currentlyActive || dmUser.presence === "online";
-    if (isOnline) return "online";
-
-    if (dmUser.presence === "offline") return "offline";
-    if (dmUser.presence === "unavailable") return "unavailable";
-
-    return null;
 }

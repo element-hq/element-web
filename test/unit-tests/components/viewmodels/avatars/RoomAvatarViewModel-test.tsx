@@ -5,34 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { renderHook, waitFor, act } from "jest-matrix-react";
-import {
-    JoinRule,
-    type MatrixClient,
-    MatrixEvent,
-    type Room,
-    RoomMember,
-    User,
-    UserEvent,
-} from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { renderHook, waitFor } from "jest-matrix-react";
+import { JoinRule, type MatrixClient, type Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
 
 import { useRoomAvatarViewModel } from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { isPresenceEnabled } from "../../../../../src/utils/presence";
-import { useDmMember } from "../../../../../src/components/views/avatars/WithPresenceIndicator";
+import * as PresenceIndicatorModule from "../../../../../src/components/views/avatars/WithPresenceIndicator";
 
 jest.mock("../../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
     getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([]),
-}));
-
-jest.mock("../../../../../src/components/views/avatars/WithPresenceIndicator", () => ({
-    useDmMember: jest.fn().mockReturnValue(null),
-}));
-
-jest.mock("../../../../../src/utils/presence", () => ({
-    isPresenceEnabled: jest.fn().mockReturnValue(false),
 }));
 
 describe("RoomAvatarViewModel", () => {
@@ -45,6 +27,9 @@ describe("RoomAvatarViewModel", () => {
 
         DMRoomMap.makeShared(matrixClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+
+        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(null);
+        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
     });
 
     it("should has hasDecoration to false", async () => {
@@ -78,79 +63,14 @@ describe("RoomAvatarViewModel", () => {
         await waitFor(() => expect(vm.current.isPublic).toBe(true));
     });
 
-    describe("presence", () => {
-        let user: User;
+    it("should return presence", async () => {
+        const user = User.createUser("userId", matrixClient);
+        const roomMember = new RoomMember(room.roomId, "userId");
+        roomMember.user = user;
+        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
+        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
 
-        beforeEach(() => {
-            user = User.createUser("userId", matrixClient);
-            const roomMember = new RoomMember(room.roomId, "userId");
-            roomMember.user = user;
-            mocked(useDmMember).mockReturnValue(roomMember);
-            mocked(isPresenceEnabled).mockReturnValue(true);
-        });
-
-        it("should has presence set to null", () => {
-            mocked(useDmMember).mockReturnValue(null);
-
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.presence).toBe(null);
-        });
-
-        it("should has online presence", async () => {
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.presence).toBe("offline");
-
-            user.presence = "online";
-
-            await act(() => user.emit(UserEvent.Presence, new MatrixEvent(), user));
-            await waitFor(() => expect(vm.current.presence).toBe("online"));
-
-            user.currentlyActive = true;
-            user.presence = "offline";
-
-            await act(() => user.emit(UserEvent.CurrentlyActive, new MatrixEvent(), user));
-            await waitFor(() => expect(vm.current.presence).toBe("online"));
-        });
-
-        it("should has busy presence", async () => {
-            user.presence = "busy";
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.presence).toBe("busy");
-        });
-
-        it("should has offline presence", async () => {
-            user.presence = "offline";
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.presence).toBe("offline");
-        });
-
-        it("should has unavailable presence", async () => {
-            user.presence = "unavailable";
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.presence).toBe("unavailable");
-        });
-
-        it("should has hasDecoration to true", async () => {
-            const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-            expect(vm.current.hasDecoration).toBe(true);
-        });
-
-        it("should recompute presence when room changed", async () => {
-            user.presence = "busy";
-            const { result: vm, rerender } = renderHook((props) => useRoomAvatarViewModel(props), {
-                initialProps: room,
-            });
-            expect(vm.current.presence).toBe("busy");
-
-            const otherRoom = mkStubRoom("roomId2", "roomName2", matrixClient);
-            const otherMember = new RoomMember(otherRoom.roomId, "userId2");
-            const otherUser = User.createUser("userId2", matrixClient);
-            otherUser.presence = "online";
-            otherMember.user = otherUser;
-            mocked(useDmMember).mockReturnValue(otherMember);
-
-            rerender(otherRoom);
-            expect(vm.current.presence).toBe("online");
-        });
+        const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
+        expect(vm.current.presence).toBe(PresenceIndicatorModule.Presence.Online);
     });
 });
