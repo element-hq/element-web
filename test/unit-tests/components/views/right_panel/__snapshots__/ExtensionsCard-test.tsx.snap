@@ -19,7 +19,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":r0:"
+        aria-labelledby="«r0»"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -119,7 +119,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":r6:"
+        aria-labelledby="«r6»"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
