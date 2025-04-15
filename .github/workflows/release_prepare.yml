@@ -100,7 +100,7 @@ jobs:
                   repo: matrix-org/matrix-js-sdk
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
-                  check-name: draft
+                  check-name: "draft / draft"
                   allowed-conclusions: success
 
             - name: Wait for element-web draft
@@ -111,7 +111,7 @@ jobs:
                   repo: element-hq/element-web
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
-                  check-name: draft
+                  check-name: "draft / draft"
                   allowed-conclusions: success
 
             - name: Wait for element-desktop draft
@@ -122,5 +122,5 @@ jobs:
                   repo: element-hq/element-desktop
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
-                  check-name: draft
+                  check-name: "draft / draft"
                   allowed-conclusions: success

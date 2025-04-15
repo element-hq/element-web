@@ -7,7 +7,7 @@
 
 import { type Page } from "@playwright/test";
 
-import { test, expect } from "../../../element-web-test";
+import { expect, test } from "../../../element-web-test";
 
 test.describe("Room list", () => {
     test.use({
@@ -85,6 +85,48 @@ test.describe("Room list", () => {
             await expect(roomItem).not.toBeVisible();
         });
 
+        test("should open the notification options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomListView = getRoomList(page);
+
+            const roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
+            await roomItem.hover();
+
+            await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
+            let roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            await roomItemMenu.click();
+
+            // Default settings should be selected
+            await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
+                "aria-selected",
+                "true",
+            );
+            await expect(page).toMatchScreenshot("room-list-item-open-notification-options.png");
+
+            // It should make the room muted
+            await page.getByRole("menuitem", { name: "Mute room" }).click();
+
+            // Remove hover on the room list item
+            await roomListView.hover();
+
+            // Scroll to the bottom of the list
+            await page.getByRole("grid", { name: "Room list" }).evaluate((e) => {
+                e.scrollTop = e.scrollHeight;
+            });
+
+            // The room decoration should have the muted icon
+            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
+
+            await roomItem.hover();
+            // On hover, the room should show the muted icon
+            await expect(roomItem).toMatchScreenshot("room-list-item-hover-silent.png");
+
+            roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            await roomItemMenu.click();
+            // The Mute room option should be selected
+            await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
+            await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
+        });
+
         test("should scroll to the current room", async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
             await roomListView.hover();
@@ -99,6 +141,32 @@ test.describe("Room list", () => {
 
             await filters.getByRole("option", { name: "People" }).click();
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
+        });
+    });
+
+    test.describe("Avatar decoration", () => {
+        test.use({ labsFlags: ["feature_video_rooms", "feature_new_room_list"] });
+
+        test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            // @ts-ignore Visibility enum is not accessible
+            await app.client.createRoom({ name: "public room", visibility: "public" });
+            const roomListView = getRoomList(page);
+            const publicRoom = roomListView.getByRole("gridcell", { name: "public room" });
+
+            await expect(publicRoom).toBeVisible();
+            await expect(publicRoom).toMatchScreenshot("room-list-item-public.png");
+        });
+
+        test("should be a video room", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            await page.getByTestId("room-list-panel").getByRole("button", { name: "Add" }).click();
+            await page.getByRole("menuitem", { name: "New video room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill("video room");
+            await page.getByRole("button", { name: "Create video room" }).click();
+
+            const roomListView = getRoomList(page);
+            const videoRoom = roomListView.getByRole("gridcell", { name: "video room" });
+            await expect(videoRoom).toBeVisible();
+            await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
         });
     });
 

@@ -34,34 +34,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="2"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="2"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room0"
                 >
                   room0
@@ -81,34 +78,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="3"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="3"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room1"
                 >
                   room1
@@ -128,34 +122,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="4"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="4"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room2"
                 >
                   room2
@@ -175,34 +166,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="5"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="5"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room3"
                 >
                   room3
@@ -222,34 +210,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="6"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="6"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room4"
                 >
                   room4
@@ -269,34 +254,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="1"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="1"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room5"
                 >
                   room5
@@ -316,34 +298,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="2"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="2"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room6"
                 >
                   room6
@@ -363,34 +342,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="3"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="3"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room7"
                 >
                   room7
@@ -410,34 +386,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="4"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="4"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room8"
                 >
                   room8
@@ -457,34 +430,31 @@ exports[`<RoomList /> should render a room list 1`] = `
               class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
-              <div
-                class="mx_DecoratedRoomAvatar"
+              <span
+                aria-label="Avatar"
+                class="_avatar_1qbcf_8 mx_BaseAvatar"
+                data-color="5"
+                data-testid="avatar-img"
+                data-type="round"
+                style="--cpd-avatar-size: 32px;"
               >
-                <span
-                  aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar"
-                  data-color="5"
-                  data-testid="avatar-img"
+                <img
+                  alt=""
+                  class="_image_1qbcf_41"
                   data-type="round"
-                  style="--cpd-avatar-size: 32px;"
-                >
-                  <img
-                    alt=""
-                    class="_image_1qbcf_41"
-                    data-type="round"
-                    height="32px"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    src="http://this.is.a.url/avatar.url/room.png"
-                    width="32px"
-                  />
-                </span>
-              </div>
+                  height="32px"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  src="http://this.is.a.url/avatar.url/room.png"
+                  width="32px"
+                />
+              </span>
               <div
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
+                  class="mx_RoomListItemView_roomName"
                   title="room9"
                 >
                   room9

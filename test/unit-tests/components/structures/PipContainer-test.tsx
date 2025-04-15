@@ -148,6 +148,8 @@ describe("PipContainer", () => {
             WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                 stop: () => {},
+                hasCapability: jest.fn(),
+                feedStateUpdate: jest.fn().mockResolvedValue(undefined),
             } as unknown as ClientWidgetApi);
 
             await call.start();
@@ -271,7 +273,10 @@ describe("PipContainer", () => {
                     Parameters<ClientWidgetApi["transport"]["send"]>
                 >()
                 .mockResolvedValue({});
-            const mockMessaging = { transport: { send: sendSpy }, stop: () => {} } as unknown as ClientWidgetApi;
+            const mockMessaging = {
+                transport: { send: sendSpy },
+                stop: () => {},
+            } as unknown as ClientWidgetApi;
             WidgetMessagingStore.instance.storeMessaging(new Widget(widget), room.roomId, mockMessaging);
             await user.click(screen.getByRole("button", { name: "Leave" }));
             expect(sendSpy).toHaveBeenCalledWith(ElementWidgetActions.HangupCall, {});

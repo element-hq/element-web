@@ -14,49 +14,54 @@ import { NotificationDecoration } from "../../../../../src/components/views/room
 describe("<NotificationDecoration />", () => {
     it("should not render if RoomNotificationState.isSilent=true", () => {
         const state = { hasAnyNotificationOrActivity: false } as RoomNotificationState;
-        render(<NotificationDecoration notificationState={state} />);
+        render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(screen.queryByTestId("notification-decoration")).toBeNull();
     });
 
     it("should render the unset message decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, isUnsetMessage: true } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the invitation decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, invited: true } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the mention decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, isMention: true, count: 1 } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the notification decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, isNotification: true, count: 1 } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the notification decoration without count", () => {
         const state = { hasAnyNotificationOrActivity: true, isNotification: true, count: 0 } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the activity decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, isActivityNotification: true } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render the muted decoration", () => {
         const state = { hasAnyNotificationOrActivity: true, muted: true } as RoomNotificationState;
-        const { asFragment } = render(<NotificationDecoration notificationState={state} />);
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+    it("should render the video decoration", () => {
+        const state = { hasAnyNotificationOrActivity: false } as RoomNotificationState;
+        const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={true} />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { ContentHelpers, EventType } from "matrix-js-sdk/src/matrix";
+import { ContentHelpers, EventType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -15,7 +15,8 @@ import Field from "../elements/Field";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
-import { idNameForRoom } from "../avatars/RoomAvatar";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { LocalRoom } from "../../../models/LocalRoom";
 
 interface IProps {
     roomId: string;
@@ -34,6 +35,19 @@ interface IState {
     canSetName: boolean;
     canSetTopic: boolean;
     canSetAvatar: boolean;
+}
+
+function idNameForRoom(room: Room): string {
+    const dmMapUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+    // If the room is a DM, we use the other user's ID for the color hash
+    // in order to match the room avatar with their avatar
+    if (dmMapUserId) return dmMapUserId;
+
+    if (room instanceof LocalRoom && room.targets.length === 1) {
+        return room.targets[0].userId;
+    }
+
+    return room.roomId;
 }
 
 // TODO: Merge with ProfileSettings?

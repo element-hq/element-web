@@ -12,7 +12,7 @@
             "one": "1 ungelesene Erwähnung."
         },
         "recent_rooms": "Kürzlich besuchte Chatrooms",
-        "room_messsage_not_sent": "Öffnen Sie den %(roomName)s Raum mit einer nicht gesetzten Nachricht.",
+        "room_messsage_not_sent": "Öffnen Sie den Chatroom %(roomName)s mit einer nicht gesendeten Nachricht.",
         "room_n_unread_invite": "%(roomName)s Einladung zum Raum öffnen.",
         "room_n_unread_messages": {
             "one": "Raum %(roomName)s öffnen mit 1 ungelesenen Nachricht.",
@@ -55,6 +55,8 @@
         "create_a_room": "Raum erstellen",
         "create_account": "Konto erstellen",
         "decline": "Ablehnen",
+        "decline_and_block": "Ablehnen und blockieren",
+        "decline_invite": "Einladung ablehnen",
         "delete": "Löschen",
         "deny": "Ablehnen",
         "disable": "Deaktivieren",
@@ -107,7 +109,6 @@
         "react": "Reagieren",
         "refresh": "Neu laden",
         "register": "Registrieren",
-        "reject": "Ablehnen",
         "reload": "Neu laden",
         "remove": "Entfernen",
         "rename": "Umbenennen",
@@ -486,7 +487,6 @@
         "capabilities": "Funktionen",
         "copied": "Kopiert!",
         "credits": "Danksagungen",
-        "cross_signing": "Quersignierung",
         "dark": "Dunkel",
         "description": "Beschreibung",
         "deselect_all": "Alle abwählen",
@@ -746,6 +746,13 @@
         "twemoji": "Die <twemoji>Twemoji</twemoji>-Emojis sind © <author>Twitter, Inc und weitere Mitwirkende</author> und wird unter den Bedingungen von <terms>CC-BY 4.0</terms> verwendet.",
         "twemoji_colr": "Die Schriftart <colr>twemoji-colr</colr> ist © <author>Mozilla Foundation</author> und wird unter den Bedingungen von <terms>Apache 2.0</terms> verwendet."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Sind Sie sicher, dass Sie die Einladung zur Teilnahme an \"%(roomName)s\" ablehnen möchten?",
+        "ignore_user_help": "Von diesem Benutzer werden Ihnen keine Nachrichten oder Chatroomeinladungen angezeigt.",
+        "reason_description": "Beschreiben Sie den Grund für die Meldung dieses Chatrooms.",
+        "report_room_description": "Melden Sie diesen Raum Ihrem Kontoanbieter.",
+        "title": "Einladung ablehnen"
+    },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktive Widgets",
@@ -846,6 +853,9 @@
         "setting_colon": "Einstellung:",
         "setting_definition": "Definition der Einstellung:",
         "setting_id": "Einstellungs-ID",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Einstellungsübersicht",
         "show_hidden_events": "Versteckte Ereignisse im Verlauf anzeigen",
         "spaces": {
@@ -920,22 +930,12 @@
         "cancel_entering_passphrase_title": "Eingabe der Passphrase abbrechen?",
         "confirm_encryption_setup_body": "Klick die Schaltfläche unten um die Einstellungen der Verschlüsselung zu bestätigen.",
         "confirm_encryption_setup_title": "Bestätige die Einrichtung der Verschlüsselung",
-        "cross_signing_not_ready": "Quersignierung wurde nicht eingerichtet.",
-        "cross_signing_ready": "Quersignaturen sind bereits in Anwendung.",
-        "cross_signing_ready_no_backup": "Quersignatur ist bereit, die Schlüssel sind aber nicht gesichert.",
         "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
         "cross_signing_room_verified": "Alle in diesem Raum sind verifiziert",
         "cross_signing_room_warning": "Jemand verwendet eine unbekannte Sitzung",
-        "cross_signing_unsupported": "Dein Heim-Server unterstützt keine Quersignierung.",
-        "cross_signing_untrusted": "Dein Konto hat eine Quersignaturidentität im sicheren Speicher, der von dieser Sitzung jedoch noch nicht vertraut wird.",
         "cross_signing_user_normal": "Du hast diesen Nutzer nicht verifiziert.",
         "cross_signing_user_verified": "Du hast diesen Nutzer verifiziert. Der Nutzer hat alle seine Sitzungen verifiziert.",
         "cross_signing_user_warning": "Dieser Benutzer hat nicht alle seine Sitzungen verifiziert.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Cross-Signing-Schlüssel löschen",
-            "title": "Cross-Signing-Schlüssel zerstören?",
-            "warning": "Das Löschen von Quersignierungsschlüsseln ist dauerhaft. Alle, mit dem du dich verifiziert hast, werden Sicherheitswarnungen angezeigt bekommen. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du quersignieren kannst."
-        },
         "enter_recovery_key": "Geben Sie den Wiederherstellungsschlüssel ein",
         "event_shield_reason_authenticity_not_guaranteed": "Die Echtheit dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.",
         "event_shield_reason_mismatched_sender_key": "Von einer nicht verifizierten Sitzung verschlüsselt",
@@ -962,7 +962,6 @@
             "title": "Neue Wiederherstellungsmethode",
             "warning": "Wenn du die neue Wiederherstellungsmethode nicht festgelegt hast, versucht ein Angreifer möglicherweise, auf dein Konto zuzugreifen. Ändere dein Kontopasswort und lege sofort eine neue Wiederherstellungsmethode in den Einstellungen fest."
         },
-        "not_supported": "<nicht unterstützt>",
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) Identität wurde zurückgesetzt. <a>Mehr erfahren </a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>Die Identität wurde zurückgesetzt. <a>Erfahre mehr </a>",
         "recovery_method_removed": {
@@ -978,8 +977,7 @@
         "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
-            "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern.",
-            "title": "Einrichten"
+            "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
         },
         "udd": {
             "interactive_verification_button": "Interaktiv per Emoji verifizieren",
@@ -1674,6 +1672,7 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
+        "default_settings": "Passen Sie die Standardeinstellungen an",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1692,7 +1691,8 @@
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
-        "mute_description": "Du wirst keine Benachrichtigungen erhalten"
+        "mute_description": "Du wirst keine Benachrichtigungen erhalten",
+        "mute_room": "Chatroom stumm stellen"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -1794,11 +1794,6 @@
         "ongoing": "Löschen…",
         "reason_label": "Grund (optional)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Bist du sicher, dass du die Einladung ablehnen willst?",
-        "failed": "Einladung konnte nicht abgelehnt werden",
-        "title": "Einladung ablehnen"
-    },
     "report_content": {
         "description": "Wenn du diese Nachricht meldest, wird die eindeutige Ereignis-ID an die Administration deines Heim-Servers übermittelt. Wenn die Nachrichten in diesem Raum verschlüsselt sind, wird deine Heim-Server-Administration nicht in der Lage sein, Nachrichten zu lesen oder Medien einzusehen.",
         "disagree": "Ablehnen",
@@ -1822,10 +1817,8 @@
         "toxic_behaviour": "Toxisches Verhalten"
     },
     "report_room": {
-        "description": "Melden Sie diesen Raum Ihrem Homeserver-Administrator. Dadurch wird die eindeutige ID des Raums gesendet. Wenn Nachrichten verschlüsselt sind, kann der Administrator sie jedoch nicht lesen oder geteilte Dateien anzeigen.",
-        "reason_placeholder": " Grund für die Meldung...",
-        "sent": "Ihr Bericht wurde gesendet.",
-        "title": "Raum melden"
+        "description": "Melden Sie diesen Raum Ihrem Kontoanbieter. Wenn die Nachrichten verschlüsselt sind, kann Ihr Administrator sie nicht lesen.",
+        "reason_label": "Beschreiben Sie den Grund"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Konnte %(failedCount)s Sitzungen nicht entschlüsseln!",
@@ -2009,7 +2002,6 @@
             "you_created": "Du hast diesen Raum erstellt."
         },
         "invite_email_mismatch_suggestion": "Teile diese E-Mail-Adresse in den Einstellungen, um Einladungen direkt in %(brand)s zu erhalten.",
-        "invite_reject_ignore": "Ablehnen und Benutzer blockieren",
         "invite_sent_to_email": "Einladung an %(email)s gesendet",
         "invite_sent_to_email_room": "Diese Einladung zu %(roomName)s wurde an %(email)s gesendet",
         "invite_subtitle": "Eingeladen von <userName/>",
@@ -2535,6 +2527,7 @@
                 "breadcrumb_third_description": "Sie müssen alle Ihre vorhandenen Geräte und Kontakte erneut verifizieren",
                 "breadcrumb_title": "Sind Sie sicher, dass Sie Ihre Identität zurücksetzen möchten?",
                 "breadcrumb_title_forgot": "Haben Sie Ihren Wiederherstellungsschlüssel vergessen? Sie müssen Ihre Identität zurücksetzen.",
+                "breadcrumb_title_sync_failed": "Der Schlüsselspeicher konnte nicht synchronisiert werden. Sie müssen Ihre Identität zurücksetzen.",
                 "breadcrumb_warning": "Tun Sie dies nur, wenn Sie glauben, dass Ihr Konto kompromittiert wurde.",
                 "details_title": "Angaben zur Verschlüsselung",
                 "do_not_close_warning": "Schließen Sie dieses Fenster nicht, bis der Reset abgeschlossen ist",
@@ -2826,57 +2819,20 @@
         "prompt_invite": "Warnen, bevor du Einladungen zu ungültigen Matrix-IDs sendest",
         "replace_plain_emoji": "Klartext-Emoji automatisch ersetzen",
         "security": {
-            "4s_public_key_in_account_data": "in den Kontodaten",
-            "4s_public_key_status": "Öffentlicher Schlüssel des sicheren Speichers:",
             "analytics_description": "Anonym Daten teilen um bei der Identifizierung von Fehlern zu helfen. Keine persönlichen Daten. Keine Daten von Dritt-Anbietern.",
-            "backup_key_cached_status": "Sicherungsschlüssel zwischengespeichert:",
-            "backup_key_stored_status": "Sicherungsschlüssel gespeichert:",
-            "backup_key_unexpected_type": "unbekannter Typ",
-            "backup_key_well_formed": "wohlgeformt",
-            "backup_keys_description": "Sichern Sie Ihren Chiffrierschlüssel zusammen mit Ihren Kontodaten, für den Fall, dass Sie den Zugriff auf Ihre Sitzungen verlieren. Ihre Schlüssel werden mit einem unikalen Wiederherstellungsschlüssel geschützt.",
             "bulk_options_accept_all_invites": "Akzeptiere alle %(invitedRooms)s Einladungen",
             "bulk_options_reject_all_invites": "Alle %(invitedRooms)s Einladungen ablehnen",
             "bulk_options_section": "Sammeloptionen",
-            "cross_signing_cached": "lokal zwischengespeichert",
-            "cross_signing_homeserver_support": "Unterstützung des Heim-Servers:",
-            "cross_signing_homeserver_support_exists": "existiert",
-            "cross_signing_in_4s": "im Schlüsselspeicher",
-            "cross_signing_in_memory": "im Speicher",
-            "cross_signing_master_private_Key": "Privater Hauptschlüssel:",
-            "cross_signing_not_cached": "lokal nicht gefunden",
-            "cross_signing_not_found": "nicht gefunden",
-            "cross_signing_not_in_4s": "nicht im Speicher gefunden",
-            "cross_signing_not_stored": "nicht gespeichert",
-            "cross_signing_private_keys": "Private Quersignaturschlüssel:",
-            "cross_signing_public_keys": "Öffentlicher Quersignaturschlüssel:",
-            "cross_signing_self_signing_private_key": "Selbst signierter privater Schlüssel:",
-            "cross_signing_user_signing_private_key": "Privater Benutzerschlüssel:",
-            "cryptography_section": "Verschlüsselung",
             "dehydrated_device_description": "Die Offline-Gerätefunktion ermöglicht es Ihnen, verschlüsselte Nachrichten zu empfangen, auch wenn Sie an keinem Gerät angemeldet sind",
             "dehydrated_device_enabled": "Offline-Gerät aktiviert",
-            "delete_backup": "Lösche Sicherung",
-            "delete_backup_confirm_description": "Bist du sicher? Du wirst alle deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gut gesichert sind.",
             "dialog_title": "<strong>Einstellungen </strong> Sicherheit & Datenschutz",
             "e2ee_default_disabled_warning": "Deine Server-Administration hat die Ende-zu-Ende-Verschlüsselung für private Räume und Direktnachrichten standardmäßig deaktiviert.",
             "enable_message_search": "Nachrichtensuche in verschlüsselten Räumen aktivieren",
             "encryption_section": "Verschlüsselung",
-            "error_loading_key_backup_status": "Konnte Status der Schlüsselsicherung nicht laden",
-            "export_megolm_keys": "E2E-Raumschlüssel exportieren",
             "ignore_users_empty": "Sie haben keinen Benutzer blockiert.",
             "ignore_users_section": "Blockierte Benutzer",
-            "import_megolm_keys": "E2E-Raumschlüssel importieren",
-            "key_backup_active": "Diese Sitzung sichert deine Schlüssel.",
-            "key_backup_active_version": "Aktive Backup-Version:",
-            "key_backup_active_version_none": "Nichts",
             "key_backup_algorithm": "Algorithmus:",
-            "key_backup_can_be_restored": "Dieses Backup kann in dieser Sitzung wiederhergestellt werden",
-            "key_backup_complete": "Alle Schlüssel gesichert",
             "key_backup_connect": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
-            "key_backup_connect_prompt": "Verbinde diese Sitzung mit deiner Schlüsselsicherung bevor du dich abmeldest, um den Verlust von Schlüsseln zu vermeiden.",
-            "key_backup_in_progress": "Sichere %(sessionsRemaining)s Schlüssel …",
-            "key_backup_inactive": "Diese Sitzung <b>sichert deine Schlüssel nicht</b>, aber du hast eine vorhandene Sicherung, die du wiederherstellen und in Zukunft hinzufügen kannst.",
-            "key_backup_inactive_warning": "Deine Schlüssel werden von dieser Sitzung <b>nicht gesichert</b>.",
-            "key_backup_latest_version": "Letzte Backup-Version auf diesen Server:",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
             "message_search_enabled": {
@@ -2896,13 +2852,7 @@
             "message_search_unsupported": "Um verschlüsselte Nachrichten lokal zu durchsuchen, benötigt %(brand)s weitere Komponenten. Wenn du diese Funktion testen möchtest, kannst du dir deine eigene Version von %(brand)s Desktop mit der <nativeLink>integrierten Suchfunktion kompilieren</nativeLink>.",
             "message_search_unsupported_web": "Das Durchsuchen von verschlüsselten Nachrichten wird aus Sicherheitsgründen nur von %(brand)s Desktop unterstützt. <desktopLink>Hier gehts zum Download</desktopLink>.",
             "record_session_details": "Bezeichnung, Version und URL der Anwendung registrieren, damit diese Sitzung in der Sitzungsverwaltung besser erkennbar ist",
-            "restore_key_backup": "Von Sicherung wiederherstellen",
-            "secret_storage_not_ready": "nicht bereit",
-            "secret_storage_ready": "bereit",
-            "secret_storage_status": "Sicherer Speicher:",
             "send_analytics": "Analysedaten senden",
-            "session_id": "Sitzungs-ID:",
-            "session_key": "Sitzungsschlüssel:",
             "strict_encryption": "Senden Sie Nachrichten nur an verifizierte Benutzer"
         },
         "send_read_receipts": "Sende Lesebestätigungen",

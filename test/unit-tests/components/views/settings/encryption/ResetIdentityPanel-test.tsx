@@ -54,4 +54,13 @@ describe("<ResetIdentityPanel />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should display the 'sync failed' variant correctly", async () => {
+        const onFinish = jest.fn();
+        const { asFragment } = render(
+            <ResetIdentityPanel variant="sync_failed" onFinish={onFinish} onCancelClick={jest.fn()} />,
+            withClientContextRenderOptions(matrixClient),
+        );
+        expect(asFragment()).toMatchSnapshot();
+    });
 });

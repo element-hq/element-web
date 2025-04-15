@@ -22,20 +22,67 @@ test.describe("Room list filters and sort", () => {
         return page.getByRole("listbox", { name: "Room list filters" });
     }
 
+    /**
+     * Get the room list
+     * @param page
+     */
+    function getRoomList(page: Page) {
+        return page.getByTestId("room-list");
+    }
+
     test.beforeEach(async ({ page, app, bot, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
     });
 
-    test.describe("Room list", () => {
-        /**
-         * Get the room list
-         * @param page
-         */
-        function getRoomList(page: Page) {
-            return page.getByTestId("room-list");
-        }
+    test.describe("Scroll behaviour", () => {
+        test("should scroll to the top of list when filter is applied and active room is not in filtered list", async ({
+            page,
+            app,
+        }) => {
+            const createFavouriteRoom = async (name: string) => {
+                const id = await app.client.createRoom({
+                    name,
+                });
+                await app.client.evaluate(async (client, favouriteId) => {
+                    await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
+                }, id);
+            };
 
+            // Create 5 favourite rooms
+            let i = 0;
+            for (; i < 5; i++) {
+                await createFavouriteRoom(`room${i}-fav`);
+            }
+
+            // Create a non-favourite room
+            await app.client.createRoom({ name: `room-non-fav` });
+
+            // Create rest of the favourite rooms
+            for (; i < 20; i++) {
+                await createFavouriteRoom(`room${i}-fav`);
+            }
+
+            // Open the non-favourite room
+            const roomListView = getRoomList(page);
+            const tile = roomListView.getByRole("gridcell", { name: "Open room room-non-fav" });
+            await tile.scrollIntoViewIfNeeded();
+            await tile.click();
+
+            // Enable Favourite filter
+            const primaryFilters = getPrimaryFilters(page);
+            await primaryFilters.getByRole("option", { name: "Favourite" }).click();
+            await expect(tile).not.toBeVisible();
+
+            // Ensure the room list is not scrolled
+            const isScrolledDown = await page
+                .getByRole("grid", { name: "Room list" })
+                .evaluate((e) => e.scrollTop !== 0);
+            expect(isScrolledDown).toStrictEqual(false);
+        });
+    });
+
+    test.describe("Room list", () => {
         let unReadDmId: string | undefined;
         let unReadRoomId: string | undefined;
 

@@ -18,6 +18,7 @@ import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
 import { type Defaultize } from "./@types/common";
 import { type ActionPayload } from "./dispatcher/payloads";
+import { filterBoolean } from "./utils/arrays.ts";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -160,13 +161,16 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      * situations like the user logging out of the app.
      */
     public forceCloseAllModals(): void {
-        for (const modal of this.modals) {
+        const modals = filterBoolean([...this.modals, this.staticModal, this.priorityModal]);
+        for (const modal of modals) {
             modal.deferred?.resolve([]);
             if (modal.onFinished) modal.onFinished.apply(null);
             this.emitClosed();
         }
 
         this.modals = [];
+        this.staticModal = null;
+        this.priorityModal = null;
         this.reRender();
     }
 
