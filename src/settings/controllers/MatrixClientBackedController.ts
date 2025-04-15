@@ -40,5 +40,5 @@ export default abstract class MatrixClientBackedController extends SettingContro
         return MatrixClientBackedController._matrixClient;
     }
 
-    protected initMatrixClient?(newClient: MatrixClient, oldClient?: MatrixClient): Promise<void>;
+    protected initMatrixClient?(newClient: MatrixClient, oldClient?: MatrixClient): void;
 }

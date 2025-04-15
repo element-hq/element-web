@@ -294,6 +294,9 @@ export interface EventRenderOpts {
     disableBigEmoji?: boolean;
     stripReplyFallback?: boolean;
     forComposerQuote?: boolean;
+    /**
+     * Should inline media be rendered?
+     */
     mediaIsVisible?: boolean;
 }
 
