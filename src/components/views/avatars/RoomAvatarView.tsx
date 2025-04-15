@@ -15,8 +15,9 @@ import BusyIcon from "@vector-im/compound-design-tokens/assets/web/icons/presenc
 import classNames from "classnames";
 
 import RoomAvatar from "./RoomAvatar";
-import { useRoomAvatarViewModel, type Presence } from "../../viewmodels/avatars/RoomAvatarViewModel";
+import { useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
 import { _t } from "../../../languageHandler";
+import { Presence } from "./WithPresenceIndicator";
 
 interface RoomAvatarViewProps {
     /**
@@ -83,7 +84,7 @@ type PresenceDecorationProps = {
  */
 function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element {
     switch (presence) {
-        case "online":
+        case Presence.Online:
             return (
                 <OnlineOrUnavailableIcon
                     width="8px"
@@ -93,7 +94,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     aria-label={_t("presence|online")}
                 />
             );
-        case "unavailable":
+        case Presence.Away:
             return (
                 <OnlineOrUnavailableIcon
                     width="8px"
@@ -103,7 +104,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     aria-label={_t("presence|away")}
                 />
             );
-        case "offline":
+        case Presence.Offline:
             return (
                 <OfflineIcon
                     width="8px"
@@ -113,7 +114,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     aria-label={_t("presence|offline")}
                 />
             );
-        case "busy":
+        case Presence.Busy:
             return (
                 <BusyIcon
                     width="8px"
