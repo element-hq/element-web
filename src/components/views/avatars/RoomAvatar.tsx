@@ -15,11 +15,10 @@ import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
-import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
-import { useDmMember } from "./WithPresenceIndicator";
+import { useRoomIdName } from "../../../hooks/room/useRoomIdName";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
@@ -38,20 +37,7 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
 const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, size = "36px", ...otherProps }) => {
     const roomName = room?.name ?? oobData?.name ?? "?";
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
-    const dmMember = useDmMember(room);
-    const roomIdName = useMemo(() => {
-        if (dmMember) {
-            // If the room is a DM, we use the other user's ID for the color hash
-            // in order to match the room avatar with their avatar
-            return dmMember.userId;
-        } else if (room instanceof LocalRoom && room.targets.length === 1) {
-            return room.targets[0].userId;
-        } else if (room) {
-            return room.roomId;
-        } else {
-            return oobData?.roomId;
-        }
-    }, [dmMember, oobData, room]);
+    const roomIdName = useRoomIdName(room, oobData);
 
     const showAvatarsOnInvites = useSettingValue("showAvatarsOnInvites", room?.roomId);
 
