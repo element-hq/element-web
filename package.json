@@ -186,7 +186,7 @@
         "@playwright/test": "^1.50.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^3.0.0",
-        "@stylistic/eslint-plugin": "^3.0.0",
+        "@stylistic/eslint-plugin": "^4.0.0",
         "@svgr/webpack": "^8.0.0",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/jest-dom": "^6.4.8",
