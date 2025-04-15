@@ -50,6 +50,8 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import ScrollPanel from "../../../../src/components/structures/ScrollPanel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -310,18 +312,14 @@ describe("TimelinePanel", () => {
 
             describe("and sending receipts is disabled", () => {
                 beforeEach(async () => {
-                    client.isVersionSupported.mockResolvedValue(true);
-                    client.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string): any => {
-                        if (setting === "sendReadReceipts") return false;
-
-                        return undefined;
-                    });
+                    // Ensure this setting is supported, otherwise it will use the default value.
+                    client.isVersionSupported.mockImplementation(async (v) => v === "v1.4");
+                    MatrixClientBackedController.matrixClient = client;
+                    SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 });
 
                 afterEach(() => {
-                    mocked(SettingsStore.getValue).mockReset();
+                    SettingsStore.reset();
                 });
 
                 it("should send a fully read marker and a private receipt", async () => {
