@@ -68,8 +68,6 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
             oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }
 
-        console.log(avatarEvent, oobAvatar);
-
         return filterBoolean([
             oobAvatar, // highest priority
             Avatar.avatarUrlForRoom(
