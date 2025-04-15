@@ -13,7 +13,6 @@ import { LocalRoom } from "../../models/LocalRoom.ts";
 /**
  * Determine a stable ID for generating hash colours. If the room
  * is a DM (or local room), then the other user's ID will be used.
- * @param room - The room model
  * @param oobData - out-of-band information about the room
  * @returns An ID string, or undefined if the room and oobData are undefined.
  */
