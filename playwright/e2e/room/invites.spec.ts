@@ -19,7 +19,10 @@ test.describe("Invites", () => {
         const roomId = await bot.createRoom({ is_direct: true });
         await bot.inviteUser(roomId, user.userId);
         await app.viewRoomByName("Bob");
-        await expect(page.locator(".mx_RoomView")).toMatchScreenshot("Invites_room_view.png");
+        await expect(page.locator(".mx_RoomView")).toMatchScreenshot("Invites_room_view.png", {
+            // Hide the mxid, which is hot stable.
+            mask: [page.locator(".mx_RoomPreviewBar_inviter_mxid")],
+        });
     });
 
     test("should be able to decline an invite", async ({ page, homeserver, user, bot, app }) => {
