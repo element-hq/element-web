@@ -2158,13 +2158,13 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.2.tgz#20d9877f11d5e411f1610f396f9e490673d6da50"
   integrity sha512-kpCdf6DBxgE7MbBbYr7FvahrktHHtiph3QN10I6nBAAPQ+hmR3aZHBECxjxLQ9RxvtBF9nlKK4bgy2YrNp6j3A==
 
-"@matrix-org/emojibase-bindings@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.4.0.tgz#ad1f917b03cd1fcf049bc3de809beb6cbae78009"
-  integrity sha512-5PsY183hHK04I8uBCIoyVvZefu/VJYB5YhoM7DAHn0WQtedn70ZCES9iUxcyMRFGzfwiiqd+ArsK8VwLN5JEVA==
+"@matrix-org/emojibase-bindings@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.3.4.tgz#b0dad8e8b8bbe433e419b59e38f933bcdaf9c271"
+  integrity sha512-+nhBg0dxjy3U4/Tn6WIsnzqiqazc0pfStc2dkSBxDnc4xnimDB6vcIad53fUIsl7SeT50ake0hhnBJs0ZDDk6Q==
   dependencies:
-    emojibase "^16.0.0"
-    emojibase-data "^16.0.3"
+    emojibase "^15.3.1"
+    emojibase-data "^15.3.1"
 
 "@matrix-org/matrix-sdk-crypto-wasm@^14.0.1":
   version "14.0.1"
@@ -3738,7 +3738,7 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
   uid ""
 
@@ -3747,7 +3747,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.3.tgz#cc54d8b3e9472bcd8e622126ba364ee31952cd8a"
   integrity sha512-fqo8P55Vc/t0vxpFar9RDJN5gKEjJmzrLo+O4piDbFda6VrRoqrWAtiu0Au0g6B4hRDPKIuFupk8v9Ja7q8Hvg==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
@@ -5941,20 +5941,20 @@ emoji-regex@^9.2.2:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
-emojibase-data@^16.0.3:
-  version "16.0.3"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-16.0.3.tgz#564ddfe11a2fdcba24975335f857dc85ee895027"
-  integrity sha512-MopInVCDZeXvqBMPJxnvYUyKw9ImJZqIDr2sABo6acVSPev5IDYX+mf+0tsu96JJyc3INNvgIf06Eso7bdTX2Q==
+emojibase-data@^15.3.1:
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-15.3.2.tgz#2742246bfe14f16a7829b42ca156dec09934cf85"
+  integrity sha512-TpDyTDDTdqWIJixV5sTA6OQ0P0JfIIeK2tFRR3q56G9LK65ylAZ7z3KyBXokpvTTJ+mLUXQXbLNyVkjvnTLE+A==
 
-emojibase-regex@16.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-16.0.0.tgz#e648d8789dc22c6adc9a10b1af47135559f65a88"
-  integrity sha512-ZMp31BkzBWNW+T73of6NURL6nXQa5GkfKneOkr3cEwBDVllbW/2nuva7NO0J3RjaQ07+SZQNgPTGZ4JlIhmM2Q==
+emojibase-regex@15.3.2:
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-15.3.2.tgz#5175231715b86d4b437754527288844a6c29318f"
+  integrity sha512-ue6BVeb2qu33l97MkxcOoyMJlg6Tug3eTv2z1at+M9TjvlWKvdmAPvZIDG1JbT2RH3FSyJNLucO5K5H/yxT03w==
 
-emojibase@^16.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/emojibase/-/emojibase-16.0.0.tgz#9da603b7d740645d0a5d21c6dcfb97c53d6f96c7"
-  integrity sha512-Nw2m7JLIO4Ou2X/yZPRNscHQXVbbr6SErjkJ7EooG7MbR3yDZszCv9KTizsXFc7yZl0n3WF+qUKIC/Lw6H9xaQ==
+emojibase@^15.3.1:
+  version "15.3.1"
+  resolved "https://registry.yarnpkg.com/emojibase/-/emojibase-15.3.1.tgz#7f6ff5482486f23e59a457de64e974bd35f3c9a3"
+  integrity sha512-GNsjHnG2J3Ktg684Fs/vZR/6XpOSkZPMAv85EHrr6br2RN2cJNwdS4am/3YSK3y+/gOv2kmoK3GGdahXdMxg2g==
 
 emojis-list@^3.0.0:
   version "3.0.0"
