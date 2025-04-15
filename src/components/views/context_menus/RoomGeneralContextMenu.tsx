@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { useContext } from "react";
+import React, { type JSX, useContext } from "react";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import RoomListActions from "../../../actions/RoomListActions";

@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type LegacyRef, type ReactNode } from "react";
+import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
@@ -25,7 +25,7 @@ import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 import { sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
-export { Linkify, linkifyElement, linkifyAndSanitizeHtml } from "./Linkify";
+export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -239,7 +239,7 @@ class HtmlHighlighter extends BaseHighlighter<string> {
 
 const emojiToHtmlSpan = (emoji: string): string =>
     `<span class='mx_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
-const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
+const emojiToJsxSpan = (emoji: string, key: Key): JSX.Element => (
     <span key={key} className="mx_Emoji" title={unicodeToShortcode(emoji)}>
         {emoji}
     </span>
@@ -365,53 +365,6 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
     }
 }
 
-export function bodyToDiv(
-    content: IContent,
-    highlights: Optional<string[]>,
-    opts: EventRenderOpts = {},
-    ref?: React.Ref<HTMLDivElement>,
-): ReactNode {
-    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
-
-    return formattedBody ? (
-        <div
-            key="body"
-            ref={ref}
-            className={className}
-            dangerouslySetInnerHTML={{ __html: formattedBody }}
-            dir="auto"
-        />
-    ) : (
-        <div key="body" ref={ref} className={className} dir="auto">
-            {emojiBodyElements || strippedBody}
-        </div>
-    );
-}
-
-export function bodyToSpan(
-    content: IContent,
-    highlights: Optional<string[]>,
-    opts: EventRenderOpts = {},
-    ref?: React.Ref<HTMLSpanElement>,
-    includeDir = true,
-): ReactNode {
-    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
-
-    return formattedBody ? (
-        <span
-            key="body"
-            ref={ref}
-            className={className}
-            dangerouslySetInnerHTML={{ __html: formattedBody }}
-            dir={includeDir ? "auto" : undefined}
-        />
-    ) : (
-        <span key="body" ref={ref} className={className} dir={includeDir ? "auto" : undefined}>
-            {emojiBodyElements || strippedBody}
-        </span>
-    );
-}
-
 interface BodyToNodeReturn {
     strippedBody: string;
     formattedBody?: string;
@@ -419,7 +372,11 @@ interface BodyToNodeReturn {
     className: string;
 }
 
-function bodyToNode(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): BodyToNodeReturn {
+export function bodyToNode(
+    content: IContent,
+    highlights: Optional<string[]>,
+    opts: EventRenderOpts = {},
+): BodyToNodeReturn {
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let emojiBody = false;

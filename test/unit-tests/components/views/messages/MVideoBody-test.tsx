@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { act } from "react";
 import { EventType, getHttpUriForMxc, type IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { render, type RenderResult } from "jest-matrix-react";
+import { fireEvent, render, screen, type RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -22,19 +22,22 @@ import {
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
+import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
+
+// Needed so we don't throw an error about failing to decrypt.
+jest.mock("matrix-encrypt-attachment", () => ({
+    decryptAttachment: jest.fn(),
+}));
 
 describe("MVideoBody", () => {
-    it("does not crash when given a portrait image", () => {
-        // Check for an unreliable crash caused by a fractional-sized
-        // image dimension being used for a CanvasImageData.
-        const { asFragment } = makeMVideoBody(720, 1280);
-        expect(asFragment()).toMatchSnapshot();
-        // If we get here, we did not crash.
-    });
+    const userId = "@user:server";
+    const deviceId = "DEADB33F";
 
-    it("should show poster for encrypted media before downloading it", async () => {
-        const userId = "@user:server";
-        const deviceId = "DEADB33F";
+    const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
+
+    beforeEach(() => {
         const cli = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(userId),
             ...mockClientMethodsServer(),
@@ -49,39 +52,107 @@ describe("MVideoBody", () => {
                 },
             }),
         });
-        const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
-        fetchMock.getOnce(thumbUrl, { status: 200 });
-
         // eslint-disable-next-line no-restricted-properties
         cli.mxcUrlToHttp.mockImplementation(
             (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
                 return getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
             },
         );
-        const encryptedMediaEvent = new MatrixEvent({
-            room_id: "!room:server",
-            sender: userId,
-            type: EventType.RoomMessage,
-            content: {
-                body: "alt for a test video",
-                info: {
-                    duration: 420,
-                    w: 40,
-                    h: 50,
-                    thumbnail_file: {
-                        url: "mxc://server/encrypted-poster",
-                    },
-                },
-                file: {
-                    url: "mxc://server/encrypted-image",
+        fetchMock.mockReset();
+    });
+
+    const encryptedMediaEvent = new MatrixEvent({
+        room_id: "!room:server",
+        sender: userId,
+        type: EventType.RoomMessage,
+        content: {
+            body: "alt for a test video",
+            info: {
+                duration: 420,
+                w: 40,
+                h: 50,
+                thumbnail_file: {
+                    url: "mxc://server/encrypted-poster",
                 },
             },
-        });
+            file: {
+                url: "mxc://server/encrypted-image",
+            },
+        },
+    });
 
+    it("does not crash when given a portrait image", () => {
+        // Check for an unreliable crash caused by a fractional-sized
+        // image dimension being used for a CanvasImageData.
+        const { asFragment } = makeMVideoBody(720, 1280);
+        expect(asFragment()).toMatchSnapshot();
+        // If we get here, we did not crash.
+    });
+
+    it("should show poster for encrypted media before downloading it", async () => {
+        fetchMock.getOnce(thumbUrl, { status: 200 });
         const { asFragment } = render(
             <MVideoBody mxEvent={encryptedMediaEvent} mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)} />,
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("with video previews/thumbnails disabled", () => {
+        beforeEach(() => {
+            act(() => {
+                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+            });
+        });
+
+        afterEach(() => {
+            act(() => {
+                SettingsStore.setValue(
+                    "showImages",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showImages"),
+                );
+                SettingsStore.setValue(
+                    "showMediaEventIds",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showMediaEventIds"),
+                );
+            });
+        });
+
+        it("should not download video", async () => {
+            fetchMock.getOnce(thumbUrl, { status: 200 });
+
+            render(
+                <MVideoBody
+                    mxEvent={encryptedMediaEvent}
+                    mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+                />,
+            );
+
+            expect(screen.getByText("Show video")).toBeInTheDocument();
+
+            expect(fetchMock).not.toHaveFetched(thumbUrl);
+        });
+
+        it("should render video poster after user consent", async () => {
+            fetchMock.getOnce(thumbUrl, { status: 200 });
+
+            render(
+                <MVideoBody
+                    mxEvent={encryptedMediaEvent}
+                    mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+                />,
+            );
+
+            const placeholderButton = screen.getByRole("button", { name: "Show video" });
+
+            expect(placeholderButton).toBeInTheDocument();
+            fireEvent.click(placeholderButton);
+
+            expect(fetchMock).toHaveFetched(thumbUrl);
+        });
     });
 });
 
@@ -109,11 +180,10 @@ function makeMVideoBody(w: number, h: number): RenderResult {
         content,
     });
 
-    const defaultProps: MVideoBody["props"] = {
+    const defaultProps: IBodyProps = {
         mxEvent: event,
         highlights: [],
         highlightLink: "",
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: {} as RoomPermalinkCreator,
         mediaEventHelper: { media: { isEncrypted: false } } as MediaEventHelper,

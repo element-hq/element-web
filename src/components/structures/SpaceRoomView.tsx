@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, RoomType, JoinRule, Preset, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { type JSX, useCallback, useContext, useRef, useState } from "react";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { type IOpts } from "../../createRoom";

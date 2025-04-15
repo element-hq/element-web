@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type CSSProperties, useRef, useState } from "react";
+import React, { type JSX, createRef, type CSSProperties, useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent, parseErrorResponse } from "matrix-js-sdk/src/matrix";
 
@@ -585,7 +585,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 function DownloadButton({ url, fileName }: { url: string; fileName?: string }): JSX.Element {
     const downloader = useRef(new FileDownloader()).current;
     const [loading, setLoading] = useState(false);
-    const blobRef = useRef<Blob>();
+    const blobRef = useRef<Blob>(undefined);
 
     function showError(e: unknown): void {
         Modal.createDialog(ErrorDialog, {

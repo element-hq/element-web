@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject } from "react";
+import React, { type JSX, type RefObject } from "react";
 import { type DATA_BY_CATEGORY, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
@@ -24,7 +24,7 @@ export interface ICategory {
     name: string;
     enabled: boolean;
     visible: boolean;
-    ref: RefObject<HTMLButtonElement>;
+    ref: RefObject<HTMLButtonElement | null>;
 }
 
 interface IProps {

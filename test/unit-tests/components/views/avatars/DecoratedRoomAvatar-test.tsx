@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { JoinRule, type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 
@@ -79,6 +79,7 @@ describe("DecoratedRoomAvatar", () => {
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
         jest.spyOn(DecoratedRoomAvatar.prototype as any, "getPresenceIcon").mockImplementation(() => "ONLINE");
+        jest.spyOn(room, "getMember").mockReturnValue(new RoomMember(room.roomId, DM_USER_ID));
 
         const { container, asFragment } = renderComponent();
 

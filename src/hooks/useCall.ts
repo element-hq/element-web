@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import { type Call, ConnectionState, CallEvent } from "../models/Call";
@@ -20,6 +20,12 @@ export const useCall = (roomId: string): Call | null => {
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, (call: Call | null, forRoomId: string) => {
         if (forRoomId === roomId) setCall(call);
     });
+
+    // Reset the value when the roomId changes
+    useEffect(() => {
+        setCall(CallStore.instance.getCall(roomId));
+    }, [roomId]);
+
     return call;
 };
 
@@ -75,9 +81,5 @@ export const useFull = (call: Call | null): boolean => {
 
 export const useJoinCallButtonDisabledTooltip = (call: Call | null): string | null => {
     const isFull = useFull(call);
-    const state = useConnectionState(call);
-
-    if (state === ConnectionState.Connecting) return _t("voip|join_button_tooltip_connecting");
-    if (isFull) return _t("voip|join_button_tooltip_call_full");
-    return null;
+    return isFull ? _t("voip|join_button_tooltip_call_full") : null;
 };

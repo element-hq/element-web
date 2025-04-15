@@ -3,18 +3,19 @@
 exports[`<RoomListPanel /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListPanel"
+    class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <header
       aria-label="Room options"
       class="mx_Flex mx_RoomListHeaderView"
       data-testid="room-list-header"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_Flex mx_RoomListHeaderView_title"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
           title="Home"
@@ -22,32 +23,137 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           Home
         </h1>
       </div>
-    </header>
-    <div
-      style="overflow: visible; height: 0px; width: 0px;"
-    >
-      <div
-        aria-label="grid"
-        aria-readonly="true"
-        class="ReactVirtualized__Grid ReactVirtualized__List"
-        role="grid"
-        style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
+      <button
+        aria-label="New message"
+        class="_icon-button_m2erp_8"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
         tabindex="0"
-      />
-    </div>
-    <div
-      class="resize-triggers"
-    >
-      <div
-        class="expand-trigger"
       >
         <div
-          style="width: 1px; height: 1px;"
-        />
-      </div>
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            color="var(--cpd-color-icon-secondary)"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            />
+          </svg>
+        </div>
+      </button>
+    </header>
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+    </ul>
+    <div
+      class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+      data-testid="empty-room-list"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="mx_EmptyRoomList_GenericPlaceholder_title"
+      >
+        No chats yet
+      </span>
+      <span
+        class="mx_EmptyRoomList_GenericPlaceholder_description"
+      >
+        Get started by messaging someone
+      </span>
       <div
-        class="contract-trigger"
-      />
+        class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          class="_button_vczzf_8 _has-icon_vczzf_57"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+            />
+          </svg>
+          New message
+        </button>
+      </div>
     </div>
   </section>
 </DocumentFragment>
@@ -56,13 +162,14 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
 exports[`<RoomListPanel /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListPanel"
+    class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListSearch"
       role="search"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
@@ -85,7 +192,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </svg>
         <span
           class="mx_Flex"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           Search
           <kbd>
@@ -119,11 +226,11 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       aria-label="Room options"
       class="mx_Flex mx_RoomListHeaderView"
       data-testid="room-list-header"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_Flex mx_RoomListHeaderView_title"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
           title="Home"
@@ -149,6 +256,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            color="var(--cpd-color-icon-secondary)"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -167,31 +275,127 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </div>
       </button>
     </header>
-    <div
-      style="overflow: visible; height: 0px; width: 0px;"
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >
-      <div
-        aria-label="grid"
-        aria-readonly="true"
-        class="ReactVirtualized__Grid ReactVirtualized__List"
-        role="grid"
-        style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
-        tabindex="0"
-      />
-    </div>
-    <div
-      class="resize-triggers"
-    >
-      <div
-        class="expand-trigger"
+      <li
+        aria-selected="false"
+        role="option"
       >
-        <div
-          style="width: 1px; height: 1px;"
-        />
-      </div>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+    </ul>
+    <div
+      class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+      data-testid="empty-room-list"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="mx_EmptyRoomList_GenericPlaceholder_title"
+      >
+        No chats yet
+      </span>
+      <span
+        class="mx_EmptyRoomList_GenericPlaceholder_description"
+      >
+        Get started by messaging someone or by creating a room
+      </span>
       <div
-        class="contract-trigger"
-      />
+        class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          class="_button_vczzf_8 _has-icon_vczzf_57"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+            />
+          </svg>
+          New message
+        </button>
+        <button
+          class="_button_vczzf_8 _has-icon_vczzf_57"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m8.566 17-.944 4.094q-.086.406-.372.656t-.687.25q-.543 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.801-3.5H3.158q-.572 0-.916-.484a1.27 1.27 0 0 1-.2-1.078 1.12 1.12 0 0 1 1.116-.938H6.85l1.145-5h-3.12q-.57 0-.915-.484a1.27 1.27 0 0 1-.2-1.078A1.12 1.12 0 0 1 4.875 7h3.691l.945-4.094q.085-.406.372-.656.286-.25.686-.25.544 0 .887.469.345.468.2 1.031l-.8 3.5h4.578l.944-4.094q.085-.406.372-.656.286-.25.687-.25.543 0 .887.469t.2 1.031L17.723 7h3.119q.573 0 .916.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937H17.15l-1.145 5h3.12q.57 0 .915.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937h-3.691l-.944 4.094q-.087.406-.373.656t-.686.25q-.544 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.8-3.5zm.573-2.5h4.578l1.144-5h-4.578z"
+            />
+          </svg>
+          New room
+        </button>
+      </div>
     </div>
   </section>
 </DocumentFragment>

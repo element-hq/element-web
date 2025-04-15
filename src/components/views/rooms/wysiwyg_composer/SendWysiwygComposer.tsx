@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ForwardedRef, forwardRef, type MutableRefObject, useMemo } from "react";
+import React, { type JSX, type ForwardedRef, forwardRef, type RefObject, useMemo } from "react";
 import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
@@ -28,7 +28,7 @@ const Content = forwardRef<HTMLElement, ContentProps>(function Content(
     { disabled = false, composerFunctions }: ContentProps,
     forwardRef: ForwardedRef<HTMLElement>,
 ) {
-    useWysiwygSendActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
+    useWysiwygSendActionHandler(disabled, forwardRef as RefObject<HTMLElement>, composerFunctions);
     return null;
 });
 

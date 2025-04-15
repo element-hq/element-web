@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig, devices } from "@playwright/test";
 
-import { Options } from "./playwright/services";
+import { type WorkerOptions } from "./playwright/services";
 
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
@@ -21,7 +21,7 @@ const chromeProject = {
     },
 };
 
-export default defineConfig<Options>({
+export default defineConfig<WorkerOptions>({
     projects: [
         {
             name: "Chrome",
@@ -83,6 +83,7 @@ export default defineConfig<Options>({
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
         timeout: (process.env.CI ? 30 : 120) * 1000,
+        stdout: "pipe",
     },
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",

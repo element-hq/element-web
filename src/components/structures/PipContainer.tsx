@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type MutableRefObject, type ReactNode, useRef } from "react";
+import React, { type RefObject, type ReactNode, useRef } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Optional } from "matrix-events-sdk";
@@ -34,7 +34,7 @@ const SHOW_CALL_IN_STATES = [
 ];
 
 interface IProps {
-    movePersistedElement: MutableRefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 interface IState {
@@ -280,7 +280,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 }
 
 export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>();
+    const movePersistedElement = useRef<() => void>(null);
 
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };

@@ -1,0 +1,77 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/**
+ * The RoomListItemView has the following structure:
+ * button----------------------------------------|
+ * | <-12px-> container--------------------------|
+ * |          | room avatar <-12px-> content-----|
+ * |          |                      | room_name |
+ * |          |                      | ----------| <-- border
+ * |---------------------------------------------|
+ */
+.mx_RoomListItemView {
+    all: unset;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-action-secondary-hovered);
+
+        .mx_RoomListItemView_content {
+            padding-right: var(--cpd-space-1-5x);
+        }
+    }
+
+    .mx_RoomListItemView_container {
+        padding-left: var(--cpd-space-2x);
+        font: var(--cpd-font-body-md-regular);
+        height: 100%;
+
+        .mx_RoomListItemView_content {
+            height: 100%;
+            flex: 1;
+            /* The border is only under the room name and the future hover menu  */
+            border-bottom: var(--cpd-border-width-0-5) solid var(--cpd-color-bg-subtle-secondary);
+            box-sizing: border-box;
+            min-width: 0;
+
+            .mx_RoomListItemView_roomName {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
+.mx_RoomListItemView_menu_open {
+    background-color: var(--cpd-color-bg-action-secondary-hovered);
+
+    .mx_RoomListItemView_content {
+        padding-right: var(--cpd-space-1-5x);
+    }
+}
+
+.mx_RoomListItemView_selected {
+    background-color: var(--cpd-color-bg-action-secondary-pressed);
+}
+
+.mx_RoomListItemView_notification_decoration {
+    .mx_RoomListItemView_content {
+        padding-right: var(--cpd-space-2x);
+    }
+}
+
+.mx_RoomListItemView_empty {
+    .mx_RoomListItemView_content {
+        padding-right: var(--cpd-space-3x);
+    }
+}
+
+.mx_RoomListItemView_bold .mx_RoomListItemView_roomName {
+    font: var(--cpd-font-body-md-semibold);
+}

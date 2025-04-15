@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    type JSX,
     type MouseEvent,
     type ComponentProps,
     type ComponentType,
@@ -55,7 +56,7 @@ type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLDivElement>;
+    innerRef?: RefObject<HTMLDivElement | null>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };

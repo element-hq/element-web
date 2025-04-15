@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type ReactNode, type TransitionEvent } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -259,8 +259,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             // previous positions the read marker has been in, so we can
@@ -292,6 +292,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
+        this.resizeObserver.disconnect();
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -800,7 +801,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 isRedacted={mxEv.isRedacted()}
                 replacingEventId={mxEv.replacingEventId()}
                 editState={isEditing ? this.props.editState : undefined}
-                onHeightChanged={this.onHeightChanged}
+                resizeObserver={this.resizeObserver}
                 readReceipts={readReceipts}
                 readReceiptMap={this.readReceiptMap}
                 showUrlPreview={this.props.showUrlPreview}
@@ -953,14 +954,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.eventTiles[eventId] = node;
     };
 
-    // once dynamic content in the events load, make the scrollPanel check the
-    // scroll offsets.
+    // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     public onHeightChanged = (): void => {
-        const scrollPanel = this.scrollPanel.current;
-        if (scrollPanel) {
-            scrollPanel.checkScroll();
-        }
+        this.scrollPanel.current?.checkScroll();
     };
+
+    private resizeObserver = new ResizeObserver(this.onHeightChanged);
 
     private onTypingShown = (): void => {
         const scrollPanel = this.scrollPanel.current;

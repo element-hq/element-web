@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { type JSX, forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
     type ISearchResults,
     type IThreadBundledRelationship,
@@ -21,8 +21,6 @@ import { _t } from "../../languageHandler";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import SearchResultTile from "../views/rooms/SearchResultTile";
 import { searchPagination, SearchScope } from "../../Searching";
-import Modal from "../../Modal";
-import ErrorDialog from "../views/dialogs/ErrorDialog";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -45,7 +43,7 @@ interface Props {
     abortController?: AbortController;
     resizeNotifier: ResizeNotifier;
     className: string;
-    onUpdate(inProgress: boolean, results: ISearchResults | null): void;
+    onUpdate(inProgress: boolean, results: ISearchResults | null, error: Error | null): void;
 }
 
 // XXX: todo: merge overlapping results somehow?
@@ -59,7 +57,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         const aborted = useRef(false);
         // A map from room ID to permalink creator
         const permalinkCreators = useMemo(() => new Map<string, RoomPermalinkCreator>(), []);
-        const innerRef = useRef<ScrollPanel | null>();
+        const innerRef = useRef<ScrollPanel>(null);
 
         useEffect(() => {
             return () => {
@@ -70,7 +68,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
 
         const handleSearchResult = useCallback(
             (searchPromise: Promise<ISearchResults>): Promise<boolean> => {
-                onUpdate(true, null);
+                onUpdate(true, null, null);
 
                 return searchPromise.then(
                     async (results): Promise<boolean> => {
@@ -116,7 +114,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
 
                         setHighlights(highlights);
                         setResults({ ...results }); // copy to force a refresh
-                        onUpdate(false, results);
+                        onUpdate(false, results, null);
                         return false;
                     },
                     (error) => {
@@ -125,11 +123,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                             return false;
                         }
                         logger.error("Search failed", error);
-                        Modal.createDialog(ErrorDialog, {
-                            title: _t("error_dialog|search_failed|title"),
-                            description: error?.message ?? _t("error_dialog|search_failed|server_unavailable"),
-                        });
-                        onUpdate(false, null);
+                        onUpdate(false, null, error);
                         return false;
                     },
                 );
@@ -197,12 +191,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                 );
             }
         }
-
-        // once dynamic content in the search results load, make the scrollPanel check
-        // the scroll offsets.
-        const onHeightChanged = (): void => {
-            innerRef.current?.checkScroll();
-        };
 
         const onRef = (e: ScrollPanel | null): void => {
             if (typeof ref === "function") {
@@ -302,7 +290,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                     searchHighlights={highlights ?? []}
                     resultLink={resultLink}
                     permalinkCreator={permalinkCreator}
-                    onHeightChanged={onHeightChanged}
                 />,
             );
 

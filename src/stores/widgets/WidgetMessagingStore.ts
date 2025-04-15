@@ -72,8 +72,11 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
      * @param {string} widgetUid The widget UID.
      */
     public stopMessagingByUid(widgetUid: string): void {
-        this.widgetMap.remove(widgetUid)?.stop();
-        this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
+        const messaging = this.widgetMap.remove(widgetUid);
+        if (messaging !== undefined) {
+            messaging.stop();
+            this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
+        }
     }
 
     /**

@@ -6,10 +6,11 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import {
     EncryptionUserSettingsTab,
@@ -66,12 +67,21 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("should display the recovery panel when the encryption is set up", async () => {
+    it("should display the recovery panel when key storage is enabled", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
         await waitFor(() => expect(screen.getByText("Recovery")).toBeInTheDocument());
     });
 
+    it("should not display the recovery panel when key storage is not enabled", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
+        renderComponent();
+        await expect(screen.queryByText("Recovery")).not.toBeInTheDocument();
+    });
+
     it("should display the recovery out of sync panel when secrets are not cached", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         // Secrets are not cached
         jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -96,6 +106,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
@@ -109,6 +120,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the set up recovery key when the user clicks on the set up recovery key button", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         jest.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue(null);
         const user = userEvent.setup();
 
@@ -123,6 +135,8 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
@@ -137,16 +151,52 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should enter reset flow when showResetIdentity is set", () => {
+    it("should enter 'Forgot recovery' flow when initialState is set to 'reset_identity_forgot'", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
         renderComponent({ initialState: "reset_identity_forgot" });
 
         expect(
-            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+            await screen.findByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your identity.",
+            }),
         ).toBeVisible();
+    });
+
+    it("should do 'Failed to sync' reset flow when initialState is set to 'reset_identity_sync_failed'", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        renderComponent({ initialState: "reset_identity_sync_failed" });
+
+        expect(
+            await screen.findByRole("heading", {
+                name: "Failed to sync key storage. You need to reset your identity.",
+            }),
+        ).toBeVisible();
+    });
+
+    it("should update when key backup status event is fired", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        renderComponent();
+
+        await expect(await screen.findByRole("heading", { name: "Recovery" })).toBeVisible();
+
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
+
+        act(() => {
+            matrixClient.emit(CryptoEvent.KeyBackupStatus, false);
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByRole("heading", { name: "Recovery" })).toBeNull();
+        });
     });
 
     it("should re-check the encryption state and displays the correct panel when the user clicks cancel the reset identity flow", async () => {
         const user = userEvent.setup();
+
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
 
         // Secrets are not cached
         jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({

@@ -69,7 +69,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -91,7 +91,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
@@ -161,13 +161,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
       >
         <div
           aria-checked="false"
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitemcheckbox"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -179,7 +179,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Favourite
           </span>
@@ -198,13 +198,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </div>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -216,13 +216,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Invite
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -241,13 +241,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -265,13 +265,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             People
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -284,13 +284,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -305,13 +305,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Threads
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -328,13 +328,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           aria-haspopup="dialog"
         >
           <button
-            class="_item_1x5l4_8 _interactive_1x5l4_26"
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
             data-kind="primary"
             role="menuitem"
           >
             <svg
               aria-hidden="true"
-              class="_icon_1x5l4_34"
+              class="_icon_dyt4i_50"
               fill="currentColor"
               height="24"
               viewBox="0 0 24 24"
@@ -348,13 +348,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               />
             </svg>
             <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
             >
               Pinned messages
             </span>
             <svg
               aria-hidden="true"
-              class="_nav-hint_1x5l4_50"
+              class="_nav-hint_dyt4i_59"
               fill="currentColor"
               height="24"
               viewBox="8 0 8 24"
@@ -373,13 +373,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </button>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -391,13 +391,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Files
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -410,13 +410,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -428,13 +428,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Extensions
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -453,13 +453,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -471,13 +471,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Copy link
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -490,13 +490,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -508,13 +508,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Polls
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -527,13 +527,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -545,13 +545,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Export Chat
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -564,13 +564,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -585,13 +585,13 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Settings
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -609,46 +609,87 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
-        <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
-          data-kind="critical"
-          role="menuitem"
+        <div
+          class="mx_RoomSummaryCard_bottomOptions"
         >
-          <svg
-            aria-hidden="true"
-            class="_icon_1x5l4_34"
-            fill="currentColor"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            <path
-              d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
-            />
-            <path
-              d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
-            />
-          </svg>
-          <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Report room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+          <button
+            class="mx_RoomSummaryCard_leave _item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            Leave room
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-            />
-          </svg>
-        </button>
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
+              />
+              <path
+                d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Leave room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -724,7 +765,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -746,7 +787,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_Box--flex"
@@ -779,13 +820,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       >
         <div
           aria-checked="false"
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitemcheckbox"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -797,7 +838,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Favourite
           </span>
@@ -816,13 +857,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </div>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -834,13 +875,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Invite
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -859,13 +900,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -883,13 +924,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             People
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -902,13 +943,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -923,13 +964,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Threads
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -946,13 +987,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           aria-haspopup="dialog"
         >
           <button
-            class="_item_1x5l4_8 _interactive_1x5l4_26"
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
             data-kind="primary"
             role="menuitem"
           >
             <svg
               aria-hidden="true"
-              class="_icon_1x5l4_34"
+              class="_icon_dyt4i_50"
               fill="currentColor"
               height="24"
               viewBox="0 0 24 24"
@@ -966,13 +1007,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               />
             </svg>
             <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
             >
               Pinned messages
             </span>
             <svg
               aria-hidden="true"
-              class="_nav-hint_1x5l4_50"
+              class="_nav-hint_dyt4i_59"
               fill="currentColor"
               height="24"
               viewBox="8 0 8 24"
@@ -991,13 +1032,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </button>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1009,13 +1050,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Files
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1028,13 +1069,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1046,13 +1087,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Extensions
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1071,13 +1112,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1089,13 +1130,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Copy link
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1108,13 +1149,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1126,13 +1167,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Polls
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1145,13 +1186,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1163,13 +1204,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Export Chat
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1182,13 +1223,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1203,13 +1244,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Settings
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1227,46 +1268,87 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
-        <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
-          data-kind="critical"
-          role="menuitem"
+        <div
+          class="mx_RoomSummaryCard_bottomOptions"
         >
-          <svg
-            aria-hidden="true"
-            class="_icon_1x5l4_34"
-            fill="currentColor"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            <path
-              d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
-            />
-            <path
-              d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
-            />
-          </svg>
-          <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Report room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+          <button
+            class="mx_RoomSummaryCard_leave _item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            Leave room
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-            />
-          </svg>
-        </button>
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
+              />
+              <path
+                d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Leave room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1342,7 +1424,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -1364,7 +1446,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
@@ -1434,13 +1516,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       >
         <div
           aria-checked="false"
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitemcheckbox"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1452,7 +1534,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Favourite
           </span>
@@ -1471,13 +1553,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </div>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1489,13 +1571,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Invite
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1514,13 +1596,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1538,13 +1620,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             People
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1557,13 +1639,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1578,13 +1660,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Threads
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1601,13 +1683,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           aria-haspopup="dialog"
         >
           <button
-            class="_item_1x5l4_8 _interactive_1x5l4_26"
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
             data-kind="primary"
             role="menuitem"
           >
             <svg
               aria-hidden="true"
-              class="_icon_1x5l4_34"
+              class="_icon_dyt4i_50"
               fill="currentColor"
               height="24"
               viewBox="0 0 24 24"
@@ -1621,13 +1703,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               />
             </svg>
             <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
             >
               Pinned messages
             </span>
             <svg
               aria-hidden="true"
-              class="_nav-hint_1x5l4_50"
+              class="_nav-hint_dyt4i_59"
               fill="currentColor"
               height="24"
               viewBox="8 0 8 24"
@@ -1646,13 +1728,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </button>
         </div>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1664,13 +1746,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Files
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1683,13 +1765,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1701,13 +1783,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Extensions
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1726,13 +1808,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1744,13 +1826,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Copy link
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1763,13 +1845,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1781,13 +1863,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Polls
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1800,13 +1882,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1818,13 +1900,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Export Chat
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1837,13 +1919,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
           role="menuitem"
         >
           <svg
             aria-hidden="true"
-            class="_icon_1x5l4_34"
+            class="_icon_dyt4i_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -1858,13 +1940,13 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
           >
             Settings
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
+            class="_nav-hint_dyt4i_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -1882,46 +1964,87 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
-        <button
-          class="_item_1x5l4_8 _interactive_1x5l4_26"
-          data-kind="critical"
-          role="menuitem"
+        <div
+          class="mx_RoomSummaryCard_bottomOptions"
         >
-          <svg
-            aria-hidden="true"
-            class="_icon_1x5l4_34"
-            fill="currentColor"
-            height="24"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            class="_item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            <path
-              d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
-            />
-            <path
-              d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
-            />
-          </svg>
-          <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Report room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+          <button
+            class="mx_RoomSummaryCard_leave _item_dyt4i_8 _interactive_dyt4i_26"
+            data-kind="critical"
+            role="menuitem"
           >
-            Leave room
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1x5l4_50"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-            />
-          </svg>
-        </button>
+            <svg
+              aria-hidden="true"
+              class="_icon_dyt4i_50"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"
+              />
+              <path
+                d="M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"
+              />
+            </svg>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            >
+              Leave room
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_dyt4i_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>

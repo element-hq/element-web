@@ -33,7 +33,6 @@ import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
-import { SlidingRoomListStoreClass } from "./SlidingRoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
@@ -406,6 +405,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
 
     public setTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         this.setAndPersistTagSorting(tagId, sort);
+        // We'll always need an update after changing the sort order, so mark for update and trigger
+        // immediately.
+        this.updateFn.mark();
         this.updateFn.trigger();
     }
 
@@ -642,16 +644,9 @@ export default class RoomListStore {
 
     public static get instance(): Interface {
         if (!RoomListStore.internalInstance) {
-            if (SettingsStore.getValue("feature_sliding_sync")) {
-                logger.info("using SlidingRoomListStoreClass");
-                const instance = new SlidingRoomListStoreClass(defaultDispatcher, SdkContextClass.instance);
-                instance.start();
-                RoomListStore.internalInstance = instance;
-            } else {
-                const instance = new RoomListStoreClass(defaultDispatcher);
-                instance.start();
-                RoomListStore.internalInstance = instance;
-            }
+            const instance = new RoomListStoreClass(defaultDispatcher);
+            instance.start();
+            RoomListStore.internalInstance = instance;
         }
 
         return this.internalInstance;

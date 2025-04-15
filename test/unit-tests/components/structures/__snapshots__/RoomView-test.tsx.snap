@@ -7,7 +7,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -222,7 +222,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -522,7 +522,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -899,7 +899,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -1264,6 +1264,79 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
 </div>
 `;
 
+exports[`RoomView invites renders an invite room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+  >
+    <div
+      class="mx_RoomPreviewBar mx_RoomPreviewBar_Invite mx_RoomPreviewBar_dialog"
+      role="complementary"
+    >
+      <div
+        class="mx_RoomPreviewBar_message"
+      >
+        <h3>
+          Do you want to join !2:example.org?
+        </h3>
+        <p>
+          <span
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="4"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 36px;"
+          >
+            !
+          </span>
+        </p>
+        <p>
+          <span>
+            Invited by 
+            <span
+              class="mx_RoomPreviewBar_inviter"
+            >
+              @bob:example.org
+            </span>
+          </span>
+        </p>
+      </div>
+      <div
+        class="mx_RoomPreviewBar_actions"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+        >
+          Accept
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+          role="button"
+          tabindex="0"
+        >
+          Decline
+        </div>
+        <button
+          class="_button_vczzf_8 _destructive_vczzf_107"
+          data-kind="tertiary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Decline and block
+        </button>
+      </div>
+      <div
+        class="mx_RoomPreviewBar_footer"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`RoomView should not display the timeline when the room encryption is loading 1`] = `
 <DocumentFragment>
   <div
@@ -1284,13 +1357,13 @@ exports[`RoomView should not display the timeline when the room encryption is lo
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="2"
+            data-color="4"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1317,7 +1390,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !6:example.org
+                  !11:example.org
                 </span>
               </div>
             </div>
@@ -1492,13 +1565,13 @@ exports[`RoomView should not display the timeline when the room encryption is lo
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="2"
+            data-color="4"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1525,7 +1598,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !6:example.org
+                  !11:example.org
                 </span>
               </div>
             </div>
@@ -1873,13 +1946,13 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="6"
+            data-color="5"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1906,7 +1979,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !13:example.org
+                  !18:example.org
                 </span>
               </div>
             </div>
@@ -2006,6 +2079,41 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             </div>
           </div>
         </header>
+        <div
+          class="mx_CallView"
+          role="main"
+        >
+          <div
+            class="mx_AppTile"
+            id="vY7Q4uEh9K38QgU2PomxwKpa"
+          >
+            <div
+              class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--loading mx_AppTileBody--call"
+            >
+              <div
+                class="mx_AppTileBody_fadeInSpinner"
+              >
+                <div
+                  class="mx_Spinner"
+                >
+                  <div
+                    class="mx_Spinner_Msg"
+                  >
+                    Loading…
+                  </div>
+                   
+                  <div
+                    aria-label="Loading…"
+                    class="mx_Spinner_icon"
+                    data-testid="spinner"
+                    role="progressbar"
+                    style="width: 32px; height: 32px;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="mx_RightPanel_ResizeWrapper"
