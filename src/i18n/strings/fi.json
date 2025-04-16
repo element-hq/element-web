@@ -965,11 +965,7 @@
             "title": "Huoneen linkin kopiointi ei onnistu"
         },
         "error_loading_user_profile": "Käyttäjäprofiilia ei voitu ladata",
-        "forget_room_failed": "Huoneen unohtaminen epäonnistui %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Palvelin saattaa olla saavuttamattomissa, ylikuormitettu tai haku kesti liian kauan :(",
-            "title": "Haku epäonnistui"
-        }
+        "forget_room_failed": "Huoneen unohtaminen epäonnistui %(errCode)s"
     },
     "error_user_not_logged_in": "Käyttäjä ei ole sisäänkirjautunut",
     "event_preview": {

@@ -1136,11 +1136,7 @@
             "title": "Не вдалося скопіювати посилання на кімнату"
         },
         "error_loading_user_profile": "Не вдалося звантажити профіль користувача",
-        "forget_room_failed": "Не вдалось видалити кімнату %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Сервер може бути недосяжним, перевантаженим або запит на пошук застарів :(",
-            "title": "Пошук не вдався"
-        }
+        "forget_room_failed": "Не вдалось видалити кімнату %(errCode)s"
     },
     "error_user_not_logged_in": "Користувач не увійшов",
     "event_preview": {

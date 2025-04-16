@@ -74,7 +74,7 @@
         "@types/react-dom": "19.0.4",
         "oidc-client-ts": "3.2.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001707",
+        "caniuse-lite": "1.0.30001713",
         "testcontainers": "10.24.2",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
@@ -286,7 +286,7 @@
         "semver": "^7.5.2",
         "source-map-loader": "^5.0.0",
         "stylelint": "^16.13.0",
-        "stylelint-config-standard": "^37.0.0",
+        "stylelint-config-standard": "^38.0.0",
         "stylelint-scss": "^6.0.0",
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",

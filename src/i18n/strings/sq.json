@@ -957,11 +957,7 @@
             "title": "S’arrihet të kopjohet lidhja e dhomës"
         },
         "error_loading_user_profile": "S’u ngarkua dot profili i përdoruesit",
-        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Shërbyesi mund të jetë i pakapshëm, i mbingarkuar, ose kërkimit i mbaroi koha :(",
-            "title": "Kërkimi shtoi"
-        }
+        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

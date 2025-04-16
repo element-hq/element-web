@@ -881,11 +881,7 @@
             "title": "Kopiëren van kamerlink is mislukt"
         },
         "error_loading_user_profile": "Kon persoonsprofiel niet laden",
-        "forget_room_failed": "Vergeten van kamer is mislukt %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "De server is misschien onbereikbaar of overbelast, of het zoeken duurde te lang :(",
-            "title": "Zoeken mislukt"
-        }
+        "forget_room_failed": "Vergeten van kamer is mislukt %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

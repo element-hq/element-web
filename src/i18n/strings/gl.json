@@ -859,11 +859,7 @@
             "title": "Non se puido copiar ligazón da sala"
         },
         "error_loading_user_profile": "Non se cargou o perfil da usuaria",
-        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor podería non estar dispoñible, sobrecargado, ou caducou a busca :(",
-            "title": "Fallou a busca"
-        }
+        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

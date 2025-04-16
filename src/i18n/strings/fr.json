@@ -1133,11 +1133,7 @@
             "title": "Impossible de copier le lien du salon"
         },
         "error_loading_user_profile": "Impossible de charger le profil de l’utilisateur",
-        "forget_room_failed": "Échec de l’oubli du salon %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Le serveur semble être inaccessible, surchargé ou la recherche a expiré :(",
-            "title": "Échec de la recherche"
-        }
+        "forget_room_failed": "Échec de l’oubli du salon %(errCode)s"
     },
     "error_user_not_logged_in": "L’utilisateur n’est pas identifié",
     "event_preview": {
@@ -2097,6 +2093,7 @@
             },
             "uploading_single_file": "Envoi de %(filename)s"
         },
+        "video_room": "Ce salon est un salon vidéo",
         "waiting_for_join_subtitle": "Une fois que les utilisateurs invités seront connectés sur %(brand)s, vous pourrez discuter et le salon sera chiffré de bout en bout",
         "waiting_for_join_title": "En attente de connexion des utilisateurs à %(brand)s"
     },
@@ -2125,7 +2122,7 @@
             "favourite": "Favoris",
             "people": "Personnes",
             "rooms": "Salons",
-            "unread": "Non lu"
+            "unread": "Non-lus"
         },
         "home_menu_label": "Options de l’accueil",
         "join_public_room_label": "Rejoindre le salon public",
