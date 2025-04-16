@@ -78,11 +78,12 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
 
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     // Listen to changes in the notification state and update the values
-    const { a11yLabel, isBold, invited, hasVisibleNotification } = useTypedEventEmitterState(
+    const { computeA11yLabel, isBold, invited, hasVisibleNotification } = useTypedEventEmitterState(
         notificationState,
         NotificationStateEvents.Update,
-        () => getNotificationValues(name, notificationState),
+        () => getNotificationValues(notificationState),
     );
+    const a11yLabel = computeA11yLabel(name);
 
     // We don't want to show the hover menu if
     // - there is an invitation for this room
@@ -127,26 +128,22 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
 
 /**
  * Calculate the values from the notification state
- * @param name - room name
  * @param notificationState
  */
-function getNotificationValues(
-    name: string,
-    notificationState: RoomNotificationState,
-): {
-    a11yLabel: string;
+function getNotificationValues(notificationState: RoomNotificationState): {
+    computeA11yLabel: (name: string) => string;
     isBold: boolean;
     invited: boolean;
     hasVisibleNotification: boolean;
 } {
     const invited = notificationState.invited;
-    const a11yLabel = getA11yLabel(name, notificationState);
+    const computeA11yLabel = (name: string): string => getA11yLabel(name, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
 
     const hasVisibleNotification = notificationState.hasAnyNotificationOrActivity || notificationState.muted;
 
     return {
-        a11yLabel,
+        computeA11yLabel,
         isBold,
         invited,
         hasVisibleNotification,
