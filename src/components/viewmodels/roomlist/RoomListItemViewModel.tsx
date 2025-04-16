@@ -63,7 +63,7 @@ export interface RoomListItemViewState {
     /**
      * Whether the notification decoration should be shown.
      */
-    isNotificationDecorationVisible: boolean;
+    showNotificationDecoration: boolean;
 }
 
 /**
@@ -99,7 +99,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const hasParticipantInCall = useParticipantCount(call) > 0;
     const callConnectionState = call ? connectionState : null;
 
-    const isNotificationDecorationVisible = hasVisibleNotification || hasParticipantInCall;
+    const showNotificationDecoration = hasVisibleNotification || hasParticipantInCall;
 
     // Actions
 
@@ -121,7 +121,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         isVideoRoom,
         callConnectionState,
         hasParticipantInCall,
-        isNotificationDecorationVisible,
+        showNotificationDecoration,
     };
 }
 
