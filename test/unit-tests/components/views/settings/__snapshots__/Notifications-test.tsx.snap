@@ -10,22 +10,22 @@ exports[`<Notifications /> main notification switches renders only enable notifi
       class="mx_SettingsFlag_label"
     >
       <div
-        id="mx_LabelledToggleSwitch_:r0:"
+        id="mx_LabelledToggleSwitch_«r0»"
       >
         Enable notifications for this account
       </div>
       <span
         class="mx_Caption"
-        id="mx_LabelledToggleSwitch_:r0:_caption"
+        id="mx_LabelledToggleSwitch_«r0»_caption"
       >
         Turn off to disable notifications on all your devices and sessions
       </span>
     </span>
     <div
       aria-checked="false"
-      aria-describedby="mx_LabelledToggleSwitch_:r0:_caption"
+      aria-describedby="mx_LabelledToggleSwitch_«r0»_caption"
       aria-disabled="false"
-      aria-labelledby="mx_LabelledToggleSwitch_:r0:"
+      aria-labelledby="mx_LabelledToggleSwitch_«r0»"
       class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
       role="switch"
       tabindex="0"

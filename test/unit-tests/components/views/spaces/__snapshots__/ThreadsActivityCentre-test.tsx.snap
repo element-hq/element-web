@@ -2,7 +2,7 @@
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
-  aria-labelledby="radix-:r33:"
+  aria-labelledby="radix-«r33»"
   aria-orientation="vertical"
   class="_menu_19sse_8"
   data-align="start"
@@ -11,14 +11,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-:r34:"
+  id="radix-«r34»"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
-    id=":r3b:"
+    id="«r3b»"
   >
     Threads activity
   </h3>
@@ -145,15 +145,15 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls="radix-:r1d:"
+        aria-controls="radix-«r1d»"
         aria-disabled="false"
         aria-expanded="true"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby=":r1e:"
+        aria-labelledby="«r1e»"
         class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
         data-state="open"
-        id="radix-:r1c:"
+        id="radix-«r1c»"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -183,7 +183,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     aria-hidden="true"
     data-aria-hidden="true"
     data-floating-ui-portal=""
-    id=":r1i:"
+    id="«r1i»"
   >
     <div
       class="_tooltip_6ode6_8 _invisible_6ode6_21"
@@ -204,7 +204,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
           stroke="none"
         />
         <clippath
-          id=":r1j:"
+          id="«r1j»"
         >
           <rect
             height="10"
@@ -215,7 +215,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
         </clippath>
       </svg>
       <span
-        id=":r1e:"
+        id="«r1e»"
       >
         Threads
       </span>
@@ -227,7 +227,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-transform-origin: 0% 0px; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px;"
   >
     <div
-      aria-labelledby="radix-:r1c:"
+      aria-labelledby="radix-«r1c»"
       aria-orientation="vertical"
       class="_menu_19sse_8"
       data-align="start"
@@ -236,14 +236,14 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
       data-side="top"
       data-state="open"
       dir="ltr"
-      id="radix-:r1d:"
+      id="radix-«r1d»"
       role="menu"
       style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
       tabindex="-1"
     >
       <h3
         class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
-        id=":r1k:"
+        id="«r1k»"
       >
         Threads activity
       </h3>
@@ -270,7 +270,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
 
 exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
-  aria-labelledby="radix-:r3n:"
+  aria-labelledby="radix-«r3n»"
   aria-orientation="vertical"
   class="_menu_19sse_8"
   data-align="start"
@@ -279,14 +279,14 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-:r3o:"
+  id="radix-«r3o»"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
-    id=":r3v:"
+    id="«r3v»"
   >
     Threads activity
   </h3>
@@ -304,7 +304,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 
 exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
 <div
-  aria-labelledby="radix-:r40:"
+  aria-labelledby="radix-«r40»"
   aria-orientation="vertical"
   class="_menu_19sse_8"
   data-align="start"
@@ -313,14 +313,14 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-:r41:"
+  id="radix-«r41»"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
-    id=":r48:"
+    id="«r48»"
   >
     Threads activity
   </h3>
@@ -482,12 +482,12 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls=":ra:"
-        aria-describedby=":ra:"
+        aria-controls="«ra»"
+        aria-describedby="«ra»"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
-        aria-labelledby=":rc:"
+        aria-labelledby="«rc»"
         class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
         data-floating-ui-inert=""
         role="button"
@@ -526,7 +526,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         tabindex="0"
       />
       <span
-        aria-owns=":rh:"
+        aria-owns="«rh»"
         data-floating-ui-inert=""
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
       />
@@ -542,7 +542,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   <div
     data-floating-ui-inert=""
     data-floating-ui-portal=""
-    id=":rg:"
+    id="«rg»"
   >
     <div
       class="_tooltip_6ode6_8 _invisible_6ode6_21"
@@ -563,7 +563,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
           stroke="none"
         />
         <clippath
-          id=":ri:"
+          id="«ri»"
         >
           <rect
             height="10"
@@ -574,7 +574,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         </clippath>
       </svg>
       <span
-        id=":rc:"
+        id="«rc»"
       >
         Threads
       </span>
@@ -582,7 +582,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   </div>
   <div
     data-floating-ui-portal=""
-    id=":rh:"
+    id="«rh»"
   >
     <span
       data-floating-ui-focus-guard=""
@@ -592,11 +592,11 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       tabindex="0"
     />
     <div
-      aria-describedby=":r9:"
-      aria-labelledby=":r8:"
+      aria-describedby="«r9»"
+      aria-labelledby="«r8»"
       class="_content_3xq91_8"
       data-floating-ui-focusable=""
-      id=":ra:"
+      id="«ra»"
       role="dialog"
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
       tabindex="-1"
@@ -614,7 +614,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
           stroke="none"
         />
         <clippath
-          id=":rj:"
+          id="«rj»"
         >
           <rect
             height="20"
@@ -626,13 +626,13 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       </svg>
       <h3
         class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 _header_3xq91_37"
-        id=":r8:"
+        id="«r8»"
       >
         Threads Activity Centre
       </h3>
       <span
         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 _description_3xq91_43"
-        id=":r9:"
+        id="«r9»"
       >
         Threads notifications have moved, find them here from now on.
       </span>

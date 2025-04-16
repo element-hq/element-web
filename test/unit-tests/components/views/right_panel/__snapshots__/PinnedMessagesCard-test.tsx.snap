@@ -19,7 +19,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         </p>
       </div>
       <button
-        aria-labelledby=":re:"
+        aria-labelledby="«re»"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -100,7 +100,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":rk:"
+        aria-labelledby="«rk»"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -157,7 +157,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby=":rq:"
+                aria-labelledby="«rq»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -169,7 +169,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_m2erp_8"
                 data-state="closed"
-                id="radix-:rv:"
+                id="radix-«rv»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -235,7 +235,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby=":r11:"
+                aria-labelledby="«r11»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -247,7 +247,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_m2erp_8"
                 data-state="closed"
-                id="radix-:r16:"
+                id="radix-«r16»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -321,7 +321,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":rt2:"
+        aria-labelledby="«rt2»"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -378,7 +378,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby=":rt8:"
+                aria-labelledby="«rt8»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -390,7 +390,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_m2erp_8"
                 data-state="closed"
-                id="radix-:rtd:"
+                id="radix-«rtd»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -456,7 +456,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby=":rtf:"
+                aria-labelledby="«rtf»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -468,7 +468,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_m2erp_8"
                 data-state="closed"
-                id="radix-:rtk:"
+                id="radix-«rtk»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
