@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
@@ -16,10 +16,11 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
+import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 
 export interface RoomListItemViewState {
     /**
@@ -72,6 +73,9 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const name = useEventEmitterState(room, RoomEvent.Name, () => room.name);
 
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
+    // force re-render on notification state change
+    const [, triggerRender] = useState({});
+    useTypedEventEmitter(notificationState, NotificationStateEvents.Update, () => triggerRender({}));
     const invited = notificationState.invited;
     const a11yLabel = getA11yLabel(name, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
