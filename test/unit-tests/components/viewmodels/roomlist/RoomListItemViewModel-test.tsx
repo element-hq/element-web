@@ -19,6 +19,7 @@ import {
 } from "../../../../../src/components/viewmodels/roomlist/utils";
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
+import * as UseCallModule from "../../../../../src/hooks/useCall";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
@@ -86,6 +87,49 @@ describe("RoomListItemViewModel", () => {
         expect(vm.current.showHoverMenu).toBe(true);
     });
 
+    describe("notification", () => {
+        let notificationState: RoomNotificationState;
+        beforeEach(() => {
+            notificationState = new RoomNotificationState(room, false);
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+        });
+
+        it("should show notification decoration if there is call has participant", () => {
+            jest.spyOn(UseCallModule, "useParticipantCount").mockReturnValue(1);
+
+            const { result: vm } = renderHook(
+                () => useRoomListItemViewModel(room),
+                withClientContextRenderOptions(room.client),
+            );
+            expect(vm.current.showNotificationDecoration).toBe(true);
+        });
+
+        it.each([
+            {
+                label: "hasAnyNotificationOrActivity",
+                mock: () => jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true),
+            },
+            { label: "muted", mock: () => jest.spyOn(notificationState, "muted", "get").mockReturnValue(true) },
+        ])("should show notification decoration if $label=true", ({ mock }) => {
+            mock();
+            const { result: vm } = renderHook(
+                () => useRoomListItemViewModel(room),
+                withClientContextRenderOptions(room.client),
+            );
+            expect(vm.current.showNotificationDecoration).toBe(true);
+        });
+
+        it("should be bold if there is a notification", () => {
+            jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+
+            const { result: vm } = renderHook(
+                () => useRoomListItemViewModel(room),
+                withClientContextRenderOptions(room.client),
+            );
+            expect(vm.current.isBold).toBe(true);
+        });
+    });
+
     describe("a11yLabel", () => {
         let notificationState: RoomNotificationState;
         beforeEach(() => {
@@ -96,7 +140,7 @@ describe("RoomListItemViewModel", () => {
         it.each([
             {
                 label: "unsent message",
-                mock: () => jest.spyOn(notificationState, "isUnsetMessage", "get").mockReturnValue(true),
+                mock: () => jest.spyOn(notificationState, "isUnsentMessage", "get").mockReturnValue(true),
                 expected: "Open room roomName with an unsent message.",
             },
             {
