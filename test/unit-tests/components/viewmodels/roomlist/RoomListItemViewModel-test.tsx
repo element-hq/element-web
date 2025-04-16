@@ -33,6 +33,10 @@ describe("RoomListItemViewModel", () => {
         room = mkStubRoom("roomId", "roomName", matrixClient);
     });
 
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
     it("should dispatch view room action on openRoom", async () => {
         const { result: vm } = renderHook(
             () => useRoomListItemViewModel(room),
@@ -61,6 +65,20 @@ describe("RoomListItemViewModel", () => {
 
     it("should show hover menu if user has access to notification menu", async () => {
         mocked(hasAccessToNotificationMenu).mockReturnValue(true);
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
+        expect(vm.current.showHoverMenu).toBe(true);
+    });
+
+    it("should not show hover menu if user has an invitation notification", async () => {
+        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
+
+        const notificationState = new RoomNotificationState(room, false);
+        jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+        jest.spyOn(notificationState, "invited", "get").mockReturnValue(false);
+
         const { result: vm } = renderHook(
             () => useRoomListItemViewModel(room),
             withClientContextRenderOptions(room.client),
@@ -108,7 +126,10 @@ describe("RoomListItemViewModel", () => {
             },
         ])("should return the $label label", ({ mock, expected }) => {
             mock?.();
-            const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
+            const { result: vm } = renderHook(
+                () => useRoomListItemViewModel(room),
+                withClientContextRenderOptions(room.client),
+            );
             expect(vm.current.a11yLabel).toBe(expected);
         });
     });
