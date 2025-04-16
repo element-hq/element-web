@@ -1135,11 +1135,7 @@
             "title": "Nelze zkopírovat odkaz na místnost"
         },
         "error_loading_user_profile": "Nepovedlo se načíst profil uživatele",
-        "forget_room_failed": "Nepodařilo se zapomenout místnost %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server může být nedostupný, přetížený nebo vyhledávání vypršelo :(",
-            "title": "Vyhledávání selhalo"
-        }
+        "forget_room_failed": "Nepodařilo se zapomenout místnost %(errCode)s"
     },
     "error_user_not_logged_in": "Uživatel není přihlášen",
     "event_preview": {

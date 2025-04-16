@@ -989,11 +989,7 @@
             "title": "Tidak dapat menyalin tautan ruangan"
         },
         "error_loading_user_profile": "Tidak dapat memuat profil pengguna",
-        "forget_room_failed": "Gagal melupakan ruangan %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server mungkin tidak tersedia, terlalu penuh, atau waktu pencarian habis :(",
-            "title": "Pencarian gagal"
-        }
+        "forget_room_failed": "Gagal melupakan ruangan %(errCode)s"
     },
     "error_user_not_logged_in": "Pengguna belum masuk",
     "event_preview": {
