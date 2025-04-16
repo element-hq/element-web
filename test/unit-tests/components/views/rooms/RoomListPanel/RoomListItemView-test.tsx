@@ -28,7 +28,6 @@ describe("<RoomListItemView />", () => {
     let defaultValue: RoomListItemViewState;
     let matrixClient: MatrixClient;
     let room: Room;
-
     beforeEach(() => {
         matrixClient = stubClient();
         room = mkRoom(matrixClient, "room1");
@@ -36,10 +35,15 @@ describe("<RoomListItemView />", () => {
         DMRoomMap.makeShared(matrixClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
 
+        const notificationState = new RoomNotificationState(room, false);
+        jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+        jest.spyOn(notificationState, "isNotification", "get").mockReturnValue(true);
+        jest.spyOn(notificationState, "count", "get").mockReturnValue(1);
+
         defaultValue = {
             openRoom: jest.fn(),
             showHoverMenu: false,
-            notificationState: new RoomNotificationState(room, false),
+            notificationState,
             a11yLabel: "Open room room1",
             isBold: false,
             isVideoRoom: false,
@@ -88,15 +92,9 @@ describe("<RoomListItemView />", () => {
     });
 
     test("should display notification decoration", async () => {
-        const notificationState = {
-            hasAnyNotificationOrActivity: true,
-            isNotification: true,
-            count: 1,
-        } as RoomNotificationState;
         mocked(useRoomListItemViewModel).mockReturnValue({
             ...defaultValue,
             showNotificationDecoration: true,
-            notificationState,
         });
 
         const { asFragment } = render(<RoomListItemView room={room} isSelected={false} />);
@@ -106,15 +104,10 @@ describe("<RoomListItemView />", () => {
 
     test("should not display notification decoration when hovered", async () => {
         const user = userEvent.setup();
-        const notificationState = {
-            hasAnyNotificationOrActivity: true,
-            isNotification: true,
-            count: 1,
-        } as RoomNotificationState;
+
         mocked(useRoomListItemViewModel).mockReturnValue({
             ...defaultValue,
             showNotificationDecoration: true,
-            notificationState,
         });
 
         render(<RoomListItemView room={room} isSelected={false} />);
