@@ -81,7 +81,7 @@ test.describe("RightPanel", () => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
             await page.getByRole("menuitem", { name: "Extensions" }).click();
-            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-extensions.png");
+            await expect(page.getByTestId("right-panel")).toMatchScreenshot("with-extensions.png");
 
             await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
