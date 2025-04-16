@@ -29,7 +29,6 @@ import type LegacyCallHandler from "../LegacyCallHandler";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import type VoipUserMapper from "../VoipUserMapper";
 import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
@@ -113,7 +112,6 @@ declare global {
         mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;

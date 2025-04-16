@@ -1952,7 +1952,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="5"
+            data-color="3"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1979,7 +1979,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !18:example.org
+                  !16:example.org
                 </span>
               </div>
             </div>

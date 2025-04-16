@@ -8,10 +8,8 @@
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import LegacyCallHandler from "../../../LegacyCallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
-import VoipUserMapper from "../../../VoipUserMapper";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -25,19 +23,8 @@ export class VisibilityProvider {
         return VisibilityProvider.internalInstance;
     }
 
-    public async onNewInvitedRoom(room: Room): Promise<void> {
-        await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
-    }
-
     public isRoomVisible(room?: Room): boolean {
         if (!room) {
-            return false;
-        }
-
-        if (
-            LegacyCallHandler.instance.getSupportsVirtualRooms() &&
-            VoipUserMapper.sharedInstance().isVirtualRoom(room)
-        ) {
             return false;
         }
 

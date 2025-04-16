@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type RefObject } from "react";
 import { mocked, type MockedObject } from "jest-mock";
 import {
-    ClientEvent,
     EventTimeline,
     EventType,
     type IEvent,
@@ -68,7 +67,6 @@ import { DirectoryMember } from "../../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext";
-import VoipUserMapper from "../../../../src/VoipUserMapper";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
@@ -119,7 +117,6 @@ describe("RoomView", () => {
         stores.client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
-        jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(undefined);
         crypto = cli.getCrypto()!;
         jest.spyOn(cli, "getCrypto").mockReturnValue(undefined);
     });
@@ -415,26 +412,6 @@ describe("RoomView", () => {
         jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
         cli.emit(CryptoEvent.UserTrustStatusChanged, cli.getSafeUserId(), verificationStatus);
         await waitFor(() => expect(container.querySelector(".mx_E2EIcon_verified")).toBeInTheDocument());
-    });
-
-    describe("with virtual rooms", () => {
-        it("checks for a virtual room on initial load", async () => {
-            const { container } = await renderRoomView();
-            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
-
-            // quick check that rendered without error
-            expect(container.querySelector(".mx_ErrorBoundary")).toBeFalsy();
-        });
-
-        it("checks for a virtual room on room event", async () => {
-            await renderRoomView();
-            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
-
-            act(() => cli.emit(ClientEvent.Room, room));
-
-            // called again after room event
-            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledTimes(2);
-        });
     });
 
     describe("video rooms", () => {
