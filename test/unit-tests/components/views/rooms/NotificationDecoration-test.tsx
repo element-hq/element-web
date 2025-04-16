@@ -19,7 +19,7 @@ describe("<NotificationDecoration />", () => {
     });
 
     it("should render the unset message decoration", () => {
-        const state = { hasAnyNotificationOrActivity: true, isUnsetMessage: true } as RoomNotificationState;
+        const state = { hasAnyNotificationOrActivity: true, isUnsentMessage: true } as RoomNotificationState;
         const { asFragment } = render(<NotificationDecoration notificationState={state} hasVideoCall={false} />);
         expect(asFragment()).toMatchSnapshot();
     });

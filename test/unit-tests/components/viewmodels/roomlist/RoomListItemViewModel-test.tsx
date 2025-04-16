@@ -96,7 +96,7 @@ describe("RoomListItemViewModel", () => {
         it.each([
             {
                 label: "unsent message",
-                mock: () => jest.spyOn(notificationState, "isUnsetMessage", "get").mockReturnValue(true),
+                mock: () => jest.spyOn(notificationState, "isUnsentMessage", "get").mockReturnValue(true),
                 expected: "Open room roomName with an unsent message.",
             },
             {

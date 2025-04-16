@@ -124,7 +124,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
  * @param notificationState
  */
 function getA11yLabel(roomName: string, notificationState: RoomNotificationState): string {
-    if (notificationState.isUnsetMessage) {
+    if (notificationState.isUnsentMessage) {
         return _t("a11y|room_messsage_not_sent", {
             roomName,
         });

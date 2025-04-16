@@ -37,7 +37,7 @@ export function NotificationDecoration({
 }: NotificationDecorationProps): JSX.Element | null {
     const {
         hasAnyNotificationOrActivity,
-        isUnsetMessage,
+        isUnsentMessage,
         invited,
         isMention,
         isActivityNotification,
@@ -55,7 +55,7 @@ export function NotificationDecoration({
             {...props}
             data-testid="notification-decoration"
         >
-            {isUnsetMessage && <ErrorIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />}
+            {isUnsentMessage && <ErrorIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />}
             {hasVideoCall && <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {invited && <EmailIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {isMention && <MentionIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
