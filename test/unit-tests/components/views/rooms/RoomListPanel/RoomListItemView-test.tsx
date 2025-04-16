@@ -45,6 +45,7 @@ describe("<RoomListItemView />", () => {
             isVideoRoom: false,
             callConnectionState: null,
             hasParticipantInCall: false,
+            name: room.name,
         };
 
         mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
