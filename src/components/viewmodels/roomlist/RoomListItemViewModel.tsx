@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
@@ -77,12 +77,12 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const name = useEventEmitterState(room, RoomEvent.Name, () => room.name);
 
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
-    // force re-render on notification state change
-    const [, triggerRender] = useState({});
-    useTypedEventEmitter(notificationState, NotificationStateEvents.Update, () => triggerRender({}));
-    const invited = notificationState.invited;
-    const a11yLabel = getA11yLabel(name, notificationState);
-    const isBold = notificationState.hasAnyNotificationOrActivity;
+    // Listen to changes in the notification state and update the values
+    const { a11yLabel, isBold, invited, hasVisibleNotification } = useTypedEventEmitterState(
+        notificationState,
+        NotificationStateEvents.Update,
+        () => getNotificationValues(name, notificationState),
+    );
 
     // We don't want to show the hover menu if
     // - there is an invitation for this room
@@ -99,8 +99,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const hasParticipantInCall = useParticipantCount(call) > 0;
     const callConnectionState = call ? connectionState : null;
 
-    const isNotificationDecorationVisible =
-        notificationState.hasAnyNotificationOrActivity || notificationState.muted || hasParticipantInCall;
+    const isNotificationDecorationVisible = hasVisibleNotification || hasParticipantInCall;
 
     // Actions
 
@@ -123,6 +122,34 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         callConnectionState,
         hasParticipantInCall,
         isNotificationDecorationVisible,
+    };
+}
+
+/**
+ * Calculate the values from the notification state
+ * @param name - room name
+ * @param notificationState
+ */
+function getNotificationValues(
+    name: string,
+    notificationState: RoomNotificationState,
+): {
+    a11yLabel: string;
+    isBold: boolean;
+    invited: boolean;
+    hasVisibleNotification: boolean;
+} {
+    const invited = notificationState.invited;
+    const a11yLabel = getA11yLabel(name, notificationState);
+    const isBold = notificationState.hasAnyNotificationOrActivity;
+
+    const hasVisibleNotification = notificationState.hasAnyNotificationOrActivity || notificationState.muted;
+
+    return {
+        a11yLabel,
+        isBold,
+        invited,
+        hasVisibleNotification,
     };
 }
 
