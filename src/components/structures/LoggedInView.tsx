@@ -725,7 +725,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <div className={bodyClasses}>
                         <div className="mx_LeftPanel_outerWrapper">
-                            <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
+                            <LeftPanelLiveShareWarning
+                                isMinimized={(!useNewRoomList && this.props.collapseLhs) || false}
+                            />
                             <div className={leftPanelWrapperClasses}>
                                 <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
                                 <SpacePanel />
@@ -733,7 +735,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 <div
                                     className="mx_LeftPanel_wrapper--user"
                                     ref={this._resizeContainer}
-                                    data-collapsed={this.props.collapseLhs ? true : undefined}
+                                    data-collapsed={!useNewRoomList && this.props.collapseLhs ? true : undefined}
                                 >
                                     <LeftPanel
                                         pageType={this.props.page_type as PageTypes}
