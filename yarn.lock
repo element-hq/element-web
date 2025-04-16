@@ -8999,9 +8999,9 @@ makeerror@1.0.12:
     tmpl "1.0.5"
 
 maplibre-gl@^5.0.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-5.3.0.tgz#31fcc6f689dd0d342446a2baa29bbb8015f9f3dc"
-  integrity sha512-qru6B6jHlDPR4Q9/P4W1zEPbPofR4wwYbrrjiHKWI7yLtyXmpJ1/G1KaIYDr5uNdFbPZ7uiZAWdqtfdNLmIhGg==
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-5.3.1.tgz#bae6408da2d708ee20aa2d8b44f8e39de8c7cd93"
+  integrity sha512-Ihx+oUUSsZkjMou1Cw5J6silE+5OtFFQSPslWF9+7v4yFC/XDHrpsORYO9lWE4KZI0djCEUpZQJpkpnMArAbeA==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
