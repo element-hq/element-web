@@ -88,11 +88,13 @@ export const RoomListItemView = memo(function RoomListItemView({
                     ) : (
                         <>
                             {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                            <NotificationDecoration
-                                notificationState={vm.notificationState}
-                                aria-hidden={true}
-                                hasVideoCall={vm.hasParticipantInCall}
-                            />
+                            {vm.showNotificationDecoration && (
+                                <NotificationDecoration
+                                    notificationState={vm.notificationState}
+                                    aria-hidden={true}
+                                    hasVideoCall={vm.hasParticipantInCall}
+                                />
+                            )}
                         </>
                     )}
                 </Flex>
