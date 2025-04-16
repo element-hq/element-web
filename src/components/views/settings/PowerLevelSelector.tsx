@@ -80,11 +80,11 @@ export function PowerLevelSelector({
     if (!users.length) return <>{children}</>;
 
     // check at least one admin in the list
-     const roomHasAtLeastOneAdmin = (usersLevels: Record<string, number>) : boolean => {
+    const roomHasAtLeastOneAdmin = (usersLevels: Record<string, number>): boolean => {
         const userLevelValues = Object.values(usersLevels);
         // At least one user as the pL 100 which means he is admin
         return userLevelValues.some((uL) => uL === 100);
-    }
+    };
 
     return (
         <SettingsFieldset legend={title}>
@@ -105,26 +105,21 @@ export function PowerLevelSelector({
                         disabled={!canChange}
                         label={userId}
                         key={userId}
-                        onChange={async (value) =>  {
+                        onChange={async (value) => {
                             const userLevelsTmp = Object.assign({}, userLevels);
                             userLevelsTmp[userId] = value;
 
                             if (!roomHasAtLeastOneAdmin(userLevelsTmp)) {
                                 const { finished } = Modal.createDialog(QuestionDialog, {
                                     title: _t("common|warning"),
-                                    description: (
-                                        <div>
-                                            {_t("user_info|demote_self_confirm_room")}
-                                        </div>
-                                    ),
+                                    description: <div>{_t("user_info|demote_self_confirm_room")}</div>,
                                     button: _t("action|continue"),
                                 });
                                 const [confirmed] = await finished;
                                 if (!confirmed) return;
                             }
                             setCurrentPowerLevel({ value, userId });
-                            }
-                        }
+                        }}
                     />
                 );
             })}
