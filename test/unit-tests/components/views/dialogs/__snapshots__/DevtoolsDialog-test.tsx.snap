@@ -198,7 +198,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <label
               class="_label_19upo_59"
-              for="radix-:r4:"
+              for="radix-«r4»"
             >
               Element Call URL
             </label>
@@ -207,7 +207,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             >
               <input
                 class="_control_sqdq4_10"
-                id="radix-:r4:"
+                id="radix-«r4»"
                 name="input"
                 title=""
                 value=""

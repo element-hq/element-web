@@ -253,13 +253,13 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       >
         <label
           class="_label_19upo_59"
-          for="radix-:r0:"
+          for="radix-«r0»"
         >
           Enter recovery key
         </label>
         <input
           class="_control_sqdq4_10"
-          id="radix-:r0:"
+          id="radix-«r0»"
           name="recoveryKey"
           required=""
           title=""
@@ -388,23 +388,23 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         <label
           class="_label_19upo_59"
           data-invalid="true"
-          for="radix-:r0:"
+          for="radix-«r0»"
         >
           Enter recovery key
         </label>
         <input
-          aria-describedby="radix-:r1:"
+          aria-describedby="radix-«r1»"
           aria-invalid="true"
           class="_control_sqdq4_10"
           data-invalid="true"
-          id="radix-:r0:"
+          id="radix-«r0»"
           name="recoveryKey"
           required=""
           title=""
         />
         <span
           class="_message_19upo_85 _error-message_19upo_95"
-          id="radix-:r1:"
+          id="radix-«r1»"
         >
           <svg
             fill="currentColor"
