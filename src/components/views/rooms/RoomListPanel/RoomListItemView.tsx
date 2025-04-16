@@ -42,9 +42,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
     const showHoverDecoration = (isMenuOpen || isHover) && vm.showHoverMenu;
 
-    const isNotificationDecorationVisible =
-        !showHoverDecoration &&
-        (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted || vm.hasParticipantInCall);
+    const isNotificationDecorationVisible = !showHoverDecoration && vm.isNotificationDecorationVisible;
 
     return (
         <button

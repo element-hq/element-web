@@ -60,6 +60,10 @@ export interface RoomListItemViewState {
      * Whether there are participants in the call.
      */
     hasParticipantInCall: boolean;
+    /**
+     * Whether the notification decoration should be shown.
+     */
+    isNotificationDecorationVisible: boolean;
 }
 
 /**
@@ -95,6 +99,9 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const hasParticipantInCall = useParticipantCount(call) > 0;
     const callConnectionState = call ? connectionState : null;
 
+    const isNotificationDecorationVisible =
+        notificationState.hasAnyNotificationOrActivity || notificationState.muted || hasParticipantInCall;
+
     // Actions
 
     const openRoom = useCallback((): void => {
@@ -115,6 +122,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         isVideoRoom,
         callConnectionState,
         hasParticipantInCall,
+        isNotificationDecorationVisible,
     };
 }
 
