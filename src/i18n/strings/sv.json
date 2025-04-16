@@ -14,6 +14,14 @@
         "recent_rooms": "Nyliga rum",
         "room_messsage_not_sent": "Öppna rummet %(roomName)s med ett osänt meddelande.",
         "room_n_unread_invite": "Öppna inbjudan till rummet %(roomName)s.",
+        "room_n_unread_messages": {
+            "one": "Öppna rummet %(roomName)s med 1 oläst meddelande.",
+            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Öppna rummet %(roomName)s med 1 oläst omnämnande.",
+            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden inklusive omnämnanden."
+        },
         "room_name": "Rum %(name)s",
         "room_status_bar": "Rumsstatusfält",
         "seek_bar_label": "Förloppsfält för ljud",
@@ -47,6 +55,8 @@
         "create_a_room": "Skapa ett rum",
         "create_account": "Skapa konto",
         "decline": "Avvisa",
+        "decline_and_block": "Avvisa och blockera",
+        "decline_invite": "Avböj inbjudan",
         "delete": "Radera",
         "deny": "Neka",
         "disable": "Inaktivera",
@@ -736,6 +746,13 @@
         "twemoji": "Emojigrafiken <twemoji>Twemoji</twemoji> är © <author>Twitter, Inc och andra bidragsgivare</author> och används under villkoren i <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Teckensnittet <colr>twemoji-colr</colr> är © <author>Mozilla Foundation</author> och används under villkoren för <terms>Apache 2.0</terms>."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Är du säker på att du vill avböja inbjudan att gå med i \"%(roomName)s\"?",
+        "ignore_user_help": "Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren.",
+        "reason_description": "Beskriv anledningen att anmäla rummet.",
+        "report_room_description": "Rapportera det här rummet till din kontoleverantör.",
+        "title": "Avböj inbjudan"
+    },
     "desktop_default_device_name": "%(brand)s Skrivbord: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktiva widgets",
@@ -836,6 +853,9 @@
         "setting_colon": "Inställning:",
         "setting_definition": "Inställningsdefinition:",
         "setting_id": "Inställnings-ID",
+        "settings": {
+            "elementCallUrl": "Element Call-URL"
+        },
         "settings_explorer": "Inställningar",
         "show_hidden_events": "Visa dolda händelser i tidslinjen",
         "spaces": {
@@ -1113,11 +1133,7 @@
             "title": "Kunde inte kopiera rumslänken"
         },
         "error_loading_user_profile": "Kunde inte ladda användarprofil",
-        "forget_room_failed": "Misslyckades att glömma bort rummet %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Servern kan vara otillgänglig eller överbelastad, eller så tog sökningen för lång tid :(",
-            "title": "Sökning misslyckades"
-        }
+        "forget_room_failed": "Misslyckades att glömma bort rummet %(errCode)s"
     },
     "error_user_not_logged_in": "Användaren är inte inloggad",
     "event_preview": {
@@ -1652,6 +1668,7 @@
         "class_global": "Globalt",
         "class_other": "Annat",
         "default": "Standard",
+        "default_settings": "Matcha standardinställningar",
         "email_pusher_app_display_name": "E-postaviseringar",
         "enable_prompt_toast_description": "Aktivera skrivbordsaviseringar",
         "enable_prompt_toast_title": "Aviseringar",
@@ -1670,7 +1687,8 @@
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
         "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
-        "mute_description": "Du får inga aviseringar"
+        "mute_description": "Du får inga aviseringar",
+        "mute_room": "Tysta rum"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s begär verifiering"
@@ -1795,7 +1813,8 @@
         "toxic_behaviour": "Stötande beteende"
     },
     "report_room": {
-        "description": "Rapportera det här rummet till din hemserveradministratör. Detta skickar rummets unika ID, men om meddelanden är krypterade kan administratören inte läsa dem eller visa delade filer."
+        "description": "Rapportera det här rummet till din hemserveradministratör. Detta skickar rummets unika ID, men om meddelanden är krypterade kan administratören inte läsa dem eller visa delade filer.",
+        "reason_label": "Beskriv skälet"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Misslyckades att avkryptera %(failedCount)s sessioner!",
@@ -2074,6 +2093,7 @@
             },
             "uploading_single_file": "Laddar upp %(filename)s"
         },
+        "video_room": "Det här rummet är ett videorum",
         "waiting_for_join_subtitle": "När inbjudna användare har gått med i %(brand)s kommer du att kunna chatta och rummet kommer att vara totalsträckskrypterat",
         "waiting_for_join_title": "Väntar på att användare går med i %(brand)s"
     },
@@ -2504,6 +2524,7 @@
                 "breadcrumb_third_description": "Du måste verifiera alla dina befintliga enheter och kontakter igen",
                 "breadcrumb_title": "Är du säker på att du vill återställa din identitet?",
                 "breadcrumb_title_forgot": "Glömt din återställningsnyckel? Du måste återställa din identitet.",
+                "breadcrumb_title_sync_failed": "Misslyckades att synkronisera nyckellagringen. Du måste återställa din identitet.",
                 "breadcrumb_warning": "Gör bara detta om du tror att ditt konto har utsatts för intrång.",
                 "details_title": "Krypteringsdetaljer",
                 "do_not_close_warning": "Stäng inte fönstret förrän återställningen är klar",

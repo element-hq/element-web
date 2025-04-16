@@ -1108,11 +1108,7 @@
             "title": "Oda bağlantısı kopyalanamıyor"
         },
         "error_loading_user_profile": "Kullanıcı profili yüklenemedi",
-        "forget_room_failed": "Oda unutulması başarısız oldu %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Sunucu kullanılamıyor , aşırı yüklenmiş veya arama zaman aşımına uğramış olabilir :(",
-            "title": "Arama başarısız"
-        }
+        "forget_room_failed": "Oda unutulması başarısız oldu %(errCode)s"
     },
     "error_user_not_logged_in": "Kullanıcı oturum açmadı",
     "event_preview": {

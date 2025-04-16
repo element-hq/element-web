@@ -921,11 +921,7 @@
             "title": "无法复制房间链接"
         },
         "error_loading_user_profile": "无法加载用户资料",
-        "forget_room_failed": "忘记房间失败，错误代码： %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "服务器可能不可用、超载，或者搜索超时 :(",
-            "title": "搜索失败"
-        }
+        "forget_room_failed": "忘记房间失败，错误代码： %(errCode)s"
     },
     "error_user_not_logged_in": "用户未登录",
     "event_preview": {

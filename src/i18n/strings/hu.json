@@ -1130,11 +1130,7 @@
             "title": "A szoba hivatkozása nem másolható"
         },
         "error_loading_user_profile": "A felhasználói profil nem tölthető be",
-        "forget_room_failed": "A szobát nem sikerült elfelejtetni: %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "A kiszolgáló elérhetetlen, túlterhelt vagy a keresés túllépte az időkorlátot :(",
-            "title": "Keresés sikertelen"
-        }
+        "forget_room_failed": "A szobát nem sikerült elfelejtetni: %(errCode)s"
     },
     "error_user_not_logged_in": "A felhasználó nincs bejelentkezve",
     "event_preview": {

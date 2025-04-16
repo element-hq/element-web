@@ -1133,11 +1133,7 @@
             "title": "Jututoa lingi kopeerimine ei õnnestu"
         },
         "error_loading_user_profile": "Kasutajaprofiili laadimine ei õnnestunud",
-        "forget_room_failed": "Jututoa unustamine ei õnnestunud %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server kas pole leitav, on ülekoormatud või otsing aegus :(",
-            "title": "Otsing ebaõnnestus"
-        }
+        "forget_room_failed": "Jututoa unustamine ei õnnestunud %(errCode)s"
     },
     "error_user_not_logged_in": "Kasutaja pole võrku loginud",
     "event_preview": {
@@ -2098,6 +2094,7 @@
             },
             "uploading_single_file": "Laadin üles %(filename)s"
         },
+        "video_room": "See jututuba on mõeldud videokohtumiste jaoks",
         "waiting_for_join_subtitle": "Kui kutse saanud kasutajad on liitunud %(brand)s'ga, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud",
         "waiting_for_join_title": "Kasutajate liitumise ootel %(brand)s'ga"
     },
