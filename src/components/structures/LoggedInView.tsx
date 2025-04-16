@@ -260,13 +260,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         let panelSize: number | null;
         let panelCollapsed: boolean;
         const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
         let toggleSize = 206 - 50;
         if (useNewRoomList) {
             toggleSize = 232;
         }
-
         const collapseConfig: ICollapseConfig = {
-            // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
             toggleSize: toggleSize,
             onCollapsed: (collapsed) => {
                 panelCollapsed = collapsed;
