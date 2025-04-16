@@ -1133,11 +1133,7 @@
             "title": "Raumlink konnte nicht kopiert werden"
         },
         "error_loading_user_profile": "Konnte Nutzerprofil nicht laden",
-        "forget_room_failed": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Der Server ist entweder nicht verfügbar, überlastet oder die Suche wurde wegen Zeitüberschreitung abgebrochen :(",
-            "title": "Suche ist fehlgeschlagen"
-        }
+        "forget_room_failed": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s"
     },
     "error_user_not_logged_in": "Benutzer ist nicht angemeldet",
     "event_preview": {

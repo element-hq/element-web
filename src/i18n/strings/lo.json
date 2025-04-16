@@ -848,11 +848,7 @@
             "title": "ບໍ່ສາມາດສຳເນົາລິ້ງຫ້ອງໄດ້"
         },
         "error_loading_user_profile": "ບໍ່ສາມາດໂຫຼດໂປຣໄຟລ໌ຂອງຜູ້ໃຊ້ໄດ້",
-        "forget_room_failed": "ບໍ່ສາມາດລືມຫ້ອງ ໄດ້%(errCode)s",
-        "search_failed": {
-            "server_unavailable": "ເຊີບເວີອາດຈະບໍ່ມີຢູ່, ໂຫຼດເກີນ, ຫຼື ໝົດເວລາການຊອກຫາ :(",
-            "title": "ຄົ້ນຫາບໍ່ສຳເລັດ"
-        }
+        "forget_room_failed": "ບໍ່ສາມາດລືມຫ້ອງ ໄດ້%(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

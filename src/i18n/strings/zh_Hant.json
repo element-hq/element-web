@@ -986,11 +986,7 @@
             "title": "無法複製聊天室連結"
         },
         "error_loading_user_profile": "無法載入使用者簡介",
-        "forget_room_failed": "無法忘記聊天室 %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "伺服器可能無法使用、超載，或搜尋時間過長 :(",
-            "title": "無法搜尋"
-        }
+        "forget_room_failed": "無法忘記聊天室 %(errCode)s"
     },
     "error_user_not_logged_in": "使用者未登入",
     "event_preview": {

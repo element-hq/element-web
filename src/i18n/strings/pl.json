@@ -1139,11 +1139,7 @@
             "title": "Nie można skopiować linku do pokoju"
         },
         "error_loading_user_profile": "Nie udało się załadować profilu",
-        "forget_room_failed": "Nie mogłem zapomnieć o pokoju %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serwer może być niedostępny, przeciążony, lub upłynął czas wyszukiwania :(",
-            "title": "Wyszukiwanie nie powiodło się"
-        }
+        "forget_room_failed": "Nie mogłem zapomnieć o pokoju %(errCode)s"
     },
     "error_user_not_logged_in": "Użytkownik nie jest zalogowany",
     "event_preview": {
@@ -2114,6 +2110,7 @@
             },
             "uploading_single_file": "Przesyłanie %(filename)s"
         },
+        "video_room": "Ten pokój jest pokojem wideo",
         "waiting_for_join_subtitle": "Jak tylko zaproszeni użytkownicy dołączą do %(brand)s, będziesz mógł czatować w pokoju szyfrowanym end-to-end",
         "waiting_for_join_title": "Czekanie na użytkowników %(brand)s"
     },

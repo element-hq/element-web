@@ -940,11 +940,7 @@
             "title": "No se ha podido copiar el enlace a la sala"
         },
         "error_loading_user_profile": "No se pudo cargar el perfil de usuario",
-        "forget_room_failed": "No se pudo olvidar la sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "El servidor podría estar saturado o desconectado, o la búsqueda caducó :(",
-            "title": "Falló la búsqueda"
-        }
+        "forget_room_failed": "No se pudo olvidar la sala %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

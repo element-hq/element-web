@@ -763,11 +763,7 @@
             "title": "Ne povas kopii ligilon al ĉambro"
         },
         "error_loading_user_profile": "Ne povis enlegi profilon de uzanto",
-        "forget_room_failed": "Malsukcesis forgesi ĉambron %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Aŭ la servilo estas neatingebla aŭ troŝarĝita, aŭ la serĉo eltempiĝis :(",
-            "title": "Serĉo malsukcesis"
-        }
+        "forget_room_failed": "Malsukcesis forgesi ĉambron %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

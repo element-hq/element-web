@@ -710,11 +710,7 @@
     "error_database_closed_title": "پایگاه داده به طور غیرمنتظره ای بسته شد",
     "error_dialog": {
         "error_loading_user_profile": "امکان نمایش پروفایل کاربر میسر نیست",
-        "forget_room_failed": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "سرور ممکن است در دسترس نباشد ، بار زیادی روی آن قرار گرفته یا زمان جستجو به پایان رسیده‌باشد :(",
-            "title": "جستجو موفیت‌آمیز نبود"
-        }
+        "forget_room_failed": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s"
     },
     "error_user_not_logged_in": "کاربر وارد نشده است",
     "event_preview": {
