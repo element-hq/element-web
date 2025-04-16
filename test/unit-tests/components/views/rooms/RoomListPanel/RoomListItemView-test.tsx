@@ -46,6 +46,7 @@ describe("<RoomListItemView />", () => {
             callConnectionState: null,
             hasParticipantInCall: false,
             name: room.name,
+            showNotificationDecoration: false,
         };
 
         mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
@@ -84,5 +85,42 @@ describe("<RoomListItemView />", () => {
             "true",
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    test("should display notification decoration", async () => {
+        const notificationState = {
+            hasAnyNotificationOrActivity: true,
+            isNotification: true,
+            count: 1,
+        } as RoomNotificationState;
+        mocked(useRoomListItemViewModel).mockReturnValue({
+            ...defaultValue,
+            showNotificationDecoration: true,
+            notificationState,
+        });
+
+        const { asFragment } = render(<RoomListItemView room={room} isSelected={false} />);
+        expect(screen.getByTestId("notification-decoration")).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    test("should not display notification decoration when hovered", async () => {
+        const user = userEvent.setup();
+        const notificationState = {
+            hasAnyNotificationOrActivity: true,
+            isNotification: true,
+            count: 1,
+        } as RoomNotificationState;
+        mocked(useRoomListItemViewModel).mockReturnValue({
+            ...defaultValue,
+            showNotificationDecoration: true,
+            notificationState,
+        });
+
+        render(<RoomListItemView room={room} isSelected={false} />);
+        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        await user.hover(listItem);
+
+        expect(screen.queryByRole("notification-decoration")).toBeNull();
     });
 });
