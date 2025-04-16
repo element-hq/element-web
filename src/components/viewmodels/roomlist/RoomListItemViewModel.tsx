@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
@@ -77,13 +77,20 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const name = useEventEmitterState(room, RoomEvent.Name, () => room.name);
 
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
-    // Listen to changes in the notification state and update the values
-    const { computeA11yLabel, isBold, invited, hasVisibleNotification } = useTypedEventEmitterState(
-        notificationState,
-        NotificationStateEvents.Update,
-        () => getNotificationValues(notificationState),
+
+    const [a11yLabel, setA11yLabel] = useState(getA11yLabel(name, notificationState));
+    const [{ isBold, invited, hasVisibleNotification }, setNotificationValues] = useState(
+        getNotificationValues(notificationState),
     );
-    const a11yLabel = computeA11yLabel(name);
+    useEffect(() => {
+        setA11yLabel(getA11yLabel(name, notificationState));
+    }, [name, notificationState]);
+
+    // Listen to changes in the notification state and update the values
+    useTypedEventEmitter(notificationState, NotificationStateEvents.Update, () => {
+        setA11yLabel(getA11yLabel(name, notificationState));
+        setNotificationValues(getNotificationValues(notificationState));
+    });
 
     // We don't want to show the hover menu if
     // - there is an invitation for this room
