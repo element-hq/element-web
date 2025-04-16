@@ -66,11 +66,17 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => room.tags);
     const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
 
-    const showHoverMenu =
-        hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
+    const invited = notificationState.invited;
     const a11yLabel = getA11yLabel(room, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
+
+    // We don't want to show the hover menu if
+    // - there is an invitation for this room
+    // - the user doesn't have access to both notification and more options menus
+    const showHoverMenu =
+        !invited &&
+        (hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
 
     // Video room
     const isVideoRoom = room.isElementVideoRoom() || room.isCallRoom();
