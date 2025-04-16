@@ -23,11 +23,17 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
-    <span
-      class="_unread-counter_9mg0k_8"
+    <svg
+      fill="var(--cpd-color-icon-accent-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      1
-    </span>
+      <path
+        d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 5.111a1 1 0 0 0 .514.874l7 3.89a1 1 0 0 0 .972 0l7-3.89a1 1 0 1 0-.972-1.748L12 11.856 5.486 8.237A1 1 0 0 0 4 9.111"
+      />
+    </svg>
   </div>
 </DocumentFragment>
 `;
