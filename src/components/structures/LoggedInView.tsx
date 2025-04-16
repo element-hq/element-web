@@ -259,9 +259,15 @@ class LoggedInView extends React.Component<IProps, IState> {
     private createResizer(): Resizer<ICollapseConfig, CollapseItem> {
         let panelSize: number | null;
         let panelCollapsed: boolean;
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        let toggleSize = 206 - 50;
+        if (useNewRoomList) {
+            toggleSize = 232;
+        }
+
         const collapseConfig: ICollapseConfig = {
             // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-            toggleSize: 232,
+            toggleSize: toggleSize,
             onCollapsed: (collapsed) => {
                 panelCollapsed = collapsed;
                 if (collapsed) {
@@ -697,6 +703,13 @@ class LoggedInView extends React.Component<IProps, IState> {
             "mx_MatrixChat--with-avatar": this.state.backgroundImage,
         });
 
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+
+        const leftPanelWrapperClasses = classNames({
+            mx_LeftPanel_wrapper: true,
+            mx_LeftPanel_NewRoomList: useNewRoomList,
+        });
+
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
@@ -713,7 +726,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <div className={bodyClasses}>
                         <div className="mx_LeftPanel_outerWrapper">
                             <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
-                            <div className="mx_LeftPanel_wrapper">
+                            <div className={leftPanelWrapperClasses}>
                                 <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
                                 <SpacePanel />
                                 <BackdropPanel backgroundImage={this.state.backgroundImage} />
@@ -724,7 +737,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 >
                                     <LeftPanel
                                         pageType={this.props.page_type as PageTypes}
-                                        isMinimized={false}
+                                        isMinimized={(!useNewRoomList && this.props.collapseLhs) || false}
                                         resizeNotifier={this.props.resizeNotifier}
                                     />
                                 </div>
