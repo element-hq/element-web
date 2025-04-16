@@ -23,6 +23,10 @@ import { type ConnectionState } from "../../../models/Call";
 
 export interface RoomListItemViewState {
     /**
+     * The name of the room.
+     */
+    name: string;
+    /**
      * Whether the hover menu should be shown.
      */
     showHoverMenu: boolean;
@@ -65,10 +69,11 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const matrixClient = useMatrixClientContext();
     const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => room.tags);
     const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
+    const name = useEventEmitterState(room, RoomEvent.Name, () => room.name);
 
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const invited = notificationState.invited;
-    const a11yLabel = getA11yLabel(room, notificationState);
+    const a11yLabel = getA11yLabel(name, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
 
     // We don't want to show the hover menu if
@@ -97,6 +102,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     }, [room]);
 
     return {
+        name,
         notificationState,
         showHoverMenu,
         openRoom,
@@ -110,29 +116,29 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
 
 /**
  * Get the a11y label for the room list item
- * @param room
+ * @param roomName
  * @param notificationState
  */
-function getA11yLabel(room: Room, notificationState: RoomNotificationState): string {
+function getA11yLabel(roomName: string, notificationState: RoomNotificationState): string {
     if (notificationState.isUnsetMessage) {
         return _t("a11y|room_messsage_not_sent", {
-            roomName: room.name,
+            roomName,
         });
     } else if (notificationState.invited) {
         return _t("a11y|room_n_unread_invite", {
-            roomName: room.name,
+            roomName,
         });
     } else if (notificationState.isMention) {
         return _t("a11y|room_n_unread_messages_mentions", {
-            roomName: room.name,
+            roomName,
             count: notificationState.count,
         });
     } else if (notificationState.hasUnreadCount) {
         return _t("a11y|room_n_unread_messages", {
-            roomName: room.name,
+            roomName,
             count: notificationState.count,
         });
     } else {
-        return _t("room_list|room|open_room", { roomName: room.name });
+        return _t("room_list|room|open_room", { roomName });
     }
 }

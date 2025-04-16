@@ -75,8 +75,8 @@ export const RoomListItemView = memo(function RoomListItemView({
                     justify="space-between"
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <span className="mx_RoomListItemView_roomName" title={room.name}>
-                        {room.name}
+                    <span className="mx_RoomListItemView_roomName" title={vm.name}>
+                        {vm.name}
                     </span>
                     {showHoverDecoration ? (
                         <RoomListItemMenuView
