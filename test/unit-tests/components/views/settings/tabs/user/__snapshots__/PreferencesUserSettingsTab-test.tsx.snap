@@ -1144,7 +1144,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </div>
           <div
-            class="mx_SettingsSubsection"
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
           >
             <div
               class="mx_SettingsSubsectionHeading"
@@ -1156,13 +1156,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               </h3>
             </div>
             <div
-              class="mx_SettingsSubsection_content"
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_19upo_16 mx_MediaPreviewAccountSetting_Form"
               >
                 <div
-                  class="mx_SettingsFlag"
+                  class="mx_SettingsFlag mx_MediaPreviewAccountSetting_ToggleSwitch"
                 >
                   <span
                     class="mx_SettingsFlag_label"
@@ -1199,13 +1199,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     Show media in timeline
                   </label>
                   <span
-                    class="_message_19upo_85 _help-message_19upo_91"
+                    class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
                     id="radix-«ra»"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
                   <div
-                    class="_inline-field_19upo_32"
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
                       class="_inline-field-control_19upo_44"
@@ -1235,7 +1235,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field_19upo_32"
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
                       class="_inline-field-control_19upo_44"
@@ -1265,7 +1265,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field_19upo_32"
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
                       class="_inline-field-control_19upo_44"
@@ -1298,6 +1298,12 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 </div>
               </form>
             </div>
+            <div
+              class="_separator_7ckbw_8"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
           </div>
           <div
             class="mx_SettingsSubsection"
