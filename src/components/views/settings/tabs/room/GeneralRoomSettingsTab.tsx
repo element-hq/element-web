@@ -93,7 +93,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
                 <SettingsSection heading={_t("room_settings|general|other_section")}>
                     {urlPreviewSettings}
-                    <SettingsSubsection heading={_t("common|moderation_and_safety")}>
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings roomId={room.roomId} />
                     </SettingsSubsection>
                     {leaveSection}

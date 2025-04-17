@@ -81,9 +81,10 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
     );
 
     return (
-        <Root>
+        <Root className="mx_MediaPreviewAccountSetting_Form">
             {!roomId && (
                 <LabelledToggleSwitch
+                    className="mx_MediaPreviewAccountSetting_ToggleSwitch"
                     label={_t("settings|media_preview|hide_avatars")}
                     value={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
                     onChange={avatarOnChange}
@@ -97,9 +98,12 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
                 aria-label={_t("settings|media_preview|media_preview_label")}
             >
                 <Label>{_t("settings|media_preview|media_preview_label")}</Label>
-                <HelpMessage>{_t("settings|media_preview|media_preview_description")}</HelpMessage>
+                <HelpMessage className="mx_MediaPreviewAccountSetting_RadioHelp">
+                    {_t("settings|media_preview|media_preview_description")}
+                </HelpMessage>
                 <InlineField
                     name="media_preview_off"
+                    className="mx_MediaPreviewAccountSetting_Radio"
                     control={
                         <RadioInput
                             id="mx_media_previews_off"
@@ -113,6 +117,7 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
                 {!roomId && (
                     <InlineField
                         name="mx_media_previews_private"
+                        className="mx_MediaPreviewAccountSetting_Radio"
                         control={
                             <RadioInput
                                 id="mx_media_previews_private"
@@ -128,6 +133,7 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
                 )}
                 <InlineField
                     name="media_preview_on"
+                    className="mx_MediaPreviewAccountSetting_Radio"
                     control={
                         <RadioInput
                             id="mx_media_previews_on"
