@@ -918,11 +918,7 @@
             "title": "Không thể sao chép liên kết phòng"
         },
         "error_loading_user_profile": "Không thể tải hồ sơ người dùng",
-        "forget_room_failed": "Không thể quên phòng %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Máy chủ có thể không khả dụng, quá tải hoặc hết thời gian tìm kiếm :(",
-            "title": "Tìm kiếm không thành công"
-        }
+        "forget_room_failed": "Không thể quên phòng %(errCode)s"
     },
     "error_user_not_logged_in": "Người dùng đang không đăng nhập",
     "event_preview": {

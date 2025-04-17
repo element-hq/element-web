@@ -223,7 +223,7 @@ describe("RoomNotificationState", () => {
         it("should has isUnsetMessage at true", () => {
             jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([{} as MatrixEvent]);
             const roomNotifState = new RoomNotificationState(room, false);
-            expect(roomNotifState.isUnsetMessage).toBe(true);
+            expect(roomNotifState.isUnsentMessage).toBe(true);
         });
 
         it("should has isMention at false if the notification is invitation, an unset message or a knock", () => {

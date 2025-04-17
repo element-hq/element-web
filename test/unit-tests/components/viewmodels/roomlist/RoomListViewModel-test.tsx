@@ -355,6 +355,43 @@ describe("RoomListViewModel", () => {
             expect(vm.rooms[i].roomId).toEqual(roomId);
         }
 
+        it("active index is calculated with the last opened room in a space", () => {
+            // Let's say there's two spaces: !space1:matrix.org and !space2:matrix.org
+            // Let's also say that the current active space is !space1:matrix.org
+            let currentSpace = "!space1:matrix.org";
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => currentSpace);
+
+            const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
+            // Let's say all the rooms are in space1
+            const roomsInSpace1 = [...rooms];
+            // Let's say all rooms with even index are in space 2
+            const roomsInSpace2 = [...rooms].filter((_, i) => i % 2 === 0);
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockImplementation(() =>
+                currentSpace === "!space1:matrix.org" ? roomsInSpace1 : roomsInSpace2,
+            );
+
+            // Let's say that the room at index 4 is currently active
+            const roomId = rooms[4].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.activeIndex).toEqual(4);
+
+            // Let's say that space is changed to "!space2:matrix.org"
+            currentSpace = "!space2:matrix.org";
+            // Let's say that room[6] is active in space 2
+            const activeRoomIdInSpace2 = rooms[6].roomId;
+            jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockImplementation(
+                () => activeRoomIdInSpace2,
+            );
+            act(() => {
+                RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT);
+            });
+
+            // Active index should be 3 even without the room change event.
+            expectActiveRoom(vm.current, 3, activeRoomIdInSpace2);
+        });
+
         it("active room and active index are retained on order change", () => {
             const { rooms } = mockAndCreateRooms();
 

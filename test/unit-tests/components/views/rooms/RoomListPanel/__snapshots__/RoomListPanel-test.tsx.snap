@@ -245,7 +245,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         aria-label="Add"
         class="_icon-button_m2erp_8"
         data-state="closed"
-        id="radix-:r0:"
+        id="radix-«r0»"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"

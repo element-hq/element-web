@@ -1031,11 +1031,7 @@
             "title": "Istabas saiti nevar ievietot starpliktuvē"
         },
         "error_loading_user_profile": "Nevarēja ielādēt lietotāja profilu",
-        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serveris izskatās nesasniedzams, ir pārslogots, vai arī meklēšana beigusies ar savienojuma noildzi :(",
-            "title": "Meklēšana neizdevās"
-        }
+        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s"
     },
     "error_user_not_logged_in": "Lietotājs nav pieteicies",
     "event_preview": {

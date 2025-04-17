@@ -62,9 +62,9 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     }
 
     /**
-     * True if the notification is an unset message.
+     * True if the notification is an unsent message.
      */
-    public get isUnsetMessage(): boolean {
+    public get isUnsentMessage(): boolean {
         return this.level === NotificationLevel.Unsent;
     }
 

@@ -994,11 +994,7 @@
             "title": "Tsy afaka mandika ny rohiny efitrano"
         },
         "error_loading_user_profile": "Tsy afaka mampiditra ny mombamomba ny mpampiasa",
-        "forget_room_failed": "Tsy nanadino ny efitrano%(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Mety tsy misy ny mpizara, be loatra, na tapitra ny fotoana fikarohana :(",
-            "title": "Tsy nahomby ny fikarohana"
-        }
+        "forget_room_failed": "Tsy nanadino ny efitrano%(errCode)s"
     },
     "error_user_not_logged_in": "Tsy tafiditra ny mpampiasa",
     "event_preview": {

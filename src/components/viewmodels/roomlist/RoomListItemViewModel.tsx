@@ -16,15 +16,20 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitter, useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
+import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 export interface RoomListItemViewState {
+    /**
+     * The name of the room.
+     */
+    name: string;
     /**
      * Whether the hover menu should be shown.
      */
@@ -63,6 +68,10 @@ export interface RoomListItemViewState {
      * if no preview should be shown.
      */
     messagePreview: string | undefined;
+    /**
+     * Whether the notification decoration should be shown.
+     */
+    showNotificationDecoration: boolean;
 }
 
 /**
@@ -73,12 +82,30 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const matrixClient = useMatrixClientContext();
     const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => room.tags);
     const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
+    const name = useEventEmitterState(room, RoomEvent.Name, () => room.name);
 
-    const showHoverMenu =
-        hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
-    const a11yLabel = getA11yLabel(room, notificationState);
-    const isBold = notificationState.hasAnyNotificationOrActivity;
+
+    const [a11yLabel, setA11yLabel] = useState(getA11yLabel(name, notificationState));
+    const [{ isBold, invited, hasVisibleNotification }, setNotificationValues] = useState(
+        getNotificationValues(notificationState),
+    );
+    useEffect(() => {
+        setA11yLabel(getA11yLabel(name, notificationState));
+    }, [name, notificationState]);
+
+    // Listen to changes in the notification state and update the values
+    useTypedEventEmitter(notificationState, NotificationStateEvents.Update, () => {
+        setA11yLabel(getA11yLabel(name, notificationState));
+        setNotificationValues(getNotificationValues(notificationState));
+    });
+
+    // We don't want to show the hover menu if
+    // - there is an invitation for this room
+    // - the user doesn't have access to both notification and more options menus
+    const showHoverMenu =
+        !invited &&
+        (hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
 
     const messagePreview = useRoomMessagePreview(room);
 
@@ -89,6 +116,8 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const connectionState = useConnectionState(call);
     const hasParticipantInCall = useParticipantCount(call) > 0;
     const callConnectionState = call ? connectionState : null;
+
+    const showNotificationDecoration = hasVisibleNotification || hasParticipantInCall;
 
     // Actions
 
@@ -101,6 +130,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     }, [room]);
 
     return {
+        name,
         notificationState,
         showHoverMenu,
         openRoom,
@@ -110,35 +140,60 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         callConnectionState,
         hasParticipantInCall,
         messagePreview,
+        showNotificationDecoration,
+    };
+}
+
+/**
+ * Calculate the values from the notification state
+ * @param notificationState
+ */
+function getNotificationValues(notificationState: RoomNotificationState): {
+    computeA11yLabel: (name: string) => string;
+    isBold: boolean;
+    invited: boolean;
+    hasVisibleNotification: boolean;
+} {
+    const invited = notificationState.invited;
+    const computeA11yLabel = (name: string): string => getA11yLabel(name, notificationState);
+    const isBold = notificationState.hasAnyNotificationOrActivity;
+
+    const hasVisibleNotification = notificationState.hasAnyNotificationOrActivity || notificationState.muted;
+
+    return {
+        computeA11yLabel,
+        isBold,
+        invited,
+        hasVisibleNotification,
     };
 }
 
 /**
  * Get the a11y label for the room list item
- * @param room
+ * @param roomName
  * @param notificationState
  */
-function getA11yLabel(room: Room, notificationState: RoomNotificationState): string {
-    if (notificationState.isUnsetMessage) {
+function getA11yLabel(roomName: string, notificationState: RoomNotificationState): string {
+    if (notificationState.isUnsentMessage) {
         return _t("a11y|room_messsage_not_sent", {
-            roomName: room.name,
+            roomName,
         });
     } else if (notificationState.invited) {
         return _t("a11y|room_n_unread_invite", {
-            roomName: room.name,
+            roomName,
         });
     } else if (notificationState.isMention) {
         return _t("a11y|room_n_unread_messages_mentions", {
-            roomName: room.name,
+            roomName,
             count: notificationState.count,
         });
     } else if (notificationState.hasUnreadCount) {
         return _t("a11y|room_n_unread_messages", {
-            roomName: room.name,
+            roomName,
             count: notificationState.count,
         });
     } else {
-        return _t("room_list|room|open_room", { roomName: room.name });
+        return _t("room_list|room|open_room", { roomName });
     }
 }
 

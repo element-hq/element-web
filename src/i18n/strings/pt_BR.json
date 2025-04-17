@@ -956,11 +956,7 @@
             "title": "Não foi possível copiar o link da sala"
         },
         "error_loading_user_profile": "Não foi possível carregar o perfil do usuário",
-        "forget_room_failed": "Falhou ao esquecer a sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-            "title": "Busca falhou"
-        }
+        "forget_room_failed": "Falhou ao esquecer a sala %(errCode)s"
     },
     "error_user_not_logged_in": "O usuário não está logado",
     "event_preview": {

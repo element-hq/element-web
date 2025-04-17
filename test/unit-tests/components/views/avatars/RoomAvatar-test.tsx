@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatar";
@@ -60,6 +60,7 @@ describe("RoomAvatar", () => {
     it("should render as expected for a DM room", () => {
         const userId = "@dm_user@example.com";
         const room = new Room("!room:example.com", client, client.getSafeUserId());
+        room.getMember = jest.fn().mockImplementation(() => new RoomMember(room.roomId, userId));
         room.name = "DM room";
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(userId);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
@@ -78,6 +79,17 @@ describe("RoomAvatar", () => {
         jest.spyOn(room, "getMxcAvatarUrl").mockImplementation(() => "mxc://example.com/foobar");
         room.name = "test room";
         room.updateMyMembership("invite");
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                sender: "@sender:server",
+                room_id: room.roomId,
+                type: EventType.RoomAvatar,
+                state_key: "",
+                content: {
+                    url: "mxc://example.com/foobar",
+                },
+            }),
+        ]);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
     });
     it("should not render an invite avatar if the user has disabled it", () => {

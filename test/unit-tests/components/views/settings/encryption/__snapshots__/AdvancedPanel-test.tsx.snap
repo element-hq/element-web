@@ -219,10 +219,10 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
         class="_container_19o42_10"
       >
         <input
-          aria-describedby="radix-:r7:"
+          aria-describedby="radix-«r7»"
           checked=""
           class="_input_19o42_24"
-          id="radix-:r6:"
+          id="radix-«r6»"
           name="neverSendEncrypted"
           title=""
           type="checkbox"
@@ -237,13 +237,13 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
     >
       <label
         class="_label_19upo_59"
-        for="radix-:r6:"
+        for="radix-«r6»"
       >
         In encrypted rooms, only send messages to verified users
       </label>
       <span
         class="_message_19upo_85 _help-message_19upo_91"
-        id="radix-:r7:"
+        id="radix-«r7»"
       >
         Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.
       </span>

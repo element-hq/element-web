@@ -1133,11 +1133,7 @@
             "title": "Kan ikke kopiere romlenken"
         },
         "error_loading_user_profile": "Klarte ikke å laste inn brukerprofilen",
-        "forget_room_failed": "Kunne ikke glemme rommet %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serveren kan være utilgjengelig, overbelastet eller søket ble tidsavbrutt :(",
-            "title": "Søket mislyktes"
-        }
+        "forget_room_failed": "Kunne ikke glemme rommet %(errCode)s"
     },
     "error_user_not_logged_in": "Brukeren er ikke logget inn",
     "event_preview": {

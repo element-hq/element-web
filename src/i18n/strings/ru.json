@@ -1085,11 +1085,7 @@
             "title": "Не удалось скопировать ссылку на комнату"
         },
         "error_loading_user_profile": "Не удалось загрузить профиль пользователя",
-        "forget_room_failed": "Не удалось забыть комнату: %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Сервер может быть недоступен, перегружен или поиск прекращен по тайм-ауту :(",
-            "title": "Поиск не удался"
-        }
+        "forget_room_failed": "Не удалось забыть комнату: %(errCode)s"
     },
     "error_user_not_logged_in": "Пользователь не вошел в систему",
     "event_preview": {

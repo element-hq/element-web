@@ -29,8 +29,6 @@ import LegacyCallHandler, {
     LegacyCallHandlerEvent,
     PROTOCOL_PSTN,
     PROTOCOL_PSTN_PREFIXED,
-    PROTOCOL_SIP_NATIVE,
-    PROTOCOL_SIP_VIRTUAL,
 } from "../../src/LegacyCallHandler";
 import { mkStubRoom, stubClient, untilDispatch } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -75,9 +73,6 @@ const NATIVE_ALICE = "@alice:example.org";
 const NATIVE_BOB = "@bob:example.org";
 const NATIVE_CHARLIE = "@charlie:example.org";
 
-// Virtual user for Bob
-const VIRTUAL_BOB = "@virtual_bob:example.org";
-
 //const REAL_ROOM_ID = "$room1:example.org";
 // The rooms the user sees when they're communicating with these users
 const NATIVE_ROOM_ALICE = "$alice_room:example.org";
@@ -85,10 +80,6 @@ const NATIVE_ROOM_BOB = "$bob_room:example.org";
 const NATIVE_ROOM_CHARLIE = "$charlie_room:example.org";
 
 const FUNCTIONAL_USER = "@bot:example.com";
-
-// The room we use to talk to virtual Bob (but that the user does not see)
-// Bob has a virtual room, but Alice doesn't
-const VIRTUAL_ROOM_BOB = "$virtual_bob_room:example.org";
 
 // Bob's phone number
 const BOB_PHONE_NUMBER = "01818118181";
@@ -146,14 +137,6 @@ class FakeCall extends EventEmitter {
     }
 }
 
-function untilCallHandlerEvent(callHandler: LegacyCallHandler, event: LegacyCallHandlerEvent): Promise<void> {
-    return new Promise<void>((resolve) => {
-        callHandler.addListener(event, () => {
-            resolve();
-        });
-    });
-}
-
 describe("LegacyCallHandler", () => {
     let dmRoomMap;
     let callHandler: LegacyCallHandler;
@@ -162,7 +145,6 @@ describe("LegacyCallHandler", () => {
 
     // what addresses the app has looked up via pstn and native lookup
     let pstnLookup: string | null;
-    let nativeLookup: string | null;
     const deviceId = "my-device";
 
     beforeEach(async () => {
@@ -180,8 +162,6 @@ describe("LegacyCallHandler", () => {
         MatrixClientPeg.safeGet().getThirdpartyProtocols = () => {
             return Promise.resolve({
                 "m.id.phone": {} as IProtocol,
-                "im.vector.protocol.sip_native": {} as IProtocol,
-                "im.vector.protocol.sip_virtual": {} as IProtocol,
             });
         };
 
@@ -193,7 +173,6 @@ describe("LegacyCallHandler", () => {
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
         const nativeRoomBob = mkStubDM(NATIVE_ROOM_BOB, NATIVE_BOB);
         const nativeRoomCharie = mkStubDM(NATIVE_ROOM_CHARLIE, NATIVE_CHARLIE);
-        const virtualBobRoom = mkStubDM(VIRTUAL_ROOM_BOB, VIRTUAL_BOB);
 
         MatrixClientPeg.safeGet().getRoom = (roomId: string): Room | null => {
             switch (roomId) {
@@ -203,8 +182,6 @@ describe("LegacyCallHandler", () => {
                     return nativeRoomBob;
                 case NATIVE_ROOM_CHARLIE:
                     return nativeRoomCharie;
-                case VIRTUAL_ROOM_BOB:
-                    return virtualBobRoom;
             }
 
             return null;
@@ -218,8 +195,6 @@ describe("LegacyCallHandler", () => {
                     return NATIVE_BOB;
                 } else if (roomId === NATIVE_ROOM_CHARLIE) {
                     return NATIVE_CHARLIE;
-                } else if (roomId === VIRTUAL_ROOM_BOB) {
-                    return VIRTUAL_BOB;
                 } else {
                     return null;
                 }
@@ -231,8 +206,6 @@ describe("LegacyCallHandler", () => {
                     return [NATIVE_ROOM_BOB];
                 } else if (userId === NATIVE_CHARLIE) {
                     return [NATIVE_ROOM_CHARLIE];
-                } else if (userId === VIRTUAL_BOB) {
-                    return [VIRTUAL_ROOM_BOB];
                 } else {
                     return [];
                 }
@@ -241,52 +214,18 @@ describe("LegacyCallHandler", () => {
         DMRoomMap.setShared(dmRoomMap);
 
         pstnLookup = null;
-        nativeLookup = null;
 
         MatrixClientPeg.safeGet().getThirdpartyUser = (proto: string, params: any) => {
             if ([PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED].includes(proto)) {
                 pstnLookup = params["m.id.phone"];
                 return Promise.resolve([
                     {
-                        userid: VIRTUAL_BOB,
+                        userid: NATIVE_BOB,
                         protocol: "m.id.phone",
-                        fields: {
-                            is_native: true,
-                            lookup_success: true,
-                        },
+                        fields: {},
                     },
                 ]);
-            } else if (proto === PROTOCOL_SIP_NATIVE) {
-                nativeLookup = params["virtual_mxid"];
-                if (params["virtual_mxid"] === VIRTUAL_BOB) {
-                    return Promise.resolve([
-                        {
-                            userid: NATIVE_BOB,
-                            protocol: "im.vector.protocol.sip_native",
-                            fields: {
-                                is_native: true,
-                                lookup_success: true,
-                            },
-                        },
-                    ]);
-                }
-                return Promise.resolve([]);
-            } else if (proto === PROTOCOL_SIP_VIRTUAL) {
-                if (params["native_mxid"] === NATIVE_BOB) {
-                    return Promise.resolve([
-                        {
-                            userid: VIRTUAL_BOB,
-                            protocol: "im.vector.protocol.sip_virtual",
-                            fields: {
-                                is_virtual: true,
-                                lookup_success: true,
-                            },
-                        },
-                    ]);
-                }
-                return Promise.resolve([]);
             }
-
             return Promise.resolve([]);
         };
 
@@ -312,16 +251,14 @@ describe("LegacyCallHandler", () => {
         await callHandler.dialNumber(BOB_PHONE_NUMBER);
 
         expect(pstnLookup).toEqual(BOB_PHONE_NUMBER);
-        expect(nativeLookup).toEqual(VIRTUAL_BOB);
 
         // we should have switched to the native room for Bob
         const viewRoomPayload = await untilDispatch(Action.ViewRoom);
         expect(viewRoomPayload.room_id).toEqual(NATIVE_ROOM_BOB);
 
         // Check that a call was started: its room on the protocol level
-        // should be the virtual room
         expect(fakeCall).not.toBeNull();
-        expect(fakeCall?.roomId).toEqual(VIRTUAL_ROOM_BOB);
+        expect(fakeCall?.roomId).toEqual(NATIVE_ROOM_BOB);
 
         // but it should appear to the user to be in thw native room for Bob
         expect(callHandler.roomIdForCall(fakeCall!)).toEqual(NATIVE_ROOM_BOB);
@@ -338,15 +275,13 @@ describe("LegacyCallHandler", () => {
         expect(viewRoomPayload.room_id).toEqual(NATIVE_ROOM_BOB);
 
         expect(fakeCall).not.toBeNull();
-        expect(fakeCall!.roomId).toEqual(VIRTUAL_ROOM_BOB);
+        expect(fakeCall!.roomId).toEqual(NATIVE_ROOM_BOB);
 
         expect(callHandler.roomIdForCall(fakeCall!)).toEqual(NATIVE_ROOM_BOB);
     });
 
     it("should move calls between rooms when remote asserted identity changes", async () => {
         callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
-
-        await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
 
         // We placed the call in Alice's room so it should start off there
         expect(callHandler.getCallForRoom(NATIVE_ROOM_ALICE)).toBe(fakeCall);
@@ -517,10 +452,7 @@ describe("LegacyCallHandler without third party protocols", () => {
     it("should still start a native call", async () => {
         callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
 
-        await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
-
         // Check that a call was started: its room on the protocol level
-        // should be the virtual room
         expect(fakeCall).not.toBeNull();
         expect(fakeCall!.roomId).toEqual(NATIVE_ROOM_ALICE);
 
