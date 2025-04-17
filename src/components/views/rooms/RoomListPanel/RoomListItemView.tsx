@@ -15,7 +15,7 @@ import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 
-interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
      * The room to display
      */
@@ -29,7 +29,7 @@ interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElem
 /**
  * An item in the room list
  */
-export function RoomListItemView({ room, isSelected, ...props }: RoomListItemViewPropsProps): JSX.Element {
+export function RoomListItemView({ room, isSelected, ...props }: RoomListItemViewProps): JSX.Element {
     const vm = useRoomListItemViewModel(room);
 
     const [isHover, setIsHover] = useState(false);
@@ -71,9 +71,12 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                     justify="space-between"
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <span className="mx_RoomListItemView_roomName" title={room.name}>
-                        {room.name}
-                    </span>
+                    <Flex className="mx_RoomListItemView_text" direction="column">
+                        <div className="mx_RoomListItemView_roomName" title={room.name}>
+                            {room.name}
+                        </div>
+                        <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
+                    </Flex>
                     {showHoverDecoration ? (
                         <RoomListItemMenuView
                             room={room}

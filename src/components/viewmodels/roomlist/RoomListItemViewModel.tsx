@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
@@ -16,10 +16,13 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 export interface RoomListItemViewState {
     /**
@@ -55,6 +58,11 @@ export interface RoomListItemViewState {
      * Whether there are participants in the call.
      */
     hasParticipantInCall: boolean;
+    /**
+     * Pre-rendered and translated preview for the latest message in the room, or undefined
+     * if no preview should be shown.
+     */
+    messagePreview: string | undefined;
 }
 
 /**
@@ -71,6 +79,8 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const a11yLabel = getA11yLabel(room, notificationState);
     const isBold = notificationState.hasAnyNotificationOrActivity;
+
+    const messagePreview = useRoomMessagePreview(room);
 
     // Video room
     const isVideoRoom = room.isElementVideoRoom() || room.isCallRoom();
@@ -99,6 +109,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         isVideoRoom,
         callConnectionState,
         hasParticipantInCall,
+        messagePreview,
     };
 }
 
@@ -129,4 +140,36 @@ function getA11yLabel(room: Room, notificationState: RoomNotificationState): str
     } else {
         return _t("room_list|room|open_room", { roomName: room.name });
     }
+}
+
+function useRoomMessagePreview(room: Room): string | undefined {
+    const { shouldShowMessagePreview } = useMessagePreviewToggle();
+    const [previewText, setPreviewText] = useState<string | undefined>(undefined);
+
+    const updatePreview = useCallback(async () => {
+        if (!shouldShowMessagePreview) {
+            setPreviewText(undefined);
+            return;
+        }
+
+        const roomIsDM = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
+        // For the tag, we only care about whether the room is a DM or not as we don't show
+        // display names in previewsd for DMs, so anything else we just say is 'untagged'
+        // (even though it could actually be have other tags: we don't care about them).
+        const messagePreview = await MessagePreviewStore.instance.getPreviewForRoom(
+            room,
+            roomIsDM ? DefaultTagID.DM : DefaultTagID.Untagged,
+        );
+        if (messagePreview) setPreviewText(messagePreview.text);
+    }, [room, shouldShowMessagePreview]);
+
+    useEventEmitter(MessagePreviewStore.instance, MessagePreviewStore.getPreviewChangedEventName(room), () => {
+        updatePreview();
+    });
+
+    useEffect(() => {
+        updatePreview();
+    }, [updatePreview]);
+
+    return previewText;
 }
