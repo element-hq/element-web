@@ -39,16 +39,46 @@ import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 
 export interface RoomSummaryCardState {
     isDirectMessage: boolean;
+    /**
+     * Whether the room is encrypted, used to display the correct badge and icon
+     */
     isRoomEncrypted: boolean;
+    /**
+     * The e2e status of the room, used to display the correct badge and icon
+     */
     e2eStatus: E2EStatus | undefined;
-    isVideoRoom: boolean;
+    /**
+     * The join rule of the room, used to display the correct badge and icon
+     */
     roomJoinRule: JoinRule;
+    /**
+     * if it is a video room, it should not display export chat, polls, files, extensions
+     */
+    isVideoRoom: boolean;
+    /**
+     * display the alias of the room, if it exists
+     */
     alias: string;
+    /**
+     * value to check if the room is a favorite or not
+     */
     isFavorite: boolean;
+    /**
+     * value to check if we disable invite button or not
+     */
     canInviteToState: boolean;
+    /**
+     * Getting the number of pinned messages in the room, next to the pin button
+     */
     pinCount: number;
     searchInputRef: React.RefObject<HTMLInputElement | null>;
+    /**
+     * The callback when new value is entered in the search input
+     */
     onUpdateSearchInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    /**
+     * Callbacks to all the actions button in the right panel
+     */
     onRoomMembersClick: () => void;
     onRoomThreadsClick: () => void;
     onRoomFilesClick: () => void;
@@ -64,6 +94,11 @@ export interface RoomSummaryCardState {
     onInviteToRoomClick: () => void;
 }
 
+/**
+ * Hook to check if the room is a direct message or not
+ * @param room - The room to check
+ * @returns Whether the room is a direct message
+ */
 const useIsDirectMessage = (room: Room): boolean => {
     const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);
     const [isDirectMessage, setDirectMessage] = useState(false);
@@ -80,7 +115,14 @@ const useIsDirectMessage = (room: Room): boolean => {
     return isDirectMessage;
 };
 
-const useSearchInput = (onSearchCancel?: () => void): {
+/**
+ * Hook to handle the search input in the right panel
+ * @param onSearchCancel - The callback when the search input is cancelled
+ * @returns The search input ref and the callback when the search input is updated
+ */
+const useSearchInput = (
+    onSearchCancel?: () => void,
+): {
     searchInputRef: React.RefObject<HTMLInputElement | null>;
     onUpdateSearchInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 } => {
@@ -119,8 +161,7 @@ const useSearchInput = (onSearchCancel?: () => void): {
         searchInputRef,
         onUpdateSearchInput,
     };
-}
-
+};
 
 export function useRoomSummaryCardViewModel(
     room: Room,

@@ -7,7 +7,6 @@
 
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 
 import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
