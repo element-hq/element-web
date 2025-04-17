@@ -57,12 +57,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room0"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room0
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room0"
+                  >
+                    room0
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -101,12 +109,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room1"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room1
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room1"
+                  >
+                    room1
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -145,12 +161,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room2"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room2
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room2"
+                  >
+                    room2
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -189,12 +213,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room3"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room3
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room3"
+                  >
+                    room3
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -233,12 +265,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room4"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room4
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room4"
+                  >
+                    room4
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -277,12 +317,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room5"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room5
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room5"
+                  >
+                    room5
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -321,12 +369,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room6"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room6
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room6"
+                  >
+                    room6
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -365,12 +421,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room7"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room7
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room7"
+                  >
+                    room7
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -409,12 +473,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room8"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room8
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room8"
+                  >
+                    room8
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -453,12 +525,20 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room9"
+                <div
+                  class="mx_Flex mx_RoomListItemView_text"
+                  style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  room9
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room9"
+                  >
+                    room9
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
