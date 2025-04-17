@@ -6,8 +6,6 @@
  */
 
 import React, { type JSX } from "react";
-import { IconButton, Tooltip } from "@vector-im/compound-web";
-import FilterIcon from "@vector-im/compound-design-tokens/assets/web/icons/filter";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { Flex } from "../../../utils/Flex";
