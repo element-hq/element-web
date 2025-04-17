@@ -12,11 +12,11 @@ import { mocked } from "jest-mock";
 import { RoomAvatarView } from "../../../../../src/components/views/avatars/RoomAvatarView";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
 import {
-    type Presence,
     type RoomAvatarViewState,
     useRoomAvatarViewModel,
 } from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { Presence } from "../../../../../src/components/views/avatars/WithPresenceIndicator";
 
 jest.mock("../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel", () => ({
     useRoomAvatarViewModel: jest.fn(),
@@ -83,10 +83,10 @@ describe("<RoomAvatarView />", () => {
     });
 
     it.each([
-        { presence: "online" as Presence, label: "Online" },
-        { presence: "offline" as Presence, label: "Offline" },
-        { presence: "busy" as Presence, label: "Busy" },
-        { presence: "unavailable" as Presence, label: "Away" },
+        { presence: Presence.Online, label: "Online" },
+        { presence: Presence.Offline, label: "Offline" },
+        { presence: Presence.Busy, label: "Busy" },
+        { presence: Presence.Away, label: "Away" },
     ])("should render the $presence presence", ({ presence, label }) => {
         mocked(useRoomAvatarViewModel).mockReturnValue({
             ...defaultValue,

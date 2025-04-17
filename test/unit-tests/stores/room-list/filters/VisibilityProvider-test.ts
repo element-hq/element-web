@@ -10,21 +10,9 @@ import { mocked } from "jest-mock";
 import { type Room, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { VisibilityProvider } from "../../../../../src/stores/room-list/filters/VisibilityProvider";
-import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
-import VoipUserMapper from "../../../../../src/VoipUserMapper";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../../src/models/LocalRoom";
 import { RoomListCustomisations } from "../../../../../src/customisations/RoomList";
 import { createTestClient } from "../../../../test-utils";
-
-jest.mock("../../../../../src/VoipUserMapper", () => ({
-    sharedInstance: jest.fn(),
-}));
-
-jest.mock("../../../../../src/LegacyCallHandler", () => ({
-    instance: {
-        getSupportsVirtualRooms: jest.fn(),
-    },
-}));
 
 jest.mock("../../../../../src/customisations/RoomList", () => ({
     RoomListCustomisations: {
@@ -46,16 +34,6 @@ const createLocalRoom = (): LocalRoom => {
 };
 
 describe("VisibilityProvider", () => {
-    let mockVoipUserMapper: VoipUserMapper;
-
-    beforeEach(() => {
-        mockVoipUserMapper = {
-            onNewInvitedRoom: jest.fn(),
-            isVirtualRoom: jest.fn(),
-        } as unknown as VoipUserMapper;
-        mocked(VoipUserMapper.sharedInstance).mockReturnValue(mockVoipUserMapper);
-    });
-
     describe("instance", () => {
         it("should return an instance", () => {
             const visibilityProvider = VisibilityProvider.instance;
@@ -64,28 +42,7 @@ describe("VisibilityProvider", () => {
         });
     });
 
-    describe("onNewInvitedRoom", () => {
-        it("should call onNewInvitedRoom on VoipUserMapper.sharedInstance", async () => {
-            const room = {} as unknown as Room;
-            await VisibilityProvider.instance.onNewInvitedRoom(room);
-            expect(mockVoipUserMapper.onNewInvitedRoom).toHaveBeenCalledWith(room);
-        });
-    });
-
     describe("isRoomVisible", () => {
-        describe("for a virtual room", () => {
-            beforeEach(() => {
-                mocked(LegacyCallHandler.instance.getSupportsVirtualRooms).mockReturnValue(true);
-                mocked(mockVoipUserMapper.isVirtualRoom).mockReturnValue(true);
-            });
-
-            it("should return return false", () => {
-                const room = createRoom();
-                expect(VisibilityProvider.instance.isRoomVisible(room)).toBe(false);
-                expect(mockVoipUserMapper.isVirtualRoom).toHaveBeenCalledWith(room);
-            });
-        });
-
         it("should return false without room", () => {
             expect(VisibilityProvider.instance.isRoomVisible()).toBe(false);
         });

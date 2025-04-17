@@ -831,10 +831,7 @@
             "title": "Tókst ekki að afrita tengil spjallrásar"
         },
         "error_loading_user_profile": "Gat ekki hlaðið inn notandasniði",
-        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s",
-        "search_failed": {
-            "title": "Leit mistókst"
-        }
+        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

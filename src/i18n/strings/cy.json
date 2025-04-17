@@ -1097,11 +1097,7 @@
             "title": "Methu â chopïo dolen ystafell"
         },
         "error_loading_user_profile": "Methu llwytho proffil defnyddiwr",
-        "forget_room_failed": "Wedi methu ag anghofio ystafell %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Mae'n bosib nad yw'r gweinydd ar gael, wedi ei orlwytho, neu fod y chwilio wedi dod i ben :(",
-            "title": "Methodd y chwilio"
-        }
+        "forget_room_failed": "Wedi methu ag anghofio ystafell %(errCode)s"
     },
     "error_user_not_logged_in": "Nid yw'r defnyddiwr wedi mewngofnodi",
     "event_preview": {

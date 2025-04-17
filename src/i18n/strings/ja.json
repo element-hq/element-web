@@ -949,11 +949,7 @@
             "title": "ルームのリンクをコピーできません"
         },
         "error_loading_user_profile": "ユーザーのプロフィールを読み込めませんでした",
-        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "サーバーが使用できないか、オーバーロードしているか、または検索がタイムアウトした可能性があります :(",
-            "title": "検索に失敗しました"
-        }
+        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {

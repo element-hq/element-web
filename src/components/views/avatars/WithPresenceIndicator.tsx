@@ -26,7 +26,7 @@ interface Props {
     children: ReactNode;
 }
 
-enum Presence {
+export enum Presence {
     // Note: the names here are used in CSS class names
     Online = "ONLINE",
     Away = "AWAY",
@@ -86,7 +86,7 @@ function getPresence(member: RoomMember | null): Presence | null {
     return null;
 }
 
-const usePresence = (room: Room, member: RoomMember | null): Presence | null => {
+export const usePresence = (room: Room, member: RoomMember | null): Presence | null => {
     const [presence, setPresence] = useState<Presence | null>(getPresence(member));
     const updatePresence = (): void => {
         setPresence(getPresence(member));
