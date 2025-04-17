@@ -8,14 +8,14 @@ import { renderHook } from "jest-matrix-react";
 import { act, type SyntheticEvent } from "react";
 
 import { useRoomTopicViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardTopicViewModel";
-import { mkStubRoom, stubClient } from "../../../../test-utils";
+import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { onRoomTopicLinkClick } from "../../../../../src/components/views/elements/RoomTopic";
 
 jest.mock("../../../../../src/components/views/elements/RoomTopic");
 
 describe("RoomSummaryCardTopicViewModel", () => {
-    const client = stubClient();
+    const client = createTestClient();
     const mockRoom = mkStubRoom("!room:example.com", "Test Room", client);
     const mockUserId = "@user:example.com";
     const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as SyntheticEvent;
@@ -41,10 +41,10 @@ describe("RoomSummaryCardTopicViewModel", () => {
         expect(result.current.expanded).toBe(true);
     });
 
-    it("should toggle expanded state on click", () => {
+    it("should toggle expanded state on click", async () => {
         const { result } = render();
 
-        act(() => {
+        await act(() => {
             result.current.onExpandedClick(mockEvent);
         });
 
@@ -59,17 +59,19 @@ describe("RoomSummaryCardTopicViewModel", () => {
 
     it("should handle topic link clicks when the target is an anchor element", () => {
         const { result } = render();
-        const mockAnchorEvent = { target: document.createElement("a") };
+        const mockAnchorEvent = { target: document.createElement("a") } as unknown as React.MouseEvent<HTMLElement>;
 
-        result.current.onTopicLinkClick(mockAnchorEvent as any);
-        expect(onRoomTopicLinkClick).toHaveBeenCalledWith(mockAnchorEvent as any);
+        result.current.onTopicLinkClick(mockAnchorEvent);
+        expect(onRoomTopicLinkClick).toHaveBeenCalledWith(mockAnchorEvent);
     });
 
     it("should handle topic link clicks when the target is not an anchor element", () => {
         const { result } = render();
-        const mockNonAnchorEvent = { target: document.createElement("div") };
+        const mockNonAnchorEvent = {
+            target: document.createElement("div"),
+        } as unknown as React.MouseEvent<HTMLElement>;
 
-        result.current.onTopicLinkClick(mockNonAnchorEvent as any);
+        result.current.onTopicLinkClick(mockNonAnchorEvent);
         expect(onRoomTopicLinkClick).not.toHaveBeenCalled();
     });
 

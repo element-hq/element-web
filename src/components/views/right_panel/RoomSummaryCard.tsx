@@ -66,7 +66,6 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useRoomState } from "../../../hooks/useRoomState";
-import { useTopic } from "../../../hooks/room/useTopic";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { Box } from "../../utils/Box";
 import { useDispatcher } from "../../../hooks/useDispatcher";
@@ -117,8 +116,7 @@ const onRoomSettingsClick = (ev: Event): void => {
 const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
     const vm = useRoomTopicViewModel(room);
 
-    const topic = useTopic(room);
-    const body = topicToHtml(topic?.text, topic?.html);
+    const body = topicToHtml(vm.topic?.text, vm.topic?.html);
 
     if (!body && !vm.canEditTopic) {
         return null;
