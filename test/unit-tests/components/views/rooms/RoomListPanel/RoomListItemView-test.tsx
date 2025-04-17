@@ -51,6 +51,7 @@ describe("<RoomListItemView />", () => {
             hasParticipantInCall: false,
             name: room.name,
             showNotificationDecoration: false,
+            messagePreview: undefined,
         };
 
         mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);

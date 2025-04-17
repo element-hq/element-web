@@ -35,12 +35,20 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <span
-          class="mx_RoomListItemView_roomName"
-          title="room1"
+        <div
+          class="mx_Flex mx_RoomListItemView_text"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
-          room1
-        </span>
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
       </div>
     </div>
   </button>
@@ -82,12 +90,20 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <span
-          class="mx_RoomListItemView_roomName"
-          title="room1"
+        <div
+          class="mx_Flex mx_RoomListItemView_text"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
-          room1
-        </span>
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
         <div
           aria-hidden="true"
           class="mx_Flex"
@@ -141,12 +157,20 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <span
-          class="mx_RoomListItemView_roomName"
-          title="room1"
+        <div
+          class="mx_Flex mx_RoomListItemView_text"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
-          room1
-        </span>
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
       </div>
     </div>
   </button>
