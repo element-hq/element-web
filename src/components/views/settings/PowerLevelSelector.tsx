@@ -108,7 +108,6 @@ export function PowerLevelSelector({
                         onChange={async (value) => {
                             const userLevelsTmp = Object.assign({}, userLevels);
                             userLevelsTmp[userId] = value;
-
                             if (!roomHasAtLeastOneAdmin(userLevelsTmp)) {
                                 const { finished } = Modal.createDialog(QuestionDialog, {
                                     title: _t("common|warning"),
@@ -116,7 +115,11 @@ export function PowerLevelSelector({
                                     button: _t("action|continue"),
                                 });
                                 const [confirmed] = await finished;
-                                if (!confirmed) return;
+                                if (!confirmed) {
+                                    // if cancel, we reput initial value
+                                    setCurrentPowerLevel({ value: userLevels[userId], userId });
+                                    return;
+                                }
                             }
                             setCurrentPowerLevel({ value, userId });
                         }}

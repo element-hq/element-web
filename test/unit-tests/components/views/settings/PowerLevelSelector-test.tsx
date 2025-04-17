@@ -142,4 +142,28 @@ describe("PowerLevelSelector", () => {
         await userEvent.click(screen.getByRole("button", { name: "Apply" }));
         expect(onClick).toHaveBeenCalledWith(50, currentUser);
     });
+
+    it("should display modal warning if user is last admin and return to initial value if user cancel", async () => {
+        const onClick = jest.fn();
+
+        renderPLS({ onClick });
+
+        // Until the power level is changed, the apply button should be disabled
+        // compound button is using aria-disabled instead of the disabled attribute, we can't toBeDisabled on it
+        expect(screen.getByRole("button", { name: "Apply" })).toHaveAttribute("aria-disabled", "true");
+
+        const select = screen.getByRole("combobox", { name: currentUser });
+        // Sanity check
+        expect(select).toHaveValue("100");
+
+        // Change current user power level to 50
+        await userEvent.selectOptions(select, "50");
+
+        // modal should appear because only admin in the room
+        expect(screen.findByText("WARNING")).toBeTruthy();
+
+        await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+        // the power level should be back to initial value
+        expect(select).toHaveValue("100");
+    });
 });
