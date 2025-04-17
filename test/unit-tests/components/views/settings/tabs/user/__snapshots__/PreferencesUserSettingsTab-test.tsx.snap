@@ -1168,7 +1168,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     class="mx_SettingsFlag_label"
                   >
                     <div
-                      id="mx_LabelledToggleSwitch_:r8:"
+                      id="mx_LabelledToggleSwitch_«r8»"
                     >
                       Hide avatars of room and inviter
                     </div>
@@ -1176,7 +1176,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <div
                     aria-checked="false"
                     aria-disabled="false"
-                    aria-labelledby="mx_LabelledToggleSwitch_:r8:"
+                    aria-labelledby="mx_LabelledToggleSwitch_«r8»"
                     class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                     role="switch"
                     tabindex="0"
@@ -1194,13 +1194,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-:r9:"
+                    for="radix-«r9»"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91"
-                    id="radix-:ra:"
+                    id="radix-«ra»"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
