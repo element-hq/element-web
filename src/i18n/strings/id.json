@@ -2674,8 +2674,6 @@
         "topic": "Mendapatkan atau mengatur topik ruangan",
         "topic_none": "Ruangan ini tidak ada topik.",
         "topic_room_error": "Gagal untuk mendapatkan topik ruangan: Tidak dapat menemukan ruangan (%(roomId)s)",
-        "tovirtual": "Mengganti ke ruangan virtual ruangan ini, jika tersedia",
-        "tovirtual_not_found": "Tidak ada ruangan virtual untuk ruangan ini",
         "unban": "Menhilangkan cekalan pengguna dengan ID yang dicantumkan",
         "unflip": "Menambahkan ┬──┬ ノ( ゜-゜ノ) ke pesan teks biasa",
         "unholdcall": "Melanjutkan panggilan di ruang saat ini",

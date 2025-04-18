@@ -2640,8 +2640,6 @@
         "topic": "Hakee tai asettaa huoneen aiheen",
         "topic_none": "Tässä huoneessa ei ole aihetta.",
         "topic_room_error": "Huoneen aiheen hakeminen epäonnistui: huonetta (%(roomId)s ei löydy.",
-        "tovirtual": "Vaihtaa tämän huoneen virtuaalihuoneeseen, mikäli huoneella sellainen on",
-        "tovirtual_not_found": "Tällä huoneella ei ole virtuaalihuonetta",
         "unban": "Poistaa porttikiellon tunnuksen mukaiselta käyttäjältä",
         "unflip": "Lisää ┬──┬ ノ( ゜-゜ノ) viestin alkuun",
         "unholdcall": "Ottaa nykyisen huoneen puhelun pois pidosta",

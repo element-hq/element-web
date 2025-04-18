@@ -3132,8 +3132,6 @@
         "topic": "Zobrazí alebo nastaví tému miestnosti",
         "topic_none": "Táto miestnosť nemá nastavenú tému.",
         "topic_room_error": "Nepodarilo sa získať tému miestnosti: Nepodarilo sa nájsť miestnosť (%(roomId)s",
-        "tovirtual": "Prepne do virtuálnej miestnosti tejto miestnosti, ak ju má",
-        "tovirtual_not_found": "Žiadna virtuálna miestnosť pre túto miestnosť",
         "unban": "Zruší zákaz vstúpiť používateľovi so zadaným ID",
         "unflip": "Pridá znaky ┬──┬ ノ( ゜-゜ノ) pred správy vo formáte obyčajného textu",
         "unholdcall": "Zruší podržanie hovoru v aktuálnej miestnosti",

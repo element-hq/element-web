@@ -2180,8 +2180,6 @@
         "topic": "Nær í eða stillir umfjöllunarefni spjallrásar",
         "topic_none": "Þessi spjallrás er ekki með umfjöllunarefni.",
         "topic_room_error": "Mistókst að ná í umfjöllunarefni spjallrásar: Gat ekki fundið spjallrásina (%(roomId)s",
-        "tovirtual": "Skiptir yfir í sýndarspjallrás þessarar spjallrásar, ef hún er til staðar",
-        "tovirtual_not_found": "Engin sýndarspjallrás fyrir þessa spjallrás",
         "unban": "Tekur bann af notanda með uppgefið auðkenni",
         "unflip": "Setur ┬──┬ ノ( ゜-゜ノ) framan við hrein textaskilaboð",
         "unholdcall": "Tekur símtalið í fyrirliggjandi spjallrás úr bið",

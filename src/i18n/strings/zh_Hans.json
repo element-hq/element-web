@@ -2400,8 +2400,6 @@
         "topic": "获取或设置房间话题",
         "topic_none": "此房间没有话题。",
         "topic_room_error": "获取房间话题失败：无法找到房间（%(roomId)s）",
-        "tovirtual": "切换到此房间的虚拟房间（如有）",
-        "tovirtual_not_found": "此房间未有虚拟房间",
         "unban": "按照 ID 解封用户",
         "unflip": "在纯文本消息开头添加 ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "解除挂起当前房间的通话",

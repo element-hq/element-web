@@ -3092,8 +3092,6 @@
         "topic": "Récupère ou définit le sujet du salon",
         "topic_none": "Ce salon n'a pas de sujet.",
         "topic_room_error": "Impossible de récupérer le sujet du salon : Salon introuvable (%(roomId)s)",
-        "tovirtual": "Bascule dans le salon virtuel de ce salon, s'il en a un",
-        "tovirtual_not_found": "Aucun salon virtuel pour ce salon",
         "unban": "Révoque le bannissement de l’utilisateur ayant l’identifiant fourni",
         "unflip": "Ajoute ┬──┬ ノ( ゜-゜ノ) en préfixe du message",
         "unholdcall": "Reprend l’appel en attente dans ce salon",

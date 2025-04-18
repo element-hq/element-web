@@ -3092,8 +3092,6 @@
         "topic": "Hämtar eller sätter ämnet för ett rum",
         "topic_none": "Det här rummet har inget ämne.",
         "topic_room_error": "Misslyckades att hitta rumsämne: Kunde inte hitta rummet (%(roomId)s)",
-        "tovirtual": "Byter till det här rummets virtuella rum, om det har ett",
-        "tovirtual_not_found": "Inget virtuellt rum för det här rummet",
         "unban": "Avbannar användaren med givet ID",
         "unflip": "Lägger till ┬──┬ ノ( ゜-゜ノ) till början av ett textmeddelande",
         "unholdcall": "Avslutar parkering av samtalet i det nuvarande samtalet",
