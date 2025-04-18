@@ -3068,8 +3068,6 @@
         "topic": "Lekérdezi vagy beállítja a szoba témáját",
         "topic_none": "A szobának nincs témája.",
         "topic_room_error": "A szoba téma nem található: A szoba nem található (%(roomId)s)",
-        "tovirtual": "Átváltás a szoba virtuális szobájába, ha létezik",
-        "tovirtual_not_found": "Ehhez a szobához nincs virtuális szoba",
         "unban": "Visszaengedi a megadott azonosítójú felhasználót",
         "unflip": "Az egyszerű szöveges üzenet elé teszi ezt: ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "Visszaveszi tartásból a jelenlegi szoba hívását",

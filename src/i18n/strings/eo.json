@@ -1953,8 +1953,6 @@
         "topic": "Ekhavas aŭ agordas la temon de la ĉambro",
         "topic_none": "Ĉi tiu ĉambro ne havas temon.",
         "topic_room_error": "Malsukcesis akiri temo de ĉambro: Ne povas trovi ĉambron (%(roomId)s)",
-        "tovirtual": "Iri al virtuala ĉambro de tiu ĉambro, se la virtuala ĉambro ekzistas",
-        "tovirtual_not_found": "Tiu ĉambro ne havas virtuala ĉambro",
         "unban": "Malforbaras uzanton kun la donita identigilo",
         "unflip": "Antaŭmetas ┬──┬ ノ( ゜-゜ノ) al platteksta mesaĝo",
         "unholdcall": "Malpaŭzigas la vokon en la nuna ĉambro",

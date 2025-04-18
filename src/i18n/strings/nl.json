@@ -2301,8 +2301,6 @@
         "topic": "Verkrijgt het onderwerp van de kamer of stelt het in",
         "topic_none": "Deze kamer heeft geen onderwerp.",
         "topic_room_error": "Kameronderwerp laden mislukt: Kan kamer niet vinden (%(roomId)s",
-        "tovirtual": "Schakelt over naar de virtuele kamer van deze kamer, als die er is",
-        "tovirtual_not_found": "Geen virtuele ruimte voor deze ruimte",
         "unban": "Ontbant de persoon met de gegeven ID",
         "unflip": "Plakt ┬──┬ ノ( ゜-゜ノ) vóór een bericht zonder opmaak",
         "unholdcall": "De huidige oproep in huidige kamer in de wacht zetten",

@@ -2533,8 +2533,6 @@
         "topic": "Merr ose cakton temën e dhomës",
         "topic_none": "Kjo dhomë s’ka temë.",
         "topic_room_error": "S’u arrit të merret tema e dhomës: S’arrihet të gjendet dhomë (%(roomId)s",
-        "tovirtual": "Kalohet te dhoma virtuale e kësaj dhome, në pastë",
-        "tovirtual_not_found": "S’ka dhomë virtuale për këtë dhomë",
         "unban": "I heq dëbimin përdoruesit me ID-në e dhënë",
         "unflip": "E paraprin një mesazh tekst i thjeshtë me ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "E heq nga pritja thirrjen në dhomën aktuale",

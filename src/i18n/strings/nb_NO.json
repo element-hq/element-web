@@ -2094,6 +2094,7 @@
             },
             "uploading_single_file": "Laster opp %(filename)s"
         },
+        "video_room": "Dette rommet er et videorom",
         "waiting_for_join_subtitle": "Når inviterte brukere har blitt med i %(brand)s, vil du kunne chatte og rommet vil bli ende-til-ende-kryptert",
         "waiting_for_join_title": "Venter på at brukerne skal bli med %(brand)s"
     },
@@ -2122,7 +2123,7 @@
             "favourite": "Favoritter",
             "people": "Personer",
             "rooms": "Rom",
-            "unread": "Ulest"
+            "unread": "Uleste"
         },
         "home_menu_label": "Hjem alternativer",
         "join_public_room_label": "Bli med i offentlig rom",
@@ -3091,8 +3092,6 @@
         "topic": "Henter eller setter rommets overskrift",
         "topic_none": "Dette rommet har ingen overskrift.",
         "topic_room_error": "Kunne ikke hente rommets emne: Kan ikke finne rom (%(roomId)s",
-        "tovirtual": "Bytter til dette rommets virtuelle rom, hvis det har et",
-        "tovirtual_not_found": "Ingen virtuelle rom for dette rommet",
         "unban": "Gir tilbake tilgang til bruker med gitt ID",
         "unflip": "Legger til ┬──┬ ノ( ゜-゜ノ) foran en ren tekstmelding",
         "unholdcall": "Tar samtalen i gjeldende rom ut av vent",

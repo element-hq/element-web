@@ -2713,8 +2713,6 @@
         "topic": "Ottiene o imposta l'argomento della stanza",
         "topic_none": "Questa stanza non ha un argomento.",
         "topic_room_error": "Lettura argomento stanza fallita: impossibile trovare la stanza (%(roomId)s",
-        "tovirtual": "Passa alla stanza virtuale di questa stanza, se ne ha una",
-        "tovirtual_not_found": "Nessuna stanza virtuale per questa stanza",
         "unban": "Riammette l'utente con l'ID dato",
         "unflip": "Antepone ┬──┬ ノ( ゜-゜ノ) ad un messaggio di testo",
         "unholdcall": "Riprende la chiamata nella stanza attuale",

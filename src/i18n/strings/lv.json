@@ -2644,8 +2644,6 @@
         "topic": "Nolasa vai iestata istabas tematu",
         "topic_none": "Istabai nav temata.",
         "topic_room_error": "Neizdevās iegūt istabas tēmu: Nevar atrast istabu (%(roomId)s",
-        "tovirtual": "Pārslēdzas uz šīs istabas virtuālo istabu, ja tāda pastāv",
-        "tovirtual_not_found": "Šai istabai nav virtuālas istabas",
         "unban": "Atceļ pieejas liegumu lietotājam ar norādīto id",
         "unflip": "Pievieno ┬──┬ ノ( ゜-゜ノ) pirms vienkārša teksta ziņas",
         "unholdcall": "Šajā istabā iepauzētās sazvana atpauzēšana",

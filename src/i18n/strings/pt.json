@@ -2991,8 +2991,6 @@
         "topic": "Obtém ou define o tópico da sala",
         "topic_none": "Esta sala não tem tópico.",
         "topic_room_error": "Falha ao obter o tópico da sala: Não foi possível encontrar a sala (%(roomId)s",
-        "tovirtual": "Muda para a sala virtual desta sala, se houver uma",
-        "tovirtual_not_found": "Não há sala virtual para esta sala",
         "unban": "Cancela o utilizador com um determinado ID",
         "unflip": "Pré-anexa ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
         "unholdcall": "Tira a chamada da sala atual da espera",

@@ -3110,8 +3110,6 @@
         "topic": "Wyświetla lub ustawia temat pokoju",
         "topic_none": "Ten pokój nie ma tematu.",
         "topic_room_error": "Nie można znaleźć tematu pokoju: Nie można znaleźć pokoju (%(roomId)s",
-        "tovirtual": "Przełącza do wirtualnego pokoju tego pokoju, jeśli taki istnieje",
-        "tovirtual_not_found": "Brak wirtualnego pokoju dla tego pokoju",
         "unban": "Odblokowuje użytkownika o danym ID",
         "unflip": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej",
         "unholdcall": "Odwiesza połączenie w obecnym pokoju",

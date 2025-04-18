@@ -2450,8 +2450,6 @@
         "topic": "Lấy hoặc đặt chủ đề phòng",
         "topic_none": "Phòng này chưa có chủ đề.",
         "topic_room_error": "Không thể lấy chủ đề phòng: Không tìm thấy phòng (%(roomId)s)",
-        "tovirtual": "Chuyển sang phòng ảo của phòng này, nếu nó có",
-        "tovirtual_not_found": "Không có phòng ảo của phòng này",
         "unban": "Gỡ cấm thành viên có ID chỉ định",
         "unflip": "Thêm ┬──┬ ノ( ゜-゜ノ) vào tin nhắn văn bản thuần túy",
         "unholdcall": "Nối lại cuộc gọi trong phòng hiện tại",
