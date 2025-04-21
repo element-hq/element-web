@@ -15,12 +15,12 @@
         "room_messsage_not_sent": "A(z) %(roomName)s szoba megnyitása nem beállított üzenettel.",
         "room_n_unread_invite": "A(z) %(roomName)s szoba meghívásának megnyitása.",
         "room_n_unread_messages": {
-            "one": "A(z) %(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
-            "other": "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
+            "A(z) %(roomName)s szoba megnyitása 1 olvasatlan üzenettel.": "one",
+            "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel.": "other"
         },
         "room_n_unread_messages_mentions": {
-            "one": "A(z) %(roomName)s szoba megnyitása 1 olvasatlan megemlítéssel.",
-            "other": "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan megemlítéssel."
+            "A(z) %(roomName)s szoba megnyitása 1 olvasatlan megemlítéssel.": "one",
+            "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan megemlítéssel.": "other"
         },
         "room_name": "Szoba: %(name)s",
         "room_status_bar": "Szoba állapotsora",
@@ -314,12 +314,12 @@
             "confirm_new_password": "Új jelszó megerősítése",
             "devices_logout_success": "Az összes eszközéről kijelentkezett és leküldéses értesítéseket sem fog kapni. Az értesítések újbóli engedélyezéséhez újra be kell jelentkezni az egyes eszközökön.",
             "other_devices_logout_warning_1": "A kijelentkezéssel az üzeneteket titkosító kulcsokat az eszközök törlik magukról ami elérhetetlenné teheti a régi titkosított csevegéseket.",
-            "other_devices_logout_warning_2": "Ha szeretné megtartani a hozzáférést a titkosított szobákban lévő csevegésekhez, állítson be Kulcs mentést vagy exportálja ki a kulcsokat valamelyik eszközéről mielőtt továbblép.",
+            "other_devices_logout_warning_2": "Ha szeretné megtartani a hozzáférést a titkosított szobákban lévő csevegésekhez, állítson be kulcsmentést vagy exportálja a kulcsokat valamelyik eszközéről mielőtt továbblép.",
             "password_not_entered": "Új jelszót kell megadni.",
             "passwords_mismatch": "Az új jelszavaknak meg kell egyezniük egymással.",
             "rate_limit_error": "Rövid idő alatt túl sok próbálkozás. Várjon egy kicsit mielőtt újra próbálkozik.",
             "rate_limit_error_with_time": "Rövid idő alatt túl sok próbálkozás. Próbálkozzon ennyi idő múlva: %(timeout)s.",
-            "reset_successful": "A jelszava alaphelyzetbe lett állítva.",
+            "reset_successful": "A jelszava vissza lett állítva.",
             "return_to_login": "Vissza a bejelentkezési képernyőre",
             "sign_out_other_devices": "Kijelentkezés az összes eszközről"
         },
@@ -329,7 +329,7 @@
         "reset_password_email_field_required_invalid": "E-mail-cím megadása (ezen a Matrix-kiszolgálón kötelező)",
         "reset_password_email_not_associated": "Úgy tűnik, hogy ez az e-mail-cím nincs összekötve Matrix-azonosítóval ezen a Matrix-kiszolgálón.",
         "reset_password_email_not_found_title": "Az e-mail-cím nem található",
-        "reset_password_title": "Jelszó megváltoztatása",
+        "reset_password_title": "Jelszó visszaállítása",
         "server_picker_custom": "Másik Matrix-kiszolgáló",
         "server_picker_description": "Használhatja az egyéni kiszolgáló lehetőséget, hogy egy másik Matrix-kiszolgáló címének megadásával jelentkezzen be. Ezzel használhatja az %(brand)s klienst egy már létező Matrix-fiókkal, egy másik Matrix-kiszolgálón.",
         "server_picker_description_matrix.org": "Csatlakozzon több millió felhasználóhoz ingyen, a legnagyobb nyilvános kiszolgálón",
@@ -385,7 +385,7 @@
             "email_resent": "Újraküldve!",
             "fallback_button": "Hitelesítés indítása",
             "mas_cross_signing_reset_cta": "Ugrás a fiókjához",
-            "mas_cross_signing_reset_description": "Állítsa vissza személyazonosságát a fiókszolgáltatón keresztül, majd térjen vissza, és kattintson az „Újra próbálkozás” gombra.",
+            "mas_cross_signing_reset_description": "Állítsa alaphelyzetbe személyazonosságát a fiókszolgáltatón keresztül, majd térjen vissza, és kattintson az „Újra” gombra.",
             "msisdn": "Szöveges üzenet küldve ide: %(msisdn)s",
             "msisdn_token_incorrect": "Helytelen token",
             "msisdn_token_prompt": "Adja meg a benne lévő kódot:",
@@ -407,7 +407,7 @@
         "unsupported_auth_msisdn": "Ez a kiszolgáló nem támogatja a telefonszámmal történő hitelesítést.",
         "username_field_required_invalid": "Felhasználónév megadása",
         "username_in_use": "Ez a felhasználónév már foglalt, próbáljon ki másikat.",
-        "verify_email_explainer": "Mielőtt beállíthatja a jelszót, tudnunk kell, hogy tényleg az, akinek mondja magát. Kattintson a hivatkozásra az e-mailben, melyet épp most küldtünk ide: <b>%(email)s</b>",
+        "verify_email_explainer": "Mielőtt visszaállíthatja a jelszót, tudnunk kell, hogy tényleg az, akinek mondja magát. Kattintson a hivatkozásra az e-mailben, melyet épp most küldtünk ide: <b>%(email)s</b>",
         "verify_email_heading": "Erősítse meg az e-mailt a továbblépéshez"
     },
     "bug_reporting": {
@@ -1060,7 +1060,7 @@
             "verify_emoji_prompt": "Ellenőrzés egyedi emodzsik összehasonlításával.",
             "verify_emoji_prompt_qr": "Ha nem tudod beolvasni az alábbi kódot, ellenőrizd az egyedi emodzsik összehasonlításával.",
             "verify_later": "Később ellenőrzöm",
-            "verify_reset_warning_1": "Az ellenőrzéshez használt kulcsok alaphelyzetbe állítását nem lehet visszavonni. A visszaállítás után nem fog hozzáférni a régi titkosított üzenetekhez, és minden ismerőse, aki eddig ellenőrizte a személyazonosságát, biztonsági figyelmeztetést fog látni, amíg újra nem ellenőrzi.",
+            "verify_reset_warning_1": "Az ellenőrzéshez használt kulcsok lecserélését nem lehet visszavonni. A visszaállítás után nem fog hozzáférni a régi titkosított üzenetekhez, és minden ismerőse, aki eddig ellenőrizte a személyazonosságát, biztonsági figyelmeztetést fog látni, amíg újra nem ellenőrzi.",
             "verify_reset_warning_2": "Csak akkor folytassa, ha biztos benne, hogy elvesztette a hozzáférést a többi eszközéhez és helyreállítási kulcsához.",
             "verify_using_device": "Ellenőrizze egy másik eszközzel",
             "verify_using_key": "Ellenőrzés helyreállítási kulccsal",
@@ -1516,7 +1516,7 @@
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
-        "sliding_sync": "Csúszó szinkronizációs mód",
+        "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "sliding_sync_disabled_notice": "A kikapcsoláshoz ki-, és bejelentkezés szükséges",
         "sliding_sync_server_no_support": "A kiszolgálója nem támogatja",
@@ -1966,7 +1966,7 @@
         "inaccessible": "Ez a szoba vagy tér jelenleg elérhetetlen.",
         "inaccessible_name": "%(roomName)s jelenleg nem érhető el.",
         "inaccessible_subtitle_1": "Próbálkozzon később vagy kérje meg a szoba vagy tér adminisztrátorát, hogy nézze meg van-e hozzáférése.",
-        "inaccessible_subtitle_2": "Amikor a szobát vagy teret próbáltuk elérni ezt a hibaüzenetet kaptuk: %(errcode)s. Ha úgy gondolja, hogy ez egy hiba legyen szíves<issueLink>nyisson egy hibajegyet</issueLink>.",
+        "inaccessible_subtitle_2": "A szoba vagy tér elérésekor ez a hibaüzenetet érkezett: %(errcode)s. Ha úgy gondolja, hogy az üzenetet egy hiba miatt látja, <issueLink>nyisson egy hibajegyet</issueLink>.",
         "intro": {
             "dm_caption": "Csak önök ketten vannak ebben a beszélgetésben, hacsak valamelyikőjük nem hív meg valakit, hogy csatlakozzon.",
             "enable_encryption_prompt": "Titkosítás bekapcsolása a beállításokban.",
@@ -2036,7 +2036,7 @@
             "button_view_all": "Összes megtekintése",
             "description": "Ez a szoba rögzített üzeneteket tartalmaz. Kattintson ide a megtekintésükhöz.",
             "go_to_message": "Tekintse meg a rögzített üzenetet az idővonalon.",
-            "title": "<bold>%(index)s rögzített %(length)s </bold> üzenetből"
+            "title": "<bold>%(index)s. / %(length)s </bold> rögzített üzenet"
         },
         "read_topic": "Kattintson a téma elolvasásához",
         "rejecting": "Meghívó elutasítása…",
@@ -2056,7 +2056,7 @@
             "homeserver_blocked": "Az üzenete nem lett elküldve, mert a Matrix-kiszolgáló adminisztrátora letiltotta. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
             "monthly_user_limit_reached": "Az üzenete nem lett elküldve, mert ez a Matrix-kiszolgáló elérte a havi aktív felhasználói korlátot. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
             "requires_consent_agreement": "Nem tudsz üzenetet küldeni amíg nem olvasod el és nem fogadod el a <consentLink>felhasználási feltételeket</consentLink>.",
-            "retry_all": "Mind újraküldése",
+            "retry_all": "Összes újraküldése",
             "select_messages_to_retry": "Újraküldéshez vagy törléshez kiválaszthatja az üzeneteket egyenként vagy az összeset együtt",
             "server_connectivity_lost_description": "Az elküldött üzenetek tárolva lesznek, amíg a kapcsolata újra elérhető nem lesz.",
             "server_connectivity_lost_title": "A kapcsolat megszakadt a kiszolgálóval.",
@@ -2078,6 +2078,7 @@
             },
             "uploading_single_file": "%(filename)s feltöltése"
         },
+        "video_room": "Ez a szoba egy videószoba",
         "waiting_for_join_subtitle": "Miután a meghívott felhasználók csatlakoztak ide: %(brand)s, beszélgethet, és a szoba végponttól végpontig titkosítva lesz",
         "waiting_for_join_title": "Várakozás a felhasználók csatlakozására ide: %(brand)s"
     },
@@ -2503,18 +2504,18 @@
                 "breadcrumb_second_description": "Elveszít minden olyan üzenetelőzményt, amely csak a kiszolgálón van tárolva.",
                 "breadcrumb_third_description": "Újra ellenőriznie kell az összes meglévő eszközét és névjegyét",
                 "breadcrumb_title": "Biztos, hogy alaphelyzetbe állítja a személyazonosságát?",
-                "breadcrumb_title_forgot": "Elfelejtette a helyreállítási kulcsot? Újra be kell állítania a személyazonosságát.",
-                "breadcrumb_title_sync_failed": "A kulcstár szinkronizálása sikertelen. Vissza kell állítania személyazonosságát.",
+                "breadcrumb_title_forgot": "Elfelejtette a helyreállítási kulcsot? Alaphelyzetbe kell állítania a személyazonosságát.",
+                "breadcrumb_title_sync_failed": "A kulcstároló szinkronizálása sikertelen. Alaphelyzetbe kell állítania személyazonosságát.",
                 "breadcrumb_warning": "Csak akkor tegye ezt, ha úgy gondolja, hogy fiókját feltörték.",
                 "details_title": "Titkosítás részletei",
-                "do_not_close_warning": "Ne zárja be ezt az ablakot, amíg a visszaállítás be nem fejeződik",
+                "do_not_close_warning": "Ne zárja be ezt az ablakot, amíg az alaphelyzetbe állítás be nem fejeződik",
                 "export_keys": "Kulcsok exportálása",
                 "import_keys": "Kulcsok importálása",
                 "other_people_device_description": "Figyelmeztetés: azok a felhasználók, akikkel nem ellenőrizték kölcsönösen egymást (például emodzsik használatával), nem kapják meg a titkosított üzeneteket. Ezenkívül az ellenőrzött felhasználók nem ellenőrzött eszközei sem kapják meg a titkosított üzeneteket.",
                 "other_people_device_label": "Titkosított szobákban csak az ellenőrzött felhasználók kapják meg az üzeneteket",
                 "other_people_device_title": "Mások eszközei",
                 "reset_identity": "Kriptográfiai személyazonosság alaphelyzetbe állítása",
-                "reset_in_progress": "Visszaállítás folyamatban…",
+                "reset_in_progress": "Alaphelyzetbe állítás folyamatban…",
                 "session_id": "Munkamenet-azonosító:",
                 "session_key": "Munkamenetkulcs:",
                 "title": "Speciális"
@@ -2658,7 +2659,7 @@
             "backup_in_progress": "A kulcsaid mentése folyamatban van (az első mentés több percig is eltarthat).",
             "backup_starting": "Mentés indul…",
             "backup_success": "Sikeres!",
-            "cannot_create_backup": "Kulcs mentés sikertelen",
+            "cannot_create_backup": "Kulcsmentés sikertelen",
             "create_title": "Kulcsmentés készítése",
             "setup_secure_backup": {
                 "backup_setup_success_description": "A kulcsai nem kerülnek elmentésre erről az eszközről.",
@@ -3240,16 +3241,16 @@
         "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről ami már rendelkezik kapcsolattal",
         "mark_all_read": "Az összes megjelölése olvasottként",
         "my_threads": "Saját üzenetszálak",
-        "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
+        "my_threads_description": "Összes olyan üzenetszál megjelenítése, amelyben részt vesz",
         "open_thread": "Üzenetszál megnyitása",
         "show_thread_filter": "Megjelenítés:"
     },
     "threads_activity_centre": {
-        "header": "Üzenetszál aktivitás",
+        "header": "Üzenetszál-tevékenységek",
         "no_rooms_with_threads_notifs": "Még nincsenek olyan szobái, amelyek üzenetszál értesítéseket tartalmaznak.",
         "no_rooms_with_unread_threads": "Nincsenek még olvasatlan üzenetszálakkal rendelkező szobái.",
         "release_announcement_description": "Az üzenetszálak értesítései átkerültek, mostantól itt találja őket.",
-        "release_announcement_header": "Üzenetszál Tevékenységi Központ"
+        "release_announcement_header": "Üzenetszálak tevékenységközpontja"
     },
     "time": {
         "about_day_ago": "egy napja",
