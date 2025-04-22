@@ -25,9 +25,9 @@ interface IProps {
  * Quick action button for marking a media event as hidden.
  */
 export const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
-    const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
+    const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent);
 
-    if (!mediaIsVisible) {
+    if (!mediaIsVisible || !setVisible) {
         return;
     }
 
