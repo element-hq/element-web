@@ -8,20 +8,20 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { HideActionButton } from "../../../../../src/components/views/messages/HideActionButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import type { Settings } from "../../../../../src/settings/Settings";
+import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
+import { getMockClientWithEventEmitter, withClientContextRenderOptions } from "../../../../test-utils";
+import type { MockedObject } from "jest-mock";
 
-function mockSetting(
-    showImages: Settings["showImages"]["default"],
-    showMediaEventIds: Settings["showMediaEventIds"]["default"],
-) {
+function mockSetting(mediaPreviews: MediaPreviewValue, showMediaEventIds: Settings["showMediaEventIds"]["default"]) {
     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-        if (settingName === "showImages") {
-            return showImages;
+        if (settingName === "mediaPreviewConfig") {
+            return { media_previews: mediaPreviews, invite_avatars: MediaPreviewValue.Off };
         } else if (settingName === "showMediaEventIds") {
             return showMediaEventIds;
         }
@@ -29,8 +29,10 @@ function mockSetting(
     });
 }
 
+const EVENT_ID = "$foo:bar";
+
 const event = new MatrixEvent({
-    event_id: "$foo:bar",
+    event_id: EVENT_ID,
     room_id: "!room:id",
     sender: "@user:id",
     type: "m.room.message",
@@ -42,32 +44,38 @@ const event = new MatrixEvent({
 });
 
 describe("HideActionButton", () => {
+    let cli: MockedObject<MatrixClient>;
+    beforeEach(() => {
+        cli = getMockClientWithEventEmitter({
+            getRoom: jest.fn(),
+        });
+    });
     afterEach(() => {
         jest.restoreAllMocks();
     });
     it("should show button when event is visible by showMediaEventIds setting", async () => {
-        mockSetting(false, { "$foo:bar": true });
-        render(<HideActionButton mxEvent={event} />);
+        mockSetting(MediaPreviewValue.Off, { [EVENT_ID]: true });
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.getByRole("button")).toBeVisible();
     });
-    it("should show button when event is visible by showImages setting", async () => {
-        mockSetting(true, {});
-        render(<HideActionButton mxEvent={event} />);
+    it("should show button when event is visible by mediaPreviewConfig setting", async () => {
+        mockSetting(MediaPreviewValue.On, {});
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.getByRole("button")).toBeVisible();
     });
     it("should hide button when event is hidden by showMediaEventIds setting", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue({ "$foo:bar": false });
-        render(<HideActionButton mxEvent={event} />);
+        mockSetting(MediaPreviewValue.Off, { [EVENT_ID]: false });
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.queryByRole("button")).toBeNull();
     });
     it("should hide button when event is hidden by showImages setting", async () => {
-        mockSetting(false, {});
-        render(<HideActionButton mxEvent={event} />);
+        mockSetting(MediaPreviewValue.Off, {});
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.queryByRole("button")).toBeNull();
     });
     it("should store event as hidden when clicked", async () => {
         const spy = jest.spyOn(SettingsStore, "setValue");
-        render(<HideActionButton mxEvent={event} />);
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         fireEvent.click(screen.getByRole("button"));
         expect(spy).toHaveBeenCalledWith("showMediaEventIds", null, SettingLevel.DEVICE, { "$foo:bar": false });
         // Button should be hidden after the setting is set.
