@@ -128,6 +128,24 @@ describe("RoomListItemViewModel", () => {
             );
             expect(vm.current.isBold).toBe(true);
         });
+
+        it("should recompute notification state when room changes", () => {
+            const newRoom = mkStubRoom("room2", "Room 2", room.client);
+            const newNotificationState = new RoomNotificationState(newRoom, false);
+
+            const { result, rerender } = renderHook((room) => useRoomListItemViewModel(room), {
+                ...withClientContextRenderOptions(room.client),
+                initialProps: room,
+            });
+
+            expect(result.current.showNotificationDecoration).toBe(false);
+
+            jest.spyOn(newNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(newNotificationState);
+            rerender(newRoom);
+
+            expect(result.current.showNotificationDecoration).toBe(true);
+        });
     });
 
     describe("a11yLabel", () => {
