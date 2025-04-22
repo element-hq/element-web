@@ -39,7 +39,9 @@ export function useRoomListNavigation(rooms: Room[]): void {
         if (currentIndex === -1) return;
 
         // Get the next/previous new room according to the delta
-        // If we are at the beginning or at end of the list, we move to the beginning or end
+        // Use slice to loop on the list
+        // If delta is -1 at the start of the list, it will go to the end
+        // If delta is 1 at the end of the list, it will go to the start
         const [newRoom] = filteredRooms.slice((currentIndex + delta) % filteredRooms.length);
         if (!newRoom) return;
 
