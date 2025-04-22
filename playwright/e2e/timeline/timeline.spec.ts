@@ -908,9 +908,14 @@ test.describe("Timeline", () => {
             });
         });
 
-        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, homeserver, room, context }) => {
             await app.viewRoomById(room.roomId);
-            await sendImage(app.client, room.roomId, NEW_AVATAR);
+
+            const bot = new Bot(page, homeserver, {});
+            await bot.prepareClient();
+            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+
+            await sendImage(bot, room.roomId, NEW_AVATAR);
             await app.timeline.scrollToBottom();
             const imgTile = page.locator(".mx_MImageBody").first();
             await expect(imgTile).toBeVisible();
@@ -921,10 +926,15 @@ test.describe("Timeline", () => {
             await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
         });
 
-        test("should be able to hide a video", async ({ page, app, room, context }) => {
+        test("should be able to hide a video", async ({ page, app, homeserver, room, context }) => {
             await app.viewRoomById(room.roomId);
-            const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
-            await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+
+            const bot = new Bot(page, homeserver, {});
+            await bot.prepareClient();
+            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+
+            const upload = await bot.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
+            await bot.sendEvent(room.roomId, null, "m.room.message" as EventType, {
                 msgtype: "m.video" as MsgType,
                 body: "bbb.webm",
                 url: upload.content_uri,

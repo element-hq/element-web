@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback } from "react";
-import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { JoinRule, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../settings/SettingLevel";
 import { useSettingValue } from "./useSettings";
@@ -19,14 +19,15 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
 
 /**
  * Should the media event be visible in the client, or hidden.
- * @param eventId The eventId of the media event.
  * @returns A boolean describing the hidden status, and a function to set the visiblity.
  */
-export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (visible: boolean) => void] {
-    const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
+export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void]|[true] {
+    const eventId = mxEvent?.getId();
+    const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", mxEvent?.getRoomId());
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
-    const joinRule = useRoomState(client.getRoom(roomId) ?? undefined, (state) => state.getJoinRule());
+    const room = client.getRoom(mxEvent?.getRoomId()) ?? undefined;
+    const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const setMediaVisible = useCallback(
         (visible: boolean) => {
             SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
@@ -36,6 +37,10 @@ export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (v
         },
         [eventId, eventVisibility],
     );
+
+    if (mxEvent?.getSender() === client.getUserId()) {
+        return [true];
+    }
 
     const roomIsPrivate = joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
 
