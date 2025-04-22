@@ -25,6 +25,8 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
  *
  * A function may be provided to alter the visible state.
  *
+ * @param The event that contains the media. If not provided, the global rule is used.
+ *
  * @returns Returns a tuple of:
  *          A boolean describing the hidden status. This is always true if the event was sent by us.
  *          A function to show or hide the event. This is `undefined` if the event was sent by us (visiblity cannot be changed).
