@@ -22,12 +22,18 @@ describe("useMediaVisible", () => {
     let room: Room;
     const mediaPreviewConfig: MediaPreviewConfig = MediaPreviewConfigController.default;
 
-    function render({sender}: {sender?: string} = {}) {
-        return renderHook(() => useMediaVisible(new MatrixEvent({
-            event_id: EVENT_ID,
-            room_id: ROOM_ID,
-            sender,
-        })), withClientContextRenderOptions(matrixClient));
+    function render({ sender }: { sender?: string } = {}) {
+        return renderHook(
+            () =>
+                useMediaVisible(
+                    new MatrixEvent({
+                        event_id: EVENT_ID,
+                        room_id: ROOM_ID,
+                        sender,
+                    }),
+                ),
+            withClientContextRenderOptions(matrixClient),
+        );
     }
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -47,19 +53,19 @@ describe("useMediaVisible", () => {
     });
 
     it("should display media by default", () => {
-        const [ visible ] = render().result.current;
+        const [visible] = render().result.current;
         expect(visible).toEqual(true);
     });
 
     it("should hide media when media previews are Off", () => {
         mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
-        const [ visible ] = render().result.current;
+        const [visible] = render().result.current;
         expect(visible).toEqual(false);
     });
 
     it("should always show media sent by us", () => {
         mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
-        const [ visible, setVisible ] = render({ sender: matrixClient.getUserId()! }).result.current;
+        const [visible, setVisible] = render({ sender: matrixClient.getUserId()! }).result.current;
         expect(visible).toEqual(true);
         expect(setVisible).toBeUndefined();
     });
@@ -69,7 +75,7 @@ describe("useMediaVisible", () => {
         (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
             room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
-            const [ visible ] = render().result.current;
+            const [visible] = render().result.current;
             expect(visible).toEqual(true);
         },
     );
@@ -79,7 +85,7 @@ describe("useMediaVisible", () => {
         (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
             room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
-            const [ visible ] = render().result.current;
+            const [visible] = render().result.current;
             expect(visible).toEqual(false);
         },
     );

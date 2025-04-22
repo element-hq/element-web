@@ -117,11 +117,12 @@ export class MediaEventHelper implements IDestroyable {
     /**
      * Determine if the media event in question supports being hidden in the timeline.
      * @param event Any matrix event.
-     * @returns `true` if the media can be hidden, otherwise false.
+     * @returns `true` if the media can be hidden, otherwise `false`.
      */
-    public static canHide(event: MatrixEvent): boolean {
+    public static canHide(event: MatrixEvent, myUserId: string): boolean {
         if (!event) return false;
         if (event.isRedacted()) return false;
+        if (event.getSender() === myUserId) return false;
         const content = event.getContent();
         const hideTypes: string[] = [MsgType.Video, MsgType.Image];
         if (hideTypes.includes(content.msgtype!)) return true;

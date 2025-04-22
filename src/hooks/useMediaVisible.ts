@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback } from "react";
-import { JoinRule, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../settings/SettingLevel";
 import { useSettingValue } from "./useSettings";
@@ -21,7 +21,7 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
  * Should the media event be visible in the client, or hidden.
  * @returns A boolean describing the hidden status, and a function to set the visiblity.
  */
-export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void]|[true] {
+export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] | [true] {
     const eventId = mxEvent?.getId();
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", mxEvent?.getRoomId());
     const client = useMatrixClientContext();

@@ -908,23 +908,27 @@ test.describe("Timeline", () => {
             });
         });
 
-        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, homeserver, room, context }) => {
-            await app.viewRoomById(room.roomId);
+        test(
+            "should be able to hide an image",
+            { tag: "@screenshot" },
+            async ({ page, app, homeserver, room, context }) => {
+                await app.viewRoomById(room.roomId);
 
-            const bot = new Bot(page, homeserver, {});
-            await bot.prepareClient();
-            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+                const bot = new Bot(page, homeserver, {});
+                await bot.prepareClient();
+                await app.client.inviteUser(room.roomId, bot.credentials.userId);
 
-            await sendImage(bot, room.roomId, NEW_AVATAR);
-            await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
-            await expect(imgTile).toBeVisible();
-            await imgTile.hover();
-            await page.getByRole("button", { name: "Hide" }).click();
+                await sendImage(bot, room.roomId, NEW_AVATAR);
+                await app.timeline.scrollToBottom();
+                const imgTile = page.locator(".mx_MImageBody").first();
+                await expect(imgTile).toBeVisible();
+                await imgTile.hover();
+                await page.getByRole("button", { name: "Hide" }).click();
 
-            // Check that the image is now hidden.
-            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
-        });
+                // Check that the image is now hidden.
+                await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
+            },
+        );
 
         test("should be able to hide a video", async ({ page, app, homeserver, room, context }) => {
             await app.viewRoomById(room.roomId);
