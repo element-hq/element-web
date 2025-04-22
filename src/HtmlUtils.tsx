@@ -308,10 +308,14 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
 
     if (opts.mediaIsVisible === false && sanitizeParams.transformTags?.["img"]) {
         // Prevent mutating the source of sanitizeParams.
-        sanitizeParams.transformTags = {
-            ...sanitizeParams.transformTags,
-            img: (tagName) => {
-                return { tagName, attribs: {} };
+        sanitizeParams = {
+            ...sanitizeParams,
+            transformTags: {
+                ...sanitizeParams.transformTags,
+                img: (tagName) => {
+                    // Remove element
+                    return { tagName, attribs: {} };
+                },
             },
         };
     }
