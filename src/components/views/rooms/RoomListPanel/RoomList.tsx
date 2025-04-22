@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
-import { AutoSizer, List, type ListRowProps } from "react-virtualized";
+import React, { useCallback, type JSX, useState, useEffect } from "react";
+import { ArrowKeyStepper, AutoSizer, List, type ListRowProps } from "react-virtualized";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
@@ -23,11 +23,22 @@ interface RoomListProps {
  * A virtualized list of rooms.
  */
 export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Element {
+    const [focusedIndex, setFocusedIndex] = useState(activeIndex);
+    useEffect(() => {
+        setFocusedIndex(activeIndex);
+    }, [activeIndex]);
+
     const roomRendererMemoized = useCallback(
         ({ key, index, style }: ListRowProps) => (
-            <RoomListItemView room={rooms[index]} key={key} style={style} isSelected={activeIndex === index} />
+            <RoomListItemView
+                room={rooms[index]}
+                key={key}
+                style={style}
+                isSelected={activeIndex === index}
+                isKeyboardSelected={focusedIndex === index}
+            />
         ),
-        [rooms, activeIndex],
+        [rooms, activeIndex, focusedIndex],
     );
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
@@ -35,16 +46,30 @@ export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Ele
         <div className="mx_RoomList" data-testid="room-list">
             <AutoSizer>
                 {({ height, width }) => (
-                    <List
-                        aria-label={_t("room_list|list_title")}
-                        className="mx_RoomList_List"
-                        rowRenderer={roomRendererMemoized}
+                    <ArrowKeyStepper
+                        mode="cells"
+                        columnCount={1}
                         rowCount={rooms.length}
-                        rowHeight={48}
-                        height={height}
-                        width={width}
-                        scrollToIndex={activeIndex ?? 0}
-                    />
+                        isControlled={true}
+                        scrollToRow={focusedIndex ?? 0}
+                        onScrollToChange={({ scrollToRow }) => setFocusedIndex(scrollToRow)}
+                    >
+                        {({ onSectionRendered, scrollToRow }) => (
+                            <List
+                                onSectionRendered={onSectionRendered}
+                                scrollToRow={scrollToRow}
+                                aria-label={_t("room_list|list_title")}
+                                className="mx_RoomList_List"
+                                rowRenderer={roomRendererMemoized}
+                                rowCount={rooms.length}
+                                rowHeight={48}
+                                height={height}
+                                width={width}
+                                scrollToIndex={activeIndex ?? 0}
+                                tabIndex={-1}
+                            />
+                        )}
+                    </ArrowKeyStepper>
                 )}
             </AutoSizer>
         </div>
