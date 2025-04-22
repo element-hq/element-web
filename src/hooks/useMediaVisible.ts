@@ -19,7 +19,16 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
 
 /**
  * Should the media event be visible in the client, or hidden.
- * @returns A boolean describing the hidden status, and a function to set the visiblity.
+ *
+ * This function uses the `mediaPreviewConfig` setting to determine the rules for the room
+ * along with the `showMediaEventIds` setting for specific events.
+ *
+ * A function may be provided to alter the visible state.
+ *
+ * @returns Returns a tuple of:
+ *          A boolean describing the hidden status. This is always true if the event was sent by us.
+ *          A function to show or hide the event. This is `undefined` if the event was sent by us (visiblity cannot be changed).
+ *
  */
 export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] | [true] {
     const eventId = mxEvent?.getId();
