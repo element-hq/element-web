@@ -2255,8 +2255,6 @@
         "topic": "Obtén ou establece o asunto da sala",
         "topic_none": "Esta sala non ten asunto.",
         "topic_room_error": "Non se obtivo o asunto da sala: Non se atopou a sala (%(roomId)s)",
-        "tovirtual": "Cambia á sala virtual desta sala, se é que existe",
-        "tovirtual_not_found": "No hai sala virtual para esta sala",
         "unban": "Desbloquea usuaria co ID dado",
         "unflip": "Antecede con ┬──┬ ノ( ゜-゜ノ) a unha mensaxe de texto plano",
         "unholdcall": "Acepta a chamada na sala actual",

@@ -3031,8 +3031,6 @@
         "topic": "Oda başlığını getirir yada ayarlar",
         "topic_none": "Bu odanın başlığı yok.",
         "topic_room_error": "Oda konusu alınamadı: Oda bulunamadı (%(roomId)s",
-        "tovirtual": "Varsa, bu odanın sanal odasına geçer",
-        "tovirtual_not_found": "Bu oda için sanal oda yok",
         "unban": "Verilen ID ile kullanıcı yasağını kaldırır",
         "unflip": "Düz metin mesajının başına ┬──┬ ノ (゜ - ゜ ノ) ekler",
         "unholdcall": "Mevcut odadaki aramayı beklemeden çıkarır",
