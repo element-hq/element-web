@@ -30,7 +30,7 @@ interface IProps {
 const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
-    const [mediaVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
+    const [mediaVisible] = useMediaVisible(mxEvent);
 
     const ts = mxEvent.getTs();
     const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(

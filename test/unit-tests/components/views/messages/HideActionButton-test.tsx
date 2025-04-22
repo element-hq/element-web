@@ -48,6 +48,7 @@ describe("HideActionButton", () => {
     beforeEach(() => {
         cli = getMockClientWithEventEmitter({
             getRoom: jest.fn(),
+            getUserId: jest.fn(),
         });
     });
     afterEach(() => {
@@ -70,6 +71,13 @@ describe("HideActionButton", () => {
     });
     it("should hide button when event is hidden by showImages setting", async () => {
         mockSetting(MediaPreviewValue.Off, {});
+        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
+        expect(screen.queryByRole("button")).toBeNull();
+    });
+    it("should hide button when event is not hideable", async () => {
+        mockSetting(MediaPreviewValue.Off, {});
+        // Make it so that the event comes from us, and therefore is always visible and never hideable.
+        cli.getUserId.mockReturnValue(event.getSender()!);
         render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.queryByRole("button")).toBeNull();
     });

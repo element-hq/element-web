@@ -538,7 +538,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         />,
                     );
                 }
-                if (MediaEventHelper.canHide(this.props.mxEvent)) {
+                if (MediaEventHelper.canHide(this.props.mxEvent, MatrixClientPeg.safeGet().getSafeUserId())) {
                     toolbarOpts.splice(0, 0, <HideActionButton mxEvent={this.props.mxEvent} key="hide" />);
                 }
             } else if (

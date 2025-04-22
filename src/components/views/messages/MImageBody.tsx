@@ -66,7 +66,7 @@ interface IProps extends IBodyProps {
      * Set the visibility of the media event.
      * @param visible Should the event be visible.
      */
-    setMediaVisible: (visible: boolean) => void;
+    setMediaVisible?: (visible: boolean) => void;
 }
 
 /**
@@ -95,7 +95,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
     protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
-            if (!this.props.mediaVisible) {
+            if (!this.props.mediaVisible && this.props.setMediaVisible) {
                 this.props.setMediaVisible(true);
                 return;
             }
@@ -686,7 +686,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
 // Wrap MImageBody component so we can use a hook here.
 const MImageBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
     return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 
