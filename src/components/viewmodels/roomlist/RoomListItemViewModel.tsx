@@ -92,6 +92,11 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         setNotificationValues(getNotificationValues(notificationState));
     });
 
+    // If the notification reference change due to room change, update the values
+    useEffect(() => {
+        setNotificationValues(getNotificationValues(notificationState));
+    }, [notificationState]);
+
     // We don't want to show the hover menu if
     // - there is an invitation for this room
     // - the user doesn't have access to both notification and more options menus
