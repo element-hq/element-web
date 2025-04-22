@@ -19,6 +19,7 @@ import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useStickyRoomList } from "./useStickyRoomList";
+import { useRoomListNavigation } from "./useRoomListNavigation";
 
 export interface RoomListViewState {
     /**
@@ -105,6 +106,8 @@ export function useRoomListViewModel(): RoomListViewState {
         activeSecondaryFilter,
     } = useFilteredRooms();
     const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
+
+    useRoomListNavigation(rooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
