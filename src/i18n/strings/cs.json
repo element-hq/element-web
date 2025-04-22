@@ -3099,8 +3099,6 @@
         "topic": "Nastaví nebo zjistí téma místnosti",
         "topic_none": "Tato místnost nemá žádné specifické téma.",
         "topic_room_error": "Nepodařilo se získat téma místnosti: Nelze najít místnost (%(roomId)s",
-        "tovirtual": "Přepne do virtuální místnosti této místnosti, pokud ji má",
-        "tovirtual_not_found": "Žádná virtuální místnost pro tuto místnost",
         "unban": "Zruší vykázání uživatele s daným identifikátorem",
         "unflip": "Vloží ┬──┬ ノ( ゜-゜ノ) na začátek zprávy",
         "unholdcall": "Zruší podržení hovoru v aktuální místnosti",

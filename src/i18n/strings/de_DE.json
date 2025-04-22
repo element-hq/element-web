@@ -1668,7 +1668,7 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
-        "default_settings": "Passen Sie die Standardeinstellungen an",
+        "default_settings": "Standardeinstellungen verwenden",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1688,7 +1688,7 @@
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
         "mute_description": "Du wirst keine Benachrichtigungen erhalten",
-        "mute_room": "Chatroom stumm stellen"
+        "mute_room": "Raum stummschalten"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -2093,6 +2093,7 @@
             },
             "uploading_single_file": "%(filename)s wird hochgeladen"
         },
+        "video_room": "Dieser Raum ist ein Videoraum",
         "waiting_for_join_subtitle": "Sobald eingeladene Benutzer %(brand)s beigetreten sind, werdet ihr euch unterhalten können und der Raum wird Ende-zu-Ende-verschlüsselt sein",
         "waiting_for_join_title": "Warte darauf, dass Benutzer %(brand)s beitreten"
     },
@@ -2121,7 +2122,7 @@
             "favourite": "Favoriten",
             "people": "Personen",
             "rooms": "Räume",
-            "unread": "Ungelesen"
+            "unread": "Ungelesene"
         },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichen Raum betreten",
@@ -3091,8 +3092,6 @@
         "topic": "Raumthema anzeigen oder ändern",
         "topic_none": "Dieser Raum hat kein Thema.",
         "topic_room_error": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
-        "tovirtual": "Zum virtuellen Raum dieses Raums wechseln, sofern vorhanden",
-        "tovirtual_not_found": "Kein virtueller Raum für diesen Raum",
         "unban": "Entsperrt den Benutzer mit der angegebenen ID",
         "unflip": "Stellt ┬──┬ ノ( ゜-゜ノ) einer Klartextnachricht voran",
         "unholdcall": "Beendet das Halten des Anrufs",

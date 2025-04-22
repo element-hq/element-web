@@ -6,48 +6,74 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { act, renderHook, waitFor } from "jest-matrix-react";
+import { JoinRule, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { useMediaVisible } from "../../../src/hooks/useMediaVisible";
+import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../test-utils";
+import { type MediaPreviewConfig, MediaPreviewValue } from "../../../src/@types/media_preview";
+import MediaPreviewConfigController from "../../../src/settings/controllers/MediaPreviewConfigController";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 const EVENT_ID = "$fibble:example.org";
-
-function render() {
-    return renderHook(() => useMediaVisible(EVENT_ID));
-}
+const ROOM_ID = "!foobar:example.org";
 
 describe("useMediaVisible", () => {
-    afterEach(() => {
-        // Using act here as otherwise React warns about state updates not being wrapped.
-        act(() => {
-            SettingsStore.setValue(
-                "showMediaEventIds",
-                null,
-                SettingLevel.DEVICE,
-                SettingsStore.getDefaultValue("showMediaEventIds"),
-            );
-            SettingsStore.setValue(
-                "showImages",
-                null,
-                SettingLevel.DEVICE,
-                SettingsStore.getDefaultValue("showImages"),
-            );
+    let matrixClient: MatrixClient;
+    let room: Room;
+    const mediaPreviewConfig: MediaPreviewConfig = MediaPreviewConfigController.default;
+
+    function render() {
+        return renderHook(() => useMediaVisible(EVENT_ID, ROOM_ID), withClientContextRenderOptions(matrixClient));
+    }
+    beforeEach(() => {
+        matrixClient = createTestClient();
+        room = mkStubRoom(ROOM_ID, undefined, matrixClient);
+        matrixClient.getRoom = jest.fn().mockReturnValue(room);
+        const origFn = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+            if (setting === "mediaPreviewConfig") {
+                return mediaPreviewConfig;
+            }
+            return origFn(setting, ...args);
         });
     });
 
-    it("should display images by default", async () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("should display media by default", async () => {
         const { result } = render();
         expect(result.current[0]).toEqual(true);
     });
 
-    it("should hide images when the default is changed", async () => {
-        SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+    it("should hide media when media previews are Off", async () => {
+        mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
         const { result } = render();
         expect(result.current[0]).toEqual(false);
     });
 
-    it("should hide images after function is called", async () => {
+    it.each([[JoinRule.Invite], [JoinRule.Knock], [JoinRule.Restricted]])(
+        "should display media when media previews are Private and the join rule is %s",
+        async (rule) => {
+            mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
+            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
+            const { result } = render();
+            expect(result.current[0]).toEqual(true);
+        },
+    );
+
+    it.each([[JoinRule.Public], ["anything_else"]])(
+        "should hide media when media previews are Private and the join rule is %s",
+        async (rule) => {
+            mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
+            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
+            const { result } = render();
+            expect(result.current[0]).toEqual(false);
+        },
+    );
+
+    it("should hide media after function is called", async () => {
         const { result } = render();
         expect(result.current[0]).toEqual(true);
         act(() => {
@@ -57,8 +83,8 @@ describe("useMediaVisible", () => {
             expect(result.current[0]).toEqual(false);
         });
     });
-    it("should show images after function is called", async () => {
-        SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+    it("should show media after function is called", async () => {
+        mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
         const { result } = render();
         expect(result.current[0]).toEqual(false);
         act(() => {

@@ -3093,8 +3093,6 @@
         "topic": "Otsib või määrab jututoa teema",
         "topic_none": "Sellel jututoal puudub teema.",
         "topic_room_error": "Jututoa teema laadimine ei õnnestu: jututuba ei õnnestu leida (%(roomId)s)",
-        "tovirtual": "Kui jututoal on virtuaalne olek, siis kasuta seda",
-        "tovirtual_not_found": "Sellel jututoal pole virtuaalset olekut",
         "unban": "Taasta ligipääs antud tunnusega kasutajale",
         "unflip": "Lisab vormindamata sõnumi ette ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "Võtab selles jututoas ootel oleva kõne",

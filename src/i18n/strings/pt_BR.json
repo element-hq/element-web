@@ -2395,8 +2395,6 @@
         "topic": "Consulta ou altera a descrição da sala",
         "topic_none": "Esta sala não tem descrição.",
         "topic_room_error": "Falha ao obter tópico da sala: Não foi possível encontrar a sala %(roomId)s",
-        "tovirtual": "Muda para a sala virtual desta sala, se houver uma",
-        "tovirtual_not_found": "Nenhuma sala virtual para esta sala",
         "unban": "Remove o banimento do usuário com o ID indicado",
         "unflip": "Adiciona ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
         "unholdcall": "Retoma a chamada na sala atual",

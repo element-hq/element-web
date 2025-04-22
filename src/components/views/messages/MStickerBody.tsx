@@ -79,7 +79,7 @@ class MStickerBodyInner extends MImageBodyInner {
 }
 
 const MStickerBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
     return <MStickerBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

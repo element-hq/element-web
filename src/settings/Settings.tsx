@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
+import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import { _t, _td, type TranslationKey } from "../languageHandler";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
@@ -45,6 +46,7 @@ import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
+import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -312,8 +314,6 @@ export interface Settings {
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
-    "showImages": IBaseSetting<boolean>;
-    "showAvatarsOnInvites": IBaseSetting<boolean>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
@@ -349,6 +349,7 @@ export interface Settings {
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
+    "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
@@ -426,6 +427,11 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
+    },
+    "mediaPreviewConfig": {
+        controller: new MediaPreviewConfigController(),
+        supportedLevels: LEVELS_ROOM_SETTINGS,
+        default: MediaPreviewConfigController.default,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -1123,16 +1129,6 @@ export const SETTINGS: Settings = {
         default: null,
         controller: new FallbackIceServerController(),
     },
-    "showImages": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|image_thumbnails"),
-        default: true,
-    },
-    "showAvatarsOnInvites": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|invite_avatars"),
-        default: true,
-    },
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],
         default: SortingAlgorithm.Recency,
@@ -1386,7 +1382,6 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
     },
-
     "Developer.elementCallUrl": {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),

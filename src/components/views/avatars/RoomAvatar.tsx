@@ -20,6 +20,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useRoomIdName } from "../../../hooks/room/useRoomIdName";
+import { MediaPreviewValue } from "../../../@types/media_preview";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
@@ -40,7 +41,8 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
     const roomIdName = useRoomIdName(room, oobData);
 
-    const showAvatarsOnInvites = useSettingValue("showAvatarsOnInvites", room?.roomId);
+    const showAvatarsOnInvites =
+        useSettingValue("mediaPreviewConfig", room?.roomId).invite_avatars === MediaPreviewValue.On;
 
     const onRoomAvatarClick = useCallback(() => {
         const avatarUrl = Avatar.avatarUrlForRoom(room ?? null);
@@ -63,7 +65,6 @@ const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobDat
         // parseInt ignores suffixes.
         const sizeInt = parseInt(size, 10);
         let oobAvatar: string | null = null;
-
         if (oobData?.avatarUrl) {
             oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }

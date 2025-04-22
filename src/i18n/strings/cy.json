@@ -2912,8 +2912,6 @@
         "topic": "Yn cael neu'n gosod pwnc yr ystafell",
         "topic_none": "Nid oes gan yr ystafell hon unrhyw bwnc.",
         "topic_room_error": "Wedi methu â chael pwnc ystafell: Methu dod o hyd i ystafell (%(roomId)s",
-        "tovirtual": "Yn newid i ystafell rithwir yr ystafell hon, os oes ganddi un",
-        "tovirtual_not_found": "Dim ystafell rithwir ar gyfer yr ystafell hon",
         "unban": "Yn dad-wahardd defnyddiwr gydag ID penodol",
         "unflip": "Yn rhagflaenu ┬──┬ ノ(゜-゜ノ) i neges testun plaen",
         "unholdcall": "Yn cymryd yr alwad yn yr ystafell bresennol oddi ar y stop",
