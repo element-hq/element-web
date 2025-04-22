@@ -17,7 +17,7 @@ import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filt
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { SortingAlgorithm } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 import { SortOption } from "../../../../../src/components/viewmodels/roomlist/useSorter";
-import SettingsStore, { CallbackFn } from "../../../../../src/settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
