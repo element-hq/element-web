@@ -940,11 +940,7 @@
             "title": "No se ha podido copiar el enlace a la sala"
         },
         "error_loading_user_profile": "No se pudo cargar el perfil de usuario",
-        "forget_room_failed": "No se pudo olvidar la sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "El servidor podría estar saturado o desconectado, o la búsqueda caducó :(",
-            "title": "Falló la búsqueda"
-        }
+        "forget_room_failed": "No se pudo olvidar la sala %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -2151,7 +2147,6 @@
             "remove_msisdn_prompt": "¿Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elige un idioma"
         },
-        "image_thumbnails": "Mostrar vistas previas para las imágenes",
         "inline_url_previews_default": "Activar la vista previa de URLs en línea por defecto",
         "inline_url_previews_room": "Activar la vista previa de URLs por defecto para los participantes de esta sala",
         "inline_url_previews_room_account": "Activar la vista previa de URLs en esta sala (solo para ti)",
@@ -2489,8 +2484,6 @@
         "topic": "Ver o cambiar el asunto de la sala",
         "topic_none": "Esta sala no tiene asunto.",
         "topic_room_error": "Fallo al obtener el asunto de la sala: No se ha podido encontrar la sala (%(roomId)s",
-        "tovirtual": "Cambia a la sala virtual de esta sala, si tiene una",
-        "tovirtual_not_found": "Esta sala no tiene una sala virtual",
         "unban": "Desbloquea el usuario con ese ID",
         "unflip": "Pone «┬──┬ ノ( ゜-゜ノ)» después de un mensaje de texto",
         "unholdcall": "Quita la llamada de la sala actual de espera",

@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Ugyldig tidsstempel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderasjon og sikkerhet",
         "modern": "Moderne",
         "mute": "Demp",
         "n_members": {
@@ -1133,11 +1134,7 @@
             "title": "Kan ikke kopiere romlenken"
         },
         "error_loading_user_profile": "Klarte ikke å laste inn brukerprofilen",
-        "forget_room_failed": "Kunne ikke glemme rommet %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serveren kan være utilgjengelig, overbelastet eller søket ble tidsavbrutt :(",
-            "title": "Søket mislyktes"
-        }
+        "forget_room_failed": "Kunne ikke glemme rommet %(errCode)s"
     },
     "error_user_not_logged_in": "Brukeren er ikke logget inn",
     "event_preview": {
@@ -2098,6 +2095,7 @@
             },
             "uploading_single_file": "Laster opp %(filename)s"
         },
+        "video_room": "Dette rommet er et videorom",
         "waiting_for_join_subtitle": "Når inviterte brukere har blitt med i %(brand)s, vil du kunne chatte og rommet vil bli ende-til-ende-kryptert",
         "waiting_for_join_title": "Venter på at brukerne skal bli med %(brand)s"
     },
@@ -2126,7 +2124,7 @@
             "favourite": "Favoritter",
             "people": "Personer",
             "rooms": "Rom",
-            "unread": "Ulest"
+            "unread": "Uleste"
         },
         "home_menu_label": "Hjem alternativer",
         "join_public_room_label": "Bli med i offentlig rom",
@@ -2670,12 +2668,10 @@
             "unable_to_load_msisdns": "Kan ikke laste inn telefonnumre",
             "username": "Brukernavn"
         },
-        "image_thumbnails": "Vis forhåndsvisninger for bilder",
         "inline_url_previews_default": "Skru på URL-forhåndsvisninger inni meldinger som standard",
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
-        "invite_avatars": "Vis avatarer til rom du har blitt invitert til",
         "jump_to_bottom_on_send": "Gå til bunnen av tidslinjen når du vil sende en melding",
         "key_backup": {
             "backup_in_progress": "Nøklene dine blir sikkerhetskopiert (den første sikkerhetskopieringen kan ta noen minutter).",
@@ -2733,6 +2729,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Innstillinger:</strong> Ignorerte brukere"
+        },
+        "media_preview": {
+            "hide_avatars": "Skjul avatarer for rom og inviterer",
+            "hide_media": "Skjul alltid",
+            "media_preview_description": "Et skjult medium kan alltid vises ved å trykke på det",
+            "media_preview_label": "Vis media i tidslinjen",
+            "show_in_private": "I private rom",
+            "show_media": "Vis alltid"
         },
         "notifications": {
             "default_setting_description": "Denne innstillingen vil bli brukt som standard for alle rommene dine.",
@@ -3095,8 +3099,6 @@
         "topic": "Henter eller setter rommets overskrift",
         "topic_none": "Dette rommet har ingen overskrift.",
         "topic_room_error": "Kunne ikke hente rommets emne: Kan ikke finne rom (%(roomId)s",
-        "tovirtual": "Bytter til dette rommets virtuelle rom, hvis det har et",
-        "tovirtual_not_found": "Ingen virtuelle rom for dette rommet",
         "unban": "Gir tilbake tilgang til bruker med gitt ID",
         "unflip": "Legger til ┬──┬ ノ( ゜-゜ノ) foran en ren tekstmelding",
         "unholdcall": "Tar samtalen i gjeldende rom ut av vent",

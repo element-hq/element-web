@@ -723,11 +723,7 @@
             "title": "לא ניתן להעתיק קישור לחדר"
         },
         "error_loading_user_profile": "לא ניתן לטעון את פרופיל המשתמש",
-        "forget_room_failed": "נכשל בעת בקשה לשכוח חדר %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "יתכן שהשרת לא יהיה זמין, עמוס יתר על המידה או שתם הזמן הקצוב לחיפוש :(",
-            "title": "החיפוש נכשל"
-        }
+        "forget_room_failed": "נכשל בעת בקשה לשכוח חדר %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1625,7 +1621,6 @@
             "remove_email_prompt": "הסר כתובות %(email)s ?",
             "remove_msisdn_prompt": "הסר מספרי %(phone)s ?"
         },
-        "image_thumbnails": "הראה תצוגה מקדימה\\ממוזערת של תמונות",
         "inline_url_previews_default": "אפשר צפייה של תצוגת קישורים בצאט כברירת מחדל",
         "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
         "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",

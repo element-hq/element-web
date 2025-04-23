@@ -831,10 +831,7 @@
             "title": "Tókst ekki að afrita tengil spjallrásar"
         },
         "error_loading_user_profile": "Gat ekki hlaðið inn notandasniði",
-        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s",
-        "search_failed": {
-            "title": "Leit mistókst"
-        }
+        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1865,7 +1862,6 @@
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
-        "image_thumbnails": "Birta forskoðun/smámyndir fyrir myndir",
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
         "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
         "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
@@ -2183,8 +2179,6 @@
         "topic": "Nær í eða stillir umfjöllunarefni spjallrásar",
         "topic_none": "Þessi spjallrás er ekki með umfjöllunarefni.",
         "topic_room_error": "Mistókst að ná í umfjöllunarefni spjallrásar: Gat ekki fundið spjallrásina (%(roomId)s",
-        "tovirtual": "Skiptir yfir í sýndarspjallrás þessarar spjallrásar, ef hún er til staðar",
-        "tovirtual_not_found": "Engin sýndarspjallrás fyrir þessa spjallrás",
         "unban": "Tekur bann af notanda með uppgefið auðkenni",
         "unflip": "Setur ┬──┬ ノ( ゜-゜ノ) framan við hrein textaskilaboð",
         "unholdcall": "Tekur símtalið í fyrirliggjandi spjallrás úr bið",

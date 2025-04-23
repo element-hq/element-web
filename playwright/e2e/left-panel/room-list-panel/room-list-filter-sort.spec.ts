@@ -140,29 +140,35 @@ test.describe("Room list filters and sort", () => {
             expect(await roomList.locator("role=gridcell").count()).toBe(3);
         });
 
-        test("unread filter should only match unread rooms that have a count", async ({ page, app, bot }) => {
-            const roomListView = getRoomList(page);
+        test(
+            "unread filter should only match unread rooms that have a count",
+            { tag: "@screenshot" },
+            async ({ page, app, bot }) => {
+                const roomListView = getRoomList(page);
 
-            // Let's configure unread dm room so that we only get notification for mentions and keywords
-            await app.viewRoomById(unReadDmId);
-            await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
-            await app.settings.closeDialog();
+                // Let's configure unread dm room so that we only get notification for mentions and keywords
+                await app.viewRoomById(unReadDmId);
+                await app.settings.openRoomSettings("Notifications");
+                await page.getByText("@mentions & keywords").click();
+                await app.settings.closeDialog();
 
-            // Let's open a room other than unread room or unread dm
-            await roomListView.getByRole("gridcell", { name: "Open room favourite room" }).click();
+                // Let's open a room other than unread room or unread dm
+                await roomListView.getByRole("gridcell", { name: "Open room favourite room" }).click();
 
-            // Let's make the bot send a new message in both rooms
-            await bot.sendMessage(unReadDmId, "Hello!");
-            await bot.sendMessage(unReadRoomId, "Hello!");
+                // Let's make the bot send a new message in both rooms
+                await bot.sendMessage(unReadDmId, "Hello!");
+                await bot.sendMessage(unReadRoomId, "Hello!");
 
-            // Let's activate the unread filter now
-            await page.getByRole("option", { name: "Unread" }).click();
+                // Let's activate the unread filter now
+                await page.getByRole("option", { name: "Unread" }).click();
 
-            // Unread filter should only show unread room and not unread dm!
-            await expect(roomListView.getByRole("gridcell", { name: "Open room unread room" })).toBeVisible();
-            await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
-        });
+                // Unread filter should only show unread room and not unread dm!
+                const unreadDm = roomListView.getByRole("gridcell", { name: "Open room unread room" });
+                await expect(unreadDm).toBeVisible();
+                await expect(unreadDm).toMatchScreenshot("unread-dm.png");
+                await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
+            },
+        );
     });
 
     test.describe("Empty room list", () => {

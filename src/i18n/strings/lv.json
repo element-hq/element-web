@@ -1031,11 +1031,7 @@
             "title": "Istabas saiti nevar ievietot starpliktuvē"
         },
         "error_loading_user_profile": "Nevarēja ielādēt lietotāja profilu",
-        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serveris izskatās nesasniedzams, ir pārslogots, vai arī meklēšana beigusies ar savienojuma noildzi :(",
-            "title": "Meklēšana neizdevās"
-        }
+        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s"
     },
     "error_user_not_logged_in": "Lietotājs nav pieteicies",
     "event_preview": {
@@ -2239,7 +2235,6 @@
             "remove_msisdn_prompt": "Dzēst %(phone)s?",
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
-        "image_thumbnails": "Rādīt attēlu priekšskatījumus/sīktēlus",
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
@@ -2648,8 +2643,6 @@
         "topic": "Nolasa vai iestata istabas tematu",
         "topic_none": "Istabai nav temata.",
         "topic_room_error": "Neizdevās iegūt istabas tēmu: Nevar atrast istabu (%(roomId)s",
-        "tovirtual": "Pārslēdzas uz šīs istabas virtuālo istabu, ja tāda pastāv",
-        "tovirtual_not_found": "Šai istabai nav virtuālas istabas",
         "unban": "Atceļ pieejas liegumu lietotājam ar norādīto id",
         "unflip": "Pievieno ┬──┬ ノ( ゜-゜ノ) pirms vienkārša teksta ziņas",
         "unholdcall": "Šajā istabā iepauzētās sazvana atpauzēšana",

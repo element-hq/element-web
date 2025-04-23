@@ -1133,11 +1133,7 @@
             "title": "Jututoa lingi kopeerimine ei õnnestu"
         },
         "error_loading_user_profile": "Kasutajaprofiili laadimine ei õnnestunud",
-        "forget_room_failed": "Jututoa unustamine ei õnnestunud %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server kas pole leitav, on ülekoormatud või otsing aegus :(",
-            "title": "Otsing ebaõnnestus"
-        }
+        "forget_room_failed": "Jututoa unustamine ei õnnestunud %(errCode)s"
     },
     "error_user_not_logged_in": "Kasutaja pole võrku loginud",
     "event_preview": {
@@ -2098,6 +2094,7 @@
             },
             "uploading_single_file": "Laadin üles %(filename)s"
         },
+        "video_room": "See jututuba on mõeldud videokohtumiste jaoks",
         "waiting_for_join_subtitle": "Kui kutse saanud kasutajad on liitunud %(brand)s'ga, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud",
         "waiting_for_join_title": "Kasutajate liitumise ootel %(brand)s'ga"
     },
@@ -2671,12 +2668,10 @@
             "unable_to_load_msisdns": "Telefoninumbrite laadimine ei õnnestu",
             "username": "Kasutajanimi"
         },
-        "image_thumbnails": "Näita piltide eelvaateid või väikepilte",
         "inline_url_previews_default": "Luba URL'ide vaikimisi eelvaated",
         "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
         "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
-        "invite_avatars": "Näita nende jututubade tunnuspilte, kuhu oled saanud kutse",
         "jump_to_bottom_on_send": "Sõnumi saatmiseks hüppa ajajoone lõppu",
         "key_backup": {
             "backup_in_progress": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
@@ -3096,8 +3091,6 @@
         "topic": "Otsib või määrab jututoa teema",
         "topic_none": "Sellel jututoal puudub teema.",
         "topic_room_error": "Jututoa teema laadimine ei õnnestu: jututuba ei õnnestu leida (%(roomId)s)",
-        "tovirtual": "Kui jututoal on virtuaalne olek, siis kasuta seda",
-        "tovirtual_not_found": "Sellel jututoal pole virtuaalset olekut",
         "unban": "Taasta ligipääs antud tunnusega kasutajale",
         "unflip": "Lisab vormindamata sõnumi ette ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "Võtab selles jututoas ootel oleva kõne",

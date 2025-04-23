@@ -881,11 +881,7 @@
             "title": "Kopiëren van kamerlink is mislukt"
         },
         "error_loading_user_profile": "Kon persoonsprofiel niet laden",
-        "forget_room_failed": "Vergeten van kamer is mislukt %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "De server is misschien onbereikbaar of overbelast, of het zoeken duurde te lang :(",
-            "title": "Zoeken mislukt"
-        }
+        "forget_room_failed": "Vergeten van kamer is mislukt %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1992,7 +1988,6 @@
             "remove_msisdn_prompt": "%(phone)s verwijderen?",
             "spell_check_locale_placeholder": "Kies een landinstelling"
         },
-        "image_thumbnails": "Miniaturen voor afbeeldingen tonen",
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
         "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
         "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
@@ -2305,8 +2300,6 @@
         "topic": "Verkrijgt het onderwerp van de kamer of stelt het in",
         "topic_none": "Deze kamer heeft geen onderwerp.",
         "topic_room_error": "Kameronderwerp laden mislukt: Kan kamer niet vinden (%(roomId)s",
-        "tovirtual": "Schakelt over naar de virtuele kamer van deze kamer, als die er is",
-        "tovirtual_not_found": "Geen virtuele ruimte voor deze ruimte",
         "unban": "Ontbant de persoon met de gegeven ID",
         "unflip": "Plakt ┬──┬ ノ( ゜-゜ノ) vóór een bericht zonder opmaak",
         "unholdcall": "De huidige oproep in huidige kamer in de wacht zetten",

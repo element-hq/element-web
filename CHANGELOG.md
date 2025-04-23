@@ -1,3 +1,35 @@
+Changes in [1.11.98](https://github.com/element-hq/element-web/releases/tag/v1.11.98) (2025-04-22)
+==================================================================================================
+## ✨ Features
+
+* print better errors in the search view instead of a blocking modal ([#29724](https://github.com/element-hq/element-web/pull/29724)). Contributed by @Jujure.
+* New room list: video room and video call decoration  ([#29693](https://github.com/element-hq/element-web/pull/29693)). Contributed by @florianduros.
+* Remove Secure Backup, Cross-signing and Cryptography sections in `Security & Privacy` user settings ([#29088](https://github.com/element-hq/element-web/pull/29088)). Contributed by @florianduros.
+* Allow reporting a room when rejecting an invite. ([#29570](https://github.com/element-hq/element-web/pull/29570)). Contributed by @Half-Shot.
+* RoomListViewModel: Reset primary and secondary filters on space change ([#29672](https://github.com/element-hq/element-web/pull/29672)). Contributed by @MidhunSureshR.
+* RoomListStore: Support specific sorting requirements for muted rooms ([#29665](https://github.com/element-hq/element-web/pull/29665)). Contributed by @MidhunSureshR.
+* New room list: add notification options menu ([#29639](https://github.com/element-hq/element-web/pull/29639)). Contributed by @florianduros.
+* Room List: Scroll to top of the list when active room is not in the list ([#29650](https://github.com/element-hq/element-web/pull/29650)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* Fix unwanted form submit behaviour in memberlist ([#29747](https://github.com/element-hq/element-web/pull/29747)). Contributed by @MidhunSureshR.
+* New room list: fix public room icon visibility when filter change ([#29737](https://github.com/element-hq/element-web/pull/29737)). Contributed by @florianduros.
+* Fix custom theme support for short hex \& rgba hex strings ([#29726](https://github.com/element-hq/element-web/pull/29726)). Contributed by @t3chguy.
+* New room list: minor visual fixes ([#29723](https://github.com/element-hq/element-web/pull/29723)). Contributed by @florianduros.
+* Fix getOidcCallbackUrl for Element Desktop ([#29711](https://github.com/element-hq/element-web/pull/29711)). Contributed by @t3chguy.
+* Fix some webp images improperly marked as animated ([#29713](https://github.com/element-hq/element-web/pull/29713)). Contributed by @Petersmit27.
+* Revert deletion of hydrateSession ([#29703](https://github.com/element-hq/element-web/pull/29703)). Contributed by @Jujure.
+* Fix converttoroom \& converttodm not working ([#29705](https://github.com/element-hq/element-web/pull/29705)). Contributed by @t3chguy.
+* Ensure forceCloseAllModals also closes priority/static modals ([#29706](https://github.com/element-hq/element-web/pull/29706)). Contributed by @t3chguy.
+* Continue button is disabled when uploading a recovery key file ([#29695](https://github.com/element-hq/element-web/pull/29695)). Contributed by @Giwayume.
+* Catch errors after syncing recovery ([#29691](https://github.com/element-hq/element-web/pull/29691)). Contributed by @andybalaam.
+* New room list: fix multiple visual issues ([#29673](https://github.com/element-hq/element-web/pull/29673)). Contributed by @florianduros.
+* New Room List: Fix mentions filter matching rooms with any highlight ([#29668](https://github.com/element-hq/element-web/pull/29668)). Contributed by @MidhunSureshR.
+*  Fix truncated emoji label during emoji SAS ([#29643](https://github.com/element-hq/element-web/pull/29643)). Contributed by @florianduros.
+* Remove duplicate jitsi link ([#29642](https://github.com/element-hq/element-web/pull/29642)). Contributed by @dbkr.
+
+
 Changes in [1.11.97](https://github.com/element-hq/element-web/releases/tag/v1.11.97) (2025-04-08)
 ==================================================================================================
 ## ✨ Features

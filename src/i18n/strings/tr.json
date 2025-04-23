@@ -1108,11 +1108,7 @@
             "title": "Oda bağlantısı kopyalanamıyor"
         },
         "error_loading_user_profile": "Kullanıcı profili yüklenemedi",
-        "forget_room_failed": "Oda unutulması başarısız oldu %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Sunucu kullanılamıyor , aşırı yüklenmiş veya arama zaman aşımına uğramış olabilir :(",
-            "title": "Arama başarısız"
-        }
+        "forget_room_failed": "Oda unutulması başarısız oldu %(errCode)s"
     },
     "error_user_not_logged_in": "Kullanıcı oturum açmadı",
     "event_preview": {
@@ -2611,7 +2607,6 @@
             "unable_to_load_msisdns": "Telefon numaraları yüklenemiyor",
             "username": "Kullanıcı Adı"
         },
-        "image_thumbnails": "Fotoğraflar için ön izleme/küçük resim göster",
         "inline_url_previews_default": "Varsayılan olarak satır içi URL önizlemeleri aç",
         "inline_url_previews_room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
         "inline_url_previews_room_account": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
@@ -3035,8 +3030,6 @@
         "topic": "Oda başlığını getirir yada ayarlar",
         "topic_none": "Bu odanın başlığı yok.",
         "topic_room_error": "Oda konusu alınamadı: Oda bulunamadı (%(roomId)s",
-        "tovirtual": "Varsa, bu odanın sanal odasına geçer",
-        "tovirtual_not_found": "Bu oda için sanal oda yok",
         "unban": "Verilen ID ile kullanıcı yasağını kaldırır",
         "unflip": "Düz metin mesajının başına ┬──┬ ノ (゜ - ゜ ノ) ekler",
         "unholdcall": "Mevcut odadaki aramayı beklemeden çıkarır",

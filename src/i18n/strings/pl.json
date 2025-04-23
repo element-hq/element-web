@@ -1139,11 +1139,7 @@
             "title": "Nie można skopiować linku do pokoju"
         },
         "error_loading_user_profile": "Nie udało się załadować profilu",
-        "forget_room_failed": "Nie mogłem zapomnieć o pokoju %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serwer może być niedostępny, przeciążony, lub upłynął czas wyszukiwania :(",
-            "title": "Wyszukiwanie nie powiodło się"
-        }
+        "forget_room_failed": "Nie mogłem zapomnieć o pokoju %(errCode)s"
     },
     "error_user_not_logged_in": "Użytkownik nie jest zalogowany",
     "event_preview": {
@@ -2114,6 +2110,7 @@
             },
             "uploading_single_file": "Przesyłanie %(filename)s"
         },
+        "video_room": "Ten pokój jest pokojem wideo",
         "waiting_for_join_subtitle": "Jak tylko zaproszeni użytkownicy dołączą do %(brand)s, będziesz mógł czatować w pokoju szyfrowanym end-to-end",
         "waiting_for_join_title": "Czekanie na użytkowników %(brand)s"
     },
@@ -2688,12 +2685,10 @@
             "unable_to_load_msisdns": "Nie można załadować numerów telefonu",
             "username": "Nazwa użytkownika"
         },
-        "image_thumbnails": "Pokaż podgląd/miniatury obrazów",
         "inline_url_previews_default": "Włącz domyślny podgląd URL w tekście",
         "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
         "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
-        "invite_avatars": "Pokaż awatary pokoi, do których zostałeś zaproszony",
         "jump_to_bottom_on_send": "Przejdź na dół osi czasu po wysłaniu wiadomości",
         "key_backup": {
             "backup_in_progress": "Tworzy się kopia zapasowa Twoich kluczy (pierwsza kopia może potrwać kilka minut).",
@@ -3113,8 +3108,6 @@
         "topic": "Wyświetla lub ustawia temat pokoju",
         "topic_none": "Ten pokój nie ma tematu.",
         "topic_room_error": "Nie można znaleźć tematu pokoju: Nie można znaleźć pokoju (%(roomId)s",
-        "tovirtual": "Przełącza do wirtualnego pokoju tego pokoju, jeśli taki istnieje",
-        "tovirtual_not_found": "Brak wirtualnego pokoju dla tego pokoju",
         "unban": "Odblokowuje użytkownika o danym ID",
         "unflip": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej",
         "unholdcall": "Odwiesza połączenie w obecnym pokoju",

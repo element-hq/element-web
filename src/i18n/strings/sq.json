@@ -957,11 +957,7 @@
             "title": "S’arrihet të kopjohet lidhja e dhomës"
         },
         "error_loading_user_profile": "S’u ngarkua dot profili i përdoruesit",
-        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Shërbyesi mund të jetë i pakapshëm, i mbingarkuar, ose kërkimit i mbaroi koha :(",
-            "title": "Kërkimi shtoi"
-        }
+        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -2181,7 +2177,6 @@
             "remove_msisdn_prompt": "Të hiqet %(phone)s?",
             "spell_check_locale_placeholder": "Zgjidhni vendore"
         },
-        "image_thumbnails": "Shfaq për figurat paraparje/miniatura",
         "inline_url_previews_default": "Aktivizo, si parazgjedhje, paraparje URL-sh brendazi",
         "inline_url_previews_room": "Aktivizo, si parazgjedhje, paraparje URL-sh për pjesëmarrësit në këtë dhomë",
         "inline_url_previews_room_account": "Aktivizo paraparje URL-sh për këtë dhomë (prek vetëm ju)",
@@ -2537,8 +2532,6 @@
         "topic": "Merr ose cakton temën e dhomës",
         "topic_none": "Kjo dhomë s’ka temë.",
         "topic_room_error": "S’u arrit të merret tema e dhomës: S’arrihet të gjendet dhomë (%(roomId)s",
-        "tovirtual": "Kalohet te dhoma virtuale e kësaj dhome, në pastë",
-        "tovirtual_not_found": "S’ka dhomë virtuale për këtë dhomë",
         "unban": "I heq dëbimin përdoruesit me ID-në e dhënë",
         "unflip": "E paraprin një mesazh tekst i thjeshtë me ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "E heq nga pritja thirrjen në dhomën aktuale",

@@ -859,11 +859,7 @@
             "title": "Non se puido copiar ligazón da sala"
         },
         "error_loading_user_profile": "Non se cargou o perfil da usuaria",
-        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor podería non estar dispoñible, sobrecargado, ou caducou a busca :(",
-            "title": "Fallou a busca"
-        }
+        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1975,7 +1971,6 @@
             "remove_msisdn_prompt": "Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elixe o idioma"
         },
-        "image_thumbnails": "Mostrar miniaturas/vista previa das imaxes",
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",
         "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
         "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",
@@ -2259,8 +2254,6 @@
         "topic": "Obtén ou establece o asunto da sala",
         "topic_none": "Esta sala non ten asunto.",
         "topic_room_error": "Non se obtivo o asunto da sala: Non se atopou a sala (%(roomId)s)",
-        "tovirtual": "Cambia á sala virtual desta sala, se é que existe",
-        "tovirtual_not_found": "No hai sala virtual para esta sala",
         "unban": "Desbloquea usuaria co ID dado",
         "unflip": "Antecede con ┬──┬ ノ( ゜-゜ノ) a unha mensaxe de texto plano",
         "unholdcall": "Acepta a chamada na sala actual",

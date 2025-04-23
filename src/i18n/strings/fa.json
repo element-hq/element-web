@@ -710,11 +710,7 @@
     "error_database_closed_title": "پایگاه داده به طور غیرمنتظره ای بسته شد",
     "error_dialog": {
         "error_loading_user_profile": "امکان نمایش پروفایل کاربر میسر نیست",
-        "forget_room_failed": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "سرور ممکن است در دسترس نباشد ، بار زیادی روی آن قرار گرفته یا زمان جستجو به پایان رسیده‌باشد :(",
-            "title": "جستجو موفیت‌آمیز نبود"
-        }
+        "forget_room_failed": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s"
     },
     "error_user_not_logged_in": "کاربر وارد نشده است",
     "event_preview": {
@@ -1505,7 +1501,6 @@
             "remove_email_prompt": "%(email)s را پاک می‌کنید؟",
             "remove_msisdn_prompt": "%(phone)s را پاک می‌کنید؟"
         },
-        "image_thumbnails": "پیش‌نمایش تصاویر را نشان بده",
         "inline_url_previews_default": "فعال‌سازی پیش‌نمایش URL به صورت پیش‌فرض",
         "inline_url_previews_room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
         "inline_url_previews_room_account": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",
@@ -1717,8 +1712,6 @@
         "topic": "موضوع اتاق را دریافت یا تنظیم می‌کند",
         "topic_none": "این اتاق هیچ موضوعی ندارد.",
         "topic_room_error": "خطا در دریافت عنوان اتاق: اتاق %(roomId)s یافت نشد",
-        "tovirtual": "جابجایی به اتاق مجازی این اتاق، اگر یکی وجود داشت",
-        "tovirtual_not_found": "اتاق مجازی برای این اتاق وجود ندارد",
         "unban": "رفع تحریم کاربر با شناسه‌ی مذکور",
         "unflip": "┬──┬ ノ (゜ - ゜ ノ) را به ابتدای یک پیام متنی ساده اضافه می‌کند",
         "unholdcall": "تماس را در اتاق فعلی خاموش نگه می دارد",

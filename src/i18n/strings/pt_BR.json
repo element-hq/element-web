@@ -956,11 +956,7 @@
             "title": "Não foi possível copiar o link da sala"
         },
         "error_loading_user_profile": "Não foi possível carregar o perfil do usuário",
-        "forget_room_failed": "Falhou ao esquecer a sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-            "title": "Busca falhou"
-        }
+        "forget_room_failed": "Falhou ao esquecer a sala %(errCode)s"
     },
     "error_user_not_logged_in": "O usuário não está logado",
     "event_preview": {
@@ -1995,7 +1991,6 @@
             "remove_msisdn_prompt": "Remover %(phone)s?",
             "spell_check_locale_placeholder": "Escolha um local"
         },
-        "image_thumbnails": "Mostrar miniaturas e resumos para imagens",
         "inline_url_previews_default": "Ativar, por padrão, a visualização de resumo de links",
         "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
         "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
@@ -2399,8 +2394,6 @@
         "topic": "Consulta ou altera a descrição da sala",
         "topic_none": "Esta sala não tem descrição.",
         "topic_room_error": "Falha ao obter tópico da sala: Não foi possível encontrar a sala %(roomId)s",
-        "tovirtual": "Muda para a sala virtual desta sala, se houver uma",
-        "tovirtual_not_found": "Nenhuma sala virtual para esta sala",
         "unban": "Remove o banimento do usuário com o ID indicado",
         "unflip": "Adiciona ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
         "unholdcall": "Retoma a chamada na sala atual",

@@ -142,6 +142,47 @@ test.describe("Room list", () => {
             await filters.getByRole("option", { name: "People" }).click();
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
         });
+
+        test.describe("Shortcuts", () => {
+            test("should select the next room", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+                await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
+                await page.keyboard.press("Alt+ArrowDown");
+
+                await expect(page.getByRole("heading", { name: "room28", level: 1 })).toBeVisible();
+            });
+
+            test("should select the previous room", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+                await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
+                await page.keyboard.press("Alt+ArrowUp");
+
+                await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
+            });
+
+            test("should select the last room", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+                await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
+                await page.keyboard.press("Alt+ArrowUp");
+
+                await expect(page.getByRole("heading", { name: "room0", level: 1 })).toBeVisible();
+            });
+
+            test("should select the next unread room", async ({ page, app, user, bot }) => {
+                const roomListView = getRoomList(page);
+
+                const roomId = await app.client.createRoom({ name: "1 notification" });
+                await app.client.inviteUser(roomId, bot.credentials.userId);
+                await bot.joinRoom(roomId);
+                await bot.sendMessage(roomId, "I am a robot. Beep.");
+
+                await roomListView.getByRole("gridcell", { name: "Open room room20" }).click();
+
+                await page.keyboard.press("Alt+Shift+ArrowDown");
+
+                await expect(page.getByRole("heading", { name: "1 notification", level: 1 })).toBeVisible();
+            });
+        });
     });
 
     test.describe("Avatar decoration", () => {

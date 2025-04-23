@@ -1133,11 +1133,7 @@
             "title": "Raumlink konnte nicht kopiert werden"
         },
         "error_loading_user_profile": "Konnte Nutzerprofil nicht laden",
-        "forget_room_failed": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Der Server ist entweder nicht verfügbar, überlastet oder die Suche wurde wegen Zeitüberschreitung abgebrochen :(",
-            "title": "Suche ist fehlgeschlagen"
-        }
+        "forget_room_failed": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s"
     },
     "error_user_not_logged_in": "Benutzer ist nicht angemeldet",
     "event_preview": {
@@ -1672,7 +1668,7 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
-        "default_settings": "Passen Sie die Standardeinstellungen an",
+        "default_settings": "Standardeinstellungen verwenden",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1692,7 +1688,7 @@
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
         "mute_description": "Du wirst keine Benachrichtigungen erhalten",
-        "mute_room": "Chatroom stumm stellen"
+        "mute_room": "Raum stummschalten"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -2097,6 +2093,7 @@
             },
             "uploading_single_file": "%(filename)s wird hochgeladen"
         },
+        "video_room": "Dieser Raum ist ein Videoraum",
         "waiting_for_join_subtitle": "Sobald eingeladene Benutzer %(brand)s beigetreten sind, werdet ihr euch unterhalten können und der Raum wird Ende-zu-Ende-verschlüsselt sein",
         "waiting_for_join_title": "Warte darauf, dass Benutzer %(brand)s beitreten"
     },
@@ -2125,7 +2122,7 @@
             "favourite": "Favoriten",
             "people": "Personen",
             "rooms": "Räume",
-            "unread": "Ungelesen"
+            "unread": "Ungelesene"
         },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichen Raum betreten",
@@ -2670,12 +2667,10 @@
             "unable_to_load_msisdns": "Telefonnummern können nicht geladen werden",
             "username": "Benutzername"
         },
-        "image_thumbnails": "Vorschauen für Bilder",
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
         "inline_url_previews_room": "URL-Vorschau für Raummitglieder",
         "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Raum",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
-        "invite_avatars": "Zeigen Sie Avatare von Chatrooms an, zu denen Sie eingeladen wurden",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
             "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",
@@ -3095,8 +3090,6 @@
         "topic": "Raumthema anzeigen oder ändern",
         "topic_none": "Dieser Raum hat kein Thema.",
         "topic_room_error": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
-        "tovirtual": "Zum virtuellen Raum dieses Raums wechseln, sofern vorhanden",
-        "tovirtual_not_found": "Kein virtueller Raum für diesen Raum",
         "unban": "Entsperrt den Benutzer mit der angegebenen ID",
         "unflip": "Stellt ┬──┬ ノ( ゜-゜ノ) einer Klartextnachricht voran",
         "unholdcall": "Beendet das Halten des Anrufs",

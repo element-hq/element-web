@@ -918,11 +918,7 @@
             "title": "Không thể sao chép liên kết phòng"
         },
         "error_loading_user_profile": "Không thể tải hồ sơ người dùng",
-        "forget_room_failed": "Không thể quên phòng %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Máy chủ có thể không khả dụng, quá tải hoặc hết thời gian tìm kiếm :(",
-            "title": "Tìm kiếm không thành công"
-        }
+        "forget_room_failed": "Không thể quên phòng %(errCode)s"
     },
     "error_user_not_logged_in": "Người dùng đang không đăng nhập",
     "event_preview": {
@@ -2091,7 +2087,6 @@
             "remove_msisdn_prompt": "Xóa %(phone)s?",
             "spell_check_locale_placeholder": "Chọn vùng miền"
         },
-        "image_thumbnails": "Hiển thị bản xem trước / hình thu nhỏ cho hình ảnh",
         "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",
         "inline_url_previews_room": "Bật xem trước nội dung liên kết cho mọi người trong phòng này",
         "inline_url_previews_room_account": "Bật xem trước nội dung liên kết trong phòng này (chỉ với bạn)",
@@ -2454,8 +2449,6 @@
         "topic": "Lấy hoặc đặt chủ đề phòng",
         "topic_none": "Phòng này chưa có chủ đề.",
         "topic_room_error": "Không thể lấy chủ đề phòng: Không tìm thấy phòng (%(roomId)s)",
-        "tovirtual": "Chuyển sang phòng ảo của phòng này, nếu nó có",
-        "tovirtual_not_found": "Không có phòng ảo của phòng này",
         "unban": "Gỡ cấm thành viên có ID chỉ định",
         "unflip": "Thêm ┬──┬ ノ( ゜-゜ノ) vào tin nhắn văn bản thuần túy",
         "unholdcall": "Nối lại cuộc gọi trong phòng hiện tại",

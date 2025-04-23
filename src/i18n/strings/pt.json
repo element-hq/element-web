@@ -1097,11 +1097,7 @@
             "title": "Não é possível copiar o link da sala"
         },
         "error_loading_user_profile": "Não foi possível carregar o perfil do utilizador",
-        "forget_room_failed": "Falha ao esquecer a sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-            "title": "Busca falhou"
-        }
+        "forget_room_failed": "Falha ao esquecer a sala %(errCode)s"
     },
     "error_user_not_logged_in": "Utilizador não tem sessão iniciada",
     "event_preview": {
@@ -2571,7 +2567,6 @@
             "unable_to_load_msisdns": "Não é possível carregar números de telefone",
             "username": "Nome de utilizador"
         },
-        "image_thumbnails": "Mostrar pré-visualizações/miniaturas de imagens",
         "inline_url_previews_default": "Ativar pré-visualizações de URL embutidas por predefinição",
         "inline_url_previews_room": "Ativar pré-visualizações de URL por defeito para os participantes nesta sala",
         "inline_url_previews_room_account": "Ativar pré-visualizações URL para esta sala (só te afeta a ti)",
@@ -2995,8 +2990,6 @@
         "topic": "Obtém ou define o tópico da sala",
         "topic_none": "Esta sala não tem tópico.",
         "topic_room_error": "Falha ao obter o tópico da sala: Não foi possível encontrar a sala (%(roomId)s",
-        "tovirtual": "Muda para a sala virtual desta sala, se houver uma",
-        "tovirtual_not_found": "Não há sala virtual para esta sala",
         "unban": "Cancela o utilizador com um determinado ID",
         "unflip": "Pré-anexa ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
         "unholdcall": "Tira a chamada da sala atual da espera",

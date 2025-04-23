@@ -949,11 +949,7 @@
             "title": "ルームのリンクをコピーできません"
         },
         "error_loading_user_profile": "ユーザーのプロフィールを読み込めませんでした",
-        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "サーバーが使用できないか、オーバーロードしているか、または検索がタイムアウトした可能性があります :(",
-            "title": "検索に失敗しました"
-        }
+        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -2117,7 +2113,6 @@
             "remove_msisdn_prompt": "%(phone)sを削除しますか？",
             "spell_check_locale_placeholder": "ロケールを選択"
         },
-        "image_thumbnails": "画像のプレビューまたはサムネイルを表示",
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
         "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
         "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
@@ -2467,8 +2462,6 @@
         "topic": "ルームのトピックを取得または設定",
         "topic_none": "このルームにはトピックがありません。",
         "topic_room_error": "ルームのトピックの取得に失敗しました：ルームを発見できません（%(roomId)s）",
-        "tovirtual": "このルームのバーチャルルームに移動（あれば）",
-        "tovirtual_not_found": "このルームのバーチャルルームはありません",
         "unban": "指定したIDのユーザーのブロックを解除",
         "unflip": "プレーンテキストメッセージの前に ┬──┬ ノ( ゜-゜ノ) を付ける",
         "unholdcall": "現在のルームの通話を保留から外す",

@@ -660,11 +660,7 @@
             "description": "Nepavyko nukopijuoti nuorodos į kambarį į iškarpinę.",
             "title": "Nepavyko nukopijuoti kambario nurodos"
         },
-        "forget_room_failed": "Nepavyko pamiršti kambario %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Gali būti, kad serveris neprieinamas, perkrautas arba pasibaigė paieškai skirtas laikas :(",
-            "title": "Paieška nepavyko"
-        }
+        "forget_room_failed": "Nepavyko pamiršti kambario %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1488,7 +1484,6 @@
             "remove_email_prompt": "Pašalinti %(email)s?",
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"
         },
-        "image_thumbnails": "Rodyti vaizdų peržiūras/miniatiūras",
         "inline_url_previews_default": "Įjungti URL nuorodų peržiūras kaip numatytasias",
         "inline_url_previews_room": "Įjungti URL nuorodų peržiūras kaip numatytasias šiame kambaryje esantiems dalyviams",
         "inline_url_previews_room_account": "Įjungti URL nuorodų peržiūras šiame kambaryje (įtakoja tik jus)",

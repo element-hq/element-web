@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatar";
@@ -17,6 +17,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import * as AvatarModule from "../../../../../src/Avatar";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
+import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
@@ -37,18 +38,18 @@ describe("RoomAvatar", () => {
     });
 
     afterAll(() => {
+        SettingsStore.setValue(
+            "mediaPreviewConfig",
+            null,
+            SettingLevel.ACCOUNT,
+            SettingsStore.getDefaultValue("mediaPreviewConfig"),
+        );
         jest.restoreAllMocks();
     });
 
     afterEach(() => {
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReset();
         mocked(AvatarModule.defaultAvatarUrlForString).mockClear();
-        SettingsStore.setValue(
-            "showAvatarsOnInvites",
-            null,
-            SettingLevel.ACCOUNT,
-            SettingsStore.getDefaultValue("showAvatarsOnInvites"),
-        );
     });
 
     it("should render as expected for a Room", () => {
@@ -60,6 +61,7 @@ describe("RoomAvatar", () => {
     it("should render as expected for a DM room", () => {
         const userId = "@dm_user@example.com";
         const room = new Room("!room:example.com", client, client.getSafeUserId());
+        room.getMember = jest.fn().mockImplementation(() => new RoomMember(room.roomId, userId));
         room.name = "DM room";
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(userId);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
@@ -73,15 +75,27 @@ describe("RoomAvatar", () => {
         expect(render(<RoomAvatar room={localRoom} />).container).toMatchSnapshot();
     });
     it("should render an avatar for a room the user is invited to", () => {
-        SettingsStore.setValue("showAvatarsOnInvites", null, SettingLevel.ACCOUNT, true);
         const room = new Room("!room:example.com", client, client.getSafeUserId());
         jest.spyOn(room, "getMxcAvatarUrl").mockImplementation(() => "mxc://example.com/foobar");
         room.name = "test room";
         room.updateMyMembership("invite");
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                sender: "@sender:server",
+                room_id: room.roomId,
+                type: EventType.RoomAvatar,
+                state_key: "",
+                content: {
+                    url: "mxc://example.com/foobar",
+                },
+            }),
+        ]);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
     });
     it("should not render an invite avatar if the user has disabled it", () => {
-        SettingsStore.setValue("showAvatarsOnInvites", null, SettingLevel.ACCOUNT, false);
+        SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            invite_avatars: MediaPreviewValue.Off,
+        });
         const room = new Room("!room:example.com", client, client.getSafeUserId());
         room.name = "test room";
         room.updateMyMembership("invite");

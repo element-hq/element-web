@@ -994,11 +994,7 @@
             "title": "Tsy afaka mandika ny rohiny efitrano"
         },
         "error_loading_user_profile": "Tsy afaka mampiditra ny mombamomba ny mpampiasa",
-        "forget_room_failed": "Tsy nanadino ny efitrano%(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Mety tsy misy ny mpizara, be loatra, na tapitra ny fotoana fikarohana :(",
-            "title": "Tsy nahomby ny fikarohana"
-        }
+        "forget_room_failed": "Tsy nanadino ny efitrano%(errCode)s"
     },
     "error_user_not_logged_in": "Tsy tafiditra ny mpampiasa",
     "event_preview": {
@@ -2306,7 +2302,6 @@
             "remove_msisdn_prompt": "Esory%(phone)s ?",
             "spell_check_locale_placeholder": "Misafidiana toerana iray"
         },
-        "image_thumbnails": "Asehoy ny topi-maso/sary kely hoan'ny sary",
         "inline_url_previews_default": "Alefaso ny fijerena URL an-tserasera aminy alàlan'ny default",
         "inline_url_previews_room": "Alefaso amin'ny alàlany ara-pototra hoany mpandray anjara amin'ity efitrano ity ny fijerena URL",
         "inline_url_previews_room_account": "Alefaso ny fijerena URL ho an'ity efitrano ity (miantraika aminao ihany)",
@@ -2701,8 +2696,6 @@
         "topic": "Mahazo na farito ny lohahevitra ny efitrano",
         "topic_none": "Tsy misy lohahevitra ity efitrano ity.",
         "topic_room_error": "Tsy tontonsa ny fahazoana efitrano ho lohahevitra. Tsy misy làlana mety hahazoana efitrano( %(numéro de pièce)s",
-        "tovirtual": "Mivadika any amin'ny efitrano virtoaly an'ity efitrano ity, raha misy izany",
-        "tovirtual_not_found": "Tsy misy efitrano virtoaly ho an'ity efitrano ity",
         "unban": "Avereno ny mpampiasa manana ID nomena",
         "unflip": "Manisy ┬──┬ ノ( ゜-゜ノ) amin'ny hafatra an-tsoratra tsotra",
         "unholdcall": "Esory ny antso ao amin'ny efitrano misy ankehitriny",

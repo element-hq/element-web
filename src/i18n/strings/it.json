@@ -245,10 +245,10 @@
         "qr_code_login": {
             "completing_setup": "Completamento configurazione nuovo dispositivo",
             "error_rate_limited": "Troppi tentativi in poco tempo. Attendi un po' prima di riprovare.",
-            "error_unexpected": "Si è verificato un errore imprevisto.",
-            "scan_code_instruction": "Scansiona il codice QR sottostante con il dispositivo che è disconnesso.",
-            "scan_qr_code": "Scansiona codice QR",
-            "select_qr_code": "Seleziona '%(scanQRCode)s'",
+            "error_unexpected": "Si è verificato un errore imprevisto. La richiesta di connessione dell'altro dispositivo è stata annullata.",
+            "scan_code_instruction": "Scansiona il codice QR con un altro dispositivo",
+            "scan_qr_code": "Accedi con codice QR",
+            "select_qr_code": "Seleziona \"%(scanQRCode)s\"",
             "waiting_for_device": "In attesa che il dispositivo acceda"
         },
         "register_action": "Crea account",
@@ -1006,11 +1006,7 @@
             "title": "Impossibile copiare il link della stanza"
         },
         "error_loading_user_profile": "Impossibile caricare il profilo utente",
-        "forget_room_failed": "Impossibile dimenticare la stanza %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Il server potrebbe essere non disponibile, sovraccarico o la ricerca è scaduta :(",
-            "title": "Ricerca fallita"
-        }
+        "forget_room_failed": "Impossibile dimenticare la stanza %(errCode)s"
     },
     "error_user_not_logged_in": "Utente non connesso",
     "event_preview": {
@@ -2322,7 +2318,6 @@
             "remove_msisdn_prompt": "Rimuovere %(phone)s?",
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
-        "image_thumbnails": "Mostra anteprime/miniature per le immagini",
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
         "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
         "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
@@ -2344,8 +2339,8 @@
                 "enter_phrase_description": "Inserisci una frase di sicurezza che conosci solo tu, dato che è usata per proteggere i tuoi dati. Per sicurezza, non dovresti riutilizzare la password dell'account.",
                 "enter_phrase_title": "Inserisci una frase di sicurezza",
                 "enter_phrase_to_confirm": "Inserisci di nuovo la password di sicurezza per confermarla.",
-                "generate_security_key_description": "Genereremo per te una chiave di sicurezza da conservare in un posto sicuro, come un in gestore di password o in una cassaforte.",
-                "generate_security_key_title": "Genera una chiave di sicurezza",
+                "generate_security_key_description": "Genereremo per te una Chiave di Recupero da conservare in un posto sicuro, come un gestore di password o una cassaforte.",
+                "generate_security_key_title": "Genera una Chiave di Recupero",
                 "pass_phrase_match_failed": "Non corrisponde.",
                 "pass_phrase_match_success": "Corrisponde!",
                 "phrase_strong_enough": "Ottimo! Questa password di sicurezza sembra abbastanza robusta.",
@@ -2561,7 +2556,7 @@
             "show_details": "Mostra dettagli",
             "sign_in_with_qr": "Collega un nuovo dispositivo",
             "sign_in_with_qr_button": "Mostra codice QR",
-            "sign_in_with_qr_description": "Puoi usare questo dispositivo per accedere in un altro con un codice QR. Dovrai scansionare il codice QR mostrato in questo dispositivo con l'altro.",
+            "sign_in_with_qr_description": "Usa un codice QR per accedere a un altro dispositivo e impostare la messaggistica sicura.",
             "sign_out": "Disconnetti da questa sessione",
             "sign_out_all_other_sessions": "Disconnetti tutte le altre sessioni (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2717,8 +2712,6 @@
         "topic": "Ottiene o imposta l'argomento della stanza",
         "topic_none": "Questa stanza non ha un argomento.",
         "topic_room_error": "Lettura argomento stanza fallita: impossibile trovare la stanza (%(roomId)s",
-        "tovirtual": "Passa alla stanza virtuale di questa stanza, se ne ha una",
-        "tovirtual_not_found": "Nessuna stanza virtuale per questa stanza",
         "unban": "Riammette l'utente con l'ID dato",
         "unflip": "Antepone ┬──┬ ノ( ゜-゜ノ) ad un messaggio di testo",
         "unholdcall": "Riprende la chiamata nella stanza attuale",
@@ -3674,7 +3667,7 @@
             "title": "Permetti a questo widget di verificare la tua identità"
         },
         "popout": "Oggetto a comparsa",
-        "set_room_layout": "Imposta la disposizione della stanza per tutti",
+        "set_room_layout": "Imposta la disposizione per tutti",
         "shared_data_avatar": "L'URL della tua immagine del profilo",
         "shared_data_device_id": "L'ID del tuo dispositivo",
         "shared_data_lang": "La tua lingua",
