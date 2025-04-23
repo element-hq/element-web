@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Ugyldig tidsstempel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderasjon og sikkerhet",
         "modern": "Moderne",
         "mute": "Demp",
         "n_members": {
@@ -2667,12 +2668,10 @@
             "unable_to_load_msisdns": "Kan ikke laste inn telefonnumre",
             "username": "Brukernavn"
         },
-        "image_thumbnails": "Vis forhåndsvisninger for bilder",
         "inline_url_previews_default": "Skru på URL-forhåndsvisninger inni meldinger som standard",
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
-        "invite_avatars": "Vis avatarer til rom du har blitt invitert til",
         "jump_to_bottom_on_send": "Gå til bunnen av tidslinjen når du vil sende en melding",
         "key_backup": {
             "backup_in_progress": "Nøklene dine blir sikkerhetskopiert (den første sikkerhetskopieringen kan ta noen minutter).",
@@ -2730,6 +2729,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Innstillinger:</strong> Ignorerte brukere"
+        },
+        "media_preview": {
+            "hide_avatars": "Skjul avatarer for rom og inviterer",
+            "hide_media": "Skjul alltid",
+            "media_preview_description": "Et skjult medium kan alltid vises ved å trykke på det",
+            "media_preview_label": "Vis media i tidslinjen",
+            "show_in_private": "I private rom",
+            "show_media": "Vis alltid"
         },
         "notifications": {
             "default_setting_description": "Denne innstillingen vil bli brukt som standard for alle rommene dine.",

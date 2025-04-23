@@ -2087,7 +2087,6 @@
             "remove_msisdn_prompt": "Xóa %(phone)s?",
             "spell_check_locale_placeholder": "Chọn vùng miền"
         },
-        "image_thumbnails": "Hiển thị bản xem trước / hình thu nhỏ cho hình ảnh",
         "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",
         "inline_url_previews_room": "Bật xem trước nội dung liên kết cho mọi người trong phòng này",
         "inline_url_previews_room_account": "Bật xem trước nội dung liên kết trong phòng này (chỉ với bạn)",

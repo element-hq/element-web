@@ -1931,7 +1931,6 @@
             "remove_email_prompt": "ລຶບ %(email)s ອອກບໍ?",
             "remove_msisdn_prompt": "ລຶບ %(phone)sອອກບໍ?"
         },
-        "image_thumbnails": "ສະແດງຕົວຢ່າງ/ຮູບຕົວຢ່າງສຳລັບຮູບພາບ",
         "inline_url_previews_default": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໃນແຖວຕາມຄ່າເລີ່ມຕົ້ນ",
         "inline_url_previews_room": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້",
         "inline_url_previews_room_account": "ເປີດໃຊ້ຕົວຢ່າງ URL ສໍາລັບຫ້ອງນີ້ (ມີຜົນຕໍ່ທ່ານເທົ່ານັ້ນ)",

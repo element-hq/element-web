@@ -2648,12 +2648,10 @@
             "unable_to_load_msisdns": "Nem sikerült betölteni a telefonszámokat",
             "username": "Felhasználónév"
         },
-        "image_thumbnails": "Előnézet/bélyegkép megjelenítése a képekhez",
         "inline_url_previews_default": "Beágyazott webcím-előnézetek alapértelmezett engedélyezése",
         "inline_url_previews_room": "Webcím-előnézetek alapértelmezett engedélyezése a szobatagok számára",
         "inline_url_previews_room_account": "Webcím-előnézetek engedélyezése ebben a szobában (csak Önt érinti)",
         "insert_trailing_colon_mentions": "Záró kettőspont beszúrása egy felhasználó üzenet elején való megemlítésekor",
-        "invite_avatars": "Azon szobák profilképének megjelenítése, melybe meghívták",
         "jump_to_bottom_on_send": "Üzenetküldés után az idővonal aljára ugrás",
         "key_backup": {
             "backup_in_progress": "A kulcsaid mentése folyamatban van (az első mentés több percig is eltarthat).",

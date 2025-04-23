@@ -2113,7 +2113,6 @@
             "remove_msisdn_prompt": "%(phone)sを削除しますか？",
             "spell_check_locale_placeholder": "ロケールを選択"
         },
-        "image_thumbnails": "画像のプレビューまたはサムネイルを表示",
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
         "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
         "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",

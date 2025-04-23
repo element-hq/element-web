@@ -1971,7 +1971,6 @@
             "remove_msisdn_prompt": "Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elixe o idioma"
         },
-        "image_thumbnails": "Mostrar miniaturas/vista previa das imaxes",
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",
         "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
         "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",

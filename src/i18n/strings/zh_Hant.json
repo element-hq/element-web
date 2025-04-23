@@ -2255,7 +2255,6 @@
             "remove_msisdn_prompt": "移除 %(phone)s？",
             "spell_check_locale_placeholder": "選擇語系"
         },
-        "image_thumbnails": "顯示圖片的預覽／縮圖",
         "inline_url_previews_default": "預設啟用行內網址預覽",
         "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
         "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",

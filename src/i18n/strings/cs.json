@@ -527,6 +527,7 @@
         "message_timestamp_invalid": "Neplatné časové razítko",
         "microphone": "Mikrofon",
         "model": "Model",
+        "moderation_and_safety": "Moderování a bezpečnost",
         "modern": "Moderní",
         "mute": "Ztlumit",
         "n_members": {
@@ -2100,6 +2101,7 @@
             },
             "uploading_single_file": "Nahrávání %(filename)s"
         },
+        "video_room": "Tato místnost je video místnost",
         "waiting_for_join_subtitle": "Jakmile se pozvaní uživatelé připojí k %(brand)s, budete moci chatovat a místnost bude koncově šifrovaná",
         "waiting_for_join_title": "Čekání na připojení uživatelů k %(brand)s"
     },
@@ -2673,12 +2675,10 @@
             "unable_to_load_msisdns": "Nelze načíst telefonní čísla",
             "username": "Uživatelské jméno"
         },
-        "image_thumbnails": "Zobrazovat náhledy obrázků",
         "inline_url_previews_default": "Nastavit povolení náhledů URL adres jako výchozí",
         "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
         "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
-        "invite_avatars": "Zobrazit avatary místností, do kterých jste byli pozváni",
         "jump_to_bottom_on_send": "Po odeslání zprávy přejít na konec časové osy",
         "key_backup": {
             "backup_in_progress": "Klíče se zálohují (první záloha může trvat pár minut).",
@@ -2736,6 +2736,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Nastavení:</strong> Ignorovaní uživatelé"
+        },
+        "media_preview": {
+            "hide_avatars": "Skrýt avatary místnosti a zvoucího",
+            "hide_media": "Vždy skrýt",
+            "media_preview_description": "Skryté médium lze vždy zobrazit klepnutím na něj",
+            "media_preview_label": "Zobrazit média na časové ose",
+            "show_in_private": "V soukromých místnostech",
+            "show_media": "Vždy zobrazit"
         },
         "notifications": {
             "default_setting_description": "Toto nastavení se ve výchozím stavu použije pro všechny vaše místnosti.",

@@ -2147,7 +2147,6 @@
             "remove_msisdn_prompt": "¿Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elige un idioma"
         },
-        "image_thumbnails": "Mostrar vistas previas para las imágenes",
         "inline_url_previews_default": "Activar la vista previa de URLs en línea por defecto",
         "inline_url_previews_room": "Activar la vista previa de URLs por defecto para los participantes de esta sala",
         "inline_url_previews_room_account": "Activar la vista previa de URLs en esta sala (solo para ti)",

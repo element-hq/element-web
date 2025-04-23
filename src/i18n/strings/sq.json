@@ -2177,7 +2177,6 @@
             "remove_msisdn_prompt": "Të hiqet %(phone)s?",
             "spell_check_locale_placeholder": "Zgjidhni vendore"
         },
-        "image_thumbnails": "Shfaq për figurat paraparje/miniatura",
         "inline_url_previews_default": "Aktivizo, si parazgjedhje, paraparje URL-sh brendazi",
         "inline_url_previews_room": "Aktivizo, si parazgjedhje, paraparje URL-sh për pjesëmarrësit në këtë dhomë",
         "inline_url_previews_room_account": "Aktivizo paraparje URL-sh për këtë dhomë (prek vetëm ju)",

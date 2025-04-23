@@ -1621,7 +1621,6 @@
             "remove_email_prompt": "הסר כתובות %(email)s ?",
             "remove_msisdn_prompt": "הסר מספרי %(phone)s ?"
         },
-        "image_thumbnails": "הראה תצוגה מקדימה\\ממוזערת של תמונות",
         "inline_url_previews_default": "אפשר צפייה של תצוגת קישורים בצאט כברירת מחדל",
         "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
         "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",

@@ -2302,7 +2302,6 @@
             "remove_msisdn_prompt": "Esory%(phone)s ?",
             "spell_check_locale_placeholder": "Misafidiana toerana iray"
         },
-        "image_thumbnails": "Asehoy ny topi-maso/sary kely hoan'ny sary",
         "inline_url_previews_default": "Alefaso ny fijerena URL an-tserasera aminy alàlan'ny default",
         "inline_url_previews_room": "Alefaso amin'ny alàlany ara-pototra hoany mpandray anjara amin'ity efitrano ity ny fijerena URL",
         "inline_url_previews_room_account": "Alefaso ny fijerena URL ho an'ity efitrano ity (miantraika aminao ihany)",
