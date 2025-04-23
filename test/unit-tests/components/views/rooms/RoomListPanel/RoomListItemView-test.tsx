@@ -63,6 +63,14 @@ describe("<RoomListItemView />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    test("should render a room item with a message preview", () => {
+        defaultValue.messagePreview = "The message looks list this";
+
+        const onClick = jest.fn();
+        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} isSelected={false} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     test("should call openRoom when clicked", async () => {
         const user = userEvent.setup();
         render(<RoomListItemView room={room} isSelected={false} />);
