@@ -1484,7 +1484,6 @@
             "remove_email_prompt": "Pašalinti %(email)s?",
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"
         },
-        "image_thumbnails": "Rodyti vaizdų peržiūras/miniatiūras",
         "inline_url_previews_default": "Įjungti URL nuorodų peržiūras kaip numatytasias",
         "inline_url_previews_room": "Įjungti URL nuorodų peržiūras kaip numatytasias šiame kambaryje esantiems dalyviams",
         "inline_url_previews_room_account": "Įjungti URL nuorodų peržiūras šiame kambaryje (įtakoja tik jus)",

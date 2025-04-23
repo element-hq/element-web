@@ -12,6 +12,7 @@ import parse from "html-react-parser";
 
 import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
+import { getMockClientWithEventEmitter } from "../test-utils";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import SdkConfig from "../../src/SdkConfig";
 
@@ -229,6 +230,37 @@ describe("bodyToNode", () => {
         );
 
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it.each([[true], [false]])("should handle inline media when mediaIsVisible is %s", (mediaIsVisible) => {
+        const cli = getMockClientWithEventEmitter({
+            mxcUrlToHttp: jest.fn().mockReturnValue("https://example.org/img"),
+        });
+        const { className, formattedBody } = bodyToNode(
+            {
+                "body": "![foo](mxc://going/knowwhere) Hello there",
+                "format": "org.matrix.custom.html",
+                "formatted_body": `<img src="mxc://going/knowwhere">foo</img> Hello there`,
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: "$eventId",
+                    },
+                },
+                "msgtype": "m.text",
+            },
+            [],
+            {
+                mediaIsVisible,
+            },
+        );
+
+        const { asFragment } = render(
+            <span className={className} dir="auto" dangerouslySetInnerHTML={{ __html: formattedBody! }} />,
+        );
+        expect(asFragment()).toMatchSnapshot();
+        // We do not want to download untrusted media.
+        // eslint-disable-next-line no-restricted-properties
+        expect(cli.mxcUrlToHttp).toHaveBeenCalledTimes(mediaIsVisible ? 1 : 0);
     });
 
     afterEach(() => {

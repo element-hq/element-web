@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Horodatage non valide",
         "microphone": "Micro",
         "model": "Modèle",
+        "moderation_and_safety": "Modération et sécurité",
         "modern": "Moderne",
         "mute": "Mettre en sourdine",
         "n_members": {
@@ -2667,12 +2668,10 @@
             "unable_to_load_msisdns": "Impossible de charger les numéros de téléphone",
             "username": "Nom d’utilisateur"
         },
-        "image_thumbnails": "Afficher les aperçus/vignettes pour les images",
         "inline_url_previews_default": "Activer l’aperçu des URL par défaut",
         "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
         "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
-        "invite_avatars": "Afficher les avatars des salons dans lesquels vous avez été invité",
         "jump_to_bottom_on_send": "Sauter en bas du fil de discussion lorsque vous envoyez un message",
         "key_backup": {
             "backup_in_progress": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
@@ -2730,6 +2729,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Paramètres : </strong> Utilisateurs ignorés"
+        },
+        "media_preview": {
+            "hide_avatars": "Masquer les avatars des salons et des invitations",
+            "hide_media": "Toujours masquer",
+            "media_preview_description": "Un média masqué peut toujours être affiché en cliquant dessus",
+            "media_preview_label": "Afficher les médias dans les discussions",
+            "show_in_private": "Dans les salons privés",
+            "show_media": "Toujours afficher"
         },
         "notifications": {
             "default_setting_description": "Ce réglage sera appliqué par défaut à tous vos salons.",
@@ -3092,8 +3099,6 @@
         "topic": "Récupère ou définit le sujet du salon",
         "topic_none": "Ce salon n'a pas de sujet.",
         "topic_room_error": "Impossible de récupérer le sujet du salon : Salon introuvable (%(roomId)s)",
-        "tovirtual": "Bascule dans le salon virtuel de ce salon, s'il en a un",
-        "tovirtual_not_found": "Aucun salon virtuel pour ce salon",
         "unban": "Révoque le bannissement de l’utilisateur ayant l’identifiant fourni",
         "unflip": "Ajoute ┬──┬ ノ( ゜-゜ノ) en préfixe du message",
         "unholdcall": "Reprend l’appel en attente dans ce salon",
