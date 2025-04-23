@@ -2538,7 +2538,6 @@
             "remove_msisdn_prompt": "Удалить %(phone)s?",
             "spell_check_locale_placeholder": "Выберите регион"
         },
-        "image_thumbnails": "Предпросмотр/миниатюры для изображений",
         "inline_url_previews_default": "Предпросмотр ссылок по умолчанию",
         "inline_url_previews_room": "Включить предпросмотр ссылок для участников этой комнаты по умолчанию",
         "inline_url_previews_room_account": "Включить предпросмотр ссылок в этой комнате (влияет только на вас)",

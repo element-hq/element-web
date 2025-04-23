@@ -2567,7 +2567,6 @@
             "unable_to_load_msisdns": "Não é possível carregar números de telefone",
             "username": "Nome de utilizador"
         },
-        "image_thumbnails": "Mostrar pré-visualizações/miniaturas de imagens",
         "inline_url_previews_default": "Ativar pré-visualizações de URL embutidas por predefinição",
         "inline_url_previews_room": "Ativar pré-visualizações de URL por defeito para os participantes nesta sala",
         "inline_url_previews_room_account": "Ativar pré-visualizações URL para esta sala (só te afeta a ti)",

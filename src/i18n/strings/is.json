@@ -1862,7 +1862,6 @@
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
-        "image_thumbnails": "Birta forskoðun/smámyndir fyrir myndir",
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
         "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
         "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",

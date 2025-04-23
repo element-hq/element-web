@@ -530,6 +530,7 @@
         "message_timestamp_invalid": "Neplatná časová značka",
         "microphone": "Mikrofón",
         "model": "Model",
+        "moderation_and_safety": "Moderovanie a bezpečnosť",
         "modern": "Moderný",
         "mute": "Umlčať",
         "n_members": {
@@ -2704,12 +2705,10 @@
             "unable_to_load_msisdns": "Nie je možné načítať telefónne čísla",
             "username": "Používateľské meno"
         },
-        "image_thumbnails": "Zobrazovať ukážky/náhľady obrázkov",
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",
         "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
         "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
-        "invite_avatars": "Zobraziť obrázky miestností, do ktorých ste boli pozvaní",
         "jump_to_bottom_on_send": "Skok na koniec časovej osi pri odosielaní správy",
         "key_backup": {
             "backup_in_progress": "Zálohovanie kľúčov máte aktívne (prvé zálohovanie môže trvať niekoľko minút).",
@@ -2767,6 +2766,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Nastavenia:</strong> Ignorovaní používatelia"
+        },
+        "media_preview": {
+            "hide_avatars": "Skryť obrázky miestnosti a pozývateľa",
+            "hide_media": "Vždy skryť",
+            "media_preview_description": "Skryté médium sa dá vždy zobraziť ťuknutím naň",
+            "media_preview_label": "Zobraziť médiá na časovej osi",
+            "show_in_private": "V súkromných miestnostiach",
+            "show_media": "Vždy zobraziť"
         },
         "notifications": {
             "default_setting_description": "Toto nastavenie sa predvolene použije pre všetky vaše miestnosti.",

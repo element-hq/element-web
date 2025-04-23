@@ -2318,7 +2318,6 @@
             "remove_msisdn_prompt": "Rimuovere %(phone)s?",
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
-        "image_thumbnails": "Mostra anteprime/miniature per le immagini",
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
         "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
         "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",

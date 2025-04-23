@@ -1991,7 +1991,6 @@
             "remove_msisdn_prompt": "Remover %(phone)s?",
             "spell_check_locale_placeholder": "Escolha um local"
         },
-        "image_thumbnails": "Mostrar miniaturas e resumos para imagens",
         "inline_url_previews_default": "Ativar, por padrão, a visualização de resumo de links",
         "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
         "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",

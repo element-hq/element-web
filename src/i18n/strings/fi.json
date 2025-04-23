@@ -2265,7 +2265,6 @@
             "unable_to_load_msisdns": "Puhelinnumeroita ei voi ladata",
             "username": "Käyttäjätunnus"
         },
-        "image_thumbnails": "Näytä kuvien esikatselut/pienoiskuvat",
         "inline_url_previews_default": "Ota linkkien esikatselu käyttöön oletusarvoisesti",
         "inline_url_previews_room": "Ota linkkien esikatselu käyttöön kaikille huoneen jäsenille",
         "inline_url_previews_room_account": "Ota linkkien esikatselut käyttöön tässä huoneessa (koskee ainoastaan sinua)",

@@ -2685,12 +2685,10 @@
             "unable_to_load_msisdns": "Nie można załadować numerów telefonu",
             "username": "Nazwa użytkownika"
         },
-        "image_thumbnails": "Pokaż podgląd/miniatury obrazów",
         "inline_url_previews_default": "Włącz domyślny podgląd URL w tekście",
         "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
         "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
-        "invite_avatars": "Pokaż awatary pokoi, do których zostałeś zaproszony",
         "jump_to_bottom_on_send": "Przejdź na dół osi czasu po wysłaniu wiadomości",
         "key_backup": {
             "backup_in_progress": "Tworzy się kopia zapasowa Twoich kluczy (pierwsza kopia może potrwać kilka minut).",

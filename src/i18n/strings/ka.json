@@ -1755,7 +1755,6 @@
             "remove_msisdn_prompt": "ამოღება%(phone)s ?",
             "spell_check_locale_placeholder": "აირჩიეთ ლოკალი"
         },
-        "image_thumbnails": "სურათების გადახედვის/მინიატურების ჩვენება",
         "inline_url_previews_default": "ნაგულისხმევად ჩართული URL-ის გადახედვის ჩართვა",
         "inline_url_previews_room": "URL-ის გადახედვის ჩართვა ნაგულისხმევად ამ ოთახში მონაწილეებისთვის",
         "inline_url_previews_room_account": "ამ ოთახისთვის URL-ის გადახედვის ჩართვა (მხოლოდ თქვენზე მოქმედებს)",

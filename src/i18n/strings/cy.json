@@ -2519,12 +2519,10 @@
             "unable_to_load_msisdns": "Methu llwytho rhifau ffôn",
             "username": "Enw defnyddiwr"
         },
-        "image_thumbnails": "Dangos rhagolygon / lluniau bach ar gyfer delweddau",
         "inline_url_previews_default": "Galluogi rhagolygon URL mewnol fel rhagosodiad",
         "inline_url_previews_room": "Galluogi rhagolygon URL fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon",
         "inline_url_previews_room_account": "Galluogi rhagolygon URL ar gyfer yr ystafell hon (yn effeithio arnoch chi yn unig)",
         "insert_trailing_colon_mentions": "Mewnosod colon sy'n llusgo ar ôl i'r defnyddiwr sôn amdano ar ddechrau neges",
-        "invite_avatars": "Dangos afatarau ystafelloedd rydych wedi'ch gwahodd iddyn nhw",
         "jump_to_bottom_on_send": "Symud i waelod y llinell amser pan fyddwch chi'n anfon neges",
         "key_backup": {
             "backup_in_progress": "Mae copi wrth gefn o'ch allweddi (gallai'r copi wrth gefn cyntaf gymryd ychydig funudau).",

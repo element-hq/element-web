@@ -1988,7 +1988,6 @@
             "remove_msisdn_prompt": "%(phone)s verwijderen?",
             "spell_check_locale_placeholder": "Kies een landinstelling"
         },
-        "image_thumbnails": "Miniaturen voor afbeeldingen tonen",
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
         "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
         "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",

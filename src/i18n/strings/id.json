@@ -2660,12 +2660,10 @@
             "unable_to_load_msisdns": "Tidak dapat memuat nomor telepon",
             "username": "Nama pengguna"
         },
-        "image_thumbnails": "Tampilkan gambar mini untuk gambar",
         "inline_url_previews_default": "Aktifkan tampilan URL secara bawaan",
         "inline_url_previews_room": "Aktifkan tampilan URL secara bawaan untuk anggota di ruangan ini",
         "inline_url_previews_room_account": "Aktifkan tampilan URL secara bawaan (hanya memengaruhi Anda)",
         "insert_trailing_colon_mentions": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
-        "invite_avatars": "Tampilkan avatar ruangan yang telah diundang",
         "jump_to_bottom_on_send": "Pergi ke bawah lini masa ketika Anda mengirim pesan",
         "key_backup": {
             "backup_in_progress": "Kunci Anda sedang dicadangkan (cadangan pertama mungkin membutuhkan beberapa menit).",
