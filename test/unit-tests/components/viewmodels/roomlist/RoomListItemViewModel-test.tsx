@@ -131,7 +131,7 @@ describe("RoomListItemViewModel", () => {
         // but I can't see how to test that.
         rerender();
 
-        () => expect(vm.current.messagePreview).toBe(undefined);
+        expect(vm.current.messagePreview).toBe(undefined);
     });
 
     describe("notification", () => {
