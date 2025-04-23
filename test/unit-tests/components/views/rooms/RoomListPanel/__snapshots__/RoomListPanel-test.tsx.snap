@@ -118,7 +118,6 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
       class="mx_Flex mx_RoomListSecondaryFilters"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 8px; --mx-flex-wrap: nowrap;"
     >
-      All activity
       <button
         aria-disabled="false"
         aria-expanded="false"
@@ -377,7 +376,6 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       class="mx_Flex mx_RoomListSecondaryFilters"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 8px; --mx-flex-wrap: nowrap;"
     >
-      All activity
       <button
         aria-disabled="false"
         aria-expanded="false"

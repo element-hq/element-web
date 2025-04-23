@@ -7,7 +7,6 @@ exports[`<RoomListSecondaryFilters /> should render 'room options' button 1`] = 
     class="mx_Flex mx_RoomListSecondaryFilters"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 8px; --mx-flex-wrap: nowrap;"
   >
-    All activity
     <button
       aria-disabled="false"
       aria-expanded="false"
