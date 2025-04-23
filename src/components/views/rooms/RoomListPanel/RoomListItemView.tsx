@@ -73,12 +73,12 @@ export const RoomListItemView = memo(function RoomListItemView({
                     justify="space-between"
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <Flex className="mx_RoomListItemView_text" direction="column">
+                    <div>
                         <div className="mx_RoomListItemView_roomName" title={vm.name}>
                             {vm.name}
                         </div>
                         <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
-                    </Flex>
+                    </div>
                     {showHoverDecoration ? (
                         <RoomListItemMenuView
                             room={room}
