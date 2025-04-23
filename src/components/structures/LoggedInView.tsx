@@ -710,7 +710,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
-        let shouldUseMinimizedUI = !useNewRoomList && this.props.collapseLhs;
+        const shouldUseMinimizedUI = !useNewRoomList && this.props.collapseLhs;
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
                 <div
