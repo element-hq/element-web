@@ -10,7 +10,6 @@ import React, { type JSX } from "react";
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
-import { SecondaryFilters } from "../../../viewmodels/roomlist/useFilteredRooms";
 import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
 
 interface Props {
@@ -20,27 +19,10 @@ interface Props {
     vm: RoomListViewState;
 }
 
-function textForFilter(filter: SecondaryFilters): string {
-    switch (filter) {
-        case SecondaryFilters.AllActivity:
-            return _t("room_list|secondary_filter|all_activity");
-        case SecondaryFilters.MentionsOnly:
-            return _t("room_list|secondary_filter|mentions_only");
-        case SecondaryFilters.InvitesOnly:
-            return _t("room_list|secondary_filter|invites_only");
-        case SecondaryFilters.LowPriority:
-            return _t("room_list|secondary_filter|low_priority");
-        default:
-            throw new Error("Unknown filter");
-    }
-}
-
 /**
  * The secondary filters for the room list (eg. mentions only / invites only).
  */
 export function RoomListSecondaryFilters({ vm }: Props): JSX.Element {
-    const activeFilterText = textForFilter(vm.activeSecondaryFilter);
-
     return (
         <Flex
             aria-label={_t("room_list|secondary_filters")}
@@ -48,7 +30,6 @@ export function RoomListSecondaryFilters({ vm }: Props): JSX.Element {
             align="center"
             gap="8px"
         >
-            {activeFilterText}
             <RoomListOptionsMenu vm={vm} />
         </Flex>
     );
