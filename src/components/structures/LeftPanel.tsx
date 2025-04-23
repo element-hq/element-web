@@ -382,7 +382,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         const containerClasses = classNames({
             mx_LeftPanel: true,
-            mx_LeftPanel_NewRoomList: useNewRoomList,
+            mx_LeftPanel_newRoomList: useNewRoomList,
             mx_LeftPanel_minimized: this.props.isMinimized,
         });
 

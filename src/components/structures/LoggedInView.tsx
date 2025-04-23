@@ -261,12 +261,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         let panelCollapsed: boolean;
         const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-        let toggleSize = 206 - 50;
-        if (useNewRoomList) {
-            toggleSize = 232;
-        }
+        const toggleSize = useNewRoomList ? 232 : 206 - 50;
         const collapseConfig: ICollapseConfig = {
-            toggleSize: toggleSize,
+            toggleSize,
             onCollapsed: (collapsed) => {
                 panelCollapsed = collapsed;
                 if (collapsed) {
@@ -706,13 +703,14 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const leftPanelWrapperClasses = classNames({
             mx_LeftPanel_wrapper: true,
-            mx_LeftPanel_NewRoomList: useNewRoomList,
+            mx_LeftPanel_newRoomList: useNewRoomList,
         });
 
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
+        let shouldUseMinimizedUI = !useNewRoomList && this.props.collapseLhs;
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
                 <div
@@ -724,9 +722,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <div className={bodyClasses}>
                         <div className="mx_LeftPanel_outerWrapper">
-                            <LeftPanelLiveShareWarning
-                                isMinimized={(!useNewRoomList && this.props.collapseLhs) || false}
-                            />
+                            <LeftPanelLiveShareWarning isMinimized={shouldUseMinimizedUI || false} />
                             <div className={leftPanelWrapperClasses}>
                                 <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
                                 <SpacePanel />
@@ -734,11 +730,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 <div
                                     className="mx_LeftPanel_wrapper--user"
                                     ref={this._resizeContainer}
-                                    data-collapsed={!useNewRoomList && this.props.collapseLhs ? true : undefined}
+                                    data-collapsed={shouldUseMinimizedUI ? true : undefined}
                                 >
                                     <LeftPanel
                                         pageType={this.props.page_type as PageTypes}
-                                        isMinimized={(!useNewRoomList && this.props.collapseLhs) || false}
+                                        isMinimized={shouldUseMinimizedUI || false}
                                         resizeNotifier={this.props.resizeNotifier}
                                     />
                                 </div>
