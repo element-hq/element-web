@@ -45,10 +45,15 @@ describe("RoomListItemViewModel", () => {
             getDMRoomsForUserId: jest.fn(),
         } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
+
+        mocked(useMessagePreviewToggle).mockReturnValue({
+            shouldShowMessagePreview: false,
+            toggleMessagePreview: jest.fn(),
+        });
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        jest.restoreAllMocks();
     });
 
     it("should dispatch view room action on openRoom", async () => {
@@ -104,6 +109,10 @@ describe("RoomListItemViewModel", () => {
         jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
             text: "Message look like this",
         } as MessagePreview);
+        mocked(useMessagePreviewToggle).mockReturnValue({
+            shouldShowMessagePreview: true,
+            toggleMessagePreview: jest.fn(),
+        });
 
         const { result: vm } = renderHook(
             () => useRoomListItemViewModel(room),
@@ -121,11 +130,6 @@ describe("RoomListItemViewModel", () => {
             () => useRoomListItemViewModel(room),
             withClientContextRenderOptions(room.client),
         );
-
-        mocked(useMessagePreviewToggle).mockReturnValue({
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
-        });
 
         // This doesn't seem to test that the hook actually triggers an update,
         // but I can't see how to test that.
