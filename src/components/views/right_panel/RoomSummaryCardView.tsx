@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ChangeEvent, useState, type SyntheticEvent } from "react";
+import React, { type JSX, type ChangeEvent } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -38,7 +38,7 @@ import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/publi
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
-import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
@@ -50,12 +50,9 @@ import { Flex } from "../../utils/Flex.tsx";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
 import { Box } from "../../utils/Box.tsx";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
-import { useRoomSummaryCardViewModel } from "../../viewmodels/rooms/RoomSummaryCardViewModel.tsx";
-import { useTopic } from "../../../hooks/room/useTopic.ts";
-import { useRoomState } from "../../../hooks/useRoomState.ts";
-import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
+import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { onRoomTopicLinkClick } from "../elements/RoomTopic.tsx";
-
+import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 
 interface IProps {
     room: Room;
@@ -67,21 +64,11 @@ interface IProps {
 }
 
 const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
-    const [expanded, setExpanded] = useState(true);
+    const vm = useRoomTopicViewModel(room);
 
-    const topic = useTopic(room);
-    const body = topicToHtml(topic?.text, topic?.html);
+    const body = topicToHtml(vm.topic?.text, vm.topic?.html);
 
-    const canEditTopic = useRoomState(room, (state) =>
-        state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
-    );
-    const onEditClick = (e: SyntheticEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        defaultDispatcher.dispatch({ action: "open_room_settings" });
-    };
-
-    if (!body && !canEditTopic) {
+    if (!body && !vm.canEditTopic) {
         return null;
     }
 
@@ -95,7 +82,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 className="mx_RoomSummaryCard_topic"
             >
                 <Box flex="1">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("right_panel|add_topic")}
                         </Text>
@@ -105,7 +92,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = expanded ? <Linkify>{body}</Linkify> : body;
+    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
 
     return (
         <Flex
@@ -114,7 +101,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
             justify="center"
             gap="var(--cpd-space-2x)"
             className={classNames("mx_RoomSummaryCard_topic", {
-                mx_RoomSummaryCard_topic_collapsed: !expanded,
+                mx_RoomSummaryCard_topic_collapsed: !vm.expanded,
             })}
         >
             <Box flex="1" className="mx_RoomSummaryCard_topic_container">
@@ -130,17 +117,13 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 >
                     {content}
                 </Text>
-                <IconButton
-                    className="mx_RoomSummaryCard_topic_chevron"
-                    size="24px"
-                    onClick={() => setExpanded(!expanded)}
-                >
+                <IconButton className="mx_RoomSummaryCard_topic_chevron" size="24px" onClick={vm.onExpandedClick}>
                     <ChevronDownIcon />
                 </IconButton>
             </Box>
-            {expanded && canEditTopic && (
+            {vm.expanded && vm.canEditTopic && (
                 <Box flex="1" className="mx_RoomSummaryCard_topic_edit">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("action|edit")}
                         </Text>

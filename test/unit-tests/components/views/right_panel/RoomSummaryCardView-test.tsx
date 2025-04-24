@@ -19,11 +19,11 @@ import { _t } from "../../../../../src/languageHandler";
 import {
     type RoomSummaryCardState,
     useRoomSummaryCardViewModel,
-} from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
+} from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 // Mock the viewmodel hooks
-jest.mock("../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel", () => ({
+jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
     useRoomSummaryCardViewModel: jest.fn(),
 }));
 
