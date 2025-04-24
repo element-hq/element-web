@@ -31,6 +31,10 @@ module.exports = {
                 "Use UIStore to access window dimensions instead.",
             ),
             ...buildRestrictedPropertiesOptions(
+                ["React.forwardRef", "*.forwardRef", "forwardRef"],
+                "Use ref props instead.",
+            ),
+            ...buildRestrictedPropertiesOptions(
                 ["*.mxcUrlToHttp", "*.getHttpUriForMxc"],
                 "Use Media helper instead to centralise access for customisation.",
             ),
@@ -55,6 +59,11 @@ module.exports = {
             "error",
             {
                 paths: [
+                    {
+                        name: "react",
+                        importNames: ["forwardRef"],
+                        message: "Use ref props instead.",
+                    },
                     {
                         name: "@testing-library/react",
                         message: "Please use jest-matrix-react instead",
