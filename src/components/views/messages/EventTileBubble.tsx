@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, forwardRef, type ReactNode } from "react";
+import React, { type JSX, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
 
 interface IProps {
@@ -15,19 +15,18 @@ interface IProps {
     timestamp?: JSX.Element;
     subtitle?: ReactNode;
     children?: JSX.Element;
+    ref?: Ref<HTMLDivElement>;
 }
 
-const EventTileBubble = forwardRef<HTMLDivElement, IProps>(
-    ({ className, title, timestamp, subtitle, children }, ref) => {
-        return (
-            <div className={classNames("mx_EventTileBubble", className)} ref={ref}>
-                <div className="mx_EventTileBubble_title">{title}</div>
-                {subtitle && <div className="mx_EventTileBubble_subtitle">{subtitle}</div>}
-                {children}
-                {timestamp}
-            </div>
-        );
-    },
-);
+const EventTileBubble = ({ className, title, timestamp, subtitle, children, ref }: IProps): JSX.Element => {
+    return (
+        <div className={classNames("mx_EventTileBubble", className)} ref={ref}>
+            <div className="mx_EventTileBubble_title">{title}</div>
+            {subtitle && <div className="mx_EventTileBubble_subtitle">{subtitle}</div>}
+            {children}
+            {timestamp}
+        </div>
+    );
+};
 
 export default EventTileBubble;

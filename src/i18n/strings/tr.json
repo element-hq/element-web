@@ -2607,7 +2607,6 @@
             "unable_to_load_msisdns": "Telefon numaraları yüklenemiyor",
             "username": "Kullanıcı Adı"
         },
-        "image_thumbnails": "Fotoğraflar için ön izleme/küçük resim göster",
         "inline_url_previews_default": "Varsayılan olarak satır içi URL önizlemeleri aç",
         "inline_url_previews_room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
         "inline_url_previews_room_account": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",

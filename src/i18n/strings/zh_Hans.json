@@ -2088,7 +2088,6 @@
             "remove_msisdn_prompt": "删除 %(phone)s 吗？",
             "spell_check_locale_placeholder": "选择区域设置"
         },
-        "image_thumbnails": "显示图片的预览图",
         "inline_url_previews_default": "默认启用行内URL预览",
         "inline_url_previews_room": "对此房间的所有参与者默认启用URL预览",
         "inline_url_previews_room_account": "对此房间启用URL预览（仅影响你）",

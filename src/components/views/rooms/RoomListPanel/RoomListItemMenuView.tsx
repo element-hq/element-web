@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type ComponentProps, forwardRef, type JSX, useState } from "react";
+import React, { type ComponentProps, type JSX, type Ref, useState } from "react";
 import { IconButton, Menu, MenuItem, Separator, ToggleMenuItem, Tooltip } from "@vector-im/compound-web";
 import MarkAsReadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-read";
 import MarkAsUnreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-unread";
@@ -147,22 +147,22 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
     );
 }
 
-interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {}
+interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {
+    ref?: Ref<HTMLButtonElement>;
+}
 
 /**
  * A button to trigger the more options menu.
  */
-export const MoreOptionsButton = forwardRef<HTMLButtonElement, MoreOptionsButtonProps>(
-    function MoreOptionsButton(props, ref) {
-        return (
-            <Tooltip label={_t("room_list|room|more_options")}>
-                <IconButton aria-label={_t("room_list|room|more_options")} {...props} ref={ref}>
-                    <OverflowIcon />
-                </IconButton>
-            </Tooltip>
-        );
-    },
-);
+export const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
+    return (
+        <Tooltip label={_t("room_list|room|more_options")}>
+            <IconButton aria-label={_t("room_list|room|more_options")} {...props}>
+                <OverflowIcon />
+            </IconButton>
+        </Tooltip>
+    );
+};
 
 interface NotificationMenuProps {
     /**
@@ -238,15 +238,17 @@ interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
      * Whether the room is muted.
      */
     isRoomMuted: boolean;
+    ref?: Ref<HTMLButtonElement>;
 }
 
 /**
  * A button to trigger the notification menu.
  */
-export const NotificationButton = forwardRef<HTMLButtonElement, NotificationButtonProps>(function MoreOptionsButton(
-    { isRoomMuted, ...props },
+export const NotificationButton = function MoreOptionsButton({
+    isRoomMuted,
     ref,
-) {
+    ...props
+}: NotificationButtonProps): JSX.Element {
     return (
         <Tooltip label={_t("room_list|notification_options")}>
             <IconButton aria-label={_t("room_list|notification_options")} {...props} ref={ref}>
@@ -254,4 +256,4 @@ export const NotificationButton = forwardRef<HTMLButtonElement, NotificationButt
             </IconButton>
         </Tooltip>
     );
-});
+};

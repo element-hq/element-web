@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type LegacyRef } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type React from "react";
@@ -44,7 +43,7 @@ export interface IBodyProps {
     // helper function to access relations for this event
     getRelationsForEvent?: GetRelationsForEvent;
 
-    ref?: React.RefObject<any> | LegacyRef<any>;
+    ref?: React.RefObject<any>;
 
     // Set to `true` to disable interactions (e.g. video controls) and to remove controls from the tab order.
     // This may be useful when displaying a preview of the event.

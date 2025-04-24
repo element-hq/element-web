@@ -1702,7 +1702,6 @@
             "remove_email_prompt": "Ĉu forigi %(email)s?",
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
-        "image_thumbnails": "Montri antaŭrigardojn/bildetojn por bildoj",
         "inline_url_previews_default": "Ŝalti entekstan antaŭrigardon al retadresoj",
         "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
         "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",

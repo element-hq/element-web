@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ForwardRefExoticComponent, useContext } from "react";
+import React, { useContext, type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
@@ -15,7 +15,7 @@ import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type IBodyProps } from "./IBodyProps";
 
-const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent }, ref) => {
+const RedactedBody = ({ mxEvent, ref }: IBodyProps): JSX.Element => {
     const cli: MatrixClient = useContext(MatrixClientContext);
     let text = _t("timeline|self_redaction");
     const unsigned = mxEvent.getUnsigned();
@@ -37,6 +37,6 @@ const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent }, ref) => {
             {text}
         </span>
     );
-}) as ForwardRefExoticComponent<IBodyProps>;
+};
 
 export default RedactedBody;

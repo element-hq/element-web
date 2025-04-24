@@ -1501,7 +1501,6 @@
             "remove_email_prompt": "%(email)s را پاک می‌کنید؟",
             "remove_msisdn_prompt": "%(phone)s را پاک می‌کنید؟"
         },
-        "image_thumbnails": "پیش‌نمایش تصاویر را نشان بده",
         "inline_url_previews_default": "فعال‌سازی پیش‌نمایش URL به صورت پیش‌فرض",
         "inline_url_previews_room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
         "inline_url_previews_room_account": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",

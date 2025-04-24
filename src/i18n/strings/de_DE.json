@@ -2667,12 +2667,10 @@
             "unable_to_load_msisdns": "Telefonnummern können nicht geladen werden",
             "username": "Benutzername"
         },
-        "image_thumbnails": "Vorschauen für Bilder",
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
         "inline_url_previews_room": "URL-Vorschau für Raummitglieder",
         "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Raum",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
-        "invite_avatars": "Zeigen Sie Avatare von Chatrooms an, zu denen Sie eingeladen wurden",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
             "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",

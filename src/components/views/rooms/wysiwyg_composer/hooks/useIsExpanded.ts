@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { type RefObject, useEffect, useState } from "react";
 
-export function useIsExpanded(ref: RefObject<HTMLElement | null>, breakingPoint: number): boolean {
+export function useIsExpanded(ref: RefObject<HTMLElement | null> | undefined, breakingPoint: number): boolean {
     const [isExpanded, setIsExpanded] = useState(false);
     useEffect(() => {
-        if (ref.current) {
+        if (ref?.current) {
             const editor = ref.current;
             const resizeObserver = new ResizeObserver((entries) => {
                 requestAnimationFrame(() => {

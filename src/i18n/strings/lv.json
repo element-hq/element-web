@@ -2235,7 +2235,6 @@
             "remove_msisdn_prompt": "Dzēst %(phone)s?",
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
-        "image_thumbnails": "Rādīt attēlu priekšskatījumus/sīktēlus",
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
