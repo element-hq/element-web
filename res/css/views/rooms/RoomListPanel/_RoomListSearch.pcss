@@ -30,11 +30,15 @@
                 font-family: inherit;
             }
 
-            /* Shrink and truncate the search text until it reaches an minimum */
-            display: inline-block;
+            /* Shrink and truncate the search text */
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            .mx_RoomListSearch_search_text {
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 
