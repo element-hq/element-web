@@ -64,3 +64,30 @@ exports[`bodyToNode should generate big emoji for an emoji-only reply to a messa
   </span>
 </DocumentFragment>
 `;
+
+exports[`bodyToNode should handle inline media when mediaIsVisible is false 1`] = `
+<DocumentFragment>
+  <span
+    class="mx_EventTile_body markdown-body translate"
+    dir="auto"
+  >
+    <img />
+    foo Hello there
+  </span>
+</DocumentFragment>
+`;
+
+exports[`bodyToNode should handle inline media when mediaIsVisible is true 1`] = `
+<DocumentFragment>
+  <span
+    class="mx_EventTile_body markdown-body translate"
+    dir="auto"
+  >
+    <img
+      src="https://example.org/img"
+      style="max-width:800px;max-height:600px"
+    />
+    foo Hello there
+  </span>
+</DocumentFragment>
+`;

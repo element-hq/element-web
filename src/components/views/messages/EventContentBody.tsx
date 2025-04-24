@@ -28,6 +28,7 @@ import {
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { filterBoolean } from "../../../utils/arrays.ts";
+import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 
 /**
  * Returns a RegExp pattern for the keyword in the push rule of the given Matrix event, if any
@@ -150,6 +151,7 @@ interface Props extends ReplacerOptions {
 const EventContentBody = memo(
     ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ref, ...options }: Props) => {
         const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
+            const [mediaIsVisible] = useMediaVisible(mxEvent?.getId(), mxEvent?.getRoomId());
 
         const replacer = useReplacer(content, mxEvent, options);
         const linkifyOptions = useMemo(
@@ -167,8 +169,8 @@ const EventContentBody = memo(
                     disableBigEmoji: isEmote || !enableBigEmoji,
                     // Part of Replies fallback support
                     stripReplyFallback: stripReply,
-                }),
-            [content, enableBigEmoji, highlights, isEmote, stripReply],
+                mediaIsVisible,}),
+            [content, mediaIsVisible,enableBigEmoji, highlights, isEmote, stripReply],
         );
 
         if (as === "div") includeDir = true; // force dir="auto" on divs

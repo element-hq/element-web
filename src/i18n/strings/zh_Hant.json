@@ -2255,7 +2255,6 @@
             "remove_msisdn_prompt": "移除 %(phone)s？",
             "spell_check_locale_placeholder": "選擇語系"
         },
-        "image_thumbnails": "顯示圖片的預覽／縮圖",
         "inline_url_previews_default": "預設啟用行內網址預覽",
         "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
         "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
@@ -2646,8 +2645,6 @@
         "topic": "取得或設定聊天室主題",
         "topic_none": "此聊天室沒有主題。",
         "topic_room_error": "無法取得聊天室主題：找不到聊天室（%(roomId)s）",
-        "tovirtual": "切換到此聊天室的虛擬聊天室（若有）",
-        "tovirtual_not_found": "此聊天室沒有虛擬聊天室",
         "unban": "取消封鎖特定 ID 的使用者",
         "unflip": "在純文字訊息前加入 ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "取消目前聊天室通話等候接聽狀態",

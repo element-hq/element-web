@@ -2088,7 +2088,6 @@
             "remove_msisdn_prompt": "删除 %(phone)s 吗？",
             "spell_check_locale_placeholder": "选择区域设置"
         },
-        "image_thumbnails": "显示图片的预览图",
         "inline_url_previews_default": "默认启用行内URL预览",
         "inline_url_previews_room": "对此房间的所有参与者默认启用URL预览",
         "inline_url_previews_room_account": "对此房间启用URL预览（仅影响你）",
@@ -2400,8 +2399,6 @@
         "topic": "获取或设置房间话题",
         "topic_none": "此房间没有话题。",
         "topic_room_error": "获取房间话题失败：无法找到房间（%(roomId)s）",
-        "tovirtual": "切换到此房间的虚拟房间（如有）",
-        "tovirtual_not_found": "此房间未有虚拟房间",
         "unban": "按照 ID 解封用户",
         "unflip": "在纯文本消息开头添加 ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "解除挂起当前房间的通话",

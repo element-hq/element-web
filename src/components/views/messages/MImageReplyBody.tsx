@@ -38,7 +38,7 @@ class MImageReplyBodyInner extends MImageBodyInner {
     }
 }
 const MImageReplyBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
     return <MImageReplyBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

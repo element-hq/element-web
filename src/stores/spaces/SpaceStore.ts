@@ -270,7 +270,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
         if (contextSwitch) {
             // view last selected room from space
-            const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+            const roomId = this.getLastSelectedRoomIdForSpace(space);
 
             // if the space being selected is an invite then always view that invite
             // else if the last viewed room in this space is joined then view that
@@ -318,6 +318,17 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 false,
             );
         }
+    }
+
+    /**
+     * Returns the room-id of the last active room in a given space.
+     * This is the room that would be opened when you switch to a given space.
+     * @param space The space you're interested in.
+     * @returns room-id of the room or null if there's no last active room.
+     */
+    public getLastSelectedRoomIdForSpace(space: SpaceKey): string | null {
+        const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+        return roomId;
     }
 
     private async loadSuggestedRooms(space: Room): Promise<void> {

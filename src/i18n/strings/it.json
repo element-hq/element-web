@@ -2318,7 +2318,6 @@
             "remove_msisdn_prompt": "Rimuovere %(phone)s?",
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
-        "image_thumbnails": "Mostra anteprime/miniature per le immagini",
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
         "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
         "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
@@ -2713,8 +2712,6 @@
         "topic": "Ottiene o imposta l'argomento della stanza",
         "topic_none": "Questa stanza non ha un argomento.",
         "topic_room_error": "Lettura argomento stanza fallita: impossibile trovare la stanza (%(roomId)s",
-        "tovirtual": "Passa alla stanza virtuale di questa stanza, se ne ha una",
-        "tovirtual_not_found": "Nessuna stanza virtuale per questa stanza",
         "unban": "Riammette l'utente con l'ID dato",
         "unflip": "Antepone ┬──┬ ノ( ゜-゜ノ) ad un messaggio di testo",
         "unholdcall": "Riprende la chiamata nella stanza attuale",

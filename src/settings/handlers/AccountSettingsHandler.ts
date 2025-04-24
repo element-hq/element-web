@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -15,6 +15,7 @@ import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandl
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
@@ -68,6 +69,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE) {
             const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
+        } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+            this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };
 
@@ -173,7 +176,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         await deferred.promise;
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         switch (settingName) {
             // Special case URL previews
             case "urlPreviewsEnabled":
@@ -199,7 +202,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             // Special case analytics
             case "pseudonymousAnalyticsOptIn":
                 return this.setAccountData(ANALYTICS_EVENT_TYPE, "pseudonymousAnalyticsOptIn", newValue);
-
+            case "mediaPreviewConfig":
+                // Handled in MediaPreviewConfigController.
+                return;
             default:
                 return this.setAccountData(DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }
