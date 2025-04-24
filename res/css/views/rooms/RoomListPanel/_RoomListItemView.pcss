@@ -35,12 +35,14 @@
             box-sizing: border-box;
             min-width: 0;
 
+            .mx_RoomListItemView_text {
+                max-width: 100%;
+            }
+
             .mx_RoomListItemView_roomName {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                line-height: 18px;
-                max-width: 100%;
             }
 
             .mx_RoomListItemView_messagePreview {
@@ -49,8 +51,6 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                line-height: 20px;
-                max-width: 100%;
             }
         }
     }
