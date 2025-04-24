@@ -6,13 +6,17 @@
  */
 
 import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip } from "@vector-im/compound-web";
-import React, { forwardRef, type JSX, useState } from "react";
+import React, { type Ref, type JSX, useState } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { _t } from "../../../../languageHandler";
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 
-const MenuTrigger = forwardRef<HTMLButtonElement>((props, ref) => (
+interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
+    ref?: Ref<HTMLButtonElement>;
+}
+
+const MenuTrigger = ({ ref, ...props }: MenuTriggerProps): JSX.Element => (
     <Tooltip label={_t("room_list|room_options")}>
         <IconButton
             className="mx_RoomListSecondaryFilters_roomOptionsButton"
@@ -23,7 +27,7 @@ const MenuTrigger = forwardRef<HTMLButtonElement>((props, ref) => (
             <OverflowHorizontalIcon />
         </IconButton>
     </Tooltip>
-));
+);
 
 interface Props {
     /**
