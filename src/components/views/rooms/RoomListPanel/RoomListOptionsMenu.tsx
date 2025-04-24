@@ -38,9 +38,7 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
     return (
         <Menu
             open={open}
-            onOpenChange={(isOpen) => {
-                setOpen(isOpen);
-            }}
+            onOpenChange={setOpen}
             title={_t("room_list|room_options")}
             showTitle={false}
             align="start"
