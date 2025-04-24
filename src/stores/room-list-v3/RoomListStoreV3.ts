@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -194,7 +194,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
-                if (newMembership === EffectiveMembership.Leave) {
+                if (
+                    (payload.oldMembership === KnownMembership.Invite ||
+                        payload.oldMembership === KnownMembership.Join) &&
+                    newMembership === EffectiveMembership.Leave
+                ) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
