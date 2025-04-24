@@ -35,7 +35,9 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <div>
+        <div
+          class="mx_RoomListItemView_text"
+        >
           <div
             class="mx_RoomListItemView_roomName"
             title="room1"
@@ -87,7 +89,9 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <div>
+        <div
+          class="mx_RoomListItemView_text"
+        >
           <div
             class="mx_RoomListItemView_roomName"
             title="room1"
@@ -151,7 +155,9 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <div>
+        <div
+          class="mx_RoomListItemView_text"
+        >
           <div
             class="mx_RoomListItemView_roomName"
             title="room1"
@@ -203,7 +209,9 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
         class="mx_Flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <div>
+        <div
+          class="mx_RoomListItemView_text"
+        >
           <div
             class="mx_RoomListItemView_roomName"
             title="room1"
