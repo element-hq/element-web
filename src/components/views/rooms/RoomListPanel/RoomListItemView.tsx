@@ -14,6 +14,7 @@ import { Flex } from "../../../utils/Flex";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
+import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 
 interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
@@ -34,22 +35,27 @@ export const RoomListItemView = memo(function RoomListItemView({
     isSelected,
     ...props
 }: RoomListItemViewProps): JSX.Element {
+    const [onFocus, isActive, ref] = useRovingTabIndex();
     const vm = useRoomListItemViewModel(room);
 
     const [isHover, setIsHover] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     // The compound menu in RoomListItemMenuView needs to be rendered when the hover menu is shown
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
-    const showHoverDecoration = (isMenuOpen || isHover) && vm.showHoverMenu;
+    const showHoverDecoration = isMenuOpen || isHover;
+    const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
 
-    const isNotificationDecorationVisible = !showHoverDecoration && vm.showNotificationDecoration;
+    const isInvitation = vm.notificationState.invited;
+    const isNotificationDecorationVisible = isInvitation || (!showHoverDecoration && vm.showNotificationDecoration);
 
     return (
         <button
+            ref={ref}
             className={classNames("mx_RoomListItemView", {
                 mx_RoomListItemView_empty: !isNotificationDecorationVisible && !showHoverDecoration,
                 mx_RoomListItemView_notification_decoration: isNotificationDecorationVisible,
-                mx_RoomListItemView_menu_open: showHoverDecoration,
+                mx_RoomListItemView_hover: showHoverDecoration,
+                mx_RoomListItemView_menu_open: showHoverMenu,
                 mx_RoomListItemView_selected: isSelected,
                 mx_RoomListItemView_bold: vm.isBold,
             })}
@@ -59,8 +65,12 @@ export const RoomListItemView = memo(function RoomListItemView({
             onClick={() => vm.openRoom()}
             onMouseOver={() => setIsHover(true)}
             onMouseOut={() => setIsHover(false)}
-            onFocus={() => setIsHover(true)}
+            onFocus={() => {
+                setIsHover(true);
+                onFocus();
+            }}
             onBlur={() => setIsHover(false)}
+            tabIndex={isActive ? 0 : -1}
             {...props}
         >
             {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
@@ -79,7 +89,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                         </div>
                         <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
                     </div>
-                    {showHoverDecoration ? (
+                    {showHoverMenu ? (
                         <RoomListItemMenuView
                             room={room}
                             setMenuOpen={(isOpen) => {
