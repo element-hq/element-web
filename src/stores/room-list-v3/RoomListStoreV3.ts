@@ -194,7 +194,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
-                if (oldMembership === EffectiveMembership.Join && newMembership === EffectiveMembership.Leave) {
+                if (newMembership === EffectiveMembership.Leave) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
