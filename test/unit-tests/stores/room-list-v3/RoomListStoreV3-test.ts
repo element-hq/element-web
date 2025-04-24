@@ -146,6 +146,30 @@ describe("RoomListStoreV3", () => {
             },
         );
 
+        it("Room is not removed when user is kicked", async () => {
+            const { store, rooms, dispatcher, client } = await getRoomListStore();
+
+            // Let's say the user gets kicked out of room at index 37
+            const room = rooms[37];
+            const mockMember = room.getMember(client.getSafeUserId())!;
+            mockMember.isKicked = () => true;
+            room.getMember = () => mockMember;
+
+            const payload = {
+                action: "MatrixActions.Room.myMembership",
+                oldMembership: KnownMembership.Join,
+                membership: KnownMembership.Leave,
+                room,
+            };
+
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(payload, true);
+
+            expect(fn).toHaveBeenCalled();
+            expect(store.getSortedRooms()).toContain(room);
+        });
+
         it("Predecessor room is removed on room upgrade", async () => {
             const { store, rooms, client, dispatcher } = await getRoomListStore();
             // Let's say that !foo32:matrix.org is being upgraded
