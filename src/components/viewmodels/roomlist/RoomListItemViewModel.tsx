@@ -223,6 +223,7 @@ function useRoomMessagePreview(room: Room): string | undefined {
         if (messagePreview) setPreviewText(messagePreview.text);
     }, [room, shouldShowMessagePreview]);
 
+    // MessagePreviewStore and the other AsyncStores need to be converted to TypedEventEmitter
     useEventEmitter(MessagePreviewStore.instance, MessagePreviewStore.getPreviewChangedEventName(room), () => {
         updatePreview();
     });
