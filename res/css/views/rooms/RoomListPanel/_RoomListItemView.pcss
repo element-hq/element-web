@@ -35,7 +35,19 @@
             box-sizing: border-box;
             min-width: 0;
 
+            .mx_RoomListItemView_text {
+                max-width: 100%;
+            }
+
             .mx_RoomListItemView_roomName {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mx_RoomListItemView_messagePreview {
+                font: var(--cpd-font-body-sm-regular);
+                color: var(--cpd-color-text-secondary);
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;

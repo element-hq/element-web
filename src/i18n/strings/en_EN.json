@@ -2102,6 +2102,7 @@
     "room_list": {
         "add_room_label": "Add room",
         "add_space_label": "Add space",
+        "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
         "empty": {
@@ -2152,7 +2153,10 @@
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
+        "room_options": "Room Options",
+        "secondary_filters": "Secondary filters",
         "show_less": "Show less",
+        "show_message_previews": "Show message previews",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
