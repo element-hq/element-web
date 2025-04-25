@@ -64,6 +64,7 @@
         "go": "Ir",
         "go_back": "Voltar",
         "got_it": "Entendi",
+        "hide": "Ocultar",
         "hide_advanced": "Ocultar avançado",
         "hold": "Espera",
         "ignore": "Ignorar",
@@ -80,12 +81,14 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
+        "new_message": "Nova mensagem",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
         "no": "Não",
         "ok": "OK",
         "open": "Abrir",
+        "open_menu": "Abrir menu",
         "pause": "Pausar",
         "pin": "Fixar",
         "play": "Reproduzir",
@@ -404,6 +407,15 @@
         "download_logs": "Descarrega os registos",
         "downloading_logs": "Descarregando registos",
         "error_empty": "Diz-nos o que correu mal ou, melhor ainda, cria uma questão no GitHub que descreva o problema.",
+        "failed_download_logs": "Falha ao descarregar os registos de depuração: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "O teu relatório de erro foi rejeitado. O servidor rageshake não suporta esta aplicação.",
+            "rejected_generic": "O teu relatório de bug foi rejeitado. O servidor do rageshake rejeitou o conteúdo do relatório devido a uma política.",
+            "rejected_recovery_key": "O teu relatório de erro foi rejeitado por razões de segurança, pois continha uma chave de recuperação.",
+            "rejected_version": "O teu relatório de erro foi rejeitado porque a versão que estás a executar é demasiado antiga.",
+            "server_unknown_error": "O servidor do rageshake encontrou um erro desconhecido e não pôde processar o relatório.",
+            "unknown_error": "Não conseguiste enviar os registos."
+        },
         "github_issue": "Problema no GitHub",
         "introduction": "Se submeteste um erro através do GitHub, os registos de depuração podem ajudar-nos a localizar o problema. ",
         "log_request": "Para nos ajudar a evitar esta situação no futuro, envia-nos os registos para <a></a> .",
@@ -443,6 +455,7 @@
         "access_token": "Token de acesso",
         "accessibility": "Acessibilidade",
         "advanced": "Avançado",
+        "all_chats": "Todas as conversas",
         "analytics": "Análise",
         "and_n_others": {
             "other": "e %(count)s outros...",
@@ -1222,6 +1235,7 @@
         "change": "Altera o servidor de identidade",
         "change_prompt": "Desligar do servidor de identidade <current /> e ligar a <new /> em vez disso?",
         "change_server_prompt": "Se não pretenderes utilizar <server /> para descobrir e ser descoberto pelos contactos existentes que conheces, introduz outro servidor de identidade abaixo.",
+        "changed": "O teu servidor de identidade foi alterado",
         "checking": "A verificar o servidor",
         "description_connected": "Atualmente, estás a utilizar <server></server> para descobrires e seres descoberto pelos contactos existentes que conheces. Podes alterar o teu servidor de identidade abaixo.",
         "description_disconnected": "Atualmente, não estás a utilizar um servidor de identidade. Para descobrires e seres descoberto pelos contactos existentes que conheces, adiciona um abaixo.",
@@ -1264,7 +1278,9 @@
         "title": "%(brand)s não suporta este browser",
         "use_desktop_heading": "Utiliza antes o %(brand)s Desktop",
         "use_mobile_heading": "Utiliza antes o %(brand)s no telemóvel",
-        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel"
+        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel",
+        "windows_64bit": "Windows (64 bits)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informação",
     "integration_manager": {
@@ -1273,6 +1289,7 @@
         "error_connecting_heading": "Não é possível conectar-se ao gerenciador de integração",
         "explainer": "Os gestores de integração recebem dados de configuração e podem modificar widgets, enviar convites para salas e definir níveis de potência em teu nome.",
         "manage_title": "Gere as integrações",
+        "toggle_label": "Ativar o gestor de integração",
         "use_im": "Utiliza um gestor de integração para gerir bots, widgets e pacotes de autocolantes.",
         "use_im_default": "Utiliza um gestor de integração <b>(%(serverName)s)</b> para gerir bots, widgets e pacotes de autocolantes."
     },
@@ -2056,19 +2073,53 @@
         "add_space_label": "Adiciona espaço",
         "breadcrumbs_empty": "Nenhuma sala visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
+        "empty": {
+            "no_chats": "Ainda sem conversas",
+            "no_chats_description": "Começa a enviar mensagens a alguém ou a crie uma sala",
+            "no_chats_description_no_room_rights": "Começa por enviar uma mensagem a alguém",
+            "no_favourites": "Ainda não tem um conversa favorita",
+            "no_favourites_description": "Pode adicionar uma conversa aos seus favoritos nas definições de conversa",
+            "no_people": "Ainda não tem conversas diretas com ninguém",
+            "no_people_description": "Pode desseleccionar filtros para veres as suas outras conversas",
+            "no_rooms": "Você ainda não está em nenhuma sala",
+            "no_rooms_description": "Pode desmarcar filtros para ver as suas outras conversas",
+            "no_unread": "Parabéns! Não tens nenhuma mensagem por ler",
+            "show_chats": "Mostra todas as conversas"
+        },
         "failed_add_tag": "Falha ao adicionar %(tagName)s à sala",
         "failed_remove_tag": "Não foi possível remover a marcação %(tagName)s desta sala",
         "failed_set_dm_tag": "Falha ao definir a etiqueta de mensagem direta",
+        "filters": {
+            "favourite": "Favoritos",
+            "people": "Pessoas",
+            "rooms": "Salas",
+            "unread": "Não lido"
+        },
         "home_menu_label": "Opções de casa",
         "join_public_room_label": "Participa na sala pública",
         "joining_rooms_status": {
             "one": "Atualmente ingressando%(count)s sala",
             "other": "Atualmente ingressando%(count)s salas"
         },
+        "list_title": "Lista de salas",
+        "more_options": {
+            "copy_link": "Copiar link da sala",
+            "favourited": "Adicionado aos favoritos",
+            "leave_room": "Sair da sala",
+            "low_priority": "Baixa prioridade",
+            "mark_read": "Marcar como lido",
+            "mark_unread": "Marcar como não lido"
+        },
         "notification_options": "Opções de notificação",
+        "open_space_menu": "Abrir menu do espaço",
+        "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens na %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
+        },
+        "room": {
+            "more_options": "Mais opções",
+            "open_room": "Abrir a sala %(roomName)s"
         },
         "show_less": "Mostrar menos",
         "show_n_more": {
@@ -2080,6 +2131,10 @@
         "sort_by_activity": "Atividade",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Mostra primeiro as salas com mensagens não lidas",
+        "space_menu": {
+            "home": "Casa do espaço",
+            "space_settings": "Configurações de espaço"
+        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Lista de opções",
         "suggested_rooms_heading": "Salas sugeridas"
@@ -2442,20 +2497,35 @@
                 "breadcrumb_title_forgot": "Esqueceu-se da sua chave de recuperação? Terá de repor a sua identidade.",
                 "breadcrumb_warning": "Faz isto apenas se acreditares que a tua conta foi comprometida.",
                 "details_title": "Detalhes da encriptação",
+                "do_not_close_warning": "Não feches esta janela até que a reposição esteja concluída",
                 "export_keys": "Exportar chaves",
                 "import_keys": "Importar chaves",
                 "other_people_device_description": "Por predefinição, nas salas encriptadas, não envies mensagens encriptadas a ninguém até as teres verificado",
                 "other_people_device_label": "Nunca enviar mensagens encriptadas para dispositivos não verificados",
                 "other_people_device_title": "Dispositivos de outras pessoas",
                 "reset_identity": "Redefinir identidade criptográfica",
+                "reset_in_progress": "Reposição em curso...",
                 "session_id": "ID da sessão:",
                 "session_key": "Chave da sessão:",
                 "title": "Avançadas"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Excluir armazenamento de chaves",
+                "confirm": "Excluir armazenamento de chaves",
+                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
+                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
+                "list_second": "Irá perder o acesso às suas mensagens encriptadas se se desconectar de %(brand)s em qualquer lugar",
+                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
             },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",
             "dialog_title": "<strong>Configurações:</strong> Encriptação",
+            "key_storage": {
+                "allow_key_storage": "Permitir armazenamento de chaves",
+                "description": "Armazene sua identidade criptográfica e chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em quaisquer novos dispositivos. <a>Saiba mais</a>",
+                "title": "Armazenamento de chaves"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirmar nova chave de recuperação",
                 "change_recovery_confirm_description": "Introduz a tua nova chave de recuperação abaixo para terminar. A tua chave antiga deixará de funcionar.",
@@ -3007,6 +3077,7 @@
         "view": "Visualiza a sala com o endereço indicado",
         "whois": "Apresenta informações sobre um utilizador"
     },
+    "sliding_sync_legacy_no_longer_supported": "A Sliding Sync Legacy não é mais suportada: faça logout e login novamente para ativar a nova opção de Sliding Sync",
     "space": {
         "add_existing_room_space": {
             "create": "Queres acrescentar uma nova sala em vez disso?",
@@ -3384,6 +3455,7 @@
             "left_reason": "%(targetName)s saiu da sala:%(reason)s",
             "no_change": "%(senderName)s não fez nenhuma alteração",
             "reject_invite": "%(targetName)s rejeitou o convite",
+            "reject_invite_reason": "%(targetName)s rejeitou o convite: %(reason)s",
             "remove_avatar": "%(senderName)s removeu a sua fotografia de perfil",
             "remove_name": "%(senderName)s removeu o seu nome de apresentação (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s colocou uma foto de perfil",
@@ -3978,7 +4050,7 @@
         "error_need_to_be_logged_in": "Você tem que estar logado.",
         "error_unable_start_audio_stream_description": "Não é possível iniciar a transmissão de áudio.",
         "error_unable_start_audio_stream_title": "Falha ao iniciar a transmissão ao vivo",
-        "modal_data_warning": "Os dados neste ecrã são partilhados com %(widgetDomain)s",
+        "modal_data_warning": "Os dados abaixo são partilhados com %(widgetDomain)s",
         "modal_title_default": "Widget Modal",
         "no_name": "Aplicação desconhecida",
         "open_id_permissions_dialog": {

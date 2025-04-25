@@ -2108,6 +2108,7 @@
     "room_list": {
         "add_room_label": "Přidat místnost",
         "add_space_label": "Přidat prostor",
+        "appearance": "Vzhled",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
         "empty": {
@@ -2158,7 +2159,10 @@
             "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
         },
+        "room_options": "Možnosti místnosti",
+        "secondary_filters": "Sekundární filtry",
         "show_less": "Zobrazit méně",
+        "show_message_previews": "Zobrazit náhledy zpráv",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
             "one": "Zobrazit %(count)s další"
