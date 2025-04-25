@@ -88,7 +88,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Check whether the initial list of rooms has loaded.
      */
     public get isLoadingRooms(): boolean {
-        return this.roomSkipList?.initialized || true;
+        return !this.roomSkipList?.initialized;
     }
 
     /**
