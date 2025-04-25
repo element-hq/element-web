@@ -99,6 +99,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
     private readonly ssoID: string = secureRandomString(32);
+    private protocol!: string;
 
     public constructor() {
         super();
@@ -186,9 +187,13 @@ export default class ElectronPlatform extends BasePlatform {
             await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        void this.ipc.call("startSSOFlow", this.ssoID);
+        void this.initializeProtocolScheme();
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+    }
+
+    private async initializeProtocolScheme(): Promise<void> {
+        this.protocol = await this.ipc.call("initializeProtocolScheme", this.ssoID);
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -477,7 +482,7 @@ export default class ElectronPlatform extends BasePlatform {
      */
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
-        url.protocol = "io.element.desktop";
+        url.protocol = this.protocol;
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
         if (url.href.startsWith(`${url.protocol}//`)) {
             url.href = url.href.replace("://", ":/");
