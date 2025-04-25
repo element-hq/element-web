@@ -2121,6 +2121,7 @@
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filter": "Filter",
         "filters": {
             "favourite": "Favourites",
             "people": "People",
@@ -2154,6 +2155,12 @@
             "open_room": "Open room %(roomName)s"
         },
         "room_options": "Room Options",
+        "secondary_filter": {
+            "all_activity": "All activity",
+            "invites_only": "Invites only",
+            "low_priority": "Low priority",
+            "mentions_only": "Mentions only"
+        },
         "secondary_filters": "Secondary filters",
         "show_less": "Show less",
         "show_message_previews": "Show message previews",
