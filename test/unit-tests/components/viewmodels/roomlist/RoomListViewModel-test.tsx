@@ -9,9 +9,8 @@ import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
-import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/RoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";

@@ -10,8 +10,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
 import { _t, _td, type TranslationKey } from "../../../languageHandler";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
-import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import RoomListStoreV3, { LISTS_LOADED_EVENT, LISTS_UPDATE_EVENT } from "../../../stores/room-list-v3/RoomListStoreV3";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
@@ -116,7 +115,7 @@ export function useFilteredRooms(): FilteredRooms {
     );
 
     const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
-    const [isLoadingRooms, setIsLoadingRooms] = useState(true);
+    const [isLoadingRooms, setIsLoadingRooms] = useState(() => RoomListStoreV3.instance.isLoadingRooms);
 
     const updateRoomsFromStore = useCallback((filters: FilterKey[] = []): void => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
@@ -137,9 +136,12 @@ export function useFilteredRooms(): FilteredRooms {
     };
 
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
-        setIsLoadingRooms(false);
         const filters = getAppliedFilters();
         updateRoomsFromStore(filters);
+    });
+
+    useEventEmitter(RoomListStoreV3.instance, LISTS_LOADED_EVENT, () => {
+        setIsLoadingRooms(false);
     });
 
     /**
