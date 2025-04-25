@@ -2102,6 +2102,7 @@
     "room_list": {
         "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
+        "appearance": "Utseende",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
         "empty": {
@@ -2152,7 +2153,10 @@
             "more_options": "Flere alternativer",
             "open_room": "Åpne rom %(roomName)s"
         },
+        "room_options": "Rominnstillinger",
+        "secondary_filters": "Sekundære filtre",
         "show_less": "Vis mindre",
+        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },
