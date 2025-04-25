@@ -51,7 +51,7 @@ describe("<RoomListView />", () => {
         });
 
         const roomList = render(<RoomListView />);
-        expect(roomList.container.querySelector(".mx_Spinner")).toBeDefined();
+        expect(roomList.container.querySelector(".mx_RoomListSkeleton")).not.toBeNull();
     });
 
     it("should render an empty room list", () => {
