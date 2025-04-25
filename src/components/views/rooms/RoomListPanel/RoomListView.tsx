@@ -11,7 +11,6 @@ import { useRoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewM
 import { RoomList } from "./RoomList";
 import { EmptyRoomList } from "./EmptyRoomList";
 import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
-import Spinner from "../../elements/Spinner";
 
 /**
  * Host the room list and the (future) room filters
@@ -21,7 +20,7 @@ export function RoomListView(): JSX.Element {
     const isRoomListEmpty = vm.rooms.length === 0;
     let listBody;
     if (vm.isLoadingRooms) {
-        listBody = <Spinner />;
+        listBody = <div className="mx_RoomListSkeleton" />;
     } else if (isRoomListEmpty) {
         listBody = <EmptyRoomList vm={vm} />;
     } else {
