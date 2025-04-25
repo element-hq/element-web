@@ -151,18 +151,8 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
       </button>
     </div>
     <div
-      class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
-      data-testid="empty-room-list"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-    >
-      <div
-        aria-label="Loading…"
-        class="mx_Spinner_icon"
-        data-testid="spinner"
-        role="progressbar"
-        style="width: 32px; height: 32px;"
-      />
-    </div>
+      class="mx_RoomListSkeleton"
+    />
   </section>
 </DocumentFragment>
 `;
@@ -380,18 +370,8 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       </button>
     </div>
     <div
-      class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
-      data-testid="empty-room-list"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-    >
-      <div
-        aria-label="Loading…"
-        class="mx_Spinner_icon"
-        data-testid="spinner"
-        role="progressbar"
-        style="width: 32px; height: 32px;"
-      />
-    </div>
+      class="mx_RoomListSkeleton"
+    />
   </section>
 </DocumentFragment>
 `;
