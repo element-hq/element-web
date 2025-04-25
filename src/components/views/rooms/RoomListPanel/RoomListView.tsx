@@ -11,6 +11,7 @@ import { useRoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewM
 import { RoomList } from "./RoomList";
 import { EmptyRoomList } from "./EmptyRoomList";
 import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
+import { RoomListSecondaryFilters } from "./RoomListSecondaryFilters";
 
 /**
  * Host the room list and the (future) room filters
@@ -29,6 +30,7 @@ export function RoomListView(): JSX.Element {
     return (
         <>
             <RoomListPrimaryFilters vm={vm} />
+            <RoomListSecondaryFilters vm={vm} />
             {listBody}
         </>
     );

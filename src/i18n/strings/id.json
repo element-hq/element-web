@@ -523,6 +523,7 @@
         "message_timestamp_invalid": "Stempel waktu tidak valid",
         "microphone": "Mikrofon",
         "model": "Model",
+        "moderation_and_safety": "Moderasi dan keamanan",
         "modern": "Modern",
         "mute": "Bisukan",
         "n_members": {
@@ -2093,6 +2094,7 @@
     "room_list": {
         "add_room_label": "Tambahkan ruangan",
         "add_space_label": "Tambahkan space",
+        "appearance": "Penampilan",
         "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
         "breadcrumbs_label": "Ruangan yang baru saja dilihat",
         "empty": {
@@ -2143,7 +2145,10 @@
             "more_options": "Opsi Lainnya",
             "open_room": "Buka ruangan %(roomName)s"
         },
+        "room_options": "Opsi Ruangan",
+        "secondary_filters": "Saringan sekunder",
         "show_less": "Tampilkan lebih sedikit",
+        "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {
             "one": "Tampilkan %(count)s lagi",
             "other": "Tampilkan %(count)s lagi"
@@ -2721,6 +2726,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Pengaturan:</strong> Pengguna yang Diabaikan"
+        },
+        "media_preview": {
+            "hide_avatars": "Sembunyikan avatar ruangan dan pengundang",
+            "hide_media": "Selalu sembunyikan",
+            "media_preview_description": "Media tersembunyi selalu dapat ditampilkan dengan mengetuknya",
+            "media_preview_label": "Tampilkan media di lini masa",
+            "show_in_private": "Di ruangan privat",
+            "show_media": "Selalu tampilkan"
         },
         "notifications": {
             "default_setting_description": "Pengaturan ini akan diterapkan secara bawaan ke semua ruangan Anda.",

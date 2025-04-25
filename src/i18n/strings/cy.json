@@ -505,6 +505,7 @@
         "message_timestamp_invalid": "Stamp amser annilys",
         "microphone": "Meicroffôn",
         "model": "Model",
+        "moderation_and_safety": "Cymedroli a diogelwch",
         "modern": "Modern",
         "mute": "Tewi",
         "name": "Enw",
@@ -1974,6 +1975,7 @@
         "upload": {
             "uploading_single_file": "Wrthi'n llwytho %(filematere)s"
         },
+        "video_room": "Mae'r ystafell hon yn ystafell fideo",
         "waiting_for_join_subtitle": "Unwaith y bydd defnyddwyr sydd wedi'u gwahodd wedi ymuno â %(brand)s, byddwch yn gallu sgwrsio a bydd yr ystafell yn cael ei hamgryptio pen-i-ben",
         "waiting_for_join_title": "Yn aros i ddefnyddwyr ymuno â %(brand)s"
     },
@@ -2580,6 +2582,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Gosodiadau:</strong> Defnyddwyr wedi'u Hanwybyddu"
+        },
+        "media_preview": {
+            "hide_avatars": "Cuddio afatarau o'r ystafell a'r gwahoddwr",
+            "hide_media": "Cuddio bob tro",
+            "media_preview_description": "Mae modd dangos cyfrwng cudd trwy dapio arno",
+            "media_preview_label": "Dangos cyfryngau mewn llinell amser",
+            "show_in_private": "Mewn ystafelloedd preifat",
+            "show_media": "Dangos bob tro"
         },
         "notifications": {
             "default_setting_description": "Bydd y gosodiad hwn yn cael ei osod fel rhagosodiad i'ch holl ystafelloedd.",

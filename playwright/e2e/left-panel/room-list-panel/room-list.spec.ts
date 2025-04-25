@@ -271,6 +271,22 @@ test.describe("Room list", () => {
             await expect(room).toMatchScreenshot("room-list-item-mention.png");
         });
 
+        test("should render a message preview", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
+            const roomListView = getRoomList(page);
+
+            await page.getByRole("button", { name: "Room Options" }).click();
+            await page.getByRole("menuitemcheckbox", { name: "Show message previews" }).click();
+
+            const roomId = await app.client.createRoom({ name: "activity" });
+            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await bot.joinRoom(roomId);
+            await bot.sendMessage(roomId, "I am a robot. Beep.");
+
+            const room = roomListView.getByRole("gridcell", { name: "activity" });
+            await expect(room.getByText("I am a robot. Beep.")).toBeVisible();
+            await expect(room).toMatchScreenshot("room-list-item-message-preview.png");
+        });
+
         test("should render an activity decoration", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
             const roomListView = getRoomList(page);
 

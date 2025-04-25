@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, forwardRef, type ReactNode, type Ref, useContext } from "react";
+import React, { type JSX, type ReactNode, type Ref, useContext } from "react";
 import { type RoomMember, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -33,21 +33,20 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     forceHistorical?: boolean; // true to deny `useOnlyCurrentProfiles` usage. Default false.
     hideTitle?: boolean;
     children?: ReactNode;
+    ref?: Ref<HTMLElement>;
 }
 
-function MemberAvatar(
-    {
-        size,
-        resizeMethod = "crop",
-        viewUserOnClick,
-        forceHistorical,
-        fallbackUserId,
-        hideTitle,
-        member: propsMember,
-        ...props
-    }: IProps,
-    ref: Ref<HTMLElement>,
-): JSX.Element {
+export default function MemberAvatar({
+    size,
+    resizeMethod = "crop",
+    viewUserOnClick,
+    forceHistorical,
+    fallbackUserId,
+    hideTitle,
+    member: propsMember,
+    ref,
+    ...props
+}: IProps): JSX.Element {
     const cli = useContext(MatrixClientContext);
     const card = useContext(CardContext);
 
@@ -101,5 +100,3 @@ function MemberAvatar(
         />
     );
 }
-
-export default forwardRef(MemberAvatar);

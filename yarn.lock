@@ -3653,10 +3653,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.2.tgz#27363d26446eaa21880ab126fa51fec112e6fd86"
   integrity sha512-y13bhPyJ5OzbGRl21F6+Y2adrjyK+mu67yKTx+o8MfmIpJzMSn4KkHZtcujMquWSh0e5ZAufsnk4VYvxbSpr1A==
 
-"@vector-im/compound-web@^7.10.1":
-  version "7.10.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.10.1.tgz#9aa7fc93550b4b064484fa30226439b2d07bb35e"
-  integrity sha512-3tVIPCNxXCrMz6TqJc5GiOndPC7bjCRdYIcSKIb7T3B0gVo81aAD2wWL5xSb33yDbXc/tdlKCiav57eQB8dRsQ==
+"@vector-im/compound-web@^7.10.2":
+  version "7.10.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.10.2.tgz#2f62c6ab83269e5b957f53bb53413a74fb65e04d"
+  integrity sha512-K9gA1Ah9CTJMeZTkcDFpAdVRNbu/rQEgV3PoDcEPI3e9iDds8Dhbo7EfOciPvtXCZw6Hr83lnhWDnwTFHVlahQ==
   dependencies:
     "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.1"
@@ -3677,7 +3677,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.3.tgz#cc54d8b3e9472bcd8e622126ba364ee31952cd8a"
   integrity sha512-fqo8P55Vc/t0vxpFar9RDJN5gKEjJmzrLo+O4piDbFda6VrRoqrWAtiu0Au0g6B4hRDPKIuFupk8v9Ja7q8Hvg==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"

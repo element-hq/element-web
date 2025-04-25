@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Ungültiger Zeitstempel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderation und Sicherheit",
         "modern": "Modern",
         "mute": "Stummschalten",
         "n_members": {
@@ -2728,6 +2729,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Einstellungen:</strong> Blockierte Benutzer"
+        },
+        "media_preview": {
+            "hide_avatars": "Verstecken Sie die Avatare von Chatroom und Einladung",
+            "hide_media": "Verstecke Sie sich immer",
+            "media_preview_description": "Ein verstecktes Medium kann immer angezeigt werden, indem Sie darauf tippen",
+            "media_preview_label": "Medien in der Zeitleiste anzeigen",
+            "show_in_private": "In privaten Chatrooms",
+            "show_media": "Immer anzeigen"
         },
         "notifications": {
             "default_setting_description": "Diese Einstellung wird standardmäßig für all deine Räume übernommen.",
