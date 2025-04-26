@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -194,11 +194,21 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
-                if (oldMembership === EffectiveMembership.Join && newMembership === EffectiveMembership.Leave) {
+
+                const ownUserId = this.matrixClient.getSafeUserId();
+                const isKicked = (payload.room as Room).getMember(ownUserId)?.isKicked();
+                const shouldRemove =
+                    !isKicked &&
+                    (payload.oldMembership === KnownMembership.Invite ||
+                        payload.oldMembership === KnownMembership.Join) &&
+                    payload.membership === KnownMembership.Leave;
+
+                if (shouldRemove) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
                 }
+
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                     // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                     // the dead room in the list.
