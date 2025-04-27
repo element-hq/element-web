@@ -119,6 +119,9 @@ Please see LICENSE files in the repository root for full details.
             word-break: break-all;
             text-overflow: ellipsis;
 
+            /* Don't spill over the container */
+            width: 90%;
+
             /* E2E icon wrapper */
             .mx_Flex > span {
                 display: inline-block;
@@ -127,11 +130,15 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_UserInfo_profile_name {
             height: 30px;
+            text-wrap: nowrap;
         }
 
         .mx_UserInfo_profile_mxid {
             color: var(--cpd-color-text-secondary);
             height: 28px;
+            max-width: 100%;
+            /* MXIDs are one long "word" */
+            word-break: break-all;
         }
 
         .mx_UserInfo_profileStatus {
