@@ -7,9 +7,6 @@
 
 import { IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import React, { type Ref, type JSX, useState } from "react";
-
-import { _t } from "../../../../languageHandler";
-import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import {
     ArrowDownIcon,
     ChatIcon,
@@ -18,6 +15,9 @@ import {
     FilterIcon,
     MentionIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+
+import { _t } from "../../../../languageHandler";
+import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../viewmodels/roomlist/useFilteredRooms";
 import { textForSecondaryFilter } from "./textForFilter";
 
