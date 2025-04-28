@@ -528,6 +528,7 @@
         "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
         "model": "Model",
+        "moderation_and_safety": "Moderacja i bezpieczeństwo",
         "modern": "Współczesny",
         "mute": "Wycisz",
         "n_members": {
@@ -2117,6 +2118,7 @@
     "room_list": {
         "add_room_label": "Dodaj pokój",
         "add_space_label": "Dodaj przestrzeń",
+        "appearance": "Wygląd",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
         "empty": {
@@ -2167,7 +2169,10 @@
             "more_options": "Więcej opcji",
             "open_room": "Pokój otwarty %(roomName)s"
         },
+        "room_options": "Opcje pokoju",
+        "secondary_filters": "Filtry poboczne",
         "show_less": "Pokaż mniej",
+        "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
             "few": "Pokaż %(count)s więcej",
@@ -2746,6 +2751,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Ustawienia:</strong> Ignorowani użytkownicy"
+        },
+        "media_preview": {
+            "hide_avatars": "Ukryj awatary pokoju i zapraszającego",
+            "hide_media": "Zawsze ukrywaj",
+            "media_preview_description": "Ukryte media można zawsze wyświetlić, dotykając ich",
+            "media_preview_label": "Pokaż media na osi czasu",
+            "show_in_private": "W pokojach prywatnych",
+            "show_media": "Zawsze pokazuj"
         },
         "notifications": {
             "default_setting_description": "To ustawienie zastosuje się do wszystkich Twoich pokoi.",
