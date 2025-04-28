@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { type JSX } from "react";
-import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
-import { AutoSizer } from "react-virtualized";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { Flex } from "../../../utils/Flex";
 import {
@@ -43,7 +42,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const getRowHeight = ({ index }: { index: number }): number => {
+    const getRowHeight = (index: number): number => {
         if (vm.members[index] === SEPARATOR) {
             /**
              * This is a separator of 2px height rendered between
@@ -64,19 +63,14 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
-        if (index === totalRows) {
-            // We've rendered all the members,
-            // now we render an empty div to add some space to the end of the list.
-            return <div key={key} style={style} />;
-        }
-        const item = vm.members[index];
-        return (
-            <div key={key} style={style}>
-                {getRowComponent(item)}
-            </div>
-        );
-    };
+    const scrollContainer = React.useRef<HTMLDivElement | null>(null);
+    const virtualizer = useVirtualizer({
+        count: totalRows,
+        getScrollElement: () => scrollContainer.current,
+        estimateSize: (i) => getRowHeight(i),
+        overscan: 15,
+    });
+    const items = virtualizer.getVirtualItems();
 
     return (
         <BaseCard
@@ -87,34 +81,60 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             header={_t("common|people")}
             onClose={props.onClose}
         >
-            <RovingTabIndexProvider handleUpDown scrollIntoView>
-                {({ onKeyDownHandler }) => (
-                    <Flex
-                        align="stretch"
-                        direction="column"
-                        className="mx_MemberListView_container"
-                        onKeyDown={onKeyDownHandler}
+            {/* <RovingTabIndexProvider handleUpDown scrollIntoView> */}
+            {/* {({ onKeyDownHandler }) => ( */}
+            <Flex
+                align="stretch"
+                direction="column"
+                className="mx_MemberListView_container"
+                // onKeyDown={onKeyDownHandler}
+            >
+                <Form.Root>
+                    <MemberListHeaderView vm={vm} />
+                </Form.Root>
+                <div
+                    ref={scrollContainer}
+                    style={{
+                        height: "100%",
+                        width: "100%",
+                        overflowY: "auto",
+                        contain: "strict",
+                    }}
+                >
+                    <div
+                        style={{
+                            height: virtualizer.getTotalSize(),
+                            width: "100%",
+                            position: "relative",
+                        }}
                     >
-                        <Form.Root>
-                            <MemberListHeaderView vm={vm} />
-                        </Form.Root>
-                        <AutoSizer>
-                            {({ height, width }) => (
-                                <List
-                                    rowRenderer={rowRenderer}
-                                    rowHeight={getRowHeight}
-                                    // The +1 refers to the additional empty div that we render at the end of the list.
-                                    rowCount={totalRows + 1}
-                                    // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-                                    height={height - 113}
-                                    width={width}
-                                    overscanRowCount={15}
-                                />
-                            )}
-                        </AutoSizer>
-                    </Flex>
-                )}
-            </RovingTabIndexProvider>
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                transform: `translateY(${items[0]?.start ?? 0}px)`,
+                            }}
+                        >
+                            {items.map((virtualRow: any) => {
+                                const member = vm.members[virtualRow.index];
+                                return (
+                                    <div
+                                        key={virtualRow.key}
+                                        data-index={virtualRow.index}
+                                        ref={virtualizer.measureElement}
+                                    >
+                                        {getRowComponent(member)}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </Flex>
+            {/* )} */}
+            {/* </RovingTabIndexProvider> */}
         </BaseCard>
     );
 };

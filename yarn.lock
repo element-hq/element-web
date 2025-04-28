@@ -2873,6 +2873,18 @@
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
 
+"@tanstack/react-virtual@^3.13.6":
+  version "3.13.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.6.tgz#30243c8c3166673caf66bfbf5352e1b314a3a4cd"
+  integrity sha512-WT7nWs8ximoQ0CDx/ngoFP7HbQF9Q2wQe4nh2NB+u2486eX3nZRE40P9g6ccCVq7ZfTSH5gFOuCoVH5DLNS/aA==
+  dependencies:
+    "@tanstack/virtual-core" "3.13.6"
+
+"@tanstack/virtual-core@3.13.6":
+  version "3.13.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.6.tgz#329f962f1596b3280736c266a982897ed2112157"
+  integrity sha512-cnQUeWnhNP8tJ4WsGcYiX24Gjkc9ALstLbHcBj1t3E7EimN6n6kHH+DPV4PpDnuw00NApQp+ViojMj1GRdwYQg==
+
 "@testcontainers/postgresql@^10.18.0":
   version "10.19.0"
   resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.19.0.tgz#e1ff9fbfee76c23bc899865524ee8e2ee297bdf2"
@@ -3668,7 +3680,7 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
   uid ""
 
