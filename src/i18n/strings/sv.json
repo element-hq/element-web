@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Ogiltig tidsstämpel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderering och säkerhet",
         "modern": "Modernt",
         "mute": "Tysta",
         "n_members": {
@@ -2100,6 +2101,7 @@
     "room_list": {
         "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
+        "appearance": "Utseende",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
         "empty": {
@@ -2150,7 +2152,10 @@
             "more_options": "Fler alternativ",
             "open_room": "Öppet rummet %(roomName)s"
         },
+        "room_options": "Rumsalternativ",
+        "secondary_filters": "Sekundära filter",
         "show_less": "Visa mindre",
+        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
@@ -2728,6 +2733,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Inställningar:</strong> Ignorerade användare"
+        },
+        "media_preview": {
+            "hide_avatars": "Dölj avatarer för rum och inbjudare",
+            "hide_media": "Dölj alltid",
+            "media_preview_description": "En dold media kan alltid visas genom att trycka på den",
+            "media_preview_label": "Visa media i tidslinjen",
+            "show_in_private": "I privata rum",
+            "show_media": "Visa alltid"
         },
         "notifications": {
             "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",

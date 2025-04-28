@@ -3262,7 +3262,7 @@
     },
     "theme": {
         "light_high_contrast": "Claro (alto contraste)",
-        "match_system": "Sistema de correspondência"
+        "match_system": "Padrão do sistema"
     },
     "thread_view_back_action_label": "Voltar ao tópico",
     "threads": {
