@@ -480,10 +480,6 @@ export function topicToHtml(
     ref?: LegacyRef<HTMLSpanElement>,
     allowExtendedHtml = false,
 ): ReactNode {
-    if (!SettingsStore.getValue("feature_html_topic")) {
-        htmlTopic = undefined;
-    }
-
     let isFormattedTopic = !!htmlTopic;
     let topicHasEmoji = false;
     let safeTopic = "";
