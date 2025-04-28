@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useMemo } from "react";
+import React, { type Ref, useCallback, useContext, useMemo, type JSX } from "react";
 
 import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
@@ -37,60 +37,69 @@ interface ActiveCallEventProps {
     buttonKind: AccessibleButtonKind;
     buttonDisabledTooltip?: string;
     onButtonClick: ((ev: ButtonEvent) => void) | null;
+    ref?: Ref<HTMLDivElement>;
 }
 
-const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
-    ({ mxEvent, call, participatingMembers, buttonText, buttonKind, buttonDisabledTooltip, onButtonClick }, ref) => {
-        const senderName = useMemo(() => mxEvent.sender?.name ?? mxEvent.getSender(), [mxEvent]);
+const ActiveCallEvent = ({
+    mxEvent,
+    call,
+    participatingMembers,
+    buttonText,
+    buttonKind,
+    buttonDisabledTooltip,
+    onButtonClick,
+    ref,
+}: ActiveCallEventProps): JSX.Element => {
+    const senderName = useMemo(() => mxEvent.sender?.name ?? mxEvent.getSender(), [mxEvent]);
 
-        const facePileMembers = useMemo(() => participatingMembers.slice(0, MAX_FACES), [participatingMembers]);
-        const facePileOverflow = participatingMembers.length > facePileMembers.length;
+    const facePileMembers = useMemo(() => participatingMembers.slice(0, MAX_FACES), [participatingMembers]);
+    const facePileOverflow = participatingMembers.length > facePileMembers.length;
 
-        return (
-            <div className="mx_CallEvent_wrapper" ref={ref}>
-                <div className="mx_CallEvent mx_CallEvent_active">
-                    <MemberAvatar
-                        member={mxEvent.sender}
-                        fallbackUserId={mxEvent.getSender()}
-                        viewUserOnClick
-                        size="24px"
-                    />
-                    <div className="mx_CallEvent_columns">
-                        <div className="mx_CallEvent_details">
-                            <span className="mx_CallEvent_title">
-                                {_t("timeline|m.call|video_call_started_text", { name: senderName })}
-                            </span>
-                            <LiveContentSummary
-                                type={LiveContentType.Video}
-                                text={_t("voip|video_call")}
-                                active={false}
-                                participantCount={participatingMembers.length}
-                            />
-                            <FacePile members={facePileMembers} size="24px" overflow={facePileOverflow} />
-                        </div>
-                        {call && <SessionDuration session={call.session} />}
-                        <AccessibleButton
-                            className="mx_CallEvent_button"
-                            kind={buttonKind}
-                            disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
-                            onClick={onButtonClick}
-                            title={buttonDisabledTooltip}
-                        >
-                            {buttonText}
-                        </AccessibleButton>
+    return (
+        <div className="mx_CallEvent_wrapper" ref={ref}>
+            <div className="mx_CallEvent mx_CallEvent_active">
+                <MemberAvatar
+                    member={mxEvent.sender}
+                    fallbackUserId={mxEvent.getSender()}
+                    viewUserOnClick
+                    size="24px"
+                />
+                <div className="mx_CallEvent_columns">
+                    <div className="mx_CallEvent_details">
+                        <span className="mx_CallEvent_title">
+                            {_t("timeline|m.call|video_call_started_text", { name: senderName })}
+                        </span>
+                        <LiveContentSummary
+                            type={LiveContentType.Video}
+                            text={_t("voip|video_call")}
+                            active={false}
+                            participantCount={participatingMembers.length}
+                        />
+                        <FacePile members={facePileMembers} size="24px" overflow={facePileOverflow} />
                     </div>
+                    {call && <SessionDuration session={call.session} />}
+                    <AccessibleButton
+                        className="mx_CallEvent_button"
+                        kind={buttonKind}
+                        disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
+                        onClick={onButtonClick}
+                        title={buttonDisabledTooltip}
+                    >
+                        {buttonText}
+                    </AccessibleButton>
                 </div>
             </div>
-        );
-    },
-);
+        </div>
+    );
+};
 
 interface ActiveLoadedCallEventProps {
     mxEvent: MatrixEvent;
     call: ElementCall;
+    ref?: Ref<HTMLDivElement>;
 }
 
-const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxEvent, call }, ref) => {
+const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProps): JSX.Element => {
     const connectionState = useConnectionState(call);
     const participatingMembers = useParticipatingMembers(call);
     const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
@@ -126,10 +135,6 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
                 return [_t("action|leave"), "danger", disconnect];
             case ConnectionState.Disconnecting:
                 return [_t("action|leave"), "danger", null];
-            case ConnectionState.Connecting:
-            case ConnectionState.Lobby:
-            case ConnectionState.WidgetLoading:
-                return [_t("action|join"), "primary", null];
         }
     }, [connectionState, connect, disconnect]);
 
@@ -145,16 +150,17 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
             onButtonClick={onButtonClick}
         />
     );
-});
+};
 
 interface CallEventProps {
     mxEvent: MatrixEvent;
+    ref?: Ref<HTMLDivElement>;
 }
 
 /**
  * An event tile representing an active or historical Element call.
  */
-export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
+export const CallEvent = ({ mxEvent, ref }: CallEventProps): JSX.Element => {
     const client = useContext(MatrixClientContext);
     const call = useCall(mxEvent.getRoomId()!);
     const latestEvent = client
@@ -191,4 +197,4 @@ export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
     }
 
     return <ActiveLoadedCallEvent mxEvent={mxEvent} call={call as ElementCall} ref={ref} />;
-});
+};

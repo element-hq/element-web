@@ -151,9 +151,11 @@ export function createTestClient(): MatrixClient {
                 },
             }),
             isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            disableKeyStorage: jest.fn(),
             resetEncryption: jest.fn(),
             getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
             isSecretStorageReady: jest.fn().mockResolvedValue(false),
+            deleteKeyBackupVersion: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -192,6 +194,7 @@ export function createTestClient(): MatrixClient {
         }),
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         setAccountData: jest.fn(),
+        deleteAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         setRoomTopic: jest.fn(),
         setRoomReadMarkers: jest.fn().mockResolvedValue({}),
@@ -300,6 +303,12 @@ export function createTestClient(): MatrixClient {
         getLocalAliases: jest.fn().mockReturnValue([]),
         uploadDeviceSigningKeys: jest.fn(),
         isKeyBackupKeyStored: jest.fn().mockResolvedValue(null),
+        getIgnoredUsers: jest.fn().mockReturnValue([]),
+        setIgnoredUsers: jest.fn(),
+        reportRoom: jest.fn(),
+        pushProcessor: {
+            getPushRuleById: jest.fn(),
+        },
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -603,7 +612,7 @@ export function mkStubRoom(
         getState: (): RoomState | undefined => undefined,
     } as unknown as EventTimeline;
     return {
-        canInvite: jest.fn(),
+        canInvite: jest.fn().mockReturnValue(false),
         client,
         findThreadForEvent: jest.fn(),
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
@@ -658,6 +667,7 @@ export function mkStubRoom(
         getUnreadNotificationCount: jest.fn(() => 0),
         getRoomUnreadNotificationCount: jest.fn().mockReturnValue(0),
         getVersion: jest.fn().mockReturnValue("1"),
+        getBumpStamp: jest.fn().mockReturnValue(0),
         hasMembershipState: () => false,
         isElementVideoRoom: jest.fn().mockReturnValue(false),
         isSpaceRoom: jest.fn().mockReturnValue(false),

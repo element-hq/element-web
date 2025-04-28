@@ -10,7 +10,7 @@ import classNames from "classnames";
 import { type InternationalisedPolicy, type Terms, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
+import React, { type JSX, type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
 import { Button, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
@@ -85,7 +85,6 @@ interface IAuthEntryProps {
     requestEmailToken?: () => Promise<void>;
     fail: (error: Error) => void;
     clientSecret: string;
-    showContinue: boolean;
 }
 
 interface IPasswordAuthEntryState {
@@ -361,9 +360,11 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
             );
         }
 
-        let submitButton: JSX.Element | undefined;
-        if (this.props.showContinue !== false) {
-            submitButton = (
+        return (
+            <div className="mx_InteractiveAuthEntryComponents">
+                <p>{_t("auth|uia|terms")}</p>
+                {checkboxes}
+                {errorSection}
                 <AccessibleButton
                     kind="primary"
                     className="mx_InteractiveAuthEntryComponents_termsSubmit"
@@ -372,15 +373,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
                 >
                     {_t("action|accept")}
                 </AccessibleButton>
-            );
-        }
-
-        return (
-            <div className="mx_InteractiveAuthEntryComponents">
-                <p>{_t("auth|uia|terms")}</p>
-                {checkboxes}
-                {errorSection}
-                {submitButton}
             </div>
         );
     }

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Form } from "@vector-im/compound-web";
-import React from "react";
+import React, { type JSX } from "react";
 import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
@@ -33,7 +33,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 
     const totalRows = vm.members.length;
 
-    const getRowComponent = (item: MemberWithSeparator): React.JSX.Element => {
+    const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
         if (item === SEPARATOR) {
             return <hr className="mx_MemberListView_separator" />;
         } else if (item.member) {
@@ -64,7 +64,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const rowRenderer = ({ key, index, style }: ListRowProps): React.JSX.Element => {
+    const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
         if (index === totalRows) {
             // We've rendered all the members,
             // now we render an empty div to add some space to the end of the list.
@@ -108,6 +108,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                                     // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
                                     height={height - 113}
                                     width={width}
+                                    overscanRowCount={15}
                                 />
                             )}
                         </AutoSizer>

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, type JSX, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -157,8 +157,7 @@ export interface EventTileProps {
     // is this the focused event
     isSelectedEvent?: boolean;
 
-    // callback called when dynamic content in events are loaded
-    onHeightChanged?: () => void;
+    resizeObserver?: ResizeObserver;
 
     // a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'.
     readReceipts?: IReadReceiptProps[];
@@ -229,6 +228,8 @@ export interface EventTileProps {
     // The following properties are used by EventTilePreview to disable tab indexes within the event tile
     hideTimestamp?: boolean;
     inhibitInteraction?: boolean;
+
+    ref?: Ref<UnwrappedEventTile>;
 }
 
 interface IState {
@@ -289,8 +290,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public readonly ref = createRef<HTMLElement>();
 
     public static defaultProps = {
-        // no-op function because onHeightChanged is optional yet some sub-components assume its existence
-        onHeightChanged: function () {},
         forExport: false,
         layout: Layout.Group,
     };
@@ -443,14 +442,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         this.unmounted = false;
+        if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
-        // If the shield state changed, the height might have changed.
-        // XXX: does the shield *actually* cause a change in height? Not sure.
-        if (prevState.shieldColour !== this.state.shieldColour && this.props.onHeightChanged) {
-            this.props.onHeightChanged();
-        }
         // If we're not listening for receipts and expect to be, register a listener.
         if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
             MatrixClientPeg.safeGet().on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -460,6 +455,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (prevProps.eventSendStatus !== this.props.eventSendStatus) {
             this.verifyEvent();
         }
+
+        if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
     }
 
     private onNewThread = (thread: Thread): void => {
@@ -564,8 +561,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private onDecrypted = (): void => {
         // we need to re-verify the sending device.
         this.verifyEvent();
-        // decryption might, of course, trigger a height change, so call onHeightChanged after the re-render
-        this.forceUpdate(this.props.onHeightChanged);
+        this.forceUpdate();
     };
 
     private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
@@ -1201,7 +1197,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             replyChain = (
                 <ReplyChain
                     parentEv={this.props.mxEvent}
-                    onHeightChanged={this.props.onHeightChanged}
                     ref={this.replyChain}
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
@@ -1254,7 +1249,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     // appease TS
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
-                                    onHeightChanged: () => this.props.onHeightChanged,
                                     permalinkCreator: this.props.permalinkCreator!,
                                 },
                                 this.context.showHiddenEvents,
@@ -1401,7 +1395,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     // appease TS
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
-                                    onHeightChanged: this.props.onHeightChanged,
                                     permalinkCreator: this.props.permalinkCreator,
                                 },
                                 this.context.showHiddenEvents,
@@ -1453,7 +1446,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     // appease TS
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
-                                    onHeightChanged: this.props.onHeightChanged,
                                     permalinkCreator: this.props.permalinkCreator,
                                 },
                                 this.context.showHiddenEvents,
@@ -1492,15 +1484,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 }
 
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
-const SafeEventTile = forwardRef<UnwrappedEventTile, EventTileProps>((props, ref) => {
+const SafeEventTile = (props: EventTileProps): JSX.Element => {
     return (
-        <>
-            <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
-                <UnwrappedEventTile ref={ref} {...props} />
-            </TileErrorBoundary>
-        </>
+        <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
+            <UnwrappedEventTile {...props} />
+        </TileErrorBoundary>
     );
-});
+};
 export default SafeEventTile;
 
 function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {

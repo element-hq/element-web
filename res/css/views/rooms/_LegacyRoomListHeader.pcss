@@ -1,0 +1,108 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyRoomListHeader {
+    display: flex;
+    align-items: center;
+
+    .mx_LegacyRoomListHeader_contextLessTitle,
+    .mx_LegacyRoomListHeader_contextMenuButton {
+        font: var(--cpd-font-heading-sm-semibold);
+        font-weight: var(--cpd-font-weight-semibold);
+        padding: 1px 24px 1px 4px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: 8px;
+        margin-right: auto;
+        user-select: none;
+    }
+
+    .mx_LegacyRoomListHeader_contextMenuButton {
+        border-radius: 6px;
+
+        &:hover {
+            background-color: $quinary-content;
+        }
+
+        &::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            top: 3px;
+            right: 0;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $tertiary-content;
+            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
+        }
+
+        &[aria-expanded="true"] {
+            background-color: $quinary-content;
+
+            &::before {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .mx_LegacyRoomListHeader_plusButton {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        position: relative;
+        padding: 8px;
+        margin-left: 8px;
+        margin-right: 12px;
+        background-color: $panel-actions;
+        box-sizing: border-box;
+        flex-shrink: 0;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+            mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
+        }
+
+        &:hover {
+            background-color: $tertiary-content;
+
+            &::before {
+                background-color: $background;
+            }
+        }
+    }
+}
+
+.mx_LegacyRoomListHeader_iconInvite::before {
+    mask-image: url("$(res)/img/element-icons/room/invite.svg");
+}
+.mx_LegacyRoomListHeader_iconStartChat::before {
+    mask-image: url("@vector-im/compound-design-tokens/icons/user-add-solid.svg");
+}
+.mx_LegacyRoomListHeader_iconNewRoom::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-plus.svg");
+}
+.mx_LegacyRoomListHeader_iconNewVideoRoom::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-video.svg");
+}
+.mx_LegacyRoomListHeader_iconExplore::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
+}
+.mx_LegacyRoomListHeader_iconPlus::before {
+    mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
+}

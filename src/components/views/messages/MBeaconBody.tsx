@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useState } from "react";
 import {
     type Beacon,
     BeaconEvent,
@@ -122,7 +122,7 @@ const useHandleBeaconRedaction = (
     }, [event, onBeforeBeaconInfoRedaction]);
 };
 
-const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, getRelationsForEvent }, ref) => {
+const MBeaconBody = ({ mxEvent, getRelationsForEvent, ref }: IBodyProps): JSX.Element => {
     const { beacon, isLive, latestLocationState, waitingToStart } = useBeaconState(mxEvent);
     const mapId = useUniqueId(mxEvent.getId()!);
 
@@ -225,6 +225,6 @@ const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, get
             )}
         </div>
     );
-}) as ForwardRefExoticComponent<IBodyProps>;
+};
 
 export default MBeaconBody;

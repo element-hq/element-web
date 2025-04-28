@@ -909,7 +909,6 @@ function getMPollBodyPropsFromEvent(mxEvent: MatrixEvent): IBodyProps {
         highlightLink: "unused",
         highlights: [],
         mediaEventHelper: {} as unknown as MediaEventHelper,
-        onHeightChanged: () => {},
         onMessageAllowed: () => {},
         permalinkCreator: {} as unknown as RoomPermalinkCreator,
     };

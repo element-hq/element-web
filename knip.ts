@@ -19,6 +19,7 @@ export default {
     ignore: [
         // Keep for now
         "src/hooks/useLocalStorageState.ts",
+        "src/hooks/useTimeout.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
     ],
@@ -39,6 +40,8 @@ export default {
         // Used by webpack
         "process",
         "util",
+        // Embedded into webapp
+        "@element-hq/element-call-embedded",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows

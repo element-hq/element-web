@@ -12,6 +12,7 @@ import React, {
     type ReactNode,
     type RefCallback,
     type SetStateAction,
+    type JSX,
     useCallback,
     useEffect,
     useLayoutEffect,

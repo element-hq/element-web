@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    type JSX,
     type MouseEvent,
     type ComponentProps,
     type ComponentType,
@@ -44,7 +45,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     AccessibleButtonProps<T>,
-    "title" | "onClick" | "size" | "element"
+    "title" | "onClick" | "size" | "element" | "ref"
 > & {
     space?: Room;
     spaceKey?: SpaceKey;
@@ -55,7 +56,7 @@ type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLDivElement>;
+    innerRef?: RefObject<HTMLDivElement | null>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };

@@ -224,6 +224,9 @@ describe("RolesRoomSettingsTab", () => {
                     content: {
                         users: {
                             [cli.getUserId()!]: 100,
+                            // needs at least one remaning admin in the room if we want to demote our user
+                            // otherwise another modal will be displayed
+                            ["@admin:server"]: 100,
                         },
                     },
                 });

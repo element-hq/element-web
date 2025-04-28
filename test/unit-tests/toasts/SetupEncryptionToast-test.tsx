@@ -9,6 +9,7 @@ import React from "react";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
+import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
 import { Kind, showToast } from "../../../src/toasts/SetupEncryptionToast";
 import dis from "../../../src/dispatcher/dispatcher";
@@ -57,7 +58,24 @@ describe("SetupEncryptionToast", () => {
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: "view_user_settings",
             initialTabId: "USER_ENCRYPTION_TAB",
-            props: { showResetIdentity: true },
+            props: { initialEncryptionState: "reset_identity_forgot" },
+        });
+    });
+
+    it("should open settings to the reset flow when recovering fails clicked", async () => {
+        jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
+            throw new Error("Something went wrong while recovering!");
+        });
+
+        showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+        const user = userEvent.setup();
+        await user.click(await screen.findByText("Enter recovery key"));
+
+        expect(dis.dispatch).toHaveBeenCalledWith({
+            action: "view_user_settings",
+            initialTabId: "USER_ENCRYPTION_TAB",
+            props: { initialEncryptionState: "reset_identity_forgot" },
         });
     });
 });

@@ -13,7 +13,7 @@ import { act, render, screen, fireEvent, type RenderResult } from "jest-matrix-r
 
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
-import _RoomListHeader from "../../../../../src/components/views/rooms/RoomListHeader";
+import _RoomListHeader from "../../../../../src/components/views/rooms/LegacyRoomListHeader";
 import * as testUtils from "../../../../test-utils";
 import { stubClient, mkSpace } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";

@@ -519,6 +519,49 @@ describe("TextForEvent", () => {
                 ),
             ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
         });
+
+        it("should handle rejected invites", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.member",
+                        sender: "@a:foo",
+                        content: {
+                            membership: KnownMembership.Leave,
+                        },
+                        unsigned: {
+                            prev_content: {
+                                membership: KnownMembership.Invite,
+                            },
+                        },
+                        state_key: "@a:foo",
+                    }),
+                    mockClient,
+                ),
+            ).toMatchInlineSnapshot(`"Member rejected the invitation"`);
+        });
+
+        it("should handle rejected invites with a reason", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.member",
+                        sender: "@a:foo",
+                        content: {
+                            membership: KnownMembership.Leave,
+                            reason: "I don't want to be in this room.",
+                        },
+                        unsigned: {
+                            prev_content: {
+                                membership: KnownMembership.Invite,
+                            },
+                        },
+                        state_key: "@a:foo",
+                    }),
+                    mockClient,
+                ),
+            ).toMatchInlineSnapshot(`"Member rejected the invitation: I don't want to be in this room."`);
+        });
     });
 
     describe("textForJoinRulesEvent()", () => {

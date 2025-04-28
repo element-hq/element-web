@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, useCallback, useContext, useEffect } from "react";
+import React, { type JSX, type ReactElement, useCallback, useContext, useEffect } from "react";
 import {
     EventStatus,
     type MatrixEvent,
@@ -61,6 +61,7 @@ import { type GetRelationsForEvent, type IEventTileType } from "../rooms/EventTi
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { HideActionButton } from "./HideActionButton.tsx";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -536,6 +537,9 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             key="download"
                         />,
                     );
+                }
+                if (MediaEventHelper.canHide(this.props.mxEvent)) {
+                    toolbarOpts.splice(0, 0, <HideActionButton mxEvent={this.props.mxEvent} key="hide" />);
                 }
             } else if (
                 // Show thread icon even for deleted messages, but only within main timeline

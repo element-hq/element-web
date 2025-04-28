@@ -89,7 +89,6 @@
         "react": "回应",
         "refresh": "刷新",
         "register": "注册",
-        "reject": "拒绝",
         "reload": "重加载",
         "remove": "移除",
         "rename": "重命名",
@@ -349,7 +348,6 @@
         "download_logs": "下载日志",
         "downloading_logs": "正在下载日志",
         "error_empty": "请告诉我们哪里出错了，或最好创建一个 GitHub issue 来描述此问题。",
-        "failed_send_logs": "无法发送日志： ",
         "github_issue": "GitHub 上的 issue",
         "introduction": "若你通过GitHub提交bug，则调试日志能帮助我们追踪问题。 ",
         "log_request": "要帮助我们防止其以后发生，请<a>给我们发送日志</a>。",
@@ -389,7 +387,6 @@
         "access_token": "访问令牌",
         "accessibility": "无障碍功能",
         "advanced": "高级",
-        "all_rooms": "所有房间",
         "analytics": "统计分析服务",
         "and_n_others": {
             "other": "和其他%(count)s个人……",
@@ -407,7 +404,6 @@
         "capabilities": "功能",
         "copied": "已复制！",
         "credits": "感谢",
-        "cross_signing": "交叉签名",
         "dark": "深色",
         "description": "描述",
         "deselect_all": "取消全选",
@@ -485,7 +481,6 @@
         "room_name": "房间名称",
         "rooms": "房间",
         "secure_backup": "安全备份",
-        "security": "安全",
         "select_all": "全选",
         "server": "服务器",
         "settings": "设置",
@@ -504,7 +499,6 @@
         "thread": "消息列",
         "threads": "消息列",
         "timeline": "时间线",
-        "trusted": "受信任的",
         "unencrypted": "未加密",
         "unmute": "取消静音",
         "unnamed_room": "未命名的房间",
@@ -754,22 +748,12 @@
         "cancel_entering_passphrase_title": "取消输入口令词组？",
         "confirm_encryption_setup_body": "点击下方按钮以确认设置加密。",
         "confirm_encryption_setup_title": "确认加密设置",
-        "cross_signing_not_ready": "未设置交叉签名。",
-        "cross_signing_ready": "交叉签名已可用。",
-        "cross_signing_ready_no_backup": "交叉签名已就绪，但尚未备份密钥。",
         "cross_signing_room_normal": "此房间是端到端加密的",
         "cross_signing_room_verified": "房间中所有人都已被验证",
         "cross_signing_room_warning": "有人在使用未知会话",
-        "cross_signing_unsupported": "你的家服务器不支持交叉签名。",
-        "cross_signing_untrusted": "你的账户在秘密存储中有交叉签名身份，但并没有被此会话信任。",
         "cross_signing_user_normal": "你没有验证此用户。",
         "cross_signing_user_verified": "你验证了此用户。此用户已验证了其全部会话。",
         "cross_signing_user_warning": "此用户没有验证其全部会话。",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "清楚交叉签名密钥",
-            "title": "销毁交叉签名密钥？",
-            "warning": "删除交叉签名密钥是永久的。所有你验证过的人都会看到安全警报。除非你丢失了所有可以交叉签名的设备，否则几乎可以确定你不想这么做。"
-        },
         "event_shield_reason_authenticity_not_guaranteed": "此加密消息的真实性无法在此设备上保证。",
         "event_shield_reason_mismatched_sender_key": "由未验证的会话加密",
         "export_unsupported": "你的浏览器不支持所需的密码学扩展",
@@ -789,7 +773,6 @@
             "title": "新恢复方式",
             "warning": "如果你没有设置新恢复方式，可能有攻击者正试图侵入你的账户。请立即更改你的账户密码并在设置中设定一个新恢复方式。"
         },
-        "not_supported": "<不支持>",
         "recovery_method_removed": {
             "description_1": "此会话已检测到你的安全短语和安全消息密钥被移除。",
             "description_2": "如果你出于意外这样做了，你可以在此会话上设置安全消息，以使用新的加密方式重新加密此会话的消息历史。",
@@ -800,8 +783,7 @@
         "set_up_toast_description": "防止丢失加密消息和数据的访问权",
         "set_up_toast_title": "设置安全备份",
         "setup_secure_backup": {
-            "explainer": "在登出之前请备份密钥以免丢失。",
-            "title": "设置"
+            "explainer": "在登出之前请备份密钥以免丢失。"
         },
         "udd": {
             "interactive_verification_button": "用表情符号交互式验证",
@@ -812,7 +794,6 @@
             "title": "不可信任"
         },
         "unable_to_setup_keys_error": "无法设置密钥",
-        "unsupported": "此客户端不支持端到端加密。",
         "verification": {
             "accepting": "正在接受……",
             "after_new_login": {
@@ -940,11 +921,7 @@
             "title": "无法复制房间链接"
         },
         "error_loading_user_profile": "无法加载用户资料",
-        "forget_room_failed": "忘记房间失败，错误代码： %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "服务器可能不可用、超载，或者搜索超时 :(",
-            "title": "搜索失败"
-        }
+        "forget_room_failed": "忘记房间失败，错误代码： %(errCode)s"
     },
     "error_user_not_logged_in": "用户未登录",
     "event_preview": {
@@ -1503,11 +1480,6 @@
         "ongoing": "正在移除…",
         "reason_label": "理由（可选）"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "你确定要拒绝邀请吗？",
-        "failed": "拒绝邀请失败",
-        "title": "拒绝邀请"
-    },
     "report_content": {
         "description": "举报此消息会将其唯一的“事件ID”发送给你的家服务器的管理员。如果此房间中的消息是加密的，则你的家服务器管理员将无法阅读消息文本，也无法查看任何文件或图片。",
         "disagree": "不同意",
@@ -1646,7 +1618,6 @@
             "you_created": "你创建了此房间。"
         },
         "invite_email_mismatch_suggestion": "要在 %(brand)s 中直接接收邀请，请在设置中共享此邮箱。",
-        "invite_reject_ignore": "拒绝并忽略用户",
         "invite_sent_to_email": "邀请已被发送到 %(email)s",
         "invite_sent_to_email_room": "这个到 %(roomName)s 的邀请是发送给 %(email)s 的",
         "invite_subtitle": "<userName/> 邀请了你",
@@ -2117,7 +2088,6 @@
             "remove_msisdn_prompt": "删除 %(phone)s 吗？",
             "spell_check_locale_placeholder": "选择区域设置"
         },
-        "image_thumbnails": "显示图片的预览图",
         "inline_url_previews_default": "默认启用行内URL预览",
         "inline_url_previews_room": "对此房间的所有参与者默认启用URL预览",
         "inline_url_previews_room_account": "对此房间启用URL预览（仅影响你）",
@@ -2218,49 +2188,16 @@
         "prompt_invite": "在发送邀请之前提示可能无效的 Matrix ID",
         "replace_plain_emoji": "自动取代纯文本为表情符号",
         "security": {
-            "4s_public_key_in_account_data": "在账户数据中",
-            "4s_public_key_status": "秘密存储公钥：",
-            "backup_key_cached_status": "备份密钥已缓存：",
-            "backup_key_stored_status": "备份密钥已保存：",
-            "backup_key_unexpected_type": "未预期的类型",
-            "backup_key_well_formed": "格式正确",
-            "backup_keys_description": "请使用你的账户数据备份加密密钥，以免你无法访问你的会话。密钥会由一个唯一安全密钥保护。",
             "bulk_options_accept_all_invites": "接受所有 %(invitedRooms)s 邀请",
             "bulk_options_reject_all_invites": "拒绝所有 %(invitedRooms)s 的邀请",
             "bulk_options_section": "批量选择",
-            "cross_signing_cached": "本地缓存",
-            "cross_signing_homeserver_support": "家服务器功能支持：",
-            "cross_signing_homeserver_support_exists": "存在",
-            "cross_signing_in_4s": "在秘密存储中",
-            "cross_signing_in_memory": "在内存中",
-            "cross_signing_master_private_Key": "主私钥：",
-            "cross_signing_not_cached": "本地未找到",
-            "cross_signing_not_found": "未找到",
-            "cross_signing_not_in_4s": "未在存储中找到",
-            "cross_signing_not_stored": "未存储",
-            "cross_signing_private_keys": "交叉签名私钥：",
-            "cross_signing_public_keys": "交叉签名公钥：",
-            "cross_signing_self_signing_private_key": "自签名私钥：",
-            "cross_signing_user_signing_private_key": "用户签名私钥：",
-            "cryptography_section": "加密",
-            "delete_backup": "删除备份",
-            "delete_backup_confirm_description": "你确定吗？如果密钥没有正确地备份你将失去你的加密消息。",
             "e2ee_default_disabled_warning": "你的服务器管理员默认关闭了私人房间和私聊中的端到端加密。",
             "enable_message_search": "在加密房间中启用消息搜索",
             "encryption_section": "加密",
-            "error_loading_key_backup_status": "无法载入密钥备份状态",
-            "export_megolm_keys": "导出房间的端到端加密密钥",
             "ignore_users_empty": "你没有设置忽略用户。",
             "ignore_users_section": "已忽略的用户",
-            "import_megolm_keys": "导入房间端到端加密密钥",
-            "key_backup_active": "此会话正在备份你的密钥。",
-            "key_backup_active_version_none": "无",
             "key_backup_algorithm": "算法：",
-            "key_backup_complete": "所有密钥都已备份",
             "key_backup_connect": "将此会话连接到密钥备份",
-            "key_backup_connect_prompt": "在登出前连接此会话到密钥备份以避免丢失可能仅在此会话上的密钥。",
-            "key_backup_inactive": "此会话<b>未备份你的密钥</b>，但如果你已有现存备份，你可以继续并从中恢复和向其添加。",
-            "key_backup_inactive_warning": "你的密钥<b>没有被此会话备份</b>。",
             "message_search_disable_warning": "如果被禁用，加密房间内的消息不会显示在搜索结果中。",
             "message_search_disabled": "在本地安全地缓存加密消息以使其出现在搜索结果中。",
             "message_search_enabled": {
@@ -2280,13 +2217,7 @@
             "message_search_unsupported": "%(brand)s缺少安全地在本地缓存加密信息所必须的部件。如果你想实验此功能，请构建一个自定义的<nativeLink>带有搜索部件的</nativeLink>%(brand)s桌面版。",
             "message_search_unsupported_web": "%(brand)s 在浏览器中运行时不能安全地在本地缓存加密信息。请使用<desktopLink>%(brand)s 桌面版</desktopLink>以使加密信息出现在搜索结果中。",
             "record_session_details": "记录客户端名称、版本和url以便在会话管理器里更易识别",
-            "restore_key_backup": "从备份恢复",
-            "secret_storage_not_ready": "尚未就绪",
-            "secret_storage_ready": "就绪",
-            "secret_storage_status": "秘密存储：",
             "send_analytics": "发送统计数据",
-            "session_id": "会话 ID：",
-            "session_key": "会话密钥：",
             "strict_encryption": "永不从本会话向未验证的会话发送加密消息"
         },
         "send_read_receipts": "发送已读回执",
@@ -2468,8 +2399,6 @@
         "topic": "获取或设置房间话题",
         "topic_none": "此房间没有话题。",
         "topic_room_error": "获取房间话题失败：无法找到房间（%(roomId)s）",
-        "tovirtual": "切换到此房间的虚拟房间（如有）",
-        "tovirtual_not_found": "此房间未有虚拟房间",
         "unban": "按照 ID 解封用户",
         "unflip": "在纯文本消息开头添加 ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "解除挂起当前房间的通话",
@@ -2863,7 +2792,9 @@
             "sent": "%(senderName)s 向 %(targetDisplayName)s 发了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 升级了此房间。",
-        "m.room.topic": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。"
+        },
         "m.sticker": "%(senderDisplayName)s 发送了一张贴纸。",
         "m.video": {
             "error_decrypting": "解密视频时出错"
@@ -3121,14 +3052,6 @@
         "ban_room_confirm_title": "禁止进入 %(roomName)s",
         "ban_space_everything": "禁止这些人做任何我有权决定的事",
         "ban_space_specific": "禁止这些人做某些我有权决定的事",
-        "count_of_sessions": {
-            "other": "%(count)s 个会话",
-            "one": "%(count)s 个会话"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s 个已验证的会话",
-            "one": "1 个已验证的会话"
-        },
         "deactivate_confirm_action": "停用用户",
         "deactivate_confirm_description": "停用此用户将会使其登出并阻止其再次登入。而且此用户也会离开其所在的所有房间。此操作不可逆。你确定要停用此用户吗？",
         "deactivate_confirm_title": "停用用户吗？",
@@ -3139,15 +3062,12 @@
         "disinvite_button_room": "从房间取消邀请",
         "disinvite_button_room_name": "取消邀请加入 %(roomName)s",
         "disinvite_button_space": "从空间取消邀请",
-        "edit_own_devices": "编辑设备",
         "error_ban_user": "封禁失败",
         "error_deactivate": "停用用户失败",
         "error_kicking_user": "移除用户失败",
         "error_mute_user": "禁言用户失败",
         "error_revoke_3pid_invite_description": "无法撤销邀请。此服务器可能出现了临时错误，或者你没有足够的权限来撤销邀请。",
         "error_revoke_3pid_invite_title": "撤销邀请失败",
-        "hide_sessions": "隐藏会话",
-        "hide_verified_sessions": "隐藏已验证的会话",
         "invited_by": "被 %(sender)s 邀请",
         "jump_to_rr_button": "跳到阅读回执",
         "kick_button_room": "从房间移除",
@@ -3227,7 +3147,6 @@
         "hide_sidebar_button": "隐藏侧边栏",
         "input_devices": "输入设备",
         "join_button_tooltip_call_full": "抱歉——目前线路拥挤",
-        "join_button_tooltip_connecting": "连接中",
         "maximise": "填满屏幕",
         "misconfigured_server": "服务器配置错误导致通话失败",
         "misconfigured_server_description": "请联系你的家服务器（<code>%(homeserverDomain)s</code>）的管理员配置 TURN 服务器，以确保通话过程稳定。",

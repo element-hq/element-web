@@ -21,11 +21,14 @@ import {
     mkRoomCanonicalAliasEvent,
     mkRoomMemberJoinEvent,
     stubClient,
+    withClientContextRenderOptions,
 } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { type ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
+import { TestSdkContext } from "../../../TestSdkContext.ts";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -45,6 +48,10 @@ describe("<Pill>", () => {
     let pillParentClickHandler: (e: ButtonEvent) => void;
 
     const renderPill = (props: PillProps): void => {
+        const cli = MatrixClientPeg.safeGet();
+        const mockSdkContext = new TestSdkContext();
+        mockSdkContext.client = cli;
+
         const withDefault = {
             inMessage: true,
             shouldShowPillAvatar: true,
@@ -53,9 +60,12 @@ describe("<Pill>", () => {
         // wrap Pill with a div to allow testing of event bubbling
         renderResult = render(
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            <div onClick={pillParentClickHandler}>
-                <Pill {...withDefault} />
-            </div>,
+            <SDKContext.Provider value={mockSdkContext}>
+                <div onClick={pillParentClickHandler}>
+                    <Pill {...withDefault} />
+                </div>
+            </SDKContext.Provider>,
+            withClientContextRenderOptions(cli),
         );
     };
 

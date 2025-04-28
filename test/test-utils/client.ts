@@ -116,6 +116,16 @@ export const mockClientMethodsEvents = () => ({
 });
 
 /**
+ * Returns basic mocked pushProcessor
+ */
+export const mockClientPushProcessor = () => ({
+    pushProcessor: {
+        getPushRuleById: jest.fn(),
+        ruleMatchesEvent: jest.fn(),
+    },
+});
+
+/**
  * Returns basic mocked client methods related to server support
  */
 export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
@@ -143,7 +153,7 @@ export const mockClientMethodsCrypto = (): Partial<
 > => ({
     isKeyBackupKeyStored: jest.fn(),
     getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
-    secretStorage: { hasKey: jest.fn() },
+    secretStorage: { hasKey: jest.fn(), isStored: jest.fn().mockResolvedValue(null) },
     getCrypto: jest.fn().mockReturnValue({
         getUserDeviceInfo: jest.fn(),
         getCrossSigningStatus: jest.fn().mockResolvedValue({

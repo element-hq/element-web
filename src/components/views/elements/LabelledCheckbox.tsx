@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -28,13 +28,16 @@ interface IProps {
 
 const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange, className }) => {
     return (
-        <label className={classnames("mx_LabelledCheckbox", className)}>
-            <StyledCheckbox disabled={disabled} checked={value} onChange={(e) => onChange(e.target.checked)} />
-            <div className="mx_LabelledCheckbox_labels">
+        <div className={classnames("mx_LabelledCheckbox", className)}>
+            <StyledCheckbox
+                description={byline}
+                disabled={disabled}
+                checked={value}
+                onChange={(e) => onChange(e.target.checked)}
+            >
                 <span className="mx_LabelledCheckbox_label">{label}</span>
-                {byline ? <span className="mx_LabelledCheckbox_byline">{byline}</span> : null}
-            </div>
-        </label>
+            </StyledCheckbox>
+        </div>
     );
 };
 

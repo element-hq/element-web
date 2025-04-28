@@ -9,7 +9,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ContextType, createRef, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
+import React, {
+    type JSX,
+    type ContextType,
+    createRef,
+    type CSSProperties,
+    type RefObject,
+    type ReactNode,
+} from "react";
 import classNames from "classnames";
 import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
@@ -89,7 +96,7 @@ interface IProps {
     widgetPageTitle?: string;
     showLayoutButtons?: boolean;
     // Handle to manually notify the PersistedElement that it needs to move
-    movePersistedElement?: MutableRefObject<(() => void) | undefined>;
+    movePersistedElement?: RefObject<(() => void) | null>;
     // An element to render after the iframe as an overlay
     overlay?: ReactNode;
     // If defined this async method will be called when the widget requests to become sticky.

@@ -13,10 +13,16 @@ import {
     RoomViewLifecycle,
     type ViewRoomOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import EventEmitter from "events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
-import { getMockClientWithEventEmitter, untilDispatch, untilEmission } from "../../test-utils";
+import {
+    getMockClientWithEventEmitter,
+    setupAsyncStoreWithClient,
+    untilDispatch,
+    untilEmission,
+} from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SlidingSyncManager } from "../../../src/SlidingSyncManager";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
@@ -33,6 +39,10 @@ import { type CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/Ca
 import { type JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
 import { type SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
+import { type IApp } from "../../../src/utils/WidgetUtils-types";
+import { CallStore } from "../../../src/stores/CallStore";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 
 jest.mock("../../../src/Modal");
 
@@ -60,6 +70,12 @@ jest.mock("../../../src/audio/VoiceRecording", () => ({
     }),
 }));
 
+jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+    [MediaDeviceKindEnum.AudioInput]: [],
+    [MediaDeviceKindEnum.VideoInput]: [],
+    [MediaDeviceKindEnum.AudioOutput]: [],
+});
+
 jest.mock("../../../src/utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: jest.fn(),
@@ -72,7 +88,21 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
     };
 });
 
-jest.mock("../../../src/stores/WidgetStore");
+jest.mock("../../../src/stores/WidgetStore", () => {
+    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const EventEmitter = require("events");
+    const apps: IApp[] = [];
+    const instance = new (class extends EventEmitter {
+        getApps() {
+            return apps;
+        }
+        addVirtualWidget(app: IApp) {
+            apps.push(app);
+        }
+    })();
+    return { instance };
+});
 jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("RoomViewStore", function () {
@@ -82,10 +112,12 @@ describe("RoomViewStore", function () {
     // we need to change the alias to ensure cache misses as the cache exists
     // through all tests.
     let alias = "#somealias2:aser.ver";
+    const getRooms = jest.fn();
     const mockClient = getMockClientWithEventEmitter({
         joinRoom: jest.fn(),
         getRoom: jest.fn(),
         getRoomIdForAlias: jest.fn(),
+        getRooms,
         isGuest: jest.fn(),
         getUserId: jest.fn().mockReturnValue(userId),
         getSafeUserId: jest.fn().mockReturnValue(userId),
@@ -97,9 +129,18 @@ describe("RoomViewStore", function () {
         knockRoom: jest.fn(),
         leave: jest.fn(),
         setRoomAccountData: jest.fn(),
+        getAccountData: jest.fn(),
+        matrixRTC: new (class extends EventEmitter {
+            getRoomSession() {
+                return new (class extends EventEmitter {
+                    memberships = [];
+                })();
+            }
+        })(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);
+    getRooms.mockReturnValue([room, room2]);
 
     const viewCall = async (): Promise<void> => {
         dis.dispatch<ViewRoomPayload>({
@@ -155,6 +196,8 @@ describe("RoomViewStore", function () {
         stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
+        // @ts-expect-error
+        MockPosthogAnalytics.instance = stores._PosthogAnalytics;
         stores._SpaceStore = new MockSpaceStore();
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
@@ -301,6 +344,7 @@ describe("RoomViewStore", function () {
     });
 
     it("when viewing a call without a broadcast, it should not raise an error", async () => {
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
         await viewCall();
     });
 
@@ -341,43 +385,35 @@ describe("RoomViewStore", function () {
     describe("Sliding Sync", function () {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, value) => {
-                return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
+                return settingName === "feature_simplified_sliding_sync"; // this is enabled, everything else is disabled.
             });
         });
 
         it("subscribes to the room", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
             await untilDispatch(Action.ActiveRoomChanged, dis);
             expect(roomViewStore.getRoomId()).toBe(subscribedRoomId);
-            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId, true);
+            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId);
         });
 
-        // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // Previously a regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // although that was before the complexity was removed with similified mode. I've removed the complexity but kept the
+        // test anyway.
         it("doesn't get stuck in a loop if you view rooms quickly", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             const subscribedRoomId2 = "!sub2:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId }, true);
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId2 }, true);
             await untilDispatch(Action.ActiveRoomChanged, dis);
-            // sub(1) then unsub(1) sub(2), unsub(1)
-            const wantCalls = [
-                [subscribedRoomId, true],
-                [subscribedRoomId, false],
-                [subscribedRoomId2, true],
-                [subscribedRoomId, false],
-            ];
+            // should view 1, then 2
+            const wantCalls = [[subscribedRoomId], [subscribedRoomId2]];
             expect(setRoomVisible).toHaveBeenCalledTimes(wantCalls.length);
             wantCalls.forEach((v, i) => {
                 try {
                     expect(setRoomVisible.mock.calls[i][0]).toEqual(v[0]);
-                    expect(setRoomVisible.mock.calls[i][1]).toEqual(v[1]);
                 } catch {
                     throw new Error(`i=${i} got ${setRoomVisible.mock.calls[i]} want ${v}`);
                 }

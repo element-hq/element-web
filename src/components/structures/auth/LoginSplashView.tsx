@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
@@ -43,13 +43,13 @@ type MigrationState = {
 /**
  * The view that is displayed after we have logged in, before the first /sync is completed.
  */
-export function LoginSplashView(props: Props): React.JSX.Element {
+export function LoginSplashView(props: Props): JSX.Element {
     const migrationState = useTypedEventEmitterState(
         props.matrixClient,
         CryptoEvent.LegacyCryptoStoreMigrationProgress,
         (progress?: number, total?: number): MigrationState => ({ progress: progress ?? -1, totalSteps: total ?? -1 }),
     );
-    let errorBox: React.JSX.Element | undefined;
+    let errorBox: JSX.Element | undefined;
     if (props.syncError) {
         errorBox = <div className="mx_LoginSplashView_syncError">{messageForSyncError(props.syncError)}</div>;
     }

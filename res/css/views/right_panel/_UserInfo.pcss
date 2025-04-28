@@ -37,10 +37,6 @@ Please see LICENSE files in the repository root for full details.
         padding: var(--cpd-space-2x) 0 var(--cpd-space-4x);
         margin: 0 var(--cpd-space-4x);
 
-        .mx_UserInfo_container_verifyButton {
-            margin-top: $spacing-8;
-        }
-
         & + .mx_UserInfo_container {
             border-top: 1px solid $separator;
         }
@@ -180,6 +176,28 @@ Please see LICENSE files in the repository root for full details.
         opacity: 1;
     }
 
+    .mx_UserInfo_verification {
+        margin-top: var(--cpd-space-4x);
+        height: 36px;
+
+        .mx_UserInfo_verified_badge {
+            min-width: 68px;
+            height: 20px;
+
+            .mx_UserInfo_verified_icon {
+                flex-shrink: 0;
+            }
+
+            .mx_UserInfo_verified_label {
+                margin: 0;
+            }
+        }
+
+        .mx_UserInfo_verification_unavailable {
+            color: var(--cpd-color-text-secondary);
+        }
+    }
+
     .mx_UserInfo_memberDetails {
         .mx_UserInfo_profileField {
             display: flex;
@@ -224,45 +242,6 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_AutoHideScrollbar {
         flex: 1 1 0;
-    }
-
-    .mx_UserInfo_devices {
-        .mx_UserInfo_device {
-            display: flex;
-            margin: $spacing-8 0;
-
-            &.mx_UserInfo_device_verified {
-                .mx_UserInfo_device_trusted {
-                    color: $accent;
-                }
-            }
-            &.mx_UserInfo_device_unverified {
-                .mx_UserInfo_device_trusted {
-                    color: $alert;
-                }
-            }
-
-            .mx_UserInfo_device_name {
-                flex: 1;
-                margin: 0 5px;
-                word-break: break-word;
-            }
-        }
-
-        /* both for icon in expand button and device item */
-        .mx_E2EIcon {
-            /* don't squeeze */
-            flex: 0 0 auto;
-            margin: 0;
-            width: 12px;
-            height: 12px;
-        }
-
-        .mx_UserInfo_expand {
-            column-gap: 5px; /* cf: mx_UserInfo_device_name */
-            margin-bottom: 11px;
-            align-items: initial; /* Cancel the default property */
-        }
     }
 
     &.mx_UserInfo_smallAvatar {

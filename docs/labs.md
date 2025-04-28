@@ -112,3 +112,7 @@ Unreliable in encrypted rooms.
 ## Knock rooms (`feature_ask_to_join`) [In Development]
 
 Enables knock feature for rooms. This allows users to ask to join a room.
+
+## New room list (`feature_new_room_list`) [In Development]
+
+Enable the new room list that is currently in development.

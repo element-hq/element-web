@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -113,12 +113,13 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     <p>{_t("user_info|redact|confirm_description_1", { count, user })}</p>
                     <p>{_t("user_info|redact|confirm_description_2")}</p>
-                    <StyledCheckbox checked={keepStateEvents} onChange={(e) => setKeepStateEvents(e.target.checked)}>
+                    <StyledCheckbox
+                        description={_t("user_info|redact|confirm_keep_state_explainer")}
+                        checked={keepStateEvents}
+                        onChange={(e) => setKeepStateEvents(e.target.checked)}
+                    >
                         {_t("user_info|redact|confirm_keep_state_label")}
                     </StyledCheckbox>
-                    <div className="mx_BulkRedactDialog_checkboxMicrocopy">
-                        {_t("user_info|redact|confirm_keep_state_explainer")}
-                    </div>
                 </div>
                 <DialogButtons
                     primaryButton={_t("user_info|redact|confirm_button", { count })}

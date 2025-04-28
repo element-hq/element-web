@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import {
     type MatrixEvent,
     EventType,
@@ -42,6 +42,7 @@ import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { ElementCall } from "../models/Call";
+import { type IBodyProps } from "../components/views/messages/IBodyProps";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -51,7 +52,6 @@ export interface EventTileTypeProps
         | "highlights"
         | "highlightLink"
         | "showUrlPreview"
-        | "onHeightChanged"
         | "forExport"
         | "getRelationsForEvent"
         | "editState"
@@ -64,12 +64,12 @@ export interface EventTileTypeProps
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
     timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
-    overrideBodyTypes?: Record<string, typeof React.Component>;
-    overrideEventTypes?: Record<string, typeof React.Component>;
+    overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
+    overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
 }
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
-type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
+type Factory<X = FactoryProps> = (ref: React.RefObject<any> | undefined, props: X) => JSX.Element;
 
 export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
@@ -273,7 +273,6 @@ export function renderTile(
         highlightLink,
         showUrlPreview,
         permalinkCreator,
-        onHeightChanged,
         callEventGrouper,
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
@@ -291,7 +290,6 @@ export function renderTile(
                 highlights,
                 highlightLink,
                 showUrlPreview,
-                onHeightChanged,
                 editState,
                 replacingEventId,
                 getRelationsForEvent,
@@ -310,7 +308,6 @@ export function renderTile(
                 highlightLink,
                 showUrlPreview,
                 permalinkCreator,
-                onHeightChanged,
                 callEventGrouper,
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
@@ -343,7 +340,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,
@@ -358,7 +354,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,

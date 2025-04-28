@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type AuthDict, type MatrixClient, MatrixError, type UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
 import Modal from "./Modal";
@@ -38,7 +38,7 @@ export async function createCrossSigning(cli: MatrixClient): Promise<void> {
 
 export async function uiAuthCallback(
     matrixClient: MatrixClient,
-    makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
+    makeRequest: (authData: AuthDict) => Promise<void>,
 ): Promise<void> {
     try {
         await makeRequest({});

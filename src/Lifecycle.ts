@@ -149,6 +149,7 @@ interface ILoadSessionOpts {
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
     fragmentQueryParams?: QueryDict;
+    abortSignal?: AbortSignal;
 }
 
 /**
@@ -196,7 +197,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
 
         if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
             logger.log("Using guest access credentials");
-            return doSetLoggedIn(
+            await doSetLoggedIn(
                 {
                     userId: fragmentQueryParams.guest_user_id as string,
                     accessToken: fragmentQueryParams.guest_access_token as string,
@@ -206,7 +207,8 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                 },
                 true,
                 false,
-            ).then(() => true);
+            );
+            return true;
         }
         const success = await restoreSessionFromStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
@@ -225,6 +227,11 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         // fall back to welcome screen
         return false;
     } catch (e) {
+        // We may be aborted e.g. because our token expired, so don't show an error here
+        if (opts.abortSignal?.aborted) {
+            return false;
+        }
+
         if (e instanceof AbortLoginAndRebuildStorage) {
             // If we're aborting login because of a storage inconsistency, we don't
             // need to show the general failure dialog. Instead, just go back to welcome.
@@ -236,7 +243,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             return false;
         }
 
-        return handleLoadSessionFailure(e);
+        return handleLoadSessionFailure(e, opts);
     }
 }
 
@@ -314,7 +321,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
 
-        await onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
+        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
 }
@@ -407,12 +414,47 @@ export function attemptTokenLogin(
 }
 
 /**
+ * Load the pickle key inside the credentials or create it if it does not exist for this device.
+ *
+ * @param credentials Holds the device to load/store the pickle key
+ *
+ * @returns {Promise} promise which resolves to the loaded or generated pickle key or undefined if
+ *    none was loaded nor generated
+ */
+async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<string | undefined> {
+    // Try to load the pickle key
+    const userId = credentials.userId;
+    const deviceId = credentials.deviceId;
+    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    if (!pickleKey) {
+        // Create it if it did not exist
+        pickleKey =
+            userId && deviceId
+                ? ((await PlatformPeg.get()?.createPickleKey(userId, deviceId)) ?? undefined)
+                : undefined;
+        if (pickleKey) {
+            logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
+        } else {
+            logger.log("Pickle key not created");
+        }
+    } else {
+        logger.log(
+            `Pickle key already exists for ${credentials.userId}|${credentials.deviceId} do not create a new one`,
+        );
+    }
+
+    return pickleKey;
+}
+
+/**
  * Called after a successful token login or OIDC authorization.
  * Clear storage then save new credentials in storage
  * @param credentials as returned from login
  */
 async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
     await clearStorage();
+    // SSO does not go through setLoggedIn so we need to load/create the pickle key here too
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
     await persistCredentials(credentials);
 
     // remember that we just logged in
@@ -426,7 +468,7 @@ type TryAgainFunction = () => void;
  * @param description error description
  * @param tryAgain OPTIONAL function to call on try again button from error dialog
  */
-async function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): Promise<void> {
+function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): void {
     Modal.createDialog(ErrorDialog, {
         title: _t("auth|oidc|error_title"),
         description,
@@ -621,7 +663,7 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
     }
 }
 
-async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
+async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessionOpts): Promise<boolean> {
     logger.error("Unable to load session", e);
 
     const modal = Modal.createDialog(SessionRestoreErrorDialog, {
@@ -636,7 +678,7 @@ async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
     }
 
     // try, try again
-    return loadSession();
+    return loadSession(loadSessionOpts);
 }
 
 /**
@@ -655,18 +697,45 @@ async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
 export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     credentials.freshLogin = true;
     stopMatrixClient();
-    const pickleKey =
-        credentials.userId && credentials.deviceId
-            ? await PlatformPeg.get()?.createPickleKey(credentials.userId, credentials.deviceId)
-            : null;
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
+    return doSetLoggedIn(credentials, true, true);
+}
 
-    if (pickleKey) {
-        logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
-    } else {
-        logger.log("Pickle key not created");
+/**
+ * Hydrates an existing session by using the credentials provided. This will
+ * not clear any local storage, unlike setLoggedIn().
+ *
+ * Stops the existing Matrix client (without clearing its data) and starts a
+ * new one in its place. This additionally starts all other react-sdk services
+ * which use the new Matrix client.
+ *
+ * If the credentials belong to a different user from the session already stored,
+ * the old session will be cleared automatically.
+ *
+ * @param {IMatrixClientCreds} credentials The credentials to use
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
+ */
+export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+    const oldUserId = MatrixClientPeg.safeGet().getUserId();
+    const oldDeviceId = MatrixClientPeg.safeGet().getDeviceId();
+
+    stopMatrixClient(); // unsets MatrixClientPeg.get()
+    localStorage.removeItem("mx_soft_logout");
+    _isLoggingOut = false;
+
+    const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
+    if (overwrite) {
+        logger.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
-    return doSetLoggedIn({ ...credentials, pickleKey: pickleKey ?? undefined }, true, true);
+    if (!credentials.pickleKey && credentials.deviceId !== undefined) {
+        logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
+        credentials.pickleKey =
+            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+    }
+
+    return doSetLoggedIn(credentials, overwrite, false);
 }
 
 /**
@@ -1124,12 +1193,13 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
         baseUrl: hsUrl,
         accessToken,
     });
-    const { user_id: userId } = await tempClient.whoami();
+    const { user_id: userId, device_id: deviceId } = await tempClient.whoami();
     await doSetLoggedIn(
         {
             homeserverUrl: hsUrl,
             accessToken,
             userId,
+            deviceId,
         },
         true,
         false,

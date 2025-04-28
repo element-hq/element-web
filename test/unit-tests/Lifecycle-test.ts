@@ -15,7 +15,7 @@ import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";
-import { logout, restoreSessionFromStorage, setLoggedIn } from "../../src/Lifecycle";
+import * as Lifecycle from "../../src/Lifecycle";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal from "../../src/Modal";
 import * as StorageAccess from "../../src/utils/StorageAccess";
@@ -28,26 +28,38 @@ import { Action } from "../../src/dispatcher/actions";
 import PlatformPeg from "../../src/PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
+import * as StorageManager from "../../src/utils/StorageManager.ts";
+import type BasePlatform from "../../src/BasePlatform.ts";
+
+const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 const webCrypto = new Crypto();
 
 const windowCrypto = window.crypto;
 
 describe("Lifecycle", () => {
-    const mockPlatform = mockPlatformPeg();
+    const homeserverUrl = "https://domain";
+    const identityServerUrl = "https://is.org";
+    const userId = "@alice:domain";
+    const deviceId = "abc123";
+    const accessToken = "test-access-token";
+
+    let mockPlatform: MockedObject<BasePlatform>;
 
     const realLocalStorage = global.localStorage;
 
     let mockClient!: MockedObject<MatrixJs.MatrixClient>;
 
     beforeEach(() => {
+        jest.restoreAllMocks();
+        mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             stopClient: jest.fn(),
             removeAllListeners: jest.fn(),
             clearStores: jest.fn(),
             getAccountData: jest.fn(),
-            getDeviceId: jest.fn(),
+            getDeviceId: jest.fn().mockReturnValue(deviceId),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             getCrypto: jest.fn(),
             getClientWellKnown: jest.fn(),
@@ -150,11 +162,6 @@ describe("Lifecycle", () => {
             });
     };
 
-    const homeserverUrl = "https://server.org";
-    const identityServerUrl = "https://is.org";
-    const userId = "@alice:server.org";
-    const deviceId = "abc123";
-    const accessToken = "test-access-token";
     const localStorageSession = {
         mx_hs_url: homeserverUrl,
         mx_is_url: identityServerUrl,
@@ -181,6 +188,32 @@ describe("Lifecycle", () => {
         iv: expect.any(String),
         mac: expect.any(String),
     };
+
+    describe("loadSession", () => {
+        beforeEach(() => {
+            // stub this out
+            jest.spyOn(Modal, "createDialog").mockReturnValue(
+                // @ts-ignore allow bad mock
+                { finished: Promise.resolve([true]) },
+            );
+        });
+
+        it("should not show any error dialog when checkConsistency throws but abortSignal has triggered", async () => {
+            jest.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
+
+            const abortController = new AbortController();
+            const prom = Lifecycle.loadSession({
+                enableGuest: true,
+                guestHsUrl: "https://guest.server",
+                fragmentQueryParams: { guest_user_id: "a", guest_access_token: "b" },
+                abortSignal: abortController.signal,
+            });
+            abortController.abort();
+            await expect(prom).resolves.toBeFalsy();
+
+            expect(Modal.createDialog).not.toHaveBeenCalled();
+        });
+    });
 
     describe("restoreSessionFromStorage()", () => {
         beforeEach(() => {
@@ -571,6 +604,38 @@ describe("Lifecycle", () => {
             await setLoggedIn(credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
+        });
+
+        describe("after a soft-logout", () => {
+            beforeEach(async () => {
+                await setLoggedIn(credentials);
+                localStorage.setItem("mx_soft_logout", "true");
+            });
+
+            it("should not clear the storage if device is the same", async () => {
+                await Lifecycle.hydrateSession(credentials);
+
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_soft_logout");
+                expect(mockClient.getUserId).toHaveReturnedWith(userId);
+                expect(mockClient.getDeviceId).toHaveReturnedWith(deviceId);
+                expect(mockClient.clearStores).toHaveBeenCalledTimes(1);
+            });
+
+            it("should clear the storage if device is not the same", async () => {
+                const fakeCredentials = {
+                    homeserverUrl,
+                    identityServerUrl,
+                    userId: "@bob:domain",
+                    deviceId,
+                    accessToken,
+                };
+                await Lifecycle.hydrateSession(fakeCredentials);
+
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_soft_logout");
+                expect(mockClient.getUserId).toHaveReturnedWith(userId);
+                expect(mockClient.getDeviceId).toHaveReturnedWith(deviceId);
+                expect(mockClient.clearStores).toHaveBeenCalledTimes(2);
+            });
         });
 
         describe("without a pickle key", () => {

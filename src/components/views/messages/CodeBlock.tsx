@@ -5,9 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState } from "react";
+import React, { type JSX, useState } from "react";
 import classNames from "classnames";
-import { TooltipProvider } from "@vector-im/compound-web";
+import { type DOMNode, Element as ParserElement, domToReact } from "html-react-parser";
+import { textContent, getInnerHTML } from "domutils";
 
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { CopyTextButton } from "../elements/CopyableText.tsx";
@@ -16,8 +17,7 @@ const MAX_HIGHLIGHT_LENGTH = 4096;
 const MAX_LINES_BEFORE_COLLAPSE = 5;
 
 interface Props {
-    children: HTMLElement;
-    onHeightChanged?(): void;
+    preNode: ParserElement;
 }
 
 const ExpandCollapseButton: React.FC<{
@@ -35,30 +35,31 @@ const ExpandCollapseButton: React.FC<{
     );
 };
 
-const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
+const CodeBlock: React.FC<Props> = ({ preNode }) => {
     const enableSyntaxHighlightLanguageDetection = useSettingValue("enableSyntaxHighlightLanguageDetection");
     const showCodeLineNumbers = useSettingValue("showCodeLineNumbers");
     const expandCodeByDefault = useSettingValue("expandCodeByDefault");
     const [expanded, setExpanded] = useState(expandCodeByDefault);
 
+    const text = textContent(preNode);
+
     let expandCollapseButton: JSX.Element | undefined;
-    if (children.textContent && children.textContent.split("\n").length >= MAX_LINES_BEFORE_COLLAPSE) {
+    if (text.split("\n").length >= MAX_LINES_BEFORE_COLLAPSE) {
         expandCollapseButton = (
             <ExpandCollapseButton
                 expanded={expanded}
                 onClick={() => {
                     setExpanded(!expanded);
-                    // By expanding/collapsing we changed the height, therefore we call this
-                    onHeightChanged?.();
                 }}
             />
         );
     }
 
+    const innerHTML = getInnerHTML(preNode);
     let lineNumbers: JSX.Element | undefined;
     if (showCodeLineNumbers) {
         // Calculate number of lines in pre
-        const number = children.innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
+        const number = innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
         // Iterate through lines starting with 1 (number of the first line is 1)
         lineNumbers = (
             <span className="mx_EventTile_lineNumbers">
@@ -108,28 +109,37 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
         }
     }
 
+    function highlightCodeRef(div: HTMLElement | null): void {
+        highlightCode(div);
+    }
+
+    let content = domToReact(preNode.children as DOMNode[]);
+
+    // Add code element if it's missing since we depend on it
+    if (!preNode.children.some((child) => child instanceof ParserElement && child.tagName.toUpperCase() === "CODE")) {
+        content = <code>{content}</code>;
+    }
+
     return (
-        <TooltipProvider>
+        <div className="mx_EventTile_pre_container">
             <pre
                 className={classNames({
                     mx_EventTile_collapsedCodeBlock: !expanded,
                 })}
             >
                 {lineNumbers}
-                <div
-                    style={{ display: "contents" }}
-                    dangerouslySetInnerHTML={{ __html: children.innerHTML }}
-                    ref={highlightCode}
-                />
+                <div style={{ display: "contents" }} ref={highlightCodeRef}>
+                    {content}
+                </div>
             </pre>
             {expandCollapseButton}
             <CopyTextButton
-                getTextToCopy={() => children.getElementsByTagName("code")[0]?.textContent ?? null}
+                getTextToCopy={() => text}
                 className={classNames("mx_EventTile_button mx_EventTile_copyButton", {
                     mx_EventTile_buttonBottom: !!expandCollapseButton,
                 })}
             />
-        </TooltipProvider>
+        </div>
     );
 };
 

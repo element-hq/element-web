@@ -20,7 +20,16 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
-import React, { type ChangeEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    type JSX,
+    type ChangeEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import sanitizeHtml from "sanitize-html";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -954,7 +963,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_createRoom"
                         onClick={() =>
                             defaultDispatcher.dispatch({
-                                action: "view_create_room",
+                                action: Action.CreateRoom,
                                 public: true,
                                 defaultName: capitalize(trimmedQuery),
                             })

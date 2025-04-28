@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useMemo } from "react";
+import React, { type JSX, useMemo } from "react";
 
 type FlexProps = {
     /**

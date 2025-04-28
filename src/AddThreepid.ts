@@ -16,7 +16,6 @@ import {
     MatrixError,
     HTTPError,
     type IThreepid,
-    type UIAResponse,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
@@ -181,9 +180,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<
-        [success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]
-    > {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         try {
             if (this.bind) {
                 const authClient = new IdentityAuthClient();
@@ -270,7 +267,7 @@ export default class AddThreepid {
      */
     public async haveMsisdnToken(
         msisdnToken: string,
-    ): Promise<[success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]> {
+    ): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {

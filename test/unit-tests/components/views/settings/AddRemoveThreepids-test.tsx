@@ -172,7 +172,7 @@ describe("AddRemoveThreepids", () => {
 
         const countryDropdown = await screen.findByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
-        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
+        const gbOption = screen.getByText("United Kingdom (+44)");
         await userEvent.click(gbOption);
 
         const input = screen.getByRole("textbox", { name: "Phone Number" });
@@ -511,7 +511,7 @@ describe("AddRemoveThreepids", () => {
 
         const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
-        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
+        const gbOption = screen.getByText("United Kingdom (+44)");
         await userEvent.click(gbOption);
 
         const input = screen.getByRole("textbox", { name: "Phone Number" });

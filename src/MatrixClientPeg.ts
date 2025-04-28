@@ -41,7 +41,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
-import { initialiseDehydration } from "./utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -299,6 +299,12 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.threadSupport = true;
 
         if (SettingsStore.getValue("feature_sliding_sync")) {
+            throw new UserFriendlyError("sliding_sync_legacy_no_longer_supported");
+        }
+
+        // If the user has enabled the labs feature for sliding sync, set it up
+        // otherwise check if the feature is supported
+        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
             SlidingSyncManager.instance.checkSupport(this.matrixClient);
@@ -347,7 +353,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         // is a new login, we will start dehydration after Secret Storage is
         // unlocked.
         try {
-            await initialiseDehydration({ onlyIfKeyCached: true, rehydrate: false }, this.matrixClient);
+            await initialiseDehydrationIfEnabled(this.matrixClient, { onlyIfKeyCached: true, rehydrate: false });
         } catch (e) {
             // We may get an error dehydrating, such as if cross-signing and
             // SSSS are not set up yet.  Just log the error and continue.

@@ -479,7 +479,7 @@ export default class ElectronPlatform extends BasePlatform {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
-        if (url.href.startsWith(`${url.protocol}://`)) {
+        if (url.href.startsWith(`${url.protocol}//`)) {
             url.href = url.href.replace("://", ":/");
         }
         return url;

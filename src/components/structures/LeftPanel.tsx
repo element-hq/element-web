@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React, { type JSX } from "react";
 import { createRef } from "react";
 import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList from "../views/rooms/RoomList";
+import LegacyRoomList from "../views/rooms/LegacyRoomList";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
@@ -23,7 +23,7 @@ import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/sp
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 import { type IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
-import RoomListHeader from "../views/rooms/RoomListHeader";
+import LegacyRoomListHeader from "../views/rooms/LegacyRoomListHeader";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -36,6 +36,8 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { RoomListPanel } from "../views/rooms/RoomListPanel";
 
 interface IProps {
     isMinimized: boolean;
@@ -56,7 +58,7 @@ interface IState {
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<RoomList>();
+    private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
@@ -377,8 +379,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const containerClasses = classNames({
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
+        });
+
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        if (useNewRoomList) {
+            return (
+                <div className={containerClasses}>
+                    <div className="mx_LeftPanel_roomListContainer">
+                        <RoomListPanel activeSpace={this.state.activeSpace} />
+                    </div>
+                </div>
+            );
+        }
+
         const roomList = (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={this.onKeyDown}
                 resizeNotifier={this.props.resizeNotifier}
                 onFocus={this.onFocus}
@@ -391,19 +410,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             />
         );
 
-        const containerClasses = classNames({
-            mx_LeftPanel: true,
-            mx_LeftPanel_minimized: this.props.isMinimized,
-        });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
-
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
                     {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
                     {this.renderBreadcrumbs()}
-                    {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
+                    {!this.props.isMinimized && <LegacyRoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
                     <nav className="mx_LeftPanel_roomListWrapper" aria-label={_t("common|rooms")}>
                         <div
                             className={roomListClasses}
