@@ -116,17 +116,49 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
     <div
       aria-label="Secondary filters"
       class="mx_Flex mx_RoomListSecondaryFilters"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 8px; --mx-flex-wrap: nowrap;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 4px; --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-expanded="false"
         aria-haspopup="menu"
+        aria-label="Filter"
+        aria-labelledby="«rk»"
+        class="_icon-button_m2erp_8"
+        data-state="closed"
+        id="radix-«ri»"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+            />
+          </svg>
+        </div>
+      </button>
+      All activity
+      <button
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
         aria-label="Room Options"
-        aria-labelledby="«rc»"
+        aria-labelledby="«rr»"
         class="_icon-button_m2erp_8 mx_RoomListSecondaryFilters_roomOptionsButton"
         data-state="closed"
-        id="radix-«ra»"
+        id="radix-«rp»"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -374,17 +406,49 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
     <div
       aria-label="Secondary filters"
       class="mx_Flex mx_RoomListSecondaryFilters"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 8px; --mx-flex-wrap: nowrap;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 4px; --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-expanded="false"
         aria-haspopup="menu"
-        aria-label="Room Options"
+        aria-label="Filter"
         aria-labelledby="«r4»"
-        class="_icon-button_m2erp_8 mx_RoomListSecondaryFilters_roomOptionsButton"
+        class="_icon-button_m2erp_8"
         data-state="closed"
         id="radix-«r2»"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+            />
+          </svg>
+        </div>
+      </button>
+      All activity
+      <button
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="Room Options"
+        aria-labelledby="«rb»"
+        class="_icon-button_m2erp_8 mx_RoomListSecondaryFilters_roomOptionsButton"
+        data-state="closed"
+        id="radix-«r9»"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
