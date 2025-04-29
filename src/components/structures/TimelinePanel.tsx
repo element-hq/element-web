@@ -44,7 +44,7 @@ import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import Timer from "../../utils/Timer";
 import shouldHideEvent from "../../shouldHideEvent";
-import MessagePanel from "./MessagePanel";
+// import MessagePanel from "./MessagePanel";
 import { type IScrollState } from "./ScrollPanel";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
@@ -58,6 +58,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { type MessagePanelMethods, MessagePanelNew } from "./MessagePanel-functional";
 
 // These pagination sizes are higher than they may possibly need be
 // once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
@@ -235,7 +236,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private lastRRSentEventId: string | null | undefined = undefined;
     private lastRMSentEventId: string | null | undefined = undefined;
 
-    private readonly messagePanel = createRef<MessagePanel>();
+    private readonly messagePanel = createRef<MessagePanelMethods>();
     private dispatcherRef?: string;
     private timelineWindow?: TimelineWindow;
     private unmounted = false;
@@ -1821,7 +1822,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
         const events = this.state.events;
         return (
-            <MessagePanel
+            <MessagePanelNew
                 ref={this.messagePanel}
                 room={this.props.timelineSet.room}
                 permalinkCreator={this.props.permalinkCreator}

@@ -18,6 +18,7 @@ import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { SeparatorKind } from "../../views/messages/TimelineSeparator";
+import type { MessagePanelMethods } from "../MessagePanel-functional";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -28,7 +29,10 @@ const groupedStateEvents = [
 
 // Wrap consecutive grouped events in a ListSummary
 export class MainGrouper extends BaseGrouper {
-    public static canStartGroup = function (panel: MessagePanel, { event: ev, shouldShow }: WrappedEvent): boolean {
+    public static canStartGroup = function (
+        panel: MessagePanel | MessagePanelMethods,
+        { event: ev, shouldShow }: WrappedEvent,
+    ): boolean {
         if (!shouldShow) return false;
 
         if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
