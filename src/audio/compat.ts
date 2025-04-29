@@ -15,7 +15,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { SAMPLE_RATE } from "./VoiceRecording";
 
 export function createAudioContext(opts?: AudioContextOptions): AudioContext {
-    var ctx: AudioContext;
+    let ctx: AudioContext;
     if (window.AudioContext) {
         ctx = new AudioContext(opts);
     } else if (window.webkitAudioContext) {
@@ -28,7 +28,7 @@ export function createAudioContext(opts?: AudioContextOptions): AudioContext {
     }
     // Initialize in suspended state, as Firefox starts using
     // CPU/battery right away, even if we don't play any sound yet.
-    ctx.suspend();
+    void ctx.suspend();
     return ctx;
 }
 
