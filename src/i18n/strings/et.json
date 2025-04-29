@@ -2102,6 +2102,7 @@
     "room_list": {
         "add_room_label": "Lisa jututuba",
         "add_space_label": "Lisa kogukonnakeskus",
+        "appearance": "Välimus",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
         "empty": {
@@ -2152,7 +2153,10 @@
             "more_options": "Täiendavad seadistused",
             "open_room": "Ava jututuba: %(roomName)s"
         },
+        "room_options": "Jututoa valikud",
+        "secondary_filters": "Teisesed filtrid",
         "show_less": "Näita vähem",
+        "show_message_previews": "Näita sõnumite eelvaateid",
         "show_n_more": {
             "one": "Näita veel %(count)s vestlust",
             "other": "Näita veel %(count)s vestlust"
