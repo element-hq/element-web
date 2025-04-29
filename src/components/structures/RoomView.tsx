@@ -1244,7 +1244,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 onView3pidInvite(payload, RightPanelStore.instance);
                 break;
             case Action.FocusMessageSearch:
-                if (payload.initialText) {
+                if ((payload as FocusMessageSearchPayload).initialText) {
                     this.onSearch(payload.initialText);
                 }
                 break;
