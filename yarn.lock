@@ -3668,9 +3668,8 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
@@ -7426,9 +7425,9 @@ http-proxy-agent@^5.0.0:
     debug "4"
 
 http-proxy-middleware@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/http-proxy-middleware/-/http-proxy-middleware-2.0.7.tgz#915f236d92ae98ef48278a95dedf17e991936ec6"
-  integrity sha512-fgVY8AV7qU7z/MmXJ/rxwbrtQH4jBQ9m7kp3llF0liB7glmFeVZFBepQb32T3y8n8k2+AEYuMPCpinYW+/CuRA==
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/http-proxy-middleware/-/http-proxy-middleware-2.0.9.tgz#e9e63d68afaa4eee3d147f39149ab84c0c2815ef"
+  integrity sha512-c1IyJYLYppU574+YI7R4QyX2ystMtVXZwIdzazUIPIJsHuWNd+mho2j+bKoHftndicGj9yh+xjd+l0yj7VeT1Q==
   dependencies:
     "@types/http-proxy" "^1.17.8"
     http-proxy "^1.18.1"
