@@ -51,6 +51,8 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
+// Pro777 edit
+import SettingsStore from "../../../settings/SettingsStore";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
@@ -400,6 +402,10 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         }
     }
 
+    // Pro777 edit
+    if (!SettingsStore.getValue("view_button_creating_home")) {
+        return null;
+    } else {
     return (
         <aside className="mx_LegacyRoomListHeader" aria-label={_t("room|context_menu|title")}>
             {contextMenuButton}
@@ -421,6 +427,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             {contextMenu}
         </aside>
     );
+}
 };
 
 export default LegacyRoomListHeader;
