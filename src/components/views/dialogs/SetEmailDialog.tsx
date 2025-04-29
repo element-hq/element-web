@@ -89,7 +89,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    private onEmailDialogFinished = (ok: boolean): void => {
+    private onEmailDialogFinished = (ok?: boolean): void => {
         if (ok) {
             this.verifyEmailAddress();
         } else {

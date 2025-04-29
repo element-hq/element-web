@@ -100,7 +100,7 @@ const useSignOut = (
             } else {
                 const deferredSuccess = defer<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
-                    deferredSuccess.resolve(success);
+                    deferredSuccess.resolve(!!success);
                 });
                 success = await deferredSuccess.promise;
             }

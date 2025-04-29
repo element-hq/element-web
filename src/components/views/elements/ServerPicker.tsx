@@ -28,7 +28,7 @@ interface IProps {
 const showPickerDialog = (
     title: string | undefined,
     serverConfig: ValidatedServerConfig,
-    onFinished: (config: ValidatedServerConfig) => void,
+    onFinished: (config?: ValidatedServerConfig) => void,
 ): void => {
     Modal.createDialog(ServerPickerDialog, { title, serverConfig, onFinished });
 };
