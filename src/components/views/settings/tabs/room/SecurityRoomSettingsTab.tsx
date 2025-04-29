@@ -213,9 +213,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            await createRoom(this.context, opts);
+            await createRoom(this.context, opts!);
         }
-        return shouldCreate;
+        return shouldCreate ?? false;
     };
 
     private onHistoryRadioToggle = (history: HistoryVisibility): void => {

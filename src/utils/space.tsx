@@ -75,7 +75,7 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
     });
     const [shouldCreate, opts] = await modal.finished;
     if (shouldCreate) {
-        await createRoom(space.client, opts);
+        await createRoom(space.client, opts!);
     }
     return !!shouldCreate;
 };

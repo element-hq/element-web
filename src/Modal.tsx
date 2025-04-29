@@ -30,6 +30,14 @@ export type ComponentType =
       }>
     | React.ComponentType<any>;
 
+/**
+ * The parameter types of the `onFinished` callback property exposed by the component which forms the
+ * body of the dialog.
+ *
+ * @typeParam C - The type of the React component which forms the body of the dialog.
+ */
+type OnFinishedParams<C extends ComponentType> = Parameters<React.ComponentProps<C>["onFinished"]>;
+
 // Generic type which returns the props of the Modal component with the onFinished being optional.
 export type ComponentProps<C extends ComponentType> = Defaultize<
     Omit<React.ComponentProps<C>, "onFinished">,
@@ -49,9 +57,27 @@ export interface IModal<C extends ComponentType> {
     deferred?: IDeferred<Parameters<ComponentProps<C>["onFinished"]>>;
 }
 
+/** The result of {@link Modal.createDialog}.
+ *
+ * @typeParam C - The type of the React component which forms the body of the dialog.
+ */
 export interface IHandle<C extends ComponentType> {
-    finished: Promise<Parameters<ComponentProps<C>["onFinished"]>>;
-    close(...args: Parameters<ComponentProps<C>["onFinished"]>): void;
+    /**
+     * A promise which will resolve when the dialog closes.
+     *
+     * If the dialog body component calls the `onFinished` property, or the caller calls {@link close},
+     * the promise resolves with an array holding the arguments to that call.
+     *
+     * If the dialog is closed by clicking in the background, the promise resolves with an empty array.
+     */
+    finished: Promise<OnFinishedParams<C> | []>;
+
+    /**
+     * A function which, if called, will close the dialog.
+     *
+     * @param args - Arguments to return to {@link finished}.
+     */
+    close(...args: OnFinishedParams<C>): void;
 }
 
 interface IOptions<C extends ComponentType> {
@@ -295,7 +321,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      *                                 static at a time.
      * @param options? extra options for the dialog
      * @param options.onBeforeClose a callback to decide whether to close the dialog
-     * @returns Object with 'close' parameter being a function that will close the dialog
+     * @returns {@link IHandle} object.
      */
     public createDialog<C extends ComponentType>(
         component: C,
