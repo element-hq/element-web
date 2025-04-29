@@ -557,18 +557,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
+        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
+        });
+        finished.then(async ([confirm]) => {
+            if (!confirm) {
+                return observer.update({ state: OpenIDRequestState.Blocked });
+            }
 
-            onFinished: async (confirm): Promise<void> => {
-                if (!confirm) {
-                    return observer.update({ state: OpenIDRequestState.Blocked });
-                }
-
-                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-            },
+            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
         });
     }
 

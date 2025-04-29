@@ -11,7 +11,7 @@ import React from "react";
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
-import Modal, { type ComponentProps } from "../../../Modal";
+import Modal, { type ComponentProps, type IHandle } from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { getPolicyUrl } from "../../../toasts/AnalyticsToast";
 import ExternalLink from "../elements/ExternalLink";
@@ -91,10 +91,10 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
 
 export const showDialog = (
     props: Omit<ComponentProps<typeof AnalyticsLearnMoreDialog>, "cookiePolicyUrl" | "analyticsOwner">,
-): void => {
+): IHandle<typeof AnalyticsLearnMoreDialog> => {
     const privacyPolicyUrl = getPolicyUrl();
     const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get("brand");
-    Modal.createDialog(
+    return Modal.createDialog(
         AnalyticsLearnMoreDialog,
         {
             privacyPolicyUrl,

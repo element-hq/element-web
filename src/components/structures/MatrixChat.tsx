@@ -1229,7 +1229,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
             description: (
                 <span>
@@ -1245,16 +1245,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ),
             button: _t("action|leave"),
             danger: warnings.length > 0,
-            onFinished: async (shouldLeave) => {
-                if (shouldLeave) {
-                    await leaveRoomBehaviour(cli, roomId);
+        });
 
-                    dis.dispatch<AfterLeaveRoomPayload>({
-                        action: Action.AfterLeaveRoom,
-                        room_id: roomId,
-                    });
-                }
-            },
+        finished.then(async ([shouldLeave]) => {
+            if (shouldLeave) {
+                await leaveRoomBehaviour(cli, roomId);
+
+                dis.dispatch<AfterLeaveRoomPayload>({
+                    action: Action.AfterLeaveRoom,
+                    room_id: roomId,
+                });
+            }
         });
     }
 
@@ -1558,7 +1559,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         });
         cli.on(HttpApiEvent.NoConsent, function (message, consentUri) {
-            Modal.createDialog(
+            const { finished } = Modal.createDialog(
                 QuestionDialog,
                 {
                     title: _t("terms|tac_title"),
@@ -1569,16 +1570,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     ),
                     button: _t("terms|tac_button"),
                     cancelButton: _t("action|dismiss"),
-                    onFinished: (confirmed) => {
-                        if (confirmed) {
-                            const wnd = window.open(consentUri, "_blank")!;
-                            wnd.opener = null;
-                        }
-                    },
                 },
                 undefined,
                 true,
             );
+            finished.then(([confirmed]) => {
+                if (confirmed) {
+                    const wnd = window.open(consentUri, "_blank")!;
+                    wnd.opener = null;
+                }
+            });
         });
 
         DecryptionFailureTracker.instance

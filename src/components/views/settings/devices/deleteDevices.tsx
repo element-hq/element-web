@@ -61,16 +61,16 @@ export const deleteDevicesWithInteractiveAuth = async (
                 continueKind: "danger",
             },
         };
-        Modal.createDialog(InteractiveAuthDialog, {
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
             title: _t("common|authentication"),
             matrixClient: matrixClient,
             authData: error.data as IAuthData,
-            onFinished,
             makeRequest: makeDeleteRequest(matrixClient, deviceIds),
             aestheticsForStagePhases: {
                 [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
             },
         });
+        finished.then(([success]) => onFinished(success));
     }
 };
