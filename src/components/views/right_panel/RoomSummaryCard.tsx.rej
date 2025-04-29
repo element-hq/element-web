@@ -1,0 +1,12 @@
+--- src/components/views/right_panel/RoomSummaryCard.tsx	2025-03-11 16:40:55.000000000 +0200
++++ src/components/views/right_panel/RoomSummaryCard.tsx	2025-04-23 22:27:08.222880750 +0300
+@@ -77,6 +77,9 @@
+ import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
+ import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
+ import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
++//Pro777 edit
++import SettingsStore from "../../../settings/SettingsStore";
++
+ 
+ interface IProps {
+     room: Room;

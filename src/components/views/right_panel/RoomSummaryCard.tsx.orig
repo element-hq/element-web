@@ -429,15 +429,12 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <MenuItem Icon={LinkIcon} label={_t("action|copy_link")} onSelect={onShareRoomClick} />
 
                 {!isVideoRoom && (
-                    <MenuItem
-                        Icon={PollsIcon}
-                        label={_t("right_panel|polls_button")}
-                        onSelect={onRoomPollHistoryClick}
-                    />
-                )}
-
-                {/*Pro777 edit*/ !isVideoRoom && SettingsStore.getValue("view_button_export") && (
                     <>
+                        <MenuItem
+                            Icon={PollsIcon}
+                            label={_t("right_panel|polls_button")}
+                            onSelect={onRoomPollHistoryClick}
+                        />
                         <MenuItem
                             Icon={ExportArchiveIcon}
                             label={_t("export_chat|title")}
