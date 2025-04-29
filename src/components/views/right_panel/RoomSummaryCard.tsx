@@ -68,7 +68,7 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { Box } from "../../utils/Box";
 import { useDispatcher } from "../../../hooks/useDispatcher";
-import { Action, isPayload } from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
