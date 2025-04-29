@@ -14,7 +14,6 @@ import { type Command, Commands, getCommand } from "../../src/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
-import LegacyCallHandler from "../../src/LegacyCallHandler";
 import { SdkContextClass } from "../../src/contexts/SDKContext";
 import Modal from "../../src/Modal";
 import WidgetUtils from "../../src/utils/WidgetUtils";
@@ -193,46 +192,6 @@ describe("SlashCommands", () => {
 
         it("should reject with usage for invalid input", () => {
             expect(command.run(client, roomId, null, " ").error).toBe(command.getUsage());
-        });
-    });
-
-    describe("/tovirtual", () => {
-        beforeEach(() => {
-            command = findCommand("tovirtual")!;
-        });
-
-        describe("isEnabled", () => {
-            describe("when virtual rooms are supported", () => {
-                beforeEach(() => {
-                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(true);
-                });
-
-                it("should return true for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(true);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
-
-            describe("when virtual rooms are not supported", () => {
-                beforeEach(() => {
-                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(false);
-                });
-
-                it("should return false for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
         });
     });
 

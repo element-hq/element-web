@@ -19,6 +19,7 @@ import {
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import LoggedInView from "../../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../../src/contexts/SDKContext";
@@ -75,6 +76,8 @@ describe("<LoggedInView />", () => {
         jest.clearAllMocks();
         mockClient.getMediaHandler.mockReturnValue(mediaHandler);
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
+        // @ts-expect-error
+        mockClient.pushProcessor = new PushProcessor(mockClient);
     });
 
     describe("synced push rules", () => {
@@ -419,6 +422,14 @@ describe("<LoggedInView />", () => {
 
         await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
         expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.ViewHomePage });
+    });
+
+    it("should open spotlight when Ctrl+k is fired", async () => {
+        jest.spyOn(defaultDispatcher, "fire");
+
+        getComponent();
+        await userEvent.keyboard("{Control>}k{/Control}");
+        expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.OpenSpotlight);
     });
 
     describe("timezone updates", () => {

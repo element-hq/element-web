@@ -673,7 +673,12 @@ module.exports = (env, argv) => {
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
                     { from: "media/**", context: path.resolve(__dirname, "res/") },
                     { from: "config.json", noErrorOnMissing: true },
-                    "contribute.json",
+                    // Element Call embedded widget
+                    {
+                        from: "**",
+                        context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
+                        to: path.join(__dirname, "webapp", "widgets", "element-call"),
+                    },
                 ],
             }),
 

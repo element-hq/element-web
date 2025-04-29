@@ -22,7 +22,6 @@ import {
     type MatrixCall,
 } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -40,14 +39,12 @@ import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { UIFeature } from "./settings/UIFeature";
 import { Action } from "./dispatcher/actions";
-import VoipUserMapper from "./VoipUserMapper";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
 import { Container, WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
-import Resend from "./Resend";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
 import { type OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
@@ -60,8 +57,6 @@ import { Jitsi } from "./widgets/Jitsi.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
-export const PROTOCOL_SIP_NATIVE = "im.vector.protocol.sip_native";
-export const PROTOCOL_SIP_VIRTUAL = "im.vector.protocol.sip_virtual";
 
 const CHECK_PROTOCOLS_ATTEMPTS = 3;
 
@@ -108,27 +103,9 @@ const debuglog = (...args: any[]): void => {
     }
 };
 
-interface ThirdpartyLookupResponseFields {
-    /* eslint-disable camelcase */
-
-    // im.vector.sip_native
-    virtual_mxid?: string;
-    is_virtual?: boolean;
-
-    // im.vector.sip_virtual
-    native_mxid?: string;
-    is_native?: boolean;
-
-    // common
-    lookup_success?: boolean;
-
-    /* eslint-enable camelcase */
-}
-
 interface ThirdpartyLookupResponse {
     userid: string;
     protocol: string;
-    fields: ThirdpartyLookupResponseFields;
 }
 
 export enum LegacyCallHandlerEvent {
@@ -159,7 +136,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private transferees = new Map<string, MatrixCall>(); // callId (target) -> call (transferee)
     private supportsPstnProtocol: boolean | null = null;
     private pstnSupportPrefixed: boolean | null = null; // True if the server only support the prefixed pstn protocol
-    private supportsSipNativeVirtual: boolean | null = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
 
     // Map of the asserted identity users after we've looked them up using the API.
     // We need to be be able to determine the mapped room synchronously, so we
@@ -180,8 +156,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     /*
-     * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
-     * if a voip_mxid_translate_pattern is set in the config)
+     * Gets the user-facing room associated with a call
      */
     public roomIdForCall(call?: MatrixCall): string | null {
         if (!call) return null;
@@ -196,7 +171,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
         }
 
-        return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) ?? call.roomId ?? null;
+        return call.roomId ?? null;
     }
 
     public start(): void {
@@ -279,12 +254,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                 this.supportsPstnProtocol = null;
             }
 
-            if (protocols[PROTOCOL_SIP_NATIVE] !== undefined && protocols[PROTOCOL_SIP_VIRTUAL] !== undefined) {
-                this.supportsSipNativeVirtual = Boolean(
-                    protocols[PROTOCOL_SIP_NATIVE] && protocols[PROTOCOL_SIP_VIRTUAL],
-                );
-            }
-
             this.emit(LegacyCallHandlerEvent.ProtocolSupport);
         } catch (e) {
             if (maxTries === 1) {
@@ -306,10 +275,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         return this.supportsPstnProtocol ?? false;
     }
 
-    public getSupportsVirtualRooms(): boolean | null {
-        return this.supportsSipNativeVirtual;
-    }
-
     public async pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
         try {
             return await MatrixClientPeg.safeGet().getThirdpartyUser(
@@ -320,28 +285,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             );
         } catch (e) {
             logger.warn("Failed to lookup user from phone number", e);
-            return Promise.resolve([]);
-        }
-    }
-
-    public async sipVirtualLookup(nativeMxid: string): Promise<ThirdpartyLookupResponse[]> {
-        try {
-            return await MatrixClientPeg.safeGet().getThirdpartyUser(PROTOCOL_SIP_VIRTUAL, {
-                native_mxid: nativeMxid,
-            });
-        } catch (e) {
-            logger.warn("Failed to query SIP identity for user", e);
-            return Promise.resolve([]);
-        }
-    }
-
-    public async sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
-        try {
-            return await MatrixClientPeg.safeGet().getThirdpartyUser(PROTOCOL_SIP_NATIVE, {
-                virtual_mxid: virtualMxid,
-            });
-        } catch (e) {
-            logger.warn("Failed to query identity for SIP user", e);
             return Promise.resolve([]);
         }
     }
@@ -538,24 +481,16 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
 
             const newAssertedIdentity = call.getRemoteAssertedIdentity()?.id;
-            let newNativeAssertedIdentity = newAssertedIdentity;
-            if (newAssertedIdentity) {
-                const response = await this.sipNativeLookup(newAssertedIdentity);
-                if (response.length && response[0].fields.lookup_success) {
-                    newNativeAssertedIdentity = response[0].userid;
-                }
-            }
-            logger.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
 
-            if (newNativeAssertedIdentity) {
-                this.assertedIdentityNativeUsers.set(call.callId, newNativeAssertedIdentity);
+            if (newAssertedIdentity) {
+                this.assertedIdentityNativeUsers.set(call.callId, newAssertedIdentity);
 
                 // If we don't already have a room with this user, make one. This will be slightly odd
                 // if they called us because we'll be inviting them, but there's not much we can do about
                 // this if we want the actual, native room to exist (which we do). This is why it's
                 // important to only obey asserted identity in trusted environments, since anyone you're
                 // on a call with can cause you to send a room invite to someone.
-                await ensureDMExists(MatrixClientPeg.safeGet(), newNativeAssertedIdentity);
+                await ensureDMExists(MatrixClientPeg.safeGet(), newAssertedIdentity);
 
                 const newMappedRoomId = this.roomIdForCall(call);
                 logger.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
@@ -596,7 +531,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         switch (newState) {
             case CallState.Ringing: {
-                const incomingCallPushRule = new PushProcessor(MatrixClientPeg.safeGet()).getPushRuleById(
+                const incomingCallPushRule = MatrixClientPeg.safeGet().pushProcessor.getPushRuleById(
                     RuleId.IncomingCall,
                 );
                 const pushRuleEnabled = incomingCallPushRule?.enabled;
@@ -811,24 +746,10 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     private async placeMatrixCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
-        const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
-        logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
-
-        // If we're using a virtual room nd there are any events pending, try to resend them,
-        // otherwise the call will fail and because its a virtual room, the user won't be able
-        // to see it to either retry or clear the pending events. There will only be call events
-        // in this queue, and since we're about to place a new call, they can only be events from
-        // previous calls that are probably stale by now, so just cancel them.
-        if (mappedRoomId !== roomId) {
-            const mappedRoom = cli.getRoom(mappedRoomId);
-            if (mappedRoom?.getPendingEvents().length) {
-                Resend.cancelUnsentEvents(mappedRoom);
-            }
-        }
 
         const timeUntilTurnCresExpire = cli.getTurnServersExpiry() - Date.now();
         logger.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
-        const call = cli.createCall(mappedRoomId)!;
+        const call = cli.createCall(roomId)!;
 
         try {
             this.addCallForRoom(roomId, call);
@@ -979,19 +900,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         }
         const userId = results[0].userid;
 
-        // Now check to see if this is a virtual user, in which case we should find the
-        // native user
-        let nativeUserId;
-        if (this.getSupportsVirtualRooms()) {
-            const nativeLookupResults = await this.sipNativeLookup(userId);
-            const lookupSuccess = nativeLookupResults.length > 0 && nativeLookupResults[0].fields.lookup_success;
-            nativeUserId = lookupSuccess ? nativeLookupResults[0].userid : userId;
-            logger.log("Looked up " + number + " to " + userId + " and mapped to native user " + nativeUserId);
-        } else {
-            nativeUserId = userId;
-        }
-
-        const roomId = await ensureDMExists(MatrixClientPeg.safeGet(), nativeUserId);
+        const roomId = await ensureDMExists(MatrixClientPeg.safeGet(), userId);
         if (!roomId) {
             throw new Error("Failed to ensure DM exists for dialing number");
         }

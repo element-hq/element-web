@@ -70,7 +70,6 @@ describe("<MPollEndBody />", () => {
         mxEvent: pollEndEvent,
         highlightLink: "unused",
         mediaEventHelper: {} as unknown as MediaEventHelper,
-        onHeightChanged: () => {},
         onMessageAllowed: () => {},
         permalinkCreator: {} as unknown as RoomPermalinkCreator,
         ref: undefined as any,

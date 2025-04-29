@@ -1,17 +1,16 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2016-2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, createRef, type ReactNode } from "react";
+import React, { type JSX, type ComponentProps, createRef, type ReactNode } from "react";
 import { decode } from "html-entities";
 import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
 import { Linkify } from "../../../HtmlUtils";
-import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -24,6 +23,7 @@ interface IProps {
     preview: IPreviewUrlResponse;
     mxEvent: MatrixEvent; // the Event associated with the preview
     children?: ReactNode;
+    mediaVisible: boolean;
 }
 
 export default class LinkPreviewWidget extends React.Component<IProps> {
@@ -69,7 +69,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         let image: string | null = p["og:image"] ?? null;
-        if (!SettingsStore.getValue("showImages")) {
+        if (!this.props.mediaVisible) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
         const imageMaxWidth = 100;

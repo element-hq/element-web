@@ -41,6 +41,7 @@ import {
     flushPromises,
     getMockClientWithEventEmitter,
     mkPusher,
+    mockClientMethodsCrypto,
     mockClientMethodsServer,
     mockClientMethodsUser,
     mockPlatformPeg,
@@ -124,10 +125,11 @@ describe("<SessionManagerTab />", () => {
 
     const mockCrypto = mocked({
         getDeviceVerificationStatus: jest.fn(),
-        getUserDeviceInfo: jest.fn(),
+        getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
         requestDeviceVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
         supportsSecretsForQrLogin: jest.fn().mockReturnValue(false),
         isCrossSigningReady: jest.fn().mockReturnValue(true),
+        getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
@@ -203,6 +205,7 @@ describe("<SessionManagerTab />", () => {
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(aliceId),
             ...mockClientMethodsServer(),
+            ...mockClientMethodsCrypto(),
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             getDevices: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
@@ -263,6 +266,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     afterAll(() => {
+        // @ts-expect-error
         window.location = realWindowLocation;
     });
 

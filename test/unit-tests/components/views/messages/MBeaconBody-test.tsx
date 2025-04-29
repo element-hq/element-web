@@ -63,7 +63,6 @@ describe("<MBeaconBody />", () => {
         mxEvent: defaultEvent,
         highlights: [],
         highlightLink: "",
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         // we dont use these and they pollute the snapshots
         permalinkCreator: {} as unknown as RoomPermalinkCreator,

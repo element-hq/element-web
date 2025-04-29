@@ -17,6 +17,7 @@ import * as RoomNotifs from "../../RoomNotifs";
 import { NotificationState } from "./NotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
+import { NotificationLevel } from "./NotificationLevel";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
     public constructor(
@@ -49,6 +50,52 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.removeListener(RoomEvent.AccountData, this.handleRoomAccountDataUpdate);
         cli.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         cli.removeListener(ClientEvent.AccountData, this.handleAccountDataUpdate);
+    }
+
+    /**
+     * True if the notification is a mention.
+     */
+    public get isMention(): boolean {
+        if (this.invited || this.knocked) return false;
+
+        return this.level === NotificationLevel.Highlight;
+    }
+
+    /**
+     * True if the notification is an unsent message.
+     */
+    public get isUnsentMessage(): boolean {
+        return this.level === NotificationLevel.Unsent;
+    }
+
+    /**
+     * Activity notifications are the lowest level of notification (except none and muted)
+     */
+    public get isActivityNotification(): boolean {
+        return this.level === NotificationLevel.Activity;
+    }
+
+    /**
+     * This is the case for notifications with a level:
+     * - is a knock
+     * - greater Activity
+     * - equal Activity and feature_hidebold is disabled.
+     */
+    public get hasAnyNotificationOrActivity(): boolean {
+        if (this.knocked) return true;
+
+        // If the feature_hidebold is enabled, we don't want to show activity notifications
+        const hideBold = SettingsStore.getValue("feature_hidebold");
+        if (!hideBold && this.level === NotificationLevel.Activity) return true;
+
+        return this.level >= NotificationLevel.Notification;
+    }
+
+    /**
+     * True if the notification is a NotificationLevel.Notification.
+     */
+    public get isNotification(): boolean {
+        return this.level === NotificationLevel.Notification;
     }
 
     private handleLocalEchoUpdated = (): void => {
@@ -95,7 +142,11 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     private updateNotificationState(): void {
         const snapshot = this.snapshot();
 
-        const { level, symbol, count } = RoomNotifs.determineUnreadState(this.room, undefined, this.includeThreads);
+        const { level, symbol, count, invited } = RoomNotifs.determineUnreadState(
+            this.room,
+            undefined,
+            this.includeThreads,
+        );
         const muted =
             RoomNotifs.getRoomNotifsState(this.room.client, this.room.roomId) === RoomNotifs.RoomNotifState.Mute;
         const knocked =
@@ -105,6 +156,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this._count = count;
         this._muted = muted;
         this._knocked = knocked;
+        this._invited = invited;
 
         // finally, publish an update if needed
         this.emitIfUpdated(snapshot);

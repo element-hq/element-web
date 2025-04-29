@@ -127,7 +127,7 @@ export default class UserProvider extends AutocompleteProvider {
                     suffix: selection.beginning && range!.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
                     component: (
-                        <PillCompletion title={displayName} description={description}>
+                        <PillCompletion title={displayName} description={description ?? undefined}>
                             <MemberAvatar member={user} size="24px" />
                         </PillCompletion>
                     ),

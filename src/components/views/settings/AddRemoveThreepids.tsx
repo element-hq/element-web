@@ -40,7 +40,7 @@ interface ExistingThreepidProps {
 const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onChange, disabled }) => {
     const [isConfirming, setIsConfirming] = useState(false);
     const client = useMatrixClientContext();
-    const bindTask = useRef<AddThreepid | undefined>();
+    const bindTask = useRef<AddThreepid>(undefined);
 
     const [isVerifyingBind, setIsVerifyingBind] = useState(false);
     const [continueDisabled, setContinueDisabled] = useState(false);
@@ -289,7 +289,7 @@ const AddThreepidSection: React.FC<{ medium: "email" | "msisdn"; disabled?: bool
     disabled,
     onChange,
 }) => {
-    const addTask = useRef<AddThreepid | undefined>();
+    const addTask = useRef<AddThreepid>(undefined);
     const [newThreepidInput, setNewThreepidInput] = useState("");
     const [phoneCountryInput, setPhoneCountryInput] = useState("");
     const [verificationCodeInput, setVerificationCodeInput] = useState("");

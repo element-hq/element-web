@@ -62,12 +62,18 @@ export const sortRooms = (rooms: Room[]): Room[] => {
     });
 };
 
-const getLastTs = (r: Room, userId: string): number => {
+export const getLastTs = (r: Room, userId: string): number => {
     const mainTimelineLastTs = ((): number => {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
         if (!r?.timeline) {
             return Number.MAX_SAFE_INTEGER;
+        }
+        // MSC4186: Simplified Sliding Sync sets this.
+        // If it's present, sort by it.
+        const bumpStamp = r.getBumpStamp();
+        if (bumpStamp) {
+            return bumpStamp;
         }
 
         // If the room hasn't been joined yet, it probably won't have a timeline to

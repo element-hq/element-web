@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type HTMLAttributes, type ReactHTML, type ReactNode, type WheelEvent } from "react";
+import React, { type HTMLAttributes, type JSX, type ReactNode, type WheelEvent } from "react";
 
 type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
     JSX.IntrinsicElements[T] extends HTMLAttributes<object> ? DynamicElementProps<T> : DynamicElementProps<"div">;
@@ -27,10 +27,10 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElem
 
 export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<IProps<T>> {
     public static defaultProps = {
-        element: "div" as keyof ReactHTML,
+        element: "div" as keyof HTMLElementTagNameMap,
     };
 
-    public readonly containerRef: React.RefObject<HTMLDivElement> = React.createRef();
+    public readonly containerRef = React.createRef<HTMLDivElement>();
 
     public componentDidMount(): void {
         if (this.containerRef.current && this.props.onScroll) {

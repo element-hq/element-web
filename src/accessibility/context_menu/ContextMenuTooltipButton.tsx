@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, type Ref } from "react";
+import React, { type JSX } from "react";
 
 import AccessibleButton, { type ButtonProps } from "../../components/views/elements/AccessibleButton";
 
@@ -18,10 +18,14 @@ type Props<T extends keyof HTMLElementTagNameMap> = ButtonProps<T> & {
 };
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuTooltipButton = forwardRef(function <T extends keyof HTMLElementTagNameMap>(
-    { isExpanded, children, onClick, onContextMenu, ...props }: Props<T>,
-    ref: Ref<HTMLElementTagNameMap[T]>,
-) {
+export const ContextMenuTooltipButton = function <T extends keyof HTMLElementTagNameMap>({
+    isExpanded,
+    children,
+    onClick,
+    onContextMenu,
+    ref,
+    ...props
+}: Props<T>): JSX.Element {
     return (
         <AccessibleButton
             {...props}
@@ -35,4 +39,4 @@ export const ContextMenuTooltipButton = forwardRef(function <T extends keyof HTM
             {children}
         </AccessibleButton>
     );
-});
+};

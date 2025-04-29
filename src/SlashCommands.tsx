@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React from "react";
 import {
     ContentHelpers,
     Direction,
@@ -52,7 +52,6 @@ import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpD
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from "./contexts/RoomContext";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import VoipUserMapper from "./VoipUserMapper";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -742,28 +741,6 @@ export const Commands = [
             );
         },
         category: CommandCategories.advanced,
-    }),
-    new Command({
-        command: "tovirtual",
-        description: _td("slash_command|tovirtual"),
-        category: CommandCategories.advanced,
-        isEnabled(cli): boolean {
-            return !!LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom(cli);
-        },
-        runFn: (cli, roomId) => {
-            return success(
-                (async (): Promise<void> => {
-                    const room = await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(roomId);
-                    if (!room) throw new UserFriendlyError("slash_command|tovirtual_not_found");
-                    dis.dispatch<ViewRoomPayload>({
-                        action: Action.ViewRoom,
-                        room_id: room.roomId,
-                        metricsTrigger: "SlashCommand",
-                        metricsViaKeyboard: true,
-                    });
-                })(),
-            );
-        },
     }),
     new Command({
         command: "query",

@@ -23,7 +23,7 @@ import * as settingsHooks from "../../../../../src/hooks/useSettings";
 import Modal from "../../../../../src/Modal";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import { flushPromises, stubClient } from "../../../../test-utils";
+import { flushPromises, stubClient, untilDispatch } from "../../../../test-utils";
 import { PollHistoryDialog } from "../../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
@@ -32,6 +32,7 @@ import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
 
 jest.mock("../../../../../src/utils/room/tagRoom");
 
@@ -275,6 +276,37 @@ describe("<RoomSummaryCard />", () => {
             { phase: RightPanelPhases.PinnedMessages },
             true,
         );
+    });
+
+    it("dispatches leave room on button click", async () => {
+        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        });
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("room_list|more_options|leave_room")));
+        await untilDispatch("leave_room", defaultDispatcher);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+            action: "leave_room",
+            room_id: room.roomId,
+        });
+    });
+
+    it("opens report dialog on button click", async () => {
+        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        });
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("action|report_room")));
+        expect(Modal.createDialog).toHaveBeenCalledWith(ReportRoomDialog, { roomId: room.roomId });
+        await untilDispatch("leave_room", defaultDispatcher);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+            action: "leave_room",
+            room_id: room.roomId,
+        });
     });
 
     describe("pinning", () => {

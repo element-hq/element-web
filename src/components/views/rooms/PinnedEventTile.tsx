@@ -90,7 +90,6 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
                 <MessageEvent
                     mxEvent={event}
                     maxImageHeight={150}
-                    onHeightChanged={() => {}} // we need to give this, apparently
                     permalinkCreator={permalinkCreator}
                     replacingEventId={event.replacingEventId()}
                 />

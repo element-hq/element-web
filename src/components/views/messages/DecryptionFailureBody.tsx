@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { forwardRef, type ForwardRefExoticComponent, useContext } from "react";
+import React, { type JSX, useContext } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { BlockIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { type IBodyProps } from "./IBodyProps";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 
-function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string | React.JSX.Element {
+function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string | JSX.Element {
     switch (mxEvent.decryptionFailureReason) {
         case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
             return _t("timeline|decryption_failure|blocked");
@@ -72,7 +72,7 @@ function errorClassName(mxEvent: MatrixEvent): string | null {
 }
 
 // A placeholder element for messages that could not be decrypted
-export const DecryptionFailureBody = forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent }, ref): React.JSX.Element => {
+export const DecryptionFailureBody = ({ mxEvent, ref }: IBodyProps): JSX.Element => {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
     const classes = classNames("mx_DecryptionFailureBody", "mx_EventTile_content", errorClassName(mxEvent));
 
@@ -81,4 +81,4 @@ export const DecryptionFailureBody = forwardRef<HTMLDivElement, IBodyProps>(({ m
             {getErrorMessage(mxEvent, verificationState)}
         </div>
     );
-}) as ForwardRefExoticComponent<IBodyProps>;
+};

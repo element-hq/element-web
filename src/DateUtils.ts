@@ -38,7 +38,7 @@ export function getMonthsArray(month: Intl.DateTimeFormatOptions["month"] = "sho
 
 // XXX: Ideally we could just specify `hour12: boolean` but it has issues on Chrome in the `en` locale
 // https://support.google.com/chrome/thread/29828561?hl=en
-function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeFormatOptions {
+export function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeFormatOptions {
     return {
         hourCycle: showTwelveHour ? "h12" : "h23",
     };

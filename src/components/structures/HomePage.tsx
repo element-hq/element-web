@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React, { type JSX } from "react";
 import { useContext, useState } from "react";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -27,7 +27,7 @@ import EmbeddedPage from "./EmbeddedPage";
 
 const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateChatButton", ev);
-    dis.dispatch({ action: "view_create_chat" });
+    dis.dispatch({ action: Action.CreateChat });
 };
 
 const onClickExplore = (ev: ButtonEvent): void => {
@@ -37,7 +37,7 @@ const onClickExplore = (ev: ButtonEvent): void => {
 
 const onClickNewRoom = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
-    dis.dispatch({ action: "view_create_room" });
+    dis.dispatch({ action: Action.CreateRoom });
 };
 
 interface IProps {

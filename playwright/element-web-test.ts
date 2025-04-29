@@ -7,18 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    expect as baseExpect,
-    type Locator,
-    type Page,
     type ExpectMatcherState,
-    type ElementHandle,
+    type MatcherReturnType,
+    type Page,
+    type Locator,
     type PlaywrightTestArgs,
     type Fixtures as _Fixtures,
 } from "@playwright/test";
-import { sanitizeForFilePath } from "playwright-core/lib/utils";
-import AxeBuilder from "@axe-core/playwright";
-import _ from "lodash";
-import { extname } from "node:path";
+import {
+    type TestFixtures as BaseTestFixtures,
+    expect as baseExpect,
+    type ToMatchScreenshotOptions,
+} from "@element-hq/element-web-playwright-common";
 
 import type { IConfigOptions } from "../src/IConfigOptions";
 import { type Credentials } from "./plugins/homeserver";
@@ -27,71 +27,22 @@ import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
 import { Bot, type CreateBotOpts } from "./pages/bot";
 import { Webserver } from "./plugins/webserver";
-import { type Options, type Services, test as base } from "./services.ts";
+import { type WorkerOptions, type Services, test as base } from "./services";
 
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
 process.env["PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS"] = "1";
 
-// This is deliberately quite a minimal config.json, so that we can test that the default settings actually work.
-const CONFIG_JSON: Partial<IConfigOptions> = {
-    // The default language is set here for test consistency
-    setting_defaults: {
-        language: "en-GB",
-    },
-
-    // the location tests want a map style url.
-    map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
-
-    features: {
-        // We don't want to go through the feature announcement during the e2e test
-        feature_release_announcement: false,
-    },
-};
+declare module "@element-hq/element-web-playwright-common" {
+    // Improve the type for the config fixture based on the real type
+    export interface Config extends Omit<IConfigOptions, "default_server_config"> {}
+}
 
 export interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 
-export interface TestFixtures {
-    axe: AxeBuilder;
-    checkA11y: () => Promise<void>;
-
-    /**
-     * The contents of the config.json to send when the client requests it.
-     */
-    config: typeof CONFIG_JSON;
-
-    /**
-     * The displayname to use for the user registered in {@link #credentials}.
-     *
-     * To set it, call `test.use({ displayName: "myDisplayName" })` in the test file or `describe` block.
-     * See {@link https://playwright.dev/docs/api/class-test#test-use}.
-     */
-    displayName?: string;
-
-    /**
-     * A test fixture which registers a test user on the {@link #homeserver} and supplies the details
-     * of the registered user.
-     */
-    credentials: CredentialsWithDisplayName;
-
-    /**
-     * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
-     * but adds an initScript which will populate localStorage with the user's details from
-     * {@link #credentials} and {@link #homeserver}.
-     *
-     * Similar to {@link #user}, but doesn't load the app.
-     */
-    pageWithCredentials: Page;
-
-    /**
-     * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
-     * the credentials into localStorage per {@link #homeserver}, and then loads the front page of the
-     * app.
-     */
-    user: CredentialsWithDisplayName;
-
+export interface TestFixtures extends BaseTestFixtures {
     /**
      * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
      * but wraps the returned `Page` in a class of utilities for interacting with the Element-Web UI,
@@ -105,13 +56,11 @@ export interface TestFixtures {
     uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
     botCreateOpts: CreateBotOpts;
     bot: Bot;
-    labsFlags: string[];
     webserver: Webserver;
-    disablePresence: boolean;
 }
 
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
-export type Fixtures = _Fixtures<CombinedTestFixtures, Services & Options, CombinedTestFixtures>;
+export type Fixtures = _Fixtures<CombinedTestFixtures, Services & WorkerOptions, CombinedTestFixtures>;
 export const test = base.extend<TestFixtures>({
     context: async ({ context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report
@@ -121,101 +70,11 @@ export const test = base.extend<TestFixtures>({
         );
         await use(context);
     },
-    disablePresence: false,
-    config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
-    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
-        await context.route(`http://localhost:8080/config.json*`, async (route) => {
-            const json = {
-                ...CONFIG_JSON,
-                ...config,
-                default_server_config: {
-                    "m.homeserver": {
-                        base_url: homeserver.baseUrl,
-                    },
-                    ...config.default_server_config,
-                },
-            };
-            json["features"] = {
-                ...json["features"],
-                // Enable the lab features
-                ...labsFlags.reduce((obj, flag) => {
-                    obj[flag] = true;
-                    return obj;
-                }, {}),
-            };
-            if (disablePresence) {
-                json["enable_presence_by_hs_url"] = {
-                    [homeserver.baseUrl]: false,
-                };
-            }
-            await route.fulfill({ json });
-        });
-        await use(page);
+
+    axe: async ({ axe }, use) => {
+        // Exclude floating UI for now
+        await use(axe.exclude("[data-floating-ui-portal]"));
     },
-
-    displayName: undefined,
-    credentials: async ({ context, homeserver, displayName: testDisplayName }, use, testInfo) => {
-        const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
-        const password = _.uniqueId("password_");
-        const displayName = testDisplayName ?? _.sample(names)!;
-
-        const credentials = await homeserver.registerUser(`user_${testInfo.testId}`, password, displayName);
-        console.log(`Registered test user ${credentials.userId} with displayname ${displayName}`);
-
-        await use({
-            ...credentials,
-            displayName,
-        });
-    },
-    labsFlags: [],
-
-    pageWithCredentials: async ({ page, homeserver, credentials }, use) => {
-        await page.addInitScript(
-            ({ baseUrl, credentials }) => {
-                // Seed the localStorage with the required credentials
-                window.localStorage.setItem("mx_hs_url", baseUrl);
-                window.localStorage.setItem("mx_user_id", credentials.userId);
-                window.localStorage.setItem("mx_access_token", credentials.accessToken);
-                window.localStorage.setItem("mx_device_id", credentials.deviceId);
-                window.localStorage.setItem("mx_is_guest", "false");
-                window.localStorage.setItem("mx_has_pickle_key", "false");
-                window.localStorage.setItem("mx_has_access_token", "true");
-
-                window.localStorage.setItem(
-                    "mx_local_settings",
-                    JSON.stringify({
-                        // Retain any other settings which may have already been set
-                        ...JSON.parse(window.localStorage.getItem("mx_local_settings") || "{}"),
-                        // Ensure the language is set to a consistent value
-                        language: "en",
-                    }),
-                );
-            },
-            { baseUrl: homeserver.baseUrl, credentials },
-        );
-        await use(page);
-    },
-
-    user: async ({ pageWithCredentials: page, credentials }, use) => {
-        await page.goto("/");
-        await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
-        await use(credentials);
-    },
-
-    axe: async ({ page }, use) => {
-        await use(new AxeBuilder({ page }).exclude("[data-floating-ui-portal]"));
-    },
-    checkA11y: async ({ axe }, use, testInfo) =>
-        use(async () => {
-            const results = await axe.analyze();
-
-            await testInfo.attach("accessibility-scan-results", {
-                body: JSON.stringify(results, null, 2),
-                contentType: "application/json",
-            });
-
-            expect(results.violations).toEqual([]);
-        }),
 
     app: async ({ page }, use) => {
         const app = new ElementAppPage(page);
@@ -244,35 +103,23 @@ export const test = base.extend<TestFixtures>({
     },
 });
 
-// Based on https://github.com/microsoft/playwright/blob/2b77ed4d7aafa85a600caa0b0d101b72c8437eeb/packages/playwright/src/util.ts#L206C8-L210C2
-function sanitizeFilePathBeforeExtension(filePath: string): string {
-    const ext = extname(filePath);
-    const base = filePath.substring(0, filePath.length - ext.length);
-    return sanitizeForFilePath(base) + ext;
+interface ExtendedToMatchScreenshotOptions extends ToMatchScreenshotOptions {
+    includeDialogBackground?: boolean;
+    showTooltips?: boolean;
+    timeout?: number;
 }
 
-export const expect = baseExpect.extend({
-    async toMatchScreenshot(
+type Expectations = {
+    toMatchScreenshot: (
         this: ExpectMatcherState,
         receiver: Page | Locator,
         name: `${string}.png`,
-        options?: {
-            mask?: Array<Locator>;
-            includeDialogBackground?: boolean;
-            showTooltips?: boolean;
-            timeout?: number;
-            css?: string;
-        },
-    ) {
-        const testInfo = test.info();
-        if (!testInfo) throw new Error(`toMatchScreenshot() must be called during the test`);
+        options?: ExtendedToMatchScreenshotOptions,
+    ) => Promise<MatcherReturnType>;
+};
 
-        if (!testInfo.tags.includes("@screenshot")) {
-            throw new Error("toMatchScreenshot() must be used in a test tagged with @screenshot");
-        }
-
-        const page = "page" in receiver ? receiver.page() : receiver;
-
+export const expect = baseExpect.extend<Expectations>({
+    async toMatchScreenshot(receiver, name, options) {
         let css = `
             .mx_MessagePanel_myReadMarker {
                 display: none !important;
@@ -322,21 +169,9 @@ export const expect = baseExpect.extend({
             css += options.css;
         }
 
-        // We add a custom style tag before taking screenshots
-        const style = (await page.addStyleTag({
-            content: css,
-        })) as ElementHandle<Element>;
-
-        const screenshotName = sanitizeFilePathBeforeExtension(name);
-        await baseExpect(receiver).toHaveScreenshot(screenshotName, options);
-
-        await style.evaluate((tag) => tag.remove());
-
-        testInfo.annotations.push({
-            // `_` prefix hides it from the HTML reporter
-            type: "_screenshot",
-            // include a path relative to `playwright/snapshots/`
-            description: testInfo.snapshotPath(screenshotName).split("/playwright/snapshots/", 2)[1],
+        await baseExpect(receiver).toMatchScreenshot(name, {
+            ...options,
+            css,
         });
 
         return { pass: true, message: () => "", name: "toMatchScreenshot" };

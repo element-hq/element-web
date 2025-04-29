@@ -77,7 +77,7 @@ test.describe("Invite dialog", function () {
         "should support inviting a user to Direct Messages",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
-            await page.locator(".mx_RoomList").getByRole("button", { name: "Start chat" }).click();
+            await page.locator(".mx_LegacyRoomList").getByRole("button", { name: "Start chat" }).click();
 
             const other = page.locator(".mx_InviteDialog_other");
             // Assert that the header is rendered

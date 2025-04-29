@@ -6,30 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
+
 import { type Fixtures } from "../../../element-web-test.ts";
 
 export const consentHomeserver: Fixtures = {
     _homeserver: [
         async ({ _homeserver: container, mailpit }, use) => {
-            container
+            (container as SynapseContainer)
                 .withCopyDirectoriesToContainer([
                     { source: "playwright/plugins/homeserver/synapse/res", target: "/data/res" },
                 ])
+                .withSmtpServer(mailpit)
                 .withConfig({
-                    email: {
-                        enable_notifs: false,
-                        smtp_host: "mailpit",
-                        smtp_port: 1025,
-                        smtp_user: "username",
-                        smtp_pass: "password",
-                        require_transport_security: false,
-                        notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>",
-                        app_name: "Matrix",
-                        notif_template_html: "notif_mail.html",
-                        notif_template_text: "notif_mail.txt",
-                        notif_for_new_users: true,
-                        client_base_url: "http://localhost/element",
-                    },
                     user_consent: {
                         template_dir: "/data/res/templates/privacy",
                         version: "1.0",

@@ -12,8 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { type Enable, Resizable } from "re-resizable";
 import { type Direction } from "re-resizable/lib/resizer";
-import * as React from "react";
-import { type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
+import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
 
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -42,8 +41,6 @@ import ContextMenu, {
 } from "../../structures/ContextMenu";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import type ExtraTile from "./ExtraTile";
-import SettingsStore from "../../../settings/SettingsStore";
-import { SlidingSyncManager } from "../../../SlidingSyncManager";
 import NotificationBadge from "./NotificationBadge";
 import RoomTile from "./RoomTile";
 
@@ -106,12 +103,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private heightAtStart: number;
     private notificationState: ListNotificationState;
 
-    private slidingSyncMode: boolean;
-
     public constructor(props: IProps) {
         super(props);
-        // when this setting is toggled it restarts the app so it's safe to not watch this.
-        this.slidingSyncMode = SettingsStore.getValue("feature_sliding_sync");
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
@@ -165,9 +158,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     private get numVisibleTiles(): number {
-        if (this.slidingSyncMode) {
-            return this.state.rooms.length;
-        }
         const nVisible = Math.ceil(this.layout.visibleTiles);
         return Math.min(nVisible, this.numTiles);
     }
@@ -329,12 +319,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = async (): Promise<void> => {
-        if (this.slidingSyncMode) {
-            const count = RoomListStore.instance.getCount(this.props.tagId);
-            await SlidingSyncManager.instance.ensureListRegistered(this.props.tagId, {
-                ranges: [[0, count]],
-            });
-        }
         // read number of visible tiles before we mutate it
         const numVisibleTiles = this.numVisibleTiles;
         const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
@@ -554,13 +538,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
-            let isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
-            let isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
-            if (this.slidingSyncMode) {
-                const slidingList = SlidingSyncManager.instance.slidingSync?.getListParams(this.props.tagId);
-                isAlphabetical = (slidingList?.sort || [])[0] === "by_name";
-                isUnreadFirst = (slidingList?.sort || [])[0] === "by_notification_level";
-            }
+            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
 
             // Invites don't get some nonsense options, so only add them if we have to.
             let otherSections: JSX.Element | undefined;
@@ -763,17 +742,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
             let showNButton: JSX.Element | undefined;
-            const hasMoreSlidingSync =
-                this.slidingSyncMode && RoomListStore.instance.getCount(this.props.tagId) > this.state.rooms.length;
 
-            if (maxTilesPx > this.state.height || hasMoreSlidingSync) {
+            if (maxTilesPx > this.state.height) {
                 // the height of all the tiles is greater than the section height: we need a 'show more' button
                 const nonPaddedHeight = this.state.height - RESIZE_HANDLE_HEIGHT - SHOW_N_BUTTON_HEIGHT;
                 const amountFullyShown = Math.floor(nonPaddedHeight / this.layout.tileHeight);
-                let numMissing = this.numTiles - amountFullyShown;
-                if (this.slidingSyncMode) {
-                    numMissing = RoomListStore.instance.getCount(this.props.tagId) - amountFullyShown;
-                }
+                const numMissing = this.numTiles - amountFullyShown;
                 const label = _t("room_list|show_n_more", { count: numMissing });
                 let showMoreText: ReactNode = <span className="mx_RoomSublist_showNButtonText">{label}</span>;
                 if (this.props.isMinimized) showMoreText = null;

@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type JSX, type ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -36,6 +36,7 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-so
 import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
@@ -65,10 +66,8 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useRoomState } from "../../../hooks/useRoomState";
-import { useTopic } from "../../../hooks/room/useTopic";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { Box } from "../../utils/Box";
-import { onRoomTopicLinkClick } from "../elements/RoomTopic";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
@@ -77,6 +76,8 @@ import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { ReportRoomDialog } from "../dialogs/ReportRoomDialog.tsx";
+import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 
 interface IProps {
     room: Room;
@@ -113,21 +114,11 @@ const onRoomSettingsClick = (ev: Event): void => {
 };
 
 const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
-    const [expanded, setExpanded] = useState(true);
+    const vm = useRoomTopicViewModel(room);
 
-    const topic = useTopic(room);
-    const body = topicToHtml(topic?.text, topic?.html);
+    const body = topicToHtml(vm.topic?.text, vm.topic?.html);
 
-    const canEditTopic = useRoomState(room, (state) =>
-        state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
-    );
-    const onEditClick = (e: SyntheticEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        defaultDispatcher.dispatch({ action: "open_room_settings" });
-    };
-
-    if (!body && !canEditTopic) {
+    if (!body && !vm.canEditTopic) {
         return null;
     }
 
@@ -141,7 +132,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 className="mx_RoomSummaryCard_topic"
             >
                 <Box flex="1">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("right_panel|add_topic")}
                         </Text>
@@ -151,7 +142,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = expanded ? <Linkify>{body}</Linkify> : body;
+    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
     return (
         <Flex
             as="section"
@@ -159,33 +150,20 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
             justify="center"
             gap="var(--cpd-space-2x)"
             className={classNames("mx_RoomSummaryCard_topic", {
-                mx_RoomSummaryCard_topic_collapsed: !expanded,
+                mx_RoomSummaryCard_topic_collapsed: !vm.expanded,
             })}
         >
             <Box flex="1" className="mx_RoomSummaryCard_topic_container">
-                <Text
-                    size="sm"
-                    weight="regular"
-                    onClick={(ev: React.MouseEvent): void => {
-                        if (ev.target instanceof HTMLAnchorElement) {
-                            onRoomTopicLinkClick(ev);
-                            return;
-                        }
-                    }}
-                >
+                <Text size="sm" weight="regular" onClick={vm.onTopicLinkClick}>
                     {content}
                 </Text>
-                <IconButton
-                    className="mx_RoomSummaryCard_topic_chevron"
-                    size="24px"
-                    onClick={() => setExpanded(!expanded)}
-                >
+                <IconButton className="mx_RoomSummaryCard_topic_chevron" size="24px" onClick={vm.onExpandedClick}>
                     <ChevronDownIcon />
                 </IconButton>
             </Box>
-            {expanded && canEditTopic && (
+            {vm.expanded && vm.canEditTopic && (
                 <Box flex="1" className="mx_RoomSummaryCard_topic_edit">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("action|edit")}
                         </Text>
@@ -230,6 +208,17 @@ const RoomSummaryCard: React.FC<IProps> = ({
             action: "leave_room",
             room_id: room.roomId,
         });
+    };
+    const onReportRoomClick = async (): Promise<void> => {
+        const [leave] = await Modal.createDialog(ReportRoomDialog, {
+            roomId: room.roomId,
+        }).finished;
+        if (leave) {
+            defaultDispatcher.dispatch({
+                action: "leave_room",
+                room_id: room.roomId,
+            });
+        }
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
@@ -320,7 +309,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 {e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorIcon width="1em" />
+                        <ErrorSolidIcon width="1em" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}
@@ -439,13 +428,21 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <MenuItem Icon={SettingsIcon} label={_t("common|settings")} onSelect={onRoomSettingsClick} />
 
                 <Separator />
-
-                <MenuItem
-                    Icon={LeaveIcon}
-                    kind="critical"
-                    label={_t("action|leave_room")}
-                    onSelect={onLeaveRoomClick}
-                />
+                <div className="mx_RoomSummaryCard_bottomOptions">
+                    <MenuItem
+                        Icon={ErrorIcon}
+                        kind="critical"
+                        label={_t("action|report_room")}
+                        onSelect={onReportRoomClick}
+                    />
+                    <MenuItem
+                        className="mx_RoomSummaryCard_leave"
+                        Icon={LeaveIcon}
+                        kind="critical"
+                        label={_t("action|leave_room")}
+                        onSelect={onLeaveRoomClick}
+                    />
+                </div>
             </div>
         </BaseCard>
     );

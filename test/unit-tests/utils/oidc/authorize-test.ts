@@ -65,6 +65,7 @@ describe("OIDC authorization", () => {
     });
 
     afterAll(() => {
+        // @ts-expect-error
         window.location = realWindowLocation;
     });
 

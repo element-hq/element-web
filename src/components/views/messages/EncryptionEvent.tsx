@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef } from "react";
+import React, { type JSX, type Ref, type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
@@ -22,9 +22,10 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 interface IProps {
     mxEvent: MatrixEvent;
     timestamp?: JSX.Element;
+    ref?: Ref<HTMLDivElement>;
 }
 
-const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp }, ref) => {
+const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
     const cli = useMatrixClientContext();
     const roomId = mxEvent.getRoomId()!;
     const isRoomEncrypted = useIsEncrypted(cli, cli.getRoom(roomId) || undefined);
@@ -80,6 +81,6 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
             timestamp={timestamp}
         />
     );
-});
+};
 
 export default EncryptionEvent;

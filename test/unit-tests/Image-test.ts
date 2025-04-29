@@ -51,6 +51,13 @@ describe("Image", () => {
             expect(await blobIsAnimated("image/webp", img)).toBeFalsy();
         });
 
+        it("Static WEBP in extended file format", async () => {
+            const img = new Blob([
+                fs.readFileSync(path.resolve(__dirname, "images", "static-logo-extended-file-format.webp")),
+            ]);
+            expect(await blobIsAnimated("image/webp", img)).toBeFalsy();
+        });
+
         it("Animated PNG", async () => {
             const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.apng"))]);
             expect(await blobIsAnimated("image/png", img)).toBeTruthy();

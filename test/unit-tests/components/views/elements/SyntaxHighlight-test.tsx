@@ -12,8 +12,10 @@ import SyntaxHighlight from "../../../../../src/components/views/elements/Syntax
 
 describe("<SyntaxHighlight />", () => {
     it("renders", async () => {
-        const { container } = render(<SyntaxHighlight>console.log("Hello, World!");</SyntaxHighlight>);
-        await waitFor(() => expect(container.querySelector(".language-arcade")).toBeTruthy());
+        const { container } = render(
+            <SyntaxHighlight language="javascript">console.log("Hello, World!");</SyntaxHighlight>,
+        );
+        await waitFor(() => expect(container.querySelector(".language-javascript")).toBeTruthy());
         expect(container).toMatchSnapshot();
     });
 
