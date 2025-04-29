@@ -15,12 +15,9 @@ import { SecondaryFilters } from "../../../../../../src/components/viewmodels/ro
 import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListFilterMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListFilterMenu";
 
-
 function getRenderOptions(): RenderOptions {
     return {
-        wrapper: ({ children }) => (
-            <TooltipProvider>{children}</TooltipProvider>
-        ),
+        wrapper: ({ children }) => <TooltipProvider>{children}</TooltipProvider>,
     };
 }
 
@@ -54,17 +51,17 @@ describe("<RoomListFilterMenu />", () => {
         const userevent = userEvent.setup();
 
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
-        expect(screen.getByRole("menu", {name: "Filter"})).toBeInTheDocument();
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
+        expect(screen.getByRole("menu", { name: "Filter" })).toBeInTheDocument();
     });
 
     it("shows 'All activity' checked if selected", async () => {
         const userevent = userEvent.setup();
 
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
 
-        const shouldBeSelected = screen.getByRole("menuitem", {name: "All activity"});
+        const shouldBeSelected = screen.getByRole("menuitem", { name: "All activity" });
         expect(shouldBeSelected).toHaveAttribute("aria-selected", "true");
         expect(shouldBeSelected).toMatchSnapshot();
     });
@@ -74,9 +71,9 @@ describe("<RoomListFilterMenu />", () => {
 
         vm.activeSecondaryFilter = SecondaryFilters.InvitesOnly;
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
 
-        const shouldBeSelected = screen.getByRole("menuitem", {name: "Invites only"});
+        const shouldBeSelected = screen.getByRole("menuitem", { name: "Invites only" });
         expect(shouldBeSelected).toHaveAttribute("aria-selected", "true");
         expect(shouldBeSelected).toMatchSnapshot();
     });
@@ -86,9 +83,9 @@ describe("<RoomListFilterMenu />", () => {
 
         vm.activeSecondaryFilter = SecondaryFilters.LowPriority;
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
 
-        const shouldBeSelected = screen.getByRole("menuitem", {name: "Low priority"});
+        const shouldBeSelected = screen.getByRole("menuitem", { name: "Low priority" });
         expect(shouldBeSelected).toHaveAttribute("aria-selected", "true");
         expect(shouldBeSelected).toMatchSnapshot();
     });
@@ -98,9 +95,9 @@ describe("<RoomListFilterMenu />", () => {
 
         vm.activeSecondaryFilter = SecondaryFilters.MentionsOnly;
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
 
-        const shouldBeSelected = screen.getByRole("menuitem", {name: "Mentions only"});
+        const shouldBeSelected = screen.getByRole("menuitem", { name: "Mentions only" });
         expect(shouldBeSelected).toHaveAttribute("aria-selected", "true");
         expect(shouldBeSelected).toMatchSnapshot();
     });
@@ -110,7 +107,7 @@ describe("<RoomListFilterMenu />", () => {
 
         vm.activateSecondaryFilter = jest.fn();
         render(<RoomListFilterMenu vm={vm} />, getRenderOptions());
-        await userevent.click(screen.getByRole("button", {name: "Filter"}));
+        await userevent.click(screen.getByRole("button", { name: "Filter" }));
         await userevent.click(screen.getByRole("menuitem", { name: "Invites only" }));
 
         expect(vm.activateSecondaryFilter).toHaveBeenCalledWith(SecondaryFilters.InvitesOnly);
