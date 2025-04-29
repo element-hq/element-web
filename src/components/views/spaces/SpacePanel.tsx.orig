@@ -242,35 +242,29 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
               openMenu();
           };
 
-    // Pro777 edit
-    if (!SettingsStore.getValue("view_button_creating_space")) {
-        return ( null );
-    //The button will not exist
-    } else {
-      return (
-          <li
-              className={classNames("mx_SpaceItem mx_SpaceItem_new", {
-                  collapsed: isPanelCollapsed,
-              })}
-              role="treeitem"
-              aria-selected={false}
-          >
-              <SpaceButton
-                  data-testid="create-space-button"
-                  className={classNames("mx_SpaceButton_new", {
-                      mx_SpaceButton_newCancel: menuDisplayed,
-                  })}
-                  label={menuDisplayed ? _t("action|cancel") : _t("create_space|label")}
-                  onClick={onNewClick}
-                  isNarrow={isPanelCollapsed}
-                  innerRef={handle}
-                  size="32px"
-              />
+    return (
+        <li
+            className={classNames("mx_SpaceItem mx_SpaceItem_new", {
+                collapsed: isPanelCollapsed,
+            })}
+            role="treeitem"
+            aria-selected={false}
+        >
+            <SpaceButton
+                data-testid="create-space-button"
+                className={classNames("mx_SpaceButton_new", {
+                    mx_SpaceButton_newCancel: menuDisplayed,
+                })}
+                label={menuDisplayed ? _t("action|cancel") : _t("create_space|label")}
+                onClick={onNewClick}
+                isNarrow={isPanelCollapsed}
+                innerRef={handle}
+                size="32px"
+            />
 
-              {contextMenu}
-          </li>
-      );
-    }
+            {contextMenu}
+        </li>
+    );
 };
 
 const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
