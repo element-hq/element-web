@@ -7,8 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 // Dispatcher actions also extend into any arbitrary string, so support that.
-import { type ActionPayload } from "./payloads.ts";
-
 export type DispatcherAction = Action | string;
 
 export enum Action {
