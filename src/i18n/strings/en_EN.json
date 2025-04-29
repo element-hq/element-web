@@ -3226,7 +3226,7 @@
         "heading_without_query": "Search for",
         "join_button_text": "Join %(roomAddress)s",
         "keyboard_scroll_hint": "Use <arrows/> to scroll",
-        "message_search_section_title": "Other searches",
+        "messages_label": "Messages",
         "other_rooms_in_space": "Other rooms in %(spaceName)s",
         "public_rooms_label": "Public rooms",
         "public_spaces_label": "Public spaces",
@@ -3236,7 +3236,6 @@
         "result_may_be_hidden_privacy_warning": "Some results may be hidden for privacy",
         "result_may_be_hidden_warning": "Some results may be hidden",
         "search_dialog": "Search Dialog",
-        "search_messages_hint": "To search messages, look for this icon at the top of a room <icon/>",
         "spaces_title": "Spaces you're in",
         "start_group_chat_button": "Start a group chat"
     },

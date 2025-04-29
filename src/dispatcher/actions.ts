@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 // Dispatcher actions also extend into any arbitrary string, so support that.
+import { type ActionPayload } from "./payloads.ts";
+
 export type DispatcherAction = Action | string;
 
 export enum Action {
@@ -362,7 +364,7 @@ export enum Action {
     View3pidInvite = "view_3pid_invite",
 
     /**
-     * Opens right panel room summary and focuses the search input
+     * Opens right panel room summary and focuses the search input. Use with a FocusMessageSearchPayload.
      */
     FocusMessageSearch = "focus_search",
 
