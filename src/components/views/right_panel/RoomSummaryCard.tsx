@@ -76,7 +76,6 @@ import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { ReportRoomDialog } from "../dialogs/ReportRoomDialog.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
-import { type FocusMessageSearchPayload } from "../../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 
 interface IProps {
     room: Room;
