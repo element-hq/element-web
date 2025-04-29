@@ -5,14 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, RenderOptions, screen } from "@testing-library/react";
-import { RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
+import React from "react";
+import { render, type RenderOptions, screen } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
+
+import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListFilterMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListFilterMenu";
-import React from "react";
-import { TooltipProvider } from "@vector-im/compound-web";
-import userEvent from "@testing-library/user-event";
+
 
 function getRenderOptions(): RenderOptions {
     return {
