@@ -291,6 +291,12 @@ export interface Settings {
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
+    // Pro777 edit
+    "view_button_creating_space": IBaseSetting<boolean>;
+    "view_button_creating_room": IBaseSetting<boolean>;
+    "view_button_creating_home": IBaseSetting<boolean>;
+    "view_button_export": IBaseSetting<boolean>;
+    //Creating parameters
     "notificationSound": IBaseSetting<
         | {
               name: string;
@@ -1141,6 +1147,24 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
     },
+    // Pro777 edit
+    "view_button_creating_space": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+    },
+    "view_button_creating_room": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+    },
+    "view_button_creating_home": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+    },
+    "view_button_export": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+    },
+    //Creating parameters
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
         default: null,
