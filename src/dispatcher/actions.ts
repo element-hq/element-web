@@ -362,7 +362,7 @@ export enum Action {
     View3pidInvite = "view_3pid_invite",
 
     /**
-     * Opens right panel room summary and focuses the search input
+     * Opens right panel room summary and focuses the search input. Use with a FocusMessageSearchPayload.
      */
     FocusMessageSearch = "focus_search",
 

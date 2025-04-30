@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type JSX, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -52,7 +52,6 @@ import { ShareDialog } from "../dialogs/ShareDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -71,7 +70,6 @@ import { Box } from "../../utils/Box";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
-import { useTransition } from "../../../hooks/useTransition";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
@@ -82,9 +80,10 @@ import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryC
 interface IProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
     focusRoomSearch?: boolean;
+    searchTerm?: string;
 }
 
 const onRoomMembersClick = (): void => {
@@ -180,6 +179,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     onSearchChange,
     onSearchCancel,
     focusRoomSearch,
+    searchTerm,
 }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -244,19 +244,6 @@ const RoomSummaryCard: React.FC<IProps> = ({
             searchInputRef.current?.focus();
         }
     });
-    // Clear the search field when the user leaves the search view
-    useTransition(
-        (prevTimelineRenderingType) => {
-            if (
-                prevTimelineRenderingType === TimelineRenderingType.Search &&
-                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
-                searchInputRef.current
-            ) {
-                searchInputRef.current.value = "";
-            }
-        },
-        [roomContext.timelineRenderingType],
-    );
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const roomInfo = (
@@ -332,7 +319,10 @@ const RoomSummaryCard: React.FC<IProps> = ({
             <Search
                 placeholder={_t("room|search|placeholder")}
                 name="room_message_search"
-                onChange={onSearchChange}
+                onChange={(e) => {
+                    onSearchChange(e.currentTarget.value);
+                }}
+                value={searchTerm}
                 className="mx_no_textinput"
                 ref={searchInputRef}
                 autoFocus={focusRoomSearch}

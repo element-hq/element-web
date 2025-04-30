@@ -608,129 +608,148 @@ describe("RoomView", () => {
         });
     });
 
-    it("should close search results when edit is clicked", async () => {
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+    describe("message search", () => {
+        it("should close search results when edit is clicked", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
 
-        const roomViewRef = createRef<RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
-        // @ts-ignore - triggering a search organically is a lot of work
-        act(() =>
-            roomViewRef.current!.setState({
-                search: {
-                    searchId: 1,
-                    roomId: room.roomId,
-                    term: "search term",
-                    scope: SearchScope.Room,
-                    promise: Promise.resolve({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        content: {
-                                            body: "search term",
-                                            msgtype: "m.text",
+            const roomViewRef = createRef<RoomView>();
+            const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.Room,
+                        promise: Promise.resolve({
+                            results: [
+                                SearchResult.fromJson(
+                                    {
+                                        rank: 1,
+                                        result: {
+                                            content: {
+                                                body: "search term",
+                                                msgtype: "m.text",
+                                            },
+                                            type: "m.room.message",
+                                            event_id: "$eventId",
+                                            sender: cli.getSafeUserId(),
+                                            origin_server_ts: 123456789,
+                                            room_id: room.roomId,
                                         },
-                                        type: "m.room.message",
-                                        event_id: "$eventId",
-                                        sender: cli.getSafeUserId(),
-                                        origin_server_ts: 123456789,
-                                        room_id: room.roomId,
-                                    },
-                                    context: {
-                                        events_before: [],
-                                        events_after: [],
-                                        profile_info: {},
-                                    },
-                                },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
-                        count: 1,
-                    }),
-                    inProgress: false,
-                    count: 1,
-                },
-            }),
-        );
-
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
-        });
-        const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
-
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
-
-        await prom;
-    });
-
-    it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
-        rooms.set(room2.roomId, room2);
-
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
-
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-
-        const roomViewRef = createRef<RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
-        // @ts-ignore - triggering a search organically is a lot of work
-        act(() =>
-            roomViewRef.current!.setState({
-                search: {
-                    searchId: 1,
-                    roomId: room.roomId,
-                    term: "search term",
-                    scope: SearchScope.All,
-                    promise: Promise.resolve({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        content: {
-                                            body: "search term",
-                                            msgtype: "m.text",
+                                        context: {
+                                            events_before: [],
+                                            events_after: [],
+                                            profile_info: {},
                                         },
-                                        type: "m.room.message",
-                                        event_id: "$eventId",
-                                        sender: cli.getSafeUserId(),
-                                        origin_server_ts: 123456789,
-                                        room_id: room2.roomId,
                                     },
-                                    context: {
-                                        events_before: [],
-                                        events_after: [],
-                                        profile_info: {},
-                                    },
-                                },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
+                                    eventMapper,
+                                ),
+                            ],
+                            highlights: [],
+                            count: 1,
+                        }),
+                        inProgress: false,
                         count: 1,
-                    }),
-                    inProgress: false,
-                    count: 1,
-                },
-            }),
-        );
+                    },
+                }),
+            );
 
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            });
+            const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
+
+            await userEvent.hover(getByText("search term"));
+            await userEvent.click(await findByLabelText("Edit"));
+
+            await prom;
         });
-        const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
 
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
+        it("should switch rooms when edit is clicked on a search result for a different room", async () => {
+            const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+            rooms.set(room2.roomId, room2);
 
-        await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+
+            const roomViewRef = createRef<RoomView>();
+            const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.All,
+                        promise: Promise.resolve({
+                            results: [
+                                SearchResult.fromJson(
+                                    {
+                                        rank: 1,
+                                        result: {
+                                            content: {
+                                                body: "search term",
+                                                msgtype: "m.text",
+                                            },
+                                            type: "m.room.message",
+                                            event_id: "$eventId",
+                                            sender: cli.getSafeUserId(),
+                                            origin_server_ts: 123456789,
+                                            room_id: room2.roomId,
+                                        },
+                                        context: {
+                                            events_before: [],
+                                            events_after: [],
+                                            profile_info: {},
+                                        },
+                                    },
+                                    eventMapper,
+                                ),
+                            ],
+                            highlights: [],
+                            count: 1,
+                        }),
+                        inProgress: false,
+                        count: 1,
+                    },
+                }),
+            );
+
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            });
+            const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
+
+            await userEvent.hover(getByText("search term"));
+            await userEvent.click(await findByLabelText("Edit"));
+
+            await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
+        });
+
+        it("should pre-fill search field on FocusMessageSearch dispatch", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            const { findByPlaceholderText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            act(() =>
+                defaultDispatcher.dispatch({
+                    action: Action.FocusMessageSearch,
+                    initialText: "search term",
+                }),
+            );
+
+            await expect(findByPlaceholderText("Search messages…")).resolves.toHaveValue("search term");
+        });
     });
 
     it("fires Action.RoomLoaded", async () => {

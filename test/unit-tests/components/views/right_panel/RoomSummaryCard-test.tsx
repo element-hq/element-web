@@ -11,7 +11,6 @@ import { render, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { EventType, MatrixEvent, Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, type MockedObject } from "jest-mock";
-import userEvent from "@testing-library/user-event";
 
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../../src/components/views/right_panel/RoomSummaryCard";
@@ -30,8 +29,6 @@ import { _t } from "../../../../../src/languageHandler";
 import { tagRoom } from "../../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
 
 jest.mock("../../../../../src/utils/room/tagRoom");
@@ -168,38 +165,6 @@ describe("<RoomSummaryCard />", () => {
             expect(getByPlaceholderText("Search messages…")).toHaveFocus();
             fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
             expect(onSearchCancel).toHaveBeenCalled();
-        });
-
-        it("should empty search field when the timeline rendering type changes away", async () => {
-            const onSearchChange = jest.fn();
-            const { rerender } = render(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Search } as any)}>
-                        <RoomSummaryCard
-                            room={room}
-                            permalinkCreator={new RoomPermalinkCreator(room)}
-                            onSearchChange={onSearchChange}
-                            focusRoomSearch={true}
-                        />
-                    </ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>,
-            );
-
-            await userEvent.type(screen.getByPlaceholderText("Search messages…"), "test");
-            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("test");
-
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                        <RoomSummaryCard
-                            room={room}
-                            permalinkCreator={new RoomPermalinkCreator(room)}
-                            onSearchChange={onSearchChange}
-                        />
-                    </ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>,
-            );
-            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("");
         });
     });
 

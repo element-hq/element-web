@@ -128,7 +128,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
                 <ResetIdentityPanel
                     variant={findResetVariant(state)}
                     onCancelClick={checkEncryptionState}
-                    onFinish={checkEncryptionState}
+                    onReset={checkEncryptionState}
                 />
             );
             break;

@@ -24,9 +24,9 @@ describe("<ResetIdentityPanel />", () => {
     it("should reset the encryption when the continue button is clicked", async () => {
         const user = userEvent.setup();
 
-        const onFinish = jest.fn();
+        const onReset = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="compromised" onFinish={onFinish} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="compromised" onReset={onReset} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
@@ -43,22 +43,22 @@ describe("<ResetIdentityPanel />", () => {
         await sleep(0);
 
         expect(matrixClient.getCrypto()!.resetEncryption).toHaveBeenCalled();
-        expect(onFinish).toHaveBeenCalled();
+        expect(onReset).toHaveBeenCalled();
     });
 
     it("should display the 'forgot recovery key' variant correctly", async () => {
-        const onFinish = jest.fn();
+        const onReset = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="forgot" onFinish={onFinish} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="forgot" onReset={onReset} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should display the 'sync failed' variant correctly", async () => {
-        const onFinish = jest.fn();
+        const onReset = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel variant="sync_failed" onFinish={onFinish} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="sync_failed" onReset={onReset} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
