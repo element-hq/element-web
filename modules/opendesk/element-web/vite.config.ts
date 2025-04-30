@@ -41,6 +41,7 @@ export default defineConfig({
         }),
     ],
     define: {
-        process: { env: {} },
+        // Use production mode for the build as it is tested against production builds of Element Web
+        process: { env: { NODE_ENV: "production" } },
     },
 });
