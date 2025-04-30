@@ -43,7 +43,8 @@ test.describe("Room list", () => {
             await expect(roomListView.getByRole("gridcell", { name: "Open room room29" })).toBeVisible();
             await expect(roomListView).toMatchScreenshot("room-list.png");
 
-            await roomListView.hover();
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
@@ -105,13 +106,10 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
-            // Remove hover on the room list item
-            await roomListView.hover();
-
-            // Scroll to the bottom of the list
-            await page.getByRole("grid", { name: "Room list" }).evaluate((e) => {
-                e.scrollTop = e.scrollHeight;
-            });
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
+            // Scroll to the end of the room list
+            await page.mouse.wheel(0, 1000);
 
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
@@ -129,7 +127,8 @@ test.describe("Room list", () => {
 
         test("should scroll to the current room", async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            await roomListView.hover();
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
 
