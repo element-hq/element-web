@@ -62,7 +62,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         );
         expect(asFragment()).toMatchSnapshot();
 
-        const spy = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+        const spy = jest.spyOn(Modal, "createDialog").mockReturnValue({ finished: new Promise(() => {}) } as any);
         await user.click(screen.getByText("Verify this device"));
         expect(spy).toHaveBeenCalled();
     });
