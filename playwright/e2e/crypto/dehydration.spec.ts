@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
+import { createBot, logIntoElement } from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
 import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
@@ -28,21 +28,27 @@ test.describe("Dehydration", () => {
     test.skip(isDendrite, "does not yet support dehydration v2");
 
     test("Verify device and reset creates dehydrated device", async ({ page, user, credentials, app }, workerInfo) => {
-        // Verify the device by resetting the key (which will create SSSS, and dehydrated device)
+        // Verify the device by resetting the identity key, and then set up recovery (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
         await expect(securityTab.getByText("Offline device enabled")).not.toBeVisible();
 
         await app.closeDialog();
 
-        // Verify the device by resetting the key
+        // Reset the identity key
         const settings = await app.settings.openUserSettings("Encryption");
         await settings.getByRole("button", { name: "Verify this device" }).click();
         await page.getByRole("button", { name: "Proceed with reset" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
-        await page.getByRole("button", { name: "Copy" }).click();
+
+        // Set up recovery
+        await page.getByRole("button", { name: "Set up recovery" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
-        await page.getByRole("button", { name: "Done" }).click();
+        const recoveryKey = await page.getByTestId("recoveryKey").innerText();
+        await page.getByRole("button", { name: "Continue" }).click();
+        await page.getByRole("textbox").fill(recoveryKey);
+        await page.getByRole("button", { name: "Finish set up" }).click();
+        await page.getByRole("button", { name: "Close" }).click();
 
         await expectDehydratedDeviceEnabled(app);
 
@@ -80,7 +86,7 @@ test.describe("Dehydration", () => {
         await expectDehydratedDeviceEnabled(app);
     });
 
-    test("Reset recovery key during login re-creates dehydrated device", async ({
+    test("Reset identity during login and set up recovery re-creates dehydrated device", async ({
         page,
         homeserver,
         app,
@@ -99,16 +105,26 @@ test.describe("Dehydration", () => {
         // Log in our client
         await logIntoElement(page, credentials);
 
-        // Oh no, we forgot our recovery key
+        // Oh no, we forgot our recovery key - reset our identity
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Reset all" }).click();
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Proceed with reset" }).click();
+        await expect(
+            page.getByRole("heading", { name: "Are you sure you want to reset your identity?" }),
+        ).toBeVisible();
+        await page.getByRole("button", { name: "Continue", exact: true }).click();
+        await page.getByPlaceholder("Password").fill(credentials.password);
+        await page.getByRole("button", { name: "Continue" }).click();
 
-        await completeCreateSecretStorageDialog(page, { accountPassword: credentials.password });
+        // And set up recovery
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Set up recovery" }).click();
+        await settings.getByRole("button", { name: "Continue" }).click();
+        const recoveryKey = await settings.getByTestId("recoveryKey").innerText();
+        await settings.getByRole("button", { name: "Continue" }).click();
+        await settings.getByRole("textbox").fill(recoveryKey);
+        await settings.getByRole("button", { name: "Finish set up" }).click();
 
         // There should be a brand new dehydrated device
-        const dehydratedDeviceIds = await getDehydratedDeviceIds(app.client);
-        expect(dehydratedDeviceIds.length).toBe(1);
-        expect(dehydratedDeviceIds[0]).not.toEqual(initialDehydratedDeviceIds[0]);
+        await expectDehydratedDeviceEnabled(app);
     });
 
     test("'Reset cryptographic identity' removes dehydrated device", async ({ page, homeserver, app, credentials }) => {

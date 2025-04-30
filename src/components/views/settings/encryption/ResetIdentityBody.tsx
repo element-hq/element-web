@@ -9,7 +9,7 @@ import { Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/co
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
-import React, { type JSX, useState, type MouseEventHandler } from "react";
+import React, { type JSX, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -22,7 +22,8 @@ interface ResetIdentityBodyProps {
     /**
      * Called when the identity is reset.
      */
-    onFinish: MouseEventHandler<HTMLButtonElement>;
+    onReset: () => void;
+
     /**
      * Called when the cancel button is clicked.
      */
@@ -36,22 +37,26 @@ interface ResetIdentityBodyProps {
 }
 
 /**
- * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
- * identity has been compromised.
+ * The variant of the panel to show.  This affects the message displayed to the user.
+ *
+ * "compromised" is shown when the user chose 'Reset cryptographic identity' explicitly in settings, usually because
+ * they believe their identity has been compromised.
  *
  * "sync_failed" is shown when the user tried to recover their identity but the process failed, probably because
  * the required information is missing from recovery.
  *
- * "forgot" is shown when the user has just forgotten their passphrase.
+ * "forgot" is shown when the user chose 'Forgot recovery key?' during `SetupEncryptionToast`.
+ *
+ * "confirm" is shown when the user chose 'Reset all' during `SetupEncryptionBody`.
  */
-export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed";
+export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm";
 
 /**
  * User interface component allowing the user to reset their cryptographic identity.
  *
  * Used by {@link ResetIdentityPanel}.
  */
-export function ResetIdentityBody({ onCancelClick, onFinish, variant }: ResetIdentityBodyProps): JSX.Element {
+export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIdentityBodyProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     // After the user clicks "Continue", we disable the button so it can't be
@@ -78,12 +83,12 @@ export function ResetIdentityBody({ onCancelClick, onFinish, variant }: ResetIde
                 <Button
                     destructive={true}
                     disabled={inProgress}
-                    onClick={async (evt) => {
+                    onClick={async () => {
                         setInProgress(true);
                         await matrixClient
                             .getCrypto()
                             ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
-                        onFinish(evt);
+                        onReset();
                     }}
                 >
                     {inProgress ? (
@@ -113,11 +118,10 @@ export function ResetIdentityBody({ onCancelClick, onFinish, variant }: ResetIde
 function titleForVariant(variant: ResetIdentityBodyVariant): string {
     switch (variant) {
         case "compromised":
+        case "confirm":
             return _t("settings|encryption|advanced|breadcrumb_title");
         case "sync_failed":
             return _t("settings|encryption|advanced|breadcrumb_title_sync_failed");
-
-        default:
         case "forgot":
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
     }
