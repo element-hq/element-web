@@ -11,6 +11,8 @@ import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListVie
 import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
+import { RoomListFilterMenu } from "./RoomListFilterMenu";
+import { textForSecondaryFilter } from "./textForFilter";
 
 interface Props {
     /**
@@ -23,13 +25,17 @@ interface Props {
  * The secondary filters for the room list (eg. mentions only / invites only).
  */
 export function RoomListSecondaryFilters({ vm }: Props): JSX.Element {
+    const activeFilterText = textForSecondaryFilter(vm.activeSecondaryFilter);
+
     return (
         <Flex
             aria-label={_t("room_list|secondary_filters")}
             className="mx_RoomListSecondaryFilters"
             align="center"
-            gap="8px"
+            gap="4px"
         >
+            <RoomListFilterMenu vm={vm} />
+            {activeFilterText}
             <RoomListOptionsMenu vm={vm} />
         </Flex>
     );
