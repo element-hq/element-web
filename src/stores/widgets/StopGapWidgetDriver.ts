@@ -562,13 +562,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
         });
-        finished.then(async ([confirm]) => {
-            if (!confirm) {
-                return observer.update({ state: OpenIDRequestState.Blocked });
-            }
-
-            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-        });
+        const [confirm] = await finished;
+        if (!confirm) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
+        }
     }
 
     public async navigate(uri: string): Promise<void> {
