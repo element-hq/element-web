@@ -78,7 +78,6 @@ import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUs
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
 import Modal from "../../../../src/Modal.tsx";
-import { findByDisplayValue } from "@testing-library/dom";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -739,8 +738,7 @@ describe("RoomView", () => {
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 
             const roomViewRef = createRef<RoomView>();
-            const { container, getByText, findByLabelText, findByPlaceholderText, findByDisplayValue } =
-                await mountRoomView(roomViewRef);
+            const { findByPlaceholderText } = await mountRoomView(roomViewRef);
             await waitFor(() => expect(roomViewRef.current).toBeTruthy());
 
             act(() =>

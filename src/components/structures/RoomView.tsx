@@ -132,7 +132,7 @@ import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
-import { FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
+import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
