@@ -6,6 +6,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
     aria-label="Open room room1"
     aria-selected="true"
     class="mx_RoomListItemView mx_RoomListItemView_empty mx_RoomListItemView_selected"
+    tabindex="-1"
     type="button"
   >
     <div
@@ -60,6 +61,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
     aria-label="Open room room1"
     aria-selected="false"
     class="mx_RoomListItemView mx_RoomListItemView_notification_decoration"
+    tabindex="-1"
     type="button"
   >
     <div
@@ -126,6 +128,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
     aria-label="Open room room1"
     aria-selected="false"
     class="mx_RoomListItemView mx_RoomListItemView_empty"
+    tabindex="-1"
     type="button"
   >
     <div
@@ -180,6 +183,7 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
     aria-label="Open room room1"
     aria-selected="false"
     class="mx_RoomListItemView mx_RoomListItemView_empty"
+    tabindex="-1"
     type="button"
   >
     <div

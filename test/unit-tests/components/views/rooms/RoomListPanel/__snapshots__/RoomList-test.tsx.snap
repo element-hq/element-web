@@ -15,7 +15,7 @@ exports[`<RoomList /> should render a room list 1`] = `
         class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
         role="grid"
         style="box-sizing: border-box; direction: ltr; height: 1500px; position: relative; width: 1500px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="ReactVirtualized__Grid__innerScrollContainer"
@@ -28,6 +28,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 0px; width: 100%;"
+            tabindex="0"
             type="button"
           >
             <div
@@ -79,6 +80,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 48px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -130,6 +132,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 96px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -181,6 +184,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 144px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -232,6 +236,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 192px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -283,6 +288,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 240px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -334,6 +340,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 288px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -385,6 +392,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 336px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -436,6 +444,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 384px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -487,6 +496,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 432px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
