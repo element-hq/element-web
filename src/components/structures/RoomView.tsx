@@ -1753,7 +1753,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (reportRoom !== false) {
-            actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom));
+            actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom!));
         }
 
         actions.push(this.context.client.leave(this.state.room.roomId));

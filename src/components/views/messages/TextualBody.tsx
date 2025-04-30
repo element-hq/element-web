@@ -235,7 +235,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         scalarClient?.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const integrationsUrl = integrationManager!.uiUrl;
-            Modal.createDialog(QuestionDialog, {
+            const { finished } = Modal.createDialog(QuestionDialog, {
                 title: _t("timeline|scalar_starter_link|dialog_title"),
                 description: (
                     <div>
@@ -243,18 +243,19 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     </div>
                 ),
                 button: _t("action|continue"),
-                onFinished(confirmed) {
-                    if (!confirmed) {
-                        return;
-                    }
-                    const width = window.screen.width > 1024 ? 1024 : window.screen.width;
-                    const height = window.screen.height > 800 ? 800 : window.screen.height;
-                    const left = (window.screen.width - width) / 2;
-                    const top = (window.screen.height - height) / 2;
-                    const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
-                    const wnd = window.open(completeUrl, "_blank", features)!;
-                    wnd.opener = null;
-                },
+            });
+
+            finished.then(([confirmed]) => {
+                if (!confirmed) {
+                    return;
+                }
+                const width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                const height = window.screen.height > 800 ? 800 : window.screen.height;
+                const left = (window.screen.width - width) / 2;
+                const top = (window.screen.height - height) / 2;
+                const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
+                const wnd = window.open(completeUrl, "_blank", features)!;
+                wnd.opener = null;
             });
         });
     };

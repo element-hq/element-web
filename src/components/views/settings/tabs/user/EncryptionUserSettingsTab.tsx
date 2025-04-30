@@ -247,7 +247,10 @@ function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Elem
             <Button
                 size="sm"
                 Icon={ComputerIcon}
-                onClick={() => Modal.createDialog(SetupEncryptionDialog, { onFinished: onFinish })}
+                onClick={() => {
+                    const { finished } = Modal.createDialog(SetupEncryptionDialog);
+                    finished.then(onFinish);
+                }}
             >
                 {_t("settings|encryption|device_not_verified_button")}
             </Button>

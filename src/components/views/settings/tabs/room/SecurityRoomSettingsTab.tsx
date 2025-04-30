@@ -155,7 +155,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             if (!confirm) return;
         }
 
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("room_settings|security|enable_encryption_confirm_title"),
             description: _t(
                 "room_settings|security|enable_encryption_confirm_description",
@@ -164,23 +164,23 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     a: (sub) => <ExternalLink href={SdkConfig.get("help_encryption_url")}>{sub}</ExternalLink>,
                 },
             ),
-            onFinished: (confirm) => {
-                if (!confirm) {
-                    this.setState({ encrypted: false });
-                    return;
-                }
+        });
+        finished.then(([confirm]) => {
+            if (!confirm) {
+                this.setState({ encrypted: false });
+                return;
+            }
 
-                const beforeEncrypted = this.state.encrypted;
-                this.setState({ encrypted: true });
-                this.context
-                    .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
-                        algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
-                    })
-                    .catch((e) => {
-                        logger.error(e);
-                        this.setState({ encrypted: beforeEncrypted });
-                    });
-            },
+            const beforeEncrypted = this.state.encrypted;
+            this.setState({ encrypted: true });
+            this.context
+                .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
+                    algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+                })
+                .catch((e) => {
+                    logger.error(e);
+                    this.setState({ encrypted: beforeEncrypted });
+                });
         });
     };
 
@@ -213,9 +213,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            await createRoom(this.context, opts);
+            await createRoom(this.context, opts!);
         }
-        return shouldCreate;
+        return shouldCreate ?? false;
     };
 
     private onHistoryRadioToggle = (history: HistoryVisibility): void => {

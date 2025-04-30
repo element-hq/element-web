@@ -124,18 +124,16 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     request.roomId,
                 );
             } else {
-                Modal.createDialog(
+                const { finished } = Modal.createDialog(
                     VerificationRequestDialog,
                     {
                         verificationRequest: request,
-                        onFinished: () => {
-                            request.cancel();
-                        },
                     },
                     undefined,
                     /* priority = */ false,
                     /* static = */ true,
                 );
+                finished.then(() => request.cancel());
             }
             await request.accept();
         } catch (err) {

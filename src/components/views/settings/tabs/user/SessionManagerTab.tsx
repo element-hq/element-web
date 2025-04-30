@@ -100,7 +100,7 @@ const useSignOut = (
             } else {
                 const deferredSuccess = defer<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
-                    deferredSuccess.resolve(success);
+                    deferredSuccess.resolve(!!success);
                 });
                 success = await deferredSuccess.promise;
             }
@@ -203,7 +203,8 @@ const SessionManagerTab: React.FC<{
     const shouldShowOtherSessions = otherSessionsCount > 0;
 
     const onVerifyCurrentDevice = (): void => {
-        Modal.createDialog(SetupEncryptionDialog, { onFinished: refreshDevices });
+        const { finished } = Modal.createDialog(SetupEncryptionDialog);
+        finished.then(refreshDevices);
     };
 
     const onTriggerDeviceVerification = useCallback(
@@ -212,14 +213,14 @@ const SessionManagerTab: React.FC<{
                 return;
             }
             const verificationRequestPromise = requestDeviceVerification(deviceId);
-            Modal.createDialog(VerificationRequestDialog, {
+            const { finished } = Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: currentUserMember,
-                onFinished: async (): Promise<void> => {
-                    const request = await verificationRequestPromise;
-                    request.cancel();
-                    await refreshDevices();
-                },
+            });
+            finished.then(async () => {
+                const request = await verificationRequestPromise;
+                request.cancel();
+                await refreshDevices();
             });
         },
         [requestDeviceVerification, refreshDevices, currentUserMember],
