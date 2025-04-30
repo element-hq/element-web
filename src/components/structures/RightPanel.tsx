@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent } from "react";
+import React from "react";
 import { type Room, type RoomState, RoomStateEvent, RoomMember, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
@@ -49,8 +49,9 @@ interface RoomlessProps extends BaseProps {
 interface RoomProps extends BaseProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
+    searchTerm?: string;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -260,6 +261,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                             permalinkCreator={this.props.permalinkCreator!}
                             onSearchChange={this.props.onSearchChange}
                             onSearchCancel={this.props.onSearchCancel}
+                            searchTerm={this.props.searchTerm}
                             focusRoomSearch={cardState?.focusRoomSearch}
                         />
                     );

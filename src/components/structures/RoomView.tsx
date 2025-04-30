@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    type ChangeEvent,
     type ComponentProps,
     createRef,
     type ReactElement,
@@ -133,6 +132,7 @@ import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
+import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1244,6 +1244,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.View3pidInvite:
                 onView3pidInvite(payload, RightPanelStore.instance);
                 break;
+            case Action.FocusMessageSearch:
+                if ((payload as FocusMessageSearchPayload).initialText) {
+                    this.onSearch(payload.initialText);
+                }
+                break;
         }
     };
 
@@ -1806,8 +1811,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         defaultDispatcher.fire(Action.ViewRoomDirectory);
     };
 
-    private onSearchChange = debounce((e: ChangeEvent): void => {
-        const term = (e.target as HTMLInputElement).value;
+    private onSearchChange = debounce((term: string): void => {
         this.onSearch(term);
     }, 300);
 
@@ -2487,6 +2491,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 e2eStatus={this.state.e2eStatus}
                 onSearchChange={this.onSearchChange}
                 onSearchCancel={this.onCancelSearchClick}
+                searchTerm={this.state.search?.term ?? ""}
             />
         ) : undefined;
 
