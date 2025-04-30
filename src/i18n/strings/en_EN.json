@@ -993,7 +993,6 @@
             "accepting": "Accepting…",
             "after_new_login": {
                 "device_verified": "Device verified",
-                "reset_confirmation": "Really reset verification keys?",
                 "skip_verification": "Skip verification for now",
                 "unable_to_verify": "Unable to verify this device",
                 "verify_this_device": "Verify this device"
@@ -1064,8 +1063,6 @@
             "verify_emoji_prompt": "Verify by comparing unique emoji.",
             "verify_emoji_prompt_qr": "If you can't scan the code above, verify by comparing unique emoji.",
             "verify_later": "I'll verify later",
-            "verify_reset_warning_1": "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.",
-            "verify_reset_warning_2": "Please only proceed if you're sure you've lost all of your other devices and your Recovery Key.",
             "verify_using_device": "Verify with another device",
             "verify_using_key": "Verify with Recovery Key",
             "verify_using_key_or_phrase": "Verify with Recovery Key or Phrase",
