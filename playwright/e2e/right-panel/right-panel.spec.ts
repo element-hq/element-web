@@ -157,7 +157,15 @@ test.describe("RightPanel", () => {
                 await expect(page.locator(".mx_UserInfo")).toBeVisible();
                 await expect(page.locator(".mx_UserInfo_profile").getByText(LONG_NAME)).toBeVisible();
 
-                await expect(page.locator(".mx_UserInfo")).toMatchScreenshot("with-long-name.png");
+                await expect(page.locator(".mx_UserInfo")).toMatchScreenshot("with-long-name.png", {
+                    mask: [page.locator(".mx_UserInfo_profile_mxid")],
+                    css: `
+                        /* Use monospace font for consistent mask width */
+                        .mx_UserInfo_profile_mxid {
+                            font-family: Inconsolata !important;
+                        }
+                    `,
+                });
             },
         );
 
