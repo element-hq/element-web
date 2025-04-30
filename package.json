@@ -69,7 +69,7 @@
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.1.0",
-        "@playwright/test": "1.51.1",
+        "@playwright/test": "1.52.0",
         "@types/react": "19.1.2",
         "@types/react-dom": "19.1.2",
         "oidc-client-ts": "3.2.0",
