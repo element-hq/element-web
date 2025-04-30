@@ -6,7 +6,7 @@
  */
 
 import { expect, test } from "../../../element-web-test";
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -18,8 +18,12 @@ test.describe("Room list filters and sort", () => {
         labsFlags: ["feature_new_room_list"],
     });
 
-    function getPrimaryFilters(page: Page) {
+    function getPrimaryFilters(page: Page): Locator {
         return page.getByRole("listbox", { name: "Room list filters" });
+    }
+
+    function getSecondaryFilters(page: Page): Locator {
+        return page.getByRole("button", { name: "Filter" });
     }
 
     /**
@@ -106,6 +110,11 @@ test.describe("Room list filters and sort", () => {
             await app.client.evaluate(async (client, favouriteId) => {
                 await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
             }, favouriteId);
+
+            const lowPrioId = await app.client.createRoom({ name: "Low prio room" });
+            await app.client.evaluate(async (client, id) => {
+                await client.setRoomTag(id, "m.lowpriority", { order: 0.5 });
+            }, lowPrioId);
         });
 
         test("should filter the list (with primary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
@@ -137,7 +146,19 @@ test.describe("Room list filters and sort", () => {
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "favourite room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "empty room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(3);
+            expect(await roomList.locator("role=gridcell").count()).toBe(4);
+        });
+
+        test("should filter the list (with secondary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomList = getRoomList(page);
+            const secondaryFilters = getSecondaryFilters(page);
+            await secondaryFilters.click();
+
+            await expect(page.getByRole("menu", { name: "Filter" })).toMatchScreenshot("filter-menu.png");
+
+            await page.getByRole("menuitem", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "Low prio room" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(1);
         });
 
         test(

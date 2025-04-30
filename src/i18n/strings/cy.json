@@ -3,9 +3,41 @@
         "emoji_picker": "Dewisydd Emoji",
         "jump_first_invite": "Symud i'r gwahoddiad cyntaf.",
         "message_composer": "Neges cyfansoddwr",
+        "n_unread_messages": {
+            "zero": "%(count)s neges heb eu darllen",
+            "one": "1 neges heb ei darllen",
+            "two": "%(count)s neges heb eu darllen",
+            "few": "%(count)s neges heb eu darllen",
+            "many": "%(count)s neges heb eu darllen",
+            "other": "%(count)s neges heb eu darllen"
+        },
+        "n_unread_messages_mentions": {
+            "zero": "%(count)s crybwylliadau heb eu darllen",
+            "one": "1 crybwylliad heb ei ddarllen",
+            "two": "%(count)s grybwylliad heb eu darllen",
+            "few": "%(count)s crybwylliad heb eu darllen",
+            "many": "%(count)s crybwylliad heb eu darllen",
+            "other": "%(count)s crybwylliad heb eu darllen"
+        },
         "recent_rooms": "Ystafelloedd diweddar",
         "room_messsage_not_sent": "Agor ystafell %(roomName)s gyda neges heb ei gosod.",
         "room_n_unread_invite": "Agor gwahoddiad i ystafell %(roomName)s.",
+        "room_n_unread_messages": {
+            "zero": "Ystafell agored%(roomName)s gyda %(count)s negeseuon heb eu darllen.",
+            "one": "Ystafell agored %(roomName)s gydag 1 neges heb ei darllen.",
+            "two": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
+            "few": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
+            "many": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
+            "other": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen."
+        },
+        "room_n_unread_messages_mentions": {
+            "zero": "Ystafell agored %(roomName)s gyda %(count)s negeseuon heb eu darllen gan gynnwys crybwylliadau.",
+            "one": "Ystafell agored %(roomName)s gydag 1 crybwylliad heb ei ddarllen.",
+            "two": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
+            "few": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
+            "many": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
+            "other": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau."
+        },
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
         "seek_bar_label": "Bar chwilio sain",
@@ -927,8 +959,8 @@
             "title": "Dull Adfer Newydd",
             "warning": "Os na wnaethoch chi osod y dull adfer newydd, mae'n bosibl bod ymosodwr yn ceisio cael mynediad i'ch cyfrif. Newidiwch eich cyfrinair cyfrif a gosodwch ddull adfer newydd ar unwaith yn y Gosodiadau."
         },
-        "pinned_identity_changed": "Mae'n ymddangos bod hunaniaeth %(displayName)s ( <b>%(userId)s</b> ) wedi newid. <a>Dysgu rhagor</a>",
-        "pinned_identity_changed_no_displayname": "Mae'n ymddangos bod hunaniaeth <b>%(userId)s</b> wedi newid. <a>Dysgu rhagor</a>",
+        "pinned_identity_changed": "Cafodd hunaniaeth (<b>%(userId)s</b>) %(displayName)s ei ailosod. <a>Dysgu rhagor</a>",
+        "pinned_identity_changed_no_displayname": "Cafodd hunaniaeth <b>%(userId)s</b> ei ailosod. <a>Dysgu rhagor</a>",
         "recovery_method_removed": {
             "description_1": "Mae'r sesiwn hon wedi canfod bod eich Ymadrodd Diogelwch a'ch allwedd ar gyfer Negeseuon Diogel wedi'u dileu.",
             "description_2": "Os gwnaethoch hyn yn ddamweiniol, gallwch osod Negeseuon Diogel ar y sesiwn hon a fydd yn ail-amgryptio hanes negeseuon y sesiwn hon gyda dull adfer newydd.",
@@ -1039,8 +1071,8 @@
             "waiting_other_user": "Yn aros i %(displayName)s wirio…"
         },
         "verification_requested_toast_title": "Gofynnwyd am ddilysiad",
-        "verified_identity_changed": "Mae hunaniaeth %(displayName)s ( <b>%(userId)s</b> ) a ddilyswyd wedi newid. <a>Dysgu rhagor</a>",
-        "verified_identity_changed_no_displayname": "Mae hunaniaeth ddilysedig <b>%(userId)s</b> wedi newid. <a>Dysgu rhagor</a>",
+        "verified_identity_changed": "Cafodd hunaniaeth (<b>%(userId)s</b>) %(displayName)s ei ailosod. <a>Dysgu rhagor</a>",
+        "verified_identity_changed_no_displayname": "Cafodd hunaniaeth <b>%(userId)s</b> ei ailosod. <a>Dysgu rhagor</a>",
         "verify_toast_description": "Efallai na fydd defnyddwyr eraill yn ymddiried ynddo",
         "verify_toast_title": "Gwiriwch y sesiwn hon",
         "withdraw_verification_action": "Tynnu'r dilysiad yn ôl"
@@ -1618,7 +1650,7 @@
         "mark_all_read": "Marcio'r cyfan wedi'u darllen",
         "mentions_and_keywords": "@crybwylliadau ac allweddeiriau",
         "mentions_and_keywords_description": "Dim ond gyda chyfeiriadau ac allweddeiriau fel y'u gosodwyd yn eich <a>gosodiadau</a> y cewch eich hysbysu",
-        "mentions_keywords": "Crybwyll ac allweddeiriau",
+        "mentions_keywords": "Crybwylliadau ac allweddeiriau",
         "message_didnt_send": "Heb anfon y neges. Cliciwch am wybodaeth.",
         "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau",
         "mute_room": "Tewi'r ystafell"
@@ -1982,6 +2014,7 @@
     "room_list": {
         "add_room_label": "Ychwanegu ystafell",
         "add_space_label": "Ychwanegu gofod",
+        "appearance": "Gwedd",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
         "empty": {
@@ -2024,7 +2057,10 @@
             "more_options": "Rhagor o Ddewisiadau",
             "open_room": "Agor ystafell %(roomName)s"
         },
+        "room_options": "Dewisiadau Ystafelloedd",
+        "secondary_filters": "Hidlyddion eilradd",
         "show_less": "Dangos llai",
+        "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",
         "sort_by": "Trefnu yn ôl",
         "sort_by_activity": "Gweithgaredd",
