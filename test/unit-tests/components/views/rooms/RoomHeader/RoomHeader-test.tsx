@@ -234,6 +234,12 @@ describe("RoomHeader", () => {
                 },
             });
         });
+
+        afterEach(() => {
+            SdkConfig.reset();
+            jest.restoreAllMocks();
+        });
+
         it("should not show call buttons in rooms smaller than 3 members", async () => {
             mockRoomMembers(room, 2);
             render(<RoomHeader room={room} />, getWrapper());
