@@ -13,7 +13,8 @@ import {
     EventType,
     HttpApiEvent,
     type MatrixClient,
-    type MatrixEvent,
+    MatrixEvent,
+    MsgType,
     type RoomType,
     SyncState,
     type SyncStateData,
@@ -50,6 +51,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -94,7 +96,6 @@ import VerificationRequestToast from "../views/toasts/VerificationRequestToast";
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
-import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
@@ -135,6 +136,8 @@ import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
+import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
+import { type SharePayload } from "../../dispatcher/payloads/SharePayload";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -779,6 +782,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Action.ViewHomePage:
                 this.viewHome(payload.justRegistered);
                 break;
+            case Action.Share:
+                this.viewShare(payload.msg);
+                break;
             case Action.ViewStartChatOrReuse:
                 this.chatCreateOrReuse(payload.user_id);
                 break;
@@ -1111,6 +1117,27 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.notifyNewScreen("user/" + userId);
             this.setState({ currentUserId: userId });
             this.setPage(PageType.UserView);
+        });
+    }
+
+    private viewShare(msg: string): void {
+        // Wait for the first sync so we can present possible rooms to share into
+        this.firstSyncPromise.promise.then(() => {
+            this.notifyNewScreen("share");
+            const rawEvent = {
+                type: "m.room.message",
+                content: {
+                    msgtype: MsgType.Text,
+                    body: msg,
+                },
+                origin_server_ts: Date.now(),
+            };
+            const event = new MatrixEvent(rawEvent);
+            dis.dispatch<OpenForwardDialogPayload>({
+                action: Action.OpenForwardDialog,
+                event: event,
+                permalinkCreator: null,
+            });
         });
     }
 
@@ -1739,6 +1766,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({
                 action: Action.CreateChat,
             });
+        } else if (screen === "share") {
+            if (params && params["msg"] !== undefined) {
+                dis.dispatch<SharePayload>({
+                    action: Action.Share,
+                    msg: params["msg"],
+                });
+            }
+            // if we weren't already coming at this from an existing screen
+            // and we're logged in, then explicitly default to home.
+            // if we're not logged in, then the login flow will do the right thing.
+            if (!this.state.currentRoomId && !this.state.currentUserId) {
+                this.viewHome();
+            }
         } else if (screen === "settings") {
             dis.fire(Action.ViewUserSettings);
         } else if (screen === "welcome") {
