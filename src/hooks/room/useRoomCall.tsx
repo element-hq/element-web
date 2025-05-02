@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import { useFeatureEnabled } from "../useSettings";
+import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -102,6 +102,8 @@ export const useRoomCall = (
 } => {
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
+    const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
+    const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
@@ -286,7 +288,7 @@ export const useRoomCall = (
     let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
     let hideVideoCallButton = false;
     // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
-    if ((memberCount > 2 && !SettingsStore.getValue(UIFeature.Widgets)) || !SettingsStore.getValue(UIFeature.Voip)) {
+    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }
