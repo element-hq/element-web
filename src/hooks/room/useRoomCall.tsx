@@ -33,7 +33,6 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { useGuestAccessInformation } from "./useGuestAccessInformation";
-import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
