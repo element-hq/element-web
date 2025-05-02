@@ -18,6 +18,7 @@ import { calculateRoomVia } from "../../../../utils/permalinks/Permalinks";
 import BaseDialog from "../../dialogs/BaseDialog";
 import { useGuestAccessInformation } from "../../../../hooks/room/useGuestAccessInformation";
 import JoinRuleSettings from "../../settings/JoinRuleSettings";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 /**
  * Display a button to open a dialog to share a link to the call using a element call guest spa url (`element_call:guest_spa_url` in the EW config).
@@ -99,6 +100,7 @@ export const JoinRuleDialog: React.FC<{
     room: Room;
     canInvite: boolean;
 }> = ({ onFinished, room, canInvite }) => {
+    const askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
     const [isUpdating, setIsUpdating] = React.useState<undefined | JoinRule>(undefined);
     const changeJoinRule = useCallback(
         async (newRule: JoinRule) => {
@@ -127,7 +129,9 @@ export const JoinRuleDialog: React.FC<{
                 recommendedOption={JoinRule.Knock}
                 room={room}
                 disabledOptions={new Set([JoinRule.Invite, JoinRule.Private, JoinRule.Restricted])}
-                hiddenOptions={new Set([JoinRule.Restricted])}
+                hiddenOptions={
+                    new Set([JoinRule.Restricted].concat(askToJoinEnabled && canInvite ? [] : [JoinRule.Knock]))
+                }
                 beforeChange={async (newRule) => {
                     await changeJoinRule(newRule).catch(() => {
                         return false;
