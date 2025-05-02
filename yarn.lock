@@ -3722,6 +3722,7 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
@@ -11059,6 +11060,11 @@ react-virtualized@^9.22.5:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
+
+react-virtuoso@^4.12.6:
+  version "4.12.6"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.12.6.tgz#20fe374d43cce3c9821e29f4cc4d050596d06d01"
+  integrity sha512-bfvS6aCL1ehXmq39KRiz/vxznGUbtA27I5I24TYCe1DhMf84O3aVNCIwrSjYQjkJGJGzY46ihdN8WkYlemuhMQ==
 
 react@^19.0.0:
   version "19.1.0"
