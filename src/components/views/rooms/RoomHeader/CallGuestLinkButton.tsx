@@ -113,7 +113,7 @@ export const JoinRuleDialog: React.FC<{
                 "",
             );
             // Show the dialog for a bit to give the user feedback
-            setTimeout(() => onFinished(), 500);
+            setTimeout(() => onFinished(), 1000);
         },
         [isUpdating, onFinished, room.client, room.roomId],
     );
