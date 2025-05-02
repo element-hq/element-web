@@ -679,7 +679,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     private showICEFallbackPrompt(): void {
         const cli = MatrixClientPeg.safeGet();
-        Modal.createDialog(
+        const { finished } = Modal.createDialog(
             QuestionDialog,
             {
                 title: _t("voip|misconfigured_server"),
@@ -703,13 +703,14 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                     server: new URL(FALLBACK_ICE_SERVER).pathname,
                 }),
                 cancelButton: _t("action|ok"),
-                onFinished: (allow) => {
-                    SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
-                },
             },
             undefined,
             true,
         );
+
+        finished.then(([allow]) => {
+            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
+        });
     }
 
     private showMediaCaptureError(call: MatrixCall): void {

@@ -2101,6 +2101,7 @@
     "room_list": {
         "add_room_label": "Ajouter un salon",
         "add_space_label": "Ajouter un espace",
+        "appearance": "Apparence",
         "breadcrumbs_empty": "Aucun salon visité récemment",
         "breadcrumbs_label": "Salons visités récemment",
         "empty": {
@@ -2151,7 +2152,10 @@
             "more_options": "Plus d’options",
             "open_room": "Ouvrir salon %(roomName)s"
         },
+        "room_options": "Options du salon",
+        "secondary_filters": "Filtres secondaires",
         "show_less": "En voir moins",
+        "show_message_previews": "Afficher les aperçus des messages",
         "show_n_more": {
             "other": "En afficher %(count)s de plus",
             "one": "En afficher %(count)s de plus"

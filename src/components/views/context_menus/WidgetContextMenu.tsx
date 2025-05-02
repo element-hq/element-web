@@ -187,14 +187,15 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                 onDeleteClick();
             } else if (roomId) {
                 // Show delete confirmation dialog
-                Modal.createDialog(QuestionDialog, {
+                const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("widget|context_menu|delete"),
                     description: _t("widget|context_menu|delete_warning"),
                     button: _t("widget|context_menu|delete"),
-                    onFinished: (confirmed) => {
-                        if (!confirmed) return;
-                        WidgetUtils.setRoomWidget(cli, roomId, app.id);
-                    },
+                });
+
+                finished.then(([confirmed]) => {
+                    if (!confirmed) return;
+                    WidgetUtils.setRoomWidget(cli, roomId, app.id);
                 });
             }
 

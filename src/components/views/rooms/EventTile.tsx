@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, type JSX, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -228,6 +228,8 @@ export interface EventTileProps {
     // The following properties are used by EventTilePreview to disable tab indexes within the event tile
     hideTimestamp?: boolean;
     inhibitInteraction?: boolean;
+
+    ref?: Ref<UnwrappedEventTile>;
 }
 
 interface IState {
@@ -1482,15 +1484,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 }
 
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
-const SafeEventTile = forwardRef<UnwrappedEventTile, EventTileProps>((props, ref) => {
+const SafeEventTile = (props: EventTileProps): JSX.Element => {
     return (
-        <>
-            <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
-                <UnwrappedEventTile ref={ref} {...props} />
-            </TileErrorBoundary>
-        </>
+        <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
+            <UnwrappedEventTile {...props} />
+        </TileErrorBoundary>
     );
-});
+};
 export default SafeEventTile;
 
 function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {

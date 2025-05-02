@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef } from "react";
+import React, { type Ref, type JSX } from "react";
 import classNames from "classnames";
 
 /* These were earlier stateless functional components but had to be converted
@@ -16,14 +16,24 @@ presumably wrap them in a <div> before rendering but I think this is the better 
  */
 
 interface ITextualCompletionProps {
-    title?: string;
-    subtitle?: string;
-    description?: string;
-    className?: string;
+    "title"?: string;
+    "subtitle"?: string;
+    "description"?: string;
+    "className"?: string;
+    "aria-selected"?: boolean;
+    "ref"?: Ref<HTMLDivElement>;
 }
 
-export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props, ref) => {
-    const { title, subtitle, description, className, "aria-selected": ariaSelectedAttribute, ...restProps } = props;
+export const TextualCompletion = (props: ITextualCompletionProps): JSX.Element => {
+    const {
+        title,
+        subtitle,
+        description,
+        className,
+        "aria-selected": ariaSelectedAttribute,
+        ref,
+        ...restProps
+    } = props;
     return (
         <div
             {...restProps}
@@ -37,13 +47,13 @@ export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props
             <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
     );
-});
+};
 
 interface IPillCompletionProps extends ITextualCompletionProps {
     children?: React.ReactNode;
 }
 
-export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref) => {
+export const PillCompletion = (props: IPillCompletionProps): JSX.Element => {
     const {
         title,
         subtitle,
@@ -51,6 +61,7 @@ export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref)
         className,
         children,
         "aria-selected": ariaSelectedAttribute,
+        ref,
         ...restProps
     } = props;
     return (
@@ -67,4 +78,4 @@ export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref)
             <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
     );
-});
+};

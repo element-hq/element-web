@@ -309,6 +309,8 @@ export function createTestClient(): MatrixClient {
         pushProcessor: {
             getPushRuleById: jest.fn(),
         },
+        search: jest.fn().mockResolvedValue({}),
+        processRoomEventsSearch: jest.fn().mockResolvedValue({ highlights: [], results: [] }),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

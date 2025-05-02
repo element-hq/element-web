@@ -631,9 +631,10 @@ describe("<SessionManagerTab />", () => {
             // click verify button from current session section
             fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
 
-            const { onFinished: modalOnFinished } = modalSpy.mock.calls[0][1] as any;
-            // simulate modal completing process
-            await modalOnFinished();
+            // close the modal
+            const { close: closeModal } = modalSpy.mock.results[0].value;
+            closeModal();
+            await flushPromises();
 
             // cancelled in case it was a failure exit from modal
             expect(mockVerificationRequest.cancel).toHaveBeenCalled();

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useState, useContext, type ForwardRefExoticComponent } from "react";
+import React, { useEffect, useState, useContext, type JSX } from "react";
 import { MatrixEvent, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -85,7 +85,7 @@ const usePollStartEvent = (event: MatrixEvent): { pollStartEvent?: MatrixEvent; 
     return { pollStartEvent, isLoadingPollStartEvent };
 };
 
-export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...props }, ref) => {
+export const MPollEndBody = ({ mxEvent, ref, ...props }: IBodyProps): JSX.Element => {
     const cli = useMatrixClientContext();
     const { pollStartEvent, isLoadingPollStartEvent } = usePollStartEvent(mxEvent);
 
@@ -105,4 +105,4 @@ export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...pro
             <MPollBody mxEvent={pollStartEvent} {...props} />
         </div>
     );
-}) as ForwardRefExoticComponent<IBodyProps>;
+};

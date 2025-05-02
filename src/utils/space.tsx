@@ -75,7 +75,7 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
     });
     const [shouldCreate, opts] = await modal.finished;
     if (shouldCreate) {
-        await createRoom(space.client, opts);
+        await createRoom(space.client, opts!);
     }
     return !!shouldCreate;
 };
@@ -106,35 +106,35 @@ export const showSpaceInvite = (space: Room, initialText = ""): void => {
 };
 
 export const showAddExistingSubspace = (space: Room): void => {
-    Modal.createDialog(
+    const { finished } = Modal.createDialog(
         AddExistingSubspaceDialog,
         {
             space,
             onCreateSubspaceClick: () => showCreateNewSubspace(space),
-            onFinished: (added: boolean) => {
-                if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                }
-            },
         },
         "mx_AddExistingToSpaceDialog_wrapper",
     );
+    finished.then(([added]) => {
+        if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+            defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+        }
+    });
 };
 
 export const showCreateNewSubspace = (space: Room): void => {
-    Modal.createDialog(
+    const { finished } = Modal.createDialog(
         CreateSubspaceDialog,
         {
             space,
             onAddExistingSpaceClick: () => showAddExistingSubspace(space),
-            onFinished: (added: boolean) => {
-                if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                }
-            },
         },
         "mx_CreateSubspaceDialog_wrapper",
     );
+    finished.then(([added]) => {
+        if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+            defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+        }
+    });
 };
 
 export const bulkSpaceBehaviour = async (

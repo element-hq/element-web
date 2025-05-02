@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -16,7 +16,6 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
@@ -49,6 +48,15 @@ const FILTERS = [
     new LowPriorityFilter(),
 ];
 
+export enum RoomListStoreV3Event {
+    // The event/channel which is called when the room lists have been changed.
+    ListsUpdate = "lists_update",
+    // The event which is called when the room list is loaded.
+    ListsLoaded = "lists_loaded",
+}
+
+export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
+export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
  * This is the third such implementation hence the "V3".
@@ -74,6 +82,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
         rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
         return rooms;
+    }
+
+    /**
+     * Check whether the initial list of rooms has loaded.
+     */
+    public get isLoadingRooms(): boolean {
+        return !this.roomSkipList?.initialized;
     }
 
     /**
@@ -127,6 +142,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
+        this.emit(LISTS_LOADED_EVENT);
         this.emit(LISTS_UPDATE_EVENT);
     }
 
@@ -194,11 +210,21 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
-                if (oldMembership === EffectiveMembership.Join && newMembership === EffectiveMembership.Leave) {
+
+                const ownUserId = this.matrixClient.getSafeUserId();
+                const isKicked = (payload.room as Room).getMember(ownUserId)?.isKicked();
+                const shouldRemove =
+                    !isKicked &&
+                    (payload.oldMembership === KnownMembership.Invite ||
+                        payload.oldMembership === KnownMembership.Join) &&
+                    payload.membership === KnownMembership.Leave;
+
+                if (shouldRemove) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
                 }
+
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                     // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                     // the dead room in the list.

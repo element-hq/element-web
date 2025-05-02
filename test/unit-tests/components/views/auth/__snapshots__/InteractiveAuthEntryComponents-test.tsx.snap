@@ -35,15 +35,42 @@ exports[`<EmailIdentityAuthEntry/> should render 1`] = `
 
 exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
 <div>
-  <div>
-    <p
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
-    >
-      Reset your identity through your account provider and then come back and click “Retry”.
-    </p>
+  <div
+    class="mx_EncryptionCard"
+  >
     <div
-      class="mx_Flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_o77nw_8"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15q-1.65 0-2.825-1.175T8 11t1.175-2.825T12 7t2.825 1.175T16 11t-1.175 2.825T12 15"
+          />
+          <path
+            d="M19.528 18.583A9.96 9.96 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.98 9.98 0 0 0 12 22a9.98 9.98 0 0 0 7.528-3.417M8.75 16.388q-1.373.332-2.709.95a8 8 0 1 1 11.918 0 14.7 14.7 0 0 0-2.709-.95A13.8 13.8 0 0 0 12 16q-1.65 0-3.25.387"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Go to your account to reset your identity
+      </h2>
+      <span>
+        You're about to go to your matrix.org account to reset your identity. Once you have completed reset on your account, please return here and click Retry.
+      </span>
+    </div>
+    <div
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_vczzf_8 mx_Dialog_nonDialogButton _has-icon_vczzf_57"
@@ -67,11 +94,11 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
             d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
           />
         </svg>
-        Go to your account
+        Continue to account
       </button>
       <button
         class="_button_vczzf_8 mx_Dialog_nonDialogButton"
-        data-kind="secondary"
+        data-kind="tertiary"
         data-size="lg"
         role="button"
         tabindex="0"

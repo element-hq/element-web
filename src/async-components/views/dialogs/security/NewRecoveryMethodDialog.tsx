@@ -49,15 +49,8 @@ export default function NewRecoveryMethodDialog({ onFinished }: NewRecoveryMetho
         if (isKeyBackupEnabled) {
             onFinished();
         } else {
-            Modal.createDialog(
-                RestoreKeyBackupDialog,
-                {
-                    onFinished,
-                },
-                undefined,
-                false,
-                true,
-            );
+            const { finished } = Modal.createDialog(RestoreKeyBackupDialog, {}, undefined, false, true);
+            finished.then(onFinished);
         }
     }
 

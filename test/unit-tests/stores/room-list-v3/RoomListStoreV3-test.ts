@@ -10,13 +10,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
-import { RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
+import { LISTS_UPDATE_EVENT, RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { mkEvent, mkMessage, mkSpace, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { getMockedRooms } from "./skip-list/getMockedRooms";
 import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
-import { LISTS_UPDATE_EVENT } from "../../../../src/stores/room-list/RoomListStore";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
@@ -122,11 +121,38 @@ describe("RoomListStoreV3", () => {
             expect(store.getSortedRooms()[0].roomId).toEqual(room.roomId);
         });
 
-        it("Room is removed when membership changes from join to leave", async () => {
-            const { store, rooms, dispatcher } = await getRoomListStore();
+        it.each([KnownMembership.Join, KnownMembership.Invite])(
+            "Room is removed when membership changes to leave",
+            async (membership) => {
+                const { store, rooms, dispatcher } = await getRoomListStore();
 
-            // Let's say the user leaves room at index 37
+                // Let's say the user leaves room at index 37
+                const room = rooms[37];
+
+                const payload = {
+                    action: "MatrixActions.Room.myMembership",
+                    oldMembership: membership,
+                    membership: KnownMembership.Leave,
+                    room,
+                };
+
+                const fn = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+                dispatcher.dispatch(payload, true);
+
+                expect(fn).toHaveBeenCalled();
+                expect(store.getSortedRooms()).not.toContain(room);
+            },
+        );
+
+        it("Room is not removed when user is kicked", async () => {
+            const { store, rooms, dispatcher, client } = await getRoomListStore();
+
+            // Let's say the user gets kicked out of room at index 37
             const room = rooms[37];
+            const mockMember = room.getMember(client.getSafeUserId())!;
+            mockMember.isKicked = () => true;
+            room.getMember = () => mockMember;
 
             const payload = {
                 action: "MatrixActions.Room.myMembership",
@@ -140,7 +166,7 @@ describe("RoomListStoreV3", () => {
             dispatcher.dispatch(payload, true);
 
             expect(fn).toHaveBeenCalled();
-            expect(store.getSortedRooms()).not.toContain(room);
+            expect(store.getSortedRooms()).toContain(room);
         });
 
         it("Predecessor room is removed on room upgrade", async () => {

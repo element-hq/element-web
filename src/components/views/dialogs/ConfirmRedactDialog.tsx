@@ -58,37 +58,32 @@ export function createRedactEventDialog({
     const roomId = mxEvent.getRoomId();
 
     if (!roomId) throw new Error(`cannot redact event ${mxEvent.getId()} without room ID`);
-    Modal.createDialog(
-        ConfirmRedactDialog,
-        {
-            event: mxEvent,
-            onFinished: async (proceed, reason): Promise<void> => {
-                if (!proceed) return;
+    const { finished } = Modal.createDialog(ConfirmRedactDialog, { event: mxEvent }, "mx_Dialog_confirmredact");
 
-                const cli = MatrixClientPeg.safeGet();
-                const withRelTypes: Pick<IRedactOpts, "with_rel_types"> = {};
+    finished.then(async ([proceed, reason]) => {
+        if (!proceed) return;
 
-                try {
-                    onCloseDialog?.();
-                    await cli.redactEvent(roomId, eventId, undefined, {
-                        ...(reason ? { reason } : {}),
-                        ...withRelTypes,
-                    });
-                } catch (e: any) {
-                    const code = e.errcode || e.statusCode;
-                    // only show the dialog if failing for something other than a network error
-                    // (e.g. no errcode or statusCode) as in that case the redactions end up in the
-                    // detached queue and we show the room status bar to allow retry
-                    if (typeof code !== "undefined") {
-                        // display error message stating you couldn't delete this.
-                        Modal.createDialog(ErrorDialog, {
-                            title: _t("common|error"),
-                            description: _t("redact|error", { code }),
-                        });
-                    }
-                }
-            },
-        },
-        "mx_Dialog_confirmredact",
-    );
+        const cli = MatrixClientPeg.safeGet();
+        const withRelTypes: Pick<IRedactOpts, "with_rel_types"> = {};
+
+        try {
+            onCloseDialog?.();
+            await cli.redactEvent(roomId, eventId, undefined, {
+                ...(reason ? { reason } : {}),
+                ...withRelTypes,
+            });
+        } catch (e: any) {
+            const code = e.errcode || e.statusCode;
+            // only show the dialog if failing for something other than a network error
+            // (e.g. no errcode or statusCode) as in that case the redactions end up in the
+            // detached queue and we show the room status bar to allow retry
+            if (typeof code !== "undefined") {
+                // display error message stating you couldn't delete this.
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("common|error"),
+                    description: _t("redact|error", { code }),
+                });
+            }
+        }
+    });
 }
