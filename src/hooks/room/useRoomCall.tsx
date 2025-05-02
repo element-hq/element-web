@@ -285,8 +285,8 @@ export const useRoomCall = (
     // We hide the voice call button if it'd have the same effect as the video call button
     let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
     let hideVideoCallButton = false;
-    // We hide both buttons if they require widgets but widgets are disabled.
-    if (memberCount > 2 && !SettingsStore.getValue(UIFeature.Widgets)) {
+    // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
+    if ((memberCount > 2 && !SettingsStore.getValue(UIFeature.Widgets)) || !SettingsStore.getValue(UIFeature.Voip)) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }
