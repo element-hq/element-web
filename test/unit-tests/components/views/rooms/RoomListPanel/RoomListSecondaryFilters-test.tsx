@@ -18,6 +18,7 @@ describe("<RoomListSecondaryFilters />", () => {
 
     beforeEach(() => {
         vm = {
+            isLoadingRooms: false,
             rooms: [],
             canCreateRoom: true,
             createRoom: jest.fn(),
