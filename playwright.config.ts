@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig, devices } from "@playwright/test";
+import { splitTests } from "@tenbin/playwright";
 
 import { type WorkerOptions } from "./playwright/services";
 
@@ -93,4 +94,11 @@ export default defineConfig<WorkerOptions>({
     snapshotDir: "playwright/snapshots",
     snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
     forbidOnly: !!process.env.CI,
+    testMatch: process.env.SHARD
+        ? splitTests({
+              shard: process.env.SHARD,
+              pattern: ["playwright/e2e/**/*.spec.ts"],
+              reportFile: "playwright-results.json",
+          })
+        : undefined,
 });
