@@ -91,6 +91,17 @@ describe("<RoomListItemView />", () => {
         await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
     });
 
+    test("should hover decoration if focused", async () => {
+        const user = userEvent.setup();
+        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
+        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        await user.click(listItem);
+        expect(listItem).toHaveClass("mx_RoomListItemView_hover");
+
+        await user.tab();
+        await waitFor(() => expect(listItem).not.toHaveClass("mx_RoomListItemView_hover"));
+    });
+
     test("should be selected if isSelected=true", async () => {
         const { asFragment } = render(<RoomListItemView room={room} isSelected={true} />);
         expect(screen.queryByRole("button", { name: `Open room ${room.name}` })).toHaveAttribute(
