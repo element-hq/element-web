@@ -140,7 +140,6 @@ const useSearchInput = (
         }
     });
 
-    
     return {
         searchInputRef,
         onUpdateSearchInput,
