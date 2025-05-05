@@ -17,8 +17,6 @@ import { useAccountData } from "../../../hooks/useAccountData";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { useTransition } from "../../../hooks/useTransition";
-import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { DefaultTagID } from "../../../stores/room-list/models";
@@ -127,7 +125,6 @@ const useSearchInput = (
     onUpdateSearchInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 } => {
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const roomContext = useScopedRoomContext("timelineRenderingType");
 
     const onUpdateSearchInput = (e: React.KeyboardEvent<HTMLInputElement>): void => {
         if (searchInputRef.current && e.key === Key.ESCAPE) {
@@ -143,20 +140,7 @@ const useSearchInput = (
         }
     });
 
-    // Clear the search field when the user leaves the search view
-    useTransition(
-        (prevTimelineRenderingType) => {
-            if (
-                prevTimelineRenderingType === TimelineRenderingType.Search &&
-                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
-                searchInputRef.current
-            ) {
-                searchInputRef.current.value = "";
-            }
-        },
-        [roomContext.timelineRenderingType],
-    );
-
+    
     return {
         searchInputRef,
         onUpdateSearchInput,
