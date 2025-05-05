@@ -5,11 +5,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useContext } from "react";
-import { type Room, RoomMember, KnownMembership, IPowerLevelsContent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember, KnownMembership, type IPowerLevelsContent } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import ConfirmSpaceUserActionDialog from "../../views/dialogs/ConfirmSpaceUserActionDialog";
 import Modal from "../../../Modal";
-import { logger } from "matrix-js-sdk/src/logger";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import { bulkSpaceBehaviour } from "../../../utils/space";
@@ -17,7 +17,7 @@ import ConfirmUserActionDialog from "../../views/dialogs/ConfirmUserActionDialog
 import ErrorDialog from "../../views/dialogs/ErrorDialog";
 import BulkRedactDialog from "../../views/dialogs/BulkRedactDialog";
 
-interface RoomAdminToolsProps {
+export interface RoomAdminToolsProps {
     room: Room;
     member: RoomMember;
     isUpdating: boolean;
@@ -40,8 +40,8 @@ interface RoomKickButtonState {
  * @param stopUpdating - a function to stop the operation
  * @returns the room kick button state
  */
-export function useRoomKickButtonViewModel( props: RoomAdminToolsProps ): RoomKickButtonState {
-    const {isUpdating, startUpdating, stopUpdating, room, member} = props;
+export function useRoomKickButtonViewModel(props: RoomAdminToolsProps): RoomKickButtonState {
+    const { isUpdating, startUpdating, stopUpdating, room, member } = props;
 
     const cli = useContext(MatrixClientContext);
 
@@ -122,7 +122,7 @@ export function useRoomKickButtonViewModel( props: RoomAdminToolsProps ): RoomKi
             });
     };
 
-    const canUserBeKicked = member.membership !== KnownMembership.Invite && member.membership !== KnownMembership.Join;
+    const canUserBeKicked = member.membership === KnownMembership.Invite || member.membership === KnownMembership.Join;
 
     const kickLabel = room.isSpaceRoom()
         ? member.membership === KnownMembership.Invite
@@ -139,7 +139,6 @@ export function useRoomKickButtonViewModel( props: RoomAdminToolsProps ): RoomKi
     };
 }
 
-
 export interface RedactMessagesButtonState {
     onRedactAllMessagesClick: () => void;
 }
@@ -149,7 +148,7 @@ export interface RedactMessagesButtonState {
  * @param member - the member to redact messages for
  * @returns the redact messages button state
  */
-export const userRedactMessagesButtonViewModel = (member: RoomMember): RedactMessagesButtonState => {
+export const useRedactMessagesButtonViewModel = (member: RoomMember): RedactMessagesButtonState => {
     const cli = useContext(MatrixClientContext);
 
     const onRedactAllMessagesClick = (): void => {
@@ -168,12 +167,12 @@ export const userRedactMessagesButtonViewModel = (member: RoomMember): RedactMes
     };
 };
 
-export interface BanToggleButtonState {
+export interface BanButtonState {
     onBanOrUnbanClick: () => void;
     banLabel: string;
 }
 
-export const userBanToggleButtonViewModel = (props: RoomAdminToolsProps): BanToggleButtonState => {
+export const useBanButtonViewModel = (props: RoomAdminToolsProps): BanButtonState => {
     const { isUpdating, startUpdating, stopUpdating, room, member } = props;
 
     const cli = useContext(MatrixClientContext);
@@ -281,17 +280,17 @@ export const userBanToggleButtonViewModel = (props: RoomAdminToolsProps): BanTog
                 stopUpdating();
             });
     };
-    
+
     return {
         onBanOrUnbanClick,
         banLabel,
     };
-}
+};
 
 interface MuteButtonState {
     isMemberInTheRoom: boolean;
     muteLabel: string;
-    onMutebuttonClick: () => void;
+    onMuteButtonClick: () => void;
 }
 
 export const useMuteButtonViewModel = (props: RoomAdminToolsProps): MuteButtonState => {
@@ -320,7 +319,7 @@ export const useMuteButtonViewModel = (props: RoomAdminToolsProps): MuteButtonSt
 
     const isMemberInTheRoom = member.membership !== KnownMembership.Join;
 
-    const onMutebuttonClick = async (): Promise<void> => {
+    const onMuteButtonClick = async (): Promise<void> => {
         if (isUpdating) return; // only allow one operation at a time
         startUpdating();
 
@@ -367,7 +366,7 @@ export const useMuteButtonViewModel = (props: RoomAdminToolsProps): MuteButtonSt
 
     return {
         isMemberInTheRoom,
-        onMutebuttonClick,
+        onMuteButtonClick,
         muteLabel,
     };
 };
@@ -380,12 +379,12 @@ interface UserInfoAdminToolsContainerState {
     isCurrentUserInTheRoom: boolean;
 }
 
-interface RoomAdminToolsContainerProps {
+export interface RoomAdminToolsContainerProps {
     room: Room;
     member: RoomMember;
     powerLevels: IPowerLevelsContent;
     children: React.ReactNode;
-};
+}
 
 export const useUserInfoAdminToolsContainerViewModel = (
     props: RoomAdminToolsContainerProps,
@@ -409,7 +408,7 @@ export const useUserInfoAdminToolsContainerViewModel = (
             shouldShowMuteButton: false,
             shouldShowRedactButton: false,
             isCurrentUserInTheRoom: false,
-        }
+        };
     }
 
     const isMe = me.userId === member.userId;
