@@ -182,6 +182,57 @@ test.describe("Room list", () => {
                 await expect(page.getByRole("heading", { name: "1 notification", level: 1 })).toBeVisible();
             });
         });
+
+        test.describe("Keyboard navigation", () => {
+            test("should navigate to the room list", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+
+                const room29 = roomListView.getByRole("gridcell", { name: "Open room room29" });
+                const room28 = roomListView.getByRole("gridcell", { name: "Open room room28" });
+
+                // open the room
+                await room29.click();
+                // put focus back on the room list item
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                await page.keyboard.press("ArrowDown");
+                await expect(room28).toBeFocused();
+                await expect(room29).not.toBeFocused();
+
+                await page.keyboard.press("ArrowUp");
+                await expect(room29).toBeFocused();
+                await expect(room28).not.toBeFocused();
+            });
+
+            test("should navigate to the notification menu", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("gridcell", { name: "Open room room29" });
+                const moreButton = room29.getByRole("button", { name: "More options" });
+                const notificationButton = room29.getByRole("button", { name: "Notification options" });
+
+                await room29.click();
+                // put focus back on the room list item
+                await room29.click();
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+                await page.keyboard.press("Tab");
+                await expect(notificationButton).toBeFocused();
+
+                // Open the menu
+                await notificationButton.click();
+                // Wait for the menu to be open
+                await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
+                    "aria-selected",
+                    "true",
+                );
+
+                // Close the menu
+                await page.keyboard.press("Escape");
+                // Focus should be back on the room list item
+                await expect(room29).toBeFocused();
+            });
+        });
     });
 
     test.describe("Avatar decoration", () => {
