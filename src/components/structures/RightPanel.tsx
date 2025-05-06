@@ -15,7 +15,7 @@ import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
+import RoomSummaryCardView from "../views/right_panel/RoomSummaryCardView";
 import WidgetCard from "../views/right_panel/WidgetCard";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
@@ -255,7 +255,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.RoomSummary:
                 if (!!this.props.room) {
                     card = (
-                        <RoomSummaryCard
+                        <RoomSummaryCardView
                             room={this.props.room}
                             // whenever RightPanel is passed a room it is passed a permalinkcreator
                             permalinkCreator={this.props.permalinkCreator!}
