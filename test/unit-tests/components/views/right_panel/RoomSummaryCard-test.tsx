@@ -11,6 +11,7 @@ import { render, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { EventType, MatrixEvent, Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, type MockedObject } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../../src/components/views/right_panel/RoomSummaryCard";
@@ -165,6 +166,20 @@ describe("<RoomSummaryCard />", () => {
             expect(getByPlaceholderText("Search messages…")).toHaveFocus();
             fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
             expect(onSearchCancel).toHaveBeenCalled();
+        });
+        it("should update the search field value correctly", async () => {
+            const user = userEvent.setup();
+
+            const onSearchChange = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+            });
+
+            const searchInput = getByPlaceholderText("Search messages…");
+            await user.type(searchInput, "test query");
+
+            expect(onSearchChange).toHaveBeenCalledWith("test query");
+            expect(searchInput).toHaveValue("test query");
         });
     });
 
