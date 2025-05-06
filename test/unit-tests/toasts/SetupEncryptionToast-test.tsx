@@ -29,7 +29,7 @@ describe("SetupEncryptionToast", () => {
     it("should render the 'set up recovery' toast", async () => {
         showToast(Kind.SET_UP_RECOVERY);
 
-        await expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
+        expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
     });
 
     it("should dismiss toast when 'not now' button clicked", async () => {
