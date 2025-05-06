@@ -93,6 +93,12 @@ describe("RoomSkipList", () => {
         }
     });
 
+    it("Throws error when same room is added via addNewRoom", () => {
+        const { skipList, rooms } = generateSkipList();
+        const room = rooms[5];
+        expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
+    });
+
     it("Re-sort works when sorter is swapped", () => {
         const { skipList, rooms, sorter } = generateSkipList();
         const sortedByRecency = [...rooms].sort((a, b) => sorter.comparator(a, b));
