@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Visibility } from "matrix-js-sdk/src/matrix";
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Locator, type Page } from "@playwright/test";
+
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { type Locator, type Page } from "@playwright/test";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -43,7 +44,7 @@ test.describe("Room list filters and sort", () => {
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
         // This bug shows up with this setting turned on
-        app.settings.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, true);
+        await app.settings.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, true);
 
         /*
         We will first create a room named 'Old Room' and will invite the bot user to this room.
@@ -60,7 +61,7 @@ test.describe("Room list filters and sort", () => {
         */
         const roomListView = getRoomList(page);
         const oldRoomTile = roomListView.getByRole("gridcell", { name: "Open room Old Room" });
-        expect(oldRoomTile).toBeVisible();
+        await expect(oldRoomTile).toBeVisible();
 
         /*
         Now let's tombstone 'Old Room'.
@@ -74,7 +75,7 @@ test.describe("Room list filters and sort", () => {
                     room_id: oldRoomId,
                 },
             },
-            visibility: Visibility.Public,
+            visibility: "public" as Visibility,
         });
 
         /*
@@ -89,7 +90,7 @@ test.describe("Room list filters and sort", () => {
         await app.client.joinRoom(newRoomId);
 
         // We expect 'Old Room' to be hidden from the room list.
-        expect(oldRoomTile).not.toBeVisible();
+        await expect(oldRoomTile).not.toBeVisible();
 
         /*
         Let's say some user in the 'Old Room' changes their display name.
@@ -97,7 +98,7 @@ test.describe("Room list filters and sort", () => {
         Nevertheless, the replaced room should not be shown in the room list.
         */
         await bot.setDisplayName("MyNewName");
-        expect(oldRoomTile).not.toBeVisible();
+        await expect(oldRoomTile).not.toBeVisible();
     });
 
     test.describe("Scroll behaviour", () => {
