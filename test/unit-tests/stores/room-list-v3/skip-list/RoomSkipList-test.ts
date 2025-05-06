@@ -62,7 +62,7 @@ describe("RoomSkipList", () => {
         for (const room of toInsert) {
             // Insert this room 10 times
             for (let i = 0; i < 10; ++i) {
-                skipList.addRoom(room);
+                skipList.reInsertRoom(room);
             }
         }
         // Sorting order should be the same as before
@@ -84,13 +84,19 @@ describe("RoomSkipList", () => {
                 event: true,
             });
             room.timeline.push(event);
-            skipList.addRoom(room);
+            skipList.reInsertRoom(room);
             expect(skipList.size).toEqual(rooms.length);
         }
         const sortedRooms = [...skipList];
         for (let i = 0; i < totalRooms; ++i) {
             expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
         }
+    });
+
+    it("Throws error when same room is added via addNewRoom", () => {
+        const { skipList, rooms } = generateSkipList();
+        const room = rooms[5];
+        expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
     });
 
     it("Re-sort works when sorter is swapped", () => {
@@ -120,7 +126,7 @@ describe("RoomSkipList", () => {
 
             // Shuffle and insert the rooms
             for (const room of shuffle(rooms)) {
-                roomSkipList.addRoom(room);
+                roomSkipList.addNewRoom(room);
             }
 
             expect(roomSkipList.size).toEqual(totalRooms);
