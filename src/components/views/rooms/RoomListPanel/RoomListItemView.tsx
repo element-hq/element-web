@@ -40,7 +40,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     const vm = useRoomListItemViewModel(room);
 
-    const [isHover, setIsHover] = useIsHover();
+    const [isHover, setIsHoverWithDelay] = useIsHover();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     // The compound menu in RoomListItemMenuView needs to be rendered when the hover menu is shown
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
@@ -65,16 +65,16 @@ export const RoomListItemView = memo(function RoomListItemView({
             aria-selected={isSelected}
             aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
-            onMouseOver={() => setIsHover(true)}
-            onMouseOut={() => setIsHover(false)}
+            onMouseOver={() => setIsHoverWithDelay(true)}
+            onMouseOut={() => setIsHoverWithDelay(false)}
             onFocus={() => {
-                setIsHover(true);
+                setIsHoverWithDelay(true);
                 onFocus();
             }}
             // Adding a timeout because when tabbing to go to the more options and notification menu, the focus moves out of the button
             // The blur makes the button lose the hover state and these menu are not shown
             // We delay the blur event to give time to the focus to move to the menu
-            onBlur={() => setIsHover(false, 10)}
+            onBlur={() => setIsHoverWithDelay(false, 10)}
             tabIndex={isActive ? 0 : -1}
             {...props}
         >
