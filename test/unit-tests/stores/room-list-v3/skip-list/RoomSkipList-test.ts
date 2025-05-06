@@ -62,7 +62,7 @@ describe("RoomSkipList", () => {
         for (const room of toInsert) {
             // Insert this room 10 times
             for (let i = 0; i < 10; ++i) {
-                skipList.addRoom(room);
+                skipList.reInsertRoom(room);
             }
         }
         // Sorting order should be the same as before
@@ -84,7 +84,7 @@ describe("RoomSkipList", () => {
                 event: true,
             });
             room.timeline.push(event);
-            skipList.addRoom(room);
+            skipList.reInsertRoom(room);
             expect(skipList.size).toEqual(rooms.length);
         }
         const sortedRooms = [...skipList];
@@ -120,7 +120,7 @@ describe("RoomSkipList", () => {
 
             // Shuffle and insert the rooms
             for (const room of shuffle(rooms)) {
-                roomSkipList.addRoom(room);
+                roomSkipList.addNewRoom(room);
             }
 
             expect(roomSkipList.size).toEqual(totalRooms);
