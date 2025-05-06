@@ -179,7 +179,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     onSearchChange,
     onSearchCancel,
     focusRoomSearch,
-    searchTerm,
+    searchTerm = "",
 }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -244,6 +244,13 @@ const RoomSummaryCard: React.FC<IProps> = ({
             searchInputRef.current?.focus();
         }
     });
+
+    // The search field is controlled and onSearchChange is debounced in RoomView,
+    // so we need to set the value of the input right away
+    const [searchValue, setSearchValue] = useState(searchTerm);
+    useEffect(() => {
+        setSearchValue(searchTerm);
+    }, [searchTerm]);
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const roomInfo = (
@@ -320,9 +327,10 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 placeholder={_t("room|search|placeholder")}
                 name="room_message_search"
                 onChange={(e) => {
+                    setSearchValue(e.currentTarget.value);
                     onSearchChange(e.currentTarget.value);
                 }}
-                value={searchTerm}
+                value={searchValue}
                 className="mx_no_textinput"
                 ref={searchInputRef}
                 autoFocus={focusRoomSearch}
