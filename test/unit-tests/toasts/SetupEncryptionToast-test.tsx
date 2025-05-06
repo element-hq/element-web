@@ -26,56 +26,60 @@ describe("SetupEncryptionToast", () => {
         render(<ToastContainer />);
     });
 
-    it("should render the 'set up recovery' toast", async () => {
-        showToast(Kind.SET_UP_RECOVERY);
+    describe("Set up recovery", () => {
+        it("should render the toast", async () => {
+            showToast(Kind.SET_UP_RECOVERY);
 
-        await expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
-    });
+            expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
+        });
 
-    it("should dismiss toast when 'not now' button clicked", async () => {
-        jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
+        it("should dismiss the toast when 'not now' button clicked", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
 
-        showToast(Kind.SET_UP_RECOVERY);
+            showToast(Kind.SET_UP_RECOVERY);
 
-        const user = userEvent.setup();
-        await user.click(await screen.findByRole("button", { name: "Not now" }));
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Not now" }));
 
-        expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
-    });
-
-    it("should render the 'key storage out of sync' toast", async () => {
-        showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
-
-        await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
-    });
-
-    it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-        showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
-
-        const user = userEvent.setup();
-        await user.click(await screen.findByText("Forgot recovery key?"));
-
-        expect(dis.dispatch).toHaveBeenCalledWith({
-            action: "view_user_settings",
-            initialTabId: "USER_ENCRYPTION_TAB",
-            props: { initialEncryptionState: "reset_identity_forgot" },
+            expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
         });
     });
 
-    it("should open settings to the reset flow when recovering fails clicked", async () => {
-        jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
-            throw new Error("Something went wrong while recovering!");
+    describe("Key storage out of sync", () => {
+        it("should render the toast", async () => {
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+            await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
         });
 
-        showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
 
-        const user = userEvent.setup();
-        await user.click(await screen.findByText("Enter recovery key"));
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Forgot recovery key?"));
 
-        expect(dis.dispatch).toHaveBeenCalledWith({
-            action: "view_user_settings",
-            initialTabId: "USER_ENCRYPTION_TAB",
-            props: { initialEncryptionState: "reset_identity_forgot" },
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "reset_identity_forgot" },
+            });
+        });
+
+        it("should open settings to the reset flow when recovering fails clicked", async () => {
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
+                throw new Error("Something went wrong while recovering!");
+            });
+
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "reset_identity_forgot" },
+            });
         });
     });
 });
