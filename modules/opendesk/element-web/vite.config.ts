@@ -28,6 +28,7 @@ export default defineConfig({
         rollupOptions: {
             external: ["react"],
         },
+        minify: false,
     },
     plugins: [
         react(),
@@ -40,6 +41,8 @@ export default defineConfig({
         }),
     ],
     define: {
-        process: { env: {} },
+        // Use production mode for the build as it is tested against production builds of Element Web,
+        // this is required for React JSX versions to be compatible.
+        process: { env: { NODE_ENV: "production" } },
     },
 });
