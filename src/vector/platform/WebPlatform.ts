@@ -21,6 +21,7 @@ import { _t } from "../../languageHandler";
 import ToastStore from "../../stores/ToastStore.ts";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
 import SdkConfig from "../../SdkConfig.ts";
+import type { ActionPayload } from "../../dispatcher/payloads.ts";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -35,12 +36,24 @@ function getNormalizedAppVersion(version: string): string {
 
 export default class WebPlatform extends BasePlatform {
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
+    private readonly registerServiceWorkerPromise: Promise<void>;
 
     public constructor() {
         super();
 
         // Register the service worker in the background
-        void this.registerServiceWorker();
+        this.registerServiceWorkerPromise = this.registerServiceWorker();
+    }
+
+    protected onAction(payload: ActionPayload): void {
+        super.onAction(payload);
+
+        switch (payload.action) {
+            case "client_started":
+                // Defer drawing the toast until the client is started as the lifecycle methods reset the ToastStore right before
+                this.registerServiceWorkerPromise.catch(this.handleServiceWorkerRegistrationError);
+                break;
+        }
     }
 
     private async registerServiceWorker(): Promise<void> {
@@ -51,30 +64,34 @@ export default class WebPlatform extends BasePlatform {
                 throw new Error("Service worker registration failed");
             }
 
-            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
             await registration.update();
         } catch (e) {
             console.error("Error registering/updating service worker:", e);
 
-            const key = "service_worker_error";
-            const brand = SdkConfig.get().brand;
-            ToastStore.sharedInstance().addOrReplaceToast({
-                key,
-                title: _t("service_worker_error|title"),
-                props: {
-                    description: _t("service_worker_error|description", { brand }),
-                    primaryLabel: _t("action|ok"),
-                    onPrimaryClick: () => {
-                        ToastStore.sharedInstance().dismissToast(key);
-                    },
-                },
-                component: GenericToast,
-                priority: 95,
-            });
+            throw e; // rethrow error
         }
     }
 
-    private onServiceWorkerPostMessage(event: MessageEvent): void {
+    private handleServiceWorkerRegistrationError = (): void => {
+        const key = "service_worker_error";
+        const brand = SdkConfig.get().brand;
+        ToastStore.sharedInstance().addOrReplaceToast({
+            key,
+            title: _t("service_worker_error|title"),
+            props: {
+                description: _t("service_worker_error|description", { brand }),
+                primaryLabel: _t("action|ok"),
+                onPrimaryClick: () => {
+                    ToastStore.sharedInstance().dismissToast(key);
+                },
+            },
+            component: GenericToast,
+            priority: 95,
+        });
+    };
+
+    private onServiceWorkerPostMessage = (event: MessageEvent): void => {
         try {
             if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
                 const userId = localStorage.getItem("mx_user_id");
@@ -90,7 +107,7 @@ export default class WebPlatform extends BasePlatform {
         } catch (e) {
             console.error("Error responding to service worker: ", e);
         }
-    }
+    };
 
     public getHumanReadableName(): string {
         return "Web Platform"; // no translation required: only used for analytics
