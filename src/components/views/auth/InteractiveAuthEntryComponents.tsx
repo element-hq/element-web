@@ -11,8 +11,9 @@ import { type InternationalisedPolicy, type Terms, type MatrixClient } from "mat
 import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
-import { Button, Text } from "@vector-im/compound-web";
+import { Button } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import UserProfileSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
 
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
@@ -21,8 +22,9 @@ import AccessibleButton, { type AccessibleButtonKind, type ButtonEvent } from ".
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
-import { Flex } from "../../utils/Flex";
 import { pickBestPolicyLanguage } from "../../../Terms.ts";
+import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons.tsx";
+import { EncryptionCard } from "../settings/encryption/EncryptionCard.tsx";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -971,9 +973,14 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
 
     public render(): React.ReactNode {
         return (
-            <div>
-                <Text>{_t("auth|uia|mas_cross_signing_reset_description")}</Text>
-                <Flex gap="var(--cpd-space-4x)">
+            <EncryptionCard
+                Icon={UserProfileSolidIcon}
+                title={_t("auth|uia|mas_cross_signing_reset_title")}
+                description={_t("auth|uia|mas_cross_signing_reset_description", {
+                    serverName: this.props.matrixClient.getDomain(),
+                })}
+            >
+                <EncryptionCardButtons>
                     <Button
                         Icon={PopOutIcon}
                         onClick={this.onGoToAccountClick}
@@ -983,11 +990,11 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
                     >
                         {_t("auth|uia|mas_cross_signing_reset_cta")}
                     </Button>
-                    <Button onClick={this.onRetryClick} kind="secondary" className="mx_Dialog_nonDialogButton">
+                    <Button onClick={this.onRetryClick} kind="tertiary" className="mx_Dialog_nonDialogButton">
                         {_t("action|retry")}
                     </Button>
-                </Flex>
-            </div>
+                </EncryptionCardButtons>
+            </EncryptionCard>
         );
     }
 }

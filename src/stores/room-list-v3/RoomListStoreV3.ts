@@ -16,7 +16,6 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
@@ -49,6 +48,15 @@ const FILTERS = [
     new LowPriorityFilter(),
 ];
 
+export enum RoomListStoreV3Event {
+    // The event/channel which is called when the room lists have been changed.
+    ListsUpdate = "lists_update",
+    // The event which is called when the room list is loaded.
+    ListsLoaded = "lists_loaded",
+}
+
+export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
+export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
  * This is the third such implementation hence the "V3".
@@ -74,6 +82,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
         rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
         return rooms;
+    }
+
+    /**
+     * Check whether the initial list of rooms has loaded.
+     */
+    public get isLoadingRooms(): boolean {
+        return !this.roomSkipList?.initialized;
     }
 
     /**
@@ -127,6 +142,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
+        this.emit(LISTS_LOADED_EVENT);
         this.emit(LISTS_UPDATE_EVENT);
     }
 
@@ -195,23 +211,28 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
 
+                // If the user is kicked, re-insert the room and do nothing more.
                 const ownUserId = this.matrixClient.getSafeUserId();
                 const isKicked = (payload.room as Room).getMember(ownUserId)?.isKicked();
-                const shouldRemove =
-                    !isKicked &&
+                if (isKicked) {
+                    this.addRoomAndEmit(payload.room);
+                    return;
+                }
+
+                // If the user has left this room, remove it from the skiplist.
+                if (
                     (payload.oldMembership === KnownMembership.Invite ||
                         payload.oldMembership === KnownMembership.Join) &&
-                    payload.membership === KnownMembership.Leave;
-
-                if (shouldRemove) {
+                    payload.membership === KnownMembership.Leave
+                ) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
                 }
 
+                // If we're joining an upgraded room, we'll want to make sure we don't proliferate
+                // the dead room in the list.
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                    // If we're joining an upgraded room, we'll want to make sure we don't proliferate
-                    // the dead room in the list.
                     const roomState: RoomState = payload.room.currentState;
                     const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
                     if (predecessor) {
@@ -220,7 +241,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                         else logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
                     }
                 }
-                this.addRoomAndEmit(payload.room);
+
+                this.addRoomAndEmit(payload.room, true);
                 break;
             }
         }
@@ -244,7 +266,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                             logger.warn(`${roomId} was found in DMs but the room is not in the store`);
                             continue;
                         }
-                        this.roomSkipList!.addRoom(room);
+                        this.roomSkipList!.reInsertRoom(room);
                         needsEmit = true;
                     }
                 }
@@ -258,7 +280,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     .map((id) => this.matrixClient?.getRoom(id))
                     .filter((room) => !!room);
                 for (const room of rooms) {
-                    this.roomSkipList!.addRoom(room);
+                    this.roomSkipList!.reInsertRoom(room);
                     needsEmit = true;
                 }
                 break;
@@ -287,10 +309,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Add a room to the skiplist and emit an update.
      * @param room The room to add to the skiplist
+     * @param isNewRoom Set this to true if this a new room that the isn't already in the skiplist
      */
-    private addRoomAndEmit(room: Room): void {
+    private addRoomAndEmit(room: Room, isNewRoom = false): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
-        this.roomSkipList.addRoom(room);
+        if (isNewRoom) this.roomSkipList.addNewRoom(room);
+        else this.roomSkipList.reInsertRoom(room);
         this.emit(LISTS_UPDATE_EVENT);
     }
 

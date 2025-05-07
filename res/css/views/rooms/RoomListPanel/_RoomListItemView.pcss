@@ -18,10 +18,6 @@
     all: unset;
     cursor: pointer;
 
-    &:hover {
-        background-color: var(--cpd-color-bg-action-secondary-hovered);
-    }
-
     .mx_RoomListItemView_container {
         padding-left: var(--cpd-space-2x);
         font: var(--cpd-font-body-md-regular);
@@ -56,12 +52,12 @@
     }
 }
 
-.mx_RoomListItemView_menu_open {
+.mx_RoomListItemView_hover {
     background-color: var(--cpd-color-bg-action-secondary-hovered);
+}
 
-    .mx_RoomListItemView_content {
-        padding-right: var(--cpd-space-1-5x);
-    }
+.mx_RoomListItemView_menu_open .mx_RoomListItemView_content {
+    padding-right: var(--cpd-space-1-5x);
 }
 
 .mx_RoomListItemView_selected {

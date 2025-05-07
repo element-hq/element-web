@@ -8,7 +8,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
   >
     <div
       class="mx_UserMenu"
-      data-floating-ui-inert=""
     >
       <div
         aria-expanded="false"
@@ -43,7 +42,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <ul
       aria-label="Spaces"
       class="mx_AutoHideScrollbar mx_SpaceTreeLevel"
-      data-floating-ui-inert=""
       data-rbd-droppable-context-id="0"
       data-rbd-droppable-id="top-level-spaces"
       role="tree"
@@ -231,17 +229,18 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls="«r12»"
-        aria-describedby="«r12»"
-        aria-expanded="true"
-        aria-haspopup="dialog"
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="«r14»"
+        aria-labelledby="«r12»"
         class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
-        data-floating-ui-inert=""
+        data-state="closed"
+        id="radix-«r10»"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
+        type="button"
       >
         <div
           class="_indicator-icon_zr2a0_17"
@@ -261,37 +260,11 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
           </svg>
         </div>
       </button>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«r19»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
     <div
       aria-expanded="false"
       aria-label="Quick settings"
       class="mx_AccessibleButton mx_QuickSettingsButton"
-      data-floating-ui-inert=""
       role="button"
       tabindex="0"
     />

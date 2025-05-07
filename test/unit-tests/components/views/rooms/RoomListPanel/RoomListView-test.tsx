@@ -24,6 +24,7 @@ jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListViewMode
 
 describe("<RoomListView />", () => {
     const defaultValue: RoomListViewState = {
+        isLoadingRooms: false,
         rooms: [],
         primaryFilters: [],
         activateSecondaryFilter: jest.fn().mockReturnValue({}),
@@ -41,6 +42,16 @@ describe("<RoomListView />", () => {
 
     afterEach(() => {
         jest.resetAllMocks();
+    });
+
+    it("should render the loading room list", () => {
+        mocked(useRoomListViewModel).mockReturnValue({
+            ...defaultValue,
+            isLoadingRooms: true,
+        });
+
+        const roomList = render(<RoomListView />);
+        expect(roomList.container.querySelector(".mx_RoomListSkeleton")).not.toBeNull();
     });
 
     it("should render an empty room list", () => {

@@ -90,15 +90,34 @@ export class RoomSkipList implements Iterable<Room> {
     }
 
     /**
-     * Adds a given room to the correct sorted position in the list.
-     * If the room is already present in the list, it is first removed.
+     * Re-inserts a room that is already in the skiplist.
+     * This method does nothing if the room isn't already in the skiplist.
+     * @param room the room to add
      */
-    public addRoom(room: Room): void {
-        /**
-         * Remove this room from the skip list if necessary.
-         */
+    public reInsertRoom(room: Room): void {
+        if (!this.roomNodeMap.has(room.roomId)) {
+            return;
+        }
         this.removeRoom(room);
+        this.addNewRoom(room);
+    }
 
+    /**
+     * Adds a new room to the skiplist.
+     * This method will throw an error if the room is already in the skiplist.
+     * @param room the room to add
+     */
+    public addNewRoom(room: Room): void {
+        if (this.roomNodeMap.has(room.roomId)) {
+            throw new Error(`Can't add room to skiplist: ${room.roomId} is already in the skiplist!`);
+        }
+        this.insertRoom(room);
+    }
+
+    /**
+     * Adds a given room to the correct sorted position in the list.
+     */
+    private insertRoom(room: Room): void {
         const newNode = new RoomNode(room);
         newNode.checkIfRoomBelongsToActiveSpace();
         newNode.applyFilters(this.filters);

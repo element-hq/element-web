@@ -20,6 +20,7 @@ describe("<EmptyRoomList />", () => {
 
     beforeEach(() => {
         vm = {
+            isLoadingRooms: false,
             rooms: [],
             primaryFilters: [],
             activateSecondaryFilter: jest.fn().mockReturnValue({}),
