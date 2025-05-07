@@ -445,7 +445,9 @@ describe("DeviceListener", () => {
             it("dispatches keybackup event when key backup is not enabled", async () => {
                 mockCrypto.getActiveSessionBackupVersion.mockResolvedValue(null);
                 await createAndStart();
-                expect(mockDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ReportKeyBackupNotEnabled });
+                expect(mockDispatcher.dispatch).toHaveBeenCalledWith({
+                    action: Action.ReportKeyBackupNotEnabled,
+                });
             });
 
             it("does not check key backup status again after check is complete", async () => {
