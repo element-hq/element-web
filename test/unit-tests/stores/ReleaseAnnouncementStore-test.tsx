@@ -24,7 +24,6 @@ describe("ReleaseAnnouncementStore", () => {
     beforeEach(() => {
         // Default settings
         settings = {
-            feature_release_announcement: true,
             releaseAnnouncementData: {},
         };
         const watchCallbacks: Array<CallbackFn> = [];
@@ -52,13 +51,6 @@ describe("ReleaseAnnouncementStore", () => {
     });
 
     /**
-     * Disables the release announcement feature.
-     */
-    function disableReleaseAnnouncement() {
-        settings["feature_release_announcement"] = false;
-    }
-
-    /**
      * Listens to the next release announcement change event.
      */
     function listenReleaseAnnouncementChanged() {
@@ -71,21 +63,8 @@ describe("ReleaseAnnouncementStore", () => {
         expect(ReleaseAnnouncementStore.instance).toBeDefined();
     });
 
-    it("should return null when the release announcement is disabled", async () => {
-        disableReleaseAnnouncement();
-
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
-
-        // Wait for the next release announcement change event
-        const promise = listenReleaseAnnouncementChanged();
-        // Call the next release announcement
-        // because the release announcement is disabled, the next release announcement should be null
-        await releaseAnnouncementStore.nextReleaseAnnouncement();
-        expect(await promise).toBeNull();
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
-    });
-
-    it("should return the next feature when the next release announcement is called", async () => {
+    // We only have a single release announcement currently
+    it.skip("should return the next feature when the next release announcement is called", async () => {
         // Sanity check
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
 
@@ -109,12 +88,12 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should listen to release announcement data changes in the store", async () => {
         const secondStore = new ReleaseAnnouncementStore();
-        expect(secondStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
+        expect(secondStore.getReleaseAnnouncement()).toBe("pinningMessageList");
 
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe("pinningMessageList");
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("pinningMessageList");
+        expect(await promise).toBe(null);
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe(null);
     });
 });
