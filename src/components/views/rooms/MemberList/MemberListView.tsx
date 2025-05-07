@@ -43,18 +43,17 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const scrollToIndex = (index: number): void => {
-        ref?.current?.scrollIntoView({
-            index: index,
-            behavior: "auto",
-            done: () => {
-                setFocusedIndex(index);
-            },
-        });
-    };
-
     const keyDownCallback = React.useCallback(
         (e: any) => {
+            const scrollToIndex = (index: number): void => {
+                ref?.current?.scrollIntoView({
+                    index: index,
+                    behavior: "auto",
+                    done: () => {
+                        setFocusedIndex(index);
+                    },
+                });
+            };
             if (e.code === "ArrowUp") {
                 const nextItemIsSeparator = focusedIndex > 1 && vm.members[focusedIndex - 1] === SEPARATOR;
                 const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
@@ -68,7 +67,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             } else if ((e.code === "Enter" || e.code === "Space") && focusedIndex >= 0) {
                 const item = vm.members[focusedIndex];
                 if (item !== SEPARATOR) {
-                    let member = item.member ?? item.threePidInvite;
+                    const member = item.member ?? item.threePidInvite;
                     vm.onClickMember(member);
                     e.stopPropagation();
                     e.preventDefault();
