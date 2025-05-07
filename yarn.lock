@@ -1618,16 +1618,16 @@
   integrity sha512-qtEQD5nFaRJ+vfAis7uhKB66SyCjrz7O+qGz/hKJjgNhBLT/6C5DK90waKINXSw0J3stFR43IWzEk5GBOrTMow==
 
 "@element-hq/element-web-playwright-common@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.1.5.tgz#e9d4e24f0f284d16b7dc8cb9cd893521e1645be0"
-  integrity sha512-Cw2PqaU9YUx/qHq8nybjfxMhSGshkvZiRBPMhYnamjMTjUiSEEF74061gjIecxLF/3hgV6I0dGp5Km3FhRbTPQ==
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.1.6.tgz#39d154df95d32ed48df51e36e88c0354e54a7404"
+  integrity sha512-KJikM1D2fr7HONYD6zrEEEJFueN+Nis6NDO8gFMxxyv68CzBwHU85BWQ1eYx/2Zeg/9EfsHtXcYC73gNPI4huA==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
-    "@testcontainers/postgresql" "^10.18.0"
+    "@testcontainers/postgresql" "^10.24.2"
     lodash-es "^4.17.21"
     mailpit-api "^1.2.0"
     strip-ansi "^7.1.0"
-    testcontainers "^10.18.0"
+    testcontainers "^10.24.2"
     yaml "^2.7.0"
 
 "@eslint-community/eslint-utils@^4.2.0":
@@ -1767,9 +1767,9 @@
     "@js-sdsl/ordered-map" "^4.4.2"
 
 "@grpc/proto-loader@^0.7.13":
-  version "0.7.13"
-  resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.7.13.tgz#f6a44b2b7c9f7b609f5748c6eac2d420e37670cf"
-  integrity sha512-AiXO/bfe9bmxBjxxtYxFAXGZvMaN5s8kO+jBHAJCON8rJoB5YS/D6X7ZNc6XQkuHNmyl4CYaMI1fJ/Gn27RGGw==
+  version "0.7.15"
+  resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.7.15.tgz#4cdfbf35a35461fc843abe8b9e2c0770b5095e60"
+  integrity sha512-tMXdRCfYVixjuFK+Hk0Q1s38gV9zDiDJfWL3h1rv4Qc39oILCu1TRTDt7+fGUI8K4G1Fj125Hx/ru3azECWTyQ==
   dependencies:
     lodash.camelcase "^4.3.0"
     long "^5.0.0"
@@ -2873,12 +2873,12 @@
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
 
-"@testcontainers/postgresql@^10.18.0":
-  version "10.19.0"
-  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.19.0.tgz#e1ff9fbfee76c23bc899865524ee8e2ee297bdf2"
-  integrity sha512-3+yQJHCWEtp4hylfZgRxCWN1P6dGqKhFM7Bypg22NpJqq1x/dcmamVCvD+4eTdm1uHV1Ta0BkHRWejxGOyTnrw==
+"@testcontainers/postgresql@^10.24.2":
+  version "10.25.0"
+  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.25.0.tgz#3f8c13ee892e8590fd75b8ae72f4646787bab424"
+  integrity sha512-VkpqpX9YZ8aq4wfk6sJRopGTmlBdE1kErzAFWJ/1pY/XrEZ7nxdfFBG+En2icQnbv3BIFQYysEKxEFMNB+hQVw==
   dependencies:
-    testcontainers "^10.19.0"
+    testcontainers "^10.25.0"
 
 "@testing-library/dom@^10.4.0":
   version "10.4.0"
@@ -3288,26 +3288,26 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*":
-  version "22.15.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.3.tgz#b7fb9396a8ec5b5dfb1345d8ac2502060e9af68b"
-  integrity sha512-lX7HFZeHf4QG/J7tBZqrCAXwz9J5RD56Y6MpP0eJkka8p+K0RY/yBTW7CYFJ4VGCclxqOLKmiGP5juQc6MKgcw==
+"@types/node@*", "@types/node@>=13.7.0":
+  version "22.15.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.14.tgz#889fd356a04d003a6d5650ccc003ef4d712430d7"
+  integrity sha512-BL1eyu/XWsFGTtDWOYULQEs4KR0qdtYfCxYAUYRoB7JP7h9ETYLgQTww6kH8Sj2C0pFGgrpM0XKv6/kbIzYJ1g==
   dependencies:
     undici-types "~6.21.0"
 
-"@types/node@18", "@types/node@^18.11.18":
+"@types/node@18":
   version "18.19.87"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.87.tgz#690f000cc51e3c7f48bc00f7e86fac6eb550b709"
   integrity sha512-OIAAu6ypnVZHmsHCeJ+7CCSub38QNBS9uceMQeg7K5Ur0Jr+wG9wEOEvvMbhp09pxD5czIUy/jND7s7Tb6Nw7A==
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@>=13.7.0":
-  version "22.14.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.14.1.tgz#53b54585cec81c21eee3697521e31312d6ca1e6f"
-  integrity sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==
+"@types/node@^18.11.18":
+  version "18.19.97"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.97.tgz#38443553a3f6288c8cac3d1b465a3b33121bbf72"
+  integrity sha512-4r3Y9EuCJjWduiam85Fo4GBQtneaEuoaBSdiKo+o6qwQUh0JFVBe7cRUK6I6yVzA0S1gBJJfoQx4VtBH4e5ikg==
   dependencies:
-    undici-types "~6.21.0"
+    undici-types "~5.26.4"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.4"
@@ -3722,7 +3722,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
@@ -4334,10 +4333,10 @@ axe-core@~4.10.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.3.tgz#04145965ac7894faddbac30861e5d8f11bfd14fc"
   integrity sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==
 
-axios@^1.8.1:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.4.tgz#78990bb4bc63d2cae072952d374835950a82f447"
-  integrity sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==
+axios@^1.8.4:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.9.0.tgz#25534e3b72b54540077d33046f77e3b8d7081901"
+  integrity sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -4468,9 +4467,9 @@ bare-events@^2.2.0, bare-events@^2.5.4:
   integrity sha512-+gFfDkR8pj4/TrWCGUGWmJIkBwuxPS5F+a5yWjOHQt2hHvNZd5YLzadjmDUtFmMM4y429bnKLa8bYBMHcYdnQA==
 
 bare-fs@^4.0.1:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/bare-fs/-/bare-fs-4.1.2.tgz#5b048298019f489979d5a6afb480f5204ad4e89b"
-  integrity sha512-8wSeOia5B7LwD4+h465y73KOdj5QHsbbuoUfPBi+pXgFJIPuG7SsiOdJuijWMyfid49eD+WivpfY7KT8gbAzBA==
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/bare-fs/-/bare-fs-4.1.4.tgz#3dd863925f29843e64a9030839c9cb3155714d40"
+  integrity sha512-r8+26Voz8dGX3AYpJdFb1ZPaUSM8XOLCZvy+YGpRTmwPHIxA7Z3Jov/oMPtV7hfRQbOnH8qGlLTzQAbgtdNN0Q==
   dependencies:
     bare-events "^2.5.4"
     bare-path "^3.0.0"
@@ -5744,9 +5743,9 @@ docker-modem@^5.0.6:
     ssh2 "^1.15.0"
 
 dockerode@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-4.0.5.tgz#3e5af60deaa5ff752886c3c880336717d1217384"
-  integrity sha512-ZPmKSr1k1571Mrh7oIBS/j0AqAccoecY2yH420ni5j1KyNMgnoTh4Nu4FWunh0HZIJmRSmSysJjBIpa/zyWUEA==
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-4.0.6.tgz#e53978605346afaaed940a72e24d4e8490d52437"
+  integrity sha512-FbVf3Z8fY/kALB9s+P9epCpWhfi/r0N2DgYYcYpsAUlaTxPjdsitsFobnltb+lyCgAIvf9C+4PSWlTnHlJMf1w==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@grpc/grpc-js" "^1.11.1"
@@ -8983,9 +8982,9 @@ loglevel@^1.9.2:
   integrity sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==
 
 long@^5.0.0:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/long/-/long-5.3.1.tgz#9d4222d3213f38a5ec809674834e0f0ab21abe96"
-  integrity sha512-ka87Jz3gcx/I7Hal94xaN2tZEOPoUOEVftkQqZx2EeQRN7LGdfLlI3FvZ+7WDplm+vK2Urx9ULrvSowtdCieng==
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/long/-/long-5.3.2.tgz#1d84463095999262d7d7b7f8bfd4a8cc55167f83"
+  integrity sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==
 
 long@^5.2.0:
   version "5.2.3"
@@ -9036,11 +9035,11 @@ magic-string@0.30.8:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
 mailpit-api@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.2.0.tgz#6cbd7c5c091fd74b000385790a1fe0c9f2a83fba"
-  integrity sha512-oni/IwQhtbwk3ERwJ6IarKIFgz2U5684SK6Bbkau2GBo2FLoiT14UGkL3CXleYPBH5SCsnymHap1eevEOLwqaA==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.3.0.tgz#a2365053b7b66179199701d4937f9eb5c0c359fe"
+  integrity sha512-IAqvrkhQr/JyG2PDIfqeiXGVkjinepPcN2lmSnghXs8hcmh5NBOjO/3Ryv7IYhq+yfasbCd/x4HyiFgIseLCVg==
   dependencies:
-    axios "^1.8.1"
+    axios "^1.8.4"
 
 make-dir@^4.0.0:
   version "4.0.0"
@@ -12483,7 +12482,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@10.24.2, testcontainers@^10.18.0, testcontainers@^10.19.0, testcontainers@^10.20.0:
+testcontainers@10.24.2, testcontainers@^10.20.0, testcontainers@^10.24.2, testcontainers@^10.25.0:
   version "10.24.2"
   resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.24.2.tgz#1312331dc3997ce5d29e9b59b7f5be037b18c524"
   integrity sha512-Don3EXEQuSw14+nFG9pj48fL9ck/jXDfR9Rb0K3acOyn/gg97+gsnfZaLzpdejl9GcPJVKxACNRe3SYVC2uWqg==
