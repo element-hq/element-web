@@ -29,7 +29,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 
 export function useInputEventProcessor(
     onSend: () => void,
-    autocompleteRef: React.RefObject<Autocomplete>,
+    autocompleteRef: React.RefObject<Autocomplete | null>,
     initialContent?: string,
     eventRelation?: IEventRelation,
 ): (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => WysiwygEvent | null {
@@ -97,7 +97,7 @@ function handleKeyboardEvent(
     roomContext: Pick<IRoomState, "liveTimeline" | "timelineRenderingType" | "room">,
     composerContext: ComposerContextState,
     mxClient: MatrixClient | undefined,
-    autocompleteRef: React.RefObject<Autocomplete>,
+    autocompleteRef: React.RefObject<Autocomplete | null>,
 ): KeyboardEvent | null {
     const { editorStateTransfer } = composerContext;
     const isEditing = Boolean(editorStateTransfer);

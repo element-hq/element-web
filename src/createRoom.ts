@@ -28,7 +28,6 @@ import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import { getAddressType } from "./UserAddress";
-import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { JitsiCall, ElementCall } from "./models/Call";
@@ -421,36 +420,6 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
     }
 
     return true;
-}
-
-// Similar to ensureDMExists but also adds creation content
-// without polluting ensureDMExists with unrelated stuff (also
-// they're never encrypted).
-export async function ensureVirtualRoomExists(
-    client: MatrixClient,
-    userId: string,
-    nativeRoomId: string,
-): Promise<string | null> {
-    const existingDMRoom = findDMForUser(client, userId);
-    let roomId: string | null;
-    if (existingDMRoom) {
-        roomId = existingDMRoom.roomId;
-    } else {
-        roomId = await createRoom(client, {
-            dmUserId: userId,
-            spinner: false,
-            andView: false,
-            createOpts: {
-                creation_content: {
-                    // This allows us to recognise that the room is a virtual room
-                    // when it comes down our sync stream (we also put the ID of the
-                    // respective native room in there because why not?)
-                    [VIRTUAL_ROOM_EVENT_TYPE]: nativeRoomId,
-                },
-            },
-        });
-    }
-    return roomId;
 }
 
 export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string | null> {

@@ -1,0 +1,33 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_EmptyRoomList_GenericPlaceholder {
+    align-self: center;
+    /** It should take 2/3 of the width **/
+    width: 66%;
+    /** It should be positioned at 1/3 of the height **/
+    padding-top: 33%;
+
+    .mx_EmptyRoomList_GenericPlaceholder_title {
+        font: var(--cpd-font-body-lg-semibold);
+        text-align: center;
+    }
+
+    .mx_EmptyRoomList_GenericPlaceholder_description {
+        font: var(--cpd-font-body-sm-regular);
+        color: var(--cpd-color-text-secondary);
+        text-align: center;
+    }
+
+    .mx_EmptyRoomList_DefaultPlaceholder {
+        margin-top: var(--cpd-space-4x);
+    }
+
+    button {
+        width: 100%;
+    }
+}

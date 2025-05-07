@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect } from "react";
+import React, { type JSX, useContext } from "react";
 import { type MatrixEvent, MatrixError, type IPreviewUrlResponse, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -17,6 +17,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 const INITIAL_NUM_PREVIEWS = 2;
 
@@ -24,12 +25,12 @@ interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
     onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
-    onHeightChanged?(): void; // called when the preview's contents has loaded
 }
 
-const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onHeightChanged }) => {
+const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
+    const [mediaVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
 
     const ts = mxEvent.getTs();
     const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(
@@ -39,10 +40,6 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
         [links, ts],
         [],
     );
-
-    useEffect(() => {
-        onHeightChanged?.();
-    }, [onHeightChanged, expanded, previews]);
 
     const showPreviews = expanded ? previews : previews.slice(0, INITIAL_NUM_PREVIEWS);
 
@@ -60,7 +57,13 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
     return (
         <div className="mx_LinkPreviewGroup">
             {showPreviews.map(([link, preview], i) => (
-                <LinkPreviewWidget key={link} link={link} preview={preview} mxEvent={mxEvent}>
+                <LinkPreviewWidget
+                    mediaVisible={mediaVisible}
+                    key={link}
+                    link={link}
+                    preview={preview}
+                    mxEvent={mxEvent}
+                >
                     {i === 0 ? (
                         <AccessibleButton
                             className="mx_LinkPreviewGroup_hide"

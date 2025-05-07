@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ForwardedRef, forwardRef, type MutableRefObject, useMemo } from "react";
+import React, { type JSX, type RefObject, useMemo, type ReactNode } from "react";
 import classNames from "classnames";
 
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -21,15 +21,13 @@ import { type ComposerFunctions } from "./types";
 interface ContentProps {
     disabled?: boolean;
     composerFunctions: ComposerFunctions;
+    ref?: RefObject<HTMLElement | null>;
 }
 
-const Content = forwardRef<HTMLElement, ContentProps>(function Content(
-    { disabled = false, composerFunctions }: ContentProps,
-    forwardRef: ForwardedRef<HTMLElement>,
-) {
-    useWysiwygEditActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
+const Content = function Content({ disabled = false, composerFunctions, ref }: ContentProps): ReactNode {
+    useWysiwygEditActionHandler(disabled, ref, composerFunctions);
     return null;
-});
+};
 
 interface EditWysiwygComposerProps {
     disabled?: boolean;

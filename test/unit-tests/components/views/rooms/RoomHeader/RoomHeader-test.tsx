@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -57,6 +57,7 @@ import * as UseCall from "../../../../../../src/hooks/useCall";
 import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
+import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -99,6 +100,7 @@ describe("RoomHeader", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+        SettingsStore.reset();
     });
 
     it("renders the room header", () => {
@@ -187,9 +189,7 @@ describe("RoomHeader", () => {
 
     it("opens the notifications panel", async () => {
         const user = userEvent.setup();
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
-            if (name === "feature_notifications") return true;
-        });
+        SettingsStore.setValue("feature_notifications", null, SettingLevel.DEVICE, true);
 
         render(<RoomHeader room={room} />, getWrapper());
 
@@ -226,9 +226,48 @@ describe("RoomHeader", () => {
         expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
     });
 
+    describe("UIFeature.Voip disabled", () => {
+        beforeEach(() => {
+            SdkConfig.put({
+                setting_defaults: {
+                    [UIFeature.Voip]: false,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
+            jest.restoreAllMocks();
+        });
+
+        it("should not show call buttons in rooms smaller than 3 members", async () => {
+            mockRoomMembers(room, 2);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+        });
+
+        it("should not show call button in rooms larger than 2 members", async () => {
+            mockRoomMembers(room, 3);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+        });
+    });
+
     describe("UIFeature.Widgets enabled (default)", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature == UIFeature.Widgets);
+            SdkConfig.put({
+                setting_defaults: {
+                    [UIFeature.Widgets]: true,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
         });
 
         it("should show call buttons in a room with 2 members", () => {
@@ -248,7 +287,15 @@ describe("RoomHeader", () => {
 
     describe("UIFeature.Widgets disabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => false);
+            SdkConfig.put({
+                setting_defaults: {
+                    [UIFeature.Widgets]: false,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
         });
 
         it("should show call buttons in a room with 2 members", () => {
@@ -268,7 +315,15 @@ describe("RoomHeader", () => {
 
     describe("groups call disabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature == UIFeature.Widgets);
+            SdkConfig.put({
+                setting_defaults: {
+                    [UIFeature.Widgets]: true,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
         });
 
         it("you can't call if you're alone", () => {
@@ -333,15 +388,26 @@ describe("RoomHeader", () => {
 
     describe("group call enabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (feature) => feature === "feature_group_calls" || feature == UIFeature.Widgets,
-            );
+            SdkConfig.put({
+                features: {
+                    feature_group_calls: true,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
+            jest.restoreAllMocks();
         });
 
         it("renders only the video call element", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
+            SdkConfig.add({
+                element_call: {
+                    use_exclusively: true,
+                },
+            });
             // allow element calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
 
@@ -359,7 +425,11 @@ describe("RoomHeader", () => {
         });
 
         it("can't call if there's an ongoing (pinned) call", () => {
-            jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
+            SdkConfig.add({
+                element_call: {
+                    use_exclusively: true,
+                },
+            });
             // allow element calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
@@ -377,7 +447,14 @@ describe("RoomHeader", () => {
         it("clicking on ongoing (unpinned) call re-pins it", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature == UIFeature.Widgets);
+            SdkConfig.add({
+                setting_defaults: {
+                    [UIFeature.Widgets]: true,
+                },
+                features: {
+                    feature_group_calls: false,
+                },
+            });
             // allow calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
@@ -427,8 +504,10 @@ describe("RoomHeader", () => {
             jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(true);
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
             jest.spyOn(room, "canInvite").mockReturnValue(false);
-            const guestSpaUrlMock = jest.spyOn(SdkConfig, "get").mockImplementation((key) => {
-                return { guest_spa_url: "https://guest_spa_url.com", url: "https://spa_url.com" };
+            SdkConfig.add({
+                element_call: {
+                    guest_spa_url: "https://guest_spa_url.com",
+                },
             });
             const { container: containerNoInviteNotPublicCanUpgradeAccess } = render(
                 <RoomHeader room={room} />,
@@ -442,8 +521,10 @@ describe("RoomHeader", () => {
             jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(false);
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
             jest.spyOn(room, "canInvite").mockReturnValue(false);
-            jest.spyOn(SdkConfig, "get").mockImplementation((key) => {
-                return { guest_spa_url: "https://guest_spa_url.com", url: "https://spa_url.com" };
+            SdkConfig.add({
+                element_call: {
+                    guest_spa_url: "https://guest_spa_url.com",
+                },
             });
             const { container: containerNoInviteNotPublic } = render(<RoomHeader room={room} />, getWrapper());
             expect(queryAllByLabelText(containerNoInviteNotPublic, "There's no one here to call")).toHaveLength(2);
@@ -463,8 +544,9 @@ describe("RoomHeader", () => {
             const { container: containerInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
             expect(queryAllByLabelText(containerInvitePublic, "There's no one here to call")).toHaveLength(0);
 
+            // Clear guest_spa_url
+            SdkConfig.reset();
             // last we can allow everything but without guest_spa_url nothing will work
-            guestSpaUrlMock.mockRestore();
             const { container: containerAllAllowedButNoGuestSpaUrl } = render(<RoomHeader room={room} />, getWrapper());
             expect(
                 queryAllByLabelText(containerAllAllowedButNoGuestSpaUrl, "There's no one here to call"),
@@ -643,6 +725,10 @@ describe("RoomHeader", () => {
             ]);
         });
 
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+
         it.each([
             [ShieldUtils.E2EStatus.Verified, "Verified"],
             [ShieldUtils.E2EStatus.Warning, "Untrusted"],
@@ -655,6 +741,11 @@ describe("RoomHeader", () => {
         });
 
         it("does not show the face pile for DMs", () => {
+            SdkConfig.put({
+                features: {
+                    feature_notifications: false,
+                },
+            });
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 
             expect(asFragment()).toMatchSnapshot();
@@ -751,7 +842,7 @@ describe("RoomHeader", () => {
 
     describe("ask to join enabled", () => {
         it("does render the RoomKnocksBar", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_ask_to_join");
+            SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, true);
             jest.spyOn(room, "canInvite").mockReturnValue(true);
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
             jest.spyOn(room, "getMembersWithMembership").mockReturnValue([new RoomMember(room.roomId, "@foo")]);

@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -27,6 +27,8 @@ const OLD_AVATAR = fs.readFileSync("playwright/sample-files/riot.png");
 const NEW_AVATAR = fs.readFileSync("playwright/sample-files/element.png");
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
+
+const VIDEO_FILE = fs.readFileSync("playwright/sample-files/5secvid.webm");
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
@@ -277,7 +279,7 @@ test.describe("Timeline", () => {
         test(
             "should add inline start margin to an event line on IRC layout",
             { tag: "@screenshot" },
-            async ({ page, app, room, axe, checkA11y }) => {
+            async ({ page, app, room, axe }) => {
                 axe.disableRules("color-contrast");
 
                 await page.goto(`/#/room/${room.roomId}`);
@@ -318,7 +320,7 @@ test.describe("Timeline", () => {
                 `,
                     },
                 );
-                await checkA11y();
+                await expect(axe).toHaveNoViolations();
             },
         );
     });
@@ -743,68 +745,64 @@ test.describe("Timeline", () => {
             ).toBeVisible();
         });
 
-        test(
-            "should render url previews",
-            { tag: "@screenshot" },
-            async ({ page, app, room, axe, checkA11y, context }) => {
-                axe.disableRules("color-contrast");
+        test("should render url previews", { tag: "@screenshot" }, async ({ page, app, room, axe, context }) => {
+            axe.disableRules("color-contrast");
 
-                // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
-                // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
-                // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
-                // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
-                // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
-                await context.route(
-                    "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
-                    async (route) => {
-                        await route.fulfill({
-                            path: "playwright/sample-files/riot.png",
-                        });
-                    },
-                );
-                await page.route(
-                    "**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*",
-                    async (route) => {
-                        await route.fulfill({
-                            json: {
-                                "og:title": "Element Call",
-                                "og:description": null,
-                                "og:image:width": 48,
-                                "og:image:height": 48,
-                                "og:image": "mxc://matrix.org/2022-08-16_yaiSVSRIsNFfxDnV",
-                                "og:image:type": "image/png",
-                                "matrix:image:size": 2121,
-                            },
-                        });
-                    },
-                );
+            // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
+            // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
+            // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
+            // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
+            // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
+            await context.route(
+                "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
+                async (route) => {
+                    await route.fulfill({
+                        path: "playwright/sample-files/riot.png",
+                    });
+                },
+            );
+            await page.route(
+                "**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*",
+                async (route) => {
+                    await route.fulfill({
+                        json: {
+                            "og:title": "Element Call",
+                            "og:description": null,
+                            "og:image:width": 48,
+                            "og:image:height": 48,
+                            "og:image": "mxc://matrix.org/2022-08-16_yaiSVSRIsNFfxDnV",
+                            "og:image:type": "image/png",
+                            "matrix:image:size": 2121,
+                        },
+                    });
+                },
+            );
 
-                const requestPromises: Promise<any>[] = [
-                    page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
-                    // see context.route above for why we listen for the unauthenticated endpoint
-                    page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
-                ];
+            const requestPromises: Promise<any>[] = [
+                page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
+                // see context.route above for why we listen for the unauthenticated endpoint
+                page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
+            ];
 
-                await app.client.sendMessage(room.roomId, "https://call.element.io/");
-                await page.goto(`/#/room/${room.roomId}`);
+            await app.client.sendMessage(room.roomId, "https://call.element.io/");
+            await page.goto(`/#/room/${room.roomId}`);
 
-                await expect(page.locator(".mx_LinkPreviewWidget").getByText("Element Call")).toBeVisible();
-                await Promise.all(requestPromises);
+            await expect(page.locator(".mx_LinkPreviewWidget").getByText("Element Call")).toBeVisible();
+            await Promise.all(requestPromises);
 
-                await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
-                await app.timeline.scrollToBottom();
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot("url-preview.png", {
-                    // Exclude timestamp and read marker from snapshot
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                    css: `
+            await app.timeline.scrollToBottom();
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot("url-preview.png", {
+                // Exclude timestamp and read marker from snapshot
+                mask: [page.locator(".mx_MessageTimestamp")],
+                css: `
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
-                });
-            },
-        );
+            });
+        });
 
         test.describe("on search results panel", () => {
             test(
@@ -908,6 +906,39 @@ test.describe("Timeline", () => {
             await expect(newTile).toMatchScreenshot("edited-code-block.png", {
                 mask: [page.locator(".mx_MessageTimestamp")],
             });
+        });
+
+        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the image is now hidden.
+            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
+        });
+
+        test("should be able to hide a video", async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
+            await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+                msgtype: "m.video" as MsgType,
+                body: "bbb.webm",
+                url: upload.content_uri,
+            });
+
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MVideoBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the video is now hidden.
+            await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
+            await expect(page.locator("video")).not.toBeVisible();
         });
     });
 
@@ -1308,6 +1339,46 @@ test.describe("Timeline", () => {
                     await testImageRendering(page, app, room);
                 },
             );
+        });
+    });
+
+    test.describe("spoilers", { tag: "@screenshot" }, () => {
+        test("clicking a spoiler containing the pill de-spoilers on 1st click, then follows link on 2nd", async ({
+            page,
+            user,
+            app,
+            room,
+        }) => {
+            // View room
+            await page.goto(`/#/room/${room.roomId}`);
+
+            // Send a spoilered pill
+            await app.client.sendMessage(room.roomId, {
+                msgtype: "m.text",
+                body: user.userId,
+                format: "org.matrix.custom.html",
+                formatted_body: `<span data-mx-spoiler>https://matrix.to/#/${user.userId}</span>`,
+            });
+
+            const screenshotOptions = {
+                css: `
+                    .mx_MessageTimestamp {
+                        display: none !important;
+                    }
+                `,
+            };
+
+            const eventTile = page.locator(".mx_RoomView_body .mx_EventTile_last");
+            await expect(eventTile).toMatchScreenshot("spoiler.png", screenshotOptions);
+
+            const rightPanelButton = page.getByText("Share profile");
+            const pill = page.locator(".mx_UserPill");
+            await pill.click({ force: true }); // force to click the spoiler wrapper instead
+            await expect(eventTile).toMatchScreenshot("spoiler-uncovered.png", screenshotOptions);
+            await expect(rightPanelButton).not.toBeVisible(); // assert the right panel is not yet open
+
+            await pill.click();
+            await expect(rightPanelButton).toBeVisible(); // assert the right panel is open
         });
     });
 });

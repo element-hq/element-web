@@ -34,7 +34,7 @@ test.describe("Email Registration", async () => {
     test(
         "registers an account and lands on the home page",
         { tag: "@screenshot" },
-        async ({ page, mailpitClient, request, checkA11y }) => {
+        async ({ page, mailpitClient, request, axe }) => {
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Hide the server text as it contains the randomly allocated Homeserver port
             const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
@@ -47,7 +47,7 @@ test.describe("Email Registration", async () => {
 
             await expect(page.getByText("Check your email to continue")).toBeVisible();
             await expect(page).toMatchScreenshot("registration_check_your_email.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
 

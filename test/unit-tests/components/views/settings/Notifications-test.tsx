@@ -36,6 +36,7 @@ import {
 } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import Notifications from "../../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -301,6 +302,8 @@ describe("<Notifications />", () => {
         mockClient.getPushRules.mockClear().mockResolvedValue(pushRules);
         mockClient.addPushRule.mockClear();
         mockClient.deletePushRule.mockClear();
+        // @ts-expect-error
+        mockClient.pushProcessor = new PushProcessor(mockClient);
 
         userEvent.setup();
 

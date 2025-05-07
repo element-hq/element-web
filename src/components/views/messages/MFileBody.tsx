@@ -93,7 +93,7 @@ export function computedStyle(element: HTMLElement | null): string {
 
 interface IProps extends IBodyProps {
     /* whether or not to show the default placeholder for the file. Defaults to true. */
-    showGenericPlaceholder: boolean;
+    showGenericPlaceholder?: boolean;
 }
 
 interface IState {
@@ -105,13 +105,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
     declare public context: React.ContextType<typeof RoomContext>;
 
     public state: IState = {};
-
-    public static defaultProps = {
-        showGenericPlaceholder: true,
-    };
-
-    private iframe: React.RefObject<HTMLIFrameElement> = createRef();
-    private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
+    private iframe = createRef<HTMLIFrameElement>();
+    private dummyLink = createRef<HTMLAnchorElement>();
     private userDidClick = false;
     private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
@@ -125,7 +120,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     }
 
     private get fileName(): string {
-        return this.content.body && this.content.body.length > 0 ? this.content.body : _t("common|attachment");
+        return this.props.mediaEventHelper?.fileName || _t("common|attachment");
     }
 
     private get linkText(): string {
@@ -145,12 +140,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 textContent: text,
             },
         });
-    }
-
-    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
-        if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
-            this.props.onHeightChanged();
-        }
     }
 
     private decryptFile = async (): Promise<void> => {
@@ -191,15 +180,17 @@ export default class MFileBody extends React.Component<IProps, IState> {
         const contentUrl = this.getContentUrl();
         const contentFileSize = this.content.info ? this.content.info.size : null;
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
+        // defaultProps breaks types on IBodyProps, so instead define the default here.
+        const showGenericPlaceholder = this.props.showGenericPlaceholder ?? true;
 
         let showDownloadLink =
-            !this.props.showGenericPlaceholder ||
+            !showGenericPlaceholder ||
             (this.context.timelineRenderingType !== TimelineRenderingType.Room &&
                 this.context.timelineRenderingType !== TimelineRenderingType.Search &&
                 this.context.timelineRenderingType !== TimelineRenderingType.Pinned);
 
         let placeholder: React.ReactNode = null;
-        if (this.props.showGenericPlaceholder) {
+        if (showGenericPlaceholder) {
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
                     <span className="mx_MFileBody_info_icon" />

@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import { useFeatureEnabled } from "../useSettings";
+import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -33,7 +33,6 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { useGuestAccessInformation } from "./useGuestAccessInformation";
-import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
@@ -102,6 +101,8 @@ export const useRoomCall = (
 } => {
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
+    const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
+    const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
@@ -285,8 +286,8 @@ export const useRoomCall = (
     // We hide the voice call button if it'd have the same effect as the video call button
     let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
     let hideVideoCallButton = false;
-    // We hide both buttons if they require widgets but widgets are disabled.
-    if (memberCount > 2 && !SettingsStore.getValue(UIFeature.Widgets)) {
+    // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
+    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }

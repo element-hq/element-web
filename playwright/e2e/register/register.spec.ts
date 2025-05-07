@@ -33,12 +33,12 @@ test.describe("Registration", () => {
     test(
         "registers an account and lands on the home screen",
         { tag: "@screenshot" },
-        async ({ homeserver, page, checkA11y, crypto }) => {
+        async ({ homeserver, page, axe, crypto }) => {
             await page.getByRole("button", { name: "Edit", exact: true }).click();
             await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
 
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("server-picker.png");
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
             await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -52,7 +52,7 @@ test.describe("Registration", () => {
                 includeDialogBackground: true,
             };
             await expect(page).toMatchScreenshot("registration.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username", exact: true }).fill("alice");
             await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
@@ -62,12 +62,12 @@ test.describe("Registration", () => {
             const dialog = page.getByRole("dialog");
             await expect(dialog).toBeVisible();
             await expect(page).toMatchScreenshot("email-prompt.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             await dialog.getByRole("button", { name: "Continue", exact: true }).click();
 
             await expect(page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy")).toBeVisible();
             await expect(page).toMatchScreenshot("terms-prompt.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             const termsPolicy = page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy");
             await termsPolicy.getByRole("checkbox").click(); // Click the checkbox before terms of service anchor link

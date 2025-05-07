@@ -37,6 +37,10 @@ describe("NotificatinSettingsTab", () => {
         NotificationSettingsTab.contextType = React.createContext<MatrixClient>(cli);
     });
 
+    afterEach(() => {
+        SettingsStore.reset();
+    });
+
     it("should prevent »Settings« link click from bubbling up to radio buttons", async () => {
         const tab = renderTab();
 

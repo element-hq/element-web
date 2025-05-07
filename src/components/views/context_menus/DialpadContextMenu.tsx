@@ -6,8 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
-import { createRef } from "react";
+import React, { createRef } from "react";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -24,7 +23,7 @@ interface IState {
 }
 
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
-    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+    private numberEntryFieldRef = createRef<Field>();
 
     public constructor(props: IProps) {
         super(props);

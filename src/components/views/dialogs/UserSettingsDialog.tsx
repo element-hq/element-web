@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Toast } from "@vector-im/compound-web";
-import React, { useState } from "react";
+import React, { type JSX, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
@@ -45,12 +45,16 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
-import { EncryptionUserSettingsTab } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
-    showResetIdentity?: boolean;
+    /*
+     * The initial state of the Encryption tab.
+     * If undefined, the default state is used ("loading").
+     */
+    initialEncryptionState?: State;
     sdkContext: SdkContextClass;
     onFinished(): void;
 }
@@ -92,9 +96,9 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 export default function UserSettingsDialog(props: IProps): JSX.Element {
     const voipEnabled = useSettingValue(UIFeature.Voip);
     const mjolnirEnabled = useSettingValue("feature_mjolnir");
-    // store these props in state as changing tabs back and forth should clear it
+    // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
-    const [showResetIdentity, setShowResetIdentity] = useState(props.showResetIdentity);
+    const [initialEncryptionState, setInitialEncryptionState] = useState(props.initialEncryptionState);
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -190,7 +194,8 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Encryption,
                 _td("settings|encryption|title"),
                 <KeyIcon />,
-                <EncryptionUserSettingsTab initialState={showResetIdentity ? "reset_identity_forgot" : undefined} />,
+                <EncryptionUserSettingsTab initialState={initialEncryptionState} />,
+                "UserSettingsEncryption",
             ),
         );
 
@@ -228,7 +233,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         _setActiveTabId(tabId);
         // Clear these so switching away from the tab and back to it will not show the QR code again
         setShowMsc4108QrCode(false);
-        setShowResetIdentity(false);
+        setInitialEncryptionState(undefined);
     };
 
     const [activeToast, toastRack] = useActiveToast();

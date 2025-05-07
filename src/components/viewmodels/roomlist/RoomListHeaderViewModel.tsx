@@ -8,8 +8,6 @@
 import { useCallback } from "react";
 import { JoinRule, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
 
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -32,6 +30,7 @@ import {
 } from "../../../utils/space";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { createRoom, hasCreateRoomRights } from "./utils";
 
 /**
  * Hook to get the active space and its title.
@@ -126,11 +125,12 @@ export interface RoomListHeaderViewState {
 export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const matrixClient = useMatrixClientContext();
     const { activeSpace, title } = useSpace();
+    const isSpaceRoom = Boolean(activeSpace);
 
-    const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
-    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
+    const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
+    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms") && canCreateRoom;
     const displayComposeMenu = canCreateRoom;
-    const displaySpaceMenu = Boolean(activeSpace);
+    const displaySpaceMenu = isSpaceRoom;
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
     );
@@ -143,13 +143,9 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
     }, []);
 
-    const createRoom = useCallback(
+    const createRoomMemoized = useCallback(
         (e: Event) => {
-            if (activeSpace) {
-                showCreateNewRoom(activeSpace);
-            } else {
-                defaultDispatcher.fire(Action.CreateRoom);
-            }
+            createRoom(activeSpace);
             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
         },
         [activeSpace],
@@ -205,7 +201,7 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         canInviteInSpace,
         canAccessSpaceSettings,
         createChatRoom,
-        createRoom,
+        createRoom: createRoomMemoized,
         createVideoRoom,
         openSpaceHome,
         inviteInSpace,

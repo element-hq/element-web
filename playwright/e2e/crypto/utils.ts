@@ -221,6 +221,9 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
 
         const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
+        // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
+        // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
+        // for a recovery key straight away. We click the button if it's there so this works in both cases.
         if (await useSecurityKey.isVisible()) {
             await useSecurityKey.click();
         }
@@ -289,17 +292,28 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 }
 
 /**
- * Open the security settings and enable secure key backup.
- *
- * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
+ * Open the encryption settings and enable key storage and recovery
+ * Assumes that the current device has been verified
  *
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    await app.settings.openUserSettings("Security & Privacy");
-    await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    return await completeCreateSecretStorageDialog(app.page);
+    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    if (!(await keyStorageToggle.isChecked())) {
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+    }
+
+    await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+
+    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+    await encryptionTab.getByRole("textbox").fill(recoveryKey);
+    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+    await app.settings.closeDialog();
+    return recoveryKey;
 }
 
 /**
