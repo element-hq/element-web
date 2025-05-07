@@ -24,6 +24,7 @@ describe("ReleaseAnnouncementStore", () => {
     beforeEach(() => {
         // Default settings
         settings = {
+            feature_release_announcement: true,
             releaseAnnouncementData: {},
         };
         const watchCallbacks: Array<CallbackFn> = [];
@@ -51,6 +52,13 @@ describe("ReleaseAnnouncementStore", () => {
     });
 
     /**
+     * Disables the release announcement feature.
+     */
+    function disableReleaseAnnouncement() {
+        settings["feature_release_announcement"] = false;
+    }
+
+    /**
      * Listens to the next release announcement change event.
      */
     function listenReleaseAnnouncementChanged() {
@@ -61,6 +69,20 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should be a singleton", () => {
         expect(ReleaseAnnouncementStore.instance).toBeDefined();
+    });
+
+    it("should return null when the release announcement is disabled", async () => {
+        disableReleaseAnnouncement();
+
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
+
+        // Wait for the next release announcement change event
+        const promise = listenReleaseAnnouncementChanged();
+        // Call the next release announcement
+        // because the release announcement is disabled, the next release announcement should be null
+        await releaseAnnouncementStore.nextReleaseAnnouncement();
+        expect(await promise).toBeNull();
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
     });
 
     // We only have a single release announcement currently
