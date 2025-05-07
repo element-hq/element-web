@@ -88,7 +88,6 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(page.getByText("Welcome")).toBeVisible();
             await page.goto("about:blank");
 
-            // @ts-expect-error
             const result = await mas.manage("kill-sessions", userId);
             expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
 
