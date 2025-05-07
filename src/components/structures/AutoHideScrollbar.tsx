@@ -15,6 +15,7 @@ type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
 type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<Omit<JSX.IntrinsicElements[T], "ref">>;
 
 // trigger
+// trigger 2
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElementProps<T>, "onScroll"> & {
     element: T;
