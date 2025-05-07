@@ -14,7 +14,6 @@ interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
-    title?: string;
     presenceJsx?: JSX.Element;
     userLabel?: React.ReactNode;
     iconJsx?: JSX.Element;
@@ -34,7 +33,6 @@ export function MemberTileView(props: Props): JSX.Element {
                 className={classNames("mx_MemberTileView", {
                     mx_MemberTileView_hover: props.focused,
                 })}
-                title={props.title}
                 onClick={props.onClick}
                 tabIndex={-1}
             >
