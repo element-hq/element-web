@@ -43,6 +43,9 @@ export default class WebPlatform extends BasePlatform {
 
         // Register the service worker in the background
         this.registerServiceWorkerPromise = this.registerServiceWorker();
+        this.registerServiceWorkerPromise.catch((e) => {
+            console.error("Error registering/updating service worker:", e);
+        });
     }
 
     protected onAction(payload: ActionPayload): void {
@@ -57,20 +60,14 @@ export default class WebPlatform extends BasePlatform {
     }
 
     private async registerServiceWorker(): Promise<void> {
-        try {
-            // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-            const registration = await navigator.serviceWorker.register("sw.js");
-            if (!registration) {
-                throw new Error("Service worker registration failed");
-            }
-
-            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
-            await registration.update();
-        } catch (e) {
-            console.error("Error registering/updating service worker:", e);
-
-            throw e; // rethrow error
+        // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+        const registration = await navigator.serviceWorker.register("sw.js");
+        if (!registration) {
+            throw new Error("Service worker registration failed");
         }
+
+        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage);
+        await registration.update();
     }
 
     private handleServiceWorkerRegistrationError = (): void => {

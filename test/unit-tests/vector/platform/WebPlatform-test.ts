@@ -28,7 +28,12 @@ describe("WebPlatform", () => {
 
     it("registers service worker", () => {
         // @ts-ignore - mocking readonly object
-        navigator.serviceWorker = { register: jest.fn() };
+        navigator.serviceWorker = {
+            register: jest.fn().mockResolvedValue({
+                update: jest.fn(),
+            }),
+            addEventListener: jest.fn(),
+        };
         new WebPlatform();
         expect(navigator.serviceWorker.register).toHaveBeenCalled();
     });
@@ -146,24 +151,20 @@ describe("WebPlatform", () => {
         });
 
         describe("pollForUpdate()", () => {
-            it(
-                "should return not available and call showNoUpdate when current version " +
-                    "matches most recent version",
-                async () => {
-                    // @ts-ignore
-                    WebPlatform.VERSION = prodVersion;
-                    fetchMock.getOnce("/version", prodVersion);
-                    const platform = new WebPlatform();
+            it("should return not available and call showNoUpdate when current version matches most recent version", async () => {
+                // @ts-ignore
+                WebPlatform.VERSION = prodVersion;
+                fetchMock.getOnce("/version", prodVersion);
+                const platform = new WebPlatform();
 
-                    const showUpdate = jest.fn();
-                    const showNoUpdate = jest.fn();
-                    const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
+                const showUpdate = jest.fn();
+                const showNoUpdate = jest.fn();
+                const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
-                    expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
-                    expect(showUpdate).not.toHaveBeenCalled();
-                    expect(showNoUpdate).toHaveBeenCalled();
-                },
-            );
+                expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
+                expect(showUpdate).not.toHaveBeenCalled();
+                expect(showNoUpdate).toHaveBeenCalled();
+            });
 
             it("should strip v prefix from versions before comparing", async () => {
                 // @ts-ignore
