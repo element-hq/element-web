@@ -226,6 +226,37 @@ describe("RoomHeader", () => {
         expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
     });
 
+    describe("UIFeature.Voip disabled", () => {
+        beforeEach(() => {
+            SdkConfig.put({
+                setting_defaults: {
+                    [UIFeature.Voip]: false,
+                },
+            });
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
+            jest.restoreAllMocks();
+        });
+
+        it("should not show call buttons in rooms smaller than 3 members", async () => {
+            mockRoomMembers(room, 2);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+        });
+
+        it("should not show call button in rooms larger than 2 members", async () => {
+            mockRoomMembers(room, 3);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+        });
+    });
+
     describe("UIFeature.Widgets enabled (default)", () => {
         beforeEach(() => {
             SdkConfig.put({
