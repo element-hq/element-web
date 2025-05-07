@@ -2457,6 +2457,10 @@
         "recent_changes_heading": "Recent changes that have not yet been received",
         "title": "Server isn't responding"
     },
+    "service_worker_error": {
+        "description": "%(brand)s requires a service worker for loading authenticated media from Matrix content repositories. This is not supported by your browser so you may experience media failing to load.",
+        "title": "Failed to load service worker"
+    },
     "seshat": {
         "error_initialising": "Message search initialisation failed, check <a>your settings</a> for more information",
         "reset_button": "Reset event store",

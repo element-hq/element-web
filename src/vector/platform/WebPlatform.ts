@@ -18,6 +18,9 @@ import { Action } from "../../dispatcher/actions";
 import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
+import ToastStore from "../../stores/ToastStore.ts";
+import GenericToast from "../../components/views/toasts/GenericToast.tsx";
+import SdkConfig from "../../SdkConfig.ts";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -37,24 +40,38 @@ export default class WebPlatform extends BasePlatform {
         super();
 
         // Register the service worker in the background
-        this.tryRegisterServiceWorker().catch((e) => console.error("Error registering/updating service worker:", e));
+        void this.registerServiceWorker();
     }
 
-    private async tryRegisterServiceWorker(): Promise<void> {
-        if (!("serviceWorker" in navigator)) {
-            return; // not available on this platform - don't try to register the service worker
-        }
+    private async registerServiceWorker(): Promise<void> {
+        try {
+            // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+            const registration = await navigator.serviceWorker.register("sw.js");
+            if (!registration) {
+                throw new Error("Service worker registration failed");
+            }
 
-        // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-        const registration = await navigator.serviceWorker.register("sw.js");
-        if (!registration) {
-            // Registration didn't work for some reason - assume failed and ignore.
-            // This typically happens in Jest.
-            return;
-        }
+            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+            await registration.update();
+        } catch (e) {
+            console.error("Error registering/updating service worker:", e);
 
-        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
-        await registration.update();
+            const key = "service_worker_error";
+            const brand = SdkConfig.get().brand;
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key,
+                title: _t("service_worker_error|title"),
+                props: {
+                    description: _t("service_worker_error|description", { brand }),
+                    primaryLabel: _t("action|ok"),
+                    onPrimaryClick: () => {
+                        ToastStore.sharedInstance().dismissToast(key);
+                    },
+                },
+                component: GenericToast,
+                priority: 95,
+            });
+        }
     }
 
     private onServiceWorkerPostMessage(event: MessageEvent): void {
