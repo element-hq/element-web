@@ -1,0 +1,27 @@
+name: Close stale issues & PRs
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "30 1 * * *"
+permissions: {}
+jobs:
+    close:
+        runs-on: ubuntu-24.04
+        permissions:
+            actions: write
+            issues: write
+            pull-requests: write
+        steps:
+            - uses: actions/stale@v9
+              with:
+                  operations-per-run: 100
+                  # Flaky test issue closing
+                  only-issue-labels: "Z-Flaky-Test"
+                  days-before-issue-stale: 14
+                  days-before-issue-close: 0
+                  close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."
+                  exempt-issue-labels: "Z-Flaky-Test-Disabled"
+                  # Stale PR closing
+                  days-before-pr-stale: 180
+                  days-before-pr-close: 0
+                  close-pr-message: "This PR has been automatically closed because it has been stale for 180 days. If you wish to continue working on this PR, please ping a maintainer to reopen it."

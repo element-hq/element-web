@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { JSX, useMemo, useRef, useState } from "react";
+import React, { type JSX, useMemo, useRef, useState } from "react";
 import { Room, RoomMember, MatrixEvent, User } from "matrix-js-sdk/src/matrix";
 import { Checkbox, Button } from "@vector-im/compound-web";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
@@ -19,7 +19,7 @@ import { RoomPermalinkCreator, makeUserPermalink } from "../../../utils/permalin
 import { copyPlaintext } from "../../../utils/strings";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
-import { XOR } from "../../../@types/common";
+import { type XOR } from "../../../@types/common";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 
 /* eslint-disable @typescript-eslint/no-require-imports */
@@ -103,7 +103,7 @@ export function ShareDialog({ target, customTitle, onFinished, permalinkCreator 
     const showQrCode = useSettingValue(UIFeature.ShareQRCode);
     const showSocials = useSettingValue(UIFeature.ShareSocial);
 
-    const timeoutIdRef = useRef<number>();
+    const timeoutIdRef = useRef<number>(undefined);
     const [isCopied, setIsCopied] = useState(false);
 
     const [linkToSpecificEvent, setLinkToSpecificEvent] = useState(target instanceof MatrixEvent);

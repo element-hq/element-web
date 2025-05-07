@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
-import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type KeyboardEvent, type RefObject, type SyntheticEvent, useCallback, useRef, useState } from "react";
+import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
@@ -49,8 +49,8 @@ export function usePlainTextListeners(
     eventRelation?: IEventRelation,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
-    ref: RefObject<HTMLDivElement>;
-    autocompleteRef: React.RefObject<Autocomplete>;
+    ref: RefObject<HTMLDivElement | null>;
+    autocompleteRef: RefObject<Autocomplete | null>;
     content?: string;
     onBeforeInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
@@ -66,8 +66,8 @@ export function usePlainTextListeners(
     const roomContext = useScopedRoomContext("room", "timelineRenderingType", "replyToEvent");
     const mxClient = useMatrixClientContext();
 
-    const ref = useRef<HTMLDivElement | null>(null);
-    const autocompleteRef = useRef<Autocomplete | null>(null);
+    const ref = useRef<HTMLDivElement>(null);
+    const autocompleteRef = useRef<Autocomplete>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
 
     const send = useCallback(() => {

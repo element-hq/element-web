@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AccountDataEvents, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import BasePlatform from "../../BasePlatform";
-import { IConfigOptions } from "../../IConfigOptions";
-import { DeepReadonly } from "../../@types/common";
-import { DeviceClientInformation } from "./types";
+import type BasePlatform from "../../BasePlatform";
+import { type IConfigOptions } from "../../IConfigOptions";
+import { type DeepReadonly } from "../../@types/common";
+import { type DeviceClientInformation } from "./types";
 
 export type { DeviceClientInformation };
 

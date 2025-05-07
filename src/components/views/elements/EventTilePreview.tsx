@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classnames from "classnames";
-import { MatrixEvent, RoomMember, MsgType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type RoomMember, MsgType } from "matrix-js-sdk/src/matrix";
 
 import * as Avatar from "../../../Avatar";
 import EventTile from "../rooms/EventTile";

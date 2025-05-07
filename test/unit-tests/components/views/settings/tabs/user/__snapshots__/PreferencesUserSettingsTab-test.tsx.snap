@@ -827,33 +827,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   />
                 </div>
               </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_NIiWzqsApP1c"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Show previews/thumbnails for images
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Show previews/thumbnails for images"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_NIiWzqsApP1c"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <div
@@ -876,7 +849,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_q1SIAPqLMVXh"
+                  for="mx_SettingsFlag_NIiWzqsApP1c"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -888,6 +861,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show typing notifications"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_NIiWzqsApP1c"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_q1SIAPqLMVXh"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show a placeholder for removed messages
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show a placeholder for removed messages"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_q1SIAPqLMVXh"
                   role="switch"
@@ -908,13 +908,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show a placeholder for removed messages
+                    Show read receipts sent by other users
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show a placeholder for removed messages"
+                  aria-label="Show read receipts sent by other users"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_dXFDGgBsKXay"
                   role="switch"
@@ -935,13 +935,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show read receipts sent by other users
+                    Show join/leave messages (invites/removes/bans unaffected)
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show read receipts sent by other users"
+                  aria-label="Show join/leave messages (invites/removes/bans unaffected)"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_7Az0xw4Bs4Tt"
                   role="switch"
@@ -962,13 +962,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show join/leave messages (invites/removes/bans unaffected)
+                    Show display name changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show join/leave messages (invites/removes/bans unaffected)"
+                  aria-label="Show display name changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_8jmzPIlPoBCv"
                   role="switch"
@@ -989,13 +989,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show display name changes
+                    Show chat effects (animations when receiving e.g. confetti)
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show display name changes"
+                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_enFRaTjdsFou"
                   role="switch"
@@ -1016,13 +1016,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show chat effects (animations when receiving e.g. confetti)
+                    Show profile picture changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
+                  aria-label="Show profile picture changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_bfwnd5rz4XNX"
                   role="switch"
@@ -1043,13 +1043,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show profile picture changes
+                    Show avatars in user, room and event mentions
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show profile picture changes"
+                  aria-label="Show avatars in user, room and event mentions"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_gs5uWEzYzZrS"
                   role="switch"
@@ -1070,13 +1070,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show avatars in user, room and event mentions
+                    Enable big emoji in chat
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show avatars in user, room and event mentions"
+                  aria-label="Enable big emoji in chat"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_qWg7OgID1yRR"
                   role="switch"
@@ -1097,13 +1097,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Enable big emoji in chat
+                    Jump to the bottom of the timeline when you send a message
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Enable big emoji in chat"
+                  aria-label="Jump to the bottom of the timeline when you send a message"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_pOPewl7rtMbV"
                   role="switch"
@@ -1124,14 +1124,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Jump to the bottom of the timeline when you send a message
+                    Show current profile picture and name for users in message history
                   </span>
                 </label>
                 <div
-                  aria-checked="true"
+                  aria-checked="false"
                   aria-disabled="true"
-                  aria-label="Jump to the bottom of the timeline when you send a message"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  aria-label="Show current profile picture and name for users in message history"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
                   id="mx_SettingsFlag_cmt3PZSyNp3v"
                   role="switch"
                   tabindex="0"
@@ -1141,34 +1141,169 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   />
                 </div>
               </div>
-              <div
-                class="mx_SettingsFlag"
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_dJJz3lHUv9XX"
+                Moderation and safety
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+            >
+              <form
+                class="_root_19upo_16 mx_MediaPreviewAccountSetting_Form"
+              >
+                <div
+                  class="mx_SettingsFlag mx_MediaPreviewAccountSetting_ToggleSwitch"
                 >
                   <span
-                    class="mx_SettingsFlag_labelText"
+                    class="mx_SettingsFlag_label"
                   >
-                    Show current profile picture and name for users in message history
+                    <div
+                      id="mx_LabelledToggleSwitch_«r8»"
+                    >
+                      Hide avatars of room and inviter
+                    </div>
                   </span>
-                </label>
-                <div
-                  aria-checked="false"
-                  aria-disabled="true"
-                  aria-label="Show current profile picture and name for users in message history"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_dJJz3lHUv9XX"
-                  role="switch"
-                  tabindex="0"
-                >
                   <div
-                    class="mx_ToggleSwitch_ball"
-                  />
+                    aria-checked="false"
+                    aria-disabled="false"
+                    aria-labelledby="mx_LabelledToggleSwitch_«r8»"
+                    class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+                    role="switch"
+                    tabindex="0"
+                  >
+                    <div
+                      class="mx_ToggleSwitch_ball"
+                    />
+                  </div>
                 </div>
-              </div>
+                <div
+                  aria-label="Show media in timeline"
+                  class="_field_19upo_26"
+                  id="mx_media_previews"
+                  role="radiogroup"
+                >
+                  <label
+                    class="_label_19upo_59"
+                    for="radix-«r9»"
+                  >
+                    Show media in timeline
+                  </label>
+                  <span
+                    class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
+                    id="radix-«ra»"
+                  >
+                    A hidden media can always be shown by tapping on it
+                  </span>
+                  <div
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                  >
+                    <div
+                      class="_inline-field-control_19upo_44"
+                    >
+                      <div
+                        class="_container_1e0uz_10"
+                      >
+                        <input
+                          class="_input_1e0uz_18"
+                          id="mx_media_previews_off"
+                          type="radio"
+                        />
+                        <div
+                          class="_ui_1e0uz_19"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="_inline-field-body_19upo_38"
+                    >
+                      <label
+                        class="_label_19upo_59"
+                        for="mx_media_previews_off"
+                      >
+                        Always hide
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                  >
+                    <div
+                      class="_inline-field-control_19upo_44"
+                    >
+                      <div
+                        class="_container_1e0uz_10"
+                      >
+                        <input
+                          class="_input_1e0uz_18"
+                          id="mx_media_previews_private"
+                          type="radio"
+                        />
+                        <div
+                          class="_ui_1e0uz_19"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="_inline-field-body_19upo_38"
+                    >
+                      <label
+                        class="_label_19upo_59"
+                        for="mx_media_previews_private"
+                      >
+                        In private rooms
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                  >
+                    <div
+                      class="_inline-field-control_19upo_44"
+                    >
+                      <div
+                        class="_container_1e0uz_10"
+                      >
+                        <input
+                          checked=""
+                          class="_input_1e0uz_18"
+                          id="mx_media_previews_on"
+                          type="radio"
+                        />
+                        <div
+                          class="_ui_1e0uz_19"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="_inline-field-body_19upo_38"
+                    >
+                      <label
+                        class="_label_19upo_59"
+                        for="mx_media_previews_on"
+                      >
+                        Always show
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
+            <div
+              class="_separator_7ckbw_8"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
           </div>
           <div
             class="mx_SettingsSubsection"
@@ -1190,7 +1325,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_SBSSOZDRlzlA"
+                  for="mx_SettingsFlag_dJJz3lHUv9XX"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1203,7 +1338,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show NSFW content"
                   class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_SBSSOZDRlzlA"
+                  id="mx_SettingsFlag_dJJz3lHUv9XX"
                   role="switch"
                   tabindex="0"
                 >
@@ -1234,7 +1369,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_FLEpLCb0jpp6"
+                  for="mx_SettingsFlag_SBSSOZDRlzlA"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1247,7 +1382,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Prompt before sending invites to potentially invalid matrix IDs"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_FLEpLCb0jpp6"
+                  id="mx_SettingsFlag_SBSSOZDRlzlA"
                   role="switch"
                   tabindex="0"
                 >

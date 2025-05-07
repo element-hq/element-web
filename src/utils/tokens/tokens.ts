@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import decryptAESSecretStorageItem from "matrix-js-sdk/src/utils/decryptAESSecretStorageItem";
 import encryptAESSecretStorageItem from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
+import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 
 import * as StorageAccess from "../StorageAccess";
 

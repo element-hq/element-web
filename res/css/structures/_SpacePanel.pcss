@@ -352,9 +352,9 @@ Please see LICENSE files in the repository root for full details.
             mask-image: linear-gradient(
                 to top,
                 transparent,
-                rgba(255, 255, 255, 30%) 4px,
-                rgba(255, 255, 255, 55%) 8px,
-                rgba(255, 255, 255, 75%) 12px,
+                rgb(255, 255, 255, 30%) 4px,
+                rgb(255, 255, 255, 55%) 8px,
+                rgb(255, 255, 255, 75%) 12px,
                 black 16px
             );
         }
@@ -365,13 +365,14 @@ Please see LICENSE files in the repository root for full details.
                Note the top fade is much smaller because the spaces start close to the top,
                so otherwise a large gradient suddenly appears when you scroll down.
              */
-            mask-image: linear-gradient(to bottom, transparent, black 16px),
+            mask-image:
+                linear-gradient(to bottom, transparent, black 16px),
                 linear-gradient(
                     to top,
                     transparent,
-                    rgba(255, 255, 255, 30%) 4px,
-                    rgba(255, 255, 255, 55%) 8px,
-                    rgba(255, 255, 255, 75%) 12px,
+                    rgb(255, 255, 255, 30%) 4px,
+                    rgb(255, 255, 255, 55%) 8px,
+                    rgb(255, 255, 255, 75%) 12px,
                     black 16px
                 );
             mask-position:

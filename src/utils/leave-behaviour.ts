@@ -7,21 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { sleep } from "matrix-js-sdk/src/utils";
-import React, { ReactNode } from "react";
-import { EventStatus, MatrixEventEvent, Room, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { EventStatus, MatrixEventEvent, type Room, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
-import Modal, { IHandle } from "../Modal";
+import Modal, { type IHandle } from "../Modal";
 import Spinner from "../components/views/elements/Spinner";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { isMetaSpace } from "../stores/spaces";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import dis from "../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
-import { ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePayload";
+import { type ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePayload";
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
-import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
 import SettingsStore from "../settings/SettingsStore";
@@ -171,20 +171,20 @@ export async function leaveRoomBehaviour(
 }
 
 export const leaveSpace = (space: Room): void => {
-    Modal.createDialog(
+    const { finished } = Modal.createDialog(
         LeaveSpaceDialog,
         {
             space,
-            onFinished: async (leave: boolean, rooms: Room[]): Promise<void> => {
-                if (!leave) return;
-                await bulkSpaceBehaviour(space, rooms, (room) => leaveRoomBehaviour(space.client, room.roomId));
-
-                dis.dispatch<AfterLeaveRoomPayload>({
-                    action: Action.AfterLeaveRoom,
-                    room_id: space.roomId,
-                });
-            },
         },
         "mx_LeaveSpaceDialog_wrapper",
     );
+    finished.then(async ([leave, rooms]) => {
+        if (!leave) return;
+        await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(space.client, room.roomId));
+
+        dis.dispatch<AfterLeaveRoomPayload>({
+            action: Action.AfterLeaveRoom,
+            room_id: space.roomId,
+        });
+    });
 };

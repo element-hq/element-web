@@ -8,9 +8,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useState, forwardRef } from "react";
+import React, { createRef, useState, type Ref, type FC } from "react";
 import classNames from "classnames";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import LegacyCallContextMenu from "../../context_menus/LegacyCallContextMenu";
 import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
@@ -24,7 +24,10 @@ import {
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
-import AccessibleButton, { ButtonEvent, ButtonProps as AccessibleButtonProps } from "../../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../../elements/AccessibleButton";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
@@ -38,31 +41,40 @@ type ButtonProps = Omit<AccessibleButtonProps<"div">, "title" | "element"> & {
     offLabel?: string;
     forceHide?: boolean;
     onHover?: (hovering: boolean) => void;
+    ref?: Ref<HTMLElement>;
 };
 
-const LegacyCallViewToggleButton = forwardRef<HTMLElement, ButtonProps>(
-    ({ children, state: isOn, className, onLabel, offLabel, forceHide, onHover, ...props }, ref) => {
-        const classes = classNames("mx_LegacyCallViewButtons_button", className, {
-            mx_LegacyCallViewButtons_button_on: isOn,
-            mx_LegacyCallViewButtons_button_off: !isOn,
-        });
+const LegacyCallViewToggleButton: FC<ButtonProps> = ({
+    children,
+    state: isOn,
+    className,
+    onLabel,
+    offLabel,
+    forceHide,
+    onHover,
+    ref,
+    ...props
+}) => {
+    const classes = classNames("mx_LegacyCallViewButtons_button", className, {
+        mx_LegacyCallViewButtons_button_on: isOn,
+        mx_LegacyCallViewButtons_button_off: !isOn,
+    });
 
-        const title = forceHide ? undefined : isOn ? onLabel : offLabel;
+    const title = forceHide ? undefined : isOn ? onLabel : offLabel;
 
-        return (
-            <AccessibleButton
-                ref={ref}
-                className={classes}
-                title={title}
-                placement="top"
-                onTooltipOpenChange={onHover}
-                {...props}
-            >
-                {children}
-            </AccessibleButton>
-        );
-    },
-);
+    return (
+        <AccessibleButton
+            ref={ref}
+            className={classes}
+            title={title}
+            placement="top"
+            onTooltipOpenChange={onHover}
+            {...props}
+        >
+            {children}
+        </AccessibleButton>
+    );
+};
 
 interface IDropdownButtonProps extends ButtonProps {
     deviceKinds: MediaDeviceKindEnum[];

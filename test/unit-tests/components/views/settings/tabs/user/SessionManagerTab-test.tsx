@@ -11,29 +11,29 @@ import {
     act,
     fireEvent,
     render,
-    RenderResult,
+    type RenderResult,
     screen,
     waitFor,
     waitForElementToBeRemoved,
     within,
 } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { defer, sleep } from "matrix-js-sdk/src/utils";
 import {
     ClientEvent,
     Device,
-    IMyDevice,
+    type IMyDevice,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
-    IAuthData,
+    type IAuthData,
     GET_LOGIN_TOKEN_CAPABILITY,
     MatrixError,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import {
@@ -41,6 +41,7 @@ import {
     flushPromises,
     getMockClientWithEventEmitter,
     mkPusher,
+    mockClientMethodsCrypto,
     mockClientMethodsServer,
     mockClientMethodsUser,
     mockPlatformPeg,
@@ -50,13 +51,13 @@ import Modal from "../../../../../../../src/Modal";
 import LogoutDialog from "../../../../../../../src/components/views/dialogs/LogoutDialog";
 import {
     DeviceSecurityVariation,
-    ExtendedDevice,
+    type ExtendedDevice,
 } from "../../../../../../../src/components/views/settings/devices/types";
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
-import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
+import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
@@ -124,10 +125,11 @@ describe("<SessionManagerTab />", () => {
 
     const mockCrypto = mocked({
         getDeviceVerificationStatus: jest.fn(),
-        getUserDeviceInfo: jest.fn(),
+        getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
         requestDeviceVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
         supportsSecretsForQrLogin: jest.fn().mockReturnValue(false),
         isCrossSigningReady: jest.fn().mockReturnValue(true),
+        getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
@@ -203,6 +205,7 @@ describe("<SessionManagerTab />", () => {
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(aliceId),
             ...mockClientMethodsServer(),
+            ...mockClientMethodsCrypto(),
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             getDevices: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
@@ -263,6 +266,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     afterAll(() => {
+        // @ts-expect-error
         window.location = realWindowLocation;
     });
 
@@ -627,9 +631,10 @@ describe("<SessionManagerTab />", () => {
             // click verify button from current session section
             fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
 
-            const { onFinished: modalOnFinished } = modalSpy.mock.calls[0][1] as any;
-            // simulate modal completing process
-            await modalOnFinished();
+            // close the modal
+            const { close: closeModal } = modalSpy.mock.results[0].value;
+            closeModal();
+            await flushPromises();
 
             // cancelled in case it was a failure exit from modal
             expect(mockVerificationRequest.cancel).toHaveBeenCalled();
@@ -894,7 +899,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("deletes a device when interactive auth is not required", async () => {
-                const deferredDeleteMultipleDevices = Promise.withResolvers<{}>();
+                const deferredDeleteMultipleDevices = defer<{}>();
                 mockClient.deleteMultipleDevices.mockReturnValue(deferredDeleteMultipleDevices.promise);
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
@@ -1103,9 +1108,10 @@ describe("<SessionManagerTab />", () => {
                 // get a handle for resolving the delete call
                 // because promise flushing after the confirm modal is resolving this too
                 // and we want to test the loading state here
-                const resolveDeleteRequest = Promise.withResolvers<IAuthData>();
-                mockClient.deleteMultipleDevices.mockImplementation(() => {
-                    return resolveDeleteRequest.promise;
+                const resolveDeleteRequest = defer<IAuthData>();
+                mockClient.deleteMultipleDevices.mockImplementation(async () => {
+                    await resolveDeleteRequest.promise;
+                    return {};
                 });
 
                 const { getByTestId } = render(getComponent());

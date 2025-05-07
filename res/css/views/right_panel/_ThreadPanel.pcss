@@ -15,41 +15,48 @@ Please see LICENSE files in the repository root for full details.
         flex: unset;
     }
 
-    .mx_BaseCard_header {
-        .mx_BaseCard_header_title {
-            .mx_AccessibleButton {
-                font-size: 12px;
-                color: $secondary-content;
+    .mx_ThreadPanelHeader {
+        height: 60px;
+        display: flex;
+        box-sizing: border-box;
+        padding: 16px;
+        align-items: center;
+        border-bottom: 1px solid var(--cpd-color-gray-400);
+
+        .mx_AccessibleButton {
+            font-size: 12px;
+            color: $secondary-content;
+        }
+
+        .mx_ThreadPanel_vertical_separator {
+            height: 28px;
+            margin-left: var(--cpd-space-3x);
+            margin-right: var(--cpd-space-2x);
+            border-left: 1px solid var(--cpd-color-gray-400);
+        }
+
+        .mx_ThreadPanel_dropdown {
+            font: var(--cpd-font-body-sm-regular);
+            padding: 3px $spacing-4 3px $spacing-8;
+            border-radius: 4px;
+            line-height: 1.5;
+            user-select: none;
+
+            &:hover,
+            &[aria-expanded="true"] {
+                background: $quinary-content;
             }
 
-            .mx_ThreadPanel_vertical_separator {
-                height: 16px;
-                margin-left: var(--cpd-space-3x);
-                margin-right: var(--cpd-space-1x);
-                border-left: 1px solid var(--cpd-color-gray-400);
-            }
-
-            .mx_ThreadPanel_dropdown {
-                padding: 3px $spacing-4 3px $spacing-8;
-                border-radius: 4px;
-                line-height: 1.5;
-                user-select: none;
-
-                &:hover,
-                &[aria-expanded="true"] {
-                    background: $quinary-content;
-                }
-
-                &::before {
-                    content: "";
-                    width: 18px;
-                    height: 18px;
-                    background: currentColor;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-                    mask-size: 100%;
-                    mask-repeat: no-repeat;
-                    float: right;
-                }
+            &::before {
+                margin-left: 2px;
+                content: "";
+                width: 20px;
+                height: 20px;
+                background: currentColor;
+                mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                float: right;
             }
         }
     }

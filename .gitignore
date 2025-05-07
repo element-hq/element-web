@@ -25,7 +25,7 @@ electron/pub
 .env
 /coverage
 # Auto-generated file
-/src/modules.ts
+/src/modules.js
 /build_config.yaml
 /book
 /index.html

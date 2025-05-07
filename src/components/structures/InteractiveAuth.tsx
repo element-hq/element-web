@@ -9,31 +9,28 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import {
     AuthType,
-    IAuthData,
-    AuthDict,
-    IInputs,
+    type IAuthData,
+    type AuthDict,
+    type IInputs,
     InteractiveAuth,
-    IStageStatus,
+    type IStageStatus,
 } from "matrix-js-sdk/src/interactive-auth";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
-    ContinueKind,
-    CustomAuthType,
-    IStageComponent,
+    type ContinueKind,
+    type CustomAuthType,
+    type IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
-type InteractiveAuthCallbackSuccess<T> = (
-    success: true,
-    response: T,
-    extra?: { emailSid?: string; clientSecret?: string },
-) => Promise<void>;
-type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => Promise<void>;
-export type InteractiveAuthCallback<T> = InteractiveAuthCallbackSuccess<T> & InteractiveAuthCallbackFailure;
+export type InteractiveAuthCallback<T> = {
+    (success: true, response: T, extra?: { emailSid?: string; clientSecret?: string }): Promise<void>;
+    (success: false, response: IAuthData | Error): Promise<void>;
+};
 
 export interface InteractiveAuthProps<T> {
     // matrix client to use for UI auth requests
@@ -49,10 +46,6 @@ export interface InteractiveAuthProps<T> {
     emailSid?: string;
     // If true, poll to see if the auth flow has been completed out-of-band
     poll?: boolean;
-    // If true, components will be told that the 'Continue' button
-    // is managed by some other party and should not be managed by
-    // the component itself.
-    continueIsManaged?: boolean;
     // continueText and continueKind are passed straight through to the AuthEntryComponent.
     continueText?: string;
     continueKind?: ContinueKind;
@@ -288,7 +281,6 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 stageState={this.state.stageState}
                 fail={this.onAuthStageFailed}
                 setEmailSid={this.setEmailSid}
-                showContinue={!this.props.continueIsManaged}
                 onPhaseChange={this.onPhaseChange}
                 requestEmailToken={this.authLogic.requestEmailToken}
                 continueText={this.props.continueText}

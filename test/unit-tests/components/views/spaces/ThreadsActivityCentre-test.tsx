@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import { getByText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";

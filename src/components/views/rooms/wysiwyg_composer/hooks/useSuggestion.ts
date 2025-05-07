@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { SyntheticEvent, useState, SetStateAction } from "react";
+import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import { type SyntheticEvent, useState, type SetStateAction } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { isNotNull } from "../../../../../Typeguards";
@@ -45,7 +45,7 @@ type SuggestionState = Suggestion | null;
  * this will be an object representing that command or mention, otherwise it is null
  */
 export function useSuggestion(
-    editorRef: React.RefObject<HTMLDivElement>,
+    editorRef: React.RefObject<HTMLDivElement | null>,
     setText: (text?: string) => void,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
@@ -105,7 +105,7 @@ export function useSuggestion(
  * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  */
 export function processSelectionChange(
-    editorRef: React.RefObject<HTMLDivElement>,
+    editorRef: React.RefObject<HTMLDivElement | null>,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
     isAutoReplaceEmojiEnabled?: boolean,
 ): void {

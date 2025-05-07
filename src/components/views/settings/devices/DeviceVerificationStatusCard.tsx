@@ -12,7 +12,7 @@ import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 import DeviceSecurityCard from "./DeviceSecurityCard";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
-import { DeviceSecurityVariation, ExtendedDevice } from "./types";
+import { DeviceSecurityVariation, type ExtendedDevice } from "./types";
 
 export interface DeviceVerificationStatusCardProps {
     device: ExtendedDevice;

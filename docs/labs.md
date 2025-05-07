@@ -101,10 +101,6 @@ Under the hood this stops Element Web from adding the `perParticipantE2EE` flag 
 
 This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
 
-## Rich text in room topics (`feature_html_topic`) [In Development]
-
-Enables rendering of MD / HTML in room topics.
-
 ## Enable the notifications panel in the room header (`feature_notifications`)
 
 Unreliable in encrypted rooms.
@@ -112,3 +108,7 @@ Unreliable in encrypted rooms.
 ## Knock rooms (`feature_ask_to_join`) [In Development]
 
 Enables knock feature for rooms. This allows users to ask to join a room.
+
+## New room list (`feature_new_room_list`) [In Development]
+
+Enable the new room list that is currently in development.

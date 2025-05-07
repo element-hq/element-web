@@ -11,7 +11,7 @@ import { mocked } from "jest-mock";
 import EditorModel from "../../../src/editor/model";
 import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded } from "../../../src/editor/serialize";
 import { createPartCreator } from "./mock";
-import { IConfigOptions } from "../../../src/IConfigOptions";
+import { type IConfigOptions } from "../../../src/IConfigOptions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import SdkConfig from "../../../src/SdkConfig";
 

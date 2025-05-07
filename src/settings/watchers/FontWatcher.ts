@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import dis from "../../dispatcher/dispatcher";
 import SettingsStore from "../SettingsStore";
-import IWatcher from "./Watcher";
+import type IWatcher from "./Watcher";
 import { toPx } from "../../utils/units";
 import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
-import { UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
+import { type ActionPayload } from "../../dispatcher/payloads";
 
 export class FontWatcher implements IWatcher {
     /**

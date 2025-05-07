@@ -7,17 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
+    type MatrixEvent,
     ClientEvent,
     EventType,
-    MatrixClient,
+    type MatrixClient,
     RoomStateEvent,
-    SyncState,
+    type SyncState,
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { logger as baseLogger, LogSpan } from "matrix-js-sdk/src/logger";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import dis from "./dispatcher/dispatcher";
@@ -35,18 +36,28 @@ import {
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
 import { isSecretStorageBeingAccessed } from "./SecurityManager";
-import { ActionPayload } from "./dispatcher/payloads";
+import { type ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
-import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
+
+/**
+ * Unfortunately-named account data key used by Element X to indicate that the user
+ * has chosen to disable server side key backups.
+ *
+ * We need to set and honour this to prevent Element X from automatically turning key backup back on.
+ */
+export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
+
+const logger = baseLogger.getChild("DeviceListener:");
 
 export default class DeviceListener {
     private dispatcherRef?: string;
@@ -89,6 +100,7 @@ export default class DeviceListener {
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
+        this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         this.shouldRecordClientInformation = SettingsStore.getValue("deviceClientInformationOptIn");
         // only configurable in config, so we don't need to watch the value
         this.enableBulkUnverifiedSessionsReminder = SettingsStore.getValue(UIFeature.BulkUnverifiedSessionsReminder);
@@ -111,6 +123,7 @@ export default class DeviceListener {
             this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
             this.client.removeListener(ClientEvent.Sync, this.onSync);
             this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
+            this.client.removeListener(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         }
         SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
         dis.unregister(this.dispatcherRef);
@@ -119,7 +132,7 @@ export default class DeviceListener {
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;
         this.keyBackupFetchedAt = null;
-        this.keyBackupStatusChecked = false;
+        this.cachedKeyBackupStatus = undefined;
         this.ourDeviceIdsAtStart = null;
         this.displayingToastsForDeviceIds = new Set();
         this.client = undefined;
@@ -131,7 +144,7 @@ export default class DeviceListener {
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
     public async dismissUnverifiedSessions(deviceIds: Iterable<string>): Promise<void> {
-        logger.log("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
+        logger.debug("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }
@@ -218,6 +231,11 @@ export default class DeviceListener {
         this.updateClientInformation();
     };
 
+    private onToDeviceEvent = (event: MatrixEvent): void => {
+        // Receiving a 4S secret can mean we are in sync where we were not before.
+        if (event.getType() === EventType.SecretSend) this.recheck();
+    };
+
     /**
      * Fetch the key backup information from the server.
      *
@@ -266,18 +284,29 @@ export default class DeviceListener {
 
     private async doRecheck(): Promise<void> {
         if (!this.running || !this.client) return; // we have been stopped
+        const logSpan = new LogSpan(logger, "check_" + secureRandomString(4));
+
         const cli = this.client;
 
         // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
-        if (!(await cli.isVersionSupported("v1.1"))) return;
+        if (!(await cli.isVersionSupported("v1.1"))) {
+            logSpan.debug("cross-signing not supported");
+            return;
+        }
 
         const crypto = cli.getCrypto();
-        if (!crypto) return;
+        if (!crypto) {
+            logSpan.debug("crypto not enabled");
+            return;
+        }
 
         // don't recheck until the initial sync is complete: lots of account data events will fire
         // while the initial sync is processing and we don't need to recheck on each one of them
         // (we add a listener on sync to do once check after the initial sync is done)
-        if (!cli.isInitialSyncComplete()) return;
+        if (!cli.isInitialSyncComplete()) {
+            logSpan.debug("initial sync not yet complete");
+            return;
+        }
 
         const crossSigningReady = await crypto.isCrossSigningReady();
         const secretStorageReady = await crypto.isSecretStorageReady();
@@ -299,6 +328,7 @@ export default class DeviceListener {
         await this.reportCryptoSessionStateToAnalytics(cli);
 
         if (this.dismissedThisDeviceToast || allSystemsReady) {
+            logSpan.info("No toast needed");
             hideSetupEncryptionToast();
 
             this.checkKeyBackupStatus();
@@ -309,21 +339,33 @@ export default class DeviceListener {
             if (!crossSigningReady) {
                 // This account is legacy and doesn't have cross-signing set up at all.
                 // Prompt the user to set it up.
+                logSpan.info("Cross-signing not ready: showing SET_UP_ENCRYPTION toast");
                 showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
             } else if (!isCurrentDeviceTrusted) {
                 // cross signing is ready but the current device is not trusted: prompt the user to verify
+                logSpan.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
+                logSpan.info(
+                    "Some secrets not cached: showing KEY_STORAGE_OUT_OF_SYNC toast",
+                    crossSigningStatus.privateKeysCachedLocally,
+                );
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             } else if (defaultKeyId === null) {
-                // the user just hasn't set up 4S yet: prompt them to do so
-                showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to key storage)
+                const disabledEvent = cli.getAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
+                if (!disabledEvent?.getContent().disabled) {
+                    logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
+                    showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                } else {
+                    logSpan.info("No default 4S key but backup disabled: no toast needed");
+                }
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
                 // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
-                logger.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
+                logSpan.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
                     crossSigningReady,
                     secretStorageReady,
                     allCrossSigningSecretsCached,
@@ -332,6 +374,8 @@ export default class DeviceListener {
                 });
                 showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
             }
+        } else {
+            logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
         }
 
         // This needs to be done after awaiting on getUserDeviceInfo() above, so
@@ -364,9 +408,9 @@ export default class DeviceListener {
             }
         }
 
-        logger.debug("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(","));
-        logger.debug("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(","));
-        logger.debug("Currently showing toasts for: " + Array.from(this.displayingToastsForDeviceIds).join(","));
+        logSpan.debug("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(","));
+        logSpan.debug("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(","));
+        logSpan.debug("Currently showing toasts for: " + Array.from(this.displayingToastsForDeviceIds).join(","));
 
         const isBulkUnverifiedSessionsReminderSnoozed = isBulkUnverifiedDeviceReminderSnoozed();
 
@@ -391,7 +435,7 @@ export default class DeviceListener {
         // ...and hide any we don't need any more
         for (const deviceId of this.displayingToastsForDeviceIds) {
             if (!newUnverifiedDeviceIds.has(deviceId)) {
-                logger.debug("Hiding unverified session toast for " + deviceId);
+                logSpan.debug("Hiding unverified session toast for " + deviceId);
                 hideUnverifiedSessionsToast(deviceId);
             }
         }
@@ -468,18 +512,36 @@ export default class DeviceListener {
      * trigger an auto-rageshake).
      */
     private checkKeyBackupStatus = async (): Promise<void> => {
-        if (this.keyBackupStatusChecked || !this.client) {
-            return;
-        }
-        const activeKeyBackupVersion = await this.client.getCrypto()?.getActiveSessionBackupVersion();
-        // if key backup is enabled, no need to check this ever again (XXX: why only when it is enabled?)
-        this.keyBackupStatusChecked = !!activeKeyBackupVersion;
-
-        if (!activeKeyBackupVersion) {
+        if (!(await this.getKeyBackupStatus())) {
             dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
         }
     };
-    private keyBackupStatusChecked = false;
+
+    /**
+     * Is key backup enabled? Use a cached answer if we have one.
+     */
+    private getKeyBackupStatus = async (): Promise<boolean> => {
+        if (!this.client) {
+            // To preserve existing behaviour, if there is no client, we
+            // pretend key storage is on.
+            //
+            // Someone looking to improve this code could try throwing an error
+            // here since we don't expect client to be undefined.
+            return true;
+        }
+
+        // If we've already cached the answer, return it.
+        if (this.cachedKeyBackupStatus !== undefined) {
+            return this.cachedKeyBackupStatus;
+        }
+
+        // Fetch the answer and cache it
+        const activeKeyBackupVersion = await this.client.getCrypto()?.getActiveSessionBackupVersion();
+        this.cachedKeyBackupStatus = !!activeKeyBackupVersion;
+
+        return this.cachedKeyBackupStatus;
+    };
+    private cachedKeyBackupStatus: boolean | undefined = undefined;
 
     private onRecordClientInformationSettingChange: CallbackFn = (
         _originalSettingName,

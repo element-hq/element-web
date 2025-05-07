@@ -1,17 +1,17 @@
 /*
-Copyright 2019-2024 New Vector Ltd.
+Copyright 2019-2025 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ContextType } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -22,6 +22,7 @@ import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
+import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
 
 interface IProps {
     room: Room;
@@ -35,8 +36,8 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
     public static contextType = MatrixClientContext;
     declare public context: ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             isRoomPublished: false, // loaded async
@@ -92,6 +93,9 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
                 <SettingsSection heading={_t("room_settings|general|other_section")}>
                     {urlPreviewSettings}
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
+                        <MediaPreviewAccountSettings roomId={room.roomId} />
+                    </SettingsSubsection>
                     {leaveSection}
                 </SettingsSection>
             </SettingsTab>

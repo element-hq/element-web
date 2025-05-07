@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React from "react";
+import React, { type JSX } from "react";
 import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
-import AccessibleButton, { ButtonProps } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonProps } from "../../elements/AccessibleButton";
 
 type Props<T extends keyof HTMLElementTagNameMap> = Omit<
     ButtonProps<T>,
-    "aria-label" | "title" | "kind" | "className" | "element"
+    "aria-label" | "title" | "kind" | "className" | "element" | "ref"
 > & {
     isExpanded: boolean;
 };

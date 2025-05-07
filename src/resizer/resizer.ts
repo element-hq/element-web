@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { throttle } from "lodash";
 
-import FixedDistributor from "./distributors/fixed";
-import ResizeItem from "./item";
-import Sizer from "./sizer";
+import type FixedDistributor from "./distributors/fixed";
+import type ResizeItem from "./item";
+import type Sizer from "./sizer";
 
 interface IClassNames {
     // class on resize-handle

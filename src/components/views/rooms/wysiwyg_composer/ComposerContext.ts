@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { createContext, useContext } from "react";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
-import { SubSelection } from "./types";
-import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
+import { type SubSelection } from "./types";
+import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 
 export function getDefaultContextValue(defaultValue?: Partial<ComposerContextState>): { selection: SubSelection } {
     return {

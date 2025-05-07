@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import { useEffect, useState } from "react";
 import {
     EventType,
-    MatrixEvent,
-    Room,
+    type MatrixEvent,
+    type Room,
     RoomStateEvent,
     ContentHelpers,
-    MRoomTopicEventContent,
+    type MRoomTopicEventContent,
 } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 

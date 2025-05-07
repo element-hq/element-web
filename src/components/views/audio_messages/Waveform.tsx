@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { CSSProperties } from "react";
+import React, { type CSSProperties } from "react";
 import classNames from "classnames";
 
 interface WaveformCSSProperties extends CSSProperties {
@@ -18,8 +18,6 @@ interface IProps {
     progress: number; // percent complete, 0-1, default 100%
 }
 
-interface IState {}
-
 /**
  * A simple waveform component. This renders bars (centered vertically) for each
  * height provided in the component properties. Updating the properties will update
@@ -28,7 +26,7 @@ interface IState {}
  * For CSS purposes, a mx_Waveform_bar_100pct class is added when the bar should be
  * "filled", as a demonstration of the progress property.
  */
-export default class Waveform extends React.PureComponent<IProps, IState> {
+export default class Waveform extends React.PureComponent<IProps> {
     public static defaultProps = {
         progress: 1,
     };

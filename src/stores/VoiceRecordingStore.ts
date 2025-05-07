@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Optional } from "matrix-events-sdk";
-import { Room, IEventRelation, RelationType } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
+import { type Room, type IEventRelation, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
-import { createVoiceMessageRecording, VoiceMessageRecording } from "../audio/VoiceMessageRecording";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { createVoiceMessageRecording, type VoiceMessageRecording } from "../audio/VoiceMessageRecording";
 
 const SEPARATOR = "|";
 

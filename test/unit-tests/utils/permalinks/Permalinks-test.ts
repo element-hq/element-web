@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventEmitter } from "events";
+import { type EventEmitter } from "events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -19,7 +19,7 @@ import {
     parsePermalink,
     RoomPermalinkCreator,
 } from "../../../../src/utils/permalinks/Permalinks";
-import { IConfigOptions } from "../../../../src/IConfigOptions";
+import { type IConfigOptions } from "../../../../src/IConfigOptions";
 import SdkConfig from "../../../../src/SdkConfig";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 
@@ -116,7 +116,7 @@ describe("Permalinks", function () {
 
     it("should gracefully handle invalid MXIDs", () => {
         const roomId = "!fake:example.org";
-        const alice50 = makeMemberWithPL(roomId, "@alice:pl_50:org", 50);
+        const alice50 = makeMemberWithPL(roomId, "@alice:pl-50:org", 50);
         const room = mockRoom(roomId, [alice50]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();

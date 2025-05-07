@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useContext } from "react";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-solid";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
@@ -17,7 +17,8 @@ import { NotificationStateEvents } from "../../../../stores/notifications/Notifi
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { SDKContext } from "../../../../contexts/SDKContext";
-import { ButtonEvent } from "../../elements/AccessibleButton";
+import { type ButtonEvent } from "../../elements/AccessibleButton";
+import { ToggleableIcon } from "./toggle/ToggleableIcon";
 
 /**
  * Display a button to toggle timeline for video rooms
@@ -54,7 +55,7 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
                 onClick={onClick}
                 indicator={displayUnreadIndicator ? "default" : undefined}
             >
-                <ChatIcon />
+                <ToggleableIcon Icon={ChatIcon} phase={RightPanelPhases.Timeline} />
             </IconButton>
         </Tooltip>
     );

@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createContext, ReactNode, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { createContext, type ReactNode, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { _t, TranslationKey } from "../../../../languageHandler";
-import { XOR } from "../../../../@types/common";
-import { Tool } from "../DevtoolsDialog";
+import { _t, type TranslationKey } from "../../../../languageHandler";
+import { type XOR } from "../../../../@types/common";
+import { type Tool } from "../DevtoolsDialog";
 
 export interface IDevtoolsProps {
     onBack(): void;

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { Room, Beacon, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { type Room, type Beacon, LocationAssetType } from "matrix-js-sdk/src/matrix";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";

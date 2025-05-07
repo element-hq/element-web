@@ -6,15 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import AutocompleteProvider from "./AutocompleteProvider";
 import { _t } from "../languageHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { PillCompletion } from "./Components";
-import { ICompletion, ISelectionRange } from "./Autocompleter";
+import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 
 const AT_ROOM_REGEX = /@\S*/g;
 

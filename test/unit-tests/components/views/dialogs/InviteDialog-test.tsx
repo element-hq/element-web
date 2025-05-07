@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { RoomType, MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../../src/components/views/dialogs/InviteDialogTypes";
@@ -27,10 +27,10 @@ import {
 } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../../src/SdkConfig";
-import { ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
-import { IConfigOptions } from "../../../../../src/IConfigOptions";
+import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
+import { type IConfigOptions } from "../../../../../src/IConfigOptions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
-import { IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
+import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 

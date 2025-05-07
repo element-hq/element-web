@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { SortAlgorithm } from "../models";
 import { ManualAlgorithm } from "./ManualAlgorithm";
-import { IAlgorithm } from "./IAlgorithm";
-import { TagID } from "../../models";
+import { type IAlgorithm } from "./IAlgorithm";
+import { type TagID } from "../../models";
 import { RecentAlgorithm } from "./RecentAlgorithm";
 import { AlphabeticAlgorithm } from "./AlphabeticAlgorithm";
 

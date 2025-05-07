@@ -14,9 +14,9 @@ import { initOnce } from "@vector-im/matrix-wysiwyg";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import { WysiwygAutocomplete } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygAutocomplete";
 import { getRoomContext, mkStubRoom, stubClient } from "../../../../../../test-utils";
-import Autocomplete from "../../../../../../../src/components/views/rooms/Autocomplete";
-import Autocompleter, { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
-import AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import type Autocomplete from "../../../../../../../src/components/views/rooms/Autocomplete";
+import Autocompleter, { type ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
+import type AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const mockCompletion: ICompletion[] = [

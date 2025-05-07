@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { Room, MatrixEvent, MatrixClient, User, EventType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import { type Room, type MatrixEvent, type MatrixClient, type User, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import MultiInviter, { CompletionStates } from "./utils/MultiInviter";
+import MultiInviter, { type CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InviteDialog from "./components/views/dialogs/InviteDialog";
@@ -18,7 +18,7 @@ import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
-import { Member } from "./utils/direct-messages";
+import { type Member } from "./utils/direct-messages";
 
 export interface IInviteResult {
     states: CompletionStates;

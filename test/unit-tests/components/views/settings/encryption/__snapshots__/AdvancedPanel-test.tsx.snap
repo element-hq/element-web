@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when loading the device keys 1`] = `
+<div
+  class="mx_EncryptionDetails"
+  data-testid="encryptionDetails"
+>
+  <div
+    class="mx_EncryptionDetails_session"
+  >
+    <h3
+      class="mx_EncryptionDetails_session_title"
+    >
+      Encryption details
+    </h3>
+    <div>
+      <span>
+        Session ID:
+      </span>
+      <span
+        data-testid="deviceId"
+      >
+        ABCDEFGHI
+      </span>
+    </div>
+    <div>
+      <span>
+        Session key:
+      </span>
+      <span
+        data-testid="sessionKey"
+      >
+        <svg
+          aria-label="Loading…"
+          class="_icon_11k6c_18"
+          fill="currentColor"
+          height="1em"
+          style="width: 20px; height: 20px;"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div
+    class="mx_EncryptionDetails_buttons"
+  >
+    <button
+      class="_button_vczzf_8 _has-icon_vczzf_57"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
+      Export keys
+    </button>
+    <button
+      class="_button_vczzf_8 _has-icon_vczzf_57"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
+      Import keys
+    </button>
+  </div>
+  <button
+    class="_button_vczzf_8 _destructive_vczzf_107"
+    data-kind="tertiary"
+    data-size="sm"
+    role="button"
+    tabindex="0"
+  >
+    Reset cryptographic identity
+  </button>
+</div>
+`;
+
+exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 1`] = `
+<div
+  class="mx_EncryptionDetails"
+  data-testid="encryptionDetails"
+>
+  <div
+    class="mx_EncryptionDetails_session"
+  >
+    <h3
+      class="mx_EncryptionDetails_session_title"
+    >
+      Encryption details
+    </h3>
+    <div>
+      <span>
+        Session ID:
+      </span>
+      <span
+        data-testid="deviceId"
+      >
+        ABCDEFGHI
+      </span>
+    </div>
+    <div>
+      <span>
+        Session key:
+      </span>
+      <span
+        data-testid="sessionKey"
+      >
+        ed25519
+      </span>
+    </div>
+  </div>
+  <div
+    class="mx_EncryptionDetails_buttons"
+  >
+    <button
+      class="_button_vczzf_8 _has-icon_vczzf_57"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
+      Export keys
+    </button>
+    <button
+      class="_button_vczzf_8 _has-icon_vczzf_57"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
+      Import keys
+    </button>
+  </div>
+  <button
+    class="_button_vczzf_8 _destructive_vczzf_107"
+    data-kind="tertiary"
+    data-size="sm"
+    role="button"
+    tabindex="0"
+  >
+    Reset cryptographic identity
+  </button>
+</div>
+`;
+
+exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unverified devices settings 1`] = `
+<form
+  class="_root_19upo_16 mx_OtherSettings"
+  data-testid="otherSettings"
+>
+  <h3
+    class="mx_OtherSettings_title"
+  >
+    Other people’s devices
+  </h3>
+  <div
+    class="_inline-field_19upo_32"
+  >
+    <div
+      class="_inline-field-control_19upo_44"
+    >
+      <div
+        class="_container_19o42_10"
+      >
+        <input
+          aria-describedby="radix-«r7»"
+          checked=""
+          class="_input_19o42_24"
+          id="radix-«r6»"
+          name="neverSendEncrypted"
+          title=""
+          type="checkbox"
+        />
+        <div
+          class="_ui_19o42_34"
+        />
+      </div>
+    </div>
+    <div
+      class="_inline-field-body_19upo_38"
+    >
+      <label
+        class="_label_19upo_59"
+        for="radix-«r6»"
+      >
+        In encrypted rooms, only send messages to verified users
+      </label>
+      <span
+        class="_message_19upo_85 _help-message_19upo_91"
+        id="radix-«r7»"
+      >
+        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.
+      </span>
+    </div>
+  </div>
+</form>
+`;

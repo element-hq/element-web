@@ -6,12 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { MatrixClient, parseErrorResponse, ResizeMethod } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
-import { Optional } from "matrix-events-sdk";
+import { type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { type Optional } from "matrix-events-sdk";
 
+import type { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
+import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
 
 // Populate this class with the details of your customisations when copying it.
@@ -25,7 +26,7 @@ import { UserFriendlyError } from "../languageHandler";
  * A media object is a representation of a "source media" and an optional
  * "thumbnail media", derived from event contents or external sources.
  */
-export class Media {
+class MediaImplementation implements Media {
     private client: MatrixClient;
 
     // Per above, this constructor signature can be whatever is helpful for you.
@@ -149,22 +150,27 @@ export class Media {
     }
 }
 
+export type { Media };
+
+type BaseMedia = MediaCustomisations<Partial<MediaEventContent>, MatrixClient, IPreparedMedia>;
+
 /**
  * Creates a media object from event content.
  * @param {MediaEventContent} content The event content.
- * @param {MatrixClient} client? Optional client to use.
- * @returns {Media} The media object.
+ * @param {MatrixClient} client Optional client to use.
+ * @returns {MediaImplementation} The media object.
  */
-export function mediaFromContent(content: Partial<MediaEventContent>, client?: MatrixClient): Media {
-    return new Media(prepEventContentAsMedia(content), client);
-}
+export const mediaFromContent: BaseMedia["mediaFromContent"] = (
+    content: Partial<MediaEventContent>,
+    client?: MatrixClient,
+): Media => new MediaImplementation(prepEventContentAsMedia(content), client);
 
 /**
  * Creates a media object from an MXC URI.
  * @param {string} mxc The MXC URI.
- * @param {MatrixClient} client? Optional client to use.
- * @returns {Media} The media object.
+ * @param {MatrixClient} client Optional client to use.
+ * @returns {MediaImplementation} The media object.
  */
-export function mediaFromMxc(mxc?: string, client?: MatrixClient): Media {
+export const mediaFromMxc: BaseMedia["mediaFromMxc"] = (mxc?: string, client?: MatrixClient): Media => {
     return mediaFromContent({ url: mxc }, client);
-}
+};

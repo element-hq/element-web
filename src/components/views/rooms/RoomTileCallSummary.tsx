@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC } from "react";
+import React, { type FC } from "react";
 
 import type { Call } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
@@ -26,18 +26,6 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
         case ConnectionState.Disconnected:
             text = _t("common|video");
             active = false;
-            break;
-        case ConnectionState.WidgetLoading:
-            text = _t("common|loading");
-            active = false;
-            break;
-        case ConnectionState.Lobby:
-            text = _t("common|lobby");
-            active = false;
-            break;
-        case ConnectionState.Connecting:
-            text = _t("room|joining");
-            active = true;
             break;
         case ConnectionState.Connected:
         case ConnectionState.Disconnecting:

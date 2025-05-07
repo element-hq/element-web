@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IMatrixProfile,
-    IEventWithRoomId as IMatrixEvent,
-    IResultRoomEvents,
-    Direction,
+    type IMatrixProfile,
+    type IEventWithRoomId as IMatrixEvent,
+    type IResultRoomEvents,
+    type Direction,
 } from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec

@@ -11,6 +11,7 @@ import { registerAccountMas } from "../oidc";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { TestClientServerAPI } from "../csAPI";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
+import { checkDeviceIsConnectedKeyBackup } from "./utils";
 
 // These tests register an account with MAS because then we go through the "normal" registration flow
 // and crypto gets set up. Using the 'user' fixture create a user and synthesizes an existing login,
@@ -19,19 +20,22 @@ test.use(masHomeserver);
 test.describe("Encryption state after registration", () => {
     test.skip(isDendrite, "does not yet support MAS");
 
-    test("Key backup is enabled by default", async ({ page, mailhogClient, app }, testInfo) => {
+    test("Key backup is enabled by default", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
-        await app.settings.openUserSettings("Security & Privacy");
-        await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
+        // Wait for the ui to load
+        await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+
+        // Recovery is not set up yet
+        await checkDeviceIsConnectedKeyBackup(app, "1", true, false);
     });
 
-    test("user is prompted to set up recovery", async ({ page, mailhogClient, app }, testInfo) => {
+    test("user is prompted to set up recovery", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
@@ -47,7 +51,7 @@ test.describe("Key backup reset from elsewhere", () => {
 
     test("Key backup is disabled when reset from elsewhere", async ({
         page,
-        mailhogClient,
+        mailpitClient,
         request,
         homeserver,
     }, testInfo) => {
@@ -60,7 +64,7 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, testUsername, "alice@email.com", testPassword);
+        await registerAccountMas(page, mailpitClient, testUsername, "alice@email.com", testPassword);
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();

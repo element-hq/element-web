@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget } from "matrix-widget-api";
+import { type IModalWidgetOpenRequestData, type IModalWidgetReturnData, type Widget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
-import Modal, { IHandle, IModal } from "../Modal";
+import { type ActionPayload } from "../dispatcher/payloads";
+import Modal, { type IHandle, type IModal } from "../Modal";
 import ModalWidgetDialog from "../components/views/dialogs/ModalWidgetDialog";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
@@ -61,18 +61,18 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
                 widgetDefinition: { ...requestData },
                 widgetRoomId,
                 sourceWidgetId: sourceWidget.id,
-                onFinished: (success, data) => {
-                    this.closeModalWidget(sourceWidget, widgetRoomId, success && data ? data : { "m.exited": true });
-
-                    this.openSourceWidgetId = null;
-                    this.openSourceWidgetRoomId = null;
-                    this.modalInstance = null;
-                },
             },
             undefined,
             /* priority = */ false,
             /* static = */ true,
         );
+        this.modalInstance!.finished.then(([success, data]) => {
+            this.closeModalWidget(sourceWidget, widgetRoomId, success && data ? data : { "m.exited": true });
+
+            this.openSourceWidgetId = null;
+            this.openSourceWidgetRoomId = null;
+            this.modalInstance = null;
+        });
     };
 
     public closeModalWidget = (

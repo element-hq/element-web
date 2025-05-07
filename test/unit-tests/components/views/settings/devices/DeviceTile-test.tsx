@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { IMyDevice } from "matrix-js-sdk/src/matrix";
+import { type IMyDevice } from "matrix-js-sdk/src/matrix";
 
 import DeviceTile from "../../../../../../src/components/views/settings/devices/DeviceTile";
 import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";

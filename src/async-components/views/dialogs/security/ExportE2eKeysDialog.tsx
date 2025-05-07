@@ -8,17 +8,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import FileSaver from "file-saver";
-import React, { ChangeEvent } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../../languageHandler";
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
-import { KeysStartingWith } from "../../../../@types/common";
+import { type KeysStartingWith } from "../../../../@types/common";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
-import Field from "../../../../components/views/elements/Field";
+import type Field from "../../../../components/views/elements/Field";
 
 enum Phase {
     Edit = "edit",
@@ -178,7 +178,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                     type="password"
                                     disabled={disableForm}
                                     autoComplete="new-password"
-                                    fieldRef={(field) => (this.fieldPassword = field)}
+                                    fieldRef={(field) => {
+                                        this.fieldPassword = field;
+                                    }}
                                 />
                             </div>
                             <div className="mx_E2eKeysDialog_inputRow">
@@ -195,7 +197,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                     type="password"
                                     disabled={disableForm}
                                     autoComplete="new-password"
-                                    fieldRef={(field) => (this.fieldPasswordConfirm = field)}
+                                    fieldRef={(field) => {
+                                        this.fieldPasswordConfirm = field;
+                                    }}
                                 />
                             </div>
                         </div>

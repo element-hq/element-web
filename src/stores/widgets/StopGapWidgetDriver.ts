@@ -7,48 +7,47 @@
  */
 
 import {
-    Capability,
+    type Capability,
     EventDirection,
-    IOpenIDCredentials,
-    IOpenIDUpdate,
-    ISendDelayedEventDetails,
-    ISendEventDetails,
-    ITurnServer,
-    IReadEventRelationsResult,
-    IRoomEvent,
+    type IOpenIDCredentials,
+    type IOpenIDUpdate,
+    type ISendDelayedEventDetails,
+    type ISendEventDetails,
+    type ITurnServer,
+    type IReadEventRelationsResult,
+    type IRoomEvent,
     MatrixCapabilities,
     OpenIDRequestState,
-    SimpleObservable,
-    Widget,
+    type SimpleObservable,
+    type Widget,
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
-    IWidgetApiErrorResponseDataDetails,
-    ISearchUserDirectoryResult,
-    IGetMediaConfigResult,
-    UpdateDelayedEventAction,
+    type IWidgetApiErrorResponseDataDetails,
+    type ISearchUserDirectoryResult,
+    type IGetMediaConfigResult,
+    type UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     ClientEvent,
-    ITurnServer as IClientTurnServer,
+    type ITurnServer as IClientTurnServer,
     EventType,
-    IContent,
+    type IContent,
     MatrixError,
-    MatrixEvent,
+    type MatrixEvent,
     Direction,
     THREAD_RELATION_TYPE,
-    SendDelayedEventResponse,
-    StateEvents,
-    TimelineEvents,
+    type SendDelayedEventResponse,
+    type StateEvents,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    ApprovalOpts,
-    CapabilitiesOpts,
+    type ApprovalOpts,
+    type CapabilitiesOpts,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
-import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
@@ -65,7 +64,7 @@ import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
-import { Media } from "../../customisations/Media";
+import { mediaFromMxc } from "../../customisations/Media";
 
 // TODO: Purge this from the universe
 
@@ -116,10 +115,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             // Auto-approve the legacy visibility capability. We send it regardless of capability.
             // Widgets don't technically need to request this capability, but Scalar still does.
             this.allowedCapabilities.add("visibility");
-        } else if (
-            virtual &&
-            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!).origin === this.forWidget.origin
-        ) {
+        } else if (virtual && WidgetType.CALL.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
@@ -561,19 +557,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
+        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
-
-            onFinished: async (confirm): Promise<void> => {
-                if (!confirm) {
-                    return observer.update({ state: OpenIDRequestState.Blocked });
-                }
-
-                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-            },
         });
+        const [confirm] = await finished;
+        if (!confirm) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
+        }
     }
 
     public async navigate(uri: string): Promise<void> {
@@ -684,7 +678,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
      */
     public async downloadFile(contentUri: string): Promise<{ file: XMLHttpRequestBodyInit }> {
         const client = MatrixClientPeg.safeGet();
-        const media = new Media({ mxc: contentUri }, client);
+        const media = mediaFromMxc(contentUri, client);
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };

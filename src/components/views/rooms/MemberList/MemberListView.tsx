@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Form } from "@vector-im/compound-web";
-import React from "react";
-import { List, ListRowProps } from "react-virtualized/dist/commonjs/List";
+import React, { type JSX } from "react";
+import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
 import { Flex } from "../../../utils/Flex";
 import {
-    MemberWithSeparator,
+    type MemberWithSeparator,
     SEPARATOR,
     useMemberListViewModel,
 } from "../../../viewmodels/memberlist/MemberListViewModel";
@@ -21,6 +21,7 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
+import { RovingTabIndexProvider } from "../../../../accessibility/RovingTabIndex";
 
 interface IProps {
     roomId: string;
@@ -32,7 +33,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 
     const totalRows = vm.members.length;
 
-    const getRowComponent = (item: MemberWithSeparator): React.JSX.Element => {
+    const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
         if (item === SEPARATOR) {
             return <hr className="mx_MemberListView_separator" />;
         } else if (item.member) {
@@ -63,7 +64,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const rowRenderer = ({ key, index, style }: ListRowProps): React.JSX.Element => {
+    const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
         if (index === totalRows) {
             // We've rendered all the members,
             // now we render an empty div to add some space to the end of the list.
@@ -86,24 +87,34 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             header={_t("common|people")}
             onClose={props.onClose}
         >
-            <Flex align="stretch" direction="column" className="mx_MemberListView_container">
-                <Form.Root>
-                    <MemberListHeaderView vm={vm} />
-                </Form.Root>
-                <AutoSizer>
-                    {({ height, width }) => (
-                        <List
-                            rowRenderer={rowRenderer}
-                            rowHeight={getRowHeight}
-                            // The +1 refers to the additional empty div that we render at the end of the list.
-                            rowCount={totalRows + 1}
-                            // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-                            height={height - 113}
-                            width={width}
-                        />
-                    )}
-                </AutoSizer>
-            </Flex>
+            <RovingTabIndexProvider handleUpDown scrollIntoView>
+                {({ onKeyDownHandler }) => (
+                    <Flex
+                        align="stretch"
+                        direction="column"
+                        className="mx_MemberListView_container"
+                        onKeyDown={onKeyDownHandler}
+                    >
+                        <Form.Root>
+                            <MemberListHeaderView vm={vm} />
+                        </Form.Root>
+                        <AutoSizer>
+                            {({ height, width }) => (
+                                <List
+                                    rowRenderer={rowRenderer}
+                                    rowHeight={getRowHeight}
+                                    // The +1 refers to the additional empty div that we render at the end of the list.
+                                    rowCount={totalRows + 1}
+                                    // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
+                                    height={height - 113}
+                                    width={width}
+                                    overscanRowCount={15}
+                                />
+                            )}
+                        </AutoSizer>
+                    </Flex>
+                )}
+            </RovingTabIndexProvider>
         </BaseCard>
     );
 };

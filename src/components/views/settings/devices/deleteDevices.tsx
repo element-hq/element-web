@@ -6,12 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { AuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import { InteractiveAuthCallback } from "../../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
 import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 
@@ -24,7 +23,7 @@ const makeDeleteRequest =
 export const deleteDevicesWithInteractiveAuth = async (
     matrixClient: MatrixClient,
     deviceIds: string[],
-    onFinished: InteractiveAuthCallback<void>,
+    onFinished: (success?: boolean) => Promise<void>,
 ): Promise<void> => {
     if (!deviceIds.length) {
         return;
@@ -32,7 +31,7 @@ export const deleteDevicesWithInteractiveAuth = async (
     try {
         await makeDeleteRequest(matrixClient, deviceIds)(null);
         // no interactive auth needed
-        await onFinished(true, undefined);
+        await onFinished(true);
     } catch (error) {
         if (!(error instanceof MatrixError) || error.httpStatus !== 401 || !error.data?.flows) {
             // doesn't look like an interactive-auth failure
@@ -62,16 +61,16 @@ export const deleteDevicesWithInteractiveAuth = async (
                 continueKind: "danger",
             },
         };
-        Modal.createDialog(InteractiveAuthDialog, {
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
             title: _t("common|authentication"),
             matrixClient: matrixClient,
             authData: error.data as IAuthData,
-            onFinished,
             makeRequest: makeDeleteRequest(matrixClient, deviceIds),
             aestheticsForStagePhases: {
                 [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
             },
         });
+        finished.then(([success]) => onFinished(success));
     }
 };

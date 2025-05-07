@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type IDeferred, defer } from "matrix-js-sdk/src/utils";
+
 /**
 A countdown timer, exposing a promise api.
 A timer starts in a non-started state,
@@ -20,7 +22,7 @@ a new one through `clone()` or `cloneIfRun()`.
 export default class Timer {
     private timerHandle?: number;
     private startTs?: number;
-    private deferred!: PromiseWithResolvers<void>;
+    private deferred!: IDeferred<void>;
 
     public constructor(private timeout: number) {
         this.setNotStarted();
@@ -29,7 +31,7 @@ export default class Timer {
     private setNotStarted(): void {
         this.timerHandle = undefined;
         this.startTs = undefined;
-        this.deferred = Promise.withResolvers();
+        this.deferred = defer();
         this.deferred.promise = this.deferred.promise.finally(() => {
             this.timerHandle = undefined;
         });

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, Room, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
-import { act, render, screen, fireEvent, RenderResult } from "jest-matrix-react";
+import { act, render, screen, fireEvent, type RenderResult } from "jest-matrix-react";
 
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
-import _RoomListHeader from "../../../../../src/components/views/rooms/RoomListHeader";
+import _RoomListHeader from "../../../../../src/components/views/rooms/LegacyRoomListHeader";
 import * as testUtils from "../../../../test-utils";
 import { stubClient, mkSpace } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { MockedObject, mocked } from "jest-mock";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type MockedObject, mocked } from "jest-mock";
 
 import { stubClient } from "../../test-utils";
 import { OwnProfileStore } from "../../../src/stores/OwnProfileStore";

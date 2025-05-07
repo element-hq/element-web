@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { setDMRoom } from "../../src/Rooms";
 import { mkEvent, stubClient } from "../test-utils";
@@ -79,16 +79,6 @@ describe("setDMRoom", () => {
         });
     });
 
-    describe("when trying to add a DM, that already exists", () => {
-        beforeEach(() => {
-            setDMRoom(client, roomId1, userId1);
-        });
-
-        it("should not update the account data", () => {
-            expect(client.setAccountData).not.toHaveBeenCalled();
-        });
-    });
-
     describe("when removing an existing DM", () => {
         beforeEach(() => {
             setDMRoom(client, roomId1, null);
@@ -99,16 +89,6 @@ describe("setDMRoom", () => {
                 [userId1]: [roomId2],
                 [userId2]: [roomId3],
             });
-        });
-    });
-
-    describe("when removing an unknown room", () => {
-        beforeEach(() => {
-            setDMRoom(client, roomId4, null);
-        });
-
-        it("should not update the account data", () => {
-            expect(client.setAccountData).not.toHaveBeenCalled();
         });
     });
 

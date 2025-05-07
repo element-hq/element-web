@@ -11,7 +11,7 @@ import React from "react";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
-import AccessibleButton, { ButtonProps } from "./AccessibleButton";
+import AccessibleButton, { type ButtonProps } from "./AccessibleButton";
 
 type Props = Omit<ButtonProps<"div">, "element" | "kind" | "onClick" | "className"> & {
     title: string;

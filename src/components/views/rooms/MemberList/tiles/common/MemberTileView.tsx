@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 
-import AccessibleButton from "../../../../elements/AccessibleButton";
+import { RovingAccessibleButton } from "../../../../../../accessibility/RovingTabIndex";
 
 interface Props {
     avatarJsx: JSX.Element;
@@ -28,7 +28,7 @@ export function MemberTileView(props: Props): JSX.Element {
     return (
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         <div>
-            <AccessibleButton className="mx_MemberTileView" title={props.title} onClick={props.onClick}>
+            <RovingAccessibleButton className="mx_MemberTileView" title={props.title} onClick={props.onClick}>
                 <div className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">
                         {props.avatarJsx} {props.presenceJsx}
@@ -39,7 +39,7 @@ export function MemberTileView(props: Props): JSX.Element {
                     {userLabelJsx}
                     {props.iconJsx}
                 </div>
-            </AccessibleButton>
+            </RovingAccessibleButton>
         </div>
     );
 }

@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import useHover from "../../../hooks/useHover";
 
 interface ExtraTileProps {

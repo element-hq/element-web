@@ -11,7 +11,8 @@ jobs:
         runs-on: ubuntu-24.04
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
-            contains(github.event.issue.assignees.*.login, 'andybalaam') ||
+            contains(github.event.issue.assignees.*.login, 'florianduros') ||
+            contains(github.event.issue.assignees.*.login, 'dbkr') ||
             contains(github.event.issue.assignees.*.login, 'MidhunSureshR')
         steps:
             - uses: actions/add-to-project@main

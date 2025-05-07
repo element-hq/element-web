@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 
 import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
-import { RoomMember } from "../../../../../models/rooms/RoomMember";
+import { type RoomMember } from "../../../../../models/rooms/RoomMember";
 import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 import { E2EIconView } from "./common/E2EIconView";
 import AvatarPresenceIconView from "./common/PresenceIconView";

@@ -11,13 +11,14 @@ import { mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
 import {
     Room,
-    MatrixClient,
-    IEvent,
+    type MatrixClient,
+    type IEvent,
     MatrixEvent,
     EventType,
     SearchResult,
-    ISearchResults,
+    type ISearchResults,
 } from "matrix-js-sdk/src/matrix";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
@@ -52,7 +53,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should show a spinner before the promise resolves", async () => {
-        const deferred = Promise.withResolvers<ISearchResults>();
+        const deferred = defer<ISearchResults>();
 
         render(
             <RoomSearchView
@@ -246,7 +247,7 @@ describe("<RoomSearchView/>", () => {
 
         await screen.findByRole("progressbar");
         await screen.findByText("Potato");
-        expect(onUpdate).toHaveBeenCalledWith(false, expect.objectContaining({}));
+        expect(onUpdate).toHaveBeenCalledWith(false, expect.objectContaining({}), null);
 
         rerender(
             <MatrixClientContext.Provider value={client}>
@@ -266,7 +267,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should handle resolutions after unmounting sanely", async () => {
-        const deferred = Promise.withResolvers<ISearchResults>();
+        const deferred = defer<ISearchResults>();
 
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
@@ -290,7 +291,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should handle rejections after unmounting sanely", async () => {
-        const deferred = Promise.withResolvers<ISearchResults>();
+        const deferred = defer<ISearchResults>();
 
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
@@ -313,8 +314,9 @@ describe("<RoomSearchView/>", () => {
         });
     });
 
-    it("should show modal if error is encountered", async () => {
-        const deferred = Promise.withResolvers<ISearchResults>();
+    it("report error if one is encountered", async () => {
+        const onUpdate = jest.fn();
+        const deferred = defer<ISearchResults>();
 
         render(
             <MatrixClientContext.Provider value={client}>
@@ -325,14 +327,18 @@ describe("<RoomSearchView/>", () => {
                     promise={deferred.promise}
                     resizeNotifier={resizeNotifier}
                     className="someClass"
-                    onUpdate={jest.fn()}
+                    onUpdate={onUpdate}
                 />
             </MatrixClientContext.Provider>,
         );
-        deferred.reject(new Error("Some error"));
+        deferred.reject("Some error");
+        try {
+            // Wait for RoomSearchView to process the promise
+            await deferred.promise;
+        } catch {}
 
-        await screen.findByText("Search failed");
-        await screen.findByText("Some error");
+        expect(onUpdate).toHaveBeenCalledWith(false, null, "Some error");
+        expect(onUpdate).toHaveBeenCalledTimes(2);
     });
 
     it("should combine search results when the query is present in multiple sucessive messages", async () => {

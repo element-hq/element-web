@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as Sentry from "@sentry/browser";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { IConfigOptions } from "./IConfigOptions";
+import { type IConfigOptions } from "./IConfigOptions";
 
 /* eslint-disable camelcase */
 
@@ -213,7 +213,6 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
-        autoSessionTracking: false,
         integrations,
         // Set to 1.0 which is reasonable if we're only submitting Rageshakes; will need to be set < 1.0
         // if we collect more frequently.

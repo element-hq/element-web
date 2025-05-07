@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import { ComponentProps } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type ComponentProps } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import Modal from "../Modal";
 import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
 import ForwardDialog from "../components/views/dialogs/ForwardDialog";
@@ -21,7 +21,7 @@ import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferences
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import InviteDialog from "../components/views/dialogs/InviteDialog";
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
-import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import PosthogTrackers from "../PosthogTrackers";
 import { showAddExistingSubspace, showCreateNewRoom } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
@@ -119,7 +119,7 @@ export class DialogOpener {
                 break;
             case Action.OpenAddToExistingSpaceDialog: {
                 const space = payload.space;
-                Modal.createDialog(
+                const { finished } = Modal.createDialog(
                     AddExistingToSpaceDialog,
                     {
                         onCreateRoomClick: (ev: ButtonEvent) => {
@@ -128,14 +128,14 @@ export class DialogOpener {
                         },
                         onAddSubspaceClick: () => showAddExistingSubspace(space),
                         space,
-                        onFinished: (added: boolean) => {
-                            if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                            }
-                        },
                     },
                     "mx_AddExistingToSpaceDialog_wrapper",
                 );
+                finished.then(([added]) => {
+                    if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+                        defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                    }
+                });
                 break;
             }
         }

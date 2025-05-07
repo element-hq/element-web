@@ -12,7 +12,10 @@ import { fireEvent, render, screen } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VoiceUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";
-import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../../../src/MediaDeviceHandler";
+import MediaDeviceHandler, {
+    type IMediaDevices,
+    MediaDeviceKindEnum,
+} from "../../../../../../../src/MediaDeviceHandler";
 import { flushPromises } from "../../../../../../test-utils";
 
 jest.mock("../../../../../../../src/MediaDeviceHandler");

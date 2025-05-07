@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { MatrixEvent, EventType, RelationType, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import React, { type JSX } from "react";
+import { type MatrixEvent, EventType, RelationType, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { defer } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -57,7 +58,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const eventId = this.props.mxEvent.getId()!;
         const client = MatrixClientPeg.safeGet();
 
-        const { resolve, reject, promise } = Promise.withResolvers<boolean>();
+        const { resolve, reject, promise } = defer<boolean>();
         let result: Awaited<ReturnType<MatrixClient["relations"]>>;
 
         try {

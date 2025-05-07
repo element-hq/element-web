@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
-import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
-import { BootstrapCrossSigningOpts, CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
+import { type SecretStorageKeyDescriptionAesV1, type ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
+import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { accessSecretStorage } from "../../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../../src/stores/SetupEncryptionStore";
@@ -150,23 +150,6 @@ describe("SetupEncryptionStore", () => {
             await setupEncryptionStore.usePassPhrase();
 
             await dehydrationPromise;
-        });
-    });
-
-    it("resetConfirm should work with a cached account password", async () => {
-        const makeRequest = jest.fn();
-        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: BootstrapCrossSigningOpts) => {
-            await opts?.authUploadDeviceSigningKeys?.(makeRequest);
-        });
-        mocked(accessSecretStorage).mockImplementation(async (func?: () => Promise<void>) => {
-            await func!();
-        });
-
-        await setupEncryptionStore.resetConfirm();
-
-        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), {
-            forceReset: true,
-            resetCrossSigning: true,
         });
     });
 });

@@ -7,16 +7,27 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { act } from "react";
+import { Crypto } from "@peculiar/webcrypto";
+import { type CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/src/crypto-api";
+import { SecretStorage } from "matrix-js-sdk/src/matrix";
 
-import { accessSecretStorage } from "../../src/SecurityManager";
+import { accessSecretStorage, crossSigningCallbacks } from "../../src/SecurityManager";
 import { filterConsole, stubClient } from "../test-utils";
 import Modal from "../../src/Modal.tsx";
+import {
+    default as AccessSecretStorageDialog,
+    type KeyParams,
+} from "../../src/components/views/dialogs/security/AccessSecretStorageDialog.tsx";
 
 jest.mock("react", () => {
     const React = jest.requireActual("react");
     React.lazy = (children: any) => children(); // stub out lazy for dialog test
     return React;
+});
+
+afterEach(() => {
+    jest.restoreAllMocks();
 });
 
 describe("SecurityManager", () => {
@@ -74,4 +85,81 @@ describe("SecurityManager", () => {
             await expect(spy.mock.lastCall![0]).resolves.toEqual(expect.objectContaining({ __test: true }));
         });
     });
+
+    describe("getSecretStorageKey", () => {
+        const { getSecretStorageKey } = crossSigningCallbacks;
+
+        /** Polyfill crypto.subtle, which is unavailable in jsdom */
+        function polyFillSubtleCrypto() {
+            Object.defineProperty(globalThis.crypto, "subtle", { value: new Crypto().subtle });
+        }
+
+        it("should prompt the user if the key is uncached", async () => {
+            polyFillSubtleCrypto();
+
+            const client = stubClient();
+            mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
+
+            const passphrase = "s3cret";
+            const { recoveryKey, keyInfo } = await deriveKeyFromPassphrase(passphrase);
+
+            jest.spyOn(Modal, "createDialog").mockImplementation((component) => {
+                expect(component).toBe(AccessSecretStorageDialog);
+
+                const modalFunc = async () => [{ passphrase }] as [KeyParams];
+                return {
+                    finished: modalFunc(),
+                    close: () => {},
+                };
+            });
+
+            const [keyId, key] = (await act(() =>
+                getSecretStorageKey!({ keys: { my_default_key: keyInfo } }, "my_secret"),
+            ))!;
+            expect(keyId).toEqual("my_default_key");
+            expect(key).toEqual(recoveryKey);
+        });
+
+        it("should not prompt the user if the requested key is not the default", async () => {
+            const client = stubClient();
+            mocked(client.secretStorage.getDefaultKeyId).mockResolvedValue("my_default_key");
+            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+
+            await expect(
+                act(() =>
+                    getSecretStorageKey!(
+                        { keys: { other_key: {} as SecretStorage.SecretStorageKeyDescription } },
+                        "my_secret",
+                    ),
+                ),
+            ).rejects.toThrow("Request for non-default 4S key");
+            expect(createDialogSpy).not.toHaveBeenCalled();
+        });
+    });
 });
+
+/** Derive a key from a passphrase, also returning the KeyInfo */
+async function deriveKeyFromPassphrase(
+    passphrase: string,
+): Promise<{ recoveryKey: Uint8Array; keyInfo: SecretStorage.SecretStorageKeyDescription }> {
+    const salt = "SALTYGOODNESS";
+    const iterations = 1000;
+
+    const recoveryKey = await deriveRecoveryKeyFromPassphrase(passphrase, salt, iterations);
+
+    const check = await SecretStorage.calculateKeyCheck(recoveryKey);
+    return {
+        recoveryKey,
+        keyInfo: {
+            iv: check.iv,
+            mac: check.mac,
+            algorithm: SecretStorage.SECRET_STORAGE_ALGORITHM_V1_AES,
+            name: "",
+            passphrase: {
+                algorithm: "m.pbkdf2",
+                iterations,
+                salt,
+            },
+        },
+    };
+}

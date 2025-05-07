@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RecoveyPanelOutOfSync /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSection mx_SettingsSection_newUi"
+    data-testid="recoveryPanel"
+  >
+    <div
+      class="mx_SettingsSection_header"
+    >
+      <h2
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+      >
+        Recovery 
+      </h2>
+      <div
+        class="mx_SettingsSubheader"
+      >
+        Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+        <span
+          class="mx_SettingsSubheader_error"
+        >
+          <svg
+            fill="currentColor"
+            height="20px"
+            viewBox="0 0 24 24"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+            />
+          </svg>
+          Your key storage is out of sync. Click one of the buttons below to fix the problem.
+        </span>
+      </div>
+    </div>
+    <div
+      class="mx_RecoveryPanelOutOfSync"
+    >
+      <button
+        class="_button_vczzf_8"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Forgot recovery key?
+      </button>
+      <button
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="primary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 5 12q0-.825.588-1.412A1.93 1.93 0 0 1 7 10q.824 0 1.412.588Q9 11.175 9 12t-.588 1.412A1.93 1.93 0 0 1 7 14m0 4q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q1.676 0 3.037.825A6.2 6.2 0 0 1 12.2 9h8.375q.2 0 .387.075.188.075.338.225l2 2q.15.15.212.325.063.175.063.375t-.062.375a.9.9 0 0 1-.213.325l-3.175 3.175a1 1 0 0 1-.3.2q-.175.075-.35.1a.8.8 0 0 1-.35-.025.9.9 0 0 1-.325-.175L17.5 15l-1.425 1.075a.95.95 0 0 1-.887.15.9.9 0 0 1-.288-.15L13.375 15H12.2a6.2 6.2 0 0 1-2.162 2.175Q8.675 18 7 18m0-2q1.4 0 2.463-.85A4.03 4.03 0 0 0 10.875 13H14l1.45 1.025L17.5 12.5l1.775 1.375L21.15 12l-1-1h-9.275a4.03 4.03 0 0 0-1.412-2.15Q8.4 8 7 8 5.35 8 4.175 9.175T3 12t1.175 2.825T7 16"
+          />
+        </svg>
+        Enter recovery key
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, waitFor } from "jest-matrix-react";
-import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
+import { type EventTimeline, type MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
+import { type IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import { MPollEndBody } from "../../../../../src/components/views/messages/MPollEndBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
@@ -70,7 +70,6 @@ describe("<MPollEndBody />", () => {
         mxEvent: pollEndEvent,
         highlightLink: "unused",
         mediaEventHelper: {} as unknown as MediaEventHelper,
-        onHeightChanged: () => {},
         onMessageAllowed: () => {},
         permalinkCreator: {} as unknown as RoomPermalinkCreator,
         ref: undefined as any,

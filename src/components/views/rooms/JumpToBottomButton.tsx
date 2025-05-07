@@ -9,7 +9,7 @@ import React from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     numUnreadMessages?: number;

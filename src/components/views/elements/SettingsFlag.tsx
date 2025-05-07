@@ -14,8 +14,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
-import { SettingLevel } from "../../../settings/SettingLevel";
-import { BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { type SettingLevel } from "../../../settings/SettingLevel";
+import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean

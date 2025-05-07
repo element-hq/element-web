@@ -6,9 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode, TransitionEvent } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
-import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixClient,
+    RoomStateEvent,
+    EventStatus,
+    type MatrixEvent,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 
@@ -19,30 +26,30 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import EventTile, {
-    GetRelationsForEvent,
-    IReadReceiptProps,
+    type GetRelationsForEvent,
+    type IReadReceiptProps,
     isEligibleForSpecialReceipt,
-    UnwrappedEventTile,
+    type UnwrappedEventTile,
 } from "../views/rooms/EventTile";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import LegacyCallEventGrouper from "./LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
-import ScrollPanel, { IScrollState } from "./ScrollPanel";
+import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
 import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import Spinner from "../views/elements/Spinner";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
+import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
-import { BaseGrouper } from "./grouper/BaseGrouper";
+import { type BaseGrouper } from "./grouper/BaseGrouper";
 import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
@@ -252,8 +259,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             // previous positions the read marker has been in, so we can
@@ -285,6 +292,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
+        this.resizeObserver.disconnect();
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -793,7 +801,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 isRedacted={mxEv.isRedacted()}
                 replacingEventId={mxEv.replacingEventId()}
                 editState={isEditing ? this.props.editState : undefined}
-                onHeightChanged={this.onHeightChanged}
+                resizeObserver={this.resizeObserver}
                 readReceipts={readReceipts}
                 readReceiptMap={this.readReceiptMap}
                 showUrlPreview={this.props.showUrlPreview}
@@ -946,14 +954,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.eventTiles[eventId] = node;
     };
 
-    // once dynamic content in the events load, make the scrollPanel check the
-    // scroll offsets.
+    // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     public onHeightChanged = (): void => {
-        const scrollPanel = this.scrollPanel.current;
-        if (scrollPanel) {
-            scrollPanel.checkScroll();
-        }
+        this.scrollPanel.current?.checkScroll();
     };
+
+    private resizeObserver = new ResizeObserver(this.onHeightChanged);
 
     private onTypingShown = (): void => {
         const scrollPanel = this.scrollPanel.current;
