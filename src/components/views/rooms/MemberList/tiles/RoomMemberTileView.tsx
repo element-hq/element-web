@@ -20,6 +20,7 @@ import { InvitedIconView } from "./common/InvitedIconView";
 interface IProps {
     member: RoomMember;
     showPresence?: boolean;
+    focused?: boolean;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -54,13 +55,14 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 
     return (
         <MemberTileView
-            // title={vm.title}
+            title={vm.title}
             onClick={vm.onClick}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
+            focused={props.focused}
         />
     );
 }

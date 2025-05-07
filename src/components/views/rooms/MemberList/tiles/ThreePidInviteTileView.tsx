@@ -15,6 +15,7 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
+    focused?: boolean;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -29,6 +30,7 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             onClick={vm.onClick}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
+            focused={props.focused}
         />
     );
 }

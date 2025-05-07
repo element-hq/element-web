@@ -28,81 +28,78 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
-
     const totalRows = vm.members.length;
+    const ref = useRef<VirtuosoHandle | null>(null);
+    const [focusedIndex, setFocusedIndex] = React.useState(-1);
+    const listRef = useRef<HTMLButtonElement | null>(null);
 
-    const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
+    const getRowComponent = (item: MemberWithSeparator, focused: boolean): JSX.Element => {
         if (item === SEPARATOR) {
             return <hr className="mx_MemberListView_separator" />;
         } else if (item.member) {
-            return <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} />;
+            return <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} focused={focused} />;
         } else {
             return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
         }
     };
 
-    const getRowHeight = ({ index }: { index: number }): number => {
-        if (vm.members[index] === SEPARATOR) {
-            /**
-             * This is a separator of 2px height rendered between
-             * joined and invited members.
-             */
-            return 2;
-        } else if (totalRows && index === totalRows) {
-            /**
-             * The empty spacer div rendered at the bottom should
-             * have a height of 32px.
-             */
-            return 32;
-        } else {
-            /**
-             * The actual member tiles have a height of 56px.
-             */
-            return 56;
-        }
+    const scrollToIndex = (index: number): void => {
+        ref?.current?.scrollIntoView({
+            index: index,
+            behavior: "auto",
+            done: () => {
+                setFocusedIndex(index);
+            },
+        });
     };
-    const ref = useRef<VirtuosoHandle | null>(null);
-    const [currentItemIndex, setCurrentItemIndex] = React.useState(-1)
-    const listRef = useRef<HTMLButtonElement | null>(null);
 
     const keyDownCallback = React.useCallback(
         (e: any) => {
-            let nextIndex = null
-            console.log("keydown")
-            console.log(e.code)
-            if (e.code === 'ArrowUp') {
-                nextIndex = Math.max(0, currentItemIndex - 1)
-            } else if (e.code === 'ArrowDown') {
-                nextIndex = Math.min(totalRows, currentItemIndex + 1)
-            } else if (e.code === 'enter') {
-                nextIndex = Math.min(totalRows, currentItemIndex + 1)
-            }
-
-            if (nextIndex !== null) {
-                ref?.current?.scrollIntoView({
-                    index: nextIndex,
-                    behavior: 'auto',
-                    done: () => {
-                        setCurrentItemIndex(nextIndex)
-                    },
-                })
-                e.preventDefault()
+            if (e.code === "ArrowUp") {
+                const nextItemIsSeparator = focusedIndex > 1 && vm.members[focusedIndex - 1] === SEPARATOR;
+                const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
+                scrollToIndex(Math.max(0, focusedIndex - nextMemberOffset));
+                e.preventDefault();
+            } else if (e.code === "ArrowDown") {
+                const nextItemIsSeparator = focusedIndex < totalRows - 1 && vm.members[focusedIndex + 1] === SEPARATOR;
+                const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
+                scrollToIndex(Math.min(totalRows - 1, focusedIndex + nextMemberOffset));
+                e.preventDefault();
+            } else if ((e.code === "Enter" || e.code === "Space") && focusedIndex >= 0) {
+                const item = vm.members[focusedIndex];
+                if (item !== SEPARATOR) {
+                    let member = item.member ?? item.threePidInvite;
+                    vm.onClickMember(member);
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
             }
         },
-        [currentItemIndex, ref, setCurrentItemIndex]
-    )
+        [focusedIndex, ref, setFocusedIndex],
+    );
 
     const scrollerRef = React.useCallback(
         (element: any) => {
             if (element) {
-                element.addEventListener('keydown', keyDownCallback)
-                listRef.current = element
+                element.addEventListener("keydown", keyDownCallback);
+                listRef.current = element;
             } else {
-                listRef?.current?.removeEventListener('keydown', keyDownCallback)
+                listRef?.current?.removeEventListener("keydown", keyDownCallback);
             }
         },
-        [keyDownCallback]
-    )
+        [keyDownCallback],
+    );
+
+    const onFocus = (e: React.FocusEvent): void => {
+        let nextIndex = focusedIndex == -1 ? 0 : focusedIndex;
+        scrollToIndex(nextIndex);
+        e.preventDefault();
+    };
+
+    function footer() {
+        return <div style={{ height: "32px" }}></div>;
+    }
+
     return (
         <BaseCard
             id="memberlist-panel"
@@ -112,33 +109,19 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             header={_t("common|people")}
             onClose={props.onClose}
         >
-            <Flex
-                align="stretch"
-                direction="column"
-                className="mx_MemberListView_container"
-            >
+            <Flex align="stretch" direction="column" className="mx_MemberListView_container">
                 <Form.Root>
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
-
                 <Virtuoso
                     ref={ref}
-                    style={{ height: '100%' }}
+                    style={{ height: "100%" }}
                     scrollerRef={scrollerRef}
-                    context={{ currentItemIndex }}
+                    context={{ focusedIndex }}
                     data={vm.members}
-                    itemContent={(index, member) => (
-                        <div
-                            style={{
-                                borderColor: index === currentItemIndex ? 'var(--border)' : 'transparent',
-                                borderWidth: '1px',
-                                borderStyle: 'solid',
-                            }}
-                        >
-                            {getRowComponent(member)}
-                        </div>
-
-                    )}
+                    onFocus={onFocus}
+                    itemContent={(index, member) => getRowComponent(member, index === focusedIndex)}
+                    components={{ Footer: () => footer() }}
                 />
             </Flex>
         </BaseCard>

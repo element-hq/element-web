@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import { RovingAccessibleButton } from "../../../../../../accessibility/RovingTabIndex";
+import AccessibleButton from "../../../../elements/AccessibleButton";
+import classNames from "classnames";
 
 interface Props {
     avatarJsx: JSX.Element;
@@ -17,6 +18,7 @@ interface Props {
     presenceJsx?: JSX.Element;
     userLabel?: React.ReactNode;
     iconJsx?: JSX.Element;
+    focused?: boolean;
 }
 
 export function MemberTileView(props: Props): JSX.Element {
@@ -28,7 +30,14 @@ export function MemberTileView(props: Props): JSX.Element {
     return (
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         <div>
-            <RovingAccessibleButton className="mx_MemberTileView" title={props.title} onClick={props.onClick}>
+            <AccessibleButton
+                className={classNames("mx_MemberTileView", {
+                    mx_MemberTileView_hover: props.focused,
+                })}
+                title={props.title}
+                onClick={props.onClick}
+                tabIndex={-1}
+            >
                 <div className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">
                         {props.avatarJsx} {props.presenceJsx}
@@ -39,7 +48,7 @@ export function MemberTileView(props: Props): JSX.Element {
                     {userLabelJsx}
                     {props.iconJsx}
                 </div>
-            </RovingAccessibleButton>
+            </AccessibleButton>
         </div>
     );
 }
