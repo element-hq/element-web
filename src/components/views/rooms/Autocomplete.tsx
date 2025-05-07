@@ -10,7 +10,6 @@ import React, { createRef, type RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import Autocompleter, {
     type ICompletion,
@@ -177,7 +176,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             }
         }
 
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         this.setState(
             {
                 completions,
