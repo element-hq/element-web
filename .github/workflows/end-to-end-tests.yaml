@@ -190,7 +190,7 @@ jobs:
         name: Downstream Playwright tests [element-modules]
         needs: build
         #if: inputs.skip != true && github.event_name == 'merge_group'
-        uses: element-hq/elemenwebappt-modules/.github/workflows/reusable-playwright-tests.yml@t3chguy/downstream-test-modules
+        uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@t3chguy/downstream-test-modules
         with:
             webapp-artifact: webapp
 
