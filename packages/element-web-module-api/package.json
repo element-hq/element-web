@@ -33,7 +33,7 @@
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@microsoft/api-extractor": "^7.49.1",
         "@types/node": "^22.10.7",
-        "@types/react": "^18",
+        "@types/react": "^19",
         "@types/semver": "^7.5.8",
         "@vitest/coverage-v8": "^3.0.4",
         "matrix-web-i18n": "^3.3.0",
@@ -49,7 +49,7 @@
         "@types/react": "*",
         "@types/react-dom": "*",
         "matrix-web-i18n": "*",
-        "react": "^18"
+        "react": "^19"
     },
     "peerDependenciesMeta": {
         "@matrix-org/react-sdk-module-api": {
