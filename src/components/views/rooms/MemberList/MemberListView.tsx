@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { useRef, type JSX } from "react";
+import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 import { Flex } from "../../../utils/Flex";
 import {
@@ -19,7 +20,6 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
-import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 interface IProps {
     roomId: string;
@@ -75,7 +75,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 }
             }
         },
-        [focusedIndex, ref, setFocusedIndex],
+        [focusedIndex, ref, setFocusedIndex, vm, totalRows],
     );
 
     const scrollerRef = React.useCallback(
@@ -91,13 +91,13 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     );
 
     const onFocus = (e: React.FocusEvent): void => {
-        let nextIndex = focusedIndex == -1 ? 0 : focusedIndex;
+        const nextIndex = focusedIndex == -1 ? 0 : focusedIndex;
         scrollToIndex(nextIndex);
         e.preventDefault();
     };
 
-    function footer() {
-        return <div style={{ height: "32px" }}></div>;
+    function footer(): React.ReactNode {
+        return <div style={{ height: "32px" }} />;
     }
 
     return (
