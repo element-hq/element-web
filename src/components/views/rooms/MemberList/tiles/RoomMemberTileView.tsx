@@ -54,7 +54,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 
     return (
         <MemberTileView
-            title={vm.title}
+            // title={vm.title}
             onClick={vm.onClick}
             avatarJsx={av}
             presenceJsx={presenceJSX}

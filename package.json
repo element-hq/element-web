@@ -148,6 +148,7 @@
         "react-focus-lock": "^2.5.1",
         "react-string-replace": "^1.1.1",
         "react-transition-group": "^4.4.1",
+        "@tanstack/react-virtual": "^3.13.6",
         "react-virtualized": "^9.22.5",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
