@@ -13,7 +13,7 @@ import type { RoomNotificationState } from "../../../../src/stores/notifications
 import { LISTS_UPDATE_EVENT, RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
-import { mkEvent, mkMessage, mkSpace, stubClient, upsertRoomStateEvents } from "../../../test-utils";
+import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { getMockedRooms } from "./skip-list/getMockedRooms";
 import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
@@ -205,14 +205,17 @@ describe("RoomListStoreV3", () => {
             expect(roomIds).toContain(newRoom.roomId);
         });
 
-        it("Rooms are inserted on m.direct event", async () => {
-            const { store, dispatcher } = await getRoomListStore();
+        it("Rooms are re-inserted on m.direct event", async () => {
+            const { store, dispatcher, client } = await getRoomListStore();
+
+            // Let's mock the client to return new rooms with the name "My DM Room"
+            client.getRoom = (roomId: string) => mkStubRoom(roomId, "My DM Room", client);
 
             // Let's create a m.direct event that we can dispatch
             const content = {
-                "@bar1:matrix.org": ["!newroom1:matrix.org", "!newroom2:matrix.org"],
-                "@bar2:matrix.org": ["!newroom3:matrix.org", "!newroom4:matrix.org"],
-                "@bar3:matrix.org": ["!newroom5:matrix.org"],
+                "@bar1:matrix.org": ["!foo1:matrix.org", "!foo2:matrix.org"],
+                "@bar2:matrix.org": ["!foo3:matrix.org", "!foo4:matrix.org"],
+                "@bar3:matrix.org": ["!foo5:matrix.org"],
             };
             const event = mkEvent({
                 event: true,
@@ -223,6 +226,8 @@ describe("RoomListStoreV3", () => {
 
             const fn = jest.fn();
             store.on(LISTS_UPDATE_EVENT, fn);
+
+            // Do the actual dispatch
             dispatcher.dispatch(
                 {
                     action: "MatrixActions.accountData",
@@ -235,17 +240,21 @@ describe("RoomListStoreV3", () => {
             // Ensure only one emit occurs
             expect(fn).toHaveBeenCalledTimes(1);
 
-            // Each of these rooms should now appear in the store
-            // We don't need to mock the rooms themselves since our mocked
-            // client will create the rooms on getRoom() call.
-            const roomIds = store.getSortedRooms().map((r) => r.roomId);
-            [
-                "!newroom1:matrix.org",
-                "!newroom2:matrix.org",
-                "!newroom3:matrix.org",
-                "!newroom4:matrix.org",
-                "!newroom5:matrix.org",
-            ].forEach((id) => expect(roomIds).toContain(id));
+            /*
+             When the dispatched event is processed by the room-list, the associated
+             rooms will be fetched via client.getRoom and will be re-inserted into the
+             skip list. We can confirm that this happened by checking if all the dm rooms
+             have the same name ("My DM Room") since we've mocked the client to return such rooms.
+             */
+            const ids = [
+                "!foo1:matrix.org",
+                "!foo2:matrix.org",
+                "!foo3:matrix.org",
+                "!foo4:matrix.org",
+                "!foo5:matrix.org",
+            ];
+            const rooms = store.getSortedRooms().filter((r) => ids.includes(r.roomId));
+            rooms.forEach((room) => expect(room.name).toBe("My DM Room"));
         });
 
         it("Room is re-inserted on tag change", async () => {
