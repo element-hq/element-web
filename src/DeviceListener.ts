@@ -132,7 +132,7 @@ export default class DeviceListener {
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;
         this.keyBackupFetchedAt = null;
-        this.keyBackupStatusChecked = false;
+        this.cachedKeyBackupStatus = undefined;
         this.ourDeviceIdsAtStart = null;
         this.displayingToastsForDeviceIds = new Set();
         this.client = undefined;
@@ -512,18 +512,36 @@ export default class DeviceListener {
      * trigger an auto-rageshake).
      */
     private checkKeyBackupStatus = async (): Promise<void> => {
-        if (this.keyBackupStatusChecked || !this.client) {
-            return;
-        }
-        const activeKeyBackupVersion = await this.client.getCrypto()?.getActiveSessionBackupVersion();
-        // if key backup is enabled, no need to check this ever again (XXX: why only when it is enabled?)
-        this.keyBackupStatusChecked = !!activeKeyBackupVersion;
-
-        if (!activeKeyBackupVersion) {
+        if (!(await this.getKeyBackupStatus())) {
             dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
         }
     };
-    private keyBackupStatusChecked = false;
+
+    /**
+     * Is key backup enabled? Use a cached answer if we have one.
+     */
+    private getKeyBackupStatus = async (): Promise<boolean> => {
+        if (!this.client) {
+            // To preserve existing behaviour, if there is no client, we
+            // pretend key storage is on.
+            //
+            // Someone looking to improve this code could try throwing an error
+            // here since we don't expect client to be undefined.
+            return true;
+        }
+
+        // If we've already cached the answer, return it.
+        if (this.cachedKeyBackupStatus !== undefined) {
+            return this.cachedKeyBackupStatus;
+        }
+
+        // Fetch the answer and cache it
+        const activeKeyBackupVersion = await this.client.getCrypto()?.getActiveSessionBackupVersion();
+        this.cachedKeyBackupStatus = !!activeKeyBackupVersion;
+
+        return this.cachedKeyBackupStatus;
+    };
+    private cachedKeyBackupStatus: boolean | undefined = undefined;
 
     private onRecordClientInformationSettingChange: CallbackFn = (
         _originalSettingName,
