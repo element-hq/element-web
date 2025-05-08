@@ -13,7 +13,7 @@ import { StaticConfig } from "../config";
  * Univention Central Navigation API
  * https://docs.software-univention.de/nubus-kubernetes-customization/1.x/en/api/central-navigation.html
  */
-export const UniventionCentralNavigation = z.object({
+const UniventionCentralNavigation = z.object({
     categories: z.array(
         z.object({
             identifier: z.string(),

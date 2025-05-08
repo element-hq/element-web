@@ -14,7 +14,7 @@ const Anchor = styled.a`
 `;
 
 const Image = styled.img`
-    height: ${({ theme }) => theme.navbar.logoHeight};
+    height: ${({ theme }): string => theme.navbar.logoHeight};
     align-self: center;
 `;
 

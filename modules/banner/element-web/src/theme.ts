@@ -14,6 +14,35 @@ const iconOnSolidPrimary = "var(--cpd-color-icon-on-solid-primary)";
 
 const bodyMdSemibold = "var(--cpd-font-body-md-semibold)";
 
+declare module "styled-components" {
+    export interface DefaultTheme {
+        compound: {
+            color: {
+                bgCanvasDefault: string;
+                textActionAccent: string;
+                textPrimary: string;
+                iconOnSolidPrimary: string;
+            };
+            font: {
+                bodyMdSemibold: string;
+            };
+        };
+        color: {
+            accent: string;
+        };
+        navbar: {
+            border: string;
+            boxShadow: string;
+            height: string;
+            triggerWidth: string;
+            logoHeight: string;
+        };
+        menu: {
+            width: string;
+        };
+    }
+}
+
 export const theme: DefaultTheme = {
     compound: {
         color: {

@@ -6,7 +6,8 @@
     "main": "lib/index.js",
     "scripts": {
         "prepare": "vite build",
-        "lint:ts": "tsc --noEmit",
+        "lint:types": "tsc --noEmit",
+        "lint:codestyle": "echo 'handled by lint:eslint'",
         "test": "echo no tests yet"
     },
     "devDependencies": {

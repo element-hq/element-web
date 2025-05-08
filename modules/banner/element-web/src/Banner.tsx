@@ -16,11 +16,11 @@ import { theme } from "./theme";
 import Logo from "./Logo.tsx";
 
 const Root = styled.nav`
-    background-color: ${({ theme }) => theme.compound.color.bgCanvasDefault};
-    border-bottom: ${({ theme }) => theme.navbar.border};
-    height: ${({ theme }) => theme.navbar.height};
+    background-color: ${({ theme }): string => theme.compound.color.bgCanvasDefault};
+    border-bottom: ${({ theme }): string => theme.navbar.border};
+    height: ${({ theme }): string => theme.navbar.height};
     display: grid;
-    grid-template-columns: ${({ theme }) => `${theme.navbar.triggerWidth} auto`};
+    grid-template-columns: ${({ theme }): string => `${theme.navbar.triggerWidth} auto`};
     gap: 24px;
 `;
 

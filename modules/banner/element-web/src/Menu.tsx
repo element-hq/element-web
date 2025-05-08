@@ -39,7 +39,7 @@ const SidebarHeading = styled.div`
 const Launcher = styled.button`
     align-items: center;
     border: none;
-    color: ${({ theme }) => theme.compound.color.textPrimary};
+    color: ${({ theme }): string => theme.compound.color.textPrimary};
     cursor: pointer;
     display: flex;
 
