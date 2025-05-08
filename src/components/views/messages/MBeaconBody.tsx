@@ -6,19 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useContext, useEffect, useState } from "react";
 import {
-    Beacon,
+    type Beacon,
     BeaconEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    MatrixClient,
+    type MatrixClient,
     RelationType,
-    IRedactOpts,
-    ContentHelpers,
+    type IRedactOpts,
+    type ContentHelpers,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import classNames from "classnames";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -33,9 +33,9 @@ import OwnBeaconStatus from "../beacon/OwnBeaconStatus";
 import { Map, SmartMarker } from "../location";
 import { MapError } from "../location/MapError";
 import MapFallback from "../location/MapFallback";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { BeaconViewDialog } from "../beacon";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 
 const useBeaconState = (
     beaconInfoEvent: MatrixEvent,
@@ -81,10 +81,10 @@ const useBeaconState = (
 // eg thread and main timeline, reply
 // maplibregl needs a unique id to attach the map instance to
 const useUniqueId = (eventId: string): string => {
-    const [id, setId] = useState(`${eventId}_${randomString(8)}`);
+    const [id, setId] = useState(`${eventId}_${secureRandomString(8)}`);
 
     useEffect(() => {
-        setId(`${eventId}_${randomString(8)}`);
+        setId(`${eventId}_${secureRandomString(8)}`);
     }, [eventId]);
 
     return id;
@@ -122,7 +122,7 @@ const useHandleBeaconRedaction = (
     }, [event, onBeforeBeaconInfoRedaction]);
 };
 
-const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, getRelationsForEvent }, ref) => {
+const MBeaconBody = ({ mxEvent, getRelationsForEvent, ref }: IBodyProps): JSX.Element => {
     const { beacon, isLive, latestLocationState, waitingToStart } = useBeaconState(mxEvent);
     const mapId = useUniqueId(mxEvent.getId()!);
 
@@ -225,6 +225,6 @@ const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, get
             )}
         </div>
     );
-}) as ForwardRefExoticComponent<IBodyProps>;
+};
 
 export default MBeaconBody;

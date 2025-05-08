@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useEffect, useMemo, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
 import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
@@ -20,7 +20,7 @@ import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../str
 import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import UIStore from "../../../stores/UIStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { IApp } from "../../../stores/WidgetStore";
+import { type IApp } from "../../../stores/WidgetStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import AccessibleButton from "../elements/AccessibleButton";

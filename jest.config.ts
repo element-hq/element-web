@@ -38,6 +38,8 @@ const config: Config = {
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
+        // Requires ESM which is incompatible with our current Jest setup
+        "^@element-hq/element-web-module-api$": "<rootDir>/__mocks__/empty.js",
     },
     transformIgnorePatterns: ["/node_modules/(?!(mime|matrix-js-sdk)).+$"],
     collectCoverageFrom: [

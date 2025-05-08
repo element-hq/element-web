@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback, useEffect } from "react";
 
 import useFocus from "../../../../../hooks/useFocus";
-import { useComposerContext, ComposerContextState } from "../ComposerContext";
+import { useComposerContext, type ComposerContextState } from "../ComposerContext";
 
 function setSelectionContext(composerContext: ComposerContextState): void {
     const selection = document.getSelection();

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications";
 
@@ -38,8 +38,8 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
 
     private card = React.createRef<HTMLDivElement>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             narrow: false,
@@ -95,7 +95,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                     onClose={this.props.onClose}
                     withoutScrollContainer={true}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     {content}
                 </BaseCard>
             </ScopedRoomContextProvider>

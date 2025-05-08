@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcClient } from "oidc-client-ts";
 
@@ -50,11 +50,8 @@ export class OidcClientStore {
         } else {
             // We are not in OIDC Native mode, as we have no locally stored issuer. Check if the server delegates auth to OIDC.
             try {
-                const authIssuer = await this.matrixClient.getAuthIssuer();
-                const { accountManagementEndpoint, metadata } = await discoverAndValidateOIDCIssuerWellKnown(
-                    authIssuer.issuer,
-                );
-                this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
+                const authMetadata = await this.matrixClient.getAuthMetadata();
+                this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
             } catch (e) {
                 console.log("Auth issuer not found", e);
             }
@@ -153,14 +150,11 @@ export class OidcClientStore {
 
         try {
             const clientId = getStoredOidcClientId();
-            const { accountManagementEndpoint, metadata, signingKeys } = await discoverAndValidateOIDCIssuerWellKnown(
-                this.authenticatedIssuer,
-            );
-            this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
+            const authMetadata = await discoverAndValidateOIDCIssuerWellKnown(this.authenticatedIssuer);
+            this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
             this.oidcClient = new OidcClient({
-                ...metadata,
-                authority: metadata.issuer,
-                signingKeys,
+                authority: authMetadata.issuer,
+                signingKeys: authMetadata.signingKeys ?? undefined,
                 redirect_uri: PlatformPeg.get()!.getOidcCallbackUrl().href,
                 client_id: clientId,
             });

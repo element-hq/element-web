@@ -6,20 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { MutableRefObject, ReactNode, useRef } from "react";
-import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import React, { type RefObject, type ReactNode, useRef } from "react";
+import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import PictureInPictureDragger, { CreatePipChildren } from "./PictureInPictureDragger";
+import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPictureDragger";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWidgetStore";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { WidgetPip } from "../views/pips/WidgetPip";
@@ -34,7 +34,7 @@ const SHOW_CALL_IN_STATES = [
 ];
 
 interface IProps {
-    movePersistedElement: MutableRefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 interface IState {
@@ -280,7 +280,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 }
 
 export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>();
+    const movePersistedElement = useRef<() => void>(null);
 
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };

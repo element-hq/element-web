@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 import { render } from "jest-matrix-react";
 
-import SettingsTab, { SettingsTabProps } from "../../../../../../src/components/views/settings/tabs/SettingsTab";
+import SettingsTab, { type SettingsTabProps } from "../../../../../../src/components/views/settings/tabs/SettingsTab";
 
 describe("<SettingsTab />", () => {
     const getComponent = (props: SettingsTabProps): ReactElement => <SettingsTab {...props} />;

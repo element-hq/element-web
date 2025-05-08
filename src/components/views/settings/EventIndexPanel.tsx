@@ -6,7 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy } from "react";
+import React, { type JSX, lazy } from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -28,8 +29,8 @@ interface IState {
     eventIndexingEnabled: boolean;
 }
 
-export default class EventIndexPanel extends React.Component<{}, IState> {
-    public constructor(props: {}) {
+export default class EventIndexPanel extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -118,15 +119,14 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
     };
 
     private confirmEventStoreReset = (): void => {
-        const { close } = Modal.createDialog(SeshatResetDialog, {
-            onFinished: async (success): Promise<void> => {
-                if (success) {
-                    await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, false);
-                    await EventIndexPeg.deleteEventIndex();
-                    await this.onEnable();
-                    close();
-                }
-            },
+        const { finished, close } = Modal.createDialog(SeshatResetDialog);
+        finished.then(async ([success]) => {
+            if (success) {
+                await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, false);
+                await EventIndexPeg.deleteEventIndex();
+                await this.onEnable();
+                close();
+            }
         });
     };
 

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 
 import StyledRadioGroup from "../../../../../src/components/views/elements/StyledRadioGroup";
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
@@ -16,9 +16,9 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff, filterBoolean } from "../utils/arrays";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Action } from "../dispatcher/actions";
-import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
+import { type SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up

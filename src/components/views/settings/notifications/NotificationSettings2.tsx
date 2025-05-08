@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState } from "react";
+import React, { type JSX, useState } from "react";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
@@ -15,7 +15,7 @@ import { useSettingValue } from "../../../../hooks/useSettings";
 import { _t } from "../../../../languageHandler";
 import {
     DefaultNotificationSettings,
-    NotificationSettings,
+    type NotificationSettings,
 } from "../../../../models/notificationsettings/NotificationSettings";
 import { RoomNotifState } from "../../../../RoomNotifs";
 import { SettingLevel } from "../../../../settings/SettingLevel";

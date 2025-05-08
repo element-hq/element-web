@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MutableRefObject, RefObject } from "react";
-import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { WysiwygEvent } from "@vector-im/matrix-wysiwyg";
+import { type RefObject } from "react";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 
-import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
-import { IRoomState } from "../../../../structures/RoomView";
-import Autocomplete from "../../Autocomplete";
+import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import { type IRoomState } from "../../../../structures/RoomView";
+import type Autocomplete from "../../Autocomplete";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
 import { getBlobSafeMimeType } from "../../../../../utils/blobs";
@@ -20,10 +20,10 @@ import ContentMessages from "../../../../../ContentMessages";
 import { isNotNull } from "../../../../../Typeguards";
 
 export function focusComposer(
-    composerElement: MutableRefObject<HTMLElement | null>,
+    composerElement: RefObject<HTMLElement | null>,
     renderingType: TimelineRenderingType,
     roomContext: Pick<IRoomState, "timelineRenderingType">,
-    timeoutId: MutableRefObject<number | null>,
+    timeoutId: RefObject<number | null>,
 ): void {
     if (renderingType === roomContext.timelineRenderingType) {
         // Immediately set the focus, so if you start typing it
@@ -62,13 +62,13 @@ export function setCursorPositionAtTheEnd(element: HTMLElement): void {
  * @returns boolean - whether or not the autocomplete has handled the event
  */
 export function handleEventWithAutocomplete(
-    autocompleteRef: RefObject<Autocomplete>,
+    autocompleteRef: RefObject<Autocomplete | null>,
     // we get a React Keyboard event from plain text composer, a Keyboard Event from the rich text composer
     event: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>,
 ): boolean {
     const autocompleteIsOpen = autocompleteRef?.current && !autocompleteRef.current.state.hide;
 
-    if (!autocompleteIsOpen) {
+    if (!autocompleteRef.current || !autocompleteIsOpen) {
         return false;
     }
 
@@ -92,7 +92,7 @@ export function handleEventWithAutocomplete(
                 handled = true;
                 break;
             case KeyBindingAction.CancelAutocomplete:
-                autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
+                autocompleteRef.current.onEscape(event);
                 handled = true;
                 break;
             default:

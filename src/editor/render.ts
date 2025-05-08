@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Part, Type } from "./parts";
-import EditorModel from "./model";
+import { type Part, Type } from "./parts";
+import type EditorModel from "./model";
 
 export function needsCaretNodeBefore(part: Part, prevPart?: Part): boolean {
     const isFirst = !prevPart || prevPart.type === Type.Newline;

@@ -8,16 +8,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import DateSeparator from "../messages/DateSeparator";
 import EventTile from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
-import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
+import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -30,7 +31,6 @@ interface IProps {
     timeline: MatrixEvent[];
     // indexes of the matching events (not contextual ones)
     ourEventsIndexes: number[];
-    onHeightChanged?: () => void;
     permalinkCreator?: RoomPermalinkCreator;
 }
 
@@ -41,8 +41,8 @@ export default class SearchResultTile extends React.Component<IProps> {
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.buildLegacyCallEventGroupers(this.props.timeline);
     }
@@ -114,7 +114,6 @@ export default class SearchResultTile extends React.Component<IProps> {
                         highlights={highlights}
                         permalinkCreator={this.props.permalinkCreator}
                         highlightLink={this.props.resultLink}
-                        onHeightChanged={this.props.onHeightChanged}
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         lastInSection={lastInSection}

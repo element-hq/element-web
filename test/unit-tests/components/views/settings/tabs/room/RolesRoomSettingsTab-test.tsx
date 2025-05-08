@@ -7,8 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, getByRole, render, RenderResult, screen, waitFor } from "jest-matrix-react";
-import { MatrixClient, EventType, MatrixEvent, Room, RoomMember, ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import { fireEvent, getByRole, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
+import {
+    type MatrixClient,
+    EventType,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    type ISendEventResponse,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 import { defer } from "matrix-js-sdk/src/utils";
@@ -217,6 +224,9 @@ describe("RolesRoomSettingsTab", () => {
                     content: {
                         users: {
                             [cli.getUserId()!]: 100,
+                            // needs at least one remaning admin in the room if we want to demote our user
+                            // otherwise another modal will be displayed
+                            ["@admin:server"]: 100,
                         },
                     },
                 });

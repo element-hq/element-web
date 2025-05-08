@@ -6,30 +6,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
+import React, { type JSX, type RefObject, useMemo, type ReactNode } from "react";
 import classNames from "classnames";
 
-import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import { WysiwygComposer } from "./components/WysiwygComposer";
 import { EditionButtons } from "./components/EditionButtons";
 import { useWysiwygEditActionHandler } from "./hooks/useWysiwygEditActionHandler";
 import { useEditing } from "./hooks/useEditing";
 import { useInitialContent } from "./hooks/useInitialContent";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
-import { ComposerFunctions } from "./types";
+import { type ComposerFunctions } from "./types";
 
 interface ContentProps {
     disabled?: boolean;
     composerFunctions: ComposerFunctions;
+    ref?: RefObject<HTMLElement | null>;
 }
 
-const Content = forwardRef<HTMLElement, ContentProps>(function Content(
-    { disabled = false, composerFunctions }: ContentProps,
-    forwardRef: ForwardedRef<HTMLElement>,
-) {
-    useWysiwygEditActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
+const Content = function Content({ disabled = false, composerFunctions, ref }: ContentProps): ReactNode {
+    useWysiwygEditActionHandler(disabled, ref, composerFunctions);
     return null;
-});
+};
 
 interface EditWysiwygComposerProps {
     disabled?: boolean;
@@ -44,7 +42,7 @@ export default function EditWysiwygComposer({
     className,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
-    const defaultContextValue = useRef(getDefaultContextValue({ editorStateTransfer }));
+    const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
@@ -55,7 +53,7 @@ export default function EditWysiwygComposer({
     }
 
     return (
-        <ComposerContext.Provider value={defaultContextValue.current}>
+        <ComposerContext.Provider value={defaultContextValue}>
             <WysiwygComposer
                 className={classNames("mx_EditWysiwygComposer", className)}
                 initialContent={initialContent}

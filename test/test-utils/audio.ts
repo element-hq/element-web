@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 
-import { Playback, PlaybackState } from "../../src/audio/Playback";
-import { PlaybackClock } from "../../src/audio/PlaybackClock";
+import { type Playback, PlaybackState } from "../../src/audio/Playback";
+import { type PlaybackClock } from "../../src/audio/PlaybackClock";
 import { UPDATE_EVENT } from "../../src/stores/AsyncStore";
-import { PublicInterface } from "../@types/common";
+import { type PublicInterface } from "../@types/common";
 
 export const createTestPlayback = (overrides: Partial<Playback> = {}): Playback => {
     const eventEmitter = new EventEmitter();

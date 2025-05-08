@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { registerOidcClient, OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { registerOidcClient, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import PlatformPeg from "../../PlatformPeg";
 
 /**
@@ -40,9 +40,9 @@ export const getOidcClientId = async (
     delegatedAuthConfig: OidcClientConfig,
     staticOidcClients?: IConfigOptions["oidc_static_clients"],
 ): Promise<string> => {
-    const staticClientId = getStaticOidcClientId(delegatedAuthConfig.metadata.issuer, staticOidcClients);
+    const staticClientId = getStaticOidcClientId(delegatedAuthConfig.issuer, staticOidcClients);
     if (staticClientId) {
-        logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.metadata.issuer}`);
+        logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.issuer}`);
         return staticClientId;
     }
     return await registerOidcClient(delegatedAuthConfig, await PlatformPeg.get()!.getOidcClientMetadata());

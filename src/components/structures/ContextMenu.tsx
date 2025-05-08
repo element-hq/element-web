@@ -8,12 +8,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
+import React, { type JSX, type CSSProperties, type RefObject, type SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
 
-import { Writeable } from "../../@types/common";
+import { type Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";
 import { checkInputableElement, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
@@ -440,7 +440,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         );
     }
 
-    public render(): React.ReactChild {
+    public render(): JSX.Element {
         if (this.props.mountAsChild) {
             // Render as a child of the current parent
             return this.renderMenu();
@@ -582,13 +582,15 @@ export const alwaysAboveRightOf = (
 
 type ContextMenuTuple<T> = [
     boolean,
-    RefObject<T>,
+    RefObject<T | null>,
     (ev?: SyntheticEvent) => void,
     (ev?: SyntheticEvent) => void,
     (val: boolean) => void,
 ];
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject<T>): ContextMenuTuple<T> => {
+export const useContextMenu = <T extends HTMLElement = HTMLElement>(
+    inputRef?: RefObject<T | null>,
+): ContextMenuTuple<T> => {
     let button = useRef<T>(null);
     if (inputRef) {
         // if we are given a ref, use it instead of ours
@@ -607,6 +609,7 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
         setIsOpen(false);
     };
 
+    // eslint-disable-next-line react-compiler/react-compiler
     return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
 

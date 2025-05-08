@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
-import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import { type RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
+import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
 
 export type ModuleFactory = (api: ModuleApi) => RuntimeModule;

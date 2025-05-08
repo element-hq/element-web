@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer } from "matrix-js-sdk/src/utils";
 
@@ -21,14 +21,14 @@ import { useOwnDevices } from "../../devices/useOwnDevices";
 import { FilteredDeviceList } from "../../devices/FilteredDeviceList";
 import CurrentDeviceSection from "../../devices/CurrentDeviceSection";
 import SecurityRecommendations from "../../devices/SecurityRecommendations";
-import { ExtendedDevice } from "../../devices/types";
+import { type ExtendedDevice } from "../../devices/types";
 import { deleteDevicesWithInteractiveAuth } from "../../devices/deleteDevices";
 import SettingsTab from "../SettingsTab";
 import LoginWithQRSection from "../../devices/LoginWithQRSection";
 import { Mode } from "../../../auth/LoginWithQR-types";
 import { useAsyncMemo } from "../../../../../hooks/useAsyncMemo";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
-import { FilterVariation } from "../../devices/filter";
+import { type FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { getManageDeviceUrl } from "../../../../../utils/oidc/urls.ts";
@@ -100,7 +100,7 @@ const useSignOut = (
             } else {
                 const deferredSuccess = defer<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
-                    deferredSuccess.resolve(success);
+                    deferredSuccess.resolve(!!success);
                 });
                 success = await deferredSuccess.promise;
             }
@@ -143,7 +143,7 @@ const SessionManagerTab: React.FC<{
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
-    const scrollIntoViewTimeoutRef = useRef<number>();
+    const scrollIntoViewTimeoutRef = useRef<number>(undefined);
 
     const sdkContext = useContext(SDKContext);
     const matrixClient = sdkContext.client!;
@@ -163,10 +163,7 @@ const SessionManagerTab: React.FC<{
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
     const oidcClientConfig = useAsyncMemo(async () => {
         try {
-            const authIssuer = await matrixClient?.getAuthIssuer();
-            if (authIssuer) {
-                return discoverAndValidateOIDCIssuerWellKnown(authIssuer.issuer);
-            }
+            return await matrixClient?.getAuthMetadata();
         } catch (e) {
             logger.error("Failed to discover OIDC metadata", e);
         }
@@ -206,7 +203,8 @@ const SessionManagerTab: React.FC<{
     const shouldShowOtherSessions = otherSessionsCount > 0;
 
     const onVerifyCurrentDevice = (): void => {
-        Modal.createDialog(SetupEncryptionDialog, { onFinished: refreshDevices });
+        const { finished } = Modal.createDialog(SetupEncryptionDialog);
+        finished.then(refreshDevices);
     };
 
     const onTriggerDeviceVerification = useCallback(
@@ -215,14 +213,14 @@ const SessionManagerTab: React.FC<{
                 return;
             }
             const verificationRequestPromise = requestDeviceVerification(deviceId);
-            Modal.createDialog(VerificationRequestDialog, {
+            const { finished } = Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: currentUserMember,
-                onFinished: async (): Promise<void> => {
-                    const request = await verificationRequestPromise;
-                    request.cancel();
-                    await refreshDevices();
-                },
+            });
+            finished.then(async () => {
+                const request = await verificationRequestPromise;
+                request.cancel();
+                await refreshDevices();
             });
         },
         [requestDeviceVerification, refreshDevices, currentUserMember],

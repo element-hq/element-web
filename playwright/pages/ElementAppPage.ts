@@ -114,7 +114,7 @@ export class ElementAppPage {
      * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
      */
     public getComposerField(isRightPanel?: boolean): Locator {
-        return this.getComposer(isRightPanel).locator("[contenteditable]");
+        return this.getComposer(isRightPanel).locator("div[contenteditable]");
     }
 
     /**
@@ -156,10 +156,6 @@ export class ElementAppPage {
     public async viewSpaceByName(name: string): Promise<void> {
         const button = await this.getSpacePanelButton(name);
         return button.click();
-    }
-
-    public async getClipboardText(): Promise<string> {
-        return this.page.evaluate("navigator.clipboard.readText()");
     }
 
     public async openSpotlight(): Promise<Spotlight> {
@@ -205,5 +201,16 @@ export class ElementAppPage {
             );
         }
         return this.page.locator(`id=${labelledById ?? describedById}`);
+    }
+
+    /**
+     * Close the notification toast
+     */
+    public closeNotificationToast(): Promise<void> {
+        // Dismiss "Notification" toast
+        return this.page
+            .locator(".mx_Toast_toast", { hasText: "Notifications" })
+            .getByRole("button", { name: "Dismiss" })
+            .click();
     }
 }

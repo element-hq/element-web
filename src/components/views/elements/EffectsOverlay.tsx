@@ -6,12 +6,12 @@ Copyright 2020 Nordeck IT + Consulting GmbH.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
  */
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { type FunctionComponent, useEffect, useRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
-import ICanvasEffect from "../../../effects/ICanvasEffect";
+import type ICanvasEffect from "../../../effects/ICanvasEffect";
 import { CHAT_EFFECTS } from "../../../effects";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 
@@ -58,11 +58,10 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
         if (canvas) canvas.height = UIStore.instance.windowHeight;
         UIStore.instance.on(UI_EVENTS.Resize, resize);
 
+        const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
         return () => {
             dis.unregister(dispatcherRef);
             UIStore.instance.off(UI_EVENTS.Resize, resize);
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
             for (const effect in currentEffects) {
                 const effectModule: ICanvasEffect = currentEffects.get(effect)!;
                 if (effectModule && effectModule.isRunning) {

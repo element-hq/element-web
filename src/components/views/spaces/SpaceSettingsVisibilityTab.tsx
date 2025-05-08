@@ -6,8 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState } from "react";
-import { Room, EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useState } from "react";
+import {
+    type Room,
+    EventType,
+    GuestAccess,
+    HistoryVisibility,
+    JoinRule,
+    type MatrixClient,
+} from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";

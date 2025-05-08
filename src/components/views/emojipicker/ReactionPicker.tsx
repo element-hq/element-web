@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, EventType, RelationType, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, RelationType, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 
 import EmojiPicker from "./EmojiPicker";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import RoomContext from "../../../contexts/RoomContext";
-import { FocusComposerPayload } from "../../../dispatcher/payloads/FocusComposerPayload";
+import { type FocusComposerPayload } from "../../../dispatcher/payloads/FocusComposerPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -31,8 +31,8 @@ class ReactionPicker extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             selectedEmojis: new Set(Object.keys(this.getReactions())),

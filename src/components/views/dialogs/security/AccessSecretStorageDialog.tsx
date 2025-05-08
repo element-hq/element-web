@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { debounce } from "lodash";
 import classNames from "classnames";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { type ChangeEvent, type FormEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
-import { SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import { _t } from "../../../../languageHandler";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
@@ -86,11 +86,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private validateRecoveryKeyOnChange = debounce(async (): Promise<void> => {
-        await this.validateRecoveryKey();
+        await this.validateRecoveryKey(this.state.recoveryKey);
     }, VALIDATION_THROTTLE_MS);
 
-    private async validateRecoveryKey(): Promise<void> {
-        if (this.state.recoveryKey === "") {
+    private async validateRecoveryKey(recoveryKey: string): Promise<void> {
+        if (recoveryKey === "") {
             this.setState({
                 recoveryKeyValid: null,
                 recoveryKeyCorrect: null,
@@ -100,7 +100,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             const cli = MatrixClientPeg.safeGet();
-            const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
+            const decodedKey = decodeRecoveryKey(recoveryKey);
             const correct = await cli.secretStorage.checkKey(decodedKey, this.props.keyInfo);
             this.setState({
                 recoveryKeyValid: true,
@@ -148,11 +148,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             // right number of characters, but it's really just to make sure that what we're reading is
             // text because we'll put it in the text field.
             if (/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\s]+$/.test(contents)) {
+                const recoveryKey = contents.trim();
                 this.setState({
                     recoveryKeyFileError: null,
-                    recoveryKey: contents.trim(),
+                    recoveryKey,
                 });
-                await this.validateRecoveryKey();
+                await this.validateRecoveryKey(recoveryKey);
             } else {
                 this.setState({
                     recoveryKeyFileError: true,

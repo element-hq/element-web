@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SenderProfile from "../messages/SenderProfile";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import { isVoiceMessage } from "../../../utils/EventUtils";
@@ -22,27 +22,23 @@ import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import MFileBody from "../messages/MFileBody";
 import MemberAvatar from "../avatars/MemberAvatar";
 import MVoiceMessageBody from "../messages/MVoiceMessageBody";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { renderReplyTile } from "../../../events/EventTileFactory";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IBodyProps } from "../messages/IBodyProps";
 
 interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
     highlights?: string[];
     highlightLink?: string;
-    onHeightChanged?(): void;
     toggleExpandedQuote?: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
 export default class ReplyTile extends React.PureComponent<IProps> {
     private anchorElement = createRef<HTMLAnchorElement>();
-
-    public static defaultProps = {
-        onHeightChanged: () => {},
-    };
 
     public componentDidMount(): void {
         this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
@@ -58,9 +54,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
     private onDecrypted = (): void => {
         this.forceUpdate();
-        if (this.props.onHeightChanged) {
-            this.props.onHeightChanged();
-        }
     };
 
     private onEventRequiresUpdate = (): void => {
@@ -139,13 +132,13 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             );
         }
 
-        const msgtypeOverrides: Record<string, typeof React.Component> = {
+        const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             [MsgType.Image]: MImageReplyBody,
             // Override audio and video body with file body. We also hide the download/decrypt button using CSS
             [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : MFileBody,
             [MsgType.Video]: MFileBody,
         };
-        const evOverrides: Record<string, typeof React.Component> = {
+        const evOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             // Use MImageReplyBody so that the sticker isn't taking up a lot of space
             [EventType.Sticker]: MImageReplyBody,
         };
@@ -169,7 +162,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                             // appease TS
                             highlights: this.props.highlights,
                             highlightLink: this.props.highlightLink,
-                            onHeightChanged: this.props.onHeightChanged,
                             permalinkCreator: this.props.permalinkCreator,
                         },
                         false /* showHiddenEvents shouldn't be relevant */,

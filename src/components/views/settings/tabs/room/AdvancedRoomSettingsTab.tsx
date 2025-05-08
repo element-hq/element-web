@@ -6,17 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { EventType, Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX } from "react";
+import { EventType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
-import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";

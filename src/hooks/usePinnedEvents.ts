@@ -8,14 +8,14 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    Room,
+    type Room,
     RoomEvent,
     RoomStateEvent,
     MatrixEvent,
     EventType,
     RelationType,
     EventTimeline,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 

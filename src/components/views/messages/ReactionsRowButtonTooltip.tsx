@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PropsWithChildren } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type PropsWithChildren } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";

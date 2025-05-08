@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useEffect, useState } from "react";
+import React, { type JSX, useEffect, useState } from "react";
 import { Field, HelpMessage, InlineField, Label, RadioControl, Root, ToggleControl } from "@vector-im/compound-web";
 
 import { SettingsSubsection } from "./shared/SettingsSubsection";

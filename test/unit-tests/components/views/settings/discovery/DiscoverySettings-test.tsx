@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, type Terms, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -25,6 +25,18 @@ jest.mock("../../../../../../src/IdentityAuthClient", () =>
         getAccessToken: mockGetAccessToken,
     })),
 );
+
+const sampleTerms = {
+    policies: {
+        terms: { version: "alpha", en: { name: "No ball games", url: "https://foobar" } },
+    },
+} satisfies Terms;
+
+const invalidTerms = {
+    policies: {
+        terms: { version: "invalid" },
+    },
+} satisfies Terms;
 
 describe("DiscoverySettings", () => {
     let client: MatrixClient;
@@ -51,20 +63,17 @@ describe("DiscoverySettings", () => {
 
     it("displays alert if an identity server needs terms accepting", async () => {
         mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");
-        mocked(client).getTerms.mockResolvedValue({
-            ["policies"]: { en: "No ball games" },
-        });
+        mocked(client).getTerms.mockResolvedValue(sampleTerms);
 
         render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
 
-        await expect(await screen.findByText("Let people find you")).toBeInTheDocument();
+        expect(await screen.findByText("Let people find you")).toBeInTheDocument();
+        expect(screen.getByRole("link")).toHaveAttribute("href", "https://foobar");
     });
 
     it("button to accept terms is disabled if checkbox not checked", async () => {
         mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");
-        mocked(client).getTerms.mockResolvedValue({
-            ["policies"]: { en: "No ball games" },
-        });
+        mocked(client).getTerms.mockResolvedValue(sampleTerms);
 
         render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
 
@@ -92,5 +101,41 @@ describe("DiscoverySettings", () => {
         });
 
         expect(client.getThreePids).toHaveBeenCalled();
+    });
+
+    it("should not disable share button if terms accepted", async () => {
+        mocked(client).getThreePids.mockResolvedValue({
+            threepids: [
+                {
+                    medium: ThreepidMedium.Email,
+                    address: "test@email.com",
+                    bound: false,
+                    added_at: 123,
+                    validated_at: 234,
+                },
+            ],
+        });
+        mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");
+        mocked(client).getTerms.mockResolvedValue(sampleTerms);
+        mocked(client).getAccountData.mockReturnValue(
+            new MatrixEvent({
+                content: { accepted: [sampleTerms.policies["terms"]["en"].url] },
+            }),
+        );
+
+        render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
+
+        const shareButton = await screen.findByRole("button", { name: "Share" });
+        expect(shareButton).not.toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("should not show invalid terms", async () => {
+        mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");
+        mocked(client).getTerms.mockResolvedValue(invalidTerms);
+
+        render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
+
+        expect(await screen.findByText("Let people find you")).toBeInTheDocument();
+        expect(screen.queryByRole("link")).not.toBeInTheDocument();
     });
 });

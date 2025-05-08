@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import ContextMenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { ChevronFace, ContextMenuButton, MenuProps, useContextMenu } from "../../structures/ContextMenu";
-import { ButtonProps } from "../elements/AccessibleButton";
+import { ChevronFace, ContextMenuButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
+import { type ButtonProps } from "../elements/AccessibleButton";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "./IconizedContextMenu";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {

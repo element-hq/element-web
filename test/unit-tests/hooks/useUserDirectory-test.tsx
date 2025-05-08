@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { waitFor, renderHook, act } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useUserDirectory } from "../../../src/hooks/useUserDirectory";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -45,9 +45,11 @@ describe("useUserDirectory", () => {
         act(() => {
             result.current.search({ limit: 1, query });
         });
-        await waitFor(() => expect(result.current.ready).toBe(true));
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+            expect(result.current.loading).toBe(false);
+        });
 
-        expect(result.current.loading).toBe(false);
         expect(result.current.users[0].name).toBe(query);
     });
 

@@ -9,7 +9,7 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
 import { mkStubRoom, stubClient } from "../../../../test-utils";
 import RoomProfileSettings from "../../../../../src/components/views/room_settings/RoomProfileSettings";

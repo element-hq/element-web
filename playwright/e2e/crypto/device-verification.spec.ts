@@ -20,7 +20,8 @@ import {
     logIntoElement,
     waitForVerificationRequest,
 } from "./utils";
-import { Bot } from "../../pages/bot";
+import { type Bot } from "../../pages/bot";
+import { Toasts } from "../../pages/toasts.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
@@ -29,7 +30,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        const res = await createBot(page, homeserver, credentials);
+        const res = await createBot(page, homeserver, credentials, true);
         aliceBotClient = res.botClient;
         expectedBackupVersion = res.expectedBackupVersion;
     });
@@ -68,8 +69,53 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        // as we need to wait for the secret gossiping to happen.
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
+    });
+
+    // Regression test for https://github.com/element-hq/element-web/issues/29110
+    test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
+        // Before we log in, the bot creates an encrypted room, so that we can test the toast behaviour that only happens
+        // when we are in an encrypted room.
+        await aliceBotClient.createRoom({
+            initial_state: [
+                {
+                    type: "m.room.encryption",
+                    state_key: "",
+                    content: { algorithm: "m.megolm.v1.aes-sha2" },
+                },
+            ],
+        });
+
+        // In order to simulate a real environment more accurately, we need to slow down the arrival of the
+        // `m.secret.send` to-device messages. That's slightly tricky to do directly, so instead we delay the *outgoing*
+        // `m.secret.request` messages.
+        await page.route("**/_matrix/client/v3/sendToDevice/m.secret.request/**", async (route) => {
+            await route.fulfill({ json: {} });
+            await new Promise((f) => setTimeout(f, 1000));
+            await route.fetch();
+        });
+
+        await logIntoElement(page, credentials);
+
+        // Launch the verification request between alice and the bot
+        const verificationRequest = await initiateAliceVerificationRequest(page);
+
+        // Handle emoji SAS verification
+        const infoDialog = page.locator(".mx_InfoDialog");
+        // the bot chooses to do an emoji verification
+        const verifier = await verificationRequest.evaluateHandle((request) => request.startVerification("m.sas.v1"));
+
+        // Handle emoji request and check that emojis are matching
+        await doTwoWaySasVerification(page, verifier);
+
+        await infoDialog.getByRole("button", { name: "They match" }).click();
+        await infoDialog.getByRole("button", { name: "Got it" }).click();
+
+        // There should be no toast (other than the notifications one)
+        const toasts = new Toasts(page);
+        await toasts.rejectToast("Notifications");
+        await toasts.assertNoToasts();
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
@@ -112,16 +158,14 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsCrossSigned(app);
 
         // Check that the current device is connected to key backup
-        // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, credentials);
 
         // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
         // Fill the passphrase
         const dialog = page.locator(".mx_Dialog");
@@ -135,18 +179,18 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
-    test("Verify device with Security Key during login", async ({ page, app, credentials, homeserver }) => {
+    test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, credentials);
 
         // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
-        // Fill the security key
+        // Fill the recovery key
         const dialog = page.locator(".mx_Dialog");
-        await dialog.getByRole("button", { name: "use your Security Key" }).click();
+        await dialog.getByRole("button", { name: "use your Recovery Key" }).click();
         const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
         await dialog.locator("#mx_securityKey").fill(aliceRecoveryKey.encodedPrivateKey);
         await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
@@ -158,7 +202,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {

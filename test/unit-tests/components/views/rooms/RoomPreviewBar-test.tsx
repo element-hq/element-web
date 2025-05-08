@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { render, fireEvent, RenderResult, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import { render, fireEvent, type RenderResult, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import { Room, type RoomMember, MatrixError, type IContent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { withClientContextRenderOptions, stubClient } from "../../../../test-utils";
@@ -279,37 +279,31 @@ describe("<RoomPreviewBar />", () => {
                 });
 
                 it("renders join and reject action buttons correctly", () => {
-                    const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    expect(getActions(component)).toMatchSnapshot();
-                });
-
-                it("renders reject and ignore action buttons when handler is provided", () => {
-                    const onRejectAndIgnoreClick = jest.fn();
-                    const component = getComponent({
-                        inviterName,
-                        room,
-                        onJoinClick,
-                        onRejectClick,
-                        onRejectAndIgnoreClick,
-                    });
+                    const component = getComponent({ inviterName, room, onJoinClick, onDeclineClick: onRejectClick });
                     expect(getActions(component)).toMatchSnapshot();
                 });
 
                 it("renders join and reject action buttons in reverse order when room can previewed", () => {
                     // when room is previewed action buttons are rendered left to right, with primary on the right
-                    const component = getComponent({ inviterName, room, onJoinClick, onRejectClick, canPreview: true });
+                    const component = getComponent({
+                        inviterName,
+                        room,
+                        onJoinClick,
+                        onDeclineClick: onRejectClick,
+                        canPreview: true,
+                    });
                     expect(getActions(component)).toMatchSnapshot();
                 });
 
                 it("joins room on primary button click", () => {
-                    const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
+                    const component = getComponent({ inviterName, room, onJoinClick, onDeclineClick: onRejectClick });
                     fireEvent.click(getPrimaryActionButton(component)!);
 
                     expect(onJoinClick).toHaveBeenCalled();
                 });
 
                 it("rejects invite on secondary button click", () => {
-                    const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
+                    const component = getComponent({ inviterName, room, onJoinClick, onDeclineClick: onRejectClick });
                     fireEvent.click(getSecondaryActionButton(component)!);
 
                     expect(onRejectClick).toHaveBeenCalled();
@@ -337,18 +331,6 @@ describe("<RoomPreviewBar />", () => {
                     const component = getComponent({ inviterName, room });
                     expect(getMessage(component)).toMatchSnapshot();
                 });
-
-                it("renders join and reject action buttons with correct labels", () => {
-                    const onRejectAndIgnoreClick = jest.fn();
-                    const component = getComponent({
-                        inviterName,
-                        room,
-                        onJoinClick,
-                        onRejectAndIgnoreClick,
-                        onRejectClick,
-                    });
-                    expect(getActions(component)).toMatchSnapshot();
-                });
             });
         });
 
@@ -364,7 +346,7 @@ describe("<RoomPreviewBar />", () => {
                 async () => {
                     const onJoinClick = jest.fn();
                     const onRejectClick = jest.fn();
-                    const component = getComponent({ ...props, onJoinClick, onRejectClick });
+                    const component = getComponent({ ...props, onJoinClick, onDeclineClick: onRejectClick });
                     await waitFor(() => expect(getPrimaryActionButton(component)).toBeTruthy());
                     if (expectSecondaryButton) expect(getSecondaryActionButton(component)).toBeFalsy();
                     fireEvent.click(getPrimaryActionButton(component)!);

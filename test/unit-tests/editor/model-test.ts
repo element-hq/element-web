@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EditorModel from "../../../src/editor/model";
-import { createPartCreator, createRenderer, MockAutoComplete } from "./mock";
+import { createPartCreator, createRenderer, type MockAutoComplete } from "./mock";
 import DocumentOffset from "../../../src/editor/offset";
-import { PillPart } from "../../../src/editor/parts";
-import DocumentPosition from "../../../src/editor/position";
+import { type PillPart } from "../../../src/editor/parts";
+import type DocumentPosition from "../../../src/editor/position";
 
 describe("editor/model", function () {
     describe("plain text manipulation", function () {

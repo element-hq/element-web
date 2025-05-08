@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { MethodLikeKeys, mocked, MockedObject, PropertyLikeKeys } from "jest-mock";
+import { type MethodLikeKeys, mocked, type MockedObject, type PropertyLikeKeys } from "jest-mock";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { MatrixClient, Room, MatrixError, User } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, MatrixError, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
@@ -116,6 +116,16 @@ export const mockClientMethodsEvents = () => ({
 });
 
 /**
+ * Returns basic mocked pushProcessor
+ */
+export const mockClientPushProcessor = () => ({
+    pushProcessor: {
+        getPushRuleById: jest.fn(),
+        ruleMatchesEvent: jest.fn(),
+    },
+});
+
+/**
  * Returns basic mocked client methods related to server support
  */
 export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
@@ -143,7 +153,7 @@ export const mockClientMethodsCrypto = (): Partial<
 > => ({
     isKeyBackupKeyStored: jest.fn(),
     getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
-    secretStorage: { hasKey: jest.fn() },
+    secretStorage: { hasKey: jest.fn(), isStored: jest.fn().mockResolvedValue(null) },
     getCrypto: jest.fn().mockReturnValue({
         getUserDeviceInfo: jest.fn(),
         getCrossSigningStatus: jest.fn().mockResolvedValue({

@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
     EventType,
-    IEventDecryptionResult,
-    MatrixClient,
+    type IEventDecryptionResult,
+    type MatrixClient,
     MatrixEvent,
     NotificationCountType,
     PendingEventOrdering,
@@ -20,15 +20,15 @@ import {
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
-    CryptoApi,
+    type CryptoApi,
     DecryptionFailureCode,
-    EventEncryptionInfo,
+    type EventEncryptionInfo,
     EventShieldColour,
     EventShieldReason,
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
-import EventTile, { EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
+import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -37,7 +37,7 @@ import { mkThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
@@ -305,7 +305,7 @@ describe("EventTile", () => {
             [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
-            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity has changed"],
+            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },

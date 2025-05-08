@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
-import { EventType, MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import React from "react";
+import { EventType, type MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
@@ -24,7 +24,7 @@ import {
 import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";

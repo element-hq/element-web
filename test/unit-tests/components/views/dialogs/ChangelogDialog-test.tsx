@@ -11,7 +11,7 @@ import fetchMock from "fetch-mock-jest";
 import { render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 
 import ChangelogDialog, {
-    DevelopVersionString,
+    type DevelopVersionString,
     parseVersion,
 } from "../../../../../src/components/views/dialogs/ChangelogDialog";
 

@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { MatrixClient, MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, type Poll, type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { PollHistoryList } from "./PollHistoryList";
-import { PollHistoryFilter } from "./types";
+import { type PollHistoryFilter } from "./types";
 import { PollDetailHeader } from "./PollDetailHeader";
 import { PollDetail } from "./PollDetail";
-import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { usePollsWithRelations } from "./usePollHistory";
 import { useFetchPastPolls } from "./fetchPastPolls";
 import Heading from "../../typography/Heading";

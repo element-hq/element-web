@@ -7,9 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback } from "react";
+import React, { type JSX, useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent, Room, RoomState } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type RoomState } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -17,7 +17,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EventTileBubble from "./EventTileBubble";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useRoomState } from "../../../hooks/useRoomState";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixToPermalinkConstructor from "../../../utils/permalinks/MatrixToPermalinkConstructor";

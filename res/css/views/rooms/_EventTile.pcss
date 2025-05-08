@@ -135,12 +135,6 @@ $left-gutter: 64px;
         }
     }
 
-    &.mx_EventTile_highlight,
-    &.mx_EventTile_highlight .markdown-body,
-    &.mx_EventTile_highlight .mx_EventTile_edited {
-        color: $alert;
-    }
-
     &.mx_EventTile_bubbleContainer {
         display: grid;
         grid-template-columns: 1fr 100px;
@@ -689,6 +683,7 @@ $left-gutter: 64px;
         line-height: inherit !important;
         background-color: inherit;
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+        flex: 1;
 
         pre,
         code {
@@ -821,11 +816,13 @@ $left-gutter: 64px;
     .mx_EventTile_spoiler_content {
         filter: blur(5px) saturate(0.1) sepia(1);
         transition-duration: 0.5s;
+        pointer-events: none;
     }
 
     &.visible > .mx_EventTile_spoiler_content {
         filter: none;
         user-select: auto;
+        pointer-events: auto;
     }
 }
 

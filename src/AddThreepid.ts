@@ -9,21 +9,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IAddThreePidOnlyBody,
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
-    MatrixClient,
+    type IAddThreePidOnlyBody,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
+    type MatrixClient,
     MatrixError,
     HTTPError,
-    IThreepid,
-    UIAResponse,
+    type IThreepid,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
@@ -78,6 +79,8 @@ export default class AddThreepid {
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
                 throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_THREEPID_MEDIUM_NOT_SUPPORTED") {
+                throw new UserFriendlyError("settings|general|email_adding_unsupported_by_hs", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -120,6 +123,8 @@ export default class AddThreepid {
      * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
+     *
+     * @throws {UserFriendlyError} An appropriate user-friendly error if the verification code could not be sent.
      */
     public async addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         try {
@@ -135,6 +140,10 @@ export default class AddThreepid {
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
                 throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_THREEPID_MEDIUM_NOT_SUPPORTED") {
+                throw new UserFriendlyError("settings|general|msisdn_adding_unsupported_by_hs", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_INVALID_PARAM") {
+                throw new UserFriendlyError("settings|general|invalid_phone_number", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -179,9 +188,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<
-        [success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]
-    > {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         try {
             if (this.bind) {
                 const authClient = new IdentityAuthClient();
@@ -249,6 +256,7 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
             sid: this.sessionId!,
@@ -267,7 +275,7 @@ export default class AddThreepid {
      */
     public async haveMsisdnToken(
         msisdnToken: string,
-    ): Promise<[success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]> {
+    ): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {

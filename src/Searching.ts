@@ -7,19 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IResultRoomEvents,
-    ISearchRequestBody,
-    ISearchResponse,
-    ISearchResult,
-    ISearchResults,
+    type IResultRoomEvents,
+    type ISearchRequestBody,
+    type ISearchResponse,
+    type ISearchResult,
+    type ISearchResults,
     SearchOrderBy,
-    IRoomEventFilter,
+    type IRoomEventFilter,
     EventType,
-    MatrixClient,
-    SearchResult,
+    type MatrixClient,
+    type SearchResult,
 } from "matrix-js-sdk/src/matrix";
 
-import { ISearchArgs } from "./indexing/BaseEventIndexManager";
+import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { isNotUndefined } from "./Typeguards";
 
@@ -718,4 +718,8 @@ export interface SearchInfo {
      * The total count of matching results as returned by the backend.
      */
     count?: number;
+    /**
+     * Describe the error if any occured.
+     */
+    error?: Error;
 }

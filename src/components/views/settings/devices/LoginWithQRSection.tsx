@@ -7,7 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { IServerVersions, OidcClientConfig, MatrixClient, DEVICE_CODE_SCOPE } from "matrix-js-sdk/src/matrix";
+import {
+    type IServerVersions,
+    type OidcClientConfig,
+    type MatrixClient,
+    DEVICE_CODE_SCOPE,
+} from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
 
@@ -31,8 +36,7 @@ export function shouldShowQr(
 ): boolean {
     const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
 
-    const deviceAuthorizationGrantSupported =
-        oidcClientConfig?.metadata?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
+    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
 
     return (
         !!deviceAuthorizationGrantSupported &&

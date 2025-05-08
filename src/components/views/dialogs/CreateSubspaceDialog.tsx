@@ -6,17 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useRef, useState } from "react";
-import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useRef, useState } from "react";
+import { type Room, JoinRule } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { BetaPill } from "../beta/BetaCard";
-import Field from "../elements/Field";
-import RoomAliasField from "../elements/RoomAliasField";
+import type Field from "../elements/Field";
+import type RoomAliasField from "../elements/RoomAliasField";
 import { createSpace, SpaceCreateForm } from "../spaces/SpaceCreateMenu";
 import { SubspaceSelector } from "./AddExistingToSpaceDialog";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";

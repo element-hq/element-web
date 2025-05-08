@@ -11,7 +11,15 @@ import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+
+// Find and click "Reply" button
+const clickButtonReply = async (tile: Locator) => {
+    await expect(async () => {
+        await tile.hover();
+        await tile.getByRole("button", { name: "Reply", exact: true }).click();
+    }).toPass();
+};
 
 test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
@@ -222,8 +230,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Find and click "Reply" button on MessageActionBar
             const tile = page.locator(".mx_EventTile_last");
-            await tile.hover();
-            await tile.getByRole("button", { name: "Reply", exact: true }).click();
+            await clickButtonReply(tile);
 
             // Reply to the player with another audio file
             await uploadFile(page, "playwright/sample-files/1sec.ogg");
@@ -251,18 +258,12 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             const tile = page.locator(".mx_EventTile_last");
 
-            // Find and click "Reply" button
-            const clickButtonReply = async () => {
-                await tile.hover();
-                await tile.getByRole("button", { name: "Reply", exact: true }).click();
-            };
-
             await uploadFile(page, "playwright/sample-files/upload-first.ogg");
 
             // Assert that the audio player is rendered
             await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-            await clickButtonReply();
+            await clickButtonReply(tile);
 
             // Reply to the player with another audio file
             await uploadFile(page, "playwright/sample-files/upload-second.ogg");
@@ -270,7 +271,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the audio player is rendered
             await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-            await clickButtonReply();
+            await clickButtonReply(tile);
 
             // Reply to the player with yet another audio file to create a reply chain
             await uploadFile(page, "playwright/sample-files/upload-third.ogg");

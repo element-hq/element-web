@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { LegacyRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import EditorStateTransfer from "../../../utils/EditorStateTransfer";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import type React from "react";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 
 export interface IBodyProps {
     mxEvent: MatrixEvent;
@@ -22,9 +22,6 @@ export interface IBodyProps {
 
     /* link URL for the highlights */
     highlightLink?: string;
-
-    /* callback called when dynamic content in events are loaded */
-    onHeightChanged?: () => void;
 
     showUrlPreview?: boolean;
     forExport?: boolean;
@@ -46,7 +43,7 @@ export interface IBodyProps {
     // helper function to access relations for this event
     getRelationsForEvent?: GetRelationsForEvent;
 
-    ref?: React.RefObject<any> | LegacyRef<any>;
+    ref?: React.RefObject<any>;
 
     // Set to `true` to disable interactions (e.g. video controls) and to remove controls from the tab order.
     // This may be useful when displaying a preview of the event.

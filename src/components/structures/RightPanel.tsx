@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
-import { Room, RoomState, RoomStateEvent, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React from "react";
+import { type Room, type RoomState, RoomStateEvent, RoomMember, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import dis from "../../dispatcher/dispatcher";
@@ -23,15 +23,15 @@ import FilePanel from "./FilePanel";
 import ThreadView from "./ThreadView";
 import ThreadPanel from "./ThreadPanel";
 import NotificationPanel from "./NotificationPanel";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { PinnedMessagesCard } from "../views/right_panel/PinnedMessagesCard";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import { E2EStatus } from "../../utils/ShieldUtils";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type E2EStatus } from "../../utils/ShieldUtils";
 import TimelineCard from "../views/right_panel/TimelineCard";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
+import { type IRightPanelCard, type IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
-import { XOR } from "../../@types/common";
+import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
 
@@ -49,8 +49,9 @@ interface RoomlessProps extends BaseProps {
 interface RoomProps extends BaseProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
+    searchTerm?: string;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -64,8 +65,10 @@ export default class RightPanel extends React.Component<Props, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: Props, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = RightPanel.getDerivedStateFromProps(props);
     }
 
     private readonly delayedUpdate = throttle(
@@ -258,6 +261,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                             permalinkCreator={this.props.permalinkCreator!}
                             onSearchChange={this.props.onSearchChange}
                             onSearchCancel={this.props.onSearchCancel}
+                            searchTerm={this.props.searchTerm}
                             focusRoomSearch={cardState?.focusRoomSearch}
                         />
                     );

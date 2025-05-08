@@ -11,11 +11,11 @@ import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import BasePlatform, { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
-import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
 

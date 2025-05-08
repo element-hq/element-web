@@ -35,10 +35,10 @@ test.describe("Pinned messages", () => {
                 mask: [tile.locator(".mx_MessageTimestamp")],
                 // Hide the jump to bottom button in the timeline to avoid flakiness
                 css: `
-                .mx_JumpToBottomButton {
-                    display: none !important;
-                }
-            `,
+                    .mx_JumpToBottomButton {
+                        display: none !important;
+                    }
+                `,
             });
         },
     );

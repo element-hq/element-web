@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Poll } from "matrix-js-sdk/src/matrix";
+import { type Poll } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import dispatcher from "../../../../dispatcher/dispatcher";
 import { Action } from "../../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
-import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../utils/MediaEventHelper";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import MPollBody from "../../messages/MPollBody";
 
 interface Props {
@@ -23,8 +23,6 @@ interface Props {
     requestModalClose: () => void;
     permalinkCreator: RoomPermalinkCreator;
 }
-
-const NOOP = (): void => {};
 
 /**
  * Content of PollHistory when a specific poll is selected
@@ -56,8 +54,6 @@ export const PollDetail: React.FC<Props> = ({ poll, permalinkCreator, requestMod
             <MPollBody
                 mxEvent={poll.rootEvent}
                 permalinkCreator={permalinkCreator}
-                onHeightChanged={NOOP}
-                onMessageAllowed={NOOP}
                 // MPollBody doesn't use this
                 // and MessageEvent only defines it for eligible events
                 // should be fixed on IBodyProps types

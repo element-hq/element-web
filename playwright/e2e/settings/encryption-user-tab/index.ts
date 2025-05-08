@@ -5,10 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Page } from "@playwright/test";
-import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { type Page } from "@playwright/test";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
-import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
 export { expect };
 
@@ -18,6 +18,8 @@ export { expect };
 export const test = base.extend<{
     util: Helpers;
 }>({
+    displayName: "Alice",
+
     util: async ({ page, app, bot }, use) => {
         await use(new Helpers(page, app));
     },
@@ -41,7 +43,7 @@ class Helpers {
      */
     async verifyDevice(recoveryKey: GeneratedSecretStorageKey) {
         // Select the security phrase
-        await this.page.getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await this.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
         await this.enterRecoveryKey(recoveryKey);
         await this.page.getByRole("button", { name: "Done" }).click();
     }
@@ -51,9 +53,6 @@ class Helpers {
      * @param recoveryKey
      */
     async enterRecoveryKey(recoveryKey: GeneratedSecretStorageKey) {
-        // Select to use recovery key
-        await this.page.getByRole("button", { name: "use your Security Key" }).click();
-
         // Fill the recovery key
         const dialog = this.page.locator(".mx_Dialog");
         await dialog.getByRole("textbox").fill(recoveryKey.encodedPrivateKey);
@@ -68,6 +67,20 @@ class Helpers {
     }
 
     /**
+     * Get the recovery section
+     */
+    getEncryptionRecoverySection() {
+        return this.page.getByTestId("recoveryPanel");
+    }
+
+    /**
+     * Get the encryption details section
+     */
+    getEncryptionDetailsSection() {
+        return this.page.getByTestId("encryptionDetails");
+    }
+
+    /**
      * Set the default key id of the secret storage to `null`
      */
     async removeSecretStorageDefaultKeyId() {
@@ -78,7 +91,7 @@ class Helpers {
     }
 
     /**
-     * Get the security key from the clipboard and fill in the input field
+     * Get the recovery key from the clipboard and fill in the input field
      * Then click on the finish button
      * @param title - The title of the dialog
      * @param confirmButtonLabel - The label of the confirm button
@@ -89,10 +102,9 @@ class Helpers {
         await expect(dialog.getByText(title, { exact: true })).toBeVisible();
         await expect(dialog).toMatchScreenshot(screenshot);
 
-        const handle = await this.page.evaluateHandle(() => navigator.clipboard.readText());
-        const clipboardContent = await handle.jsonValue();
+        const clipboardContent = await this.app.getClipboard();
         await dialog.getByRole("textbox").fill(clipboardContent);
         await dialog.getByRole("button", { name: confirmButtonLabel }).click();
-        await expect(dialog).toMatchScreenshot("default-recovery.png");
+        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }

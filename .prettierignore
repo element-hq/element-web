@@ -17,6 +17,7 @@ electron/pub
 /coverage
 # Auto-generated file
 /src/modules.ts
+/src/modules.js
 /src/i18n/strings
 /build_config.yaml
 # Raises an error because it contains a template var breaking the script tag

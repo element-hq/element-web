@@ -57,8 +57,8 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.openThread("ThreadRoot");
 
                 // Then the thread root is marked as read in the main timeline,
-                // 30 remaining messages are unread - 7 messages are displayed under the thread root
-                await util.assertUnread(room2, 30 - 7);
+                // 30 remaining messages are unread - 6 messages are displayed under the thread root
+                await util.assertUnread(room2, 30 - 6);
             });
 
             test("Creating a new thread based on a reply makes the room unread", async ({

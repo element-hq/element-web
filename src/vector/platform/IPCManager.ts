@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { ElectronChannel } from "../../@types/global";
+import { type ElectronChannel } from "../../@types/global";
 
 interface IPCPayload {
     id?: number;
@@ -40,7 +40,7 @@ export class IPCManager {
         return deferred.promise;
     }
 
-    private onIpcReply = (_ev: {}, payload: IPCPayload): void => {
+    private onIpcReply = (_ev: Event, payload: IPCPayload): void => {
         if (payload.id === undefined) {
             logger.warn("Ignoring IPC reply with no ID");
             return;

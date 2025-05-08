@@ -1,0 +1,204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      You don't have favourite chat yet
+    </span>
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_description"
+    >
+      You can add a chat to your favourites in the chat settings
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      You don’t have direct chats with anyone yet
+    </span>
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_description"
+    >
+      You can deselect filters in order to see your other chats
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      You’re not in any room yet
+    </span>
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_description"
+    >
+      You can deselect filters in order to see your other chats
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmptyRoomList /> should display the empty state for the unread filter 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      Congrats! You don’t have any unread messages
+    </span>
+    <button
+      class="_button_vczzf_8"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      Show all chats
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmptyRoomList /> should not render the new room button if the user doesn't have the rights to create a room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      No chats yet
+    </span>
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_description"
+    >
+      Get started by messaging someone
+    </span>
+    <div
+      class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+          />
+        </svg>
+        New message
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmptyRoomList /> should render the default placeholder when there is no filter 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      No chats yet
+    </span>
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_description"
+    >
+      Get started by messaging someone or by creating a room
+    </span>
+    <div
+      class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+          />
+        </svg>
+        New message
+      </button>
+      <button
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m8.566 17-.944 4.094q-.086.406-.372.656t-.687.25q-.543 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.801-3.5H3.158q-.572 0-.916-.484a1.27 1.27 0 0 1-.2-1.078 1.12 1.12 0 0 1 1.116-.938H6.85l1.145-5h-3.12q-.57 0-.915-.484a1.27 1.27 0 0 1-.2-1.078A1.12 1.12 0 0 1 4.875 7h3.691l.945-4.094q.085-.406.372-.656.286-.25.686-.25.544 0 .887.469.345.468.2 1.031l-.8 3.5h4.578l.944-4.094q.085-.406.372-.656.286-.25.687-.25.543 0 .887.469t.2 1.031L17.723 7h3.119q.573 0 .916.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937H17.15l-1.145 5h3.12q.57 0 .915.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937h-3.691l-.944 4.094q-.087.406-.373.656t-.686.25q-.544 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.8-3.5zm.573-2.5h4.578l1.144-5h-4.578z"
+          />
+        </svg>
+        New room
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

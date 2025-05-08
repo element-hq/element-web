@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Device } from "matrix-js-sdk/src/matrix";
-import { GeneratedSas, EmojiMapping } from "matrix-js-sdk/src/crypto-api";
+import { type Device } from "matrix-js-sdk/src/matrix";
+import { type GeneratedSas, type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 import SasEmoji from "@matrix-org/spec/sas-emoji.json";
 
 import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
@@ -165,11 +165,11 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         } else {
             confirm = (
                 <div className="mx_VerificationShowSas_buttonRow">
-                    <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
-                        {_t("encryption|verification|sas_no_match")}
-                    </AccessibleButton>
                     <AccessibleButton onClick={this.onMatchClick} kind="primary">
                         {_t("encryption|verification|sas_match")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onDontMatchClick} kind="secondary">
+                        {_t("encryption|verification|sas_no_match")}
                     </AccessibleButton>
                 </div>
             );

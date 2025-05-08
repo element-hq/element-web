@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
@@ -27,8 +27,8 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.state = {

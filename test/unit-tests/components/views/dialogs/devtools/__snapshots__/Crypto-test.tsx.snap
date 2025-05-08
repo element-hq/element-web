@@ -1,0 +1,289 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Crypto /> <CrossSigning /> should display when the cross-signing data are available 1`] = `
+<table
+  aria-label="Cross-signing"
+>
+  <thead>
+    Cross-signing
+  </thead>
+  <tbody>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing status:
+      </th>
+      <td>
+        Cross-signing is ready for use.
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing public keys:
+      </th>
+      <td>
+        in memory
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing private keys:
+      </th>
+      <td>
+        in secret storage
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Master private key:
+      </th>
+      <td>
+        cached locally
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Self signing private key:
+      </th>
+      <td>
+        cached locally
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        User signing private key:
+      </th>
+      <td>
+        cached locally
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`<Crypto /> <CrossSigning /> should display when the cross-signing data are missing 1`] = `
+<table
+  aria-label="Cross-signing"
+>
+  <thead>
+    Cross-signing
+  </thead>
+  <tbody>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing status:
+      </th>
+      <td>
+        Cross-signing is not set up.
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing public keys:
+      </th>
+      <td>
+        not found
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Cross-signing private keys:
+      </th>
+      <td>
+        not found in storage
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Master private key:
+      </th>
+      <td>
+        not found locally
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Self signing private key:
+      </th>
+      <td>
+        not found locally
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        User signing private key:
+      </th>
+      <td>
+        not found locally
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`<Crypto /> <KeyStorage /> should display when the key storage data are available 1`] = `
+<table
+  aria-label="Key Storage"
+>
+  <thead>
+    Key Storage
+  </thead>
+  <tbody>
+    <tr>
+      <th
+        scope="row"
+      >
+        Latest backup version on server:
+      </th>
+      <td>
+        1 (Algorithm: m.megolm_backup.v1)
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Backup key stored:
+      </th>
+      <td>
+        in secret storage
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Active backup version:
+      </th>
+      <td>
+        2
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Backup key cached:
+      </th>
+      <td>
+        cached locally, well formed
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Secret storage public key:
+      </th>
+      <td>
+        in account data
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Secret storage:
+      </th>
+      <td>
+        ready
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`<Crypto /> <KeyStorage /> should display when the key storage data are missing 1`] = `
+<table
+  aria-label="Key Storage"
+>
+  <thead>
+    Key Storage
+  </thead>
+  <tbody>
+    <tr>
+      <th
+        scope="row"
+      >
+        Latest backup version on server:
+      </th>
+      <td>
+        Your keys are not being backed up from this session.
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Backup key stored:
+      </th>
+      <td>
+        not stored
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Active backup version:
+      </th>
+      <td>
+        None
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Backup key cached:
+      </th>
+      <td>
+        not found locally, unexpected type
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Secret storage public key:
+      </th>
+      <td>
+        not found
+      </td>
+    </tr>
+    <tr>
+      <th
+        scope="row"
+      >
+        Secret storage:
+      </th>
+      <td>
+        not ready
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;

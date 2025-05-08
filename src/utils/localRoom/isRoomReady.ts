@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { LocalRoom } from "../../models/LocalRoom";
+import { type LocalRoom } from "../../models/LocalRoom";
 
 /**
  * Tests whether a room created based on a local room is ready.

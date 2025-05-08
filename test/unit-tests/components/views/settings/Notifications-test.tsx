@@ -8,22 +8,22 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import {
-    IPushRule,
-    IPushRules,
+    type IPushRule,
+    type IPushRules,
     RuleId,
-    IPusher,
+    type IPusher,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     Room,
     PushRuleActionName,
     TweakName,
     ConditionKind,
-    IPushRuleCondition,
+    type IPushRuleCondition,
     PushRuleKind,
-    IThreepid,
+    type IThreepid,
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import {
     act,
     fireEvent,
@@ -36,6 +36,7 @@ import {
 } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import Notifications from "../../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -287,7 +288,7 @@ describe("<Notifications />", () => {
 
     beforeEach(async () => {
         let i = 0;
-        mocked(randomString).mockImplementation(() => {
+        mocked(secureRandomString).mockImplementation(() => {
             return "testid_" + i++;
         });
 
@@ -301,6 +302,8 @@ describe("<Notifications />", () => {
         mockClient.getPushRules.mockClear().mockResolvedValue(pushRules);
         mockClient.addPushRule.mockClear();
         mockClient.deletePushRule.mockClear();
+        // @ts-expect-error
+        mockClient.pushProcessor = new PushProcessor(mockClient);
 
         userEvent.setup();
 

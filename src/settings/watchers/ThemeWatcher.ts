@@ -8,16 +8,25 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import ThemeController from "../controllers/ThemeController";
-import { findHighContrastTheme, setTheme } from "../../theme";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { findHighContrastTheme } from "../../theme";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
-export default class ThemeWatcher {
+export enum ThemeWatcherEvent {
+    Change = "change",
+}
+
+interface ThemeWatcherEventHandlerMap {
+    [ThemeWatcherEvent.Change]: (theme: string) => void;
+}
+
+export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, ThemeWatcherEventHandlerMap> {
     private themeWatchRef?: string;
     private systemThemeWatchRef?: string;
     private dispatcherRef?: string;
@@ -29,6 +38,7 @@ export default class ThemeWatcher {
     private currentTheme: string;
 
     public constructor() {
+        super();
         // we have both here as each may either match or not match, so by having both
         // we can get the tristate of dark/light/unsupported
         this.preferDark = (<any>global).matchMedia("(prefers-color-scheme: dark)");
@@ -72,9 +82,7 @@ export default class ThemeWatcher {
     public recheck(forceTheme?: string): void {
         const oldTheme = this.currentTheme;
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
-        if (oldTheme !== this.currentTheme) {
-            setTheme(this.currentTheme);
-        }
+        if (oldTheme !== this.currentTheme) this.emit(ThemeWatcherEvent.Change, this.currentTheme);
     }
 
     public getEffectiveTheme(): string {

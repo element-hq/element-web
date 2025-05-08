@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -70,7 +70,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
                                 className="mx_RoomAvatarEvent_avatar"
                                 onClick={this.onAvatarClick}
                             >
-                                <RoomAvatar size="14px" oobData={oobData} />
+                                <RoomAvatar room={room ?? undefined} size="14px" oobData={oobData} />
                             </AccessibleButton>
                         ),
                     },

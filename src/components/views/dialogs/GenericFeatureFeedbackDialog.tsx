@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useState } from "react";
+import React, { type ReactNode, useState } from "react";
 
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
@@ -78,7 +78,6 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                         }}
                         autoFocus={true}
                     />
-
                     <StyledCheckbox
                         checked={canContact}
                         onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}

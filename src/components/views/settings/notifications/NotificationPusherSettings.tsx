@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ThreepidMedium, IPusher } from "matrix-js-sdk/src/matrix";
-import React, { useCallback, useMemo } from "react";
+import { ThreepidMedium, type IPusher } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useCallback, useMemo } from "react";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { Action } from "../../../../dispatcher/actions";

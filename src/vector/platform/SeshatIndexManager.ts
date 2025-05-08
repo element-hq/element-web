@@ -6,14 +6,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 // eslint-disable-next-line no-restricted-imports
-import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
+import {
+    type IMatrixProfile,
+    type IEventWithRoomId as IMatrixEvent,
+    type IResultRoomEvents,
+} from "matrix-js-sdk/src/@types/search";
 
 import BaseEventIndexManager, {
-    ICrawlerCheckpoint,
-    IEventAndProfile,
-    IIndexStats,
-    ISearchArgs,
-    ILoadArgs,
+    type ICrawlerCheckpoint,
+    type IEventAndProfile,
+    type IIndexStats,
+    type ISearchArgs,
+    type ILoadArgs,
 } from "../../indexing/BaseEventIndexManager";
 import { IPCManager } from "./IPCManager";
 

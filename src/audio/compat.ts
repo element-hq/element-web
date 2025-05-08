@@ -16,7 +16,11 @@ import { SAMPLE_RATE } from "./VoiceRecording";
 
 export function createAudioContext(opts?: AudioContextOptions): AudioContext {
     if (window.AudioContext) {
-        return new AudioContext(opts);
+        const ctx = new AudioContext(opts);
+        // Initialize in suspended state, as Firefox starts using
+        // CPU/battery right away, even if we don't play any sound yet.
+        void ctx.suspend();
+        return ctx;
     } else {
         throw new Error("Unsupported browser");
     }

@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { User } from "matrix-js-sdk/src/matrix";
+import { type User } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseDialog from "./BaseDialog";
-import { IDevice } from "../right_panel/UserInfo";
+import { type IDevice } from "../right_panel/UserInfo";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 
 interface IProps {

@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../../../../../src/dispatcher/actions";
 import { onView3pidInvite } from "../../../../../src/stores/right-panel/action-handlers";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
+import type RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 
 describe("onView3pidInvite()", () => {
