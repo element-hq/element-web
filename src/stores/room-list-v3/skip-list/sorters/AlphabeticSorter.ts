@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Sorter } from ".";
+import { type Sorter, SortingAlgorithm } from ".";
 
 export class AlphabeticSorter implements Sorter {
     private readonly collator = new Intl.Collator();
@@ -19,5 +19,9 @@ export class AlphabeticSorter implements Sorter {
 
     public comparator(roomA: Room, roomB: Room): number {
         return this.collator.compare(roomA.name, roomB.name);
+    }
+
+    public get type(): SortingAlgorithm.Alphabetic {
+        return SortingAlgorithm.Alphabetic;
     }
 }

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type ReactNode } from "react";
+import React, { type JSX, type ChangeEvent, type ReactNode } from "react";
 import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
@@ -14,6 +14,7 @@ import {
     type RoomPreviewOpts,
     RoomViewLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { Button } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -90,12 +91,18 @@ interface IProps {
     roomAlias?: string;
 
     onJoinClick?(): void;
-    onRejectClick?(): void;
-    onRejectAndIgnoreClick?(): void;
+    onDeclineClick?(): void;
+    onDeclineAndBlockClick?(): void;
     onForgetClick?(): void;
 
     canAskToJoinAndMembershipIsLeave?: boolean;
     promptAskToJoin?: boolean;
+
+    /**
+     * If true, this will prompt for additional safety options
+     * like reporting an invite or ignoring the user.
+     */
+    promptRejectionOptions?: boolean;
     knocked?: boolean;
     onSubmitAskToJoin?(reason?: string): void;
     onCancelAskToJoin?(): void;
@@ -313,6 +320,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         let primaryActionLabel: string | undefined;
         let secondaryActionHandler: (() => void) | undefined;
         let secondaryActionLabel: string | undefined;
+        let dangerActionHandler: (() => void) | undefined;
+        let dangerActionLabel: string | undefined;
         let footer: JSX.Element | undefined;
         const extraComponents: JSX.Element[] = [];
 
@@ -549,16 +558,11 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
 
                 primaryActionHandler = this.props.onJoinClick;
-                secondaryActionLabel = _t("action|reject");
-                secondaryActionHandler = this.props.onRejectClick;
+                secondaryActionLabel = _t("action|decline");
+                secondaryActionHandler = this.props.onDeclineClick;
+                dangerActionLabel = _t("action|decline_and_block");
+                dangerActionHandler = this.props.onDeclineAndBlockClick;
 
-                if (this.props.onRejectAndIgnoreClick) {
-                    extraComponents.push(
-                        <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
-                            {_t("room|invite_reject_ignore")}
-                        </AccessibleButton>,
-                    );
-                }
                 break;
             }
             case MessageCase.ViewingRoom: {
@@ -691,6 +695,15 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             );
         }
 
+        let dangerActionButton;
+        if (dangerActionHandler) {
+            dangerActionButton = (
+                <Button destructive kind="tertiary" onClick={dangerActionHandler}>
+                    {dangerActionLabel}
+                </Button>
+            );
+        }
+
         const isPanel = this.props.canPreview;
 
         const classes = classNames("mx_RoomPreviewBar", `mx_RoomPreviewBar_${messageCase}`, {
@@ -701,6 +714,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         // ensure correct tab order for both views
         const actions = isPanel ? (
             <>
+                {dangerActionButton}
                 {secondaryButton}
                 {extraComponents}
                 {primaryButton}
@@ -710,6 +724,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 {primaryButton}
                 {extraComponents}
                 {secondaryButton}
+                {dangerActionButton}
             </>
         );
 

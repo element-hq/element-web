@@ -9,6 +9,7 @@ import { shuffle } from "lodash";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Sorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
+import type { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { mkMessage, stubClient } from "../../../../test-utils";
 import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/RoomSkipList";
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
@@ -16,6 +17,7 @@ import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-li
 import { getMockedRooms } from "./getMockedRooms";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
+import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
 
 describe("RoomSkipList", () => {
     function generateSkipList(roomCount?: number): {
@@ -36,6 +38,12 @@ describe("RoomSkipList", () => {
         jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+        jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(() => {
+            const state = {
+                mute: false,
+            } as unknown as RoomNotificationState;
+            return state;
+        });
     });
 
     it("Rooms are in sorted order after initial seed", () => {
@@ -54,7 +62,7 @@ describe("RoomSkipList", () => {
         for (const room of toInsert) {
             // Insert this room 10 times
             for (let i = 0; i < 10; ++i) {
-                skipList.addRoom(room);
+                skipList.reInsertRoom(room);
             }
         }
         // Sorting order should be the same as before
@@ -76,13 +84,19 @@ describe("RoomSkipList", () => {
                 event: true,
             });
             room.timeline.push(event);
-            skipList.addRoom(room);
+            skipList.reInsertRoom(room);
             expect(skipList.size).toEqual(rooms.length);
         }
         const sortedRooms = [...skipList];
         for (let i = 0; i < totalRooms; ++i) {
             expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
         }
+    });
+
+    it("Throws error when same room is added via addNewRoom", () => {
+        const { skipList, rooms } = generateSkipList();
+        const room = rooms[5];
+        expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
     });
 
     it("Re-sort works when sorter is swapped", () => {
@@ -112,7 +126,7 @@ describe("RoomSkipList", () => {
 
             // Shuffle and insert the rooms
             for (const room of shuffle(rooms)) {
-                roomSkipList.addRoom(room);
+                roomSkipList.addNewRoom(room);
             }
 
             expect(roomSkipList.size).toEqual(totalRooms);

@@ -45,9 +45,11 @@ describe("useUserDirectory", () => {
         act(() => {
             result.current.search({ limit: 1, query });
         });
-        await waitFor(() => expect(result.current.ready).toBe(true));
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+            expect(result.current.loading).toBe(false);
+        });
 
-        expect(result.current.loading).toBe(false);
         expect(result.current.users[0].name).toBe(query);
     });
 

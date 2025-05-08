@@ -29,7 +29,6 @@ import type LegacyCallHandler from "../LegacyCallHandler";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import type VoipUserMapper from "../VoipUserMapper";
 import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
@@ -47,6 +46,7 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
+import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -99,6 +99,7 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
+        mxRoomListStoreV3: RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
@@ -111,7 +112,6 @@ declare global {
         mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;

@@ -14,7 +14,7 @@ import Modal from "../Modal";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
-import { accessSecretStorage } from "../SecurityManager";
+import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { ModuleRunner } from "../modules/ModuleRunner";
@@ -153,6 +153,8 @@ export const showToast = (kind: Kind): void => {
             );
             try {
                 await accessSecretStorage();
+            } catch (error) {
+                onAccessSecretStorageFailed(error as Error);
             } finally {
                 modal.close();
             }
@@ -161,14 +163,36 @@ export const showToast = (kind: Kind): void => {
 
     const onSecondaryClick = (): void => {
         if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC) {
+            // Open the user settings dialog to the encryption tab and start the flow to reset encryption
             const payload: OpenToTabPayload = {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,
-                props: { showResetIdentity: true },
+                props: { initialEncryptionState: "reset_identity_forgot" },
             };
             defaultDispatcher.dispatch(payload);
         } else {
             DeviceListener.sharedInstance().dismissEncryptionSetup();
+        }
+    };
+
+    /**
+     * We tried to accessSecretStorage, which triggered us to ask for the
+     * recovery key, but this failed. If the user just gave up, that is fine,
+     * but if not, that means downloading encryption info from 4S did not fix
+     * the problem we identified. Presumably, something is wrong with what
+     * they have in 4S: we tell them to reset their identity.
+     */
+    const onAccessSecretStorageFailed = (error: Error): void => {
+        if (error instanceof AccessCancelledError) {
+            // The user cancelled the dialog - just allow it to close
+        } else {
+            // A real error happened - jump to the reset identity tab
+            const payload: OpenToTabPayload = {
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+                props: { initialEncryptionState: "reset_identity_sync_failed" },
+            };
+            defaultDispatcher.dispatch(payload);
         }
     };
 

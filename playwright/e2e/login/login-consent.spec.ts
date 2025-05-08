@@ -13,6 +13,7 @@ import { selectHomeserver } from "../utils";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { createBot } from "../crypto/utils.ts";
 
 // This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
@@ -258,6 +259,71 @@ test.describe("Login", () => {
 
                     await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
                 });
+
+                test("Continues to show verification prompt after cancelling device verification", async ({
+                    page,
+                    homeserver,
+                    credentials,
+                }) => {
+                    // Create a different device which is cross-signed, meaning we need to verify this device
+                    await createBot(page, homeserver, credentials, true);
+
+                    // Wait to avoid homeserver rate limit on logins
+                    await page.waitForTimeout(100);
+
+                    // Load the page and see that we are asked to verify
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+                    let h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    await expect(h1).toBeVisible();
+
+                    // Click "Verify with another device"
+                    await page.getByRole("button", { name: "Verify with another device" }).click();
+
+                    // Cancel the new dialog
+                    await page.getByRole("button", { name: "Close dialog" }).click();
+
+                    // Check that we are still being asked to verify
+                    h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    await expect(h1).toBeVisible();
+                });
+            });
+
+            test("Can reset identity to become verified", async ({ page, homeserver, request, credentials }) => {
+                // Log in
+                const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
+                    headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                    data: DEVICE_SIGNING_KEYS_BODY,
+                });
+                if (!res.ok()) {
+                    console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
+                    throw new Error("Uploading dummy keys failed");
+                }
+
+                await page.goto("/");
+                await login(page, homeserver, credentials);
+
+                await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+
+                // Start the reset process
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // First try cancelling and restarting
+                await page.getByRole("button", { name: "Cancel" }).click();
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // Then click outside the dialog and restart
+                await page.getByRole("link", { name: "Powered by Matrix" }).click({ force: true });
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // Finally we actually continue
+                await page.getByRole("button", { name: "Continue" }).click();
+                await page.getByPlaceholder("Password").fill(credentials.password);
+                await page.getByRole("button", { name: "Continue" }).click();
+
+                // We end up at the Home screen
+                await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
+                await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
             });
         });
     });

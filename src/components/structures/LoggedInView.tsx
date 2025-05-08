@@ -124,9 +124,9 @@ class LoggedInView extends React.Component<IProps, IState> {
     public static displayName = "LoggedInView";
 
     protected readonly _matrixClient: MatrixClient;
-    protected readonly _roomView: React.RefObject<RoomView>;
-    protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
-    protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
+    protected readonly _roomView: React.RefObject<RoomView | null>;
+    protected readonly _resizeContainer: React.RefObject<HTMLDivElement | null>;
+    protected readonly resizeHandler: React.RefObject<HTMLDivElement | null>;
     protected layoutWatcherRef?: string;
     protected compactLayoutWatcherRef?: string;
     protected backgroundImageWatcherRef?: string;

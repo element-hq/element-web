@@ -43,8 +43,6 @@ import { isPushNotifyDisabled } from "./settings/controllers/NotificationControl
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import LegacyCallHandler from "./LegacyCallHandler";
-import VoipUserMapper from "./VoipUserMapper";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
@@ -447,14 +445,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: exported for tests
     public evaluateEvent(ev: MatrixEvent): void {
-        let roomId = ev.getRoomId()!;
-        if (LegacyCallHandler.instance.getSupportsVirtualRooms()) {
-            // Attempt to translate a virtual room to a native one
-            const nativeRoomId = VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(roomId);
-            if (nativeRoomId) {
-                roomId = nativeRoomId;
-            }
-        }
+        const roomId = ev.getRoomId()!;
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) {
             // e.g we are in the process of joining a room.

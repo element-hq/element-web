@@ -6,7 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type ContextType, createRef, type SyntheticEvent } from "react";
+import React, {
+    type JSX,
+    type ToggleEvent,
+    type ChangeEvent,
+    type ContextType,
+    createRef,
+    type SyntheticEvent,
+} from "react";
 import { type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
@@ -101,8 +108,8 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         canSetCanonicalAlias: false,
     };
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const state: IState = {
             altAliases: [],
@@ -278,9 +285,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             });
     };
 
-    private onLocalAliasesToggled = (event: ChangeEvent<HTMLDetailsElement>): void => {
+    private onLocalAliasesToggled = (event: ToggleEvent<HTMLDetailsElement>): void => {
         // expanded
-        if (event.target.open) {
+        if (event.currentTarget.open) {
             // if local aliases haven't been preloaded yet at component mount
             if (!this.props.canSetCanonicalAlias && this.state.localAliases.length === 0) {
                 this.loadLocalAliases();

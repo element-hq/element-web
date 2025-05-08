@@ -147,11 +147,12 @@ export function avatarUrlForRoom(
     width?: number,
     height?: number,
     resizeMethod?: ResizeMethod,
+    avatarMxcOverride?: string,
 ): string | null {
     if (!room) return null; // null-guard
-
-    if (room.getMxcAvatarUrl()) {
-        const media = mediaFromMxc(room.getMxcAvatarUrl() ?? undefined);
+    const mxc = avatarMxcOverride ?? room.getMxcAvatarUrl();
+    if (mxc) {
+        const media = mediaFromMxc(mxc);
         if (width !== undefined && height !== undefined) {
             return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
         }

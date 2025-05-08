@@ -22,7 +22,7 @@ server {
         add_header Cache-Control "no-cache";
     }
     location /modules {
-        alias /tmp/element-web-modules;
+        alias /modules;
     }
     # redirect server error pages to the static page /50x.html
     #

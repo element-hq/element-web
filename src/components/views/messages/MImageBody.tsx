@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, createRef, type ReactNode } from "react";
+import React, { type JSX, type ComponentProps, createRef, type ReactNode } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -33,6 +33,8 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
+import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 enum Placeholder {
     NoImage,
@@ -52,11 +54,25 @@ interface IState {
     };
     hover: boolean;
     focus: boolean;
-    showImage: boolean;
     placeholder: Placeholder;
 }
 
-export default class MImageBody extends React.Component<IBodyProps, IState> {
+interface IProps extends IBodyProps {
+    /**
+     * Should the media be behind a preview.
+     */
+    mediaVisible: boolean;
+    /**
+     * Set the visibility of the media event.
+     * @param visible Should the event be visible.
+     */
+    setMediaVisible: (visible: boolean) => void;
+}
+
+/**
+ * @private Only use for inheritance. Use the default export for presentation.
+ */
+export class MImageBodyInner extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -73,21 +89,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgLoaded: false,
         hover: false,
         focus: false,
-        showImage: SettingsStore.getValue("showImages"),
         placeholder: Placeholder.NoImage,
     };
-
-    protected showImage(): void {
-        localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
-        this.setState({ showImage: true });
-        this.downloadImage();
-    }
 
     protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
-            if (!this.state.showImage) {
-                this.showImage();
+            if (!this.props.mediaVisible) {
+                this.props.setMediaVisible(true);
                 return;
             }
 
@@ -125,7 +134,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private get shouldAutoplay(): boolean {
         return !(
             !this.state.contentUrl ||
-            !this.state.showImage ||
+            !this.props.mediaVisible ||
             !this.state.isAnimated ||
             SettingsStore.getValue("autoplayGifs")
         );
@@ -170,7 +179,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     private onImageLoad = (): void => {
         this.clearBlurhashTimeout();
-        this.props.onHeightChanged?.();
 
         let loadedImageDimensions: IState["loadedImageDimensions"];
 
@@ -346,14 +354,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     public componentDidMount(): void {
         this.unmounted = false;
 
-        const showImage =
-            this.state.showImage || localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
-
-        if (showImage) {
+        if (this.props.mediaVisible) {
             // noinspection JSIgnoredPromiseFromCall
             this.downloadImage();
-            this.setState({ showImage: true });
-        } // else don't download anything because we don't want to display anything.
+        }
 
         // Add a 150ms timer for blurhash to first appear.
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
@@ -370,6 +374,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
+    }
+
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+        if (!prevProps.mediaVisible && this.props.mediaVisible) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.downloadImage();
+        }
     }
 
     public componentWillUnmount(): void {
@@ -425,8 +436,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             // by the same width and height logic below.
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
-                if (!this.state.showImage) {
-                    imageElement = <HiddenImagePlaceholder />;
+                if (!this.props.mediaVisible) {
+                    imageElement = (
+                        <HiddenMediaPlaceholder onClick={this.onClick}>
+                            {_t("timeline|m.image|show_image")}
+                        </HiddenMediaPlaceholder>
+                    );
                 } else {
                     imageElement = (
                         <img
@@ -495,8 +510,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        if (!this.state.showImage) {
-            img = <HiddenImagePlaceholder maxWidth={maxWidth} />;
+        if (!this.props.mediaVisible) {
+            img = (
+                <div style={{ width: maxWidth, height: maxHeight }}>
+                    <HiddenMediaPlaceholder onClick={this.onClick}>
+                        {_t("timeline|m.image|show_image")}
+                    </HiddenMediaPlaceholder>
+                </div>
+            );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
@@ -506,7 +527,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         let banner: ReactNode | undefined;
-        if (this.state.showImage && hoverOrFocus) {
+        if (this.props.mediaVisible && hoverOrFocus) {
             banner = this.getBanner(content);
         }
 
@@ -552,7 +573,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 </div>
 
                 {/* HACK: This div fills out space while the image loads, to prevent scroll jumps */}
-                {!this.props.forExport && !this.state.imgLoaded && (
+                {!this.props.forExport && !this.state.imgLoaded && !placeholder && (
                     <div style={{ height: maxHeight, width: maxWidth }} />
                 )}
             </div>
@@ -584,12 +605,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 >
                     {children}
                 </a>
-            );
-        } else if (!this.state.showImage) {
-            return (
-                <div role="button" onClick={this.onClick}>
-                    {children}
-                </div>
             );
         }
         return children;
@@ -669,20 +684,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 }
 
-interface PlaceholderIProps {
-    maxWidth?: number;
-}
+// Wrap MImageBody component so we can use a hook here.
+const MImageBody: React.FC<IBodyProps> = (props) => {
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
+};
 
-export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    public render(): React.ReactNode {
-        const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        return (
-            <div className="mx_HiddenImagePlaceholder" style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
-                <div className="mx_HiddenImagePlaceholder_button">
-                    <span className="mx_HiddenImagePlaceholder_eye" />
-                    <span>{_t("timeline|m.image|show_image")}</span>
-                </div>
-            </div>
-        );
-    }
-}
+export default MImageBody;

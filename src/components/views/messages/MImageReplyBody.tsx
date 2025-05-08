@@ -6,14 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 
-import MImageBody from "./MImageBody";
+import { MImageBodyInner } from "./MImageBody";
+import { type IBodyProps } from "./IBodyProps";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 const FORCED_IMAGE_HEIGHT = 44;
 
-export default class MImageReplyBody extends MImageBody {
+class MImageReplyBodyInner extends MImageBodyInner {
     public onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
     };
@@ -35,3 +37,9 @@ export default class MImageReplyBody extends MImageBody {
         return <div className="mx_MImageReplyBody">{thumbnail}</div>;
     }
 }
+const MImageReplyBody: React.FC<IBodyProps> = (props) => {
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    return <MImageReplyBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
+};
+
+export default MImageReplyBody;

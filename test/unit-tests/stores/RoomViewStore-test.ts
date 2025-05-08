@@ -196,6 +196,8 @@ describe("RoomViewStore", function () {
         stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
+        // @ts-expect-error
+        MockPosthogAnalytics.instance = stores._PosthogAnalytics;
         stores._SpaceStore = new MockSpaceStore();
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
@@ -383,43 +385,35 @@ describe("RoomViewStore", function () {
     describe("Sliding Sync", function () {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, value) => {
-                return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
+                return settingName === "feature_simplified_sliding_sync"; // this is enabled, everything else is disabled.
             });
         });
 
         it("subscribes to the room", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
             await untilDispatch(Action.ActiveRoomChanged, dis);
             expect(roomViewStore.getRoomId()).toBe(subscribedRoomId);
-            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId, true);
+            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId);
         });
 
-        // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // Previously a regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // although that was before the complexity was removed with similified mode. I've removed the complexity but kept the
+        // test anyway.
         it("doesn't get stuck in a loop if you view rooms quickly", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             const subscribedRoomId2 = "!sub2:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId }, true);
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId2 }, true);
             await untilDispatch(Action.ActiveRoomChanged, dis);
-            // sub(1) then unsub(1) sub(2), unsub(1)
-            const wantCalls = [
-                [subscribedRoomId, true],
-                [subscribedRoomId, false],
-                [subscribedRoomId2, true],
-                [subscribedRoomId, false],
-            ];
+            // should view 1, then 2
+            const wantCalls = [[subscribedRoomId], [subscribedRoomId2]];
             expect(setRoomVisible).toHaveBeenCalledTimes(wantCalls.length);
             wantCalls.forEach((v, i) => {
                 try {
                     expect(setRoomVisible.mock.calls[i][0]).toEqual(v[0]);
-                    expect(setRoomVisible.mock.calls[i][1]).toEqual(v[1]);
                 } catch {
                     throw new Error(`i=${i} got ${setRoomVisible.mock.calls[i]} want ${v}`);
                 }

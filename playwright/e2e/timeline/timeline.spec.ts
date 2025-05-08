@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -27,6 +27,8 @@ const OLD_AVATAR = fs.readFileSync("playwright/sample-files/riot.png");
 const NEW_AVATAR = fs.readFileSync("playwright/sample-files/element.png");
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
+
+const VIDEO_FILE = fs.readFileSync("playwright/sample-files/5secvid.webm");
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
@@ -905,6 +907,39 @@ test.describe("Timeline", () => {
                 mask: [page.locator(".mx_MessageTimestamp")],
             });
         });
+
+        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the image is now hidden.
+            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
+        });
+
+        test("should be able to hide a video", async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
+            await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+                msgtype: "m.video" as MsgType,
+                body: "bbb.webm",
+                url: upload.content_uri,
+            });
+
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MVideoBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the video is now hidden.
+            await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
+            await expect(page.locator("video")).not.toBeVisible();
+        });
     });
 
     test.describe("message sending", { tag: ["@no-firefox", "@no-webkit"] }, () => {
@@ -1304,6 +1339,46 @@ test.describe("Timeline", () => {
                     await testImageRendering(page, app, room);
                 },
             );
+        });
+    });
+
+    test.describe("spoilers", { tag: "@screenshot" }, () => {
+        test("clicking a spoiler containing the pill de-spoilers on 1st click, then follows link on 2nd", async ({
+            page,
+            user,
+            app,
+            room,
+        }) => {
+            // View room
+            await page.goto(`/#/room/${room.roomId}`);
+
+            // Send a spoilered pill
+            await app.client.sendMessage(room.roomId, {
+                msgtype: "m.text",
+                body: user.userId,
+                format: "org.matrix.custom.html",
+                formatted_body: `<span data-mx-spoiler>https://matrix.to/#/${user.userId}</span>`,
+            });
+
+            const screenshotOptions = {
+                css: `
+                    .mx_MessageTimestamp {
+                        display: none !important;
+                    }
+                `,
+            };
+
+            const eventTile = page.locator(".mx_RoomView_body .mx_EventTile_last");
+            await expect(eventTile).toMatchScreenshot("spoiler.png", screenshotOptions);
+
+            const rightPanelButton = page.getByText("Share profile");
+            const pill = page.locator(".mx_UserPill");
+            await pill.click({ force: true }); // force to click the spoiler wrapper instead
+            await expect(eventTile).toMatchScreenshot("spoiler-uncovered.png", screenshotOptions);
+            await expect(rightPanelButton).not.toBeVisible(); // assert the right panel is not yet open
+
+            await pill.click();
+            await expect(rightPanelButton).toBeVisible(); // assert the right panel is open
         });
     });
 });

@@ -222,10 +222,10 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                         const [ok, newServer] = await finished;
                         if (!ok) return;
 
-                        if (!allServers.includes(newServer)) {
-                            setUserDefinedServers([...userDefinedServers, newServer]);
+                        if (!allServers.includes(newServer!)) {
+                            setUserDefinedServers([...userDefinedServers, newServer!]);
                             setConfig({
-                                roomServer: newServer,
+                                roomServer: newServer!,
                             });
                         }
                     }}

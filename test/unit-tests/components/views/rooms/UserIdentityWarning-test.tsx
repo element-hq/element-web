@@ -145,9 +145,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
 
         await waitFor(() =>
-            expect(
-                getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-            ).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
         await userEvent.click(screen.getByRole("button")!);
         await waitFor(() => expect(crypto.pinCurrentUserIdentity).toHaveBeenCalledWith("@alice:example.org"));
@@ -168,7 +166,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
 
         await waitFor(() =>
-            expect(getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
 
         expect(
@@ -192,8 +190,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
         await sleep(10); // give it some time to finish initialising
 
-        expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
-        expect(() => getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toThrow();
+        expect(() => getWarningByText("Alice's (@alice:example.org) identity was reset.")).toThrow();
     });
 
     // We don't display warnings in non-encrypted rooms, but if encryption is
@@ -213,7 +210,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
 
         await sleep(10); // give it some time to finish initialising
-        expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
+        expect(() => getWarningByText("Alice's (@alice:example.org) identity was reset.")).toThrow();
 
         // Encryption gets enabled in the room.  We should now warn that Alice's
         // identity changed.
@@ -234,9 +231,7 @@ describe("UserIdentityWarning", () => {
             null,
         );
         await waitFor(() =>
-            expect(
-                getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-            ).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
     });
 
@@ -255,9 +250,7 @@ describe("UserIdentityWarning", () => {
             crypto.pinCurrentUserIdentity = jest.fn();
             renderComponent(client, room);
 
-            await waitFor(() =>
-                expect(getWarningByText("@a:example.org's identity appears to have changed.")).toBeInTheDocument(),
-            );
+            await waitFor(() => expect(getWarningByText("@a:example.org's identity was reset.")).toBeInTheDocument());
         });
 
         it("Ensure existing prompt stays even if a new violation with lower lexicographic order detected", async () => {
@@ -273,9 +266,7 @@ describe("UserIdentityWarning", () => {
             crypto.pinCurrentUserIdentity = jest.fn();
             renderComponent(client, room);
 
-            await waitFor(() =>
-                expect(getWarningByText("@b:example.org's identity appears to have changed.")).toBeInTheDocument(),
-            );
+            await waitFor(() => expect(getWarningByText("@b:example.org's identity was reset.")).toBeInTheDocument());
 
             // Simulate a new member joined with lower lexico order and also in violation
             mockMembershipForRoom(room, ["@a:example.org", "@b:example.org"]);
@@ -285,9 +276,7 @@ describe("UserIdentityWarning", () => {
             });
 
             // We should still display the warning for @b:example.org
-            await waitFor(() =>
-                expect(getWarningByText("@b:example.org's identity appears to have changed.")).toBeInTheDocument(),
-            );
+            await waitFor(() => expect(getWarningByText("@b:example.org's identity was reset.")).toBeInTheDocument());
         });
     });
 
@@ -307,7 +296,7 @@ describe("UserIdentityWarning", () => {
             await sleep(50);
         });
 
-        expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
+        expect(() => getWarningByText("Alice's (@alice:example.org) identity was reset.")).toThrow();
 
         // The user changes their identity, so we should show the warning.
         act(() => {
@@ -317,9 +306,7 @@ describe("UserIdentityWarning", () => {
         });
 
         await waitFor(() =>
-            expect(
-                getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-            ).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
 
         // Simulate the user's new identity having been approved, so we no
@@ -330,7 +317,7 @@ describe("UserIdentityWarning", () => {
             client.emit(CryptoEvent.UserTrustStatusChanged, "@alice:example.org", newStatus);
         });
         await waitFor(() =>
-            expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow(),
+            expect(() => getWarningByText("Alice's (@alice:example.org) identity was reset.")).toThrow(),
         );
     });
 
@@ -355,7 +342,7 @@ describe("UserIdentityWarning", () => {
             });
 
             await waitFor(() =>
-                expect(getWarningByText("@alice:example.org's identity appears to have changed.")).toBeInTheDocument(),
+                expect(getWarningByText("@alice:example.org's identity was reset.")).toBeInTheDocument(),
             );
 
             // Bob is invited.  His identity needs approval, so we should show a
@@ -372,12 +359,8 @@ describe("UserIdentityWarning", () => {
                 emitMembershipChange(client, "@alice:example.org", "leave");
             });
 
-            await waitFor(() =>
-                expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow(),
-            );
-            await waitFor(() =>
-                expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
-            );
+            await waitFor(() => expect(() => getWarningByText("@alice:example.org's identity was reset.")).toThrow());
+            await waitFor(() => expect(getWarningByText("@bob:example.org's identity was reset.")).toBeInTheDocument());
         });
 
         it("when invited users cannot see encrypted messages", async () => {
@@ -399,7 +382,7 @@ describe("UserIdentityWarning", () => {
                 emitMembershipChange(client, "@alice:example.org", "join");
             });
             await waitFor(() =>
-                expect(getWarningByText("@alice:example.org's identity appears to have changed.")).toBeInTheDocument(),
+                expect(getWarningByText("@alice:example.org's identity was reset.")).toBeInTheDocument(),
             );
 
             // Bob is invited. His identity needs approval, but we don't encrypt
@@ -419,12 +402,8 @@ describe("UserIdentityWarning", () => {
                 mockMembershipForRoom(room, [["@bob:example.org", "invited"]]);
                 emitMembershipChange(client, "@alice:example.org", "leave");
             });
-            await waitFor(() =>
-                expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow(),
-            );
-            await waitFor(() =>
-                expect(() => getWarningByText("@bob:example.org's identity appears to have changed.")).toThrow(),
-            );
+            await waitFor(() => expect(() => getWarningByText("@alice:example.org's identity was reset.")).toThrow());
+            await waitFor(() => expect(() => getWarningByText("@bob:example.org's identity was reset.")).toThrow());
         });
 
         it("when member leaves immediately after component is loaded", async () => {
@@ -448,7 +427,7 @@ describe("UserIdentityWarning", () => {
                 renderComponent(client, room);
                 await sleep(10);
             });
-            expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow();
+            expect(() => getWarningByText("@alice:example.org's identity was reset.")).toThrow();
         });
 
         it("when member leaves immediately after joining", async () => {
@@ -496,7 +475,7 @@ describe("UserIdentityWarning", () => {
                 null,
             );
             await sleep(10); // give it some time to finish
-            expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow();
+            expect(() => getWarningByText("@alice:example.org's identity was reset.")).toThrow();
         });
     });
 
@@ -516,9 +495,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
         // We should warn about Alice's identity first.
         await waitFor(() =>
-            expect(
-                getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-            ).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
 
         // Simulate Alice's new identity having been approved, so now we warn
@@ -534,9 +511,7 @@ describe("UserIdentityWarning", () => {
             });
             client.emit(CryptoEvent.UserTrustStatusChanged, "@alice:example.org", newStatus);
         });
-        await waitFor(() =>
-            expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(getWarningByText("@bob:example.org's identity was reset.")).toBeInTheDocument());
     });
 
     it("displays the next user when the verification requirement is withdrawn", async () => {
@@ -556,7 +531,7 @@ describe("UserIdentityWarning", () => {
         renderComponent(client, room);
         // We should warn about Alice's identity first.
         await waitFor(() =>
-            expect(getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toBeInTheDocument(),
+            expect(getWarningByText("Alice's (@alice:example.org) identity was reset.")).toBeInTheDocument(),
         );
 
         // Simulate Alice's new identity having been approved, so now we warn
@@ -575,8 +550,6 @@ describe("UserIdentityWarning", () => {
                 new UserVerificationStatus(false, false, false, false),
             );
         });
-        await waitFor(() =>
-            expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(getWarningByText("@bob:example.org's identity was reset.")).toBeInTheDocument());
     });
 });

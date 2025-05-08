@@ -23,15 +23,16 @@ import * as settingsHooks from "../../../../../src/hooks/useSettings";
 import Modal from "../../../../../src/Modal";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import { flushPromises, stubClient } from "../../../../test-utils";
+import { flushPromises, stubClient, untilDispatch } from "../../../../test-utils";
 import { PollHistoryDialog } from "../../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
 import { tagRoom } from "../../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
+import SettingsStore from "../../../../../src/settings/SettingsStore.ts";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel.ts";
 
 jest.mock("../../../../../src/utils/room/tagRoom");
 
@@ -78,6 +79,8 @@ describe("<RoomSummaryCard />", () => {
         jest.spyOn(defaultDispatcher, "dispatch");
         jest.clearAllMocks();
         DMRoomMap.makeShared(mockClient);
+
+        SettingsStore.setValue("releaseAnnouncementData", null, SettingLevel.DEVICE, { pinningMessageList: true });
 
         mockClient.getRoom.mockReturnValue(room);
         jest.spyOn(room, "isElementVideoRoom").mockRestore();
@@ -168,37 +171,19 @@ describe("<RoomSummaryCard />", () => {
             fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
             expect(onSearchCancel).toHaveBeenCalled();
         });
+        it("should update the search field value correctly", async () => {
+            const user = userEvent.setup();
 
-        it("should empty search field when the timeline rendering type changes away", async () => {
             const onSearchChange = jest.fn();
-            const { rerender } = render(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Search } as any)}>
-                        <RoomSummaryCard
-                            room={room}
-                            permalinkCreator={new RoomPermalinkCreator(room)}
-                            onSearchChange={onSearchChange}
-                            focusRoomSearch={true}
-                        />
-                    </ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>,
-            );
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+            });
 
-            await userEvent.type(screen.getByPlaceholderText("Search messages…"), "test");
-            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("test");
+            const searchInput = getByPlaceholderText("Search messages…");
+            await user.type(searchInput, "test query");
 
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
-                        <RoomSummaryCard
-                            room={room}
-                            permalinkCreator={new RoomPermalinkCreator(room)}
-                            onSearchChange={onSearchChange}
-                        />
-                    </ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>,
-            );
-            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("");
+            expect(onSearchChange).toHaveBeenCalledWith("test query");
+            expect(searchInput).toHaveValue("test query");
         });
     });
 
@@ -275,6 +260,37 @@ describe("<RoomSummaryCard />", () => {
             { phase: RightPanelPhases.PinnedMessages },
             true,
         );
+    });
+
+    it("dispatches leave room on button click", async () => {
+        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        });
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("room_list|more_options|leave_room")));
+        await untilDispatch("leave_room", defaultDispatcher);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+            action: "leave_room",
+            room_id: room.roomId,
+        });
+    });
+
+    it("opens report dialog on button click", async () => {
+        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        });
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText(_t("action|report_room")));
+        expect(Modal.createDialog).toHaveBeenCalledWith(ReportRoomDialog, { roomId: room.roomId });
+        await untilDispatch("leave_room", defaultDispatcher);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+            action: "leave_room",
+            room_id: room.roomId,
+        });
     });
 
     describe("pinning", () => {

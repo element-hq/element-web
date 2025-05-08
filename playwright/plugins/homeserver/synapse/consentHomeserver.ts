@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 
-import { type Fixtures } from "../../../element-web-test";
+import { type Fixtures } from "../../../element-web-test.ts";
 
 export const consentHomeserver: Fixtures = {
     _homeserver: [

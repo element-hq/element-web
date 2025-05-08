@@ -17,6 +17,7 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type JSX } from "react";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { type IExportOptions, ExportType, ExportFormat } from "../../../src/utils/exportUtils/exportUtils";
@@ -252,8 +253,9 @@ describe("export", function () {
             },
             setProgressText,
         );
-        const imageRegex = /<img.+ src="mxc:\/\/test.org" alt="image\.png"\/?>/;
-        expect(imageRegex.test(renderToString(exporter.getEventTile(mkImageEvent(), true)))).toBeTruthy();
+        expect(renderToString(exporter.getEventTile(mkImageEvent(), true))).toMatch(
+            /<img.+ alt="image\.png" src="mxc:\/\/test.org"\/?>/,
+        );
     });
 
     const invalidExportOptions: [string, IExportOptions][] = [

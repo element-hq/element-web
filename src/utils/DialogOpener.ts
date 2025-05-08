@@ -119,7 +119,7 @@ export class DialogOpener {
                 break;
             case Action.OpenAddToExistingSpaceDialog: {
                 const space = payload.space;
-                Modal.createDialog(
+                const { finished } = Modal.createDialog(
                     AddExistingToSpaceDialog,
                     {
                         onCreateRoomClick: (ev: ButtonEvent) => {
@@ -128,14 +128,14 @@ export class DialogOpener {
                         },
                         onAddSubspaceClick: () => showAddExistingSubspace(space),
                         space,
-                        onFinished: (added: boolean) => {
-                            if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                            }
-                        },
                     },
                     "mx_AddExistingToSpaceDialog_wrapper",
                 );
+                finished.then(([added]) => {
+                    if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+                        defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                    }
+                });
                 break;
             }
         }

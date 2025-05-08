@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MutableRefObject, useEffect, useState } from "react";
+import { type RefObject, useEffect, useState } from "react";
 
-export function useIsExpanded(ref: MutableRefObject<HTMLElement | null>, breakingPoint: number): boolean {
+export function useIsExpanded(ref: RefObject<HTMLElement | null> | undefined, breakingPoint: number): boolean {
     const [isExpanded, setIsExpanded] = useState(false);
     useEffect(() => {
-        if (ref.current) {
+        if (ref?.current) {
             const editor = ref.current;
             const resizeObserver = new ResizeObserver((entries) => {
                 requestAnimationFrame(() => {
