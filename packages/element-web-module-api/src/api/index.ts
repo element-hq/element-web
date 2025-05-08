@@ -5,8 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { Root } from "react-dom/client";
 import { LegacyModuleApiExtension } from "./legacy-modules";
 import { LegacyCustomisationsApiExtension } from "./legacy-customisations";
+import { ConfigApi } from "./config";
+import { I18nApi } from "./i18n";
 
 /**
  * Module interface for modules to implement.
@@ -62,31 +65,32 @@ export function isModule(module: unknown): module is ModuleExport {
 }
 
 /**
- * The configuration for the application.
- * Should be extended via declaration merging.
- * @public
- */
-export interface Config {
-    // The branding name of the application
-    brand: string;
-    // Other config options are available but not specified in the types as that would make it difficult to change for element-web
-    // they are accessible at runtime all the same, see list at https://github.com/element-hq/element-web/blob/develop/docs/config.md
-}
-
-/**
- * API for accessing the configuration.
- * @public
- */
-export interface ConfigApi {
-    get(): Config;
-    get<K extends keyof Config>(key: K): Config[K];
-    get<K extends keyof Config = never>(key?: K): Config | Config[K];
-}
-
-/**
  * The API for modules to interact with the application.
  * @public
  */
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
-    config: ConfigApi;
+    /**
+     * The API to read config.json values.
+     * Keys should be scoped to the module in reverse domain name notation.
+     * @public
+     */
+    readonly config: ConfigApi;
+    /**
+     * The internationalisation API.
+     * @public
+     */
+    readonly i18n: I18nApi;
+    /**
+     * The root node the main application is rendered to.
+     * Intended for rendering sibling React trees.
+     * @public
+     */
+    readonly rootNode: HTMLElement;
+    /**
+     * Create a ReactDOM root for rendering React components.
+     * Exposed to allow modules to avoid needing to bundle their own ReactDOM.
+     * @param element - the element to render use as the root.
+     * @public
+     */
+    createRoot(element: Element): Root;
 }
