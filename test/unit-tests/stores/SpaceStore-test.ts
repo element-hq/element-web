@@ -20,7 +20,6 @@ import {
     type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import {
@@ -1010,7 +1009,7 @@ describe("SpaceStore", () => {
 
         await run();
 
-        const deferred = defer<boolean>();
+        const deferred = Promise.withResolvers<boolean>();
         space.loadMembersIfNeeded.mockImplementation(() => {
             const event = mkEvent({
                 event: true,

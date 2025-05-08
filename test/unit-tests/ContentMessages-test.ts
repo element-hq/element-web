@@ -14,7 +14,6 @@ import {
     type UploadResponse,
 } from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
-import { defer } from "matrix-js-sdk/src/utils";
 import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/ContentMessages";
@@ -338,7 +337,7 @@ describe("ContentMessages", () => {
 
     describe("cancelUpload", () => {
         it("should cancel in-flight upload", async () => {
-            const deferred = defer<UploadResponse>();
+            const deferred = Promise.withResolvers<UploadResponse>();
             mocked(client.uploadContent).mockReturnValue(deferred.promise);
             const file1 = new File([], "file1");
             const prom = contentMessages.sendContentToRoom(file1, roomId, undefined, client, undefined);

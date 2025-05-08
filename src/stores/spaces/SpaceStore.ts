@@ -21,7 +21,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -153,7 +152,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     private _enabledMetaSpaces: MetaSpace[] = [];
     /** Whether the feature flag is set for MSC3946 */
     private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
-    private _storeReadyDeferred = defer();
+    private _storeReadyDeferred = Promise.withResolvers<void>();
 
     public constructor() {
         super(defaultDispatcher, {});
