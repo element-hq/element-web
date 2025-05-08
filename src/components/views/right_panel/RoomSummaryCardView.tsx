@@ -51,7 +51,6 @@ import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
 import { Box } from "../../utils/Box.tsx";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
-import { onRoomTopicLinkClick } from "../elements/RoomTopic.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 
 interface IProps {
@@ -105,16 +104,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
             })}
         >
             <Box flex="1" className="mx_RoomSummaryCard_topic_container">
-                <Text
-                    size="sm"
-                    weight="regular"
-                    onClick={(ev: React.MouseEvent): void => {
-                        if (ev.target instanceof HTMLAnchorElement) {
-                            onRoomTopicLinkClick(ev);
-                            return;
-                        }
-                    }}
-                >
+                <Text size="sm" weight="regular" onClick={vm.onTopicLinkClick}>
                     {content}
                 </Text>
                 <IconButton className="mx_RoomSummaryCard_topic_chevron" size="24px" onClick={vm.onExpandedClick}>
