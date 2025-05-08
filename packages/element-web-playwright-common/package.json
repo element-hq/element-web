@@ -18,6 +18,8 @@
     },
     "scripts": {
         "prepare": "tsc",
+        "lint:types": "tsc --noEmit",
+        "lint:codestyle": "echo 'handled by lint:eslint'",
         "test": "echo No tests for @element-hq/element-web-playwright-common"
     },
     "devDependencies": {
