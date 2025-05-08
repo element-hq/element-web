@@ -26,7 +26,8 @@
     ],
     "scripts": {
         "prepare": "vite build && api-extractor run",
-        "lint": "tsc --noEmit",
+        "lint:types": "tsc --noEmit",
+        "lint:codestyle": "echo 'handled by lint:eslint'",
         "test": "vitest --coverage"
     },
     "devDependencies": {
