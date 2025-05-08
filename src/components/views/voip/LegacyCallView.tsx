@@ -65,6 +65,18 @@ interface IState {
     sidebarShown: boolean;
 }
 
+function getFullScreenElement(): Element | null {
+    return document.fullscreenElement;
+}
+
+function requestFullscreen(element: Element): void {
+    element.requestFullscreen();
+}
+
+function exitFullscreen(): void {
+    document.exitFullscreen();
+}
+
 export default class LegacyCallView extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private contentWrapperRef = createRef<HTMLDivElement>();
@@ -96,8 +108,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
+        if (getFullScreenElement()) {
+            exitFullscreen();
         }
 
         document.removeEventListener("keydown", this.onNativeKeyDown);
@@ -136,9 +148,9 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                     return;
                 }
                 if (payload.fullscreen) {
-                    this.contentWrapperRef.current?.requestFullscreen();
-                } else if (document.fullscreenElement) {
-                    document.exitFullscreen();
+                    requestFullscreen(this.contentWrapperRef.current);
+                } else if (getFullScreenElement()) {
+                    exitFullscreen();
                 }
                 break;
             }
