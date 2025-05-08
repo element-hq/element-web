@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Form } from "@vector-im/compound-web";
-import React, { useRef, type JSX } from "react";
+import React, { useCallback, useRef, type JSX } from "react";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 import { Flex } from "../../../utils/Flex";
@@ -43,17 +43,21 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const keyDownCallback = React.useCallback(
+    const scrollToIndex = useCallback(
+        (index: number): void => {
+            ref?.current?.scrollIntoView({
+                index: index,
+                behavior: "auto",
+                done: () => {
+                    setFocusedIndex(index);
+                },
+            });
+        },
+        [ref],
+    );
+
+    const keyDownCallback = useCallback(
         (e: any) => {
-            const scrollToIndex = (index: number): void => {
-                ref?.current?.scrollIntoView({
-                    index: index,
-                    behavior: "auto",
-                    done: () => {
-                        setFocusedIndex(index);
-                    },
-                });
-            };
             if (e.code === "ArrowUp") {
                 const nextItemIsSeparator = focusedIndex > 1 && vm.members[focusedIndex - 1] === SEPARATOR;
                 const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
@@ -74,10 +78,10 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 }
             }
         },
-        [focusedIndex, ref, setFocusedIndex, vm, totalRows],
+        [scrollToIndex, focusedIndex, setFocusedIndex, vm, totalRows],
     );
 
-    const scrollerRef = React.useCallback(
+    const scrollerRef = useCallback(
         (element: any) => {
             if (element) {
                 element.addEventListener("keydown", keyDownCallback);
