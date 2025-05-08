@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useEffect, type JSX } from "react";
 
 import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import { type RoomMember } from "../../../../../models/rooms/RoomMember";
@@ -37,7 +37,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
-    const nameJSX = <DisambiguatedProfile member={member} fallbackName={name || ""} />;
+    const nameJSX = <DisambiguatedProfile withTooltip member={member} fallbackName={name || ""} />;
 
     const presenceState = member.presenceState;
     let presenceJSX: JSX.Element | undefined;
@@ -60,6 +60,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
             userLabel={vm.userLabel}
+            ariaLabel={_t("member_list|open_profile", { memberName: name })}
             iconJsx={iconJsx}
             focused={props.focused}
         />

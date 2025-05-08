@@ -117,10 +117,14 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
                 <Virtuoso
+                    aria-label={_t("room_list|list_title")}
+                    role="grid"
                     ref={ref}
                     style={{ height: "100%" }}
                     scrollerRef={scrollerRef}
                     context={{ focusedIndex }}
+                    // Don't focus on the table as a whole go straight to the first item in the list
+                    tabIndex={undefined}
                     data={vm.members}
                     onFocus={onFocus}
                     itemContent={(index, member) => getRowComponent(member, index === focusedIndex)}
