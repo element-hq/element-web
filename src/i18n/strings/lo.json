@@ -731,7 +731,6 @@
             "accepting": "ກຳລັງຍອມຮັບ…",
             "after_new_login": {
                 "device_verified": "ຢັ້ງຢືນອຸປະກອນແລ້ວ",
-                "reset_confirmation": "ຕັ້ງຄ່າຢືນຢັນກະແຈຄືນໃໝ່ບໍ?",
                 "skip_verification": "ຂ້າມການຢັ້ງຢືນດຽວນີ້",
                 "unable_to_verify": "ບໍ່ສາມາດຢັ້ງຢືນອຸປະກອນນີ້ໄດ້",
                 "verify_this_device": "ຢັ້ງຢືນອຸປະກອນນີ້"
@@ -793,7 +792,6 @@
             "verify_emoji_prompt": "ຢັ້ງຢືນໂດຍການປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ.",
             "verify_emoji_prompt_qr": "ຖ້າທ່ານບໍ່ສາມາດສະແກນລະຫັດຂ້າງເທິງໄດ້, ໃຫ້ກວດສອບໂດຍການປຽບທຽບອີໂມຈິທີ່ເປັນເອກະລັກ.",
             "verify_later": "ຂ້ອຍຈະກວດສອບພາຍຫຼັງ",
-            "verify_reset_warning_1": "ການຕັ້ງຄ່າລະຫັດຢືນຢັນຂອງທ່ານບໍ່ສາມາດຍົກເລີກໄດ້. ຫຼັງຈາກການຕັ້ງຄ່າແລ້ວ, ທ່ານຈະບໍ່ສາມາດເຂົ້າເຖິງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດເກົ່າໄດ້, ແລະ ໝູ່ເພື່ອນທີ່ຢືນຢັນໄປກ່ອນໜ້ານີ້ ທ່ານຈະເຫັນຄຳເຕືອນຄວາມປອດໄພຈົນກວ່າທ່ານຈະຢືນຢັນກັບພວກມັນຄືນໃໝ່.",
             "verify_using_device": "ຢັ້ງຢືນດ້ວຍອຸປະກອນອື່ນ",
             "verify_using_key": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ",
             "verify_using_key_or_phrase": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ ຫຼືປະໂຫຍກ",
@@ -2285,13 +2283,11 @@
         "heading_with_query": "ໃຊ້ \"%(query)s\" ເພື່ອຊອກຫາ",
         "join_button_text": "ເຂົ້າຮ່ວມ %(roomAddress)s",
         "keyboard_scroll_hint": "ໃຊ້ <arrows/> ເພື່ອເລື່ອນ",
-        "message_search_section_title": "ການຄົ້ນຫາອື່ນໆ",
         "other_rooms_in_space": "ຫ້ອງອື່ນໆ%(spaceName)s",
         "public_rooms_label": "ຫ້ອງສາທາລະນະ",
         "recent_searches_section_title": "ການຄົ້ນຫາທີ່ຜ່ານມາ",
         "recently_viewed_section_title": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
         "search_dialog": "ຊອກຫາ ກ່ອງໂຕ້ຕອບ",
-        "search_messages_hint": "ເພື່ອຊອກຫາຂໍ້ຄວາມ, ຊອກຫາໄອຄອນນີ້ຢູ່ເທິງສຸດຂອງຫ້ອງ <icon/>",
         "spaces_title": "ຊ່ອງທີ່ທ່ານຢູ່"
     },
     "stickers": {

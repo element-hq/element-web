@@ -384,6 +384,7 @@
             "fallback_button": "Mulai autentikasi",
             "mas_cross_signing_reset_cta": "Buka akun Anda",
             "mas_cross_signing_reset_description": "Atur ulang identitas Anda melalui penyedia akun Anda, kemudian kembali dan klik “Coba lagi”.",
+            "mas_cross_signing_reset_title": "Buka akun Anda untuk mengatur ulang identitas Anda",
             "msisdn": "Sebuah pesan teks telah dikirim ke %(msisdn)s",
             "msisdn_token_incorrect": "Token salah",
             "msisdn_token_prompt": "Silakan masukkan kode yang berisi:",
@@ -990,7 +991,6 @@
             "accepting": "Menerima…",
             "after_new_login": {
                 "device_verified": "Perangkat telah diverifikasi",
-                "reset_confirmation": "Benar-benar ingin mengatur ulang kunci-kunci verifikasi?",
                 "skip_verification": "Lewatkan verifikasi untuk sementara",
                 "unable_to_verify": "Tidak dapat memverifikasi perangkat ini",
                 "verify_this_device": "Verifikasi perangkat ini"
@@ -1061,8 +1061,6 @@
             "verify_emoji_prompt": "Verifikasi dengan membandingkan emoji unik.",
             "verify_emoji_prompt_qr": "Jika Anda tidak dapat memindai kode di atas, verifikasi dengan membandingkan emoji yang unik.",
             "verify_later": "Saya verifikasi nanti",
-            "verify_reset_warning_1": "Mengatur ulang kunci verifikasi Anda tidak dapat dibatalkan. Setelah mengatur ulang, Anda tidak akan memiliki akses ke pesan terenkripsi lama, dan semua orang yang sebelumnya telah memverifikasi Anda akan melihat peringatan keamanan sampai Anda memverifikasi ulang dengan mereka.",
-            "verify_reset_warning_2": "Silakan lanjutkan hanya jika Anda yakin telah kehilangan semua perangkat lain dan Kunci Pemulihan Anda.",
             "verify_using_device": "Verifikasi dengan perangkat lain",
             "verify_using_key": "Verifikasi dengan Kunci Keamanan",
             "verify_using_key_or_phrase": "Verifikasi dengan Kunci atau Frasa Keamanan",
@@ -2113,6 +2111,7 @@
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
+        "filter": "Filter",
         "filters": {
             "favourite": "Favorit",
             "people": "Orang",
@@ -2146,6 +2145,12 @@
             "open_room": "Buka ruangan %(roomName)s"
         },
         "room_options": "Opsi Ruangan",
+        "secondary_filter": {
+            "all_activity": "Semua aktivitas",
+            "invites_only": "Hanya undangan",
+            "low_priority": "Prioritas rendah",
+            "mentions_only": "Sebutan saja"
+        },
         "secondary_filters": "Saringan sekunder",
         "show_less": "Tampilkan lebih sedikit",
         "show_message_previews": "Tampilkan pratinjau pesan",
@@ -2622,6 +2627,7 @@
             "discovery_needs_terms_title": "Biarkan orang lain menemukan Anda",
             "display_name": "Nama Tampilan",
             "display_name_error": "Tidak dapat mengatur nama tampilan",
+            "email_adding_unsupported_by_hs": "Homeserver ini tidak mendukung penambahan alamat surel ke akun Anda.",
             "email_address_in_use": "Alamat email ini telah dipakai",
             "email_address_label": "Alamat Email",
             "email_not_verified": "Alamat email Anda belum diverifikasi",
@@ -2646,7 +2652,9 @@
             "error_share_msisdn_discovery": "Tidak dapat membagikan nomor telepon",
             "identity_server_no_token": "Tidak ada token akses identitas yang ditemukan",
             "identity_server_not_set": "Server identitas tidak diatur",
+            "invalid_phone_number": "Nomor telepon yang diberikan tampaknya tidak valid.",
             "language_section": "Bahasa",
+            "msisdn_adding_unsupported_by_hs": "Homeserver ini tidak mendukung penambahan nomor telepon ke akun Anda.",
             "msisdn_in_use": "Nomor telepon ini telah dipakai",
             "msisdn_label": "Nomor Telepon",
             "msisdn_verification_field_label": "Kode verifikasi",
@@ -3218,7 +3226,7 @@
         "heading_without_query": "Cari",
         "join_button_text": "Bergabung dengan %(roomAddress)s",
         "keyboard_scroll_hint": "Gunakan <arrows/> untuk menggulirkan",
-        "message_search_section_title": "Pencarian lainnya",
+        "messages_label": "Pesan",
         "other_rooms_in_space": "Ruangan lainnya di %(spaceName)s",
         "public_rooms_label": "Ruangan publik",
         "public_spaces_label": "Space publik",
@@ -3228,7 +3236,6 @@
         "result_may_be_hidden_privacy_warning": "Beberapa hasil mungkin disembunyikan untuk privasi",
         "result_may_be_hidden_warning": "Beberapa hasil mungkin tersembunyi",
         "search_dialog": "Dialog Pencarian",
-        "search_messages_hint": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
         "spaces_title": "Space yang Anda berada",
         "start_group_chat_button": "Mulai sebuah grup obrolan"
     },
@@ -3277,9 +3284,7 @@
     "threads_activity_centre": {
         "header": "Aktivitas utas",
         "no_rooms_with_threads_notifs": "Anda belum memiliki ruangan dengan notifikasi utas.",
-        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca.",
-        "release_announcement_description": "Notifikasi utas telah dipindahkan, temukan di sini mulai sekarang.",
-        "release_announcement_header": "Pusat Aktivitas Utas"
+        "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
     },
     "time": {
         "about_day_ago": "1 hari yang lalu",
@@ -3790,10 +3795,11 @@
         "unavailable": "Tidak Tersedia"
     },
     "update_room_access_modal": {
-        "description": "Untuk membuat tautan berbagi, Anda harus mengizinkan tamu bergabung dengan ruangan ini. Hal ini dapat membuat ruangan menjadi kurang aman. Setelah selesai dengan panggilan, Anda dapat membuat ruangan menjadi pribadi lagi.",
-        "dont_change_description": "Sebagai alternatif, Anda dapat melakukan panggilan di ruangan terpisah.",
+        "description": "Untuk membuat tautan berbagi, jadikan ruangan ini <b>publik</b> atau aktifkan opsi bagi pengguna untuk <b>meminta bergabung</b>. Hal ini memungkinkan tamu untuk bergabung tanpa diundang.",
+        "dont_change_description": "Jika Anda tidak ingin mengubah akses ruangan ini, Anda dapat membuat ruang baru untuk tautan panggilan.",
         "no_change": "Saya tidak ingin mengubah tingkat akses.",
-        "title": "Ubah tingkat akses ruangan"
+        "revert_access_description": "(Ini dapat dikembalikan ke nilai sebelumnya di Pengaturan Ruangan: <b>Keamanan & Privasi</b> / <b>Akses</b>)",
+        "title": "Izinkan pengguna tamu untuk bergabung dengan ruangan ini"
     },
     "upload_failed_generic": "File '%(fileName)s' gagal untuk diunggah.",
     "upload_failed_size": "File '%(fileName)s' melebihi batas ukuran unggahan file homeserver",

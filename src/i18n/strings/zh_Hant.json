@@ -856,7 +856,6 @@
             "accepting": "正在接受…",
             "after_new_login": {
                 "device_verified": "裝置已驗證",
-                "reset_confirmation": "真的要重設驗證金鑰？",
                 "skip_verification": "暫時略過驗證",
                 "unable_to_verify": "無法驗證此裝置",
                 "verify_this_device": "驗證此裝置"
@@ -926,8 +925,6 @@
             "verify_emoji_prompt": "透過比對獨特的表情符號來進行驗證。",
             "verify_emoji_prompt_qr": "如果您無法掃描上面的條碼，請透過比較獨特的表情符號驗證。",
             "verify_later": "我稍後驗證",
-            "verify_reset_warning_1": "重設您的驗證金鑰將無法復原。重設後，您將無法存取舊的加密訊息，之前任何驗證過您的朋友也會看到安全警告，直到您重新驗證。",
-            "verify_reset_warning_2": "請僅在您確定遺失了您其他所有裝置與安全金鑰時才繼續。",
             "verify_using_device": "用另一台裝置驗證",
             "verify_using_key": "使用安全金鑰進行驗證",
             "verify_using_key_or_phrase": "使用安全金鑰或密語進行驗證",
@@ -2765,7 +2762,6 @@
         "heading_without_query": "搜尋",
         "join_button_text": "加入 %(roomAddress)s",
         "keyboard_scroll_hint": "使用 <arrows/> 捲動",
-        "message_search_section_title": "其他搜尋",
         "other_rooms_in_space": "其他在 %(spaceName)s 中的聊天室",
         "public_rooms_label": "公開聊天室",
         "recent_searches_section_title": "近期搜尋",
@@ -2774,7 +2770,6 @@
         "result_may_be_hidden_privacy_warning": "出於隱私考量，可能會隱藏一些結果",
         "result_may_be_hidden_warning": "某些結果可能會被隱藏",
         "search_dialog": "搜尋對話方塊",
-        "search_messages_hint": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
         "spaces_title": "您所在的聊天空間",
         "start_group_chat_button": "開始群組聊天"
     },

@@ -967,7 +967,6 @@
             "accepting": "Kabul ediyorum…",
             "after_new_login": {
                 "device_verified": "Cihaz doğrulandı",
-                "reset_confirmation": "Doğrulama anahtarlarını sıfırlamak istediğinizden emin misiniz?",
                 "skip_verification": "Şimdilik doğrulamayı atla",
                 "unable_to_verify": "Bu cihaz doğrulanamıyor",
                 "verify_this_device": "Bu cihazı doğrulayın"
@@ -1038,8 +1037,6 @@
             "verify_emoji_prompt": "Eşsiz emoji eşleştirme ile doğrulama.",
             "verify_emoji_prompt_qr": "Yukarıdaki kodu tarayamıyorsanız benzersiz emojiyi karşılaştırarak doğrulayın.",
             "verify_later": "Daha sonra doğrulayacağım",
-            "verify_reset_warning_1": "Doğrulama anahtarlarınızı sıfırlama işlemi geri alınamaz. Sıfırladıktan sonra eski şifrelenmiş mesajlara erişiminiz olmaz ve sizi daha önce doğrulamış olan arkadaşlarınız, siz onlarla yeniden doğrulayana kadar güvenlik uyarıları görür.",
-            "verify_reset_warning_2": "Lütfen yalnızca diğer tüm cihazlarınızı ve Güvenlik Anahtarınızı kaybettiğinizden eminseniz devam edin.",
             "verify_using_device": "Başka bir cihazla doğrula",
             "verify_using_key": "Güvenlik Anahtarı ile Doğrula",
             "verify_using_key_or_phrase": "Güvenlik Anahtarı veya İfadesiyle Doğrula",
@@ -3151,7 +3148,6 @@
         "heading_without_query": "Ara",
         "join_button_text": "Katıl %(roomAddress)s",
         "keyboard_scroll_hint": "Kaydırmak için <arrows/> kullanın",
-        "message_search_section_title": "Diğer aramalar",
         "other_rooms_in_space": "%(spaceName)s alanındaki diğer odalar",
         "public_rooms_label": "Herkese açık odalar",
         "public_spaces_label": "Herkese açık alanlar",
@@ -3161,7 +3157,6 @@
         "result_may_be_hidden_privacy_warning": "Bazı sonuçlar gizlilik için gizlenmiş olabilir",
         "result_may_be_hidden_warning": "Bazı sonuçlar gizlenmiş olabilir",
         "search_dialog": "Arama İletişim Kutusu",
-        "search_messages_hint": "Mesajları aramak için odanın üst kısmında bu simgeye tıklayın <icon/>",
         "spaces_title": "Bulunduğunuz alanlar",
         "start_group_chat_button": "Grup sohbeti başlat"
     },
@@ -3210,9 +3205,7 @@
     "threads_activity_centre": {
         "header": "Mesaj dizileri etkinliği",
         "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok.",
-        "release_announcement_description": "Mesaj dizisi bildirimleri taşındı, bundan sonra burada bulabilirsiniz.",
-        "release_announcement_header": "Mesaj Dizileri Etkinlik Merkezi"
+        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
     },
     "time": {
         "about_day_ago": "yaklaşık bir gün önce",

@@ -999,7 +999,6 @@
             "accepting": "Akceptowanie…",
             "after_new_login": {
                 "device_verified": "Urządzenie zweryfikowane",
-                "reset_confirmation": "Czy na pewno zresetować klucze weryfikacyjne?",
                 "skip_verification": "Pomiń weryfikację na razie",
                 "unable_to_verify": "Nie można zweryfikować tego urządzenia",
                 "verify_this_device": "Zweryfikuj to urządzenie"
@@ -1070,8 +1069,6 @@
             "verify_emoji_prompt": "Zweryfikuj, porównując unikalne emotikony.",
             "verify_emoji_prompt_qr": "Jeśli nie jesteś w stanie skanować kodu powyżej, zweryfikuj porównując emoji.",
             "verify_later": "Zweryfikuję później",
-            "verify_reset_warning_1": "Zresetowanie kluczy weryfikacyjnych nie może być cofnięte. Po zresetowaniu, nie będziesz mieć dostępu do starych wiadomości szyfrowanych, a wszyscy znajomi, którzy wcześniej Cię zweryfikowali, będą widzieć ostrzeżenia do czasu ponownej weryfikacji.",
-            "verify_reset_warning_2": "Kontynuuj tylko wtedy, gdy masz pewność, że utraciłeś wszystkie inne urządzenia i swój klucz przywracania.",
             "verify_using_device": "Zweryfikuj innym urządzeniem",
             "verify_using_key": "Zweryfikuj kluczem przywracania",
             "verify_using_key_or_phrase": "Zweryfikuj kluczem przywracania lub frazą",
@@ -3243,7 +3240,6 @@
         "heading_without_query": "Szukaj",
         "join_button_text": "Dołącz %(roomAddress)s",
         "keyboard_scroll_hint": "Użyj <arrows/>, aby przewijać",
-        "message_search_section_title": "Inne wyszukiwania",
         "other_rooms_in_space": "Inne pokoje w %(spaceName)s",
         "public_rooms_label": "Pokoje publiczne",
         "public_spaces_label": "Przestrzenie publiczne",
@@ -3253,7 +3249,6 @@
         "result_may_be_hidden_privacy_warning": "Niektóre wyniki zostały ukryte dla ochrony prywatności",
         "result_may_be_hidden_warning": "Niektóre wyniki mogą być ukryte",
         "search_dialog": "Pasek wyszukiwania",
-        "search_messages_hint": "Aby szukać wiadomości, poszukaj tej ikony na górze pokoju <icon/>",
         "spaces_title": "Przestrzenie, w których jesteś",
         "start_group_chat_button": "Rozpocznij czat grupowy"
     },
@@ -3302,9 +3297,7 @@
     "threads_activity_centre": {
         "header": "Aktywność wątków",
         "no_rooms_with_threads_notifs": "Nie masz jeszcze pokoi z powiadomieniami w wątku.",
-        "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami.",
-        "release_announcement_description": "Powiadomienia w wątkach zostały przeniesione, teraz znajdziesz je tutaj.",
-        "release_announcement_header": "Centrum aktywności wątków"
+        "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
     },
     "time": {
         "about_day_ago": "około dzień temu",
