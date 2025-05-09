@@ -157,6 +157,7 @@
         "view_message": "View message",
         "view_source": "View Source",
         "yes": "Yes",
+        "yes_dismiss": "Yes, dismiss",
         "zoom_in": "Zoom in",
         "zoom_out": "Zoom out"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Back up your keys before signing out to avoid losing them."
         },
+        "turn_on_key_storage": "Turn on key storage",
+        "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
@@ -2559,6 +2562,8 @@
                 "session_key": "Session key:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
+            "confirm_key_storage_off_description": "If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
