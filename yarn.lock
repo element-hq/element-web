@@ -1617,10 +1617,10 @@
   resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-0.1.1.tgz#e2b24aa38aa9f7b6af3c4993e6402a8b7e2f3cb5"
   integrity sha512-qtEQD5nFaRJ+vfAis7uhKB66SyCjrz7O+qGz/hKJjgNhBLT/6C5DK90waKINXSw0J3stFR43IWzEk5GBOrTMow==
 
-"@element-hq/element-web-playwright-common@^1.1.5":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.1.6.tgz#39d154df95d32ed48df51e36e88c0354e54a7404"
-  integrity sha512-KJikM1D2fr7HONYD6zrEEEJFueN+Nis6NDO8gFMxxyv68CzBwHU85BWQ1eYx/2Zeg/9EfsHtXcYC73gNPI4huA==
+"@element-hq/element-web-playwright-common@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.1.7.tgz#aa128df6c19351bda575122479b7d57d81b305de"
+  integrity sha512-2UoXd/O1wk0vKfGyX7cD04W4yulgokpv9mR80JuxwkvFufqOUWmxQWn6eKUugxosn1+8BVgZkiCqf8/BBeiAaw==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^10.24.2"
@@ -3722,13 +3722,14 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.3.tgz#cc54d8b3e9472bcd8e622126ba364ee31952cd8a"
   integrity sha512-fqo8P55Vc/t0vxpFar9RDJN5gKEjJmzrLo+O4piDbFda6VrRoqrWAtiu0Au0g6B4hRDPKIuFupk8v9Ja7q8Hvg==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
