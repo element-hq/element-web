@@ -386,6 +386,7 @@
             "fallback_button": "Begynn autentisering",
             "mas_cross_signing_reset_cta": "Gå til kontoen din",
             "mas_cross_signing_reset_description": "Tilbakestill identiteten din gjennom kontoleverandøren din, og kom deretter tilbake og klikk \"Prøv på nytt\".",
+            "mas_cross_signing_reset_title": "Gå til kontoen din for å tilbakestille identiteten din",
             "msisdn": "En SMS har blitt sendt til %(msisdn)s",
             "msisdn_token_incorrect": "Sjetongen er feil",
             "msisdn_token_prompt": "Vennligst skriv inn koden den inneholder:",
@@ -993,7 +994,6 @@
             "accepting": "Aksepterer …",
             "after_new_login": {
                 "device_verified": "Enhet verifisert",
-                "reset_confirmation": "Vil du virkelig tilbakestille bekreftelsesnøkler?",
                 "skip_verification": "Hopp over verifisering for nå",
                 "unable_to_verify": "Kan ikke verifisere denne enheten",
                 "verify_this_device": "Verifiser denne enheten"
@@ -1064,8 +1064,6 @@
             "verify_emoji_prompt": "Bekreft ved å sammenligne unike emoji.",
             "verify_emoji_prompt_qr": "Hvis du ikke kan skanne koden ovenfor, bekreft ved å sammenligne unike emoji.",
             "verify_later": "Jeg bekrefter senere",
-            "verify_reset_warning_1": "Tilbakestilling av bekreftelsesnøklene kan ikke angres. Etter tilbakestilling har du ikke tilgang til gamle krypterte meldinger, og eventuelle venner som tidligere har bekreftet deg, vil se sikkerhetsadvarsler til du bekrefter med dem på nytt.",
-            "verify_reset_warning_2": "Fortsett bare hvis du er sikker på at du har mistet alle de andre enhetene og sikkerhetsnøkkelen din.",
             "verify_using_device": "Bekreft med en annen enhet",
             "verify_using_key": "Bekreft med gjenopprettingsnøkkel",
             "verify_using_key_or_phrase": "Bekreft med gjenopprettingsnøkkel eller -frase",
@@ -2121,6 +2119,7 @@
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
+        "filter": "Filter",
         "filters": {
             "favourite": "Favoritter",
             "people": "Personer",
@@ -2154,6 +2153,12 @@
             "open_room": "Åpne rom %(roomName)s"
         },
         "room_options": "Rominnstillinger",
+        "secondary_filter": {
+            "all_activity": "All aktivitet",
+            "invites_only": "Kun invitasjoner",
+            "low_priority": "Lav prioritet",
+            "mentions_only": "Kun omtaler"
+        },
         "secondary_filters": "Sekundære filtre",
         "show_less": "Vis mindre",
         "show_message_previews": "Aktiver forhåndsvisning av meldinger",
@@ -2629,6 +2634,7 @@
             "discovery_needs_terms_title": "La folk finne deg",
             "display_name": "Visningsnavn",
             "display_name_error": "Kan ikke angi visningsnavn",
+            "email_adding_unsupported_by_hs": "Denne hjemmeserveren støtter ikke å legge til flere e-postadresser til kontoen din.",
             "email_address_in_use": "Denne e-postadressen er allerede i bruk",
             "email_address_label": "E-postadresse",
             "email_not_verified": "E-postadressen din er ikke verifisert ennå",
@@ -2653,7 +2659,9 @@
             "error_share_msisdn_discovery": "Kan ikke dele telefonnummer",
             "identity_server_no_token": "Ingen identitetstilgangstoken funnet",
             "identity_server_not_set": "Identitetsserver er ikke angitt",
+            "invalid_phone_number": "Telefonnummeret som er oppgitt ser ikke ut til å være gyldig.",
             "language_section": "Språk",
+            "msisdn_adding_unsupported_by_hs": "Denne hjemmeserveren støtter ikke å legge til telefonnumre til kontoen din.",
             "msisdn_in_use": "Dette mobilnummeret er allerede i bruk",
             "msisdn_label": "Telefonnummer",
             "msisdn_verification_field_label": "Verifikasjonskode",
@@ -3225,7 +3233,7 @@
         "heading_without_query": "Søk etter",
         "join_button_text": "Bli med i %(roomAddress)s",
         "keyboard_scroll_hint": "Bruk <arrows/> for å scrolle",
-        "message_search_section_title": "Andre søk",
+        "messages_label": "Meldinger",
         "other_rooms_in_space": "Andre rom i %(spaceName)s",
         "public_rooms_label": "Offentlige rom",
         "public_spaces_label": "Offentlige områder",
@@ -3235,7 +3243,6 @@
         "result_may_be_hidden_privacy_warning": "Noen resultater kan være skjult av personvernhensyn",
         "result_may_be_hidden_warning": "Noen resultater kan være skjult",
         "search_dialog": "Søkedialog",
-        "search_messages_hint": "For å søke i meldinger, se etter dette ikonet øverst i et rom <icon/>",
         "spaces_title": "Områder du er i",
         "start_group_chat_button": "Start en gruppechat"
     },
@@ -3284,9 +3291,7 @@
     "threads_activity_centre": {
         "header": "Trådaktivitet",
         "no_rooms_with_threads_notifs": "Du har ikke rom med trådvarsler ennå.",
-        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå.",
-        "release_announcement_description": "Trådenotifikasjoner er flyttet, du finner dem her fra nå av.",
-        "release_announcement_header": "Aktivitetssenter for tråder"
+        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
     },
     "time": {
         "about_day_ago": "cirka 1 dag siden",
@@ -3794,10 +3799,10 @@
         "unavailable": "Ikke tilgjengelig"
     },
     "update_room_access_modal": {
-        "description": "Hvis du vil opprette en delingslenke, må du tillate gjester å bli med i dette rommet. Dette kan gjøre rommet mindre sikkert. Når du er ferdig med samtalen, kan du gjøre rommet privat igjen.",
-        "dont_change_description": "Alternativt kan du holde samtalen i et eget rom.",
+        "description": "For å opprette en delingslenke, lag dette rommet <b>offentlig</b> eller aktiver alternativet for brukere å <b>be om å bli med</b> Dette lar gjester bli med uten å bli invitert.",
+        "dont_change_description": "Hvis du ikke ønsker å endre tilgangen til dette rommet, kan du opprette et nytt rom for lenken.",
         "no_change": "Jeg vil ikke endre tilgangsnivået.",
-        "title": "Endre tilgangsnivået til rommet"
+        "title": "Tillat gjestebrukere å bli med i dette rommet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",
     "upload_failed_size": "Filen \"%(fileName)s\" er større enn hjemmeserverens grense for opplastninger",
