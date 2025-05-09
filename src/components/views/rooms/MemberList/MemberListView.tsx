@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { useCallback, useRef, type JSX } from "react";
-import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
+import { Virtualizer, VirtualizerHandle } from "virtua";
+// import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 import { Flex } from "../../../utils/Flex";
 import {
@@ -29,9 +30,9 @@ interface IProps {
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const totalRows = vm.members.length;
-    const ref = useRef<VirtuosoHandle | null>(null);
+    const ref = useRef<VirtualizerHandle | null>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null);
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
-    const listRef = useRef<HTMLButtonElement | null>(null);
 
     const getRowComponent = (item: MemberWithSeparator, focused: boolean): JSX.Element => {
         if (item === SEPARATOR) {
@@ -39,19 +40,16 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         } else if (item.member) {
             return <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} focused={focused} />;
         } else {
-            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
+            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} focused={focused} />;
         }
     };
 
     const scrollToIndex = useCallback(
         (index: number): void => {
-            ref?.current?.scrollIntoView({
-                index: index,
-                behavior: "auto",
-                done: () => {
-                    setFocusedIndex(index);
-                },
+            ref?.current?.scrollToIndex(index, {
+                align: "nearest",
             });
+            setFocusedIndex(index);
         },
         [ref],
     );
@@ -81,18 +79,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         [scrollToIndex, focusedIndex, setFocusedIndex, vm, totalRows],
     );
 
-    const scrollerRef = useCallback(
-        (element: any) => {
-            if (element) {
-                element.addEventListener("keydown", keyDownCallback);
-                listRef.current = element;
-            } else {
-                listRef?.current?.removeEventListener("keydown", keyDownCallback);
-            }
-        },
-        [keyDownCallback],
-    );
-
     const onFocus = (e: React.FocusEvent): void => {
         const nextIndex = focusedIndex == -1 ? 0 : focusedIndex;
         scrollToIndex(nextIndex);
@@ -116,20 +102,24 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 <Form.Root>
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
-                <Virtuoso
+                <div
+                    style={{
+                        overflowY: "auto",
+                        // opt out browser's scroll anchoring on header/footer because it will conflict to scroll anchoring of virtualizer
+                        overflowAnchor: "none",
+                    }}
                     aria-label={_t("room_list|list_title")}
                     role="grid"
-                    ref={ref}
-                    style={{ height: "100%" }}
-                    scrollerRef={scrollerRef}
-                    context={{ focusedIndex }}
-                    // Don't focus on the table as a whole go straight to the first item in the list
-                    tabIndex={undefined}
-                    data={vm.members}
+                    ref={scrollRef}
                     onFocus={onFocus}
-                    itemContent={(index, member) => getRowComponent(member, index === focusedIndex)}
-                    components={{ Footer: () => footer() }}
-                />
+                    onKeyDown={keyDownCallback}
+                    tabIndex={0}
+                >
+                    <Virtualizer ref={ref} scrollRef={scrollRef}>
+                        {vm.members.map((member, index) => getRowComponent(member, index === focusedIndex))}
+                    </Virtualizer>
+                    {footer()}
+                </div>
             </Flex>
         </BaseCard>
     );
