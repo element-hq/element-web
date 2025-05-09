@@ -195,9 +195,8 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private readonly args = ["-c", "/config/config.yaml"];
 
     public constructor(db: StartedPostgreSqlContainer) {
-        // We rely on `mas-cli manage add-email` which isn't in a release yet
-        // https://github.com/element-hq/matrix-authentication-service/pull/3235
-        super("ghcr.io/element-hq/matrix-authentication-service:sha-0b90c33");
+        // We rely on https://github.com/element-hq/matrix-authentication-service/pull/4529 which isn't in a release yet
+        super("ghcr.io/element-hq/matrix-authentication-service:sha-98f2776");
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.database.username = db.getUsername();
