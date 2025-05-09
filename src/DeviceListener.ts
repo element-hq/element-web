@@ -97,6 +97,7 @@ export default class DeviceListener {
         this.client.on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
+        this.client.on(CryptoEvent.KeyBackupStatus, this.onKeyStorageChanged);
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
@@ -157,6 +158,13 @@ export default class DeviceListener {
         this.recheck();
     }
 
+    /**
+     * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
+     */
+    public disableBackup(): void {
+        this.client?.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
+    }
+
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
         if (this.ourDeviceIdsAtStart === null) {
             this.ourDeviceIdsAtStart = await this.getDeviceIds();
@@ -189,6 +197,10 @@ export default class DeviceListener {
     private onUserTrustStatusChanged = (userId: string): void => {
         if (!this.client) return;
         if (userId !== this.client.getUserId()) return;
+        this.recheck();
+    };
+
+    private onKeyStorageChanged = (): void => {
         this.recheck();
     };
 
@@ -324,7 +336,16 @@ export default class DeviceListener {
                 (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
             );
 
-        const allSystemsReady = crossSigningReady && secretStorageReady && allCrossSigningSecretsCached;
+        const keyStorageOn = await this.getKeyBackupStatus();
+        const backupDisabled = cli.getAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY)?.getContent().disabled;
+
+        // We warn if key storage is turned off and we have not explicitly
+        // said we are OK with that.
+        const keyStorageIsOk = keyStorageOn || backupDisabled;
+
+        const allSystemsReady =
+            crossSigningReady && keyStorageIsOk && secretStorageReady && allCrossSigningSecretsCached;
+
         await this.reportCryptoSessionStateToAnalytics(cli);
 
         if (this.dismissedThisDeviceToast || allSystemsReady) {
@@ -353,10 +374,12 @@ export default class DeviceListener {
                     crossSigningStatus.privateKeysCachedLocally,
                 );
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
+            } else if (!keyStorageIsOk) {
+                logSpan.info("Key storage is turned off: showing TURN_ON_KEY_STORAGE toast");
+                showSetupEncryptionToast(SetupKind.TURN_ON_KEY_STORAGE);
             } else if (defaultKeyId === null) {
                 // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to key storage)
-                const disabledEvent = cli.getAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
-                if (!disabledEvent?.getContent().disabled) {
+                if (!backupDisabled) {
                     logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
                     showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
                 } else {
