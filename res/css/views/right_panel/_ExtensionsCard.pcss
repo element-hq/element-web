@@ -7,12 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_ExtensionsCard {
-    --cpd-separator-inset: var(--cpd-space-4x);
-    --cpd-separator-spacing: var(--cpd-space-4x);
-
+    --cpd-separator-spacing: var(--cpd-space-6x);
+    --AddExtension-overlap: -76px;
     .mx_AutoHideScrollbar {
         padding: 0 var(--cpd-space-4x);
-        margin-top: var(--cpd-space-3x);
+        margin-top: var(--cpd-space-6x);
         box-sizing: border-box;
 
         /* Styling for the "Add extensions" button */
@@ -128,6 +127,11 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_EmptyState::before {
         /* Overlap the Add extensions button */
-        top: -76px;
+        top: var(--AddExtension-overlap);
+    }
+
+    .mx_EmptyState {
+        /* Stop empty state scrolling */
+        height: calc(100% + var(--AddExtension-overlap));
     }
 }
