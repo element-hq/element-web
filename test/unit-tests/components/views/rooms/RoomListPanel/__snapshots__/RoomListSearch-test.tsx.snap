@@ -30,7 +30,11 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
         class="mx_Flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -91,7 +95,11 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
         class="mx_Flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -173,7 +181,11 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
         class="mx_Flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -213,7 +225,11 @@ exports[`<RoomListSearch /> should hide the explore button when the active space
         class="mx_Flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
