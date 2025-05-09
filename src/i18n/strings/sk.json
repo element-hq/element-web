@@ -390,6 +390,7 @@
             "fallback_button": "Spustiť overenie",
             "mas_cross_signing_reset_cta": "Prejdite do svojho účtu",
             "mas_cross_signing_reset_description": "Obnovte svoju totožnosť prostredníctvom poskytovateľa účtu a potom sa vráťte späť a kliknite na tlačidlo „Skúsiť znova“.",
+            "mas_cross_signing_reset_title": "Prejdite do svojho účtu a obnovte svoju totožnosť",
             "msisdn": "Na číslo %(msisdn)s bola odoslaná textová správa",
             "msisdn_token_incorrect": "Neplatný token",
             "msisdn_token_prompt": "Prosím, zadajte kód z tejto správy:",
@@ -1002,7 +1003,6 @@
             "accepting": "Akceptovanie…",
             "after_new_login": {
                 "device_verified": "Zariadenie overené",
-                "reset_confirmation": "Skutočne vynulovať overovacie kľúče?",
                 "skip_verification": "Vynechať zatiaľ overovanie",
                 "unable_to_verify": "Nie je možné overiť toto zariadenie",
                 "verify_this_device": "Overiť toto zariadenie"
@@ -1073,8 +1073,6 @@
             "verify_emoji_prompt": "Overenie porovnaním jedinečnej kombinácie emotikonov.",
             "verify_emoji_prompt_qr": "Ak sa vám nepodarí naskenovať uvedený kód, overte pomocou porovnania jedinečných emotikonov.",
             "verify_later": "Overím to neskôr",
-            "verify_reset_warning_1": "Vynulovanie overovacích kľúčov sa nedá vrátiť späť. Po vynulovaní nebudete mať prístup k starým zašifrovaným správam a všetci priatelia, ktorí vás predtým overili, uvidia bezpečnostné upozornenia, kým sa u nich znovu neoveríte.",
-            "verify_reset_warning_2": "Pokračujte prosím iba vtedy, ak ste si istí, že ste stratili všetky ostatné zariadenia aj váš kľúč na obnovenie.",
             "verify_using_device": "Overiť pomocou iného zariadenia",
             "verify_using_key": "Overiť pomocou kľúča na obnovenie",
             "verify_using_key_or_phrase": "Overiť pomocou kľúča na obnovenie alebo frázy",
@@ -2151,6 +2149,7 @@
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
         "failed_remove_tag": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
+        "filter": "Filter",
         "filters": {
             "favourite": "Obľúbené",
             "people": "Ľudia",
@@ -2186,6 +2185,12 @@
             "open_room": "Otvoriť miestnosť %(roomName)s"
         },
         "room_options": "Možnosti miestnosti",
+        "secondary_filter": {
+            "all_activity": "Všetka aktivita",
+            "invites_only": "Len pozvánky",
+            "low_priority": "Nízka priorita",
+            "mentions_only": "Iba zmienky"
+        },
         "secondary_filters": "Sekundárne filtre",
         "show_less": "Zobraziť menej",
         "show_message_previews": "Zobraziť náhľady správ",
@@ -2666,6 +2671,7 @@
             "discovery_needs_terms_title": "Umožnite ľuďom, aby vás našli",
             "display_name": "Zobrazované meno",
             "display_name_error": "Nedá sa nastaviť zobrazované meno",
+            "email_adding_unsupported_by_hs": "Tento domovský server nepodporuje pridávanie e-mailových adries do vášho účtu.",
             "email_address_in_use": "Táto emailová adresa sa už používa",
             "email_address_label": "Emailová adresa",
             "email_not_verified": "Vaša emailová adresa nebola zatiaľ overená",
@@ -2690,7 +2696,9 @@
             "error_share_msisdn_discovery": "Nepodarilo sa zdieľanie telefónneho čísla",
             "identity_server_no_token": "Nenašiel sa prístupový token totožnosti",
             "identity_server_not_set": "Server totožnosti nie je nastavený",
+            "invalid_phone_number": "Poskytnuté telefónne číslo sa nezdá byť platné.",
             "language_section": "Jazyk",
+            "msisdn_adding_unsupported_by_hs": "Tento domovský server nepodporuje pridávanie telefónnych čísel do vášho účtu.",
             "msisdn_in_use": "Toto telefónne číslo sa už používa",
             "msisdn_label": "Telefónne číslo",
             "msisdn_verification_field_label": "Overovací kód",
@@ -3267,7 +3275,7 @@
         "heading_without_query": "Hľadať",
         "join_button_text": "Pripojiť sa k %(roomAddress)s",
         "keyboard_scroll_hint": "Na posúvanie použite <arrows/>",
-        "message_search_section_title": "Iné vyhľadávania",
+        "messages_label": "Správy",
         "other_rooms_in_space": "Ostatné miestnosti v %(spaceName)s",
         "public_rooms_label": "Verejné miestnosti",
         "public_spaces_label": "Verejné priestory",
@@ -3277,7 +3285,6 @@
         "result_may_be_hidden_privacy_warning": "Niektoré výsledky môžu byť skryté kvôli ochrane súkromia",
         "result_may_be_hidden_warning": "Niektoré výsledky môžu byť skryté",
         "search_dialog": "Vyhľadávacie dialógové okno",
-        "search_messages_hint": "Ak chcete vyhľadávať správy, nájdite túto ikonu v hornej časti miestnosti <icon/>",
         "spaces_title": "Priestory, v ktorých sa nachádzate",
         "start_group_chat_button": "Začať skupinovú konverzáciu"
     },
@@ -3327,9 +3334,7 @@
     "threads_activity_centre": {
         "header": "Aktivita vlákien",
         "no_rooms_with_threads_notifs": "Zatiaľ nemáte miestnosti s upozorneniami na vlákna.",
-        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami.",
-        "release_announcement_description": "Upozornenia na vlákna sa presunuli, odteraz ich nájdete tu.",
-        "release_announcement_header": "Centrum aktivity vlákien"
+        "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
     },
     "time": {
         "about_day_ago": "asi pred jedným dňom",
@@ -3874,10 +3879,11 @@
         "unavailable": "Nedostupné"
     },
     "update_room_access_modal": {
-        "description": "Ak chcete vytvoriť odkaz na zdieľanie, musíte povoliť hosťom pripojiť sa k tejto miestnosti. To môže spôsobiť, že miestnosť bude menej bezpečná. Keď ukončíte hovor, môžete miestnosť opäť nastaviť na súkromnú.",
-        "dont_change_description": "Prípadne môžete hovor uskutočniť v samostatnej miestnosti.",
+        "description": "Ak chcete vytvoriť odkaz na zdieľanie, nastavte túto miestnosť ako <b> verejnú</b> alebo povolte používateľom možnosť <b>požiadať o pripojenie</b>. To umožní hosťom pripojiť sa bez pozvánky.",
+        "dont_change_description": "Ak nechcete zmeniť prístup do tejto miestnosti, môžete vytvoriť novú miestnosť pre odkaz na hovor.",
         "no_change": "Nechcem zmeniť úroveň prístupu.",
-        "title": "Zmeniť úroveň prístupu do miestnosti"
+        "revert_access_description": "(Túto hodnotu je možné vrátiť na predchádzajúcu hodnotu v nastaveniach miestnosti: <b>Zabezpečenie a súkromie</b> / <b>Prístup</b>)",
+        "title": "Povoliť hosťom pripojiť sa k tejto miestnosti"
     },
     "upload_failed_generic": "Nepodarilo sa nahrať súbor „%(fileName)s“.",
     "upload_failed_size": "Veľkosť súboru „%(fileName)s“ prekračuje limit veľkosti súboru nahrávania na tento domovský server",
