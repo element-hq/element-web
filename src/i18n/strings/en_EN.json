@@ -1645,7 +1645,9 @@
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
         "no_matches": "No matches",
-        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
+        "power_label": "%(userName)s (power %(powerLevelNumber)s)",
+        "list_title": "Member list",
+        "open_profile": "Open profile %(memberName)s"
     },
     "member_list_back_action_label": "Room members",
     "message_edit_dialog_title": "Message edits",

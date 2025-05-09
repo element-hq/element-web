@@ -12,23 +12,28 @@ import { type ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite"
 import BaseAvatar from "../../../avatars/BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
+import { _t } from "../../../../../languageHandler";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
+    focused?: boolean;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
     const vm = useThreePidTileViewModel(props);
     const av = <BaseAvatar name={vm.name} size="32px" aria-hidden="true" />;
     const iconJsx = <InvitedIconView isThreePid={true} />;
+    const name = vm.name;
 
     return (
         <MemberTileView
-            nameJsx={vm.name}
+            nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
+            ariaLabel={_t("member_list|open_profile", { memberName: name })}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
+            focused={props.focused}
         />
     );
 }
