@@ -478,6 +478,8 @@ export default class ElectronPlatform extends BasePlatform {
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
+        // Set no_universal_links=true to prevent the callback being handled by Element X installed on macOS Apple Silicon
+        url.searchParams.set("no_universal_links", "true");
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
         if (url.href.startsWith(`${url.protocol}//`)) {
             url.href = url.href.replace("://", ":/");
