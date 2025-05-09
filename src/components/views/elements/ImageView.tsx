@@ -550,7 +550,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("lightbox|rotate_right")}
                             onClick={this.onRotateClockwiseClick}
                         />
-                        <DownloadButton url={this.props.src} fileName={this.props.name} />
+                        <DownloadButton url={this.props.src} fileName={this.props.name} mxEvent={this.props.mxEvent} />
                         {contextMenuButton}
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_button_close"
