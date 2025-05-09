@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IMatrixProfile, type MatrixEvent, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { PillType } from "../components/views/elements/Pill";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContext, type SdkContextClass } from "../contexts/SDKContext";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
 const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomMember => {
@@ -65,12 +65,12 @@ const determineUserId = (
  *          If sharing at least one room with the user, then the result will be the profile fetched via API.
  *          null in all other cases.
  */
-const determineMember = (userId: string, targetRoom: Room): RoomMember | null => {
+const determineMember = (userId: string, targetRoom: Room, context: SdkContextClass): RoomMember | null => {
     const targetRoomMember = targetRoom.getMember(userId);
 
     if (targetRoomMember) return targetRoomMember;
 
-    const knownProfile = SdkContextClass.instance.userProfilesStore.getOnlyKnownProfile(userId);
+    const knownProfile = context.userProfilesStore.getOnlyKnownProfile(userId);
 
     if (knownProfile) {
         return createMemberFromProfile(userId, knownProfile);
@@ -97,11 +97,12 @@ export const usePermalinkMember = (
     targetRoom: Room | null,
     event: MatrixEvent | null,
 ): RoomMember | null => {
+    const context = useContext(SDKContext);
     // User mentions and permalinks to events in the same room require to know the user.
     // If it cannot be initially determined, it will be looked up later by a memo hook.
     const shouldLookUpUser = type && [PillType.UserMention, PillType.EventInSameRoom].includes(type);
     const userId = determineUserId(type, parseResult, event);
-    const userInRoom = shouldLookUpUser && userId && targetRoom ? determineMember(userId, targetRoom) : null;
+    const userInRoom = shouldLookUpUser && userId && targetRoom ? determineMember(userId, targetRoom, context) : null;
     const [member, setMember] = useState<RoomMember | null>(userInRoom);
 
     useEffect(() => {
@@ -111,7 +112,7 @@ export const usePermalinkMember = (
         }
 
         const doProfileLookup = async (): Promise<void> => {
-            const fetchedProfile = await SdkContextClass.instance.userProfilesStore.fetchOnlyKnownProfile(userId);
+            const fetchedProfile = await context.userProfilesStore.fetchOnlyKnownProfile(userId);
 
             if (fetchedProfile) {
                 const newMember = createMemberFromProfile(userId, fetchedProfile);
@@ -120,7 +121,7 @@ export const usePermalinkMember = (
         };
 
         doProfileLookup();
-    }, [member, shouldLookUpUser, targetRoom, userId]);
+    }, [context, member, shouldLookUpUser, targetRoom, userId]);
 
     return member;
 };

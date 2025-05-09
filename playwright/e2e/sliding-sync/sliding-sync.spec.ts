@@ -7,47 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page, type Request } from "@playwright/test";
-import { GenericContainer, type StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
 
 const test = base.extend<{
-    slidingSyncProxy: StartedTestContainer;
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    slidingSyncProxy: async ({ logger, network, postgres, page, homeserver }, use, testInfo) => {
-        const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
-            .withNetwork(network)
-            .withExposedPorts(8008)
-            .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
-            .withWaitStrategy(Wait.forHttp("/client/server.json", 8008))
-            .withEnvironment({
-                SYNCV3_SECRET: "bwahahaha",
-                SYNCV3_DB: `user=${postgres.getUsername()} dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
-                SYNCV3_SERVER: `http://homeserver:8008`,
-            })
-            .start();
-
-        const proxyAddress = `http://${container.getHost()}:${container.getMappedPort(8008)}`;
-        await page.addInitScript((proxyAddress) => {
-            window.localStorage.setItem(
-                "mx_local_settings",
-                JSON.stringify({
-                    feature_sliding_sync_proxy_url: proxyAddress,
-                }),
-            );
-            window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
-        }, proxyAddress);
-        await use(container);
-        await container.stop();
-    },
-    // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
-    credentials: async ({ slidingSyncProxy, credentials }, use) => {
-        await use(credentials);
-    },
     testRoom: async ({ user, app }, use) => {
         const name = "Test Room";
         const roomId = await app.client.createRoom({ name });
@@ -81,6 +49,14 @@ test.describe("Sliding Sync", () => {
             msgtype: "m.text",
         });
     };
+
+    test.use({
+        config: {
+            features: {
+                feature_simplified_sliding_sync: true,
+            },
+        },
+    });
 
     // Load the user fixture for all tests
     test.beforeEach(({ user }) => {});
@@ -188,15 +164,7 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
-        // TODO: for now. Later we should.
-
-        // disable notifs in this room (TODO: CS API call?)
-        const locator = page.getByRole("treeitem", { name: "Test Room" });
-        await locator.hover();
-        await locator.getByRole("button", { name: "Notification options" }).click();
-        await page.getByRole("menuitemradio", { name: "Mute room" }).click();
-
+    test("should show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
         // create a new room so we know when the message has been received as it'll re-shuffle the room list
         await app.client.createRoom({ name: "Dummy" });
 
@@ -207,9 +175,7 @@ test.describe("Sliding Sync", () => {
         // wait for this message to arrive, tell by the room list resorting
         await checkOrder(["Test Room", "Dummy"], page);
 
-        await expect(
-            page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge"),
-        ).not.toBeAttached();
+        await expect(page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge")).toBeAttached();
     });
 
     test("should update user settings promptly", async ({ page, app }) => {
@@ -219,6 +185,37 @@ test.describe("Sliding Sync", () => {
         await expect(locator.locator(".mx_ToggleSwitch_on")).not.toBeAttached();
         await locator.locator(".mx_ToggleSwitch_ball").click();
         await expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
+    });
+
+    test("should send subscribe_rooms on room switch if room not already subscribed", async ({ page, app }) => {
+        // create rooms and check room names are correct
+        const roomIds: string[] = [];
+        for (const fruit of ["Apple", "Pineapple", "Orange"]) {
+            const id = await app.client.createRoom({ name: fruit });
+            roomIds.push(id);
+            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
+        }
+        const [roomAId, roomPId] = roomIds;
+
+        const matchRoomSubRequest = (subRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
+            const body = request.postDataJSON();
+            return body.room_subscriptions?.[subRoomId];
+        };
+
+        // Select the Test Room and wait for playwright to get the request
+        const [request] = await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
+        ]);
+        const roomSubscriptions = request.postDataJSON().room_subscriptions;
+        expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
+
+        // Switch to another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomPId)),
+            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
+        ]);
     });
 
     test("should show and be able to accept/reject/rescind invites", async ({
@@ -258,8 +255,8 @@ test.describe("Sliding Sync", () => {
         // Select the room to reject
         await page.getByRole("treeitem", { name: "Room to Reject" }).click();
 
-        // Reject the invite
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Reject", exact: true }).click();
+        // Decline the invite
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Decline", exact: true }).click();
 
         await expect(
             page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
@@ -360,53 +357,5 @@ test.describe("Sliding Sync", () => {
 
         // ensure the reply-to does not disappear
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
-    });
-
-    test("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
-        // create rooms and check room names are correct
-        const roomIds: string[] = [];
-        for (const fruit of ["Apple", "Pineapple", "Orange"]) {
-            const id = await app.client.createRoom({ name: fruit });
-            roomIds.push(id);
-            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
-        }
-        const [roomAId, roomPId, roomOId] = roomIds;
-
-        const matchRoomSubRequest = (subRoomId: string) => (request: Request) => {
-            if (!request.url().includes("/sync")) return false;
-            const body = request.postDataJSON();
-            return body.txn_id && body.room_subscriptions?.[subRoomId];
-        };
-        const matchRoomUnsubRequest = (unsubRoomId: string) => (request: Request) => {
-            if (!request.url().includes("/sync")) return false;
-            const body = request.postDataJSON();
-            return (
-                body.txn_id && body.unsubscribe_rooms?.includes(unsubRoomId) && !body.room_subscriptions?.[unsubRoomId]
-            );
-        };
-
-        // Select the Test Room and wait for playwright to get the request
-        const [request] = await Promise.all([
-            page.waitForRequest(matchRoomSubRequest(roomAId)),
-            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
-        ]);
-        const roomSubscriptions = request.postDataJSON().room_subscriptions;
-        expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
-
-        // Switch to another room and wait for playwright to get the request
-        await Promise.all([
-            page.waitForRequest(matchRoomSubRequest(roomPId)),
-            page.waitForRequest(matchRoomUnsubRequest(roomAId)),
-            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
-        ]);
-
-        // And switch to even another room and wait for playwright to get the request
-        await Promise.all([
-            page.waitForRequest(matchRoomSubRequest(roomOId)),
-            page.waitForRequest(matchRoomUnsubRequest(roomPId)),
-            page.getByRole("treeitem", { name: "Orange", exact: true }).click(),
-        ]);
-
-        // TODO: Add tests for encrypted rooms
     });
 });

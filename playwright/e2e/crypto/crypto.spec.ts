@@ -8,14 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Page } from "@playwright/test";
 import { expect, test } from "../../element-web-test";
-import {
-    autoJoin,
-    completeCreateSecretStorageDialog,
-    copyAndContinue,
-    createSharedRoomWithUser,
-    enableKeyBackup,
-    verify,
-} from "./utils";
+import { autoJoin, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
 import { type Bot } from "../../pages/bot";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
@@ -84,85 +77,43 @@ test.describe("Cryptography", function () {
         },
     });
 
-    for (const isDeviceVerified of [true, false]) {
-        test.describe(`setting up secure key backup should work isDeviceVerified=${isDeviceVerified}`, () => {
-            /**
-             * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
-             * @param keyType
-             */
-            async function verifyKey(app: ElementAppPage, keyType: "master" | "self_signing" | "user_signing") {
-                const accountData: { encrypted: Record<string, Record<string, string>> } = await app.client.evaluate(
-                    (cli, keyType) => cli.getAccountDataFromServer(`m.cross_signing.${keyType}`),
-                    keyType,
-                );
-                expect(accountData.encrypted).toBeDefined();
-                const keys = Object.keys(accountData.encrypted);
-                const key = accountData.encrypted[keys[0]];
-                expect(key.ciphertext).toBeDefined();
-                expect(key.iv).toBeDefined();
-                expect(key.mac).toBeDefined();
-            }
+    /**
+     * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
+     * @param keyType
+     */
+    async function verifyKey(app: ElementAppPage, keyType: "master" | "self_signing" | "user_signing") {
+        const accountData: { encrypted: Record<string, Record<string, string>> } = await app.client.evaluate(
+            (cli, keyType) => cli.getAccountDataFromServer(`m.cross_signing.${keyType}`),
+            keyType,
+        );
 
-            test("by recovery code", async ({ page, app, user: aliceCredentials }) => {
-                // Verified the device
-                if (isDeviceVerified) {
-                    await app.client.bootstrapCrossSigning(aliceCredentials);
-                }
-
-                await page.route("**/_matrix/client/v3/keys/signatures/upload", async (route) => {
-                    // We delay this API otherwise the `Setting up keys` may happen too quickly and cause flakiness
-                    await new Promise((resolve) => setTimeout(resolve, 500));
-                    await route.continue();
-                });
-
-                await app.settings.openUserSettings("Security & Privacy");
-                await page.getByRole("button", { name: "Set up Secure Backup" }).click();
-
-                await completeCreateSecretStorageDialog(page);
-
-                // Verify that the SSSS keys are in the account data stored in the server
-                await verifyKey(app, "master");
-                await verifyKey(app, "self_signing");
-                await verifyKey(app, "user_signing");
-            });
-
-            test("by passphrase", async ({ page, app, user: aliceCredentials }) => {
-                // Verified the device
-                if (isDeviceVerified) {
-                    await app.client.bootstrapCrossSigning(aliceCredentials);
-                }
-
-                await app.settings.openUserSettings("Security & Privacy");
-                await page.getByRole("button", { name: "Set up Secure Backup" }).click();
-
-                const dialog = page.locator(".mx_Dialog");
-                // Select passphrase option
-                await dialog.getByText("Enter a Security Phrase").click();
-                await dialog.getByRole("button", { name: "Continue" }).click();
-
-                // Fill passphrase input
-                await dialog.locator("input").fill("new passphrase for setting up a secure key backup");
-                await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
-                // Confirm passphrase
-                await dialog.locator("input").fill("new passphrase for setting up a secure key backup");
-                await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
-
-                await copyAndContinue(page);
-
-                await expect(dialog.getByText("Secure Backup successful")).toBeVisible();
-                await dialog.getByRole("button", { name: "Done" }).click();
-                await expect(dialog.getByText("Secure Backup successful")).not.toBeVisible();
-
-                // Verify that the SSSS keys are in the account data stored in the server
-                await verifyKey(app, "master");
-                await verifyKey(app, "self_signing");
-                await verifyKey(app, "user_signing");
-            });
-        });
+        expect(accountData.encrypted).toBeDefined();
+        const keys = Object.keys(accountData.encrypted);
+        const key = accountData.encrypted[keys[0]];
+        expect(key.ciphertext).toBeDefined();
+        expect(key.iv).toBeDefined();
+        expect(key.mac).toBeDefined();
     }
 
+    test("Setting up key backup by recovery key", async ({ page, app, user: aliceCredentials }) => {
+        await app.client.bootstrapCrossSigning(aliceCredentials);
+
+        await enableKeyBackup(app);
+
+        // Wait for the cross signing keys to be uploaded
+        // Waiting for "Change the recovery key" button ensure that all the secrets are uploaded and cached locally
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
+        await expect(encryptionTab.getByRole("button", { name: "Change recovery key" })).toBeVisible();
+
+        // Verify that the SSSS keys are in the account data stored in the server
+        await verifyKey(app, "master");
+        await verifyKey(app, "self_signing");
+        await verifyKey(app, "user_signing");
+    });
+
     test("Can reset cross-signing keys", async ({ page, app, user: aliceCredentials }) => {
-        const secretStorageKey = await enableKeyBackup(app);
+        await app.client.bootstrapCrossSigning(aliceCredentials);
+        await enableKeyBackup(app);
 
         // Fetch the current cross-signing keys
         async function fetchMasterKey() {
@@ -176,18 +127,15 @@ test.describe("Cryptography", function () {
                 return k;
             });
         }
+
         const masterKey1 = await fetchMasterKey();
 
-        // Find the "reset cross signing" button, and click it
-        await app.settings.openUserSettings("Security & Privacy");
-        await page.locator("div.mx_CrossSigningPanel_buttonRow").getByRole("button", { name: "Reset" }).click();
+        // Find "the Reset cryptographic identity" button
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
+        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
 
         // Confirm
-        await page.getByRole("button", { name: "Clear cross-signing keys" }).click();
-
-        // Enter the 4S key
-        await page.getByPlaceholder("Recovery Key").fill(secretStorageKey);
-        await page.getByRole("button", { name: "Continue" }).click();
+        await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
         // Enter the password
         await page.getByPlaceholder("Password").fill(aliceCredentials.password);
@@ -197,9 +145,6 @@ test.describe("Cryptography", function () {
             const masterKey2 = await fetchMasterKey();
             expect(masterKey1).not.toEqual(masterKey2);
         }).toPass();
-
-        // The dialog should have gone away
-        await expect(page.locator(".mx_Dialog")).toHaveCount(1);
     });
 
     test(

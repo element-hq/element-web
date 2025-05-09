@@ -31,7 +31,6 @@ interface IProps {
     timeline: MatrixEvent[];
     // indexes of the matching events (not contextual ones)
     ourEventsIndexes: number[];
-    onHeightChanged?: () => void;
     permalinkCreator?: RoomPermalinkCreator;
 }
 
@@ -42,8 +41,8 @@ export default class SearchResultTile extends React.Component<IProps> {
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.buildLegacyCallEventGroupers(this.props.timeline);
     }
@@ -115,7 +114,6 @@ export default class SearchResultTile extends React.Component<IProps> {
                         highlights={highlights}
                         permalinkCreator={this.props.permalinkCreator}
                         highlightLink={this.props.resultLink}
-                        onHeightChanged={this.props.onHeightChanged}
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         lastInSection={lastInSection}

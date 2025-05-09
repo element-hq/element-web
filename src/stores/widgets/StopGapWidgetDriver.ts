@@ -48,7 +48,6 @@ import {
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
-import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
@@ -116,10 +115,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             // Auto-approve the legacy visibility capability. We send it regardless of capability.
             // Widgets don't technically need to request this capability, but Scalar still does.
             this.allowedCapabilities.add("visibility");
-        } else if (
-            virtual &&
-            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!).origin === this.forWidget.origin
-        ) {
+        } else if (virtual && WidgetType.CALL.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
@@ -561,19 +557,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
+        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
-
-            onFinished: async (confirm): Promise<void> => {
-                if (!confirm) {
-                    return observer.update({ state: OpenIDRequestState.Blocked });
-                }
-
-                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-            },
         });
+        const [confirm] = await finished;
+        if (!confirm) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
+        }
     }
 
     public async navigate(uri: string): Promise<void> {

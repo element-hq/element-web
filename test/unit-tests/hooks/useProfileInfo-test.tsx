@@ -40,9 +40,10 @@ describe("useProfileInfo", () => {
             result.current.search({ query });
         });
 
-        await waitFor(() => expect(result.current.ready).toBe(true));
-
-        expect(result.current.profile?.display_name).toBe(query);
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+            expect(result.current.profile?.display_name).toBe(query);
+        });
     });
 
     it("should work with empty queries", async () => {

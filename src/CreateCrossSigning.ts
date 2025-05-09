@@ -64,7 +64,7 @@ export async function uiAuthCallback(
         };
 
         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-            title: _t("encryption|bootstrap_title"),
+            title: "",
             matrixClient,
             makeRequest,
             aestheticsForStagePhases: {

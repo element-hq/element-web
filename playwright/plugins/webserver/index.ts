@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as http from "http";
-import { type AddressInfo } from "net";
+import * as http from "node:http";
+import { type AddressInfo } from "node:net";
 
 export class Webserver {
     private server?: http.Server;

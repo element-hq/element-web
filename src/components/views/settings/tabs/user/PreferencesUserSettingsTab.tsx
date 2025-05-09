@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -32,6 +32,7 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
+import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -146,7 +147,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "urlPreviewsEnabled",
         "autoplayGifs",
         "autoplayVideo",
-        "showImages",
     ];
 
     private static TIMELINE_SETTINGS: BooleanSettingKey[] = [
@@ -224,8 +224,14 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
-        return settingIds.map((i) => <SettingsFlag key={i} name={i} level={level} />);
+    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): JSX.Element {
+        return (
+            <>
+                {settingIds.map((i) => (
+                    <SettingsFlag key={i} name={i} level={level} />
+                ))}
+            </>
+        );
     }
 
     private onKeyboardShortcutsClicked = (): void => {
@@ -327,6 +333,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|timeline")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                    </SettingsSubsection>
+
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
+                        <MediaPreviewAccountSettings />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>

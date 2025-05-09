@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -388,7 +388,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 label={_td("auth|change_password_new_label")}
                                 value={this.state.password}
                                 minScore={PASSWORD_MIN_SCORE}
-                                fieldRef={(field) => (this.fieldPassword = field)}
+                                fieldRef={(field) => {
+                                    this.fieldPassword = field;
+                                }}
                                 onChange={this.onInputChanged.bind(this, "password")}
                                 autoComplete="new-password"
                             />
@@ -399,7 +401,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 labelInvalid={_td("auth|reset_password|passwords_mismatch")}
                                 value={this.state.password2}
                                 password={this.state.password}
-                                fieldRef={(field) => (this.fieldPasswordConfirm = field)}
+                                fieldRef={(field) => {
+                                    this.fieldPasswordConfirm = field;
+                                }}
                                 onChange={this.onInputChanged.bind(this, "password2")}
                                 autoComplete="new-password"
                             />

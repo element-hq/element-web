@@ -40,6 +40,8 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                                 { count: searchInfo.count },
                                 { query: () => <strong>{searchInfo.term}</strong> },
                             )
+                        ) : searchInfo?.error !== undefined ? (
+                            searchInfo?.error.message
                         ) : (
                             <InlineSpinner />
                         )}

@@ -11,7 +11,6 @@ import { type AuthDict, type IAuthData } from "matrix-js-sdk/src/interactive-aut
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import { type InteractiveAuthCallback } from "../../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
 import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 
@@ -24,7 +23,7 @@ const makeDeleteRequest =
 export const deleteDevicesWithInteractiveAuth = async (
     matrixClient: MatrixClient,
     deviceIds: string[],
-    onFinished: InteractiveAuthCallback<void>,
+    onFinished: (success?: boolean) => Promise<void>,
 ): Promise<void> => {
     if (!deviceIds.length) {
         return;
@@ -32,7 +31,7 @@ export const deleteDevicesWithInteractiveAuth = async (
     try {
         await makeDeleteRequest(matrixClient, deviceIds)(null);
         // no interactive auth needed
-        await onFinished(true, undefined);
+        await onFinished(true);
     } catch (error) {
         if (!(error instanceof MatrixError) || error.httpStatus !== 401 || !error.data?.flows) {
             // doesn't look like an interactive-auth failure
@@ -62,16 +61,16 @@ export const deleteDevicesWithInteractiveAuth = async (
                 continueKind: "danger",
             },
         };
-        Modal.createDialog(InteractiveAuthDialog, {
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
             title: _t("common|authentication"),
             matrixClient: matrixClient,
             authData: error.data as IAuthData,
-            onFinished,
             makeRequest: makeDeleteRequest(matrixClient, deviceIds),
             aestheticsForStagePhases: {
                 [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
             },
         });
+        finished.then(([success]) => onFinished(success));
     }
 };

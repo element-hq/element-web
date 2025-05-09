@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, type ReactNode, type Ref, useContext } from "react";
+import React, { type JSX, type ReactNode, type Ref, useContext } from "react";
 import { type RoomMember, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -18,6 +18,7 @@ import { CardContext } from "../right_panel/context";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 import { _t } from "../../../languageHandler";
+import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember | null;
@@ -32,21 +33,21 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     forceHistorical?: boolean; // true to deny `useOnlyCurrentProfiles` usage. Default false.
     hideTitle?: boolean;
     children?: ReactNode;
+    ref?: Ref<HTMLElement>;
 }
 
-function MemberAvatar(
-    {
-        size,
-        resizeMethod = "crop",
-        viewUserOnClick,
-        forceHistorical,
-        fallbackUserId,
-        hideTitle,
-        member: propsMember,
-        ...props
-    }: IProps,
-    ref: Ref<HTMLElement>,
-): JSX.Element {
+export default function MemberAvatar({
+    size,
+    resizeMethod = "crop",
+    viewUserOnClick,
+    forceHistorical,
+    fallbackUserId,
+    hideTitle,
+    member: propsMember,
+    ref,
+    ...props
+}: IProps): JSX.Element {
+    const cli = useContext(MatrixClientContext);
     const card = useContext(CardContext);
 
     const member = useRoomMemberProfile({
@@ -60,7 +61,7 @@ function MemberAvatar(
     let imageUrl: string | null | undefined;
     if (member?.name) {
         if (member.getMxcAvatarUrl()) {
-            imageUrl = mediaFromMxc(member.getMxcAvatarUrl() ?? "").getThumbnailOfSourceHttp(
+            imageUrl = mediaFromMxc(member.getMxcAvatarUrl() ?? "", cli).getThumbnailOfSourceHttp(
                 parseInt(size, 10),
                 parseInt(size, 10),
                 resizeMethod,
@@ -99,5 +100,3 @@ function MemberAvatar(
         />
     );
 }
-
-export default forwardRef(MemberAvatar);

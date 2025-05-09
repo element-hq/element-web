@@ -66,12 +66,12 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         this.addThreepid = new AddThreepid(MatrixClientPeg.safeGet());
         this.addThreepid.addEmailAddress(emailAddress).then(
             () => {
-                Modal.createDialog(QuestionDialog, {
+                const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("auth|set_email|verification_pending_title"),
                     description: _t("auth|set_email|verification_pending_description"),
                     button: _t("action|continue"),
-                    onFinished: this.onEmailDialogFinished,
                 });
+                finished.then(([ok]) => this.onEmailDialogFinished(ok));
             },
             (err) => {
                 this.setState({ emailBusy: false });
@@ -89,7 +89,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    private onEmailDialogFinished = (ok: boolean): void => {
+    private onEmailDialogFinished = (ok?: boolean): void => {
         if (ok) {
             this.verifyEmailAddress();
         } else {
@@ -115,12 +115,12 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                         _t("settings|general|error_email_verification") +
                         " " +
                         _t("auth|set_email|verification_pending_description");
-                    Modal.createDialog(QuestionDialog, {
+                    const { finished } = Modal.createDialog(QuestionDialog, {
                         title: _t("auth|set_email|verification_pending_title"),
                         description: message,
                         button: _t("action|continue"),
-                        onFinished: this.onEmailDialogFinished,
                     });
+                    finished.then(([ok]) => this.onEmailDialogFinished(ok));
                 } else {
                     logger.error("Unable to verify email address: " + err);
                     Modal.createDialog(ErrorDialog, {

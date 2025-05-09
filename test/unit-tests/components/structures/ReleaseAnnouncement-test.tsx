@@ -23,7 +23,7 @@ describe("ReleaseAnnouncement", () => {
     function renderReleaseAnnouncement() {
         return render(
             <ReleaseAnnouncement
-                feature="threadsActivityCentre"
+                feature="pinningMessageList"
                 header="header"
                 description="description"
                 closeLabel="close"

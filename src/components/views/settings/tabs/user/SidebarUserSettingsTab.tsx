@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -14,7 +14,6 @@ import {
     FavouriteSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -24,7 +23,7 @@ import { MetaSpace } from "../../../../../stores/spaces";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
@@ -87,14 +86,10 @@ const SidebarUserSettingsTab: React.FC = () => {
                         onChange={onMetaSpaceChangeFactory(MetaSpace.Home, "WebSettingsSidebarTabSpacesCheckbox")}
                         className="mx_SidebarUserSettingsTab_checkbox"
                         disabled={homeEnabled}
+                        description={_t("settings|sidebar|metaspaces_home_description")}
                     >
-                        <SettingsSubsectionText>
-                            <HomeSolidIcon />
-                            {_t("common|home")}
-                        </SettingsSubsectionText>
-                        <SettingsSubsectionText>
-                            {_t("settings|sidebar|metaspaces_home_description")}
-                        </SettingsSubsectionText>
+                        <HomeSolidIcon className="mx_SidebarUserSettingsTab_icon" />
+                        {_t("common|home")}
                     </StyledCheckbox>
 
                     <StyledCheckbox
@@ -103,13 +98,9 @@ const SidebarUserSettingsTab: React.FC = () => {
                         onChange={onAllRoomsInHomeToggle}
                         className="mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                        description={_t("settings|sidebar|metaspaces_home_all_rooms_description")}
                     >
-                        <SettingsSubsectionText>
-                            {_t("settings|sidebar|metaspaces_home_all_rooms")}
-                        </SettingsSubsectionText>
-                        <SettingsSubsectionText>
-                            {_t("settings|sidebar|metaspaces_home_all_rooms_description")}
-                        </SettingsSubsectionText>
+                        {_t("settings|sidebar|metaspaces_home_all_rooms")}
                     </StyledCheckbox>
 
                     {!newRoomListEnabled && (
@@ -121,14 +112,10 @@ const SidebarUserSettingsTab: React.FC = () => {
                                     "WebSettingsSidebarTabSpacesCheckbox",
                                 )}
                                 className="mx_SidebarUserSettingsTab_checkbox"
+                                description={_t("settings|sidebar|metaspaces_favourites_description")}
                             >
-                                <SettingsSubsectionText>
-                                    <FavouriteSolidIcon />
-                                    {_t("common|favourites")}
-                                </SettingsSubsectionText>
-                                <SettingsSubsectionText>
-                                    {_t("settings|sidebar|metaspaces_favourites_description")}
-                                </SettingsSubsectionText>
+                                <FavouriteSolidIcon className="mx_SidebarUserSettingsTab_icon" />
+                                {_t("common|favourites")}
                             </StyledCheckbox>
 
                             <StyledCheckbox
@@ -138,14 +125,10 @@ const SidebarUserSettingsTab: React.FC = () => {
                                     "WebSettingsSidebarTabSpacesCheckbox",
                                 )}
                                 className="mx_SidebarUserSettingsTab_checkbox"
+                                description={_t("settings|sidebar|metaspaces_people_description")}
                             >
-                                <SettingsSubsectionText>
-                                    <UserProfileSolidIcon />
-                                    {_t("common|people")}
-                                </SettingsSubsectionText>
-                                <SettingsSubsectionText>
-                                    {_t("settings|sidebar|metaspaces_people_description")}
-                                </SettingsSubsectionText>
+                                <UserProfileSolidIcon className="mx_SidebarUserSettingsTab_icon" />
+                                {_t("common|people")}
                             </StyledCheckbox>
                         </>
                     )}
@@ -154,14 +137,9 @@ const SidebarUserSettingsTab: React.FC = () => {
                         checked={!!orphansEnabled}
                         onChange={onMetaSpaceChangeFactory(MetaSpace.Orphans, "WebSettingsSidebarTabSpacesCheckbox")}
                         className="mx_SidebarUserSettingsTab_checkbox"
+                        description={_t("settings|sidebar|metaspaces_orphans_description")}
                     >
-                        <SettingsSubsectionText>
-                            <HashCircleIcon />
-                            {_t("settings|sidebar|metaspaces_orphans")}
-                        </SettingsSubsectionText>
-                        <SettingsSubsectionText>
-                            {_t("settings|sidebar|metaspaces_orphans_description")}
-                        </SettingsSubsectionText>
+                        {_t("settings|sidebar|metaspaces_orphans")}
                     </StyledCheckbox>
                     {SettingsStore.getValue("feature_video_rooms") && (
                         <StyledCheckbox
@@ -171,12 +149,10 @@ const SidebarUserSettingsTab: React.FC = () => {
                                 "WebSettingsSidebarTabSpacesCheckbox",
                             )}
                             className="mx_SidebarUserSettingsTab_checkbox"
+                            description={conferenceSubsectionText}
                         >
-                            <SettingsSubsectionText>
-                                <VideoCallSolidIcon />
-                                {_t("settings|sidebar|metaspaces_video_rooms")}
-                            </SettingsSubsectionText>
-                            <SettingsSubsectionText>{conferenceSubsectionText}</SettingsSubsectionText>
+                            <VideoCallSolidIcon className="mx_SidebarUserSettingsTab_icon" />
+                            {_t("settings|sidebar|metaspaces_video_rooms")}
                         </StyledCheckbox>
                     )}
                 </SettingsSubsection>

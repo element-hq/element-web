@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, lazy, Suspense } from "react";
+import React, { type JSX, type ComponentProps, lazy, Suspense } from "react";
 import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
 
 // we need to import the types for TS, but do not import the sendMessage

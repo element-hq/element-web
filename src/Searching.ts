@@ -718,4 +718,8 @@ export interface SearchInfo {
      * The total count of matching results as returned by the backend.
      */
     count?: number;
+    /**
+     * Describe the error if any occured.
+     */
+    error?: Error;
 }

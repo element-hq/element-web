@@ -10,9 +10,10 @@ import { useCallback, useMemo, useState } from "react";
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
 import { _t, _td, type TranslationKey } from "../../../languageHandler";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
-import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import RoomListStoreV3, { LISTS_LOADED_EVENT, LISTS_UPDATE_EVENT } from "../../../stores/room-list-v3/RoomListStoreV3";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
 
 /**
  * Provides information about a primary filter.
@@ -27,13 +28,21 @@ export interface PrimaryFilter {
     active: boolean;
     // Text that can be used in the UI to represent this filter.
     name: string;
+    // The key of the filter
+    key: FilterKey;
 }
 
 interface FilteredRooms {
     primaryFilters: PrimaryFilter[];
+    isLoadingRooms: boolean;
     rooms: Room[];
     activateSecondaryFilter: (filter: SecondaryFilters) => void;
     activeSecondaryFilter: SecondaryFilters;
+    /**
+     * The currently active primary filter.
+     * If no primary filter is active, this will be undefined.
+     */
+    activePrimaryFilter?: PrimaryFilter;
 }
 
 const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
@@ -106,11 +115,18 @@ export function useFilteredRooms(): FilteredRooms {
     );
 
     const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
+    const [isLoadingRooms, setIsLoadingRooms] = useState(() => RoomListStoreV3.instance.isLoadingRooms);
 
     const updateRoomsFromStore = useCallback((filters: FilterKey[] = []): void => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
         setRooms(newRooms);
     }, []);
+
+    // Reset filters when active space changes
+    useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
+        setPrimaryFilter(undefined);
+        activateSecondaryFilter(SecondaryFilters.AllActivity);
+    });
 
     const filterUndefined = (array: (FilterKey | undefined)[]): FilterKey[] =>
         array.filter((f) => f !== undefined) as FilterKey[];
@@ -122,6 +138,10 @@ export function useFilteredRooms(): FilteredRooms {
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
         const filters = getAppliedFilters();
         updateRoomsFromStore(filters);
+    });
+
+    useEventEmitter(RoomListStoreV3.instance, LISTS_LOADED_EVENT, () => {
+        setIsLoadingRooms(false);
     });
 
     /**
@@ -138,22 +158,14 @@ export function useFilteredRooms(): FilteredRooms {
             // SecondaryFilter is an enum for the UI, let's convert it to something
             // that the store will understand.
             const secondary = secondaryFiltersToFilterKeyMap.get(filter);
-
-            // Active primary filter may need to be toggled off when applying this secondary filer.
-            let primary = primaryFilter;
-            if (
-                primaryFilter !== undefined &&
-                secondary !== undefined &&
-                !isPrimaryFilterCompatible(primaryFilter, secondary)
-            ) {
-                primary = undefined;
-            }
-
             setActiveSecondaryFilter(filter);
-            setPrimaryFilter(primary);
-            updateRoomsFromStore(filterUndefined([primary, secondary]));
+
+            // Reset any active primary filters.
+            setPrimaryFilter(undefined);
+
+            updateRoomsFromStore(filterUndefined([secondary]));
         },
-        [activeSecondaryFilter, primaryFilter, updateRoomsFromStore],
+        [activeSecondaryFilter, updateRoomsFromStore],
     );
 
     /**
@@ -172,6 +184,7 @@ export function useFilteredRooms(): FilteredRooms {
                 },
                 active: primaryFilter === key,
                 name,
+                key,
             };
         };
         const filters: PrimaryFilter[] = [];
@@ -184,5 +197,14 @@ export function useFilteredRooms(): FilteredRooms {
         return filters;
     }, [primaryFilter, updateRoomsFromStore, secondaryFilter]);
 
-    return { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter };
+    const activePrimaryFilter = useMemo(() => primaryFilters.find((filter) => filter.active), [primaryFilters]);
+
+    return {
+        isLoadingRooms,
+        primaryFilters,
+        activePrimaryFilter,
+        rooms,
+        activateSecondaryFilter,
+        activeSecondaryFilter,
+    };
 }

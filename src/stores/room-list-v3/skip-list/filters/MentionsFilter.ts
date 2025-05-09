@@ -11,7 +11,7 @@ import { RoomNotificationStateStore } from "../../../notifications/RoomNotificat
 
 export class MentionsFilter implements Filter {
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).hasMentions;
+        return RoomNotificationStateStore.instance.getRoomState(room).isMention;
     }
 
     public get key(): FilterKey.MentionsFilter {

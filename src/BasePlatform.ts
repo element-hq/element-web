@@ -16,6 +16,7 @@ import {
     type SSOAction,
     encodeUnpaddedBase64,
     type OidcRegistrationClientMetadata,
+    MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -227,6 +228,16 @@ export default abstract class BasePlatform {
             dis.dispatch(payload);
             window.focus();
         };
+
+        const closeHandler = (): void => notification.close();
+
+        // Clear a notification from a redacted event.
+        if (ev) {
+            ev.once(MatrixEventEvent.BeforeRedaction, closeHandler);
+            notification.onclose = () => {
+                ev.off(MatrixEventEvent.BeforeRedaction, closeHandler);
+            };
+        }
 
         return notification;
     }
