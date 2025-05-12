@@ -262,6 +262,7 @@ describe("<MatrixChat />", () => {
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
         localStorage.clear();
+        Lifecycle.setSessionLockNotStolen();
     });
 
     resetJsDomAfterEach();
