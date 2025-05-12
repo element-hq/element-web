@@ -744,7 +744,9 @@ export default class SettingsStore {
             } // else, we don't set anything and use the server value
         };
 
-        void doMigration();
+        doMigration().catch((e) => {
+            logger.error("Failed to migrate media config settings", e);
+        });
     }
 
     /**
