@@ -718,6 +718,8 @@ export default class SettingsStore {
 
     /**
      * Migrate the setting for visible images to a setting.
+     *
+     * @param isFreshLogin True if the user has just logged in, false if a previous session is being restored.
      */
     private static migrateMediaControlsToSetting(isFreshLogin: boolean): void {
         if (isFreshLogin) return;
