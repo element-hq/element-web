@@ -139,5 +139,47 @@ describe("SettingsStore", () => {
 
             expect(room.getAccountData).not.toHaveBeenCalled();
         });
+
+        describe("Migrate media preview configuration", () => {
+            beforeEach(() => {
+                client.getAccountData = jest.fn().mockImplementation((type) => {
+                    if (type === "im.vector.web.settings") {
+                        return {
+                            getContent: jest.fn().mockReturnValue({
+                                showImages: false,
+                                showAvatarsOnInvites: false,
+                            }),
+                        };
+                    } else {
+                        return undefined;
+                    }
+                });
+            });
+
+            it("migrates media preview configuration", async () => {
+                client.setAccountData = jest.fn();
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
+                    invite_avatars: "off",
+                    media_previews: "off",
+                });
+            });
+
+            it("does not migrate media preview configuration if the session is fresh", async () => {
+                client.setAccountData = jest.fn();
+                SettingsStore.runMigrations(true);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
+
+            it("does not migrate media preview configuration if the account data is already set", async () => {
+                client.setAccountData = jest.fn();
+                client.getAccountData = jest.fn().mockReturnValue({});
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
+        });
     });
 });
