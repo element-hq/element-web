@@ -701,6 +701,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
+        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
+
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
                 <div
@@ -714,9 +716,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                         <div className="mx_LeftPanel_outerWrapper">
                             <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
                             <div className="mx_LeftPanel_wrapper">
-                                <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
+                                {!newRoomListEnabled && (
+                                    <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
+                                )}
                                 <SpacePanel />
-                                <BackdropPanel backgroundImage={this.state.backgroundImage} />
+                                {!newRoomListEnabled && <BackdropPanel backgroundImage={this.state.backgroundImage} />}
                                 <div
                                     className="mx_LeftPanel_wrapper--user"
                                     ref={this._resizeContainer}
