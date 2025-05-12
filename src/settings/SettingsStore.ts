@@ -720,8 +720,12 @@ export default class SettingsStore {
      * Migrate the setting for visible images to a setting.
      */
     private static migrateMediaControlsToSetting(): void {
-        const MIGRATION_DONE_FLAG = "mx_migrate_media_controls";
-        if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
+        // Never migrate if the config already exists.
+        const existingConfig = MatrixClientPeg.get()?.getAccountData("io.element.msc4278.media_preview_config");
+
+        if (existingConfig) {
+            return;
+        }
 
         logger.info("Performing one-time settings migration of show images and invite avatars to account data");
         const handler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
@@ -735,8 +739,6 @@ export default class SettingsStore {
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
         } // else, we don't set anything and use the server value
-
-        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
 
     /**
