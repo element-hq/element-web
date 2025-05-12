@@ -719,26 +719,41 @@ export default class SettingsStore {
     /**
      * Migrate the setting for visible images to a setting.
      */
-    private static migrateMediaControlsToSetting(): void {
-        // Never migrate if the config already exists.
-        const existingConfig = MatrixClientPeg.get()?.getAccountData("io.element.msc4278.media_preview_config");
+    private static migrateMediaControlsToSetting(isFreshLogin: boolean): void {
+        if (isFreshLogin) return;
+        const client = MatrixClientPeg.safeGet();
 
-        if (existingConfig) {
-            return;
-        }
+        const doMigration = async (): Promise<void> => {
+            // Never migrate if the config already exists.
+            const existingConfig = client.getAccountData("io.element.msc4278.media_preview_config");
 
-        logger.info("Performing one-time settings migration of show images and invite avatars to account data");
-        const handler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
-        const showImages = handler.getValue("showImages", null);
-        const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
+            if (existingConfig) {
+                return;
+            }
+            logger.info("Performing one-time settings migration of show images and invite avatars to account data");
+            const handler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
+            const showImages = handler.getValue("showImages", null);
+            const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
 
-        const AccountHandler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
-        if (showImages !== null || showAvatarsOnInvites !== null) {
-            AccountHandler.setValue("mediaPreviewConfig", null, {
-                invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
-                media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
-            });
-        } // else, we don't set anything and use the server value
+            if (typeof showImages === "boolean" || typeof showAvatarsOnInvites === "boolean") {
+                this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+                    invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
+                    media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
+                });
+            } // else, we don't set anything and use the server value
+        };
+
+        const onSync = (state: SyncState): void => {
+            if (state === SyncState.Prepared) {
+                client.removeListener(ClientEvent.Sync, onSync);
+
+                doMigration().catch((e) => {
+                    logger.error("Failed to migrate URL previews in E2EE rooms:", e);
+                });
+            }
+        };
+
+        client.on(ClientEvent.Sync, onSync);
     }
 
     /**
@@ -762,7 +777,7 @@ export default class SettingsStore {
         // this migration.
         // The consequences of missing the migration are that the previously set
         // media controls for this user will be missing
-        SettingsStore.migrateMediaControlsToSetting();
+        SettingsStore.migrateMediaControlsToSetting(isFreshLogin);
 
         // Dev notes: to add your migration, just add a new `migrateMyFeature` function, call it, and
         // add a comment to note when it can be removed.
