@@ -150,15 +150,15 @@ jobs:
                   project-url: https://github.com/orgs/element-hq/projects/41
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-    verticals_feature:
-        name: Add labelled issues to Verticals Feature project
+    crypto:
+        name: Add labelled issues to Crypto project
         runs-on: ubuntu-24.04
         if: >
-            contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+            contains(github.event.issue.labels.*.name, 'Team: Crypto')
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/element-hq/projects/57
+                  project-url: https://github.com/orgs/element-hq/projects/76
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
     tech_debt:

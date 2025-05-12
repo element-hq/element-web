@@ -993,7 +993,6 @@
             "accepting": "Accepterar…",
             "after_new_login": {
                 "device_verified": "Enhet verifierad",
-                "reset_confirmation": "Återställ verkligen verifieringsnycklar?",
                 "skip_verification": "Hoppa över verifiering för tillfället",
                 "unable_to_verify": "Kunde inte verifiera den här enheten",
                 "verify_this_device": "Verifiera den här enheten"
@@ -1064,8 +1063,6 @@
             "verify_emoji_prompt": "Verifiera genom att jämföra unika emojier.",
             "verify_emoji_prompt_qr": "Om du inte kan skanna koden ovan, verifiera genom att jämföra unika emojier.",
             "verify_later": "Jag verifierar senare",
-            "verify_reset_warning_1": "Återställning av dina verifieringsnycklar kan inte ångras. Efter återställning så kommer du inte att komma åt dina krypterade meddelanden, och alla vänner som tidigare har verifierat dig kommer att se säkerhetsvarningar tills du återverifierar med dem.",
-            "verify_reset_warning_2": "Fortsätt bara om du är säker på att du har förlorat alla dina övriga enheter och din säkerhetsnyckel.",
             "verify_using_device": "Verifiera med annan enhet",
             "verify_using_key": "Verifiera med säkerhetsnyckel",
             "verify_using_key_or_phrase": "Verifiera med säkerhetsnyckel eller -fras",
@@ -3225,7 +3222,6 @@
         "heading_without_query": "Sök efter",
         "join_button_text": "Gå med i %(roomAddress)s",
         "keyboard_scroll_hint": "Använd <arrows/> för att skrolla",
-        "message_search_section_title": "Andra sökningar",
         "other_rooms_in_space": "Andra rum i %(spaceName)s",
         "public_rooms_label": "Offentliga rum",
         "public_spaces_label": "Offentliga utrymmen",
@@ -3235,7 +3231,6 @@
         "result_may_be_hidden_privacy_warning": "Vissa resultat kan vara dolda av sekretesskäl",
         "result_may_be_hidden_warning": "Vissa resultat kanske är dolda",
         "search_dialog": "Sökdialog",
-        "search_messages_hint": "För att söka efter meddelanden, leta efter den här ikonen på toppen av ett rum <icon/>",
         "spaces_title": "Utrymmen du är med i",
         "start_group_chat_button": "Starta en gruppchatt"
     },
@@ -3284,9 +3279,7 @@
     "threads_activity_centre": {
         "header": "Aktivitet för trådar",
         "no_rooms_with_threads_notifs": "Du har inga rum med trådaviseringar ännu.",
-        "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än.",
-        "release_announcement_description": "Meddelanden om trådar har flyttats, du hittar dem här från och med nu.",
-        "release_announcement_header": "Aktivitetscenter för Trådar"
+        "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
     },
     "time": {
         "about_day_ago": "cirka en dag sedan",

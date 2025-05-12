@@ -386,6 +386,7 @@
             "fallback_button": "Commencer l’authentification",
             "mas_cross_signing_reset_cta": "Accédez à votre compte",
             "mas_cross_signing_reset_description": "Réinitialisez votre identité par l’intermédiaire de votre fournisseur de compte, puis revenez et cliquez sur « Réessayer ».",
+            "mas_cross_signing_reset_title": "Accédez à votre compte pour réinitialiser votre identité",
             "msisdn": "Un message a été envoyé à %(msisdn)s",
             "msisdn_token_incorrect": "Jeton incorrect",
             "msisdn_token_prompt": "Merci de saisir le code qu’il contient :",
@@ -993,7 +994,6 @@
             "accepting": "Acceptation…",
             "after_new_login": {
                 "device_verified": "Appareil vérifié",
-                "reset_confirmation": "Réinitialiser les clés de vérification, c’est certain ?",
                 "skip_verification": "Ignorer la vérification pour l’instant",
                 "unable_to_verify": "Impossible de vérifier cet appareil",
                 "verify_this_device": "Vérifier cet appareil"
@@ -1064,8 +1064,6 @@
             "verify_emoji_prompt": "Vérifier en comparant des émojis uniques.",
             "verify_emoji_prompt_qr": "Si vous ne pouvez pas scanner le code ci-dessus, vérifiez en comparant des émojis uniques.",
             "verify_later": "Je ferai la vérification plus tard",
-            "verify_reset_warning_1": "La réinitialisation de vos clés de vérification ne peut pas être annulé. Après la réinitialisation, vous n’aurez plus accès à vos anciens messages chiffrés, et tous les amis que vous aviez précédemment vérifiés verront des avertissement de sécurité jusqu'à ce vous les vérifiiez à nouveau.",
-            "verify_reset_warning_2": "Veuillez ne continuer que si vous êtes certain d’avoir perdu tous vos autres appareils et votre clé de récupération.",
             "verify_using_device": "Vérifier avec un autre appareil",
             "verify_using_key": "Vérifier avec la clé de récupération",
             "verify_using_key_or_phrase": "Vérifier avec une clé de récupération ou une phrase",
@@ -2120,6 +2118,7 @@
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
+        "filter": "Filtre",
         "filters": {
             "favourite": "Favoris",
             "people": "Personnes",
@@ -2153,6 +2152,12 @@
             "open_room": "Ouvrir salon %(roomName)s"
         },
         "room_options": "Options du salon",
+        "secondary_filter": {
+            "all_activity": "Toutes les activités",
+            "invites_only": "Invitations uniquement",
+            "low_priority": "Faible priorité",
+            "mentions_only": "Mentions uniquement"
+        },
         "secondary_filters": "Filtres secondaires",
         "show_less": "En voir moins",
         "show_message_previews": "Afficher les aperçus des messages",
@@ -2629,6 +2634,7 @@
             "discovery_needs_terms_title": "Laissez les gens vous trouver",
             "display_name": "Nom d'affichage",
             "display_name_error": "Impossible de définir le nom d'affichage",
+            "email_adding_unsupported_by_hs": "Ce serveur d'accueil ne prend pas en charge l'ajout d'adresses e-mail à votre compte.",
             "email_address_in_use": "Cette adresse e-mail est déjà utilisée",
             "email_address_label": "Adresse e-mail",
             "email_not_verified": "Votre adresse e-mail n’a pas encore été vérifiée",
@@ -2653,7 +2659,9 @@
             "error_share_msisdn_discovery": "Impossible de partager le numéro de téléphone",
             "identity_server_no_token": "Aucun jeton d’accès d’identité trouvé",
             "identity_server_not_set": "Serveur d'identité non défini",
+            "invalid_phone_number": "Le numéro de téléphone fourni est invalide.",
             "language_section": "Langue",
+            "msisdn_adding_unsupported_by_hs": "Ce serveur d'accueil ne prend pas en charge l'ajout de numéros de téléphone à votre compte.",
             "msisdn_in_use": "Ce numéro de téléphone est déjà utilisé",
             "msisdn_label": "Numéro de téléphone",
             "msisdn_verification_field_label": "Code de vérification",
@@ -3225,7 +3233,7 @@
         "heading_without_query": "Recherche de",
         "join_button_text": "Rejoindre %(roomAddress)s",
         "keyboard_scroll_hint": "Utilisez <arrows/> pour faire défiler",
-        "message_search_section_title": "Autres recherches",
+        "messages_label": "Messages",
         "other_rooms_in_space": "Autres salons dans %(spaceName)s",
         "public_rooms_label": "Salons publics",
         "public_spaces_label": "Espaces publics",
@@ -3235,7 +3243,6 @@
         "result_may_be_hidden_privacy_warning": "Certains résultats pourraient être masqués pour des raisons de confidentialité",
         "result_may_be_hidden_warning": "Certains résultats peuvent être cachés",
         "search_dialog": "Fenêtre de recherche",
-        "search_messages_hint": "Pour chercher des messages, repérez cette icône en haut à droite d'un salon <icon/>",
         "spaces_title": "Espaces où vous êtes",
         "start_group_chat_button": "Démarrer une conversation de groupe"
     },
@@ -3284,9 +3291,7 @@
     "threads_activity_centre": {
         "header": "Activité des fils de discussions",
         "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
-        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus.",
-        "release_announcement_description": "Les notifications des fils de discussion ont été déplacées. À partir de maintenant, retrouvez-les ici.",
-        "release_announcement_header": "Centre d'activité des fils de discussions"
+        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
     },
     "time": {
         "about_day_ago": "il y a environ un jour",
@@ -3797,10 +3802,11 @@
         "unavailable": "Indisponible"
     },
     "update_room_access_modal": {
-        "description": "Pour créer un lien de partage, vous devez autoriser les invités à rejoindre ce salon. Cela peut rendre le salon moins sûr. Lorsque vous aurez terminé l'appel, vous pourrez redéfinir la confidentialité du salon.",
-        "dont_change_description": "Vous pouvez également prendre l'appel dans un salon séparé.",
+        "description": "Pour créer un lien de partage, rendez ce salon <b>publique</b> ou activer l 'option permettant aux utilisateurs de <b>demander à rejoindre</b>. Cela permet aux invités de participer sans être invités.",
+        "dont_change_description": "Si vous ne souhaitez pas modifier l'accès à ce salon, vous pouvez créer un nouveau salon pour le lien d'appel.",
         "no_change": "Je ne souhaite pas modifier le niveau d'accès.",
-        "title": "Modifier le niveau d'accès du salon"
+        "revert_access_description": "(Ceci peut être rétabli à sa valeur précédente dans les paramètres du salon : <b> Sécurité et confidentialité</b>/<b>Accès</b>)",
+        "title": "Autoriser les utilisateurs invités à rejoindre ce salon"
     },
     "upload_failed_generic": "Le fichier « %(fileName)s » n’a pas pu être envoyé.",
     "upload_failed_size": "Le fichier « %(fileName)s » dépasse la taille limite autorisée par ce serveur pour les envois",

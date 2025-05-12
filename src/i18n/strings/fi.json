@@ -2757,7 +2757,6 @@
         "heading_without_query": "Etsittävät kohteet",
         "join_button_text": "Liity %(roomAddress)s",
         "keyboard_scroll_hint": "Käytä <arrows/> vierittääksesi",
-        "message_search_section_title": "Muut haut",
         "other_rooms_in_space": "Muut huoneet avaruudessa %(spaceName)s",
         "public_rooms_label": "Julkiset huoneet",
         "public_spaces_label": "Julkiset avaruudet",
@@ -2765,7 +2764,6 @@
         "recently_viewed_section_title": "Äskettäin katsottu",
         "result_may_be_hidden_privacy_warning": "Jotkin tulokset saatetaan piilottaa tietosuojan takia",
         "result_may_be_hidden_warning": "Jotkin tulokset saatetaan piilottaa",
-        "search_messages_hint": "Etsi viesteistä huoneen yläosassa olevalla kuvakkeella <icon/>",
         "spaces_title": "Avaruudet, joissa olet",
         "start_group_chat_button": "Aloita ryhmäkeskustelu"
     },
