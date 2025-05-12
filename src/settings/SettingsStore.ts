@@ -665,37 +665,28 @@ export default class SettingsStore {
         if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
         if (isFreshLogin) return;
 
+        if (isFreshLogin) return;
         const client = MatrixClientPeg.safeGet();
 
-        const doMigration = async (): Promise<void> => {
-            logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
+        while (!client.isInitialSyncComplete()) {
+            await new Promise((r) => client.once(ClientEvent.Sync, r));
+        }
 
-            const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
+        logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
 
-            for (const room of client.getRooms()) {
-                // We need to use the handler directly because this setting is no longer supported
-                // at this level at all
-                const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
+        const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
 
-                if (val !== undefined) {
-                    await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
-                }
+        for (const room of client.getRooms()) {
+            // We need to use the handler directly because this setting is no longer supported
+            // at this level at all
+            const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
+
+            if (val !== undefined) {
+                await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
             }
+        }
 
-            localStorage.setItem(MIGRATION_DONE_FLAG, "true");
-        };
-
-        const onSync = (state: SyncState): void => {
-            if (state === SyncState.Prepared) {
-                client.removeListener(ClientEvent.Sync, onSync);
-
-                doMigration().catch((e) => {
-                    logger.error("Failed to migrate URL previews in E2EE rooms:", e);
-                });
-            }
-        };
-
-        client.on(ClientEvent.Sync, onSync);
+        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
 
     /**
@@ -754,7 +745,9 @@ export default class SettingsStore {
         // (so around October 2024).
         // The consequences of missing the migration are only that URL previews will
         // be disabled in E2EE rooms.
-        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin);
+        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin).catch((e) => {
+            logger.error("Failed to migrate URL previews in E2EE rooms:", e);
+        });
 
         // This can be removed once enough users have run a version of Element with
         // this migration.
