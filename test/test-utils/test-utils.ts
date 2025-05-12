@@ -45,7 +45,6 @@ import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfi
 import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
-import MatrixClientBackedController from "../../src/settings/controllers/MatrixClientBackedController";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -73,7 +72,6 @@ export function stubClient(): MatrixClient {
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
-    MatrixClientBackedController.matrixClient = client;
     return client;
 }
 
@@ -166,6 +164,7 @@ export function createTestClient(): MatrixClient {
         getVisibleRooms: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
         on: eventEmitter.on.bind(eventEmitter),
+        once: eventEmitter.once.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
         emit: eventEmitter.emit.bind(eventEmitter),

@@ -724,10 +724,11 @@ export default class SettingsStore {
         const client = MatrixClientPeg.safeGet();
 
         const doMigration = async (): Promise<void> => {
+            while (!client.isInitialSyncComplete()) {
+                await new Promise((r) => client.once(ClientEvent.Sync, r));
+            }
             // Never migrate if the config already exists.
-            const existingConfig = client.getAccountData("io.element.msc4278.media_preview_config");
-
-            if (existingConfig) {
+            if (client.getAccountData("io.element.msc4278.media_preview_config")) {
                 return;
             }
             logger.info("Performing one-time settings migration of show images and invite avatars to account data");
@@ -743,17 +744,7 @@ export default class SettingsStore {
             } // else, we don't set anything and use the server value
         };
 
-        const onSync = (state: SyncState): void => {
-            if (state === SyncState.Prepared) {
-                client.removeListener(ClientEvent.Sync, onSync);
-
-                doMigration().catch((e) => {
-                    logger.error("Failed to migrate URL previews in E2EE rooms:", e);
-                });
-            }
-        };
-
-        client.on(ClientEvent.Sync, onSync);
+        void doMigration();
     }
 
     /**
