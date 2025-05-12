@@ -2449,6 +2449,10 @@
         "recent_changes_heading": "Perubahan terbaru yang belum diterima",
         "title": "Server tidak merespon"
     },
+    "service_worker_error": {
+        "description": "%(brand)s memerlukan pekerja layanan untuk memuat media yang diautentikasi dari repositori konten Matrix. Ini tidak didukung oleh peramban Anda sehingga Anda mungkin mengalami kegagalan pemuatan media.",
+        "title": "Gagal memuat pekerja layanan"
+    },
     "seshat": {
         "error_initialising": "Initialisasi pencarian pesan gagal, periksa <a>pengaturan Anda</a> untuk informasi lanjut",
         "reset_button": "Atur ulang penyimpanan peristiwa",

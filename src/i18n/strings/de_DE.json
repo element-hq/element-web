@@ -2456,6 +2456,10 @@
         "recent_changes_heading": "Letzte Änderungen, die noch nicht eingegangen sind",
         "title": "Server reagiert nicht"
     },
+    "service_worker_error": {
+        "description": "%(brand)s benötigt einen Service Worker zum Laden authentifizierter Medien aus Matrix-Inhaltsrepositorys. Dies wird von Ihrem Browser nicht unterstützt, sodass Medien möglicherweise nicht geladen werden können.",
+        "title": "Service Worker konnte nicht geladen werden"
+    },
     "seshat": {
         "error_initialising": "Initialisierung der Suche fehlgeschlagen, für weitere Informationen öffne <a>deine Einstellungen</a>",
         "reset_button": "Ereignisspeicher zurück setzen",
