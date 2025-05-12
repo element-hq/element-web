@@ -665,7 +665,6 @@ export default class SettingsStore {
         if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
         if (isFreshLogin) return;
 
-        if (isFreshLogin) return;
         const client = MatrixClientPeg.safeGet();
 
         while (!client.isInitialSyncComplete()) {
