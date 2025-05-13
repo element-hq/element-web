@@ -27,7 +27,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
             contains(github.event.issue.labels.*.name, 'A-Element-Call')
         steps:
-            - uses: actions/github-script@v7
+            - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
               with:
                   script: |
                       github.rest.issues.addLabels({
@@ -44,7 +44,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'good first issue') ||
             contains(github.event.issue.labels.*.name, 'Hacktoberfest')
         steps:
-            - uses: actions/github-script@v7
+            - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
               with:
                   script: |
                       github.rest.issues.addLabels({
@@ -61,7 +61,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
             - id: add_to_project
-              uses: actions/add-to-project@v1.0.2
+              uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -84,7 +84,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
         steps:
             - id: add_to_project
-              uses: actions/add-to-project@v1.0.2
+              uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
