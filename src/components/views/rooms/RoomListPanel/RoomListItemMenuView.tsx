@@ -84,6 +84,21 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
             align="start"
             trigger={<MoreOptionsButton size="24px" />}
         >
+            <MoreOptionContent vm={vm} />
+        </Menu>
+    );
+}
+
+interface MoreOptionContentProps {
+    /**
+     * The view model state for the menu.
+     */
+    vm: RoomListItemMenuViewState;
+}
+
+export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
+    return (
+        <>
             {vm.canMarkAsRead && (
                 <MenuItem
                     Icon={MarkAsReadIcon}
@@ -143,7 +158,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 onClick={(evt) => evt.stopPropagation()}
                 hideChevron={true}
             />
-        </Menu>
+        </>
     );
 }
 
