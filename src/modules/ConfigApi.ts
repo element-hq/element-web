@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { ConfigApi as IConfigApi, Config } from "../../../element-web-modules/packages/element-web-module-api";
+import type { ConfigApi as IConfigApi, Config } from "@element-hq/element-web-module-api";
 import SdkConfig from "../SdkConfig.ts";
 
 export class ConfigApi implements IConfigApi {
