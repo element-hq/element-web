@@ -1,41 +1,84 @@
 {
     "categories": [
         {
-            "identifier": "category1",
-            "display_name": "Category 1",
+            "identifier": "applications",
+            "display_name": "Anwendungen",
             "entries": [
                 {
                     "identifier": "app1",
-                    "display_name": "App 1",
-                    "icon_url": "http://localhost:8080/app1.png",
+                    "display_name": "Portal",
+                    "icon_url": "http://localhost:8080/opendesk/app1.svg",
                     "link": "https://example.com/app1",
                     "target": "_blank"
                 },
                 {
                     "identifier": "app2",
-                    "display_name": "App 2",
-                    "icon_url": "http://localhost:8080/app2.png",
+                    "display_name": "Aufgaben",
+                    "icon_url": "http://localhost:8080/opendesk/app2.svg",
                     "link": "https://example.com/app2",
                     "target": "_blank"
-                }
-            ]
-        },
-        {
-            "identifier": "category2",
-            "display_name": "Category 2",
-            "entries": [
+                },
                 {
                     "identifier": "app3",
-                    "display_name": "App 3",
-                    "icon_url": "http://localhost:8080/app1.png",
+                    "display_name": "Chat",
+                    "icon_url": "http://localhost:8080/opendesk/app3.svg",
                     "link": "https://example.com/app3",
                     "target": "_blank"
                 },
                 {
                     "identifier": "app4",
-                    "display_name": "App 4",
-                    "icon_url": "http://localhost:8080/app2.png",
-                    "link": "https://example.com/app4",
+                    "display_name": "Dateien",
+                    "icon_url": "http://localhost:8080/opendesk/app4.svg",
+                    "link": "https://example.com/ap4",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app5",
+                    "display_name": "E-Mail",
+                    "icon_url": "http://localhost:8080/opendesk/app5.svg",
+                    "link": "https://example.com/app5",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app6",
+                    "display_name": "Kelender",
+                    "icon_url": "http://localhost:8080/opendesk/app6.svg",
+                    "link": "https://example.com/app6",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app7",
+                    "display_name": "Kontakte",
+                    "icon_url": "http://localhost:8080/opendesk/app7.svg",
+                    "link": "https://example.com/app7",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app8",
+                    "display_name": "Notizen",
+                    "icon_url": "http://localhost:8080/opendesk/app8.svg",
+                    "link": "https://example.com/app8",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app9",
+                    "display_name": "Projekte",
+                    "icon_url": "http://localhost:8080/opendesk/app9.svg",
+                    "link": "https://example.com/app9",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app10",
+                    "display_name": "Videokonferenz",
+                    "icon_url": "http://localhost:8080/opendesk/app10.svg",
+                    "link": "https://example.com/app10",
+                    "target": "_blank"
+                },
+                {
+                    "identifier": "app11",
+                    "display_name": "Wiki",
+                    "icon_url": "http://localhost:8080/opendesk/app11.svg",
+                    "link": "https://example.com/app11",
                     "target": "_blank"
                 }
             ]

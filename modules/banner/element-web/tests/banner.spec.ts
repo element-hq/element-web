@@ -12,9 +12,10 @@ test.describe("Banner", () => {
     test.use({
         displayName: "Timmy",
         page: async ({ context, page, moduleDir }, use) => {
-            for (const path of ["logo.svg", "app1.png", "app2.png"]) {
+            for (const path of ["logo.svg", "app1.png", "app2.png", "opendesk/"]) {
                 await context.route(`/${path}*`, async (route) => {
-                    await route.fulfill({ path: `${moduleDir}/tests/fixture/${path}` });
+                    const file = new URL(route.request().url()).pathname;
+                    await route.fulfill({ path: `${moduleDir}/tests/fixture/${file}` });
                 });
             }
             await context.route("http://localhost:8080/ics/navigation.json*", async (route) => {
@@ -75,10 +76,11 @@ test.describe("Banner", () => {
             },
         },
         {
-            logo_url: "http://localhost:8080/logo.svg",
+            logo_url: "http://localhost:8080/opendesk/logomark.svg",
             logo_link_url: "https://example.com/portal",
             menu: {
                 type: "univention",
+                logo_url: "http://localhost:8080/opendesk/logofull.svg",
                 ics_url: "http://localhost:8080/ics/",
             },
         },

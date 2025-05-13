@@ -58,6 +58,12 @@ const UniventionConfig = z.object({
     type: z.literal("univention"),
 
     /**
+     * Alternative logo URL to display in the popover menu.
+     * Will use the main logo url if omitted.
+     */
+    logo_url: z.string().url().optional(),
+
+    /**
      * Base URL to an Intercom Service
      * https://docs.software-univention.de/intercom-service/latest/architecture.html#endpoints
      */
