@@ -465,7 +465,7 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
         logger.error("Unable to find an appropriate language, preferred: ", preferredLangs);
     }
 
-    const languageData = getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
+    const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
 
     counterpart.registerTranslations(chosenLanguage, languageData);
     await registerCustomTranslations();
