@@ -741,7 +741,6 @@
             "accepting": "Aceptando…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "Queres restablecer as chaves de verificación?",
                 "skip_verification": "Omitir a verificación por agora",
                 "unable_to_verify": "Non se puido verificar este dispositivo",
                 "verify_this_device": "Verifica este dispositivo"
@@ -804,7 +803,6 @@
             "verify_emoji_prompt": "Verficación por comparación de emoticonas.",
             "verify_emoji_prompt_qr": "Se non podes escanear o código superior, verifica comparando as emoticonas.",
             "verify_later": "Verificarei máis tarde",
-            "verify_reset_warning_1": "O restablecemento das chaves de seguridade non se pode desfacer. Tras o restablecemento, non terás acceso ás antigas mensaxes cifradas, e calquera amizade que verificaras con anterioridade vai ver un aviso de seguridade ata que volvades a verificarvos mutuamente.",
             "verify_using_device": "Verifica usando outro dispositivo",
             "verify_using_key": "Verificar coa Chave de Seguridade",
             "verify_using_key_or_phrase": "Verificar coa Chave ou Frase de Seguridade",
@@ -2372,7 +2370,6 @@
         "heading_without_query": "Buscar",
         "join_button_text": "Unirse a %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> para desprazarte",
-        "message_search_section_title": "Outras buscas",
         "other_rooms_in_space": "Outras salas en %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "recent_searches_section_title": "Buscas recentes",
@@ -2381,7 +2378,6 @@
         "result_may_be_hidden_privacy_warning": "Algúns resultados poden estar agochados por privacidade",
         "result_may_be_hidden_warning": "Algúns resultados poderían estar agochados",
         "search_dialog": "Diálogo de busca",
-        "search_messages_hint": "Para buscar mensaxes, busca esta icona arriba de todo na sala <icon/>",
         "spaces_title": "Espazos nos que estás",
         "start_group_chat_button": "Inicia un chat en grupo"
     },

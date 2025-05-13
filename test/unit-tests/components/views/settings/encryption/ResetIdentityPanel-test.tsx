@@ -7,7 +7,7 @@
 
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { sleep, defer } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
@@ -33,7 +33,7 @@ describe("<ResetIdentityPanel />", () => {
 
         // We need to pause the reset so that we can check that it's providing
         // feedback to the user that something is happening.
-        const { promise: resetEncryptionPromise, resolve: resolveResetEncryption } = defer();
+        const { promise: resetEncryptionPromise, resolve: resolveResetEncryption } = Promise.withResolvers<void>();
         jest.spyOn(matrixClient.getCrypto()!, "resetEncryption").mockReturnValue(resetEncryptionPromise);
 
         const continueButton = screen.getByRole("button", { name: "Continue" });

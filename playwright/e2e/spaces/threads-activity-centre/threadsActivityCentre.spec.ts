@@ -19,7 +19,6 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },
-        labsFlags: ["threadsActivityCentre"],
     });
 
     test(

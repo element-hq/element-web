@@ -31,6 +31,8 @@ import { tagRoom } from "../../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
+import SettingsStore from "../../../../../src/settings/SettingsStore.ts";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel.ts";
 
 jest.mock("../../../../../src/utils/room/tagRoom");
 
@@ -77,6 +79,8 @@ describe("<RoomSummaryCard />", () => {
         jest.spyOn(defaultDispatcher, "dispatch");
         jest.clearAllMocks();
         DMRoomMap.makeShared(mockClient);
+
+        SettingsStore.setValue("releaseAnnouncementData", null, SettingLevel.DEVICE, { pinningMessageList: true });
 
         mockClient.getRoom.mockReturnValue(room);
         jest.spyOn(room, "isElementVideoRoom").mockRestore();

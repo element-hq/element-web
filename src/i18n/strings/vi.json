@@ -788,7 +788,6 @@
             "accepting": "Đang chấp nhận…",
             "after_new_login": {
                 "device_verified": "Thiết bị được xác thực",
-                "reset_confirmation": "Thực sự đặt lại các khóa xác minh?",
                 "skip_verification": "Bỏ qua xác thực ngay bây giờ",
                 "unable_to_verify": "Không thể xác thực thiết bị này",
                 "verify_this_device": "Xác thực thiết bị này"
@@ -858,8 +857,6 @@
             "verify_emoji_prompt": "Xác thực bằng cách so sánh biểu tượng cảm xúc độc đáo.",
             "verify_emoji_prompt_qr": "Nếu bạn không thể quét mã ở trên, hãy xác thực bằng cách so sánh biểu tượng cảm xúc duy nhất.",
             "verify_later": "Tôi sẽ xác thực sau",
-            "verify_reset_warning_1": "Sẽ không thể hoàn tác lại việc đặt lại các khóa xác thực của bạn. Sau khi đặt lại, bạn sẽ không có quyền truy cập vào các tin nhắn đã được mã hóa cũ, và bạn bè đã được xác thực trước đó bạn sẽ thấy các cảnh báo bảo mật cho đến khi bạn xác thực lại với họ.",
-            "verify_reset_warning_2": "Chỉ tiếp tục nếu bạn chắc chắn là mình đã mất mọi thiết bị khác và khóa bảo mật.",
             "verify_using_device": "Xác thực bằng thiết bị khác",
             "verify_using_key": "Xác thực bằng Khóa Bảo mật",
             "verify_using_key_or_phrase": "Xác thực bằng Khóa hoặc Chuỗi Bảo mật",
@@ -2563,14 +2560,12 @@
         "heading_without_query": "Tìm",
         "join_button_text": "Tham gia %(roomAddress)s",
         "keyboard_scroll_hint": "Dùng <arrows/> để cuộn",
-        "message_search_section_title": "Các tìm kiếm khác",
         "other_rooms_in_space": "Các phòng khác trong %(spaceName)s",
         "public_rooms_label": "Các phòng công cộng",
         "recent_searches_section_title": "Các tìm kiếm gần đây",
         "recently_viewed_section_title": "Được xem gần đây",
         "result_may_be_hidden_privacy_warning": "Một số kết quả có thể bị ẩn để đảm bảo quyền riêng tư",
         "result_may_be_hidden_warning": "Một số kết quả có thể bị ẩn",
-        "search_messages_hint": "Để tìm các tin nhắn, hãy tìm biểu tượng này ở đầu phòng <icon/>",
         "spaces_title": "Các Space bạn đang trong đó",
         "start_group_chat_button": "Bắt đầu cuộc trò chuyện nhóm"
     },

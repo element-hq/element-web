@@ -23,6 +23,7 @@ jest.mock("../../../src/dispatcher/dispatcher", () => ({
 
 describe("SetupEncryptionToast", () => {
     beforeEach(() => {
+        jest.resetAllMocks();
         render(<ToastContainer />);
     });
 
@@ -65,7 +66,7 @@ describe("SetupEncryptionToast", () => {
             });
         });
 
-        it("should open settings to the reset flow when recovering fails clicked", async () => {
+        it("should open settings to the reset flow when recovering fails", async () => {
             jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
                 throw new Error("Something went wrong while recovering!");
             });
@@ -78,7 +79,7 @@ describe("SetupEncryptionToast", () => {
             expect(dis.dispatch).toHaveBeenCalledWith({
                 action: "view_user_settings",
                 initialTabId: "USER_ENCRYPTION_TAB",
-                props: { initialEncryptionState: "reset_identity_forgot" },
+                props: { initialEncryptionState: "reset_identity_sync_failed" },
             });
         });
     });

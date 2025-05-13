@@ -386,6 +386,7 @@
             "fallback_button": "Alusta autentimist",
             "mas_cross_signing_reset_cta": "Mine oma kasutajakonto andmete juurde",
             "mas_cross_signing_reset_description": "Lähtesta oma võrguidentiteet oma teenusepakkuja abil ning tule siis siia tagasi ja vajuta „Proovi uuesti“.",
+            "mas_cross_signing_reset_title": "Oma võrguidentiteedi lähtestamiseks ava oma kasutajakonto vaade",
             "msisdn": "Saatsime tekstisõnumi telefoninumbrile %(msisdn)s",
             "msisdn_token_incorrect": "Vigane tunnusluba",
             "msisdn_token_prompt": "Palun sisesta seal kuvatud kood:",
@@ -993,7 +994,6 @@
             "accepting": "Nõustun …",
             "after_new_login": {
                 "device_verified": "Seade on verifitseeritud",
-                "reset_confirmation": "Kas tõesti kustutame kõik verifitseerimisvõtmed?",
                 "skip_verification": "Jäta verifitseerimine praegu vahele",
                 "unable_to_verify": "Selle seadme verifitseerimine ei õnnestunud",
                 "verify_this_device": "Verifitseeri see seade"
@@ -1064,8 +1064,6 @@
             "verify_emoji_prompt": "Verifitseeri unikaalsete emoji'de võrdlemise teel.",
             "verify_emoji_prompt_qr": "Kui sa ei saa skaneerida eespool kuvatud koodi, siis verifitseeri unikaalsete emoji'de võrdlemise teel.",
             "verify_later": "Ma verifitseerin hiljem",
-            "verify_reset_warning_1": "Verifitseerimisvõtmete kustutamist ei saa hiljem tagasi võtta. Peale seda sul puudub ligipääs vanadele krüptitud sõnumitele ja kõik sinu verifitseeritud sõbrad-tuttavad näevad turvahoiatusi seni kuni sa uuesti nad verifitseerid.",
-            "verify_reset_warning_2": "Palun jätka ainult siis, kui sa oled kaotanud ligipääsu oma kõikidele muudele seadmetele ning oma taastevõtmele.",
             "verify_using_device": "Verifitseeri teise seadmega",
             "verify_using_key": "Verifitseeri taastevõtmega",
             "verify_using_key_or_phrase": "Verifitseeri taastevõtme või -fraasiga",
@@ -2121,6 +2119,7 @@
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
+        "filter": "Filtreerimise alus",
         "filters": {
             "favourite": "Lemmikud",
             "people": "Inimesed",
@@ -2154,6 +2153,12 @@
             "open_room": "Ava jututuba: %(roomName)s"
         },
         "room_options": "Jututoa valikud",
+        "secondary_filter": {
+            "all_activity": "Kõik tegevused",
+            "invites_only": "Vaid kutsed",
+            "low_priority": "Vähetähtsad",
+            "mentions_only": "Vaid mainimised"
+        },
         "secondary_filters": "Teisesed filtrid",
         "show_less": "Näita vähem",
         "show_message_previews": "Näita sõnumite eelvaateid",
@@ -2630,6 +2635,7 @@
             "discovery_needs_terms_title": "Võimalda teistel Matrixi võrgu kasutajatel sind leida",
             "display_name": "Kuvatav nimi",
             "display_name_error": "Kuvatava nime määramine ei õnnestu",
+            "email_adding_unsupported_by_hs": "See koduserver ei toeta kasutajakonto juurde e-posti aadressi lisamise võimalust.",
             "email_address_in_use": "See e-posti aadress on juba kasutusel",
             "email_address_label": "E-posti aadress",
             "email_not_verified": "Sinu e-posti aadress pole veel verifitseeritud",
@@ -2654,7 +2660,9 @@
             "error_share_msisdn_discovery": "Telefoninumbri jagamine ei õnnestunud",
             "identity_server_no_token": "Ei leidu tunnusluba isikutuvastusserveri jaoks",
             "identity_server_not_set": "Isikutuvastusserver on määramata",
+            "invalid_phone_number": "Sisestatud telefoninumber ei tundu olema korrektne",
             "language_section": "Keel",
+            "msisdn_adding_unsupported_by_hs": "See koduserver ei toeta kasutajakonto juurde telefoninumbri lisamise võimalust.",
             "msisdn_in_use": "See telefoninumber on juba kasutusel",
             "msisdn_label": "Telefoninumber",
             "msisdn_verification_field_label": "Verifikatsioonikood",
@@ -3226,7 +3234,7 @@
         "heading_without_query": "Otsingusõna",
         "join_button_text": "Liitu %(roomAddress)s jututoaga",
         "keyboard_scroll_hint": "Kerimiseks kasuta <arrows/>",
-        "message_search_section_title": "Muud otsingud",
+        "messages_label": "Sõnumid",
         "other_rooms_in_space": "Muud jututoad %(spaceName)s kogukonnad",
         "public_rooms_label": "Avalikud jututoad",
         "public_spaces_label": "Avalikud kogukonnad",
@@ -3236,7 +3244,6 @@
         "result_may_be_hidden_privacy_warning": "Mõned tulemused võivad privaatsusseadistuste tõttu olla peidetud",
         "result_may_be_hidden_warning": "Mõned tulemused võivad olla peidetud",
         "search_dialog": "Otsinguvaade",
-        "search_messages_hint": "Sõnumite otsimiseks klõpsi <icon/> ikooni jututoa ülaosas",
         "spaces_title": "Kogukonnad, mille liige sa oled",
         "start_group_chat_button": "Alusta rühmavestlust"
     },
@@ -3285,9 +3292,7 @@
     "threads_activity_centre": {
         "header": "Jutulõngade ülevaade",
         "no_rooms_with_threads_notifs": "Pole veel ühtegi jutulõngakohase teavitusega jututuba.",
-        "no_rooms_with_unread_threads": "Pole veel ühtegi lugemata jutulõngaga jututuba.",
-        "release_announcement_description": "Jutulõngade teavitused leiduvad nüüd uues kohas. Nüüd leiad nad siit.",
-        "release_announcement_header": "Jutulõngade ülevaade"
+        "no_rooms_with_unread_threads": "Pole veel ühtegi lugemata jutulõngaga jututuba."
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -3798,10 +3803,11 @@
         "unavailable": "Ei ole saadaval"
     },
     "update_room_access_modal": {
-        "description": "Osalemiseks mõeldud lingi loomiseks on vaja, et külalised saavad selle jututoaga liituda. See aga võib muuta jututoa vähem turvaliseks. Kui sa oled aga kõne lõpetanud, siis saad soovi korral jututoa uuesti muuta privaatseks.",
-        "dont_change_description": "Teise võimalusena saad helistada eraldi jututoas",
+        "description": "Kui soovid luua jagatavat linki, siis pead selle jututoa tegema <b>avalikuks</b> või pead seadistustest lubama huvilistel <b>paluda võimalust liitumiseks</b>. See võimaldab külalistel liituda ilma kutseta.",
+        "dont_change_description": "Kui sa ei soovi selle jututoa ligipääsuõigusi muuta, siis teise võimalusena saad helistamiseks luua eraldi jututoa",
         "no_change": "Ma ei soovi muuta õigusi jututoas.",
-        "title": "Muuda õigusi jututoas"
+        "revert_access_description": "(Eelmise väärtuse saad taastada jututoa seadistustest: <b>Turvalisus & Privaatsus</b> / <b>Ligipääs</b>)",
+        "title": "Luba külalistel selle jututoaga liituda"
     },
     "upload_failed_generic": "Faili '%(fileName)s' üleslaadimine ei õnnestunud.",
     "upload_failed_size": "Faili '%(fileName)s' suurus ületab serveris seadistatud üleslaadimise piiri",
