@@ -5,6 +5,7 @@
 ```ts
 
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
+import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
 
 // @alpha @deprecated (undocumented)
@@ -18,8 +19,10 @@ export interface AliasCustomisations {
 //
 // @public
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
-    // (undocumented)
-    config: ConfigApi;
+    readonly config: ConfigApi;
+    createRoot(element: Element): Root;
+    readonly i18n: I18nApi;
+    readonly rootNode: HTMLElement;
 }
 
 // @alpha @deprecated (undocumented)
@@ -58,6 +61,13 @@ export interface ConfigApi {
 export interface DirectoryCustomisations {
     // (undocumented)
     requireCanonicalAliasAccessToPublish?(): boolean;
+}
+
+// @public
+export interface I18nApi {
+    get language(): string;
+    register(translations: Partial<Translations>): void;
+    translate(key: keyof Translations, variables?: Variables): string;
 }
 
 // @alpha @deprecated (undocumented)
@@ -179,6 +189,11 @@ export interface RoomListCustomisations<Room> {
 // @alpha @deprecated (undocumented)
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 
+// @public
+export type Translations = Record<string, {
+    [ietfLanguageTag: string]: string;
+}>;
+
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {
     getDisplayUserIdentifier(userId: string, opts: {
@@ -186,6 +201,12 @@ export interface UserIdentifierCustomisations {
         withDisplayName?: boolean;
     }): string | null;
 }
+
+// @public
+export type Variables = {
+    count?: number;
+    [key: string]: number | string | undefined;
+};
 
 // @alpha @deprecated (undocumented)
 export interface WidgetPermissionsCustomisations<Widget, Capability> {

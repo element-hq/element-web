@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, test } from "vitest";
 
-import { Api } from ".";
-import { isModule } from "./api.js";
+import { Api, isModule } from ".";
 
 const TestModule = {
     default: class TestModule {
