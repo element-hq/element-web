@@ -3722,6 +3722,7 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
@@ -9123,9 +9124,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "37.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/00bd7f0f02a0a49ea466b7cabf3e1770da84b568"
+matrix-js-sdk@37.6.0-rc.0:
+  version "37.6.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-37.6.0-rc.0.tgz#aa2f58c1894bcf1833b1a437f3f93e886a24ed1b"
+  integrity sha512-V7osozYZWx3bKFXm43fWZsvFikwe6vUcG8aiwj70tlTLIC0cJFyjYmt2L2JJJwPHQ2egV66U9NBYYvoR7g/JfQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^14.0.1"
