@@ -1,0 +1,144 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React from "react";
+import { render, RenderOptions, screen } from "@testing-library/react";
+import { RoomListOptionsMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListOptionsMenu";
+import { RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
+import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
+
+function getRenderOptions(): RenderOptions {
+    return {
+        wrapper: ({ children }) => <TooltipProvider>{children}</TooltipProvider>,
+    };
+}
+
+describe("<RoomListOptionsMenu />", () => {
+    it("should match snapshot", () => {
+        const vm = {
+            sort: jest.fn(),
+        } as unknown as RoomListViewState;
+
+        const { asFragment } = render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should show A to Z selected if activeSortOption is Alphabetic", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            sort: jest.fn(),
+            activeSortOption: "Alphabetic",
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        // Open the menu
+        const button = screen.getByRole("button", { name: "Room Options" });
+        await user.click(button);
+
+        expect(screen.getByRole("menuitemradio", { name: "A-Z" })).toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Activity" })).not.toBeChecked();
+    });
+
+    it("should show Activity selected if activeSortOption is Recency", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            sort: jest.fn(),
+            activeSortOption: "Recency",
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        // Open the menu
+        const button = screen.getByRole("button", { name: "Room Options" });
+        await user.click(button);
+
+        expect(screen.getByRole("menuitemradio", { name: "A-Z" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Activity" })).toBeChecked();
+    });
+
+    it("should sort A to Z", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            sort: jest.fn(),
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        await user.click(screen.getByRole("menuitemradio", { name: "A-Z" }));
+
+        expect(vm.sort).toHaveBeenCalledWith("Alphabetic");
+    });
+
+    it("should sort by activity", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            sort: jest.fn(),
+            activeSortOption: "Alphabetic",
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        await user.click(screen.getByRole("menuitemradio", { name: "Activity" }));
+
+        expect(vm.sort).toHaveBeenCalledWith("Recency");
+    });
+
+    it("should show message previews disabled", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            shouldShowMessagePreview: false,
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        expect(screen.getByRole("menuitemcheckbox", { name: "Show message previews" })).not.toBeChecked();
+    });
+
+    it("should show message previews enabled", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            shouldShowMessagePreview: true,
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        expect(screen.getByRole("menuitemcheckbox", { name: "Show message previews" })).toBeChecked();
+    });
+
+    it("should toggle message previews", async () => {
+        const user = userEvent.setup();
+
+        const vm = {
+            toggleMessagePreview: jest.fn(),
+        } as unknown as RoomListViewState;
+
+        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        await user.click(screen.getByRole("menuitemcheckbox", { name: "Show message previews" }));
+
+        expect(vm.toggleMessagePreview).toHaveBeenCalled();
+    });
+});
