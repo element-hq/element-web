@@ -107,6 +107,7 @@ import Views from "../../Views";
 import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForgetRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
@@ -1273,6 +1274,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // be notified to us, therefore the room list will have no other way of knowing
                 // the room is forgotten.
                 if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+
+                dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room_id: roomId });
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("error|unknown_error_code");

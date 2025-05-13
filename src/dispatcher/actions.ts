@@ -236,6 +236,11 @@ export enum Action {
     AfterLeaveRoom = "after_leave_room",
 
     /**
+     * Dispatched after a room has been successfully forgotten
+     */
+    AfterForgetRoom = "after_forget_room",
+
+    /**
      * Used to defer actions until after sync is complete
      * LifecycleStore will emit deferredAction payload after 'MatrixActions.sync'
      */
