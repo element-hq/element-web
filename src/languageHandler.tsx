@@ -468,7 +468,6 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
     const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
 
     counterpart.registerTranslations(chosenLanguage, languageData);
-    await registerCustomTranslations();
     counterpart.setLocale(chosenLanguage);
 
     await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
