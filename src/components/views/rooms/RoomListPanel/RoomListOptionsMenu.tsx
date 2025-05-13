@@ -58,8 +58,16 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
             trigger={<MenuTrigger />}
         >
             <MenuTitle title={_t("room_list|sort")} />
-            <RadioMenuItem label={_t("room_list|sort_type|activity")} checked={vm.activeSortOption === SortOption.Activity} onSelect={onActivitySelected} />
-            <RadioMenuItem label={_t("room_list|sort_type|atoz")} checked={vm.activeSortOption === SortOption.AToZ} onSelect={onAtoZSelected} />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|activity")}
+                checked={vm.activeSortOption === SortOption.Activity}
+                onSelect={onActivitySelected}
+            />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|atoz")}
+                checked={vm.activeSortOption === SortOption.AToZ}
+                onSelect={onAtoZSelected}
+            />
             <MenuTitle title={_t("room_list|appearance")} />
             <CheckboxMenuItem
                 label={_t("room_list|show_message_previews")}
