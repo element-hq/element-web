@@ -6,11 +6,12 @@
  */
 
 import React from "react";
-import { render, RenderOptions, screen } from "@testing-library/react";
-import { RoomListOptionsMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListOptionsMenu";
-import { RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
+import { render, type RenderOptions, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
+
+import { RoomListOptionsMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListOptionsMenu";
+import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 
 function getRenderOptions(): RenderOptions {
     return {

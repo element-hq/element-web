@@ -10,7 +10,6 @@ import { type Locator, type Page } from "@playwright/test";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { get } from "lodash";
 
 test.describe("Room list filters and sort", () => {
     test.use({
