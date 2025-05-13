@@ -27,6 +27,7 @@ import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
+import { Action } from "../../../../src/dispatcher/actions";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -119,6 +120,27 @@ describe("RoomListStoreV3", () => {
 
             expect(fn).toHaveBeenCalled();
             expect(store.getSortedRooms()[0].roomId).toEqual(room.roomId);
+        });
+
+        it("Forgotten room is removed", async () => {
+            const { store, rooms, dispatcher } = await getRoomListStore();
+            const room = rooms[37];
+
+            // Room at index 37 should be in the store now
+            expect(store.getSortedRooms().map((r) => r.roomId)).toContain(room.roomId);
+
+            // Forget room at index 37
+            const payload = {
+                action: Action.AfterForgetRoom,
+                room: room,
+            };
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(payload, true);
+
+            // Room at index 37 should no longer be in the store
+            expect(fn).toHaveBeenCalled();
+            expect(store.getSortedRooms().map((r) => r.roomId)).not.toContain(room.roomId);
         });
 
         it.each([KnownMembership.Join, KnownMembership.Invite])(
