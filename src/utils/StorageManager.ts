@@ -92,8 +92,7 @@ export async function checkConsistency(): Promise<{
     if (dataInLocalStorage && cryptoInited && !dataInCryptoStore) {
         healthy = false;
         error(
-            "Data exists in local storage and crypto is marked as initialised " +
-                " but no data found in crypto store. " +
+            "Data exists in local storage and crypto is marked as initialised but no data found in crypto store. " +
                 "IndexedDB storage has likely been evicted by the browser!",
         );
     }

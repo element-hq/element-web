@@ -68,6 +68,7 @@ import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
+import { clearStorage } from "../../../../src/Lifecycle";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -217,6 +218,9 @@ describe("<MatrixChat />", () => {
     };
 
     beforeEach(async () => {
+        await clearStorage();
+        Lifecycle.setSessionLockNotStolen();
+
         localStorage.clear();
         jest.restoreAllMocks();
         defaultProps = {
@@ -344,10 +348,6 @@ describe("<MatrixChat />", () => {
                     },
                 });
 
-            jest.spyOn(logger, "error").mockClear();
-        });
-
-        beforeEach(() => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
             jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
