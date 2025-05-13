@@ -66,7 +66,6 @@ import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
 import { useSettingValue } from "../../hooks/useSettings";
-import { useRoomState } from "../../hooks/useRoomState";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -186,7 +185,7 @@ export interface MessagePanelMethods {
         nextEventWithTile?: MatrixEvent | null,
     ) => ReactNode[];
     layout?: Layout;
-    scrollPanel: RefObject<ScrollPanel>;
+    scrollPanel: RefObject<ScrollPanel | null>;
     getNodeForEventId: (eventId: string) => HTMLElement | undefined;
 }
 
@@ -271,6 +270,7 @@ interface IProps {
 
     callEventGroupers: Map<string, LegacyCallEventGrouper>;
     ref: RefObject<MessagePanelMethods | null>;
+    props: IProps;
 }
 
 interface IReadReceiptForUser {
@@ -725,10 +725,12 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
             layout: props.layout,
             scrollPanel,
             getNodeForEventId,
+            props,
         };
     });
 
     const getEventTiles = (): ReactNode[] => {
+        if (!props.ref.current) return [];
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
