@@ -12,6 +12,5 @@ import { type ActionPayload } from "../payloads";
 
 export interface AfterForgetRoomPayload extends ActionPayload {
     action: Action.AfterForgetRoom;
-    // eslint-disable-next-line camelcase
-    room_id?: Room["roomId"];
+    room: Room;
 }
