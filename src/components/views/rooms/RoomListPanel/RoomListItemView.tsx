@@ -15,6 +15,7 @@ import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
+import { RoomListItemContextMenuView } from "./RoomListItemContextMenuView";
 
 interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
@@ -50,7 +51,19 @@ export const RoomListItemView = memo(function RoomListItemView({
     const isInvitation = vm.notificationState.invited;
     const isNotificationDecorationVisible = isInvitation || (!showHoverDecoration && vm.showNotificationDecoration);
 
-    return (
+    const setIsMenuOpenMemoized = useCallback((isOpen: boolean) => {
+        if (isOpen) {
+            setIsMenuOpen(isOpen);
+        } else {
+            // To avoid icon blinking when closing the menu, we delay the state update
+            setTimeout(() => setIsMenuOpen(isOpen), 0);
+            // After closing the menu, we need to set the focus back to the button
+            // 10ms because the focus moves to the body and we put back the focus on the button
+            setTimeout(() => buttonRef.current?.focus(), 10);
+        }
+    }, []);
+
+    const content = (
         <button
             ref={ref}
             className={classNames("mx_RoomListItemView", {
@@ -95,20 +108,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                         <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
                     </div>
                     {showHoverMenu ? (
-                        <RoomListItemMenuView
-                            room={room}
-                            setMenuOpen={(isOpen) => {
-                                if (isOpen) {
-                                    setIsMenuOpen(isOpen);
-                                } else {
-                                    // To avoid icon blinking when closing the menu, we delay the state update
-                                    setTimeout(() => setIsMenuOpen(isOpen), 0);
-                                    // After closing the menu, we need to set the focus back to the button
-                                    // 10ms because the focus moves to the body and we put back the focus on the button
-                                    setTimeout(() => buttonRef.current?.focus(), 10);
-                                }
-                            }}
-                        />
+                        <RoomListItemMenuView room={room} setMenuOpen={setIsMenuOpenMemoized} />
                     ) : (
                         <>
                             {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
@@ -124,6 +124,14 @@ export const RoomListItemView = memo(function RoomListItemView({
                 </Flex>
             </Flex>
         </button>
+    );
+
+    if (!vm.showContextMenu) return content;
+
+    return (
+        <RoomListItemContextMenuView room={room} setMenuOpen={setIsMenuOpenMemoized}>
+            {content}
+        </RoomListItemContextMenuView>
     );
 });
 
