@@ -262,7 +262,7 @@
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",
         "knip": "^5.36.2",
-        "lint-staged": "^15.0.2",
+        "lint-staged": "^16.0.0",
         "matrix-web-i18n": "^3.2.1",
         "mini-css-extract-plugin": "2.9.2",
         "minimist": "^1.2.6",
