@@ -154,7 +154,7 @@ interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the more options menu.
  */
-export const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
+const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
     return (
         <Tooltip label={_t("room_list|room|more_options")}>
             <IconButton aria-label={_t("room_list|room|more_options")} {...props}>
@@ -244,7 +244,7 @@ interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the notification menu.
  */
-export const NotificationButton = function MoreOptionsButton({
+const NotificationButton = function MoreOptionsButton({
     isRoomMuted,
     ref,
     ...props
