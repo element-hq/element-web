@@ -28,6 +28,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import sanitizeHtml from "sanitize-html";
+
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
