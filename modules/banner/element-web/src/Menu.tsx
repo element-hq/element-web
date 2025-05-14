@@ -155,6 +155,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
+    let logoUrl = fallbackLogoUrl;
     if (config instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
     } else if (config) {
@@ -165,6 +166,9 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                 ))}
             </>
         );
+        if (config.logo_url) {
+            logoUrl = config.logo_url;
+        }
     } else {
         content = (
             <CentredContainer>
@@ -205,7 +209,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
-                                        <Logo api={api} src={config?.logo_url ?? fallbackLogoUrl} />
+                                        <Logo api={api} src={logoUrl} />
                                         <Dialog.Close asChild>
                                             <CloseButton
                                                 aria-label={api.i18n.translate("close_label")}

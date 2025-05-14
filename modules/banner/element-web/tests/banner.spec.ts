@@ -5,15 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test, expect } from "../../../../playwright/element-web-test.ts";
+import { test as base, expect } from "../../../../playwright/element-web-test.ts";
 import { ModuleConfig } from "../src/config.ts";
+
+const test = base.extend<{
+    // Resolver for when to respond to the navigation.json request
+    navigationJsonResolver: PromiseWithResolvers<void>;
+}>({
+    navigationJsonResolver: async ({}, use) => {
+        await use(Promise.withResolvers<void>());
+    },
+});
 
 test.describe("Banner", () => {
     test.use({
         displayName: "Timmy",
-        navigationJsonResolver: async ({}, use) => {
-            await use(Promise.withResolvers<void>());
-        },
         page: async ({ context, page, moduleDir }, use) => {
             for (const path of ["logo.svg", "app1.png", "app2.png", "opendesk/"]) {
                 await context.route(`/${path}*`, async (route) => {
@@ -190,14 +196,13 @@ test.describe("Banner", () => {
             await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
             await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://example.com/portal");
 
-            const nav = page.locator("nav");
-
             const trigger = page.getByLabel("Show menu");
 
             await trigger.click();
             const sidebar = page.getByRole("dialog");
             await expect(sidebar.getByText("Failed to load")).toBeVisible();
             await expect(sidebar).toMatchScreenshot("univention_error.png");
+            await expect(axe).toHaveNoViolations();
         });
     });
 });
