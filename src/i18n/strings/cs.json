@@ -2463,6 +2463,10 @@
         "recent_changes_heading": "Nedávné změny, které dosud nebyly přijaty",
         "title": "Server neodpovídá"
     },
+    "service_worker_error": {
+        "description": "%(brand)s vyžaduje service worker pro načítání ověřených médií z úložiště obsahu Matrixu. Váš prohlížeč to nepodporuje, takže může dojít k selhání načtení médií.",
+        "title": "Nepodařilo se načíst service worker"
+    },
     "seshat": {
         "error_initialising": "Inicializace vyhledávání zpráv se nezdařila, zkontrolujte <a>svá nastavení</a>",
         "reset_button": "Resetovat úložiště událostí",

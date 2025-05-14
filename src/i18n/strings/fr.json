@@ -2456,6 +2456,10 @@
         "recent_changes_heading": "Changements récents qui n’ont pas encore été reçus",
         "title": "Le serveur ne répond pas"
     },
+    "service_worker_error": {
+        "description": "%(brand)s nécessite un service worker pour charger les médias authentifiés à partir des référentiels de contenu Matrix. Ceci n'est pas pris en charge par votre navigateur. Il est donc possible que le contenu multimédia ne se charge pas.",
+        "title": "Échec du chargement du service worker"
+    },
     "seshat": {
         "error_initialising": "Échec de l’initialisation de la recherche de messages, vérifiez <a>vos paramètres</a> pour plus d’information",
         "reset_button": "Réinitialiser le magasin d’évènements",
