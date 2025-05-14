@@ -75,7 +75,7 @@ export async function loadLanguage(): Promise<void> {
         langs = [prefLang];
     }
     try {
-        await languageHandler.setLanguage(langs);
+        await languageHandler.setLanguage(...langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         logger.error("Unable to set language", e);

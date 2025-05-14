@@ -825,7 +825,6 @@
             "accepting": "承認しています…",
             "after_new_login": {
                 "device_verified": "端末が認証されました",
-                "reset_confirmation": "本当に認証鍵をリセットしますか？",
                 "skip_verification": "認証をスキップ",
                 "unable_to_verify": "この端末を認証できません",
                 "verify_this_device": "この端末を認証"
@@ -892,8 +891,6 @@
             "verify_emoji_prompt": "絵文字の並びを比較して認証。",
             "verify_emoji_prompt_qr": "上記のコードをスキャンできない場合は、絵文字による確認を行ってください。",
             "verify_later": "後で認証",
-            "verify_reset_warning_1": "認証鍵のリセットは取り消せません。リセットすると、以前の暗号化されたメッセージにはアクセスできなくなります。また、あなたのアカウントを認証した連絡先には、再認証するまで、セキュリティーに関する警告が表示されます。",
-            "verify_reset_warning_2": "全ての端末とセキュリティーキーを紛失してしまったことが確かである場合にのみ、続行してください。",
             "verify_using_device": "別の端末で認証",
             "verify_using_key": "セキュリティーキーで認証",
             "verify_using_key_or_phrase": "セキュリティーキーあるいはセキュリティーフレーズで認証",
@@ -2580,7 +2577,6 @@
         "heading_without_query": "検索",
         "join_button_text": "%(roomAddress)sに参加",
         "keyboard_scroll_hint": "<arrows/>でスクロール",
-        "message_search_section_title": "その他の検索",
         "other_rooms_in_space": "%(spaceName)sの他のルーム",
         "public_rooms_label": "公開ルーム",
         "recent_searches_section_title": "最近の検索",
@@ -2589,7 +2585,6 @@
         "result_may_be_hidden_privacy_warning": "プライバシーの観点から表示していない結果があります",
         "result_may_be_hidden_warning": "いくつかの結果が表示されていない可能性があります",
         "search_dialog": "検索ダイアログ",
-        "search_messages_hint": "メッセージを検索する場合は、ルームの上に表示されるアイコン<icon/>をクリックしてください。",
         "spaces_title": "参加しているスペース",
         "start_group_chat_button": "グループチャットを開始"
     },

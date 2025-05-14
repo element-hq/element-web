@@ -19,7 +19,7 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -215,7 +215,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private firstSyncComplete = false;
-    private firstSyncPromise: IDeferred<void>;
+    private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
@@ -254,7 +254,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -1471,11 +1471,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // since we're about to start the client and therefore about to do the first sync
         // We resolve the existing promise with the new one to update any existing listeners
         if (!this.firstSyncComplete) {
-            const firstSyncPromise = defer<void>();
+            const firstSyncPromise = Promise.withResolvers<void>();
             this.firstSyncPromise.resolve(firstSyncPromise.promise);
             this.firstSyncPromise = firstSyncPromise;
         } else {
-            this.firstSyncPromise = defer();
+            this.firstSyncPromise = Promise.withResolvers();
         }
         this.firstSyncComplete = false;
         const cli = MatrixClientPeg.safeGet();

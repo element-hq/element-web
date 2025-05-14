@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
-import { type IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
@@ -70,7 +69,7 @@ export interface IModal<C extends ComponentType> {
     /** A deferred to resolve when the dialog closes, with the results as provided by
      * the call to {@link close} (normally from the `onFinished` callback).
      */
-    deferred?: IDeferred<OnFinishedParams<C> | []>;
+    deferred?: PromiseWithResolvers<OnFinishedParams<C> | []>;
 }
 
 /** The result of {@link Modal.createDialog}.
@@ -254,7 +253,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     private getCloseFn<C extends ComponentType>(modal: IModal<C>): [IHandle<C>["close"], IHandle<C>["finished"]] {
-        modal.deferred = defer<OnFinishedParams<C> | []>();
+        modal.deferred = Promise.withResolvers<OnFinishedParams<C> | []>();
         return [
             async (...args: OnFinishedParams<C>): Promise<void> => {
                 if (modal.beforeClosePromise) {

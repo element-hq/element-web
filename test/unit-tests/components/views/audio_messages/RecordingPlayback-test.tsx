@@ -65,7 +65,7 @@ describe("<RecordingPlayback />", () => {
     beforeEach(() => {
         jest.spyOn(logger, "error").mockRestore();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
-        mockAudioContext.decodeAudioData.mockReset().mockImplementation((_b, callback) => callback(mockAudioBuffer));
+        mockAudioContext.decodeAudioData.mockReset().mockResolvedValue(mockAudioBuffer);
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 

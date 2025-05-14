@@ -798,7 +798,6 @@
             "accepting": "正在接受……",
             "after_new_login": {
                 "device_verified": "设备已验证",
-                "reset_confirmation": "确实要重置验证密钥？",
                 "skip_verification": "暂时跳过验证",
                 "unable_to_verify": "无法验证此设备",
                 "verify_this_device": "验证此设备"
@@ -862,7 +861,6 @@
             "verify_emoji_prompt": "通过比较唯一的表情符号来验证。",
             "verify_emoji_prompt_qr": "如果你不能扫描以上代码，请通过比较唯一的表情符号来验证。",
             "verify_later": "我稍后进行验证",
-            "verify_reset_warning_1": "无法撤消重置验证密钥的操作。重置后，你将无法访问旧的加密消息，任何之前验证过你的朋友将看到安全警告，直到你再次和他们进行验证。",
             "verify_using_device": "使用其他设备进行验证",
             "verify_using_key": "使用安全密钥进行验证",
             "verify_using_key_or_phrase": "使用安全密钥或短语进行验证",
@@ -2518,7 +2516,6 @@
         "heading_without_query": "搜索",
         "join_button_text": "加入%(roomAddress)s",
         "keyboard_scroll_hint": "用<arrows/>来滚动",
-        "message_search_section_title": "其他搜索",
         "other_rooms_in_space": "%(spaceName)s 中的其他房间",
         "public_rooms_label": "公共房间",
         "public_spaces_label": "公共空间",
@@ -2528,7 +2525,6 @@
         "result_may_be_hidden_privacy_warning": "为保护隐私，一些结果可能被隐藏",
         "result_may_be_hidden_warning": "一些结果可能被隐藏",
         "search_dialog": "搜索对话",
-        "search_messages_hint": "要搜索消息，请在房间顶部查找此图标<icon/>",
         "spaces_title": "你所在的空间",
         "start_group_chat_button": "发起群聊天"
     },
