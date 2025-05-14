@@ -45,7 +45,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     AccessibleButtonProps<T>,
-    "title" | "onClick" | "size" | "element"
+    "title" | "onClick" | "size" | "element" | "ref"
 > & {
     space?: Room;
     spaceKey?: SpaceKey;

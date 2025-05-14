@@ -165,10 +165,9 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
     }, []);
 
     const onDeactivateClicked = useCallback((): void => {
-        Modal.createDialog(DeactivateAccountDialog, {
-            onFinished: (success) => {
-                if (success) closeSettingsFn();
-            },
+        const { finished } = Modal.createDialog(DeactivateAccountDialog);
+        finished.then(([success]) => {
+            if (success) closeSettingsFn();
         });
     }, [closeSettingsFn]);
 

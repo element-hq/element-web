@@ -1505,11 +1505,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 description = _t("timeline|load_error|unable_to_find");
             }
 
-            Modal.createDialog(ErrorDialog, {
+            const { finished } = Modal.createDialog(ErrorDialog, {
                 title: _t("timeline|load_error|title"),
                 description,
-                onFinished,
             });
+            if (onFinished) {
+                finished.then(onFinished);
+            }
         };
 
         // if we already have the event in question, TimelineWindow.load

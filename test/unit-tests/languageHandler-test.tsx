@@ -26,6 +26,7 @@ import {
     type TranslationKey,
     type IVariables,
     type Tags,
+    getLanguagesFromBrowser,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
 import { setupLanguageMock } from "../setup/setupLanguage";
@@ -196,6 +197,29 @@ describe("languageHandler", () => {
                 ]
             `);
             setupLanguageMock(); // restore language mock
+        });
+    });
+
+    describe("getLanguagesFromBrowser", () => {
+        beforeEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("should return navigator.languages if available", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue(["en", "de"]);
+            expect(getLanguagesFromBrowser()).toEqual(["en", "de"]);
+        });
+
+        it("should return navigator.language if available", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
+            jest.spyOn(window.navigator, "language", "get").mockReturnValue("de");
+            expect(getLanguagesFromBrowser()).toEqual(["de"]);
+        });
+
+        it("should return 'en' otherwise", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
+            jest.spyOn(window.navigator, "language", "get").mockReturnValue(undefined as any);
+            expect(getLanguagesFromBrowser()).toEqual(["en"]);
         });
     });
 });

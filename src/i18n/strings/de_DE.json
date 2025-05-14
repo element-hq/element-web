@@ -386,6 +386,7 @@
             "fallback_button": "Authentifizierung beginnen",
             "mas_cross_signing_reset_cta": "Gehen Sie zu Ihren Konto",
             "mas_cross_signing_reset_description": "Setzen Sie Ihre Identität über Ihren Kontoanbieter zurück. Kommen Sie dann zurück und klicken Sie auf „Wiederholen“.",
+            "mas_cross_signing_reset_title": "Gehen sie zu ihrem Konto, um ihre Identität zurückzusetzen",
             "msisdn": "Eine Textnachricht wurde an %(msisdn)s gesendet",
             "msisdn_token_incorrect": "Token fehlerhaft",
             "msisdn_token_prompt": "Bitte gib den darin enthaltenen Code ein:",
@@ -525,6 +526,7 @@
         "message_timestamp_invalid": "Ungültiger Zeitstempel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderation und Sicherheit",
         "modern": "Modern",
         "mute": "Stummschalten",
         "n_members": {
@@ -781,7 +783,7 @@
             "cross_signing_public_keys_on_device_status": "Überkreuzsignierung öffentlicher Schlüssel:",
             "cross_signing_ready": "Kreuzsignatur ist einsatzbereit.",
             "cross_signing_status": "Status der Kreuzsignatur",
-            "cross_signing_untrusted": "Ihr Konto verfügt über eine Cross-Signing-Identität im geheimen Speicher, diese wird von dieser Sitzung jedoch noch nicht als vertrauenswürdig eingestuft.",
+            "cross_signing_untrusted": "Ihr Konto hat eine Cross-Signing-Identität im sicheren Speicher, der von dieser Sitzung jedoch noch nicht als vertrauenswürdig eingestuft wird.",
             "crypto_not_available": "Das kryptografische Modul ist nicht verfügbar",
             "key_backup_active_version": "Aktive Backup Version:",
             "key_backup_active_version_none": "Keine",
@@ -992,7 +994,6 @@
             "accepting": "Annehmen…",
             "after_new_login": {
                 "device_verified": "Gerät verifiziert",
-                "reset_confirmation": "Willst du deine Verifizierungsschlüssel wirklich zurücksetzen?",
                 "skip_verification": "Verifizierung vorläufig überspringen",
                 "unable_to_verify": "Gerät konnte nicht verifiziert werden",
                 "verify_this_device": "Dieses Gerät verifizieren"
@@ -1063,8 +1064,6 @@
             "verify_emoji_prompt": "Durch den Vergleich einzigartiger Emojis verifizieren.",
             "verify_emoji_prompt_qr": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
             "verify_later": "Später verifizieren",
-            "verify_reset_warning_1": "Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können und Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.",
-            "verify_reset_warning_2": "Bitte fahren Sie nur fort, wenn Sie sicher sind, dass Sie Ihren Zugang zu allen anderen Geräte und Ihren Wiederherstellungsschlüssel verloren haben.",
             "verify_using_device": "Mit anderem Gerät verifizieren",
             "verify_using_key": "Mit Wiederherstellungsschlüssel verifizieren",
             "verify_using_key_or_phrase": "Mit Wiederherstellungsschlüssel oder Wiederherstellungsphrase verifizieren",
@@ -1668,7 +1667,7 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
-        "default_settings": "Passen Sie die Standardeinstellungen an",
+        "default_settings": "Standardeinstellungen verwenden",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1688,7 +1687,7 @@
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
         "mute_description": "Du wirst keine Benachrichtigungen erhalten",
-        "mute_room": "Chatroom stumm stellen"
+        "mute_room": "Raum stummschalten"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -1973,7 +1972,7 @@
             },
             "room_is_public": "Dieser Raum ist öffentlich"
         },
-        "header_avatar_open_settings_label": "Chatroomeinstellungen öffnen",
+        "header_avatar_open_settings_label": "Raumeinstellungen öffnen",
         "header_face_pile_tooltip": "Personen",
         "header_untrusted_label": "Nicht vertrauenswürdig",
         "inaccessible": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
@@ -2093,12 +2092,14 @@
             },
             "uploading_single_file": "%(filename)s wird hochgeladen"
         },
+        "video_room": "Dieser Raum ist ein Videoraum",
         "waiting_for_join_subtitle": "Sobald eingeladene Benutzer %(brand)s beigetreten sind, werdet ihr euch unterhalten können und der Raum wird Ende-zu-Ende-verschlüsselt sein",
         "waiting_for_join_title": "Warte darauf, dass Benutzer %(brand)s beitreten"
     },
     "room_list": {
         "add_room_label": "Raum hinzufügen",
         "add_space_label": "Space hinzufügen",
+        "appearance": "Erscheinungsbild",
         "breadcrumbs_empty": "Keine kürzlich besuchten Räume",
         "breadcrumbs_label": "Kürzlich besuchte Räume",
         "empty": {
@@ -2117,11 +2118,12 @@
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
         "failed_remove_tag": "Entfernen der Raum-Kennzeichnung %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
+        "filter": "Filter",
         "filters": {
             "favourite": "Favoriten",
             "people": "Personen",
             "rooms": "Räume",
-            "unread": "Ungelesen"
+            "unread": "Ungelesene"
         },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichen Raum betreten",
@@ -2149,7 +2151,16 @@
             "more_options": "Weitere Optionen",
             "open_room": "Raum öffnen %(roomName)s"
         },
+        "room_options": "Chatroomoptionen",
+        "secondary_filter": {
+            "all_activity": "Alle Aktivitäten",
+            "invites_only": "Nur Einladungen",
+            "low_priority": "Niedrige Priorität",
+            "mentions_only": "Nur Erwähnungen"
+        },
+        "secondary_filters": "Sekundäre Filter",
         "show_less": "Weniger anzeigen",
+        "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"
@@ -2445,6 +2456,10 @@
         "recent_changes_heading": "Letzte Änderungen, die noch nicht eingegangen sind",
         "title": "Server reagiert nicht"
     },
+    "service_worker_error": {
+        "description": "%(brand)s benötigt einen Service Worker zum Laden authentifizierter Medien aus Matrix-Inhaltsrepositorys. Dies wird von Ihrem Browser nicht unterstützt, sodass Medien möglicherweise nicht geladen werden können.",
+        "title": "Service Worker konnte nicht geladen werden"
+    },
     "seshat": {
         "error_initialising": "Initialisierung der Suche fehlgeschlagen, für weitere Informationen öffne <a>deine Einstellungen</a>",
         "reset_button": "Ereignisspeicher zurück setzen",
@@ -2623,6 +2638,7 @@
             "discovery_needs_terms_title": "Lassen Sie sich von anderen finden",
             "display_name": "Anzeigename",
             "display_name_error": "Anzeigename konnte nicht gesetzt werden",
+            "email_adding_unsupported_by_hs": "Dieser Homeserver unterstützt das Hinzufügen von E-Mail-Adressen zu Ihrem Konto nicht.",
             "email_address_in_use": "Diese E-Mail-Adresse wird bereits verwendet",
             "email_address_label": "E-Mail-Adresse",
             "email_not_verified": "Deine E-Mail-Adresse wurde noch nicht verifiziert",
@@ -2647,7 +2663,9 @@
             "error_share_msisdn_discovery": "Teilen der Telefonnummer nicht möglich",
             "identity_server_no_token": "Kein Identitäts-Zugangs-Token gefunden",
             "identity_server_not_set": "Kein Identitäts-Server festgelegt",
+            "invalid_phone_number": "Die angegebene Telefonnummer scheint nicht gültig zu sein.",
             "language_section": "Sprache",
+            "msisdn_adding_unsupported_by_hs": "Dieser Homeserver unterstützt das Hinzufügen von Telefonnummern zu Ihrem Konto nicht.",
             "msisdn_in_use": "Diese Telefonnummer wird bereits verwendet",
             "msisdn_label": "Telefonnummer",
             "msisdn_verification_field_label": "Bestätigungscode",
@@ -2666,12 +2684,10 @@
             "unable_to_load_msisdns": "Telefonnummern können nicht geladen werden",
             "username": "Benutzername"
         },
-        "image_thumbnails": "Vorschauen für Bilder",
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
         "inline_url_previews_room": "URL-Vorschau für Raummitglieder",
         "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Raum",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
-        "invite_avatars": "Zeigen Sie Avatare von Chatrooms an, zu denen Sie eingeladen wurden",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
             "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",
@@ -2729,6 +2745,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Einstellungen:</strong> Blockierte Benutzer"
+        },
+        "media_preview": {
+            "hide_avatars": "Verstecken Sie die Avatare von Chatroom und Einladung",
+            "hide_media": "Verstecke Sie sich immer",
+            "media_preview_description": "Ein verstecktes Medium kann immer angezeigt werden, indem Sie darauf tippen",
+            "media_preview_label": "Medien in der Zeitleiste anzeigen",
+            "show_in_private": "In privaten Chatrooms",
+            "show_media": "Immer anzeigen"
         },
         "notifications": {
             "default_setting_description": "Diese Einstellung wird standardmäßig für all deine Räume übernommen.",
@@ -3091,8 +3115,6 @@
         "topic": "Raumthema anzeigen oder ändern",
         "topic_none": "Dieser Raum hat kein Thema.",
         "topic_room_error": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
-        "tovirtual": "Zum virtuellen Raum dieses Raums wechseln, sofern vorhanden",
-        "tovirtual_not_found": "Kein virtueller Raum für diesen Raum",
         "unban": "Entsperrt den Benutzer mit der angegebenen ID",
         "unflip": "Stellt ┬──┬ ノ( ゜-゜ノ) einer Klartextnachricht voran",
         "unholdcall": "Beendet das Halten des Anrufs",
@@ -3215,7 +3237,7 @@
         "heading_without_query": "Suche nach",
         "join_button_text": "%(roomAddress)s betreten",
         "keyboard_scroll_hint": "Benutze <arrows/> zum Scrollen",
-        "message_search_section_title": "Andere Suchen",
+        "messages_label": "Nachrichten",
         "other_rooms_in_space": "Andere Räume in %(spaceName)s",
         "public_rooms_label": "Öffentliche Räume",
         "public_spaces_label": "Öffentliche Spaces",
@@ -3225,7 +3247,6 @@
         "result_may_be_hidden_privacy_warning": "Einige Vorschläge könnten aus Gründen der Privatsphäre ausgeblendet sein",
         "result_may_be_hidden_warning": "Einige Ergebnisse können ausgeblendet sein",
         "search_dialog": "Suchdialog",
-        "search_messages_hint": "Wenn du Nachrichten durchsuchen willst, klicke auf das <icon/> Icon oberhalb des Raumes",
         "spaces_title": "Spaces, in denen du Mitglied bist",
         "start_group_chat_button": "Gruppenunterhaltung beginnen"
     },
@@ -3274,9 +3295,7 @@
     "threads_activity_centre": {
         "header": "Thread-Aktivität",
         "no_rooms_with_threads_notifs": "Sie haben noch keine Chatrooms mit Thread-Benachrichtigungen.",
-        "no_rooms_with_unread_threads": "Sie haben noch keine Chatrooms mit ungelesenen Threads.",
-        "release_announcement_description": "Die Thread-Benachrichtigungen wurden verschoben. Sie finden sie ab sofort hier.",
-        "release_announcement_header": "Thread Aktivitätszentrum"
+        "no_rooms_with_unread_threads": "Sie haben noch keine Chatrooms mit ungelesenen Threads."
     },
     "time": {
         "about_day_ago": "vor etwa einem Tag",
@@ -3787,10 +3806,11 @@
         "unavailable": "Nicht verfügbar"
     },
     "update_room_access_modal": {
-        "description": "Um einen Link zum Teilen zu erstellen, müssen Sie Gästen erlauben, diesem Chatroom beizutreten. Dadurch kann der Chatroom weniger sicher werden. Wenn Sie mit dem Anruf fertig sind, können Sie den Raum wieder privat machen.",
-        "dont_change_description": "Sie können den Anruf auch in einem separaten Chatroom führen.",
+        "description": "Um einen Link zum Teilen zu erstellen, mache diesen Chatroom <b> öffentlich </b> oder erlaube <b>Beitrittsanfragen</b>. Auf diese Weise können Gäste beitreten, ohne eingeladen zu werden.",
+        "dont_change_description": "Andernfalls, wenn Sie den Zugang dieses Raumes nicht anpassen möchten, können sie einen neuen Raum für den Anruflink erstellen.",
         "no_change": "Ich möchte die Zugriffsebene nicht ändern.",
-        "title": "Ändern Sie die Zugriffsebene des Chatrooms."
+        "revert_access_description": "(Dies kann in den Raumeinstellungen auf den vorherigen Wert zurückgesetzt werden: <b> Sicherheit & Datenschutz</b>/<b>Zutritt</b>)",
+        "title": "Gastbenutzern erlauben, diesem Raum beizutreten"
     },
     "upload_failed_generic": "Die Datei „%(fileName)s“ konnte nicht hochgeladen werden.",
     "upload_failed_size": "Die Datei „%(fileName)s“ überschreitet das Hochladelimit deines Heim-Servers",

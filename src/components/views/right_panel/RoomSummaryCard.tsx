@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type JSX, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -52,7 +52,6 @@ import { ShareDialog } from "../dialogs/ShareDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -66,26 +65,25 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useRoomState } from "../../../hooks/useRoomState";
-import { useTopic } from "../../../hooks/room/useTopic";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { Box } from "../../utils/Box";
-import { onRoomTopicLinkClick } from "../elements/RoomTopic";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
-import { useTransition } from "../../../hooks/useTransition";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { ReportRoomDialog } from "../dialogs/ReportRoomDialog.tsx";
+import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 
 interface IProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
     focusRoomSearch?: boolean;
+    searchTerm?: string;
 }
 
 const onRoomMembersClick = (): void => {
@@ -115,21 +113,11 @@ const onRoomSettingsClick = (ev: Event): void => {
 };
 
 const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
-    const [expanded, setExpanded] = useState(true);
+    const vm = useRoomTopicViewModel(room);
 
-    const topic = useTopic(room);
-    const body = topicToHtml(topic?.text, topic?.html);
+    const body = topicToHtml(vm.topic?.text, vm.topic?.html);
 
-    const canEditTopic = useRoomState(room, (state) =>
-        state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
-    );
-    const onEditClick = (e: SyntheticEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        defaultDispatcher.dispatch({ action: "open_room_settings" });
-    };
-
-    if (!body && !canEditTopic) {
+    if (!body && !vm.canEditTopic) {
         return null;
     }
 
@@ -143,7 +131,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 className="mx_RoomSummaryCard_topic"
             >
                 <Box flex="1">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("right_panel|add_topic")}
                         </Text>
@@ -153,7 +141,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = expanded ? <Linkify>{body}</Linkify> : body;
+    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
     return (
         <Flex
             as="section"
@@ -161,33 +149,20 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
             justify="center"
             gap="var(--cpd-space-2x)"
             className={classNames("mx_RoomSummaryCard_topic", {
-                mx_RoomSummaryCard_topic_collapsed: !expanded,
+                mx_RoomSummaryCard_topic_collapsed: !vm.expanded,
             })}
         >
             <Box flex="1" className="mx_RoomSummaryCard_topic_container">
-                <Text
-                    size="sm"
-                    weight="regular"
-                    onClick={(ev: React.MouseEvent): void => {
-                        if (ev.target instanceof HTMLAnchorElement) {
-                            onRoomTopicLinkClick(ev);
-                            return;
-                        }
-                    }}
-                >
+                <Text size="sm" weight="regular" onClick={vm.onTopicLinkClick}>
                     {content}
                 </Text>
-                <IconButton
-                    className="mx_RoomSummaryCard_topic_chevron"
-                    size="24px"
-                    onClick={() => setExpanded(!expanded)}
-                >
+                <IconButton className="mx_RoomSummaryCard_topic_chevron" size="24px" onClick={vm.onExpandedClick}>
                     <ChevronDownIcon />
                 </IconButton>
             </Box>
-            {expanded && canEditTopic && (
+            {vm.expanded && vm.canEditTopic && (
                 <Box flex="1" className="mx_RoomSummaryCard_topic_edit">
-                    <Link kind="primary" onClick={onEditClick}>
+                    <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("action|edit")}
                         </Text>
@@ -204,6 +179,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     onSearchChange,
     onSearchCancel,
     focusRoomSearch,
+    searchTerm = "",
 }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -268,19 +244,13 @@ const RoomSummaryCard: React.FC<IProps> = ({
             searchInputRef.current?.focus();
         }
     });
-    // Clear the search field when the user leaves the search view
-    useTransition(
-        (prevTimelineRenderingType) => {
-            if (
-                prevTimelineRenderingType === TimelineRenderingType.Search &&
-                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
-                searchInputRef.current
-            ) {
-                searchInputRef.current.value = "";
-            }
-        },
-        [roomContext.timelineRenderingType],
-    );
+
+    // The search field is controlled and onSearchChange is debounced in RoomView,
+    // so we need to set the value of the input right away
+    const [searchValue, setSearchValue] = useState(searchTerm);
+    useEffect(() => {
+        setSearchValue(searchTerm);
+    }, [searchTerm]);
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const roomInfo = (
@@ -356,7 +326,11 @@ const RoomSummaryCard: React.FC<IProps> = ({
             <Search
                 placeholder={_t("room|search|placeholder")}
                 name="room_message_search"
-                onChange={onSearchChange}
+                onChange={(e) => {
+                    setSearchValue(e.currentTarget.value);
+                    onSearchChange(e.currentTarget.value);
+                }}
+                value={searchValue}
                 className="mx_no_textinput"
                 ref={searchInputRef}
                 autoFocus={focusRoomSearch}

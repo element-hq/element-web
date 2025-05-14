@@ -34,33 +34,35 @@ const onReject = (): void => {
 };
 
 const onLearnMoreNoOptIn = (): void => {
-    showAnalyticsLearnMoreDialog({
-        onFinished: (buttonClicked?: ButtonClicked) => {
-            if (buttonClicked === ButtonClicked.Primary) {
-                // user clicked "Enable"
-                onAccept();
-            }
-            // otherwise, the user either clicked "Cancel", or closed the dialog without making a choice,
-            // leave the toast open
-        },
+    const { finished } = showAnalyticsLearnMoreDialog({
         primaryButton: _t("action|enable"),
+    });
+
+    finished.then(([buttonClicked]) => {
+        if (buttonClicked === ButtonClicked.Primary) {
+            // user clicked "Enable"
+            onAccept();
+        }
+        // otherwise, the user either clicked "Cancel", or closed the dialog without making a choice,
+        // leave the toast open
     });
 };
 
 const onLearnMorePreviouslyOptedIn = (): void => {
-    showAnalyticsLearnMoreDialog({
-        onFinished: (buttonClicked?: ButtonClicked) => {
-            if (buttonClicked === ButtonClicked.Primary) {
-                // user clicked "That's fine"
-                onAccept();
-            } else if (buttonClicked === ButtonClicked.Cancel) {
-                // user clicked "Stop"
-                onReject();
-            }
-            // otherwise, the user closed the dialog without making a choice, leave the toast open
-        },
+    const { finished } = showAnalyticsLearnMoreDialog({
         primaryButton: _t("analytics|accept_button"),
         cancelButton: _t("action|stop"),
+    });
+
+    finished.then(([buttonClicked]) => {
+        if (buttonClicked === ButtonClicked.Primary) {
+            // user clicked "That's fine"
+            onAccept();
+        } else if (buttonClicked === ButtonClicked.Cancel) {
+            // user clicked "Stop"
+            onReject();
+        }
+        // otherwise, the user closed the dialog without making a choice, leave the toast open
     });
 };
 

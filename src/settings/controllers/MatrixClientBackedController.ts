@@ -26,7 +26,7 @@ export default abstract class MatrixClientBackedController extends SettingContro
         MatrixClientBackedController._matrixClient = client;
 
         for (const instance of MatrixClientBackedController.instances) {
-            instance.initMatrixClient(client, oldClient);
+            instance.initMatrixClient?.(client, oldClient);
         }
     }
 
@@ -40,5 +40,5 @@ export default abstract class MatrixClientBackedController extends SettingContro
         return MatrixClientBackedController._matrixClient;
     }
 
-    protected abstract initMatrixClient(newClient: MatrixClient, oldClient?: MatrixClient): void;
+    protected initMatrixClient?(newClient: MatrixClient, oldClient?: MatrixClient): void;
 }

@@ -729,7 +729,6 @@
             "accepting": "Samþykki…",
             "after_new_login": {
                 "device_verified": "Tæki er sannreynt",
-                "reset_confirmation": "Viltu í alvörunni endurstilla sannvottunarlyklana?",
                 "skip_verification": "Sleppa sannvottun í bili",
                 "unable_to_verify": "Tókst ekki að sannreyna þetta tæki",
                 "verify_this_device": "Sannreyna þetta tæki"
@@ -1862,7 +1861,6 @@
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
-        "image_thumbnails": "Birta forskoðun/smámyndir fyrir myndir",
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
         "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
         "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
@@ -2180,8 +2178,6 @@
         "topic": "Nær í eða stillir umfjöllunarefni spjallrásar",
         "topic_none": "Þessi spjallrás er ekki með umfjöllunarefni.",
         "topic_room_error": "Mistókst að ná í umfjöllunarefni spjallrásar: Gat ekki fundið spjallrásina (%(roomId)s",
-        "tovirtual": "Skiptir yfir í sýndarspjallrás þessarar spjallrásar, ef hún er til staðar",
-        "tovirtual_not_found": "Engin sýndarspjallrás fyrir þessa spjallrás",
         "unban": "Tekur bann af notanda með uppgefið auðkenni",
         "unflip": "Setur ┬──┬ ノ( ゜-゜ノ) framan við hrein textaskilaboð",
         "unholdcall": "Tekur símtalið í fyrirliggjandi spjallrás úr bið",
@@ -2294,7 +2290,6 @@
         "heading_without_query": "Leita að",
         "join_button_text": "Taka þátt í %(roomAddress)s",
         "keyboard_scroll_hint": "Notaðu <arrows/> til að skruna",
-        "message_search_section_title": "Aðrar leitir",
         "other_rooms_in_space": "Aðrar spjallrásir í %(spaceName)s",
         "public_rooms_label": "Almenningsspjallrásir",
         "recent_searches_section_title": "Nýlegar leitir",

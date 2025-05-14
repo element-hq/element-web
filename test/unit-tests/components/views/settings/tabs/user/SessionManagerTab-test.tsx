@@ -19,7 +19,7 @@ import {
 } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
-import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 import {
     ClientEvent,
     Device,
@@ -631,9 +631,10 @@ describe("<SessionManagerTab />", () => {
             // click verify button from current session section
             fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
 
-            const { onFinished: modalOnFinished } = modalSpy.mock.calls[0][1] as any;
-            // simulate modal completing process
-            await modalOnFinished();
+            // close the modal
+            const { close: closeModal } = modalSpy.mock.results[0].value;
+            closeModal();
+            await flushPromises();
 
             // cancelled in case it was a failure exit from modal
             expect(mockVerificationRequest.cancel).toHaveBeenCalled();
@@ -898,7 +899,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("deletes a device when interactive auth is not required", async () => {
-                const deferredDeleteMultipleDevices = defer<{}>();
+                const deferredDeleteMultipleDevices = Promise.withResolvers<{}>();
                 mockClient.deleteMultipleDevices.mockReturnValue(deferredDeleteMultipleDevices.promise);
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
@@ -1107,7 +1108,7 @@ describe("<SessionManagerTab />", () => {
                 // get a handle for resolving the delete call
                 // because promise flushing after the confirm modal is resolving this too
                 // and we want to test the loading state here
-                const resolveDeleteRequest = defer<IAuthData>();
+                const resolveDeleteRequest = Promise.withResolvers<IAuthData>();
                 mockClient.deleteMultipleDevices.mockImplementation(async () => {
                     await resolveDeleteRequest.promise;
                     return {};

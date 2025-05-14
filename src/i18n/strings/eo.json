@@ -1702,7 +1702,6 @@
             "remove_email_prompt": "Ĉu forigi %(email)s?",
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
-        "image_thumbnails": "Montri antaŭrigardojn/bildetojn por bildoj",
         "inline_url_previews_default": "Ŝalti entekstan antaŭrigardon al retadresoj",
         "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
         "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
@@ -1953,8 +1952,6 @@
         "topic": "Ekhavas aŭ agordas la temon de la ĉambro",
         "topic_none": "Ĉi tiu ĉambro ne havas temon.",
         "topic_room_error": "Malsukcesis akiri temo de ĉambro: Ne povas trovi ĉambron (%(roomId)s)",
-        "tovirtual": "Iri al virtuala ĉambro de tiu ĉambro, se la virtuala ĉambro ekzistas",
-        "tovirtual_not_found": "Tiu ĉambro ne havas virtuala ĉambro",
         "unban": "Malforbaras uzanton kun la donita identigilo",
         "unflip": "Antaŭmetas ┬──┬ ノ( ゜-゜ノ) al platteksta mesaĝo",
         "unholdcall": "Malpaŭzigas la vokon en la nuna ĉambro",

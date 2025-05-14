@@ -5,8 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Locator, type Page } from "@playwright/test";
+
 import { expect, test } from "../../../element-web-test";
-import type { Page } from "@playwright/test";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -18,8 +21,12 @@ test.describe("Room list filters and sort", () => {
         labsFlags: ["feature_new_room_list"],
     });
 
-    function getPrimaryFilters(page: Page) {
+    function getPrimaryFilters(page: Page): Locator {
         return page.getByRole("listbox", { name: "Room list filters" });
+    }
+
+    function getSecondaryFilters(page: Page): Locator {
+        return page.getByRole("button", { name: "Filter" });
     }
 
     /**
@@ -33,6 +40,65 @@ test.describe("Room list filters and sort", () => {
     test.beforeEach(async ({ page, app, bot, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+    });
+
+    test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
+        // This bug shows up with this setting turned on
+        await app.settings.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, true);
+
+        /*
+        We will first create a room named 'Old Room' and will invite the bot user to this room.
+        We will also send a simple message in this room.
+        */
+        const oldRoomId = await app.client.createRoom({ name: "Old Room" });
+        await app.client.inviteUser(oldRoomId, bot.credentials.userId);
+        await bot.joinRoom(oldRoomId);
+        const response = await app.client.sendMessage(oldRoomId, "Hello!");
+
+        /*
+        At this point, we haven't done anything interesting.
+        So we expect 'Old Room' to show up in the room list.
+        */
+        const roomListView = getRoomList(page);
+        const oldRoomTile = roomListView.getByRole("gridcell", { name: "Open room Old Room" });
+        await expect(oldRoomTile).toBeVisible();
+
+        /*
+        Now let's tombstone 'Old Room'.
+        First we create a new room ('New Room') with the predecessor set to the old room..
+        */
+        const newRoomId = await bot.createRoom({
+            name: "New Room",
+            creation_content: {
+                predecessor: {
+                    event_id: response.event_id,
+                    room_id: oldRoomId,
+                },
+            },
+            visibility: "public" as Visibility,
+        });
+
+        /*
+        Now we can send the tombstone event itself to the 'Old Room'.
+        */
+        await app.client.sendStateEvent(oldRoomId, "m.room.tombstone", {
+            body: "This room has been replaced",
+            replacement_room: newRoomId,
+        });
+
+        // Let's join the replaced room.
+        await app.client.joinRoom(newRoomId);
+
+        // We expect 'Old Room' to be hidden from the room list.
+        await expect(oldRoomTile).not.toBeVisible();
+
+        /*
+        Let's say some user in the 'Old Room' changes their display name.
+        This will send events to the all the rooms including 'Old Room'.
+        Nevertheless, the replaced room should not be shown in the room list.
+        */
+        await bot.setDisplayName("MyNewName");
+        await expect(oldRoomTile).not.toBeVisible();
     });
 
     test.describe("Scroll behaviour", () => {
@@ -106,6 +172,11 @@ test.describe("Room list filters and sort", () => {
             await app.client.evaluate(async (client, favouriteId) => {
                 await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
             }, favouriteId);
+
+            const lowPrioId = await app.client.createRoom({ name: "Low prio room" });
+            await app.client.evaluate(async (client, id) => {
+                await client.setRoomTag(id, "m.lowpriority", { order: 0.5 });
+            }, lowPrioId);
         });
 
         test("should filter the list (with primary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
@@ -137,32 +208,50 @@ test.describe("Room list filters and sort", () => {
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "favourite room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "empty room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(3);
+            expect(await roomList.locator("role=gridcell").count()).toBe(4);
         });
 
-        test("unread filter should only match unread rooms that have a count", async ({ page, app, bot }) => {
-            const roomListView = getRoomList(page);
+        test("should filter the list (with secondary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomList = getRoomList(page);
+            const secondaryFilters = getSecondaryFilters(page);
+            await secondaryFilters.click();
 
-            // Let's configure unread dm room so that we only get notification for mentions and keywords
-            await app.viewRoomById(unReadDmId);
-            await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
-            await app.settings.closeDialog();
+            await expect(page.getByRole("menu", { name: "Filter" })).toMatchScreenshot("filter-menu.png");
 
-            // Let's open a room other than unread room or unread dm
-            await roomListView.getByRole("gridcell", { name: "Open room favourite room" }).click();
-
-            // Let's make the bot send a new message in both rooms
-            await bot.sendMessage(unReadDmId, "Hello!");
-            await bot.sendMessage(unReadRoomId, "Hello!");
-
-            // Let's activate the unread filter now
-            await page.getByRole("option", { name: "Unread" }).click();
-
-            // Unread filter should only show unread room and not unread dm!
-            await expect(roomListView.getByRole("gridcell", { name: "Open room unread room" })).toBeVisible();
-            await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
+            await page.getByRole("menuitem", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "Low prio room" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(1);
         });
+
+        test(
+            "unread filter should only match unread rooms that have a count",
+            { tag: "@screenshot" },
+            async ({ page, app, bot }) => {
+                const roomListView = getRoomList(page);
+
+                // Let's configure unread dm room so that we only get notification for mentions and keywords
+                await app.viewRoomById(unReadDmId);
+                await app.settings.openRoomSettings("Notifications");
+                await page.getByText("@mentions & keywords").click();
+                await app.settings.closeDialog();
+
+                // Let's open a room other than unread room or unread dm
+                await roomListView.getByRole("gridcell", { name: "Open room favourite room" }).click();
+
+                // Let's make the bot send a new message in both rooms
+                await bot.sendMessage(unReadDmId, "Hello!");
+                await bot.sendMessage(unReadRoomId, "Hello!");
+
+                // Let's activate the unread filter now
+                await page.getByRole("option", { name: "Unread" }).click();
+
+                // Unread filter should only show unread room and not unread dm!
+                const unreadDm = roomListView.getByRole("gridcell", { name: "Open room unread room" });
+                await expect(unreadDm).toBeVisible();
+                await expect(unreadDm).toMatchScreenshot("unread-dm.png");
+                await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
+            },
+        );
     });
 
     test.describe("Empty room list", () => {

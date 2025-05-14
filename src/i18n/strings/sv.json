@@ -525,6 +525,7 @@
         "message_timestamp_invalid": "Ogiltig tidsstämpel",
         "microphone": "Mikrofon",
         "model": "Modell",
+        "moderation_and_safety": "Moderering och säkerhet",
         "modern": "Modernt",
         "mute": "Tysta",
         "n_members": {
@@ -992,7 +993,6 @@
             "accepting": "Accepterar…",
             "after_new_login": {
                 "device_verified": "Enhet verifierad",
-                "reset_confirmation": "Återställ verkligen verifieringsnycklar?",
                 "skip_verification": "Hoppa över verifiering för tillfället",
                 "unable_to_verify": "Kunde inte verifiera den här enheten",
                 "verify_this_device": "Verifiera den här enheten"
@@ -1063,8 +1063,6 @@
             "verify_emoji_prompt": "Verifiera genom att jämföra unika emojier.",
             "verify_emoji_prompt_qr": "Om du inte kan skanna koden ovan, verifiera genom att jämföra unika emojier.",
             "verify_later": "Jag verifierar senare",
-            "verify_reset_warning_1": "Återställning av dina verifieringsnycklar kan inte ångras. Efter återställning så kommer du inte att komma åt dina krypterade meddelanden, och alla vänner som tidigare har verifierat dig kommer att se säkerhetsvarningar tills du återverifierar med dem.",
-            "verify_reset_warning_2": "Fortsätt bara om du är säker på att du har förlorat alla dina övriga enheter och din säkerhetsnyckel.",
             "verify_using_device": "Verifiera med annan enhet",
             "verify_using_key": "Verifiera med säkerhetsnyckel",
             "verify_using_key_or_phrase": "Verifiera med säkerhetsnyckel eller -fras",
@@ -2100,6 +2098,7 @@
     "room_list": {
         "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
+        "appearance": "Utseende",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
         "empty": {
@@ -2150,7 +2149,10 @@
             "more_options": "Fler alternativ",
             "open_room": "Öppet rummet %(roomName)s"
         },
+        "room_options": "Rumsalternativ",
+        "secondary_filters": "Sekundära filter",
         "show_less": "Visa mindre",
+        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
@@ -2667,12 +2669,10 @@
             "unable_to_load_msisdns": "Det går inte att läsa in telefonnummer",
             "username": "Användarnamn"
         },
-        "image_thumbnails": "Visa förhandsgranskning/miniatyr för bilder",
         "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",
         "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
         "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
-        "invite_avatars": "Visa avatarer av rum du har blivit inbjuden till",
         "jump_to_bottom_on_send": "Hoppa till botten av tidslinjen när du skickar ett meddelande",
         "key_backup": {
             "backup_in_progress": "Dina nycklar säkerhetskopieras (den första säkerhetskopieringen kan ta några minuter).",
@@ -2730,6 +2730,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Inställningar:</strong> Ignorerade användare"
+        },
+        "media_preview": {
+            "hide_avatars": "Dölj avatarer för rum och inbjudare",
+            "hide_media": "Dölj alltid",
+            "media_preview_description": "En dold media kan alltid visas genom att trycka på den",
+            "media_preview_label": "Visa media i tidslinjen",
+            "show_in_private": "I privata rum",
+            "show_media": "Visa alltid"
         },
         "notifications": {
             "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",
@@ -3092,8 +3100,6 @@
         "topic": "Hämtar eller sätter ämnet för ett rum",
         "topic_none": "Det här rummet har inget ämne.",
         "topic_room_error": "Misslyckades att hitta rumsämne: Kunde inte hitta rummet (%(roomId)s)",
-        "tovirtual": "Byter till det här rummets virtuella rum, om det har ett",
-        "tovirtual_not_found": "Inget virtuellt rum för det här rummet",
         "unban": "Avbannar användaren med givet ID",
         "unflip": "Lägger till ┬──┬ ノ( ゜-゜ノ) till början av ett textmeddelande",
         "unholdcall": "Avslutar parkering av samtalet i det nuvarande samtalet",
@@ -3216,7 +3222,6 @@
         "heading_without_query": "Sök efter",
         "join_button_text": "Gå med i %(roomAddress)s",
         "keyboard_scroll_hint": "Använd <arrows/> för att skrolla",
-        "message_search_section_title": "Andra sökningar",
         "other_rooms_in_space": "Andra rum i %(spaceName)s",
         "public_rooms_label": "Offentliga rum",
         "public_spaces_label": "Offentliga utrymmen",
@@ -3226,7 +3231,6 @@
         "result_may_be_hidden_privacy_warning": "Vissa resultat kan vara dolda av sekretesskäl",
         "result_may_be_hidden_warning": "Vissa resultat kanske är dolda",
         "search_dialog": "Sökdialog",
-        "search_messages_hint": "För att söka efter meddelanden, leta efter den här ikonen på toppen av ett rum <icon/>",
         "spaces_title": "Utrymmen du är med i",
         "start_group_chat_button": "Starta en gruppchatt"
     },
@@ -3275,9 +3279,7 @@
     "threads_activity_centre": {
         "header": "Aktivitet för trådar",
         "no_rooms_with_threads_notifs": "Du har inga rum med trådaviseringar ännu.",
-        "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än.",
-        "release_announcement_description": "Meddelanden om trådar har flyttats, du hittar dem här från och med nu.",
-        "release_announcement_header": "Aktivitetscenter för Trådar"
+        "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
     },
     "time": {
         "about_day_ago": "cirka en dag sedan",

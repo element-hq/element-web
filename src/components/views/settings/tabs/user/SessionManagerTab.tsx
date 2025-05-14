@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
@@ -98,9 +97,9 @@ const useSignOut = (
                 const url = getManageDeviceUrl(delegatedAuthAccountUrl, deviceId);
                 window.open(url, "_blank");
             } else {
-                const deferredSuccess = defer<boolean>();
+                const deferredSuccess = Promise.withResolvers<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
-                    deferredSuccess.resolve(success);
+                    deferredSuccess.resolve(!!success);
                 });
                 success = await deferredSuccess.promise;
             }
@@ -203,7 +202,8 @@ const SessionManagerTab: React.FC<{
     const shouldShowOtherSessions = otherSessionsCount > 0;
 
     const onVerifyCurrentDevice = (): void => {
-        Modal.createDialog(SetupEncryptionDialog, { onFinished: refreshDevices });
+        const { finished } = Modal.createDialog(SetupEncryptionDialog);
+        finished.then(refreshDevices);
     };
 
     const onTriggerDeviceVerification = useCallback(
@@ -212,14 +212,14 @@ const SessionManagerTab: React.FC<{
                 return;
             }
             const verificationRequestPromise = requestDeviceVerification(deviceId);
-            Modal.createDialog(VerificationRequestDialog, {
+            const { finished } = Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: currentUserMember,
-                onFinished: async (): Promise<void> => {
-                    const request = await verificationRequestPromise;
-                    request.cancel();
-                    await refreshDevices();
-                },
+            });
+            finished.then(async () => {
+                const request = await verificationRequestPromise;
+                request.cancel();
+                await refreshDevices();
             });
         },
         [requestDeviceVerification, refreshDevices, currentUserMember],

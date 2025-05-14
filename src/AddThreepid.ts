@@ -79,6 +79,8 @@ export default class AddThreepid {
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
                 throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_THREEPID_MEDIUM_NOT_SUPPORTED") {
+                throw new UserFriendlyError("settings|general|email_adding_unsupported_by_hs", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;
@@ -121,6 +123,8 @@ export default class AddThreepid {
      * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
+     *
+     * @throws {UserFriendlyError} An appropriate user-friendly error if the verification code could not be sent.
      */
     public async addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         try {
@@ -136,6 +140,10 @@ export default class AddThreepid {
         } catch (err) {
             if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
                 throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_THREEPID_MEDIUM_NOT_SUPPORTED") {
+                throw new UserFriendlyError("settings|general|msisdn_adding_unsupported_by_hs", { cause: err });
+            } else if (err instanceof MatrixError && err.errcode === "M_INVALID_PARAM") {
+                throw new UserFriendlyError("settings|general|invalid_phone_number", { cause: err });
             }
             // Otherwise, just blurt out the same error
             throw err;

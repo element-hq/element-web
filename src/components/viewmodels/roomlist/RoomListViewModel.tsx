@@ -19,8 +19,14 @@ import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useStickyRoomList } from "./useStickyRoomList";
+import { useRoomListNavigation } from "./useRoomListNavigation";
 
 export interface RoomListViewState {
+    /**
+     * Whether the list of rooms is being loaded.
+     */
+    isLoadingRooms: boolean;
+
     /**
      * A list of rooms to be displayed in the left panel.
      */
@@ -98,6 +104,7 @@ export interface RoomListViewState {
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
     const {
+        isLoadingRooms,
         primaryFilters,
         activePrimaryFilter,
         rooms: filteredRooms,
@@ -105,6 +112,8 @@ export function useRoomListViewModel(): RoomListViewState {
         activeSecondaryFilter,
     } = useFilteredRooms();
     const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
+
+    useRoomListNavigation(rooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
@@ -120,6 +129,7 @@ export function useRoomListViewModel(): RoomListViewState {
     const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
+        isLoadingRooms,
         rooms,
         canCreateRoom,
         createRoom,

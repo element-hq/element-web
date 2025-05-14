@@ -865,7 +865,6 @@
             "accepting": "Manaiky…",
             "after_new_login": {
                 "device_verified": "Voamarina ny fitaovana",
-                "reset_confirmation": "Avereno tokoa ny fanalahidiny fanamarinana?",
                 "skip_verification": "Alefaso ny fanamarinana amin'izao fotoana izao",
                 "unable_to_verify": "Tsy afaka manamarina ity fitaovana ity",
                 "verify_this_device": "Hamarino ity fitaovana ity"
@@ -935,8 +934,6 @@
             "verify_emoji_prompt": "Hamarino amin'ny fampitahana emoji tokana.",
             "verify_emoji_prompt_qr": "Raha tsy azonao atao ny mijery ny kaody etsy ambony dia hamarino amin'ny fampitahana emoji tokana.",
             "verify_later": "Hamariniko avy eo",
-            "verify_reset_warning_1": "Tsy azo atao ny mamerina ny fanalahidiny fanamarinanao. Aoriany famerenanao dia tsy ho afaka miditra amin'ny hafatra miafina taloha ianao, ary izay namana nanamarina anao teo aloha dia hahita fampitandremana momba ny fiarovana mandra-panamarinanao azy ireo indray.",
-            "verify_reset_warning_2": "Tohizo ihany azafady raha azonao antoka fa very daholo ny fitaovanao hafa rehetra sy ny Key Security.",
             "verify_using_device": "Hamarino amin'ny fitaovana hafa",
             "verify_using_key": "Hamarino aminy fanalahidiny voaharo",
             "verify_using_key_or_phrase": "Hamarino amin'ny fanalahidy na rakin-tsoratra voaharo",
@@ -2302,7 +2299,6 @@
             "remove_msisdn_prompt": "Esory%(phone)s ?",
             "spell_check_locale_placeholder": "Misafidiana toerana iray"
         },
-        "image_thumbnails": "Asehoy ny topi-maso/sary kely hoan'ny sary",
         "inline_url_previews_default": "Alefaso ny fijerena URL an-tserasera aminy alàlan'ny default",
         "inline_url_previews_room": "Alefaso amin'ny alàlany ara-pototra hoany mpandray anjara amin'ity efitrano ity ny fijerena URL",
         "inline_url_previews_room_account": "Alefaso ny fijerena URL ho an'ity efitrano ity (miantraika aminao ihany)",
@@ -2697,8 +2693,6 @@
         "topic": "Mahazo na farito ny lohahevitra ny efitrano",
         "topic_none": "Tsy misy lohahevitra ity efitrano ity.",
         "topic_room_error": "Tsy tontonsa ny fahazoana efitrano ho lohahevitra. Tsy misy làlana mety hahazoana efitrano( %(numéro de pièce)s",
-        "tovirtual": "Mivadika any amin'ny efitrano virtoaly an'ity efitrano ity, raha misy izany",
-        "tovirtual_not_found": "Tsy misy efitrano virtoaly ho an'ity efitrano ity",
         "unban": "Avereno ny mpampiasa manana ID nomena",
         "unflip": "Manisy ┬──┬ ノ( ゜-゜ノ) amin'ny hafatra an-tsoratra tsotra",
         "unholdcall": "Esory ny antso ao amin'ny efitrano misy ankehitriny",
@@ -2820,7 +2814,6 @@
         "heading_without_query": "Hitady ny",
         "join_button_text": "anjara%(roomAddress)s",
         "keyboard_scroll_hint": "Ampiasao<arrows/> ny horonan-taratasy",
-        "message_search_section_title": "Fikarohana hafa",
         "other_rooms_in_space": "Efitrano hafa ao%(spaceName)s",
         "public_rooms_label": "Efitranom-bahoaka",
         "public_spaces_label": "Toeram-bahoaka",
@@ -2830,7 +2823,6 @@
         "result_may_be_hidden_privacy_warning": "Mety hafenina hoany fiainana manokana ny valiny sasany",
         "result_may_be_hidden_warning": "Mety hafenina ny valiny sasany",
         "search_dialog": "Fikarohana Dialog",
-        "search_messages_hint": "Raha hikaroka hafatra dia tadiavo ity kisary ity eo an-tampon'ny efitrano iray<icon/>",
         "spaces_title": "Toerana misy anao",
         "start_group_chat_button": "Manomboha resaka vondrona"
     },

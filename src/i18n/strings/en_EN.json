@@ -384,8 +384,9 @@
             "email_resend_prompt": "Did not receive it? <a>Resend it</a>",
             "email_resent": "Resent!",
             "fallback_button": "Start authentication",
-            "mas_cross_signing_reset_cta": "Go to your account",
-            "mas_cross_signing_reset_description": "Reset your identity through your account provider and then come back and click “Retry”.",
+            "mas_cross_signing_reset_cta": "Continue to account",
+            "mas_cross_signing_reset_description": "You're about to go to your %(serverName)s account to reset your identity. Once you have completed reset on your account, please return here and click Retry.",
+            "mas_cross_signing_reset_title": "Go to your account to reset your identity",
             "msisdn": "A text message has been sent to %(msisdn)s",
             "msisdn_token_incorrect": "Token incorrect",
             "msisdn_token_prompt": "Please enter the code it contains:",
@@ -525,6 +526,7 @@
         "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
         "model": "Model",
+        "moderation_and_safety": "Moderation and safety",
         "modern": "Modern",
         "mute": "Mute",
         "n_members": {
@@ -992,7 +994,6 @@
             "accepting": "Accepting…",
             "after_new_login": {
                 "device_verified": "Device verified",
-                "reset_confirmation": "Really reset verification keys?",
                 "skip_verification": "Skip verification for now",
                 "unable_to_verify": "Unable to verify this device",
                 "verify_this_device": "Verify this device"
@@ -1063,8 +1064,6 @@
             "verify_emoji_prompt": "Verify by comparing unique emoji.",
             "verify_emoji_prompt_qr": "If you can't scan the code above, verify by comparing unique emoji.",
             "verify_later": "I'll verify later",
-            "verify_reset_warning_1": "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.",
-            "verify_reset_warning_2": "Please only proceed if you're sure you've lost all of your other devices and your Recovery Key.",
             "verify_using_device": "Verify with another device",
             "verify_using_key": "Verify with Recovery Key",
             "verify_using_key_or_phrase": "Verify with Recovery Key or Phrase",
@@ -2101,6 +2100,7 @@
     "room_list": {
         "add_room_label": "Add room",
         "add_space_label": "Add space",
+        "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
         "empty": {
@@ -2119,6 +2119,7 @@
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filter": "Filter",
         "filters": {
             "favourite": "Favourites",
             "people": "People",
@@ -2151,7 +2152,16 @@
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
+        "room_options": "Room Options",
+        "secondary_filter": {
+            "all_activity": "All activity",
+            "invites_only": "Invites only",
+            "low_priority": "Low priority",
+            "mentions_only": "Mentions only"
+        },
+        "secondary_filters": "Secondary filters",
         "show_less": "Show less",
+        "show_message_previews": "Show message previews",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
@@ -2447,6 +2457,10 @@
         "recent_changes_heading": "Recent changes that have not yet been received",
         "title": "Server isn't responding"
     },
+    "service_worker_error": {
+        "description": "%(brand)s requires a service worker for loading authenticated media from Matrix content repositories. This is not supported by your browser so you may experience media failing to load.",
+        "title": "Failed to load service worker"
+    },
     "seshat": {
         "error_initialising": "Message search initialisation failed, check <a>your settings</a> for more information",
         "reset_button": "Reset event store",
@@ -2625,6 +2639,7 @@
             "discovery_needs_terms_title": "Let people find you",
             "display_name": "Display Name",
             "display_name_error": "Unable to set display name",
+            "email_adding_unsupported_by_hs": "This homeserver does not support adding email addresses to your account.",
             "email_address_in_use": "This email address is already in use",
             "email_address_label": "Email Address",
             "email_not_verified": "Your email address hasn't been verified yet",
@@ -2649,7 +2664,9 @@
             "error_share_msisdn_discovery": "Unable to share phone number",
             "identity_server_no_token": "No identity access token found",
             "identity_server_not_set": "Identity server not set",
+            "invalid_phone_number": "The phone number supplied does not appear to be valid.",
             "language_section": "Language",
+            "msisdn_adding_unsupported_by_hs": "This homeserver does not support adding phone numbers to your account.",
             "msisdn_in_use": "This phone number is already in use",
             "msisdn_label": "Phone Number",
             "msisdn_verification_field_label": "Verification code",
@@ -2668,12 +2685,10 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "image_thumbnails": "Show previews/thumbnails for images",
         "inline_url_previews_default": "Enable inline URL previews by default",
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
-        "invite_avatars": "Show avatars of rooms you have been invited to",
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
@@ -2731,6 +2746,14 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Settings:</strong> Ignored Users"
+        },
+        "media_preview": {
+            "hide_avatars": "Hide avatars of room and inviter",
+            "hide_media": "Always hide",
+            "media_preview_description": "A hidden media can always be shown by tapping on it",
+            "media_preview_label": "Show media in timeline",
+            "show_in_private": "In private rooms",
+            "show_media": "Always show"
         },
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
@@ -3215,7 +3238,7 @@
         "heading_without_query": "Search for",
         "join_button_text": "Join %(roomAddress)s",
         "keyboard_scroll_hint": "Use <arrows/> to scroll",
-        "message_search_section_title": "Other searches",
+        "messages_label": "Messages",
         "other_rooms_in_space": "Other rooms in %(spaceName)s",
         "public_rooms_label": "Public rooms",
         "public_spaces_label": "Public spaces",
@@ -3225,7 +3248,6 @@
         "result_may_be_hidden_privacy_warning": "Some results may be hidden for privacy",
         "result_may_be_hidden_warning": "Some results may be hidden",
         "search_dialog": "Search Dialog",
-        "search_messages_hint": "To search messages, look for this icon at the top of a room <icon/>",
         "spaces_title": "Spaces you're in",
         "start_group_chat_button": "Start a group chat"
     },
@@ -3274,9 +3296,7 @@
     "threads_activity_centre": {
         "header": "Threads activity",
         "no_rooms_with_threads_notifs": "You don't have rooms with thread notifications yet.",
-        "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet.",
-        "release_announcement_description": "Threads notifications have moved, find them here from now on.",
-        "release_announcement_header": "Threads Activity Centre"
+        "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
     },
     "time": {
         "about_day_ago": "about a day ago",
@@ -3787,10 +3807,11 @@
         "unavailable": "Unavailable"
     },
     "update_room_access_modal": {
-        "description": "To create a share link, you need to allow guests to join this room. This may make the room less secure. When you're done with the call, you can make the room private again.",
-        "dont_change_description": "Alternatively, you can hold the call in a separate room.",
+        "description": "To create a share link, make this room <b>public</b> or enable the option for users to <b>ask to join</b>. This allows guests to join without being invited.",
+        "dont_change_description": "If you don't want to change the access of this room, you can create a new room for the call link.",
         "no_change": "I don't want to change the access level.",
-        "title": "Change the room access level"
+        "revert_access_description": "(This can be reverted to the previous value in the Room Settings: <b>Security & Privacy</b> / <b>Access</b>)",
+        "title": "Allow guest users to join this room"
     },
     "upload_failed_generic": "The file '%(fileName)s' failed to upload.",
     "upload_failed_size": "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",

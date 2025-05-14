@@ -15,7 +15,7 @@ exports[`<RoomList /> should render a room list 1`] = `
         class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
         role="grid"
         style="box-sizing: border-box; direction: ltr; height: 1500px; position: relative; width: 1500px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="ReactVirtualized__Grid__innerScrollContainer"
@@ -28,6 +28,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 0px; width: 100%;"
+            tabindex="0"
             type="button"
           >
             <div
@@ -57,12 +58,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room0"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room0
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room0"
+                  >
+                    room0
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -72,6 +80,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 48px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -101,12 +110,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room1"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room1
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room1"
+                  >
+                    room1
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -116,6 +132,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 96px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -145,12 +162,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room2"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room2
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room2"
+                  >
+                    room2
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -160,6 +184,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 144px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -189,12 +214,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room3"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room3
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room3"
+                  >
+                    room3
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -204,6 +236,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 192px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -233,12 +266,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room4"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room4
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room4"
+                  >
+                    room4
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -248,6 +288,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 240px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -277,12 +318,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room5"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room5
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room5"
+                  >
+                    room5
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -292,6 +340,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 288px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -321,12 +370,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room6"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room6
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room6"
+                  >
+                    room6
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -336,6 +392,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 336px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -365,12 +422,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room7"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room7
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room7"
+                  >
+                    room7
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -380,6 +444,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 384px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -409,12 +474,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room8"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room8
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room8"
+                  >
+                    room8
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>
@@ -424,6 +496,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 432px; width: 100%;"
+            tabindex="-1"
             type="button"
           >
             <div
@@ -453,12 +526,19 @@ exports[`<RoomList /> should render a room list 1`] = `
                 class="mx_Flex mx_RoomListItemView_content"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
-                <span
-                  class="mx_RoomListItemView_roomName"
-                  title="room9"
+                <div
+                  class="mx_RoomListItemView_text"
                 >
-                  room9
-                </span>
+                  <div
+                    class="mx_RoomListItemView_roomName"
+                    title="room9"
+                  >
+                    room9
+                  </div>
+                  <div
+                    class="mx_RoomListItemView_messagePreview"
+                  />
+                </div>
               </div>
             </div>
           </button>

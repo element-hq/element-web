@@ -813,7 +813,6 @@
             "accepting": "Aceptando…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "¿De verdad quieres restablecer las claves de verificación?",
                 "skip_verification": "Saltar la verificación por ahora",
                 "unable_to_verify": "No se ha podido verificar el dispositivo",
                 "verify_this_device": "Verificar este dispositivo"
@@ -883,7 +882,6 @@
             "verify_emoji_prompt": "Verifica comparando emoji únicos.",
             "verify_emoji_prompt_qr": "Si no puedes escanear el código de arriba, verifica comparando emoji únicos.",
             "verify_later": "La verificaré en otro momento",
-            "verify_reset_warning_1": "Una vez restableces las claves de verificación, no lo podrás deshacer. Después de restablecerlas, no podrás acceder a los mensajes cifrados antiguos, y cualquier persona que te haya verificado verá avisos de seguridad hasta que vuelvas a hacer la verificación con ella.",
             "verify_using_device": "Verificar con otro dispositivo",
             "verify_using_key": "Verificar con una clave de seguridad",
             "verify_using_key_or_phrase": "Verificar con una clave o frase de seguridad",
@@ -2147,7 +2145,6 @@
             "remove_msisdn_prompt": "¿Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elige un idioma"
         },
-        "image_thumbnails": "Mostrar vistas previas para las imágenes",
         "inline_url_previews_default": "Activar la vista previa de URLs en línea por defecto",
         "inline_url_previews_room": "Activar la vista previa de URLs por defecto para los participantes de esta sala",
         "inline_url_previews_room_account": "Activar la vista previa de URLs en esta sala (solo para ti)",
@@ -2485,8 +2482,6 @@
         "topic": "Ver o cambiar el asunto de la sala",
         "topic_none": "Esta sala no tiene asunto.",
         "topic_room_error": "Fallo al obtener el asunto de la sala: No se ha podido encontrar la sala (%(roomId)s",
-        "tovirtual": "Cambia a la sala virtual de esta sala, si tiene una",
-        "tovirtual_not_found": "Esta sala no tiene una sala virtual",
         "unban": "Desbloquea el usuario con ese ID",
         "unflip": "Pone «┬──┬ ノ( ゜-゜ノ)» después de un mensaje de texto",
         "unholdcall": "Quita la llamada de la sala actual de espera",
@@ -2605,7 +2600,6 @@
         "heading_without_query": "Buscar",
         "join_button_text": "Unirte a %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> para desplazarte",
-        "message_search_section_title": "Otras búsquedas",
         "other_rooms_in_space": "Otras salas en %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "recent_searches_section_title": "Búsquedas recientes",
@@ -2614,7 +2608,6 @@
         "result_may_be_hidden_privacy_warning": "Algunos resultados pueden estar ocultos por motivos de privacidad",
         "result_may_be_hidden_warning": "Algunos resultados pueden estar ocultos",
         "search_dialog": "Ventana de búsqueda",
-        "search_messages_hint": "Para buscar contenido de mensajes, usa este icono en la parte de arriba de una sala: <icon/>",
         "spaces_title": "Tus espacios",
         "start_group_chat_button": "Crear conversación en grupo"
     },

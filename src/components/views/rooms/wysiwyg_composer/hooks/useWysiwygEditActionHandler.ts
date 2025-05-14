@@ -22,7 +22,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 
 export function useWysiwygEditActionHandler(
     disabled: boolean,
-    composerElement: RefObject<HTMLElement>,
+    composerElement: RefObject<HTMLElement | null> | undefined,
     composerFunctions: ComposerFunctions,
 ): void {
     const roomContext = useScopedRoomContext("timelineRenderingType");
@@ -33,7 +33,7 @@ export function useWysiwygEditActionHandler(
         (payload: ActionPayload) => {
             // don't let the user into the composer if it is disabled - all of these branches lead
             // to the cursor being in the composer
-            if (disabled || !composerElement.current) return;
+            if (disabled || !composerElement?.current) return;
 
             const context = payload.context ?? TimelineRenderingType.Room;
 
