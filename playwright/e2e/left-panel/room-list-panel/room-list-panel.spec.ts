@@ -36,6 +36,8 @@ test.describe("Room list panel", () => {
         const roomListView = getRoomListView(page);
         // Wait for the last room to be visible
         await expect(roomListView.getByRole("gridcell", { name: "Open room room19" })).toBeVisible();
+        // move the cursor somewwhere well-defined so we don't get hover decoration on room tiles
+        await page.getByRole("button", { name: "User menu" }).hover();
         await expect(roomListView).toMatchScreenshot("room-list-panel.png");
     });
 });
