@@ -16,7 +16,8 @@ import { _t } from "../../../../../languageHandler";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
-    focused?: boolean;
+    index: number;
+    focused: boolean;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -30,7 +31,8 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
-            ariaLabel={_t("member_list|open_profile", { memberName: name })}
+            ariaLabel={name}
+            aria-colindex={props.index}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
             focused={props.focused}

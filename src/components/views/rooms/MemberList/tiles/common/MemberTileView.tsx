@@ -15,6 +15,7 @@ interface Props {
     nameJsx: JSX.Element | string;
     onClick: () => void;
     ariaLabel: string;
+    index: number;
     presenceJsx?: JSX.Element;
     userLabel?: React.ReactNode;
     iconJsx?: JSX.Element;
@@ -42,6 +43,8 @@ export function MemberTileView(props: Props): JSX.Element {
                 })}
                 onClick={props.onClick}
                 aria-label={props.ariaLabel}
+                aria-rowindex={props.index + 1}
+                aria-colindex={1}
                 tabIndex={props.focused ? 0 : -1}
                 role="gridcell"
             >

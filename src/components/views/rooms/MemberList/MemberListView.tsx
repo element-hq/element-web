@@ -33,13 +33,20 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
     const listRef = useRef<HTMLButtonElement | null>(null);
 
-    const getRowComponent = (item: MemberWithSeparator, focused: boolean): JSX.Element => {
+    const getRowComponent = (item: MemberWithSeparator, focused: boolean, index: number): JSX.Element => {
         if (item === SEPARATOR) {
-            return <hr className="mx_MemberListView_separator" />;
+            return <hr className="mx_MemberListView_separator" role="separator" />;
         } else if (item.member) {
-            return <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} focused={focused} />;
+            return (
+                <RoomMemberTileView
+                    member={item.member}
+                    showPresence={vm.isPresenceEnabled}
+                    focused={focused}
+                    index={index}
+                />
+            );
         } else {
-            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
+            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} index={index} />;
         }
     };
 
@@ -117,8 +124,10 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
                 <Virtuoso
-                    aria-label={_t("room_list|list_title")}
+                    aria-label={_t("member_list|list_title")}
                     role="grid"
+                    aria-rowcount={vm.members.length}
+                    aria-colcount={1}
                     ref={ref}
                     style={{ height: "100%" }}
                     scrollerRef={scrollerRef}
@@ -127,7 +136,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     tabIndex={undefined}
                     data={vm.members}
                     onFocus={onFocus}
-                    itemContent={(index, member) => getRowComponent(member, index === focusedIndex)}
+                    itemContent={(index, member) => getRowComponent(member, index === focusedIndex, index)}
                     components={{ Footer: () => footer() }}
                 />
             </Flex>

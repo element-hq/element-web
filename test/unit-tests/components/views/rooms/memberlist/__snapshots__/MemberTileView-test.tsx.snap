@@ -4,9 +4,9 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
+      role="row"
       tabindex="-1"
     >
       <div
@@ -22,7 +22,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:matrix.org (power 0)"
           >
             u
           </span>
@@ -33,6 +33,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -47,7 +48,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«ri»"
+          aria-labelledby="«r6»"
           class="mx_E2EIconView"
         >
           <svg
@@ -73,9 +74,9 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
+      role="row"
       tabindex="-1"
     >
       <div
@@ -91,7 +92,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:matrix.org (power 0)"
           >
             u
           </span>
@@ -102,6 +103,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -116,7 +118,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r8»"
+          aria-labelledby="«r0»"
           class="mx_E2EIconView"
         >
           <svg
@@ -142,9 +144,9 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
+      role="row"
       tabindex="-1"
     >
       <div
@@ -160,7 +162,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:matrix.org (power 0)"
           >
             u
           </span>
@@ -171,6 +173,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -193,8 +196,9 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
 <div>
   <div>
     <div
+      aria-label="Foobar"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
+      role="row"
       tabindex="-1"
     >
       <div

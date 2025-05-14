@@ -19,8 +19,9 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface IProps {
     member: RoomMember;
-    showPresence?: boolean;
-    focused?: boolean;
+    showPresence: boolean;
+    focused: boolean;
+    index: number;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -60,9 +61,10 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
             userLabel={vm.userLabel}
-            ariaLabel={_t("member_list|open_profile", { memberName: name })}
+            ariaLabel={name}
             iconJsx={iconJsx}
             focused={props.focused}
+            index={props.index}
         />
     );
 }
