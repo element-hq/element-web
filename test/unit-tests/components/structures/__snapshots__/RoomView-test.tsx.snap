@@ -2121,6 +2121,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
       >
         <aside
           class="mx_RightPanel"
+          data-testid="right-panel"
           id="mx_RightPanel"
         >
           <div
