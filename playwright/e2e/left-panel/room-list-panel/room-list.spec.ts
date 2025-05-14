@@ -57,6 +57,13 @@ test.describe("Room list", () => {
             await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
         });
 
+        test("should open the context menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomListView = getRoomList(page);
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click({ button: "right" });
+            await expect(page.getByRole("menu", { name: "More Options" })).toBeVisible();
+            await expect(page).toMatchScreenshot("room-list-item-context-menu.png");
+        });
+
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
             const roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
