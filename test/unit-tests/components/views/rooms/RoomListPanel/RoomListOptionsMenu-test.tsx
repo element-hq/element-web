@@ -6,18 +6,11 @@
  */
 
 import React from "react";
-import { render, type RenderOptions, screen } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { RoomListOptionsMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListOptionsMenu";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-
-function getRenderOptions(): RenderOptions {
-    return {
-        wrapper: ({ children }) => <TooltipProvider>{children}</TooltipProvider>,
-    };
-}
 
 describe("<RoomListOptionsMenu />", () => {
     it("should match snapshot", () => {
@@ -25,7 +18,7 @@ describe("<RoomListOptionsMenu />", () => {
             sort: jest.fn(),
         } as unknown as RoomListViewState;
 
-        const { asFragment } = render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        const { asFragment } = render(<RoomListOptionsMenu vm={vm} />);
 
         expect(asFragment()).toMatchSnapshot();
     });
@@ -38,7 +31,7 @@ describe("<RoomListOptionsMenu />", () => {
             activeSortOption: "Alphabetic",
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         // Open the menu
         const button = screen.getByRole("button", { name: "Room Options" });
@@ -56,7 +49,7 @@ describe("<RoomListOptionsMenu />", () => {
             activeSortOption: "Recency",
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         // Open the menu
         const button = screen.getByRole("button", { name: "Room Options" });
@@ -73,7 +66,7 @@ describe("<RoomListOptionsMenu />", () => {
             sort: jest.fn(),
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
@@ -90,7 +83,7 @@ describe("<RoomListOptionsMenu />", () => {
             activeSortOption: "Alphabetic",
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
@@ -106,7 +99,7 @@ describe("<RoomListOptionsMenu />", () => {
             shouldShowMessagePreview: false,
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
@@ -120,7 +113,7 @@ describe("<RoomListOptionsMenu />", () => {
             shouldShowMessagePreview: true,
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
@@ -134,7 +127,7 @@ describe("<RoomListOptionsMenu />", () => {
             toggleMessagePreview: jest.fn(),
         } as unknown as RoomListViewState;
 
-        render(<RoomListOptionsMenu vm={vm} />, getRenderOptions());
+        render(<RoomListOptionsMenu vm={vm} />);
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
