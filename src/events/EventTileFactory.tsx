@@ -60,6 +60,7 @@ export interface EventTileTypeProps
         | "callEventGrouper"
         | "isSeeingThroughMessageHiddenForModeration"
         | "inhibitInteraction"
+        | "isScrolling"
     > {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
     timestamp?: JSX.Element;
@@ -278,6 +279,7 @@ export function renderTile(
         isSeeingThroughMessageHiddenForModeration,
         timestamp,
         inhibitInteraction,
+        isScrolling,
     } = props;
 
     switch (renderType) {
@@ -313,6 +315,7 @@ export function renderTile(
                 isSeeingThroughMessageHiddenForModeration,
                 timestamp,
                 inhibitInteraction,
+                isScrolling,
             });
     }
 }

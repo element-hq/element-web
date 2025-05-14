@@ -48,4 +48,5 @@ export interface IBodyProps {
     // Set to `true` to disable interactions (e.g. video controls) and to remove controls from the tab order.
     // This may be useful when displaying a preview of the event.
     inhibitInteraction?: boolean;
+    isScrolling?: boolean;
 }

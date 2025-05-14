@@ -380,7 +380,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     private get messagePanelDiv(): HTMLDivElement | null {
-        return this.messagePanel.current?.scrollPanel.current?.divScroll ?? null;
+        return null;
+        // return this.messagePanel.current?.scrollPanel.current?.divScroll ?? null;
     }
 
     /**

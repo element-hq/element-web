@@ -35,7 +35,8 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
-import ScrollPanel, { type IScrollState } from "./ScrollPanel";
+import { type IScrollState } from "./ScrollPanel";
+import { ListRange, LogLevel, Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import DateSeparator from "../views/messages/DateSeparator";
 import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
@@ -57,6 +58,15 @@ import { getLateEventInfo } from "./grouper/LateEventGrouper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+
+type EventItem = {
+    prevEvent: MatrixEvent | null;
+    wrappedEvent: WrappedEvent;
+    last: boolean;
+    isGrouped: boolean;
+    nextEvent: WrappedEvent | null;
+    nextEventWithTile: MatrixEvent | null;
+};
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -192,6 +202,7 @@ interface IState {
     ghostReadMarkers: string[];
     showTypingNotifications: boolean;
     hideSender: boolean;
+    isScrolling: boolean;
 }
 
 interface IReadReceiptForUser {
@@ -251,13 +262,17 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private readMarkerNode = createRef<HTMLLIElement>();
     private whoIsTyping = createRef<WhoIsTypingTile>();
-    public scrollPanel = createRef<ScrollPanel>();
+    private virtuosoRef = createRef<VirtuosoHandle | null>();
 
     private showTypingNotificationsWatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
+
+    private initialIndex = 100000;
+    private items: EventItem[] = [];
+    private scrollingTimeout: number | undefined = undefined;
 
     public constructor(props: IProps) {
         super(props);
@@ -268,6 +283,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
             hideSender: this.shouldHideSender(),
+            isScrolling: false,
         };
 
         // Cache these settings on mount since Settings is expensive to query,
@@ -362,7 +378,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     /* return true if the content is fully scrolled down right now; else false.
      */
     public isAtBottom(): boolean | undefined {
-        return this.scrollPanel.current?.isAtBottom();
+        return false;
+        // return this.scrollPanel.current?.isAtBottom();
     }
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
@@ -371,7 +388,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
      * returns null if we are not mounted.
      */
     public getScrollState(): IScrollState | null {
-        return this.scrollPanel.current?.getScrollState() ?? null;
+        return null;
+        // return this.scrollPanel.current?.getScrollState() ?? null;
     }
 
     // returns one of:
@@ -382,36 +400,43 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
         const readMarker = this.readMarkerNode.current;
-        const messageWrapper = this.scrollPanel.current?.divScroll;
 
-        if (!readMarker || !messageWrapper) {
-            return null;
-        }
+        return null;
+        // const messageWrapper = this.scrollPanel.current?.divScroll;
 
-        const wrapperRect = messageWrapper.getBoundingClientRect();
-        const readMarkerRect = readMarker.getBoundingClientRect();
+        // if (!readMarker || !messageWrapper) {
+        //     return null;
+        // }
 
-        // the read-marker pretends to have zero height when it is actually
-        // two pixels high; +2 here to account for that.
-        if (readMarkerRect.bottom + 2 < wrapperRect.top) {
-            return -1;
-        } else if (readMarkerRect.top < wrapperRect.bottom) {
-            return 0;
-        } else {
-            return 1;
-        }
+        // const wrapperRect = messageWrapper.getBoundingClientRect();
+        // const readMarkerRect = readMarker.getBoundingClientRect();
+
+        // // the read-marker pretends to have zero height when it is actually
+        // // two pixels high; +2 here to account for that.
+        // if (readMarkerRect.bottom + 2 < wrapperRect.top) {
+        //     return -1;
+        // } else if (readMarkerRect.top < wrapperRect.bottom) {
+        //     return 0;
+        // } else {
+        //     return 1;
+        // }
     }
 
     /* jump to the top of the content.
      */
     public scrollToTop(): void {
-        this.scrollPanel.current?.scrollToTop();
+        // console.log("scrollToTop");
+        // this.virtuosoRef.current?.scrollIntoView({ index: 0, align: "start" });
+        // this.virtuosoRef.current?.scrollToIndex()
+        // this.scrollPanel.current?.scrollToTop();
     }
 
     /* jump to the bottom of the content.
      */
     public scrollToBottom(): void {
-        this.scrollPanel.current?.scrollToBottom();
+        // console.log("scrollToBottom");
+        // this.virtuosoRef.current?.scrollIntoView({ index: this.items.length - 1, align: "end" });
+        // this.scrollPanel.current?.scrollToBottom();
     }
 
     /**
@@ -420,7 +445,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
      * @param {KeyboardEvent} ev: the keyboard event to handle
      */
     public handleScrollKey(ev: React.KeyboardEvent | KeyboardEvent): void {
-        this.scrollPanel.current?.handleScrollKey(ev);
+        // this.scrollPanel.current?.handleScrollKey(ev);
     }
 
     /* jump to the given event id.
@@ -434,17 +459,18 @@ export default class MessagePanel extends React.Component<IProps, IState> {
      * defaults to 0.
      */
     public scrollToEvent(eventId: string, pixelOffset?: number, offsetBase?: number): void {
-        this.scrollPanel.current?.scrollToToken(eventId, pixelOffset, offsetBase);
+        // this.scrollPanel.current?.scrollToToken(eventId, pixelOffset, offsetBase);
     }
 
     public scrollToEventIfNeeded(eventId: string): void {
-        const node = this.getNodeForEventId(eventId);
-        if (node) {
-            node.scrollIntoView({
-                block: "nearest",
-                behavior: "instant",
-            });
-        }
+        console.log("scrollToEventIfNeeded");
+        // const node = this.getNodeForEventId(eventId);
+        // if (node) {
+        //     node.scrollIntoView({
+        //         block: "nearest",
+        //         behavior: "instant",
+        //     });
+        // }
     }
 
     private isUnmounting = (): boolean => {
@@ -605,7 +631,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
-    private getEventTiles(): ReactNode[] {
+    private getEventItems(): EventItem[] {
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
@@ -651,7 +677,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        const ret: ReactNode[] = [];
+        const ret: EventItem[] = [];
         let prevEvent: MatrixEvent | null = null; // the last event we showed
 
         // Note: the EventTile might still render a "sent/sending receipt" independent of
@@ -662,7 +688,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             this.readReceiptsByEvent = this.getReadReceiptsByShownEvent(events);
         }
 
-        let grouper: BaseGrouper | null = null;
+        // let grouper: BaseGrouper | null = null;
 
         for (let i = 0; i < events.length; i++) {
             const wrappedEvent = events[i];
@@ -671,60 +697,58 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             const last = event === lastShownEvent;
             const { nextEventAndShouldShow, nextTile } = this.getNextEventInfo(events, i);
 
-            if (grouper) {
-                if (grouper.shouldGroup(wrappedEvent)) {
-                    grouper.add(wrappedEvent);
-                    continue;
-                } else {
-                    // not part of group, so get the group tiles, close the
-                    // group, and continue like a normal event
-                    ret.push(...grouper.getTiles());
-                    prevEvent = grouper.getNewPrevEvent();
-                    grouper = null;
-                }
+            // if (grouper) {
+            //     if (grouper.shouldGroup(wrappedEvent)) {
+            //         grouper.add(wrappedEvent);
+            //         continue;
+            //     } else {
+            //         // not part of group, so get the group tiles, close the
+            //         // group, and continue like a normal event
+            //         ret.push(...grouper.getTiles());
+            //         prevEvent = grouper.getNewPrevEvent();
+            //         grouper = null;
+            //     }
+            // }
+
+            // for (const Grouper of groupers) {
+            //     if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
+            //         grouper = new Grouper(
+            //             this,
+            //             wrappedEvent,
+            //             prevEvent,
+            //             lastShownEvent,
+            //             nextEventAndShouldShow,
+            //             nextTile,
+            //         );
+            //         break; // break on first grouper
+            //     }
+            // }
+
+            // if (!grouper) {
+            if (shouldShow) {
+                // make sure we unpack the array returned by getTilesForEvent,
+                // otherwise React will auto-generate keys, and we will end up
+                // replacing all the DOM elements every time we paginate.
+                ret.push({
+                    prevEvent,
+                    wrappedEvent,
+                    last,
+                    isGrouped: false,
+                    nextEvent: nextEventAndShouldShow,
+                    nextEventWithTile: nextTile,
+                });
+                prevEvent = event;
             }
 
-            for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
-                    grouper = new Grouper(
-                        this,
-                        wrappedEvent,
-                        prevEvent,
-                        lastShownEvent,
-                        nextEventAndShouldShow,
-                        nextTile,
-                    );
-                    break; // break on first grouper
-                }
-            }
-
-            if (!grouper) {
-                if (shouldShow) {
-                    // make sure we unpack the array returned by getTilesForEvent,
-                    // otherwise React will auto-generate keys, and we will end up
-                    // replacing all the DOM elements every time we paginate.
-                    ret.push(
-                        ...this.getTilesForEvent(
-                            prevEvent,
-                            wrappedEvent,
-                            last,
-                            false,
-                            nextEventAndShouldShow,
-                            nextTile,
-                        ),
-                    );
-                    prevEvent = event;
-                }
-
-                const readMarker = this.readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
-                if (readMarker) ret.push(readMarker);
-            }
+            // const readMarker = this.readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
+            // if (readMarker) ret.push(readMarker);
+            // }
         }
 
-        if (grouper) {
-            ret.push(...grouper.getTiles());
-        }
-
+        // if (grouper) {
+        //     ret.push(...grouper.getTiles());
+        // }
+        // console.log(`Rendering event tiles ${ret.length}`);
         return ret;
     }
 
@@ -735,6 +759,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         isGrouped = false,
         nextEvent: WrappedEvent | null = null,
         nextEventWithTile: MatrixEvent | null = null,
+        isScrolling: boolean,
     ): ReactNode[] {
         const mxEv = wrappedEvent.event;
         const ret: ReactNode[] = [];
@@ -819,6 +844,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 showReadReceipts={this.props.showReadReceipts}
                 callEventGrouper={callEventGrouper}
                 hideSender={this.state.hideSender}
+                isScrolling={isScrolling}
             />,
         );
 
@@ -956,60 +982,118 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     public onHeightChanged = (): void => {
-        this.scrollPanel.current?.checkScroll();
+        // this.scrollPanel.current?.checkScroll();
     };
 
     private resizeObserver = new ResizeObserver(this.onHeightChanged);
 
     private onTypingShown = (): void => {
-        const scrollPanel = this.scrollPanel.current;
-        // this will make the timeline grow, so checkScroll
-        scrollPanel?.checkScroll();
-        if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
-            scrollPanel.preventShrinking();
-        }
+        // const scrollPanel = this.scrollPanel.current;
+        // // this will make the timeline grow, so checkScroll
+        // scrollPanel?.checkScroll();
+        // if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
+        //     scrollPanel.preventShrinking();
+        // }
     };
 
     private onTypingHidden = (): void => {
-        const scrollPanel = this.scrollPanel.current;
-        if (scrollPanel) {
-            // as hiding the typing notifications doesn't
-            // update the scrollPanel, we tell it to apply
-            // the shrinking prevention once the typing notifs are hidden
-            scrollPanel.updatePreventShrinking();
-            // order is important here as checkScroll will scroll down to
-            // reveal added padding to balance the notifs disappearing.
-            scrollPanel.checkScroll();
-        }
+        // const scrollPanel = this.scrollPanel.current;
+        // if (scrollPanel) {
+        //     // as hiding the typing notifications doesn't
+        //     // update the scrollPanel, we tell it to apply
+        //     // the shrinking prevention once the typing notifs are hidden
+        //     scrollPanel.updatePreventShrinking();
+        //     // order is important here as checkScroll will scroll down to
+        //     // reveal added padding to balance the notifs disappearing.
+        //     scrollPanel.checkScroll();
+        // }
     };
 
     public updateTimelineMinHeight(): void {
-        const scrollPanel = this.scrollPanel.current;
-
-        if (scrollPanel) {
-            const isAtBottom = scrollPanel.isAtBottom();
-            const whoIsTyping = this.whoIsTyping.current;
-            const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
-            // when messages get added to the timeline,
-            // but somebody else is still typing,
-            // update the min-height, so once the last
-            // person stops typing, no jumping occurs
-            if (isAtBottom && isTypingVisible) {
-                scrollPanel.preventShrinking();
-            }
-        }
+        //     const scrollPanel = this.scrollPanel.current;
+        //     if (scrollPanel) {
+        //         const isAtBottom = scrollPanel.isAtBottom();
+        //         const whoIsTyping = this.whoIsTyping.current;
+        //         const isTypingVisible = whoIsTyping && whoIsTyping.isVisible();
+        //         // when messages get added to the timeline,
+        //         // but somebody else is still typing,
+        //         // update the min-height, so once the last
+        //         // person stops typing, no jumping occurs
+        //         if (isAtBottom && isTypingVisible) {
+        //             scrollPanel.preventShrinking();
+        //         }
+        //     }
     }
 
     public onTimelineReset(): void {
-        const scrollPanel = this.scrollPanel.current;
-        if (scrollPanel) {
-            scrollPanel.clearPreventShrinking();
+        // const scrollPanel = this.scrollPanel.current;
+        // if (scrollPanel) {
+        //     scrollPanel.clearPreventShrinking();
+        // }
+    }
+    private readonly pendingFillRequests: Record<"b" | "f", boolean | null> = {
+        b: null,
+        f: null,
+    };
+    // check if there is already a pending fill request. If not, set one off.
+    private maybeFill(backwards: boolean): Promise<void> {
+        const dir = backwards ? "b" : "f";
+        if (this.pendingFillRequests[dir]) {
+            console.log("Already a fill in progress - not starting another; direction=", dir);
+            return Promise.resolve();
         }
+
+        console.log("starting fill; direction=", dir);
+
+        // onFillRequest can end up calling us recursively (via onScroll
+        // events) so make sure we set this before firing off the call.
+        this.pendingFillRequests[dir] = true;
+
+        // wait 1ms before paginating, because otherwise
+        // this will block the scroll event handler for +700ms
+        // if messages are already cached in memory,
+        // This would cause jumping to happen on Chrome/macOS.
+        return new Promise((resolve) => window.setTimeout(resolve, 1))
+            .then(() => {
+                return this.props.onFillRequest?.(backwards);
+            })
+            .finally(() => {
+                this.pendingFillRequests[dir] = false;
+            })
+            .then((hasMoreResults) => {
+                if (this.unmounted) {
+                    return;
+                }
+
+                console.log("fill complete; hasMoreResults=", hasMoreResults, "direction=", dir);
+                if (hasMoreResults) {
+                    // further pagination requests have been disabled until now, so
+                    // it's time to check the fill state again in case the pagination
+                    // was insufficient.
+                    // return this.checkFillState(depth + 1);
+                }
+            });
     }
 
+    private onStartReached = (index: number): void => {
+        //   setTimeout(() => {
+        console.log("onStartReached");
+        console.log(index);
+        this.maybeFill(true);
+        //   }, 10);
+    };
+
+    // private setVisibleRange = (range: ListRange): void => {
+    // if (range.startIndex == 0) {
+    //     // this.props.onFillRequest?.(true);
+    //     this.maybeFill(true);
+    // }
+    //     console.log(`VisibleRange: ${range.startIndex} : ${range.endIndex}`);
+    // };
+
     public render(): React.ReactNode {
-        let topSpinner;
-        let bottomSpinner;
+        let topSpinner: ReactNode;
+        let bottomSpinner: ReactNode;
         if (this.props.backPaginating) {
             topSpinner = (
                 <li key="_topSpinner">
@@ -1054,9 +1138,82 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             mx_MessagePanel_narrow: this.context.narrow,
         });
 
+        // const InnerEventTiles = React.memo((e: EventItem) => {
+        //     React.useEffect(() => {
+        //         console.log("inner mounting", e);
+        //         return () => {
+        //             console.log("inner unmounting", e);
+        //         };
+        //     }, [e]);
+        //     return this.getTilesForEvent(
+        //         e.prevEvent,
+        //         e.wrappedEvent,
+        //         e.last,
+        //         e.isGrouped,
+        //         e.nextEvent,
+        //         e.nextEventWithTile,
+        //     );
+        // });
+
+        const newItems = this.getEventItems();
+        const diff = newItems.length - this.items.length;
+        this.initialIndex -= diff;
+        this.items = newItems;
         return (
             <ErrorBoundary>
-                <ScrollPanel
+                {/* {ircResizer} */}
+                <div style={{ height: "100%" }} className="mx_RoomView_messageListWrapper">
+                    <ol style={{ height: "100%" }} className="mx_RoomView_MessageList" aria-live="polite">
+                        <Virtuoso
+                            ref={this.virtuosoRef}
+                            className={classes}
+                            style={style}
+                            firstItemIndex={this.initialIndex}
+                            data={this.items}
+                            alignToBottom={true}
+                            // logLevel={LogLevel.DEBUG}
+                            isScrolling={(isScrolling) => {
+                                if (isScrolling && !this.state.isScrolling) {
+                                    this.setState({ isScrolling });
+                                    return;
+                                }
+                                clearTimeout(this.scrollingTimeout);
+                                this.scrollingTimeout = window.setTimeout(() => {
+                                    if (this.state.isScrolling != isScrolling) {
+                                        this.setState({ isScrolling });
+                                    }
+                                }, 1000);
+                            }}
+                            // rangeChanged={this.setVisibleRange}
+                            startReached={this.onStartReached}
+                            // increaseViewportBy={{ top: 3000, bottom: 3000 }}
+                            overscan={{ main: 1000, reverse: 1000 }}
+                            itemContent={(i, e) =>
+                                //     <div>
+                                //         <span>
+                                //             {e.wrappedEvent.event.getContent().body} {i}
+                                //         </span>
+                                //     </div>
+                                // )
+
+                                this.getTilesForEvent(
+                                    e.prevEvent,
+                                    e.wrappedEvent,
+                                    e.last,
+                                    e.isGrouped,
+                                    e.nextEvent,
+                                    e.nextEventWithTile,
+                                    // true,
+                                    this.state.isScrolling,
+                                )
+                            }
+                            components={{ Header: () => topSpinner, Footer: () => bottomSpinner }}
+                            // onScroll={(e) => "ONSCROLL!"}
+                        />
+                    </ol>
+                </div>
+
+                {/* <ScrollPanel
                     ref={this.scrollPanel}
                     className={classes}
                     onScroll={this.props.onScroll}
@@ -1071,7 +1228,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     {this.getEventTiles()}
                     {whoIsTyping}
                     {bottomSpinner}
-                </ScrollPanel>
+                </ScrollPanel> */}
             </ErrorBoundary>
         );
     }

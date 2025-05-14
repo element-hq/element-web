@@ -25,9 +25,10 @@ interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
     onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
+    isScrolling?: boolean;
 }
 
-const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
+const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, isScrolling }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
     const [mediaVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
@@ -55,28 +56,30 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) =
     }
 
     return (
-        <div className="mx_LinkPreviewGroup">
-            {showPreviews.map(([link, preview], i) => (
-                <LinkPreviewWidget
-                    mediaVisible={mediaVisible}
-                    key={link}
-                    link={link}
-                    preview={preview}
-                    mxEvent={mxEvent}
-                >
-                    {i === 0 ? (
-                        <AccessibleButton
-                            className="mx_LinkPreviewGroup_hide"
-                            onClick={onCancelClick}
-                            aria-label={_t("timeline|url_preview|close")}
-                        >
-                            <CloseIcon width="20px" height="20px" />
-                        </AccessibleButton>
-                    ) : undefined}
-                </LinkPreviewWidget>
-            ))}
-            {toggleButton}
-        </div>
+        !isScrolling && (
+            <div className="mx_LinkPreviewGroup">
+                {showPreviews.map(([link, preview], i) => (
+                    <LinkPreviewWidget
+                        mediaVisible={mediaVisible}
+                        key={link}
+                        link={link}
+                        preview={preview}
+                        mxEvent={mxEvent}
+                    >
+                        {i === 0 ? (
+                            <AccessibleButton
+                                className="mx_LinkPreviewGroup_hide"
+                                onClick={onCancelClick}
+                                aria-label={_t("timeline|url_preview|close")}
+                            >
+                                <CloseIcon width="20px" height="20px" />
+                            </AccessibleButton>
+                        ) : undefined}
+                    </LinkPreviewWidget>
+                ))}
+                {toggleButton}
+            </div>
+        )
     );
 };
 
