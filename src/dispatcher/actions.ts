@@ -237,6 +237,7 @@ export enum Action {
 
     /**
      * Dispatched after a room has been successfully forgotten
+     * Should be used with AfterForgetRoomPayload.
      */
     AfterForgetRoom = "after_forget_room",
 
