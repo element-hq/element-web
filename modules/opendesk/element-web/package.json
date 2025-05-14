@@ -13,7 +13,7 @@
         "test": "echo no tests yet"
     },
     "devDependencies": {
-        "@element-hq/element-web-module-api": "^0.2.0",
+        "@element-hq/element-web-module-api": "^1.0.0",
         "@nordeck/element-web-guest-module": "^2.0.0",
         "@nordeck/element-web-opendesk-module": "^0.5.0",
         "@nordeck/element-web-widget-lifecycle-module": "^1.0.1",
