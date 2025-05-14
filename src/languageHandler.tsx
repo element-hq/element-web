@@ -113,6 +113,10 @@ export function _td(s: TranslationKey): TranslationKey {
     return s;
 }
 
+function isValidTranslation(translated: string): boolean {
+    return typeof translated === "string" && !translated.startsWith("missing translation:");
+}
+
 /**
  * to improve screen reader experience translations that are not in the main page language
  * eg a translation that fell back to english from another language
@@ -124,30 +128,26 @@ export function _td(s: TranslationKey): TranslationKey {
  * */
 const translateWithFallback = (text: string, options?: IVariables): { translated: string; isFallback?: boolean } => {
     const translated = counterpart.translate(text, { ...options, fallbackLocale: counterpart.getLocale() });
-    if (!translated || translated.startsWith("missing translation:")) {
-        const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
-        if (
-            (!fallbackTranslated || fallbackTranslated.startsWith("missing translation:")) &&
-            process.env.NODE_ENV !== "development"
-        ) {
-            // Even the translation via FALLBACK_LOCALE failed; this can happen if
-            //
-            // 1. The string isn't in the translations dictionary, usually because you're in develop
-            // and haven't run yarn i18n
-            // 2. Loading the translation resources over the network failed, which can happen due to
-            // to network or if the client tried to load a translation that's been removed from the
-            // server.
-            //
-            // At this point, its the lesser evil to show the untranslated text, which
-            // will be in English, so the user can still make out *something*, rather than an opaque
-            // "missing translation" error.
-            //
-            // Don't do this in develop so people remember to run yarn i18n.
-            return { translated: text, isFallback: true };
-        }
+    if (isValidTranslation(translated)) {
+        return { translated };
+    }
+
+    const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
+    if (isValidTranslation(fallbackTranslated)) {
         return { translated: fallbackTranslated, isFallback: true };
     }
-    return { translated };
+
+    // Even the translation via FALLBACK_LOCALE failed; this can happen if
+    //
+    // 1. The string isn't in the translations dictionary, usually because you're in develop
+    // and haven't run yarn i18n
+    // 2. Loading the translation resources over the network failed, which can happen due to
+    // to network or if the client tried to load a translation that's been removed from the
+    // server.
+    //
+    // At this point, its the lesser evil to show the i18n key which will be in English but not human-friendly,
+    // so the user can still make out *something*, rather than an opaque possibly-untranslated "missing translation" error.
+    return { translated: text, isFallback: true };
 };
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly

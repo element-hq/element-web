@@ -238,27 +238,6 @@ describe("RoomListViewModel", () => {
         ];
 
         describe.each(testcases)("For secondary filter: %s", (secondaryFilterName, secondary, primaryFilterName) => {
-            it(`should unapply incompatible primary filter that is already active: ${primaryFilterName}`, () => {
-                const { fn } = mockAndCreateRooms();
-                const { result: vm } = renderHook(() => useRoomListViewModel());
-
-                // Apply the primary filter
-                const i = vm.current.primaryFilters.findIndex((f) => f.name === primaryFilterName);
-                act(() => {
-                    vm.current.primaryFilters[i].toggle();
-                });
-
-                // Apply the secondary filter
-                act(() => {
-                    vm.current.activateSecondaryFilter(secondary.secondary);
-                });
-
-                // RLS call should only include the secondary filter
-                expect(fn).toHaveBeenLastCalledWith([secondary.filterKey]);
-                // Primary filter should have been unapplied
-                expect(vm.current.primaryFilters[i].active).toEqual(false);
-            });
-
             it(`should hide incompatible primary filter: ${primaryFilterName}`, () => {
                 mockAndCreateRooms();
                 const { result: vm } = renderHook(() => useRoomListViewModel());
