@@ -708,6 +708,7 @@ describe("StopGapWidgetDriver", () => {
             id: "$event-id2",
             type: "org.example.foo",
             user: "@alice:example.org",
+            skey: "",
             content: { hello: "world" },
             room: "!1:example.org",
         });
@@ -724,6 +725,12 @@ describe("StopGapWidgetDriver", () => {
             expect(
                 await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, undefined, 10, undefined),
             ).toEqual([event2, event1].map((e) => e.getEffectiveEvent()));
+        });
+
+        it("reads state events", async () => {
+            expect(
+                await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, "", 10, undefined),
+            ).toEqual([event2.getEffectiveEvent()]);
         });
 
         it("reads up to a limit", async () => {
