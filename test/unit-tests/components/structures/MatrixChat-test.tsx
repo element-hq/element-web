@@ -68,6 +68,7 @@ import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
+import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -781,6 +782,28 @@ describe("<MatrixChat />", () => {
                                 ),
                             ).toBeInTheDocument();
                         });
+                    });
+                });
+
+                it("should open forward dialog when share is fired", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({ action: Action.Share, format: ShareFormat.Text, msg: "Hello world" });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        body: "Hello world",
                     });
                 });
             });
