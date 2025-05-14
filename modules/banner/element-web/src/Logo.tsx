@@ -25,12 +25,12 @@ interface Props {
 }
 
 const Logo: FC<Props> = ({ api, src, href }) => {
-    const img = <Image alt={api.i18n.translate("Portal logo")} src={src} />;
+    const img = <Image alt={api.i18n.translate("logo_alt")} src={src} />;
 
     if (!href) return img;
 
     return (
-        <Anchor aria-label={api.i18n.translate("Show portal")} href={href}>
+        <Anchor aria-label={api.i18n.translate("logo_link_label")} href={href}>
             {img}
         </Anchor>
     );

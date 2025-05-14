@@ -21,30 +21,34 @@ interface Props {
 
 const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [data, setData] = useState<StaticConfig | null>();
+    const [data, setData] = useState<StaticConfig | Error>();
     const language = api.i18n.language.toLowerCase().startsWith("de") ? "de-DE" : "en";
 
     useEffect(() => {
         let discard = false;
 
-        setData(null);
-        fetchNavigation(config.ics_url, language).then((data) => {
-            if (discard) return;
-            setData(data);
-        });
+        setData(undefined);
+        fetchNavigation(config.ics_url, language)
+            .then((data) => {
+                if (discard) return;
+                setData(data);
+            })
+            .catch((error) => {
+                if (discard) return;
+                setData(error);
+            });
 
         return (): void => {
             discard = true;
         };
     }, [config, language, loggedIn]);
 
-    if (!loggedIn) {
-        return <SilentLogin onLoggedIn={setLoggedIn} icsUrl={config.ics_url} />;
-    }
-    if (data) {
-        return <StaticMenu api={api} config={data} fallbackLogoUrl={fallbackLogoUrl} />;
-    }
-    return <div />;
+    return (
+        <>
+            {!loggedIn && <SilentLogin onLoggedIn={setLoggedIn} icsUrl={config.ics_url} />}
+            <StaticMenu api={api} config={data ?? null} fallbackLogoUrl={config.logo_url ?? fallbackLogoUrl} />
+        </>
+    );
 };
 
 export default Menu;

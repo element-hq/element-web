@@ -5,10 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type FC, useState } from "react";
+import { type FC, type JSX, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled from "styled-components";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import { StaticConfig } from "./config";
 import { theme } from "./theme";
@@ -16,7 +17,7 @@ import type { Api } from "@element-hq/element-web-module-api";
 import Logo from "./Logo.tsx";
 
 const Sidebar = styled(motion.div)`
-    padding: 16px 12px;
+    padding: 16px 12px 0;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     overflow: auto;
     position: fixed;
@@ -105,6 +106,19 @@ const LinkLogo = styled.img`
     background-color: #ffffff;
 `;
 
+const CentredContainer = styled.div`
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+
+    svg {
+        margin: 0 auto;
+    }
+`;
+
 const Overlay = styled(motion.div)`
     background-color: rgba(238, 239, 242, 0.5);
     position: fixed;
@@ -116,7 +130,7 @@ const Overlay = styled(motion.div)`
 
 interface Props {
     api: Api;
-    config: StaticConfig;
+    config: StaticConfig | Error | null; // null for loading
     fallbackLogoUrl: string;
 }
 
@@ -140,10 +154,29 @@ const Category: FC<{
 const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     const [open, setOpen] = useState(false);
 
+    let content: JSX.Element;
+    if (config instanceof Error) {
+        content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
+    } else if (config) {
+        content = (
+            <>
+                {config.categories.map((category) => (
+                    <Category key={category.name} data={category} />
+                ))}
+            </>
+        );
+    } else {
+        content = (
+            <CentredContainer>
+                <InlineSpinner size={32} />
+            </CentredContainer>
+        );
+    }
+
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-                <Launcher aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("Show menu")}>
+                <Launcher aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("trigger_label")}>
                     <svg fill="currentColor" height="16" width="16">
                         <path d="M0 4h4V0H0v4Zm6 12h4v-4H6v4Zm-6 0h4v-4H0v4Zm0-6h4V6H0v4Zm6 0h4V6H6v4Zm6-10v4h4V0h-4ZM6 4h4V0H6v4Zm6 6h4V6h-4v4Zm0 6h4v-4h-4v4Z" />
                     </svg>
@@ -168,33 +201,33 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                                 animate={{ x: 0 }}
                                 exit={{ x: -WIDTH }}
                                 transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-                                aria-label={api.i18n.translate("Menu")}
+                                aria-label={api.i18n.translate("menu_label")}
                             >
-                                <SidebarHeading>
-                                    <Logo api={api} src={config.logo_url ?? fallbackLogoUrl} />
-                                    <Dialog.Close asChild>
-                                        <CloseButton
-                                            aria-label={api.i18n.translate("Close menu")}
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            <svg
-                                                width="20"
-                                                height="20"
-                                                viewBox="0 0 20 20"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
+                                <Dialog.Title>
+                                    <SidebarHeading>
+                                        <Logo api={api} src={config?.logo_url ?? fallbackLogoUrl} />
+                                        <Dialog.Close asChild>
+                                            <CloseButton
+                                                aria-label={api.i18n.translate("close_label")}
+                                                onClick={() => setOpen(false)}
                                             >
-                                                <path
-                                                    d="M7.04167 13.9999L6 12.9583L8.9375 9.99992L6 7.06242L7.04167 6.02075L10 8.95825L12.9375 6.02075L13.9792 7.06242L11.0417 9.99992L13.9792 12.9583L12.9375 13.9999L10 11.0624L7.04167 13.9999Z"
-                                                    fill="currentColor"
-                                                />
-                                            </svg>
-                                        </CloseButton>
-                                    </Dialog.Close>
-                                </SidebarHeading>
-                                {config.categories.map((category) => (
-                                    <Category key={category.name} data={category} />
-                                ))}
+                                                <svg
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 20 20"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M7.04167 13.9999L6 12.9583L8.9375 9.99992L6 7.06242L7.04167 6.02075L10 8.95825L12.9375 6.02075L13.9792 7.06242L11.0417 9.99992L13.9792 12.9583L12.9375 13.9999L10 11.0624L7.04167 13.9999Z"
+                                                        fill="currentColor"
+                                                    />
+                                                </svg>
+                                            </CloseButton>
+                                        </Dialog.Close>
+                                    </SidebarHeading>
+                                </Dialog.Title>
+                                {content}
                             </Sidebar>
                         </Dialog.Content>
                     </Dialog.Portal>

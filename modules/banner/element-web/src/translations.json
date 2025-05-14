@@ -1,22 +1,26 @@
 {
-    "Portal logo": {
+    "logo_alt": {
         "en": "Portal logo",
         "de": "Portal Logo"
     },
-    "Menu": {
+    "menu_label": {
         "en": "Menu",
         "de": "Menü"
     },
-    "Show menu": {
+    "trigger_label": {
         "en": "Show menu",
         "de": "Menü anzeigen"
     },
-    "Close menu": {
+    "close_label": {
         "en": "Close menu",
         "de": "Menü schließen"
     },
-    "Show portal": {
+    "logo_link_label": {
         "en": "Show portal",
         "de": "Portal anzeigen"
+    },
+    "univention_error": {
+        "en": "Failed to load data from Univention",
+        "de": "Daten konnten nicht von Univention geladen werden"
     }
 }

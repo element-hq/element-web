@@ -36,7 +36,7 @@
                     "identifier": "app5",
                     "display_name": "E-Mail",
                     "icon_url": "http://localhost:8080/opendesk/app5.svg",
-                    "link": "https://example.com/app5",
+                    "link": "https://example.com/email",
                     "target": "_blank"
                 },
                 {
