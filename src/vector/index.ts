@@ -162,20 +162,17 @@ async function start(): Promise<void> {
         // now that the config is ready, try to persist logs
         const persistLogsPromise = setupLogStorage();
 
-        // Load modules & plugins before language to ensure any custom translations are respected, and any app
-        // startup functionality is run
-        const loadModulesPromise = loadModules();
-        await settled(loadModulesPromise);
-        const loadPluginsPromise = loadPlugins();
-        await settled(loadPluginsPromise);
-
         // Load language after loading config.json so that settingsDefaults.language can be applied
         const loadLanguagePromise = loadLanguage();
         // as quickly as we possibly can, set a default theme...
         const loadThemePromise = loadTheme();
-
         // await things settling so that any errors we have to render have features like i18n running
         await settled(loadThemePromise, loadLanguagePromise);
+
+        const loadModulesPromise = loadModules();
+        await settled(loadModulesPromise);
+        const loadPluginsPromise = loadPlugins();
+        await settled(loadPluginsPromise);
 
         let acceptBrowser = supportedBrowser;
         if (!acceptBrowser && window.localStorage) {

@@ -454,55 +454,35 @@ type Languages = {
     [lang: string]: string;
 };
 
-export function setLanguage(preferredLangs: string | string[]): Promise<void> {
-    if (!Array.isArray(preferredLangs)) {
-        preferredLangs = [preferredLangs];
+export async function setLanguage(...preferredLangs: string[]): Promise<void> {
+    PlatformPeg.get()?.setLanguage(preferredLangs);
+
+    const availableLanguages = await getLangsJson();
+    let chosenLanguage = preferredLangs.find((lang) => availableLanguages.hasOwnProperty(lang));
+    if (!chosenLanguage) {
+        // Fallback to en_EN if none is found
+        chosenLanguage = "en";
+        logger.error("Unable to find an appropriate language, preferred: ", preferredLangs);
     }
 
-    const plaf = PlatformPeg.get();
-    if (plaf) {
-        plaf.setLanguage(preferredLangs);
+    const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
+
+    counterpart.registerTranslations(chosenLanguage, languageData);
+    counterpart.setLocale(chosenLanguage);
+
+    await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
+    // Adds a lot of noise to test runs, so disable logging there.
+    if (process.env.NODE_ENV !== "test") {
+        logger.log("set language to " + chosenLanguage);
     }
 
-    let langToUse: string;
-    let availLangs: Languages;
-    return getLangsJson()
-        .then((result) => {
-            availLangs = result;
+    // Set 'en' as fallback language:
+    if (chosenLanguage !== "en") {
+        const fallbackLanguageData = await getLanguageRetry(i18nFolder + availableLanguages["en"]);
+        counterpart.registerTranslations("en", fallbackLanguageData);
+    }
 
-            for (let i = 0; i < preferredLangs.length; ++i) {
-                if (availLangs.hasOwnProperty(preferredLangs[i])) {
-                    langToUse = preferredLangs[i];
-                    break;
-                }
-            }
-            if (!langToUse) {
-                // Fallback to en_EN if none is found
-                langToUse = "en";
-                logger.error("Unable to find an appropriate language");
-            }
-
-            return getLanguageRetry(i18nFolder + availLangs[langToUse]);
-        })
-        .then(async (langData): Promise<ICounterpartTranslation | undefined> => {
-            counterpart.registerTranslations(langToUse, langData);
-            await registerCustomTranslations();
-            counterpart.setLocale(langToUse);
-            await SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-            // Adds a lot of noise to test runs, so disable logging there.
-            if (process.env.NODE_ENV !== "test") {
-                logger.log("set language to " + langToUse);
-            }
-
-            // Set 'en' as fallback language:
-            if (langToUse !== "en") {
-                return getLanguageRetry(i18nFolder + availLangs["en"]);
-            }
-        })
-        .then(async (langData): Promise<void> => {
-            if (langData) counterpart.registerTranslations("en", langData);
-            await registerCustomTranslations();
-        });
+    await registerCustomTranslations();
 }
 
 type Language = {

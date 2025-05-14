@@ -2457,6 +2457,10 @@
         "recent_changes_heading": "Hiljutised muudatused, mis pole veel alla laetud või saabunud",
         "title": "Server ei vasta päringutele"
     },
+    "service_worker_error": {
+        "description": "Selleks, et autenditud meediafailide laadimine Matrixi sisuhoidlast toimiks, eeldab %(brand)s taustal toimiva teenuse töötleja kasutamist. See funktsionaalsus pole sinu veebibrauseris toetatud ja meediafailid võivad jääda laadimata.",
+        "title": "Teenuse töötleja laadimine ei õnnestunud"
+    },
     "seshat": {
         "error_initialising": "Sõnumite otsingu ettevalmistamine ei õnnestunud, lisateavet leiad <a>rakenduse seadistustest</a>",
         "reset_button": "Lähtesta sündmuste andmekogu",

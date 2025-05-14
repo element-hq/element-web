@@ -2493,6 +2493,10 @@
         "recent_changes_heading": "Nedávne zmeny, ktoré ešte neboli prijaté",
         "title": "Server neodpovedá"
     },
+    "service_worker_error": {
+        "description": "%(brand)s vyžaduje proces služby na načítanie overených médií z úložísk obsahu Matrix. Váš prehliadač to nepodporuje, takže sa môže vyskytnúť zlyhanie načítania médií.",
+        "title": "Nepodarilo sa načítať proces služby"
+    },
     "seshat": {
         "error_initialising": "Inicializácia vyhľadávania správ zlyhala, pre viac informácií skontrolujte <a>svoje nastavenia</a>",
         "reset_button": "Obnoviť úložisko udalostí",
