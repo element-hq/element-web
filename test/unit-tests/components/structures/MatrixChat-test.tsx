@@ -785,7 +785,7 @@ describe("<MatrixChat />", () => {
                     });
                 });
 
-                it("should open forward dialog when share is fired", async () => {
+                it("should open forward dialog when text message shared", async () => {
                     await getComponentAndWaitForReady();
                     defaultDispatcher.dispatch({ action: Action.Share, format: ShareFormat.Text, msg: "Hello world" });
                     await waitFor(() => {
@@ -804,6 +804,58 @@ describe("<MatrixChat />", () => {
                     expect(payload!.event.getContent()).toEqual({
                         msgtype: MatrixJs.MsgType.Text,
                         body: "Hello world",
+                    });
+                });
+
+                it("should open forward dialog when html message shared", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({ action: Action.Share, format: ShareFormat.Html, msg: "Hello world" });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: expect.stringContaining("Hello world"),
+                        formatted_body: expect.stringContaining("Hello world"),
+                    });
+                });
+
+                it("should open forward dialog when markdown message shared", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({
+                        action: Action.Share,
+                        format: ShareFormat.Markdown,
+                        msg: "Hello *world*",
+                    });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: "Hello *world*",
+                        formatted_body: "Hello <em>world</em>",
                     });
                 });
             });
