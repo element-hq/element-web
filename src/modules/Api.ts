@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Api, RuntimeModuleConstructor, Config } from "@element-hq/element-web-module-api";
+import { createRoot, type Root } from "react-dom/client";
+
+import type { Api, RuntimeModuleConstructor } from "@element-hq/element-web-module-api";
 import { ModuleRunner } from "./ModuleRunner.ts";
 import AliasCustomisations from "../customisations/Alias.ts";
 import { RoomListCustomisations } from "../customisations/RoomList.ts";
@@ -17,7 +19,8 @@ import * as MediaCustomisations from "../customisations/Media.ts";
 import UserIdentifierCustomisations from "../customisations/UserIdentifier.ts";
 import { WidgetPermissionCustomisations } from "../customisations/WidgetPermissions.ts";
 import { WidgetVariableCustomisations } from "../customisations/WidgetVariables.ts";
-import SdkConfig from "../SdkConfig.ts";
+import { ConfigApi } from "./ConfigApi.ts";
+import { I18nApi } from "./I18nApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -27,17 +30,6 @@ const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) =>
         used = true;
     };
 };
-
-class ConfigApi {
-    public get(): Config;
-    public get<K extends keyof Config>(key: K): Config[K];
-    public get<K extends keyof Config = never>(key?: K): Config | Config[K] {
-        if (key === undefined) {
-            return SdkConfig.get() as Config;
-        }
-        return SdkConfig.get(key);
-    }
-}
 
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
@@ -65,6 +57,12 @@ class ModuleApi implements Api {
     /* eslint-enable @typescript-eslint/naming-convention */
 
     public readonly config = new ConfigApi();
+    public readonly i18n = new I18nApi();
+    public readonly rootNode = document.getElementById("matrixchat")!;
+
+    public createRoot(element: Element): Root {
+        return createRoot(element);
+    }
 }
 
 export type ModuleApiType = ModuleApi;
