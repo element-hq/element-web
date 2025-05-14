@@ -29,6 +29,8 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 
+import sanitizeHtml from "sanitize-html";
+
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
@@ -124,7 +126,7 @@ import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSet
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
-import { Linkify } from "../../HtmlUtils";
+import { getHtmlText, Linkify } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
@@ -137,7 +139,9 @@ import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
 import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
-import { type SharePayload } from "../../dispatcher/payloads/SharePayload";
+import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
+import Markdown from "../../Markdown";
+import { sanitizeHtmlParams } from "../../Linkify";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -783,7 +787,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewHome(payload.justRegistered);
                 break;
             case Action.Share:
-                this.viewShare(payload.msg);
+                this.viewShare(payload.format, payload.msg);
                 break;
             case Action.ViewStartChatOrReuse:
                 this.chatCreateOrReuse(payload.user_id);
@@ -1120,18 +1124,49 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private viewShare(msg: string): void {
+    private viewShare(format: ShareFormat, msg: string): void {
         // Wait for the first sync so we can present possible rooms to share into
         this.firstSyncPromise.promise.then(() => {
             this.notifyNewScreen("share");
-            const rawEvent = {
-                type: "m.room.message",
-                content: {
-                    msgtype: MsgType.Text,
-                    body: msg,
-                },
-                origin_server_ts: Date.now(),
-            };
+            let rawEvent;
+            switch (format) {
+                case ShareFormat.Html: {
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: getHtmlText(msg),
+                            format: "org.matrix.custom.html",
+                            formatted_body: sanitizeHtml(msg, sanitizeHtmlParams),
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+                    break;
+                }
+                case ShareFormat.Markdown: {
+                    const html = new Markdown(msg).toHTML({ externalLinks: true });
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: msg,
+                            format: "org.matrix.custom.html",
+                            formatted_body: html,
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+                    break;
+                }
+                default:
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: msg,
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+            }
             const event = new MatrixEvent(rawEvent);
             dis.dispatch<OpenForwardDialogPayload>({
                 action: Action.OpenForwardDialog,
@@ -1771,6 +1806,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 dis.dispatch<SharePayload>({
                     action: Action.Share,
                     msg: params["msg"],
+                    format: params["format"],
                 });
             }
             // if we weren't already coming at this from an existing screen
