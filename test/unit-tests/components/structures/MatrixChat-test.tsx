@@ -69,6 +69,7 @@ import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServe
 import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
+import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -155,6 +156,7 @@ describe("<MatrixChat />", () => {
         whoami: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
+        forget: () => Promise.resolve(),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -673,6 +675,34 @@ describe("<MatrixChat />", () => {
 
                 afterEach(() => {
                     jest.restoreAllMocks();
+                });
+
+                describe("forget_room", () => {
+                    it("should dispatch after_forget_room action on successful forget", async () => {
+                        await clearAllModals();
+                        await getComponentAndWaitForReady();
+
+                        // Mock out the old room list store
+                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
+
+                        // Register a mock function to the dispatcher
+                        const fn = jest.fn();
+                        defaultDispatcher.register(fn);
+
+                        // Forge the room
+                        defaultDispatcher.dispatch({
+                            action: "forget_room",
+                            room_id: roomId,
+                        });
+
+                        // On success, we expect the following action to have been dispatched.
+                        await waitFor(() => {
+                            expect(fn).toHaveBeenCalledWith({
+                                action: Action.AfterForgetRoom,
+                                room: room,
+                            });
+                        });
+                    });
                 });
 
                 describe("leave_room", () => {
