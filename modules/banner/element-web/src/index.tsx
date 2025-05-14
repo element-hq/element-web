@@ -12,7 +12,7 @@ import Banner from "./Banner";
 import { name as ModuleName } from "../package.json";
 
 class TopBarModule implements Module {
-    public static readonly moduleApiVersion = "^0.2.0";
+    public static readonly moduleApiVersion = "^1.0.0";
 
     private config?: ModuleConfig;
 

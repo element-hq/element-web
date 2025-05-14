@@ -11,7 +11,7 @@
         "test": "echo no tests yet"
     },
     "devDependencies": {
-        "@element-hq/element-web-module-api": "^0.2.0",
+        "@element-hq/element-web-module-api": "^1.0.0",
         "@types/node": "^22.10.7",
         "@types/react": "^19",
         "@vitejs/plugin-react": "^4.3.4",
