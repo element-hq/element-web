@@ -25,12 +25,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
-
 // what-input helps improve keyboard accessibility
 import "what-input";
-
 import sanitizeHtml from "sanitize-html";
-
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
