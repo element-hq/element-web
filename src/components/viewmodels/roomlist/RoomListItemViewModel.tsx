@@ -220,7 +220,7 @@ function useRoomMessagePreview(room: Room): string | undefined {
             room,
             roomIsDM ? DefaultTagID.DM : DefaultTagID.Untagged,
         );
-        if (messagePreview) setPreviewText(messagePreview.text);
+        setPreviewText(messagePreview?.text);
     }, [room, shouldShowMessagePreview]);
 
     // MessagePreviewStore and the other AsyncStores need to be converted to TypedEventEmitter

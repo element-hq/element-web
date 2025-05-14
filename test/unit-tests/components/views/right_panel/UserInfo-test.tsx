@@ -20,7 +20,6 @@ import {
     Device,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import {
     UserVerificationStatus,
@@ -714,7 +713,7 @@ describe("<UserOptionsSection />", () => {
     ])(
         "clicking »message« %s should start a DM",
         async (test: string, member: RoomMember | User, expectedAvatarUrl: string | undefined) => {
-            const deferred = defer<string>();
+            const deferred = Promise.withResolvers<string>();
             mocked(startDmOnFirstMessage).mockReturnValue(deferred.promise);
 
             renderComponent({ member });

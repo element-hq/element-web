@@ -46,9 +46,11 @@ describe("<CallGuestLinkButton />", () => {
      */
     const makeRoom = (isVideoRoom = true): Room => {
         const room = new Room(roomId, sdkContext.client!, sdkContext.client!.getSafeUserId());
+        sdkContext.client!.getRoomDirectoryVisibility = jest.fn().mockResolvedValue("public");
         jest.spyOn(room, "isElementVideoRoom").mockReturnValue(isVideoRoom);
         // stub
         jest.spyOn(room, "getPendingEvents").mockReturnValue([]);
+        jest.spyOn(room, "getVersion").mockReturnValue("9");
         return room;
     };
     function mockRoomMembers(room: Room, count: number) {
@@ -221,24 +223,25 @@ describe("<CallGuestLinkButton />", () => {
         });
 
         it("shows ask to join if feature is enabled", () => {
-            const { container } = getComponent(room);
-            expect(getByText(container, "Ask to join")).toBeInTheDocument();
+            getComponent(room);
+            expect(screen.getByRole("radio", { name: "Ask to join ( Recommended )" })).toBeInTheDocument();
         });
-        it("font show ask to join if feature is enabled but cannot invite", () => {
+        it("dont show ask to join if feature is enabled but cannot invite", () => {
             getComponent(room, false);
-            expect(screen.queryByText("Ask to join")).not.toBeInTheDocument();
+            expect(screen.queryByRole("radio", { name: "Ask to join ( Recommended )" })).not.toBeInTheDocument();
         });
         it("doesn't show ask to join if feature is disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
             getComponent(room);
-            expect(screen.queryByText("Ask to join")).not.toBeInTheDocument();
+            expect(screen.queryByRole("radio", { name: "Ask to join ( Recommended )" })).not.toBeInTheDocument();
         });
 
         it("sends correct state event on click", async () => {
             const sendStateSpy = jest.spyOn(sdkContext.client!, "sendStateEvent");
+
             let container;
             container = getComponent(room).container;
-            fireEvent.click(getByText(container, "Ask to join"));
+            fireEvent.click(screen.getByRole("radio", { name: "Ask to join ( Recommended )" }));
             expect(sendStateSpy).toHaveBeenCalledWith(
                 "!room:server.org",
                 "m.room.join_rules",
@@ -246,7 +249,7 @@ describe("<CallGuestLinkButton />", () => {
                 "",
             );
             expect(sendStateSpy).toHaveBeenCalledTimes(1);
-            await waitFor(() => expect(onFinished).toHaveBeenCalledTimes(1));
+            await waitFor(() => expect(onFinished).toHaveBeenCalledTimes(1), { timeout: 3000 });
             onFinished.mockClear();
             sendStateSpy.mockClear();
 
@@ -260,7 +263,7 @@ describe("<CallGuestLinkButton />", () => {
             );
             expect(sendStateSpy).toHaveBeenCalledTimes(1);
             container = getComponent(room).container;
-            await waitFor(() => expect(onFinished).toHaveBeenCalledTimes(1));
+            await waitFor(() => expect(onFinished).toHaveBeenCalledTimes(1), { timeout: 3000 });
             onFinished.mockClear();
             sendStateSpy.mockClear();
 

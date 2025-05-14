@@ -908,7 +908,6 @@
             "accepting": "Apstiprina…",
             "after_new_login": {
                 "device_verified": "Ierīce ir verificēta",
-                "reset_confirmation": "Vai tiešām atiestatīt verifikācijas atslēgas?",
                 "skip_verification": "Pagaidām izlaist verifikāciju",
                 "unable_to_verify": "Neizdevās verificēt šo ierīci",
                 "verify_this_device": "Verificēt šo ierīci"
@@ -979,8 +978,6 @@
             "verify_emoji_prompt": "Apliecināt ar vienreizēju emocijzīmu salīdzināšanu.",
             "verify_emoji_prompt_qr": "Ja nevar nolasīt augstāk esošo kodu, var apliecināt ar vienreizēju emocijzīmju salīdzināšanu.",
             "verify_later": "Es verificēšu vēlāk",
-            "verify_reset_warning_1": "Verifikācijas atslēgu atiestatīšanu nevar atsaukt. Pēc atiestatīšanas jūs nevarēsit piekļūt vecām šifrētām ziņām, un visi draugi, kas jūs iepriekš ir verificējuši, redzēs drošības brīdinājumus, līdz veiksit atkārtotu verifikāciju.",
-            "verify_reset_warning_2": "Lūdzu, turpiniet tikai tad, ja esat pārliecināts, ka esat zaudējis visas pārējās ierīces un drošības atslēgu.",
             "verify_using_device": "Verificēt ar citu ierīci",
             "verify_using_key": "Verificēt ar drošības atslēgu",
             "verify_using_key_or_phrase": "Verificēt, izmantojot drošības atslēgu vai frāzi",
@@ -2765,7 +2762,6 @@
         "heading_with_query": "Izmantot \"%(query)s\" meklēšanai",
         "heading_without_query": "Meklēt",
         "keyboard_scroll_hint": "Lietojiet <arrows/> ritināšanai",
-        "message_search_section_title": "Citi meklējumi",
         "other_rooms_in_space": "Citas istabas %(spaceName)s",
         "public_rooms_label": "Publiskas istabas",
         "public_spaces_label": "Publiskās telpas",
@@ -2774,7 +2770,6 @@
         "remove_filter": "Noņemt meklēšanas filtru %(filter)s",
         "result_may_be_hidden_privacy_warning": "Daži rezultāti var būt slēpti dēļ privātuma",
         "result_may_be_hidden_warning": "Atsevišķi rezultāti var būt slēpti",
-        "search_messages_hint": "Lai meklētu ziņas, istabas augšpusē meklējiet šo ikonu <icon/>",
         "spaces_title": "Telpas, kurās atrodaties",
         "start_group_chat_button": "Uzsākt grupas tērzēšanu"
     },

@@ -23,6 +23,11 @@ import { useRoomListNavigation } from "./useRoomListNavigation";
 
 export interface RoomListViewState {
     /**
+     * Whether the list of rooms is being loaded.
+     */
+    isLoadingRooms: boolean;
+
+    /**
      * A list of rooms to be displayed in the left panel.
      */
     rooms: Room[];
@@ -99,6 +104,7 @@ export interface RoomListViewState {
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
     const {
+        isLoadingRooms,
         primaryFilters,
         activePrimaryFilter,
         rooms: filteredRooms,
@@ -123,6 +129,7 @@ export function useRoomListViewModel(): RoomListViewState {
     const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
+        isLoadingRooms,
         rooms,
         canCreateRoom,
         createRoom,

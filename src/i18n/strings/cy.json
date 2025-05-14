@@ -989,7 +989,6 @@
             "accepting": "Yn derbyn…",
             "after_new_login": {
                 "device_verified": "Dyfais wedi'i dilysu",
-                "reset_confirmation": "Ailosod allweddi dilysu mewn gwirionedd?",
                 "skip_verification": "Hepgor dilysu am y tro",
                 "unable_to_verify": "Methu â gwirio'r ddyfais hon",
                 "verify_this_device": "Dilyswch y ddyfais hon"
@@ -1060,8 +1059,6 @@
             "verify_emoji_prompt": "Gwiriwch trwy gymharu emoji unigryw.",
             "verify_emoji_prompt_qr": "Os na allwch sganio'r cod uchod, gwiriwch trwy gymharu emoji unigryw.",
             "verify_later": "Byddaf yn gwirio yn ddiweddarach",
-            "verify_reset_warning_1": "Nid oes modd dadwneud ailosod eich allweddi dilysu. Ar ôl ailosod, ni fydd gennych fynediad i hen negeseuon wedi'u hamgryptio, a bydd unrhyw ffrindiau sydd wedi'ch dilysu o'r blaen yn gweld rhybuddion diogelwch nes i chi ail-ddilysu gyda nhw.",
-            "verify_reset_warning_2": "Mynd ymlaen dim ond os ydych yn siŵr eich bod wedi colli eich holl ddyfeisiau eraill a'ch Allwedd Adfer.",
             "verify_using_device": "Gwiriwch gyda dyfais arall",
             "verify_using_key": "Dilyswch gydag Allwedd Adfer",
             "verify_using_key_or_phrase": "Dilyswch gydag Allwedd Adfer neu Ymadrodd",
@@ -3070,7 +3067,6 @@
         "heading_without_query": "Chwilio am",
         "join_button_text": "Ymuno â %(roomAddress)s",
         "keyboard_scroll_hint": "Defnydd<arrows/> i sgrolio",
-        "message_search_section_title": "Chwiliadau eraill",
         "other_rooms_in_space": "Ystafelloedd eraill yn %(spaceName)s",
         "public_rooms_label": "Ystafelloedd cyhoeddus",
         "public_spaces_label": "Gofodau cyhoeddus",
@@ -3080,7 +3076,6 @@
         "result_may_be_hidden_privacy_warning": "Gall rhai canlyniadau gael eu cuddio er preifatrwydd",
         "result_may_be_hidden_warning": "Efallai y bydd rhai canlyniadau wedi'u cuddio",
         "search_dialog": "Deialog Chwilio",
-        "search_messages_hint": "I chwilio negeseuon, edrychwch am yr eicon hwn ar frig ystafell<icon/>",
         "spaces_title": "Gofodau rydych chi ynddyn nhw",
         "start_group_chat_button": "Dechreuwch sgwrs grŵp"
     },
@@ -3125,9 +3120,7 @@
     "threads_activity_centre": {
         "header": "Gweithgaredd edafedd",
         "no_rooms_with_threads_notifs": "Nid oes gennych chi ystafelloedd gyda hysbysiadau edafedd eto.",
-        "no_rooms_with_unread_threads": "Nid oes gennych chi ystafelloedd ag edafedd heb eu darllen eto.",
-        "release_announcement_description": "Mae hysbysiadau edafedd wedi symud, dewch o hyd iddyn nhw yma o hyn ymlaen.",
-        "release_announcement_header": "Canolfan Gweithgareddau Edafedd"
+        "no_rooms_with_unread_threads": "Nid oes gennych chi ystafelloedd ag edafedd heb eu darllen eto."
     },
     "time": {
         "about_day_ago": "tua diwrnod yn ôl",

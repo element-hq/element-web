@@ -65,7 +65,7 @@
         "go_back": "Voltar",
         "got_it": "Entendi",
         "hide": "Ocultar",
-        "hide_advanced": "Ocultar avançado",
+        "hide_advanced": "Ocultar avançadas",
         "hold": "Espera",
         "ignore": "Ignorar",
         "import": "Importar",
@@ -939,8 +939,8 @@
             "title": "Novo método de recuperação",
             "warning": "Se não tiveres definido o novo método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
-        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) parece ter mudado.<a> Saber mais</a>",
-        "pinned_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> parece ter mudado. <a>Saiba mais</a>",
+        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) foi alterada. <a> Saber mais</a>",
+        "pinned_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
         "recovery_method_removed": {
             "description_1": "Esta sessão detectou que a tua frase de segurança e a chave para as mensagens seguras foram removidas.",
             "description_2": "Se o fizeste acidentalmente, podes configurar as Mensagens seguras nesta sessão, o que criptografará novamente o histórico de mensagens desta sessão com um novo método de recuperação.",
@@ -969,7 +969,6 @@
             "accepting": "Aceitando...",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "Repõe mesmo as chaves de verificação?",
                 "skip_verification": "Ignora a verificação por enquanto",
                 "unable_to_verify": "Não é possível verificar este dispositivo",
                 "verify_this_device": "Verifica este dispositivo"
@@ -1040,8 +1039,6 @@
             "verify_emoji_prompt": "Verifica comparando o emoji único.",
             "verify_emoji_prompt_qr": "Se não conseguires ler o código acima, verifica-o comparando emojis.",
             "verify_later": "Verificarei mais tarde",
-            "verify_reset_warning_1": "A reposição das tuas chaves de verificação não pode ser anulada. Após a reposição, não terás acesso a mensagens encriptadas antigas e todos os amigos que te tenham verificado anteriormente verão avisos de segurança até voltares a verificar com eles.",
-            "verify_reset_warning_2": "Só avances se tiveres a certeza de que perdeste todos os teus outros dispositivos e a tua chave de recuperação.",
             "verify_using_device": "Verifica com outro dispositivo",
             "verify_using_key": "Verifica com a chave de recuperação",
             "verify_using_key_or_phrase": "Verifica com a chave ou frase de recuperação",
@@ -1052,7 +1049,7 @@
         },
         "verification_requested_toast_title": "Verificação solicitada",
         "verified_identity_changed": "%(displayName)s(<b>%(userId)s</b>) mudou a tua identidade verificada. <a>Saber mais</a>",
-        "verified_identity_changed_no_displayname": "A identidade verificada de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
+        "verified_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
         "verify_toast_description": "Outros utilizadores podem não confiar nisto",
         "verify_toast_title": "Verifica esta sessão",
         "withdraw_verification_action": "Retirar verificação"
@@ -2168,7 +2165,7 @@
             "upgrade_dwarning_ialog_title_public": "Atualizar sala pública",
             "upgrade_warning_dialog_description": "A atualização de uma divisão é uma ação avançada e é normalmente recomendada quando uma divisão está instável devido a erros, funcionalidades em falta ou vulnerabilidades de segurança.",
             "upgrade_warning_dialog_explainer": "<b>Tem em atenção que a atualização fará uma nova versão da sala</b>. Todas as mensagens actuais permanecerão nesta sala arquivada.",
-            "upgrade_warning_dialog_footer": "Actualizarás este quarto de <oldVersion /> para <newVersion />.",
+            "upgrade_warning_dialog_footer": "Esta sala será atualizada de <oldVersion /> para <newVersion />.",
             "upgrade_warning_dialog_invite_label": "Convida automaticamente os membros desta sala para a nova sala",
             "upgrade_warning_dialog_report_bug_prompt": "Normalmente, isto só afecta a forma como a sala é processada no servidor. Se estiveres a ter problemas com o teu %(brand)s, por favor reporta um erro.",
             "upgrade_warning_dialog_report_bug_prompt_link": "Normalmente, isto apenas afecta a forma como a sala é processada no servidor. Se estiveres a ter problemas com o teu %(brand)s, por favor <a>reporta um bug</a>.",
@@ -2308,7 +2305,7 @@
             "encrypted_room_public_confirm_description_1": "<b>Não é recomendável tornar públicas as salas encriptadas.</b> Isso significa que qualquer pessoa pode encontrar e entrar na sala, pelo que qualquer pessoa pode ler as mensagens. Não terás nenhum dos benefícios da encriptação. Encriptar mensagens numa sala pública tornará a receção e o envio de mensagens mais lento.",
             "encrypted_room_public_confirm_description_2": "Para evitar estes problemas, cria uma <a>nova sala pública</a> para a conversa que pretendes ter.",
             "encrypted_room_public_confirm_title": "Tens a certeza de que queres tornar pública esta sala encriptada?",
-            "encryption_forced": "O teu servidor requer que a encriptação seja desactivada.",
+            "encryption_forced": "O servidor requer que a encriptação seja desativada.",
             "encryption_permanent": "Uma vez activada, a encriptação não pode ser desactivada.",
             "error_join_rule_change_title": "Falha ao atualizar as regras de adesão",
             "error_join_rule_change_unknown": "Falha desconhecida",
@@ -2363,7 +2360,7 @@
             "public_without_alias_warning": "Para estabelecer uma ligação a esta sala, adiciona um endereço.",
             "publish_room": "Torna esta sala visível no diretório público de salas.",
             "publish_space": "Torna este espaço visível no diretório de salas públicas.",
-            "strict_encryption": "Nunca envia mensagens encriptadas para sessões não verificadas nesta sala a partir desta sessão",
+            "strict_encryption": "Enviar mensagens apenas a utilizadores verificados.",
             "title": "Segurança e privacidade"
         },
         "title": "Configurações da sala -%(roomName)s",
@@ -2818,7 +2815,7 @@
             "message_search_unsupported_web": "%(brand)s não é possível armazenar mensagens encriptadas em cache com segurança localmente durante a execução num navegador da Web. Usa <desktopLink>%(brand)s Desktop</desktopLink> para que as mensagens encriptadas apareçam nos resultados da pesquisa.",
             "record_session_details": "Grava o nome do cliente, a versão e o URL para reconhecer mais facilmente as sessões no gestor de sessões",
             "send_analytics": "Envia dados analíticos",
-            "strict_encryption": "Nunca envies mensagens encriptadas para sessões não verificadas a partir desta sessão"
+            "strict_encryption": "Enviar mensagens apenas a utilizadores verificados"
         },
         "send_read_receipts": "Enviar recibos lidos",
         "send_read_receipts_unsupported": "O teu servidor não suporta a desativação do envio de recibos de leitura.",
@@ -3182,7 +3179,6 @@
         "heading_without_query": "Pesquisar por",
         "join_button_text": "Aderir %(roomAddress)s",
         "keyboard_scroll_hint": "Utiliza <arrows/> para te deslocares",
-        "message_search_section_title": "Outras pesquisas",
         "other_rooms_in_space": "Outras salas em %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "public_spaces_label": "Espaços públicos",
@@ -3192,7 +3188,6 @@
         "result_may_be_hidden_privacy_warning": "Alguns resultados podem estar ocultos por motivos de privacidade",
         "result_may_be_hidden_warning": "Alguns resultados podem estar ocultos",
         "search_dialog": "Diálogo de pesquisa",
-        "search_messages_hint": "Para procurar mensagens, procura este ícone na parte superior de uma sala <icon/>",
         "spaces_title": "Espaços em que te encontras",
         "start_group_chat_button": "Inicia uma conversa de grupo"
     },
@@ -3241,9 +3236,7 @@
     "threads_activity_centre": {
         "header": "Atividade de tópicos",
         "no_rooms_with_threads_notifs": "Ainda não tens salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos.",
-        "release_announcement_description": "As notificações de tópicos foram movidas, encontre-as aqui a partir de agora.",
-        "release_announcement_header": "Centro de Actividades Tópicos"
+        "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
     },
     "time": {
         "about_day_ago": "há cerca de um dia",

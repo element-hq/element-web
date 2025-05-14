@@ -1,5 +1,5 @@
 diff --git a/node_modules/@types/react/index.d.ts b/node_modules/@types/react/index.d.ts
-index 2272032..18bd20a 100644
+index d3318dc..c2b2c77 100644
 --- a/node_modules/@types/react/index.d.ts
 +++ b/node_modules/@types/react/index.d.ts
 @@ -134,7 +134,7 @@ declare namespace React {
@@ -11,7 +11,7 @@ index 2272032..18bd20a 100644
  
      /**
       * Created by {@link createRef}, or {@link useRef} when passed `null`.
-@@ -941,7 +941,7 @@ declare namespace React {
+@@ -945,7 +945,7 @@ declare namespace React {
          context: unknown;
  
          // Keep in sync with constructor signature of JSXElementConstructor and ComponentClass.
@@ -20,7 +20,7 @@ index 2272032..18bd20a 100644
  
          // We MUST keep setState() as a unified signature because it allows proper checking of the method return type.
          // See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18365#issuecomment-351013257
-@@ -1113,7 +1113,7 @@ declare namespace React {
+@@ -1117,7 +1117,7 @@ declare namespace React {
       */
      interface ComponentClass<P = {}, S = ComponentState> extends StaticLifecycle<P, S> {
          // constructor signature must match React.Component

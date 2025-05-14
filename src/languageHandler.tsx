@@ -113,6 +113,10 @@ export function _td(s: TranslationKey): TranslationKey {
     return s;
 }
 
+function isValidTranslation(translated: string): boolean {
+    return typeof translated === "string" && !translated.startsWith("missing translation:");
+}
+
 /**
  * to improve screen reader experience translations that are not in the main page language
  * eg a translation that fell back to english from another language
@@ -124,30 +128,26 @@ export function _td(s: TranslationKey): TranslationKey {
  * */
 const translateWithFallback = (text: string, options?: IVariables): { translated: string; isFallback?: boolean } => {
     const translated = counterpart.translate(text, { ...options, fallbackLocale: counterpart.getLocale() });
-    if (!translated || translated.startsWith("missing translation:")) {
-        const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
-        if (
-            (!fallbackTranslated || fallbackTranslated.startsWith("missing translation:")) &&
-            process.env.NODE_ENV !== "development"
-        ) {
-            // Even the translation via FALLBACK_LOCALE failed; this can happen if
-            //
-            // 1. The string isn't in the translations dictionary, usually because you're in develop
-            // and haven't run yarn i18n
-            // 2. Loading the translation resources over the network failed, which can happen due to
-            // to network or if the client tried to load a translation that's been removed from the
-            // server.
-            //
-            // At this point, its the lesser evil to show the untranslated text, which
-            // will be in English, so the user can still make out *something*, rather than an opaque
-            // "missing translation" error.
-            //
-            // Don't do this in develop so people remember to run yarn i18n.
-            return { translated: text, isFallback: true };
-        }
+    if (isValidTranslation(translated)) {
+        return { translated };
+    }
+
+    const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
+    if (isValidTranslation(fallbackTranslated)) {
         return { translated: fallbackTranslated, isFallback: true };
     }
-    return { translated };
+
+    // Even the translation via FALLBACK_LOCALE failed; this can happen if
+    //
+    // 1. The string isn't in the translations dictionary, usually because you're in develop
+    // and haven't run yarn i18n
+    // 2. Loading the translation resources over the network failed, which can happen due to
+    // to network or if the client tried to load a translation that's been removed from the
+    // server.
+    //
+    // At this point, its the lesser evil to show the i18n key which will be in English but not human-friendly,
+    // so the user can still make out *something*, rather than an opaque possibly-untranslated "missing translation" error.
+    return { translated: text, isFallback: true };
 };
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
@@ -454,55 +454,35 @@ type Languages = {
     [lang: string]: string;
 };
 
-export function setLanguage(preferredLangs: string | string[]): Promise<void> {
-    if (!Array.isArray(preferredLangs)) {
-        preferredLangs = [preferredLangs];
+export async function setLanguage(...preferredLangs: string[]): Promise<void> {
+    PlatformPeg.get()?.setLanguage(preferredLangs);
+
+    const availableLanguages = await getLangsJson();
+    let chosenLanguage = preferredLangs.find((lang) => availableLanguages.hasOwnProperty(lang));
+    if (!chosenLanguage) {
+        // Fallback to en_EN if none is found
+        chosenLanguage = "en";
+        logger.error("Unable to find an appropriate language, preferred: ", preferredLangs);
     }
 
-    const plaf = PlatformPeg.get();
-    if (plaf) {
-        plaf.setLanguage(preferredLangs);
+    const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
+
+    counterpart.registerTranslations(chosenLanguage, languageData);
+    counterpart.setLocale(chosenLanguage);
+
+    await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
+    // Adds a lot of noise to test runs, so disable logging there.
+    if (process.env.NODE_ENV !== "test") {
+        logger.log("set language to " + chosenLanguage);
     }
 
-    let langToUse: string;
-    let availLangs: Languages;
-    return getLangsJson()
-        .then((result) => {
-            availLangs = result;
+    // Set 'en' as fallback language:
+    if (chosenLanguage !== "en") {
+        const fallbackLanguageData = await getLanguageRetry(i18nFolder + availableLanguages["en"]);
+        counterpart.registerTranslations("en", fallbackLanguageData);
+    }
 
-            for (let i = 0; i < preferredLangs.length; ++i) {
-                if (availLangs.hasOwnProperty(preferredLangs[i])) {
-                    langToUse = preferredLangs[i];
-                    break;
-                }
-            }
-            if (!langToUse) {
-                // Fallback to en_EN if none is found
-                langToUse = "en";
-                logger.error("Unable to find an appropriate language");
-            }
-
-            return getLanguageRetry(i18nFolder + availLangs[langToUse]);
-        })
-        .then(async (langData): Promise<ICounterpartTranslation | undefined> => {
-            counterpart.registerTranslations(langToUse, langData);
-            await registerCustomTranslations();
-            counterpart.setLocale(langToUse);
-            await SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-            // Adds a lot of noise to test runs, so disable logging there.
-            if (process.env.NODE_ENV !== "test") {
-                logger.log("set language to " + langToUse);
-            }
-
-            // Set 'en' as fallback language:
-            if (langToUse !== "en") {
-                return getLanguageRetry(i18nFolder + availLangs["en"]);
-            }
-        })
-        .then(async (langData): Promise<void> => {
-            if (langData) counterpart.registerTranslations("en", langData);
-            await registerCustomTranslations();
-        });
+    await registerCustomTranslations();
 }
 
 type Language = {
@@ -529,8 +509,7 @@ export async function getAllLanguagesWithLabels(): Promise<Language[]> {
 
 export function getLanguagesFromBrowser(): readonly string[] {
     if (navigator.languages && navigator.languages.length) return navigator.languages;
-    if (navigator.language) return [navigator.language];
-    return [navigator.userLanguage || "en"];
+    return [navigator.language ?? "en"];
 }
 
 export function getLanguageFromBrowser(): string {

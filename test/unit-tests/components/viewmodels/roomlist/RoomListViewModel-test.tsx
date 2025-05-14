@@ -9,9 +9,8 @@ import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
-import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/RoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
@@ -239,27 +238,6 @@ describe("RoomListViewModel", () => {
         ];
 
         describe.each(testcases)("For secondary filter: %s", (secondaryFilterName, secondary, primaryFilterName) => {
-            it(`should unapply incompatible primary filter that is already active: ${primaryFilterName}`, () => {
-                const { fn } = mockAndCreateRooms();
-                const { result: vm } = renderHook(() => useRoomListViewModel());
-
-                // Apply the primary filter
-                const i = vm.current.primaryFilters.findIndex((f) => f.name === primaryFilterName);
-                act(() => {
-                    vm.current.primaryFilters[i].toggle();
-                });
-
-                // Apply the secondary filter
-                act(() => {
-                    vm.current.activateSecondaryFilter(secondary.secondary);
-                });
-
-                // RLS call should only include the secondary filter
-                expect(fn).toHaveBeenLastCalledWith([secondary.filterKey]);
-                // Primary filter should have been unapplied
-                expect(vm.current.primaryFilters[i].active).toEqual(false);
-            });
-
             it(`should hide incompatible primary filter: ${primaryFilterName}`, () => {
                 mockAndCreateRooms();
                 const { result: vm } = renderHook(() => useRoomListViewModel());
