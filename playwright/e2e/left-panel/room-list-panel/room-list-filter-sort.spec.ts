@@ -29,6 +29,10 @@ test.describe("Room list filters and sort", () => {
         return page.getByRole("button", { name: "Filter" });
     }
 
+    function getRoomOptionsMenu(page: Page): Locator {
+        return page.getByRole("button", { name: "Room Options" });
+    }
+
     /**
      * Get the room list
      * @param page
@@ -252,6 +256,23 @@ test.describe("Room list filters and sort", () => {
                 await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
             },
         );
+
+        test("should sort the room list alphabetically", async ({ page }) => {
+            const roomListView = getRoomList(page);
+
+            await getRoomOptionsMenu(page).click();
+            await page.getByRole("menuitemradio", { name: "A-Z" }).click();
+
+            await expect(roomListView.getByRole("gridcell").first()).toHaveText(/empty room/);
+        });
+
+        test("should move room to the top on message when sorting by activity", async ({ page, bot }) => {
+            const roomListView = getRoomList(page);
+
+            await bot.sendMessage(unReadDmId, "Hello!");
+
+            await expect(roomListView.getByRole("gridcell").first()).toHaveText(/unread dm/);
+        });
     });
 
     test.describe("Empty room list", () => {

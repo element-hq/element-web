@@ -2167,9 +2167,14 @@
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
+        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Activity",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Show rooms with unread messages first",
         "space_menu": {
             "home": "Space home",

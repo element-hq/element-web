@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip } from "@vector-im/compound-web";
-import React, { type Ref, type JSX, useState } from "react";
+import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
+import React, { type Ref, type JSX, useState, useCallback } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { _t } from "../../../../languageHandler";
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
+import { SortOption } from "../../../viewmodels/roomlist/useSorter";
 
 interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
     ref?: Ref<HTMLButtonElement>;
@@ -39,6 +40,14 @@ interface Props {
 export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
     const [open, setOpen] = useState(false);
 
+    const onActivitySelected = useCallback(() => {
+        vm.sort(SortOption.Activity);
+    }, [vm]);
+
+    const onAtoZSelected = useCallback(() => {
+        vm.sort(SortOption.AToZ);
+    }, [vm]);
+
     return (
         <Menu
             open={open}
@@ -48,6 +57,17 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
             align="start"
             trigger={<MenuTrigger />}
         >
+            <MenuTitle title={_t("room_list|sort")} />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|activity")}
+                checked={vm.activeSortOption === SortOption.Activity}
+                onSelect={onActivitySelected}
+            />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|atoz")}
+                checked={vm.activeSortOption === SortOption.AToZ}
+                onSelect={onAtoZSelected}
+            />
             <MenuTitle title={_t("room_list|appearance")} />
             <CheckboxMenuItem
                 label={_t("room_list|show_message_previews")}
