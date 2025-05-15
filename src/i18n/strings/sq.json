@@ -827,7 +827,6 @@
             "accepting": "Po pranohet…",
             "after_new_login": {
                 "device_verified": "Pajisja u verifikua",
-                "reset_confirmation": "Të kthehen vërtet te parazgjedhjet kyçet e verifikimit?",
                 "skip_verification": "Anashkaloje verifikimin hëpërhë",
                 "unable_to_verify": "S’arrihet të verifikohet kjo pajisje",
                 "verify_this_device": "Verifikoni këtë pajisje"
@@ -897,8 +896,6 @@
             "verify_emoji_prompt": "Verifikoje duke krahasuar emoji unik.",
             "verify_emoji_prompt_qr": "Nëse s’e skanoni dot kodin më sipër, verifikojeni duke krahasuar emoji unik.",
             "verify_later": "Do ta verifikoj më vonë",
-            "verify_reset_warning_1": "Rikthimi te parazgjedhjet i kyçeve tuaj të verifikimit s’mund të zhbëhet. Pas rikthimit te parazgjedhjet, s’do të mund të hyni dot te mesazhe të dikurshëm të fshehtëzuar dhe, cilido shok që ju ka verifikuar më parë, do të shohë një sinjalizim sigurie deri sa të ribëni verifikimin me ta.",
-            "verify_reset_warning_2": "Ju lutemi, ecni më tej vetëm nëse jeni i sigurt se keni humbur krejt pajisjet tuaja të tjera dhe Kyçin tuaj të Sigurisë.",
             "verify_using_device": "Verifikojeni me pajisje tjetër",
             "verify_using_key": "Verifikoje me Kyç Sigurie",
             "verify_using_key_or_phrase": "Verifikojeni me Kyç ose Frazë Sigurie",
@@ -2650,7 +2647,6 @@
         "heading_without_query": "Kërkoni për",
         "join_button_text": "Hyni te %(roomAddress)s",
         "keyboard_scroll_hint": "Përdorni <arrows/> për rrëshqitje",
-        "message_search_section_title": "Kërkime të tjera",
         "other_rooms_in_space": "Dhoma të tjera në %(spaceName)s",
         "public_rooms_label": "Dhoma publike",
         "recent_searches_section_title": "Kërkime së fundi",
@@ -2659,7 +2655,6 @@
         "result_may_be_hidden_privacy_warning": "Disa përfundime mund të jenë fshehur, për arsye privatësie",
         "result_may_be_hidden_warning": "Disa përfundime mund të jenë të fshehura",
         "search_dialog": "Dialog Kërkimi",
-        "search_messages_hint": "Që të kërkoni te mesazhet, shihni për këtë ikonë në krye të një dhome <icon/>",
         "spaces_title": "Hapësira ku jeni i pranishëm",
         "start_group_chat_button": "Nisni një fjalosje grupi"
     },

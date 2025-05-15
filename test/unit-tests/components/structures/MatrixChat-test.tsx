@@ -21,7 +21,7 @@ import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
-import { defer, type IDeferred, sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 import {
     CryptoEvent,
     type DeviceVerificationStatus,
@@ -68,6 +68,7 @@ import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
+import { clearStorage } from "../../../../src/Lifecycle";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -85,7 +86,7 @@ describe("<MatrixChat />", () => {
     const deviceId = "qwertyui";
     const accessToken = "abc123";
     const refreshToken = "def456";
-    let bootstrapDeferred: IDeferred<void>;
+    let bootstrapDeferred: PromiseWithResolvers<void>;
     // reused in createClient mock below
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
@@ -217,6 +218,9 @@ describe("<MatrixChat />", () => {
     };
 
     beforeEach(async () => {
+        await clearStorage();
+        Lifecycle.setSessionLockNotStolen();
+
         localStorage.clear();
         jest.restoreAllMocks();
         defaultProps = {
@@ -248,7 +252,7 @@ describe("<MatrixChat />", () => {
             {} as ValidatedServerConfig,
         );
 
-        bootstrapDeferred = defer();
+        bootstrapDeferred = Promise.withResolvers();
 
         await clearAllModals();
     });
@@ -344,10 +348,6 @@ describe("<MatrixChat />", () => {
                     },
                 });
 
-            jest.spyOn(logger, "error").mockClear();
-        });
-
-        beforeEach(() => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
             jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
@@ -1513,7 +1513,7 @@ describe("<MatrixChat />", () => {
                 jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
 
                 // intercept initCrypto and have it block until we complete the deferred
-                const initCryptoCompleteDefer = defer();
+                const initCryptoCompleteDefer = Promise.withResolvers<void>();
                 const initCryptoCalled = new Promise<void>((resolve) => {
                     client.initRustCrypto.mockImplementation(() => {
                         resolve();

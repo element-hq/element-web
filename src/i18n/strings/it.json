@@ -869,7 +869,6 @@
             "accepting": "Accettazione…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificato",
-                "reset_confirmation": "Reimpostare le chiavi di verifica?",
                 "skip_verification": "Salta la verifica per adesso",
                 "unable_to_verify": "Impossibile verificare questo dispositivo",
                 "verify_this_device": "Verifica questo dispositivo"
@@ -939,8 +938,6 @@
             "verify_emoji_prompt": "Verifica confrontando emoji specifici.",
             "verify_emoji_prompt_qr": "Se non riesci a scansionare il codice sopra, verifica confrontando emoji specifiche.",
             "verify_later": "Verificherò dopo",
-            "verify_reset_warning_1": "La reimpostazione delle chiavi di verifica non può essere annullata. Dopo averlo fatto, non avrai accesso ai vecchi messaggi cifrati, e gli amici che ti avevano verificato in precedenza vedranno avvisi di sicurezza fino a quando non ti ri-verifichi con loro.",
-            "verify_reset_warning_2": "Procedi solo se sei sicuro di avere perso tutti gli altri tuoi dispositivi e la chiave di sicurezza.",
             "verify_using_device": "Verifica con un altro dispositivo",
             "verify_using_key": "Verifica con chiave di sicurezza",
             "verify_using_key_or_phrase": "Verifica con chiave di sicurezza o frase",
@@ -2833,7 +2830,6 @@
         "heading_without_query": "Cerca",
         "join_button_text": "Entra in %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> per scorrere",
-        "message_search_section_title": "Altre ricerche",
         "other_rooms_in_space": "Altre stanze in %(spaceName)s",
         "public_rooms_label": "Stanze pubbliche",
         "public_spaces_label": "Spazi pubblici",
@@ -2843,7 +2839,6 @@
         "result_may_be_hidden_privacy_warning": "Alcuni risultati potrebbero essere nascosti per privacy",
         "result_may_be_hidden_warning": "Alcuni risultati potrebbero essere nascosti",
         "search_dialog": "Finestra di ricerca",
-        "search_messages_hint": "Per cercare messaggi, trova questa icona in cima ad una stanza <icon/>",
         "spaces_title": "Spazi in cui sei",
         "start_group_chat_button": "Inizia una conversazione di gruppo"
     },

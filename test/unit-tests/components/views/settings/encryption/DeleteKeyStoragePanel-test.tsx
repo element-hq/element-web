@@ -9,7 +9,6 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
@@ -72,7 +71,7 @@ describe("<DeleteKeyStoragePanel />", () => {
     });
 
     it("should wait with button disabled while setEnabled runs", async () => {
-        const setEnabledDefer = defer();
+        const setEnabledDefer = Promise.withResolvers<void>();
 
         mocked(useKeyStoragePanelViewModel).mockReturnValue({
             setEnabled: jest.fn().mockReturnValue(setEnabledDefer.promise),

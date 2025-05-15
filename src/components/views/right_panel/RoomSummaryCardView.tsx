@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -130,10 +130,17 @@ const RoomSummaryCardView: React.FC<IProps> = ({
     onSearchChange,
     onSearchCancel,
     focusRoomSearch,
-    searchTerm,
+    searchTerm = "",
 }) => {
     const vm = useRoomSummaryCardViewModel(room, permalinkCreator, onSearchCancel);
 
+    // The search field is controlled and onSearchChange is debounced in RoomView,
+    // so we need to set the value of the input right away
+    const [searchValue, setSearchValue] = useState(searchTerm);
+    useEffect(() => {
+        setSearchValue(searchTerm);
+    }, [searchTerm]);
+    
     const roomInfo = (
         <header className="mx_RoomSummaryCard_container">
             <RoomAvatar room={room} size="80px" viewAvatarOnClick />
@@ -200,9 +207,10 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 placeholder={_t("room|search|placeholder")}
                 name="room_message_search"
                 onChange={(e) => {
+                    setSearchValue(e.currentTarget.value);
                     onSearchChange(e.currentTarget.value);
                 }}
-                value={searchTerm}
+                value={searchValue}
                 className="mx_no_textinput"
                 ref={vm.searchInputRef}
                 autoFocus={focusRoomSearch}

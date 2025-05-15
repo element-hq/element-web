@@ -21,6 +21,7 @@ import {
     useRoomSummaryCardViewModel,
 } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import userEvent from "@testing-library/user-event";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
@@ -157,6 +158,21 @@ describe("<RoomSummaryCard />", () => {
             expect(getByPlaceholderText("Search messages…")).toHaveFocus();
             fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
             expect(vmDefaultValues.onUpdateSearchInput).toHaveBeenCalled();
+        });
+
+        it("should update the search field value correctly", async () => {
+            const user = userEvent.setup();
+
+            const onSearchChange = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+            });
+
+            const searchInput = getByPlaceholderText("Search messages…");
+            await user.type(searchInput, "test query");
+
+            expect(onSearchChange).toHaveBeenCalledWith("test query");
+            expect(searchInput).toHaveValue("test query");
         });
     });
 
