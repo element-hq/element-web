@@ -12,12 +12,12 @@ import { type ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite"
 import BaseAvatar from "../../../avatars/BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
-import { _t } from "../../../../../languageHandler";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
     index: number;
-    focused: boolean;
+    focused?: boolean;
+    onBlur?: () => void;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -31,6 +31,7 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
+            onBlur={props.onBlur}
             index={props.index}
             ariaLabel={name}
             aria-colindex={props.index}

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, type JSX } from "react";
+import React, { type JSX } from "react";
 
 import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import { type RoomMember } from "../../../../../models/rooms/RoomMember";
@@ -19,10 +19,10 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface IProps {
     member: RoomMember;
-    showPresence: boolean;
-    focused: boolean;
     index: number;
-    onBlur: () => void;
+    onBlur?: () => void;
+    showPresence?: boolean;
+    focused?: boolean;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {

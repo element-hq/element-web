@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { useCallback, useRef, type JSX } from "react";
-import { ListRange, Virtuoso, VirtuosoHandle } from "react-virtuoso";
+import { type ListRange, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { Flex } from "../../../utils/Flex";
 import {
@@ -34,26 +34,36 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const [lastFocusedIndex, setLastFocusedIndex] = React.useState(-1);
     const [visibleRange, setVisibleRange] = React.useState<ListRange | undefined>(undefined);
 
-    const getRowComponent = (item: MemberWithSeparator, focused: boolean, index: number): JSX.Element => {
+    const getRowComponent = (item: MemberWithSeparator, index: number, focusedIndex: number): JSX.Element => {
+        const focused = index == focusedIndex;
+        const onBlur = () => {
+            if (focusedIndex == index) {
+                setFocusedIndex(-1);
+                setLastFocusedIndex(index);
+            }
+        };
+
         if (item === SEPARATOR) {
-            return <hr className="mx_MemberListView_separator" role="separator" />;
+            return <hr className="mx_MemberListView_separator" />;
         } else if (item.member) {
             return (
                 <RoomMemberTileView
                     member={item.member}
                     showPresence={vm.isPresenceEnabled}
-                    focused={focused}
+                    focused={index == focusedIndex}
                     index={index}
-                    onBlur={() => {
-                        if (focusedIndex == index) {
-                            setFocusedIndex(-1);
-                            setLastFocusedIndex(index);
-                        }
-                    }}
+                    onBlur={onBlur}
                 />
             );
         } else {
-            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} focused={focused} index={index} />;
+            return (
+                <ThreePidInviteTileView
+                    threePidInvite={item.threePidInvite}
+                    focused={focused}
+                    index={index}
+                    onBlur={onBlur}
+                />
+            );
         }
     };
 
@@ -73,7 +83,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 
     const scrollToMember = useCallback(
         (index: number, isDirectionDown: boolean, align?: "center" | "end" | "start"): void => {
-            let nextItemIsSeparator = isDirectionDown
+            const nextItemIsSeparator = isDirectionDown
                 ? focusedIndex < totalRows - 1 && vm.members[index] === SEPARATOR
                 : focusedIndex > 1 && vm.members[index] === SEPARATOR;
             const nextMemberOffset = nextItemIsSeparator ? 1 : 0;
@@ -82,7 +92,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 : Math.max(0, index - nextMemberOffset);
             scrollToIndex(nextIndex, align);
         },
-        [ref, focusedIndex, totalRows],
+        [ref, focusedIndex, totalRows, scrollToIndex, vm.members],
     );
 
     const keyDownCallback = useCallback(
@@ -122,7 +132,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 e.preventDefault();
             }
         },
-        [scrollToIndex, scrollToMember, focusedIndex, vm],
+        [scrollToIndex, scrollToMember, focusedIndex, vm, visibleRange],
     );
 
     const onFocus = (e: React.FocusEvent): void => {
@@ -165,7 +175,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     rangeChanged={setVisibleRange}
                     data={vm.members}
                     onFocus={onFocus}
-                    itemContent={(index, member) => getRowComponent(member, index === focusedIndex, index)}
+                    itemContent={(index, member, context) => getRowComponent(member, index, context.focusedIndex)}
                     components={{ Footer: () => footer() }}
                 />
             </Flex>

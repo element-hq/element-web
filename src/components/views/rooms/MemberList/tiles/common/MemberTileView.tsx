@@ -14,9 +14,9 @@ interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
-    onBlur: () => void;
-    ariaLabel: string;
     index: number;
+    onBlur?: () => void;
+    ariaLabel?: string;
     presenceJsx?: JSX.Element;
     userLabel?: React.ReactNode;
     iconJsx?: JSX.Element;
@@ -44,7 +44,7 @@ export function MemberTileView(props: Props): JSX.Element {
                 })}
                 onClick={props.onClick}
                 onBlur={props.onBlur}
-                aria-label={props.ariaLabel}
+                aria-label={props?.ariaLabel}
                 aria-rowindex={props.index + 1}
                 aria-colindex={1}
                 tabIndex={props.focused ? 0 : -1}
