@@ -224,7 +224,11 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           class="mx_Flex"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
-          Search
+          <span
+            class="mx_RoomListSearch_search_text"
+          >
+            Search
+          </span>
           <kbd>
             Ctrl K
           </kbd>
