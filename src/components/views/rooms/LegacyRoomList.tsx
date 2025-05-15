@@ -356,7 +356,9 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
         );
     }
 
-    if (showCreateRoom || showExploreRooms) {
+    // Pro777 edit
+    ///if (showCreateRoom || showExploreRooms) {
+    if ((showCreateRoom || showExploreRooms) && SettingsStore.getValue("view_button_creating_room")) {
         return (
             <>
                 <ContextMenuTooltipButton
