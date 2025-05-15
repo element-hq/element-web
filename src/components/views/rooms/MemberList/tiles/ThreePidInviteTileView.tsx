@@ -31,6 +31,7 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
+            index={props.index}
             ariaLabel={name}
             aria-colindex={props.index}
             userLabel={vm.userLabel}

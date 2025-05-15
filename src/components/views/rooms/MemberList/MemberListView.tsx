@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { useCallback, useRef, type JSX } from "react";
-import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
+import { ListRange, Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
 import { Flex } from "../../../utils/Flex";
 import {
@@ -31,7 +31,8 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const totalRows = vm.members.length;
     const ref = useRef<VirtuosoHandle | null>(null);
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
-    const listRef = useRef<HTMLButtonElement | null>(null);
+    const [lastFocusedIndex, setLastFocusedIndex] = React.useState(-1);
+    const [visibleRange, setVisibleRange] = React.useState<ListRange | undefined>(undefined);
 
     const getRowComponent = (item: MemberWithSeparator, focused: boolean, index: number): JSX.Element => {
         if (item === SEPARATOR) {
@@ -43,17 +44,24 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     showPresence={vm.isPresenceEnabled}
                     focused={focused}
                     index={index}
+                    onBlur={() => {
+                        if (focusedIndex == index) {
+                            setFocusedIndex(-1);
+                            setLastFocusedIndex(index);
+                        }
+                    }}
                 />
             );
         } else {
-            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} index={index} />;
+            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} focused={focused} index={index} />;
         }
     };
 
     const scrollToIndex = useCallback(
-        (index: number): void => {
+        (index: number, align?: "center" | "end" | "start"): void => {
             ref?.current?.scrollIntoView({
                 index: index,
+                align: align,
                 behavior: "auto",
                 done: () => {
                     setFocusedIndex(index);
@@ -63,46 +71,68 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         [ref],
     );
 
+    const scrollToMember = useCallback(
+        (index: number, isDirectionDown: boolean, align?: "center" | "end" | "start"): void => {
+            let nextItemIsSeparator = isDirectionDown
+                ? focusedIndex < totalRows - 1 && vm.members[index] === SEPARATOR
+                : focusedIndex > 1 && vm.members[index] === SEPARATOR;
+            const nextMemberOffset = nextItemIsSeparator ? 1 : 0;
+            const nextIndex = isDirectionDown
+                ? Math.min(totalRows - 1, index + nextMemberOffset)
+                : Math.max(0, index - nextMemberOffset);
+            scrollToIndex(nextIndex, align);
+        },
+        [ref, focusedIndex, totalRows],
+    );
+
     const keyDownCallback = useCallback(
         (e: any) => {
+            let handled = false;
             if (e.code === "ArrowUp") {
-                const nextItemIsSeparator = focusedIndex > 1 && vm.members[focusedIndex - 1] === SEPARATOR;
-                const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
-                scrollToIndex(Math.max(0, focusedIndex - nextMemberOffset));
-                e.preventDefault();
+                scrollToMember(focusedIndex - 1, false);
+                handled = true;
             } else if (e.code === "ArrowDown") {
-                const nextItemIsSeparator = focusedIndex < totalRows - 1 && vm.members[focusedIndex + 1] === SEPARATOR;
-                const nextMemberOffset = nextItemIsSeparator ? 2 : 1;
-                scrollToIndex(Math.min(totalRows - 1, focusedIndex + nextMemberOffset));
-                e.preventDefault();
+                scrollToMember(focusedIndex + 1, true);
+                handled = true;
             } else if ((e.code === "Enter" || e.code === "Space") && focusedIndex >= 0) {
                 const item = vm.members[focusedIndex];
                 if (item !== SEPARATOR) {
                     const member = item.member ?? item.threePidInvite;
                     vm.onClickMember(member);
-                    e.stopPropagation();
-                    e.preventDefault();
+                    handled = true;
                 }
+            } else if (e.code === "Home") {
+                scrollToIndex(0);
+                handled = true;
+            } else if (e.code === "End") {
+                scrollToIndex(vm.members.length - 1);
+                handled = true;
+            } else if (e.code === "PageDown" && visibleRange) {
+                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                scrollToMember(focusedIndex + numberDisplayed, false, `start`);
+                handled = true;
+            } else if (e.code === "PageUp" && visibleRange) {
+                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                scrollToMember(focusedIndex - numberDisplayed, false, `start`);
+                handled = true;
             }
-        },
-        [scrollToIndex, focusedIndex, setFocusedIndex, vm, totalRows],
-    );
 
-    const scrollerRef = useCallback(
-        (element: any) => {
-            if (element) {
-                element.addEventListener("keydown", keyDownCallback);
-                listRef.current = element;
-            } else {
-                listRef?.current?.removeEventListener("keydown", keyDownCallback);
+            if (handled) {
+                e.stopPropagation();
+                e.preventDefault();
             }
         },
-        [keyDownCallback],
+        [scrollToIndex, scrollToMember, focusedIndex, vm],
     );
 
     const onFocus = (e: React.FocusEvent): void => {
-        const nextIndex = focusedIndex == -1 ? 0 : focusedIndex;
+        if (focusedIndex > -1) {
+            return;
+        }
+
+        const nextIndex = lastFocusedIndex == -1 ? 0 : lastFocusedIndex;
         scrollToIndex(nextIndex);
+        e.stopPropagation();
         e.preventDefault();
     };
 
@@ -118,6 +148,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             role="tabpanel"
             header={_t("common|people")}
             onClose={props.onClose}
+            onKeyDown={keyDownCallback}
         >
             <Flex align="stretch" direction="column" className="mx_MemberListView_container">
                 <Form.Root>
@@ -130,10 +161,8 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     aria-colcount={1}
                     ref={ref}
                     style={{ height: "100%" }}
-                    scrollerRef={scrollerRef}
                     context={{ focusedIndex }}
-                    // Don't focus on the table as a whole go straight to the first item in the list
-                    tabIndex={undefined}
+                    rangeChanged={setVisibleRange}
                     data={vm.members}
                     onFocus={onFocus}
                     itemContent={(index, member) => getRowComponent(member, index === focusedIndex, index)}

@@ -14,6 +14,7 @@ interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
+    onBlur: () => void;
     ariaLabel: string;
     index: number;
     presenceJsx?: JSX.Element;
@@ -30,7 +31,7 @@ export function MemberTileView(props: Props): JSX.Element {
     const ref = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         if (props.focused) {
-            ref.current?.focus();
+            ref.current?.focus({ preventScroll: true, focusVisible: true });
         }
     }, [props.focused]);
     return (
@@ -42,6 +43,7 @@ export function MemberTileView(props: Props): JSX.Element {
                     mx_MemberTileView_hover: props.focused,
                 })}
                 onClick={props.onClick}
+                onBlur={props.onBlur}
                 aria-label={props.ariaLabel}
                 aria-rowindex={props.index + 1}
                 aria-colindex={1}

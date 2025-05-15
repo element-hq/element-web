@@ -22,6 +22,7 @@ interface IProps {
     showPresence: boolean;
     focused: boolean;
     index: number;
+    onBlur: () => void;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -57,6 +58,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
     return (
         <MemberTileView
             onClick={vm.onClick}
+            onBlur={props.onBlur}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
