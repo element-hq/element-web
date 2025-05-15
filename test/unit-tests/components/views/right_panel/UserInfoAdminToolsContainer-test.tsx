@@ -11,7 +11,13 @@ import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { UserInfoAdminToolsContainer } from "../../../../../src/components/views/right_panel/user_info/UserInfoAdminToolsContainer";
+import { useUserInfoAdminToolsContainerViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
+import { useRoomKickButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel";
+import { useBanButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel";
+import { useMuteButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel";
+import { useRedactMessagesButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel";
 import { stubClient } from "../../../../test-utils";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../src/utils/DMRoomMap", () => {
     const mock = {
@@ -24,12 +30,48 @@ jest.mock("../../../../../src/utils/DMRoomMap", () => {
         sharedInstance: mock,
     };
 });
-// Mock the view models
-jest.mock("../../../../../src/components/viewmodels/right_panel/UserInfoAdminToolsContainerViewModel");
 
-const mockViewModel = jest.requireMock(
-    "../../../../../src/components/viewmodels/right_panel/UserInfoAdminToolsContainerViewModel",
+jest.mock(
+    "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel",
+    () => ({
+        useUserInfoAdminToolsContainerViewModel: jest.fn().mockReturnValue({
+            isCurrentUserInTheRoom: true,
+            shouldShowKickButton: true,
+            shouldShowBanButton: true,
+            shouldShowMuteButton: true,
+            shouldShowRedactButton: true,
+        }),
+    }),
 );
+
+jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel", () => ({
+    useRoomKickButtonViewModel: jest.fn().mockReturnValue({
+        canUserBeKicked: true,
+        kickLabel: "Kick",
+        onKickClick: jest.fn(),
+    }),
+}));
+
+jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel", () => ({
+    useBanButtonViewModel: jest.fn().mockReturnValue({
+        banLabel: "Ban",
+        onBanOrUnbanClick: jest.fn(),
+    }),
+}));
+
+jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel", () => ({
+    useMuteButtonViewModel: jest.fn().mockReturnValue({
+        isMemberInTheRoom: true,
+        muteLabel: "Mute",
+        onMuteButtonClick: jest.fn(),
+    }),
+}));
+
+jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel", () => ({
+    useRedactMessagesButtonViewModel: jest.fn().mockReturnValue({
+        onRedactAllMessagesClick: jest.fn(),
+    }),
+}));
 
 const defaultRoomId = "!fkfk";
 
@@ -78,43 +120,25 @@ describe("UserInfoAdminToolsContainer", () => {
         stopUpdating: jest.fn(),
     };
 
-    const renderComponent = () => {
-        return render(<UserInfoAdminToolsContainer {...defaultProps} />);
-    };
-    beforeEach(() => {
-        jest.clearAllMocks();
-        // Mock the current user
-        stubClient();
+    const mockMatrixClient = stubClient();
 
-        // Setup the mock view model functions
-        mockViewModel.useUserInfoAdminToolsContainerViewModel = jest.fn().mockReturnValue({
+    const renderComponent = (props = defaultProps) => {
+        return render(
+            <MatrixClientContext.Provider value={mockMatrixClient}>
+                <UserInfoAdminToolsContainer {...props} />
+            </MatrixClientContext.Provider>,
+        );
+    };
+
+    beforeEach(() => {
+        mocked(useUserInfoAdminToolsContainerViewModel).mockReturnValue({
             isCurrentUserInTheRoom: true,
             shouldShowKickButton: true,
             shouldShowBanButton: true,
             shouldShowMuteButton: true,
             shouldShowRedactButton: true,
         });
-
-        mockViewModel.useRoomKickButtonViewModel = jest.fn().mockReturnValue({
-            canUserBeKicked: true,
-            kickLabel: "Kick",
-            onKickClick: jest.fn(),
-        });
-
-        mockViewModel.useBanButtonViewModel = jest.fn().mockReturnValue({
-            banLabel: "Ban",
-            onBanOrUnbanClick: jest.fn(),
-        });
-
-        mockViewModel.useMuteButtonViewModel = jest.fn().mockReturnValue({
-            isMemberInTheRoom: true,
-            muteLabel: "Mute",
-            onMuteButtonClick: jest.fn(),
-        });
-
-        mockViewModel.useRedactMessagesButtonViewModel = jest.fn().mockReturnValue({
-            onRedactAllMessagesClick: jest.fn(),
-        });
+        jest.clearAllMocks();
     });
 
     it("renders all admin tools when user has permissions", () => {
@@ -128,7 +152,7 @@ describe("UserInfoAdminToolsContainer", () => {
     });
 
     it("renders no admin tools when current user is not in the room", () => {
-        mockViewModel.useUserInfoAdminToolsContainerViewModel.mockReturnValue({
+        mocked(useUserInfoAdminToolsContainerViewModel).mockReturnValue({
             isCurrentUserInTheRoom: false,
             shouldShowKickButton: false,
             shouldShowBanButton: false,
@@ -155,16 +179,22 @@ describe("UserInfoAdminToolsContainer", () => {
 
     describe("Kick behavior", () => {
         it("clicking kick button calls the appropriate handler", () => {
+            const mockedOnKickClick = jest.fn();
+            mocked(useRoomKickButtonViewModel).mockReturnValue({
+                canUserBeKicked: true,
+                kickLabel: "Kick",
+                onKickClick: mockedOnKickClick,
+            });
             renderComponent();
 
             const kickButton = screen.getByText("Kick");
             fireEvent.click(kickButton);
 
-            expect(mockViewModel.useRoomKickButtonViewModel().onKickClick).toHaveBeenCalled();
+            expect(mockedOnKickClick).toHaveBeenCalled();
         });
 
         it("should not display kick buttun if user can't be kicked", () => {
-            mockViewModel.useRoomKickButtonViewModel.mockReturnValue({
+            mocked(useRoomKickButtonViewModel).mockReturnValue({
                 canUserBeKicked: false,
                 kickLabel: "Kick",
                 onKickClick: jest.fn(),
@@ -175,57 +205,68 @@ describe("UserInfoAdminToolsContainer", () => {
             expect(screen.queryByText("Kick")).not.toBeInTheDocument();
         });
 
-        it("should display the correct label when user can be kicked", () => {
-            mockViewModel.useRoomKickButtonViewModel.mockReturnValue({
+        it("should display the correct label when user can be disinvited", () => {
+            mocked(useRoomKickButtonViewModel).mockReturnValue({
                 canUserBeKicked: true,
                 kickLabel: "Disinvite",
                 onKickClick: jest.fn(),
             });
-            renderComponent();
 
-            const kickButton = screen.getByText("Disinvite");
-            fireEvent.click(kickButton);
+            renderComponent({
+                ...defaultProps,
+                member: mockMember,
+            });
 
-            expect(mockViewModel.useRoomKickButtonViewModel().kickLabel).toBe("Disinvite");
+            expect(screen.getByText("Disinvite")).toBeInTheDocument();
         });
     });
 
     describe("Ban behavior", () => {
         it("clicking ban button calls the appropriate handler", () => {
+            const mockedOnBanOrUnbanClick = jest.fn();
+            mocked(useBanButtonViewModel).mockReturnValue({
+                banLabel: "Ban",
+                onBanOrUnbanClick: mockedOnBanOrUnbanClick,
+            });
             renderComponent();
 
             const banButton = screen.getByText("Ban");
             fireEvent.click(banButton);
 
-            expect(mockViewModel.useBanButtonViewModel().onBanOrUnbanClick).toHaveBeenCalled();
+            expect(mockedOnBanOrUnbanClick).toHaveBeenCalled();
         });
 
-        it("should display the correct label when user can be banned", () => {
-            mockViewModel.useBanButtonViewModel.mockReturnValue({
+        it("should display the correct label", () => {
+            const mockedOnBanOrUnbanClick = jest.fn();
+            mocked(useBanButtonViewModel).mockReturnValue({
                 banLabel: "Unban",
-                onBanOrUnbanClick: jest.fn(),
+                onBanOrUnbanClick: mockedOnBanOrUnbanClick,
             });
             renderComponent();
 
-            const banButton = screen.getByText("Unban");
-            fireEvent.click(banButton);
-
-            expect(mockViewModel.useBanButtonViewModel().banLabel).toBe("Unban");
+            // The label should be "Unban"
+            expect(screen.getByText("Unban")).toBeInTheDocument();
         });
     });
 
     describe("Mute behavior", () => {
         it("clicking mute button calls the appropriate handler", () => {
+            const mockedOnMuteButtonClick = jest.fn();
+            mocked(useMuteButtonViewModel).mockReturnValue({
+                isMemberInTheRoom: true,
+                muteLabel: "Mute",
+                onMuteButtonClick: mockedOnMuteButtonClick,
+            });
             renderComponent();
 
             const muteButton = screen.getByText("Mute");
             fireEvent.click(muteButton);
 
-            expect(mockViewModel.useMuteButtonViewModel().onMuteButtonClick).toHaveBeenCalled();
+            expect(mockedOnMuteButtonClick).toHaveBeenCalled();
         });
 
         it("should not display mute button if user is not in the room", () => {
-            mockViewModel.useMuteButtonViewModel.mockReturnValue({
+            mocked(useMuteButtonViewModel).mockReturnValue({
                 isMemberInTheRoom: false,
                 muteLabel: "Mute",
                 onMuteButtonClick: jest.fn(),
@@ -236,29 +277,30 @@ describe("UserInfoAdminToolsContainer", () => {
             expect(screen.queryByText("Mute")).not.toBeInTheDocument();
         });
 
-        it("should display the correct label when user can be muted", () => {
-            mockViewModel.useMuteButtonViewModel.mockReturnValue({
+        it("should display the correct label", () => {
+            mocked(useMuteButtonViewModel).mockReturnValue({
                 isMemberInTheRoom: true,
-                muteLabel: "Unmmute",
+                muteLabel: "Mute",
                 onMuteButtonClick: jest.fn(),
             });
             renderComponent();
 
-            const muteButton = screen.getByText("Unmmute");
-            fireEvent.click(muteButton);
-
-            expect(mockViewModel.useMuteButtonViewModel().muteLabel).toBe("Unmmute");
+            expect(screen.getByText("Mute")).toBeInTheDocument();
         });
     });
 
     describe("Redact behavior", () => {
         it("clicking redact button calls the appropriate handler", () => {
+            const mockedOnRedactAllMessagesClick = jest.fn();
+            mocked(useRedactMessagesButtonViewModel).mockReturnValue({
+                onRedactAllMessagesClick: mockedOnRedactAllMessagesClick,
+            });
             renderComponent();
 
             const redactButton = screen.getByText("Remove messages");
             fireEvent.click(redactButton);
 
-            expect(mockViewModel.useRedactMessagesButtonViewModel().onRedactAllMessagesClick).toHaveBeenCalled();
+            expect(mockedOnRedactAllMessagesClick).toHaveBeenCalled();
         });
     });
 });

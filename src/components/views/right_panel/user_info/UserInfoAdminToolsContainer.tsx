@@ -16,13 +16,11 @@ import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave"
 
 import { _t } from "../../../../languageHandler";
 import { type IPowerLevelsContent } from "../UserInfo";
-import {
-    useMuteButtonViewModel,
-    useBanButtonViewModel,
-    useRoomKickButtonViewModel,
-    useRedactMessagesButtonViewModel,
-    useUserInfoAdminToolsContainerViewModel,
-} from "../../../viewmodels/right_panel/UserInfoAdminToolsContainerViewModel";
+import { useUserInfoAdminToolsContainerViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
+import { useMuteButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel";
+import { useBanButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel";
+import { useRoomKickButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel";
+import { useRedactMessagesButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel";
 
 const Container: React.FC<{
     children: ReactNode;
@@ -122,7 +120,6 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
     stopUpdating,
 }) => {
     const vm = useMuteButtonViewModel({ room, member, isUpdating, startUpdating, stopUpdating });
-
     // Don't show the mute/unmute option if the user is not in the room
     if (!vm.isMemberInTheRoom) return null;
 
@@ -155,7 +152,7 @@ export const UserInfoAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     let muteButton;
     let redactButton;
 
-    const vm = useUserInfoAdminToolsContainerViewModel({ room, member, powerLevels, children });
+    const vm = useUserInfoAdminToolsContainerViewModel({ room, member, powerLevels });
 
     if (!vm.isCurrentUserInTheRoom) {
         // we aren't in the room, so return no admin tooling
