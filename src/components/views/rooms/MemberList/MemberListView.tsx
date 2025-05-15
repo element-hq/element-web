@@ -36,7 +36,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 
     const getRowComponent = (item: MemberWithSeparator, index: number, focusedIndex: number): JSX.Element => {
         const focused = index == focusedIndex;
-        const onBlur = () => {
+        const onBlur = (): void => {
             if (focusedIndex == index) {
                 setFocusedIndex(-1);
                 setLastFocusedIndex(index);
@@ -92,7 +92,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 : Math.max(0, index - nextMemberOffset);
             scrollToIndex(nextIndex, align);
         },
-        [ref, focusedIndex, totalRows, scrollToIndex, vm.members],
+        [focusedIndex, totalRows, scrollToIndex, vm.members],
     );
 
     const keyDownCallback = useCallback(
