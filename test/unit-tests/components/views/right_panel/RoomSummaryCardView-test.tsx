@@ -10,6 +10,7 @@ import React from "react";
 import { render, fireEvent, screen } from "jest-matrix-react";
 import { Room, type MatrixClient, JoinRule, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import RoomSummaryCardView from "../../../../../src/components/views/right_panel/RoomSummaryCardView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -21,7 +22,6 @@ import {
     useRoomSummaryCardViewModel,
 } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import userEvent from "@testing-library/user-event";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({

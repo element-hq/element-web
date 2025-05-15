@@ -140,7 +140,7 @@ const RoomSummaryCardView: React.FC<IProps> = ({
     useEffect(() => {
         setSearchValue(searchTerm);
     }, [searchTerm]);
-    
+
     const roomInfo = (
         <header className="mx_RoomSummaryCard_container">
             <RoomAvatar room={room} size="80px" viewAvatarOnClick />
