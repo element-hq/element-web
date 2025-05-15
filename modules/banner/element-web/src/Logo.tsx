@@ -13,19 +13,22 @@ const Anchor = styled.a`
     display: flex;
 `;
 
-const Image = styled.img`
-    height: ${({ theme }): string => theme.navbar.logoHeight};
+const Image = styled.img<{
+    height?: string;
+}>`
     align-self: center;
+    height: ${({ height }): string => height ?? "32px"};
 `;
 
 interface Props {
     api: Api;
     src: string;
+    height?: string;
     href?: string;
 }
 
-const Logo: FC<Props> = ({ api, src, href }) => {
-    const img = <Image alt={api.i18n.translate("logo_alt")} src={src} />;
+const Logo: FC<Props> = ({ api, src, href, height }) => {
+    const img = <Image alt={api.i18n.translate("logo_alt")} src={src} height={height} />;
 
     if (!href) return img;
 

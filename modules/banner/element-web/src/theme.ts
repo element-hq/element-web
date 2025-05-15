@@ -5,68 +5,26 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { DefaultTheme } from "styled-components";
+const theme = {
+    textColor: "var(--cpd-color-text-primary)",
+    bannerBackgroundColor: "var(--cpd-color-bg-canvas-default)",
+    bannerHeight: "60px",
+    triggerWidth: "68px",
+    triggerBackgroundColor: "var(--cpd-color-bg-subtle-primary)",
+    // triggerBackgroundColorHover: "var(--cpd-color-bg-accent-hovered)",
+    triggerBackgroundColorHover: "var(--cpd-color-text-action-accent)",
+    triggerColor: "var(--cpd-color-text-primary)",
+    triggerColorHover: "var(--cpd-color-bg-canvas-default)",
+    menuWidth: "320px",
+    menuBackgroundColor: "var(--cpd-color-bg-canvas-default)",
+    menuButtonBackgroundColorHover: "var(--cpd-color-bg-subtle-primary)",
+};
 
-const bgCanvasDefault = "var(--cpd-color-bg-canvas-default)";
-const textActionAccent = "var(--cpd-color-text-action-accent)";
-const textPrimary = "var(--cpd-color-text-primary)";
-const iconOnSolidPrimary = "var(--cpd-color-icon-on-solid-primary)";
+type Theme = typeof theme;
 
-const bodyMdSemibold = "var(--cpd-font-body-md-semibold)";
+export { theme };
 
 declare module "styled-components" {
-    export interface DefaultTheme {
-        compound: {
-            color: {
-                bgCanvasDefault: string;
-                textActionAccent: string;
-                textPrimary: string;
-                iconOnSolidPrimary: string;
-            };
-            font: {
-                bodyMdSemibold: string;
-            };
-        };
-        color: {
-            accent: string;
-        };
-        navbar: {
-            border: string;
-            boxShadow: string;
-            height: string;
-            triggerWidth: string;
-            logoHeight: string;
-        };
-        menu: {
-            width: string;
-        };
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    export interface DefaultTheme extends Theme {}
 }
-
-export const theme: DefaultTheme = {
-    compound: {
-        color: {
-            bgCanvasDefault,
-            textActionAccent,
-            textPrimary,
-            iconOnSolidPrimary,
-        },
-        font: {
-            bodyMdSemibold,
-        },
-    },
-    color: {
-        accent: "#571EFA", // primary/700 TODO
-    },
-    navbar: {
-        border: "1px solid #D3D7DE", // TODO
-        boxShadow: "4px 4px 12px 0 rgba(118, 131, 156, 0.6)",
-        height: "60px",
-        triggerWidth: "68px",
-        logoHeight: "34px",
-    },
-    menu: {
-        // TODO
-        width: "235px",
-    },
-};

@@ -136,8 +136,9 @@ test.describe("Banner", () => {
 
                     if (type === "univention") {
                         await expect(sidebar).toMatchScreenshot(`${type}_menu_loading.png`);
-                        await navigationJsonResolver.resolve();
+                        navigationJsonResolver.resolve();
                     }
+                    await page.pause();
 
                     const emailApp = page.getByText("E-Mail");
                     await expect(emailApp).toHaveAttribute("href", "https://example.com/email");

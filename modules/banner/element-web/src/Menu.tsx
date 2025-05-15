@@ -8,47 +8,47 @@ Please see LICENSE files in the repository root for full details.
 import { type FC, type JSX, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { StaticConfig } from "./config";
-import { theme } from "./theme";
 import type { Api } from "@element-hq/element-web-module-api";
 import Logo from "./Logo.tsx";
 
 const Sidebar = styled(motion.div)`
-    padding: 16px 12px 0;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 0 var(--cpd-space-3x) var(--cpd-space-4x);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
     overflow: auto;
     position: fixed;
     left: 0;
     top: 0;
     height: 100%;
-    width: ${({ theme }): string => theme.menu.width};
-    background: white;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+    width: ${({ theme }): string => theme.menuWidth};
+    background: ${({ theme }): string => theme.menuBackgroundColor};
+    border-radius: 0 16px 16px 0;
 `;
 
 const SidebarHeading = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 20px; // TODO check
 `;
 
-const Launcher = styled.button`
+const Trigger = styled.button`
     align-items: center;
     border: none;
-    color: ${({ theme }): string => theme.compound.color.textPrimary};
     cursor: pointer;
     display: flex;
+    background-color: ${({ theme }): string => theme.triggerBackgroundColor};
+    color: ${({ theme }): string => theme.triggerColor};
+    width: ${({ theme }): string => theme.triggerWidth};
 
     &:hover,
     &:focus,
     &[data-expanded="true"] {
-        background-color: ${({ theme }): string => theme.color.accent};
-        color: #ffffff;
+        background-color: ${({ theme }): string => theme.triggerBackgroundColorHover};
+        color: ${({ theme }): string => theme.triggerColorHover};
     }
 
     svg {
@@ -71,39 +71,43 @@ const CloseButton = styled.button`
 
     &:hover,
     &:focus {
-        background-color: rgba(238, 239, 242, 1);
+        background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 `;
 
 const CategoryHeading = styled.h2`
     font-weight: 700;
     font-size: 12px;
-    color: #203257;
+    color: #203257; // TODO font
     margin-top: 16px;
     margin-bottom: 8px;
 `;
 
 const LinkButton = styled.a`
-    font-size: 14px;
-    color: #000000;
+    font-size: 14px; // TODO font
+    color: var(--cpd-color-text-action-primary);
     font-weight: 500;
     display: flex;
     border-radius: 8px;
     padding: 8px;
     align-items: center;
 
+    &:link {
+        color: var(--cpd-color-text-action-primary); // TODO
+    }
+
     &:hover {
-        background-color: #eeeff2;
+        background-color: #eeeff2; // TODO
     }
 `;
 
 const LinkLogo = styled.img`
     height: 24px;
     width: 24px;
-    border-radius: 3px;
-    border: 1px solid #eeeff2;
+    border-radius: 3px; // TODO
+    border: 1px solid #eeeff2; // TODO
     margin-right: 8px;
-    background-color: #ffffff;
+    background-color: ${({ theme }): string => theme.menuBackgroundColor};
 `;
 
 const CentredContainer = styled.div`
@@ -134,8 +138,6 @@ interface Props {
     fallbackLogoUrl: string;
 }
 
-const WIDTH = parseInt(theme.menu.width.slice(0, -2), 10);
-
 const Category: FC<{
     data: StaticConfig["categories"][number];
 }> = ({ data }) => {
@@ -152,6 +154,8 @@ const Category: FC<{
 };
 
 const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
+    const theme = useTheme();
+    const width = parseInt(theme.menuWidth.slice(0, -2), 10);
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
@@ -180,11 +184,14 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-                <Launcher aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("trigger_label")}>
-                    <svg fill="currentColor" height="16" width="16">
-                        <path d="M0 4h4V0H0v4Zm6 12h4v-4H6v4Zm-6 0h4v-4H0v4Zm0-6h4V6H0v4Zm6 0h4V6H6v4Zm6-10v4h4V0h-4ZM6 4h4V0H6v4Zm6 6h4V6h-4v4Zm0 6h4v-4h-4v4Z" />
+                <Trigger aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("trigger_label")}>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4.99992 16.6667C4.54159 16.6667 4.14922 16.5035 3.82284 16.1771C3.49645 15.8507 3.33325 15.4584 3.33325 15C3.33325 14.5417 3.49645 14.1493 3.82284 13.823C4.14922 13.4966 4.54159 13.3334 4.99992 13.3334C5.45825 13.3334 5.85061 13.4966 6.177 13.823C6.50339 14.1493 6.66659 14.5417 6.66659 15C6.66659 15.4584 6.50339 15.8507 6.177 16.1771C5.85061 16.5035 5.45825 16.6667 4.99992 16.6667ZM9.99992 16.6667C9.54158 16.6667 9.14922 16.5035 8.82284 16.1771C8.49645 15.8507 8.33325 15.4584 8.33325 15C8.33325 14.5417 8.49645 14.1493 8.82284 13.823C9.14922 13.4966 9.54158 13.3334 9.99992 13.3334C10.4583 13.3334 10.8506 13.4966 11.177 13.823C11.5034 14.1493 11.6666 14.5417 11.6666 15C11.6666 15.4584 11.5034 15.8507 11.177 16.1771C10.8506 16.5035 10.4583 16.6667 9.99992 16.6667ZM14.9999 16.6667C14.5416 16.6667 14.1492 16.5035 13.8228 16.1771C13.4964 15.8507 13.3333 15.4584 13.3333 15C13.3333 14.5417 13.4964 14.1493 13.8228 13.823C14.1492 13.4966 14.5416 13.3334 14.9999 13.3334C15.4583 13.3334 15.8506 13.4966 16.177 13.823C16.5034 14.1493 16.6666 14.5417 16.6666 15C16.6666 15.4584 16.5034 15.8507 16.177 16.1771C15.8506 16.5035 15.4583 16.6667 14.9999 16.6667ZM4.99992 11.6667C4.54159 11.6667 4.14922 11.5035 3.82284 11.1771C3.49645 10.8507 3.33325 10.4584 3.33325 10C3.33325 9.54171 3.49645 9.14935 3.82284 8.82296C4.14922 8.49657 4.54159 8.33337 4.99992 8.33337C5.45825 8.33337 5.85061 8.49657 6.177 8.82296C6.50339 9.14935 6.66659 9.54171 6.66659 10C6.66659 10.4584 6.50339 10.8507 6.177 11.1771C5.85061 11.5035 5.45825 11.6667 4.99992 11.6667ZM9.99992 11.6667C9.54158 11.6667 9.14922 11.5035 8.82284 11.1771C8.49645 10.8507 8.33325 10.4584 8.33325 10C8.33325 9.54171 8.49645 9.14935 8.82284 8.82296C9.14922 8.49657 9.54158 8.33337 9.99992 8.33337C10.4583 8.33337 10.8506 8.49657 11.177 8.82296C11.5034 9.14935 11.6666 9.54171 11.6666 10C11.6666 10.4584 11.5034 10.8507 11.177 11.1771C10.8506 11.5035 10.4583 11.6667 9.99992 11.6667ZM14.9999 11.6667C14.5416 11.6667 14.1492 11.5035 13.8228 11.1771C13.4964 10.8507 13.3333 10.4584 13.3333 10C13.3333 9.54171 13.4964 9.14935 13.8228 8.82296C14.1492 8.49657 14.5416 8.33337 14.9999 8.33337C15.4583 8.33337 15.8506 8.49657 16.177 8.82296C16.5034 9.14935 16.6666 9.54171 16.6666 10C16.6666 10.4584 16.5034 10.8507 16.177 11.1771C15.8506 11.5035 15.4583 11.6667 14.9999 11.6667ZM4.99992 6.66671C4.54159 6.66671 4.14922 6.50351 3.82284 6.17712C3.49645 5.85074 3.33325 5.45837 3.33325 5.00004C3.33325 4.54171 3.49645 4.14935 3.82284 3.82296C4.14922 3.49657 4.54159 3.33337 4.99992 3.33337C5.45825 3.33337 5.85061 3.49657 6.177 3.82296C6.50339 4.14935 6.66659 4.54171 6.66659 5.00004C6.66659 5.45837 6.50339 5.85074 6.177 6.17712C5.85061 6.50351 5.45825 6.66671 4.99992 6.66671ZM9.99992 6.66671C9.54158 6.66671 9.14922 6.50351 8.82284 6.17712C8.49645 5.85074 8.33325 5.45837 8.33325 5.00004C8.33325 4.54171 8.49645 4.14935 8.82284 3.82296C9.14922 3.49657 9.54158 3.33337 9.99992 3.33337C10.4583 3.33337 10.8506 3.49657 11.177 3.82296C11.5034 4.14935 11.6666 4.54171 11.6666 5.00004C11.6666 5.45837 11.5034 5.85074 11.177 6.17712C10.8506 6.50351 10.4583 6.66671 9.99992 6.66671ZM14.9999 6.66671C14.5416 6.66671 14.1492 6.50351 13.8228 6.17712C13.4964 5.85074 13.3333 5.45837 13.3333 5.00004C13.3333 4.54171 13.4964 4.14935 13.8228 3.82296C14.1492 3.49657 14.5416 3.33337 14.9999 3.33337C15.4583 3.33337 15.8506 3.49657 16.177 3.82296C16.5034 4.14935 16.6666 4.54171 16.6666 5.00004C16.6666 5.45837 16.5034 5.85074 16.177 6.17712C15.8506 6.50351 15.4583 6.66671 14.9999 6.66671Z"
+                            fill="currentColor"
+                        />
                     </svg>
-                </Launcher>
+                </Trigger>
             </Dialog.Trigger>
 
             <AnimatePresence>
@@ -201,9 +208,9 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                         </Dialog.Overlay>
                         <Dialog.Content asChild>
                             <Sidebar
-                                initial={{ x: -WIDTH }}
+                                initial={{ x: -width }}
                                 animate={{ x: 0 }}
-                                exit={{ x: -WIDTH }}
+                                exit={{ x: -width }}
                                 transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
                                 aria-label={api.i18n.translate("menu_label")}
                             >

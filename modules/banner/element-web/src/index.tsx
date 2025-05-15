@@ -11,7 +11,7 @@ import { ModuleConfig, CONFIG_KEY } from "./config";
 import Banner from "./Banner";
 import { name as ModuleName } from "../package.json";
 
-class TopBarModule implements Module {
+class BannerModule implements Module {
     public static readonly moduleApiVersion = "^1.0.0";
 
     private config?: ModuleConfig;
@@ -43,4 +43,4 @@ class TopBarModule implements Module {
     }
 }
 
-export default TopBarModule satisfies ModuleFactory;
+export default BannerModule satisfies ModuleFactory;

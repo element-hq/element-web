@@ -8,26 +8,25 @@ Please see LICENSE files in the repository root for full details.
 import { type FC } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import { type Api } from "@element-hq/element-web-module-api";
+import { Heading } from "@vector-im/compound-web";
 
 import { type ModuleConfig } from "./config";
 import UniventionMenu from "./Univention/Menu";
 import Menu from "./Menu";
-import { theme } from "./theme";
 import Logo from "./Logo.tsx";
+import { theme } from "./theme.ts";
 
 const Root = styled.nav`
-    background-color: ${({ theme }): string => theme.compound.color.bgCanvasDefault};
-    border-bottom: ${({ theme }): string => theme.navbar.border};
-    height: ${({ theme }): string => theme.navbar.height};
-    display: grid;
-    grid-template-columns: ${({ theme }): string => `${theme.navbar.triggerWidth} auto`};
-    gap: 24px;
+    height: ${({ theme }): string => theme.bannerHeight};
+    background-color: ${({ theme }): string => theme.bannerBackgroundColor};
+    border-bottom: "1px solid var(--cpd-color-bg-subtle-primary)";
+    display: flex;
+    gap: var(--cpd-space-3x);
 `;
 
-const Main = styled.div`
+const LogoContainer = styled.div`
     display: flex;
-    align-items: center;
-    grid-column: 2;
+    padding: var(--cpd-space-3x) 0;
 `;
 
 interface Props {
@@ -54,9 +53,12 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu }) => {
         <ThemeProvider theme={theme}>
             <Root>
                 {menuJsx}
-                <Main>
-                    <Logo api={api} src={logoUrl} href={href} />
-                </Main>
+                <LogoContainer>
+                    <Logo api={api} src={logoUrl} href={href} height="100%" />
+                </LogoContainer>
+                <Heading size="sm" weight="medium" as="h1">
+                    {api.config.get("brand")}
+                </Heading>
             </Root>
         </ThemeProvider>
     );

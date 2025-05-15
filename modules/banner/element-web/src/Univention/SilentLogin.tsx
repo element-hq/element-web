@@ -34,8 +34,7 @@ const SilentLogin: FC<Props> = ({ onLoggedIn, icsUrl }) => {
         };
     }, [onLoggedIn, url.origin]);
 
-    // TODO title?
-    return <HiddenIFrame src={url.href} title="Silent Login" />;
+    return <HiddenIFrame src={url.href} />;
 };
 
 export default SilentLogin;
