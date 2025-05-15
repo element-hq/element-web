@@ -83,19 +83,6 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           role="button"
           tabindex="0"
         >
-          Favourites
-        </button>
-      </li>
-      <li
-        aria-selected="false"
-        role="option"
-      >
-        <button
-          aria-selected="false"
-          class="_chat-filter_5qdp0_8"
-          role="button"
-          tabindex="0"
-        >
           People
         </button>
       </li>
@@ -110,6 +97,19 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           tabindex="0"
         >
           Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
         </button>
       </li>
     </ul>
@@ -338,19 +338,6 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           role="button"
           tabindex="0"
         >
-          Favourites
-        </button>
-      </li>
-      <li
-        aria-selected="false"
-        role="option"
-      >
-        <button
-          aria-selected="false"
-          class="_chat-filter_5qdp0_8"
-          role="button"
-          tabindex="0"
-        >
           People
         </button>
       </li>
@@ -365,6 +352,19 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           tabindex="0"
         >
           Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
         </button>
       </li>
     </ul>

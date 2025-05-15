@@ -73,7 +73,7 @@ describe("RoomListViewModel", () => {
             // should have 4 filters
             expect(vm.current.primaryFilters).toHaveLength(4);
             // check the order
-            for (const [i, name] of ["Unreads", "Favourites", "People", "Rooms"].entries()) {
+            for (const [i, name] of ["Unreads", "People", "Rooms", "Favourites"].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
                 expect(vm.current.primaryFilters[i].active).toEqual(false);
             }
