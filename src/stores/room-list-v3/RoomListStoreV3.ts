@@ -34,6 +34,7 @@ import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
+import { Action } from "../../dispatcher/actions";
 
 /**
  * These are the filters passed to the room skip list.
@@ -243,6 +244,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 }
 
                 this.addRoomAndEmit(payload.room, true);
+                break;
+            }
+
+            case Action.AfterForgetRoom: {
+                const room = payload.room;
+                this.roomSkipList.removeRoom(room);
+                this.emit(LISTS_UPDATE_EVENT);
                 break;
             }
         }

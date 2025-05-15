@@ -107,6 +107,7 @@ import Views from "../../Views";
 import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForgetRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
@@ -1269,10 +1270,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({ action: Action.ViewHomePage });
                 }
 
-                // We have to manually update the room list because the forgotten room will not
-                // be notified to us, therefore the room list will have no other way of knowing
-                // the room is forgotten.
-                if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                if (room) {
+                    // Legacy room list store needs to be told to manually remove this room
+                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    // New room list store will remove the room on the following dispatch
+                    dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
+                }
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("error|unknown_error_code");
