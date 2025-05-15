@@ -30,6 +30,9 @@ test.describe("Room list panel", () => {
         for (let i = 0; i < 20; i++) {
             await app.client.createRoom({ name: `room${i}` });
         }
+
+        // focus the user menu to avoid to have hover decoration
+        await page.getByRole("button", { name: "User menu" }).focus();
     });
 
     test("should render the room list panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
