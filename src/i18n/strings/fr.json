@@ -2166,9 +2166,14 @@
             "one": "En afficher %(count)s de plus"
         },
         "show_previews": "Afficher un aperçu des messages",
+        "sort": "Trier",
         "sort_by": "Trier par",
         "sort_by_activity": "Activité",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Activité",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Afficher les salons non lus en premier",
         "space_menu": {
             "home": "Accueil de l’espace",

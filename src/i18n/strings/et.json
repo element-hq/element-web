@@ -2167,9 +2167,14 @@
             "other": "Näita veel %(count)s vestlust"
         },
         "show_previews": "Näita sõnumite eelvaateid",
+        "sort": "Järjesta",
         "sort_by": "Järjestamisviis",
         "sort_by_activity": "Aktiivsuse alusel",
         "sort_by_alphabet": "Tähestiku järjekorras",
+        "sort_type": {
+            "activity": "Aktiivsuse alusel",
+            "atoz": "Tähestiku alusel"
+        },
         "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
         "space_menu": {
             "home": "Kogukonna avaleht",

@@ -2166,9 +2166,14 @@
             "Vis %(count)s til": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
+        "sort": "Sorter",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
+        "sort_type": {
+            "activity": "Aktivitet",
+            "atoz": "A-Å"
+        },
         "sort_unread_first": "Vis rom med uleste meldinger først",
         "space_menu": {
             "home": "Område hjem",
@@ -3802,6 +3807,7 @@
         "description": "For å opprette en delingslenke, lag dette rommet <b>offentlig</b> eller aktiver alternativet for brukere å <b>be om å bli med</b> Dette lar gjester bli med uten å bli invitert.",
         "dont_change_description": "Hvis du ikke ønsker å endre tilgangen til dette rommet, kan du opprette et nytt rom for lenken.",
         "no_change": "Jeg vil ikke endre tilgangsnivået.",
+        "revert_access_description": "(Dette kan tilbakestilles til den forrige verdien i Rominnstillinger: <b>Sikkerhet og personvern</b> / <b>Tilgang</b>)",
         "title": "Tillat gjestebrukere å bli med i dette rommet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",
