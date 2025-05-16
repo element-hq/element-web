@@ -2148,9 +2148,14 @@
             "Még %(count)s megjelenítése": "one"
         },
         "show_previews": "Üzenet-előnézet megjelenítése",
+        "sort": "Rendezés",
         "sort_by": "Rendezés",
         "sort_by_activity": "Aktivitás",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Tevékenység",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elöl",
         "space_menu": {
             "home": "Tér kezdőlapja",
@@ -2436,6 +2441,10 @@
         "empty_timeline": "Mindennel naprakész.",
         "recent_changes_heading": "A legutóbbi változások, amelyek még nem érkeztek meg",
         "title": "A kiszolgáló nem válaszol"
+    },
+    "service_worker_error": {
+        "description": "Az %(brand)s ún. service workert igényel a hitelesített médiafájlok Matrix tartalomtárolókból történő betöltéséhez. Ezt a böngészője nem támogatja, ezért előfordulhat, hogy a médiafájlok nem töltődnek be.",
+        "title": "A service worker betöltése sikertelen"
     },
     "seshat": {
         "error_initialising": "Az üzenetkeresés előkészítése sikertelen, további információkért ellenőrizze a <a>beállításait</a>",

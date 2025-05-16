@@ -2200,9 +2200,14 @@
             "other": "Zobraziť %(count)s ďalších"
         },
         "show_previews": "Zobraziť náhľady správ",
+        "sort": "Zoradiť",
         "sort_by": "Zoradiť podľa",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktivita",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Najprv ukázať miestnosti s neprečítanými správami",
         "space_menu": {
             "home": "Domov priestoru",

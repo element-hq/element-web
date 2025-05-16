@@ -2184,9 +2184,14 @@
             "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
+        "sort": "Sortuj",
         "sort_by": "Sortuj według",
         "sort_by_activity": "Aktywności",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktywność",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
         "space_menu": {
             "home": "Główna przestrzeni",
@@ -3834,6 +3839,7 @@
         "description": "Aby utworzyć link udostępniania, ustaw ten pokój jako <b>publiczny</b> lub włącz opcję umożliwiającą użytkownikom <b>poprosić o dołączenie</b>. Dzięki temu goście będą mogli dołączyć bez zaproszenia.",
         "dont_change_description": "Jeśli nie chcesz zmieniać uprawnień dostępu tego pokoju, możesz utworzyć link połączenia w nowym pokoju.",
         "no_change": "Nie chce zmieniać poziomu uprawnień.",
+        "revert_access_description": "(Przywróć poprzednią wartość w ustawieniach pokoju: <b>Bezpieczeństwo i prywatność</b> / <b>Dostęp</b>)",
         "title": "Zezwól gościom na dołączenie do tego pokoju"
     },
     "upload_failed_generic": "Nie udało się przesłać pliku '%(fileName)s'.",
