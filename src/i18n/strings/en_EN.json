@@ -903,12 +903,11 @@
         "access_secret_storage_dialog": {
             "alternatives": "If you have a security key or security phrase, this will work too.",
             "key_validation_text": {
-                "recovery_key_is_correct": "Looks good!",
                 "wrong_security_key": "The recovery key you entered is not correct."
             },
             "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Enter your recovery key"
+            "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
         "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
