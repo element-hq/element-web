@@ -32,10 +32,10 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«rk»"
+          aria-labelledby="«rc»"
           class="_icon-button_m2erp_8"
           data-state="closed"
-          id="radix-«ri»"
+          id="radix-«ra»"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -146,48 +146,36 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           role="button"
           tabindex="0"
         >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
           Favourites
         </button>
       </li>
     </ul>
-    <div
-      aria-label="Secondary filters"
-      class="mx_Flex mx_RoomListSecondaryFilters"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 4px; --mx-flex-wrap: nowrap;"
-    >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Filter"
-        aria-labelledby="«rr»"
-        class="_icon-button_m2erp_8"
-        data-state="closed"
-        id="radix-«rp»"
-        role="button"
-        style="--cpd-icon-button-size: 28px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
-            />
-          </svg>
-        </div>
-      </button>
-      All activity
-    </div>
     <div
       class="mx_RoomListSkeleton"
     />
@@ -407,48 +395,36 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           role="button"
           tabindex="0"
         >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
           Favourites
         </button>
       </li>
     </ul>
-    <div
-      aria-label="Secondary filters"
-      class="mx_Flex mx_RoomListSecondaryFilters"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 4px; --mx-flex-wrap: nowrap;"
-    >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Filter"
-        aria-labelledby="«rb»"
-        class="_icon-button_m2erp_8"
-        data-state="closed"
-        id="radix-«r9»"
-        role="button"
-        style="--cpd-icon-button-size: 28px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
-            />
-          </svg>
-        </div>
-      </button>
-      All activity
-    </div>
     <div
       class="mx_RoomListSkeleton"
     />
