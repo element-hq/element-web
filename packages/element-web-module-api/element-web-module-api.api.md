@@ -4,6 +4,7 @@
 
 ```ts
 
+import { JSX } from 'react';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
@@ -21,6 +22,8 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
+    // (undocumented)
+    readonly customComponents: CustomComponentsApi;
     readonly i18n: I18nApi;
     readonly rootNode: HTMLElement;
 }
@@ -55,6 +58,28 @@ export interface ConfigApi {
     get<K extends keyof Config>(key: K): Config[K];
     // (undocumented)
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
+}
+
+// @public
+export type CustomComponentProps = {
+    [CustomComponentTarget.TextualEvent]: {
+        mxEvent: any;
+        stripReply: boolean;
+    };
+};
+
+// @public
+export type CustomComponentRenderFunction<T extends CustomComponentTarget> = (props: CustomComponentProps[T], originalComponent: JSX.Element) => JSX.Element | null;
+
+// @public
+export interface CustomComponentsApi {
+    register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void;
+}
+
+// @public
+export enum CustomComponentTarget {
+    // (undocumented)
+    TextualEvent = "TextualEvent"
 }
 
 // @alpha @deprecated (undocumented)
