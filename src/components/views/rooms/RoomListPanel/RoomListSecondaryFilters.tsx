@@ -10,7 +10,6 @@ import React, { type JSX } from "react";
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
-import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
 import { RoomListFilterMenu } from "./RoomListFilterMenu";
 import { textForSecondaryFilter } from "./textForFilter";
 
@@ -36,7 +35,6 @@ export function RoomListSecondaryFilters({ vm }: Props): JSX.Element {
         >
             <RoomListFilterMenu vm={vm} />
             {activeFilterText}
-            <RoomListOptionsMenu vm={vm} />
         </Flex>
     );
 }
