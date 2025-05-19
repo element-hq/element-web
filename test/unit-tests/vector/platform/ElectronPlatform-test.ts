@@ -31,6 +31,7 @@ describe("ElectronPlatform", () => {
     const mockElectron = {
         on: jest.fn(),
         send: jest.fn(),
+        initialise: jest.fn(),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
