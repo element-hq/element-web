@@ -19,7 +19,7 @@ import { theme } from "./theme.ts";
 const Root = styled.nav`
     height: ${({ theme }): string => theme.bannerHeight};
     background-color: ${({ theme }): string => theme.bannerBackgroundColor};
-    border-bottom: "1px solid var(--cpd-color-bg-subtle-primary)";
+    border-bottom: "var(--cpd-border-width-1) solid var(--cpd-color-bg-subtle-primary)";
     display: flex;
     gap: var(--cpd-space-3x);
 `;

@@ -32,7 +32,7 @@ const SidebarHeading = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px; // TODO check
+    margin-bottom: var(--cpd-space-5x); // TODO check
 `;
 
 const Trigger = styled.button`
@@ -45,10 +45,15 @@ const Trigger = styled.button`
     width: ${({ theme }): string => theme.triggerWidth};
 
     &:hover,
-    &:focus,
-    &[data-expanded="true"] {
+    &:focus {
         background-color: ${({ theme }): string => theme.triggerBackgroundColorHover};
-        color: ${({ theme }): string => theme.triggerColorHover};
+        color: ${({ theme }): string => theme.triggerColorContrast};
+    }
+
+    &:active,
+    &[data-expanded="true"] {
+        background-color: ${({ theme }): string => theme.triggerBackgroundColorPressed};
+        color: ${({ theme }): string => theme.triggerColorContrast};
     }
 
     svg {
@@ -73,41 +78,50 @@ const CloseButton = styled.button`
     &:focus {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
+
+    &:active {
+        background-color: ${({ theme }): string => theme.menuButtonBackgroundColorPressed};
+    }
 `;
 
 const CategoryHeading = styled.h2`
     font-weight: 700;
     font-size: 12px;
-    color: #203257; // TODO font
-    margin-top: 16px;
-    margin-bottom: 8px;
+    color: ${({ theme }): string => theme.subheadingColor};
+    margin-top: var(--cpd-space-4x);
+    margin-bottom: var(--cpd-space-2x);
 `;
 
 const LinkButton = styled.a`
-    font-size: 14px; // TODO font
+    font-size: 14px;
     color: var(--cpd-color-text-action-primary);
-    font-weight: 500;
+    font-weight: var(--cpd-font-weight-medium);
     display: flex;
     border-radius: 8px;
-    padding: 8px;
+    padding: var(--cpd-space-2x);
     align-items: center;
 
     &:link {
-        color: var(--cpd-color-text-action-primary); // TODO
+        color: var(--cpd-color-text-action-primary);
     }
 
-    &:hover {
-        background-color: #eeeff2; // TODO
+    &:hover,
+    &:focus {
+        background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
+    }
+
+    &:active {
+        background-color: ${({ theme }): string => theme.menuButtonBackgroundColorPressed};
     }
 `;
 
 const LinkLogo = styled.img`
     height: 24px;
     width: 24px;
-    border-radius: 3px; // TODO
-    border: 1px solid #eeeff2; // TODO
-    margin-right: 8px;
+    border-radius: 4px;
+    border: ${({ theme }): string => `var(--cpd-border-width-1) solid ${theme.menuButtonBackgroundColorPressed}`};
     background-color: ${({ theme }): string => theme.menuBackgroundColor};
+    margin-right: var(--cpd-space-2x);
 `;
 
 const CentredContainer = styled.div`
@@ -116,7 +130,7 @@ const CentredContainer = styled.div`
     width: 100%;
     align-items: center;
     text-align: center;
-    font-weight: 600;
+    font-weight: var(--cpd-font-weight-semibold);
 
     svg {
         margin: 0 auto;

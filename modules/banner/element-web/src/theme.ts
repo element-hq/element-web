@@ -7,17 +7,19 @@ Please see LICENSE files in the repository root for full details.
 
 const theme = {
     textColor: "var(--cpd-color-text-primary)",
+    subheadingColor: "var(--cpd-color-text-secondary)", // TODO
     bannerBackgroundColor: "var(--cpd-color-bg-canvas-default)",
     bannerHeight: "60px",
     triggerWidth: "68px",
-    triggerBackgroundColor: "var(--cpd-color-bg-subtle-primary)",
-    // triggerBackgroundColorHover: "var(--cpd-color-bg-accent-hovered)",
-    triggerBackgroundColorHover: "var(--cpd-color-text-action-accent)",
-    triggerColor: "var(--cpd-color-text-primary)",
-    triggerColorHover: "var(--cpd-color-bg-canvas-default)",
+    triggerBackgroundColor: "var(--cpd-color-bg-subtle-secondary)",
+    triggerBackgroundColorHover: "var(--cpd-color-bg-accent-hovered)",
+    triggerBackgroundColorPressed: "var(--cpd-color-bg-accent-pressed)",
+    triggerColor: "var(--cpd-color-icon-primary)",
+    triggerColorContrast: "var(--cpd-color-icon-on-solid-primary)",
     menuWidth: "320px",
     menuBackgroundColor: "var(--cpd-color-bg-canvas-default)",
-    menuButtonBackgroundColorHover: "var(--cpd-color-bg-subtle-primary)",
+    menuButtonBackgroundColorHover: "var(--cpd-color-bg-action-secondary-hovered)",
+    menuButtonBackgroundColorPressed: "var(--cpd-color-bg-action-secondary-pressed)",
 };
 
 type Theme = typeof theme;
