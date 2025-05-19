@@ -44,13 +44,15 @@
         "vite": "^6.0.11",
         "vite-plugin-dts": "^4.5.0",
         "vitest": "^3.0.5",
-        "vitest-sonar-reporter": "^2.0.0"
+        "vitest-sonar-reporter": "^2.0.0",
+        "matrix-js-sdk": "^37.5.0"
     },
     "peerDependencies": {
         "@matrix-org/react-sdk-module-api": "*",
         "@types/react": "*",
         "@types/react-dom": "*",
         "matrix-web-i18n": "*",
+        "matrix-js-sdk": "*",
         "react": "^19"
     },
     "peerDependenciesMeta": {
