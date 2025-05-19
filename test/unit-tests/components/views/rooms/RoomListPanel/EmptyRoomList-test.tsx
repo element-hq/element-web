@@ -11,7 +11,6 @@ import userEvent from "@testing-library/user-event";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { EmptyRoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/EmptyRoomList";
 import { FilterKey } from "../../../../../../src/stores/room-list-v3/skip-list/filters";
 
@@ -25,13 +24,9 @@ describe("<EmptyRoomList />", () => {
             primaryFilters: [],
             activateSecondaryFilter: jest.fn().mockReturnValue({}),
             activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
             canCreateRoom: true,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             activeIndex: undefined,
         };
     });

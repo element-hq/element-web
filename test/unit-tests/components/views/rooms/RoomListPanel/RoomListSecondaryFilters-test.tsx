@@ -10,7 +10,6 @@ import { render, screen } from "jest-matrix-react";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListSecondaryFilters } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListSecondaryFilters";
 
 describe("<RoomListSecondaryFilters />", () => {
@@ -26,10 +25,6 @@ describe("<RoomListSecondaryFilters />", () => {
             primaryFilters: [],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             activeIndex: undefined,
         };
     });

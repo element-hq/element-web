@@ -10,13 +10,13 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { RoomListOptionsMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListOptionsMenu";
-import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
+import { type RoomListHeaderViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
 
 describe("<RoomListOptionsMenu />", () => {
     it("should match snapshot", () => {
         const vm = {
             sort: jest.fn(),
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         const { asFragment } = render(<RoomListOptionsMenu vm={vm} />);
 
@@ -29,7 +29,7 @@ describe("<RoomListOptionsMenu />", () => {
         const vm = {
             sort: jest.fn(),
             activeSortOption: "Alphabetic",
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -47,7 +47,7 @@ describe("<RoomListOptionsMenu />", () => {
         const vm = {
             sort: jest.fn(),
             activeSortOption: "Recency",
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -64,7 +64,7 @@ describe("<RoomListOptionsMenu />", () => {
 
         const vm = {
             sort: jest.fn(),
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -81,7 +81,7 @@ describe("<RoomListOptionsMenu />", () => {
         const vm = {
             sort: jest.fn(),
             activeSortOption: "Alphabetic",
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -97,7 +97,7 @@ describe("<RoomListOptionsMenu />", () => {
 
         const vm = {
             shouldShowMessagePreview: false,
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -111,7 +111,7 @@ describe("<RoomListOptionsMenu />", () => {
 
         const vm = {
             shouldShowMessagePreview: true,
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
@@ -125,7 +125,7 @@ describe("<RoomListOptionsMenu />", () => {
 
         const vm = {
             toggleMessagePreview: jest.fn(),
-        } as unknown as RoomListViewState;
+        } as unknown as RoomListHeaderViewState;
 
         render(<RoomListOptionsMenu vm={vm} />);
 
