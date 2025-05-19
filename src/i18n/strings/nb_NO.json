@@ -2461,6 +2461,10 @@
         "recent_changes_heading": "Nylige endringer som ennå ikke er mottatt",
         "title": "Serveren svarer ikke"
     },
+    "service_worker_error": {
+        "description": "%(brand)s krever en tjenestearbeider for å laste inn autentiserte medier fra Matrix-innholdslagre. Dette støttes ikke av nettleseren din, så du kan oppleve at media ikke lastes inn.",
+        "title": "Kunne ikke laste inn servicearbeider"
+    },
     "seshat": {
         "error_initialising": "Initialisering av meldingssøk mislyktes, sjekk innstillingene <a> dine </a> for mer informasjon",
         "reset_button": "Tilbakestill hendelseslageret",

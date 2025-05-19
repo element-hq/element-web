@@ -4,39 +4,27 @@
         "jump_first_invite": "Symud i'r gwahoddiad cyntaf.",
         "message_composer": "Neges cyfansoddwr",
         "n_unread_messages": {
-            "zero": "%(count)s neges heb eu darllen",
-            "one": "1 neges heb ei darllen",
-            "two": "%(count)s neges heb eu darllen",
-            "few": "%(count)s neges heb eu darllen",
-            "many": "%(count)s neges heb eu darllen",
-            "other": "%(count)s neges heb eu darllen"
+            "%(count)s neges heb eu darllen": "other",
+            "1 neges heb ei darllen": "one"
         },
         "n_unread_messages_mentions": {
-            "zero": "%(count)s crybwylliadau heb eu darllen",
-            "one": "1 crybwylliad heb ei ddarllen",
-            "two": "%(count)s grybwylliad heb eu darllen",
-            "few": "%(count)s crybwylliad heb eu darllen",
-            "many": "%(count)s crybwylliad heb eu darllen",
-            "other": "%(count)s crybwylliad heb eu darllen"
+            "%(count)s crybwylliadau heb eu darllen": "zero",
+            "1 crybwylliad heb ei ddarllen": "one",
+            "%(count)s grybwylliad heb eu darllen": "two",
+            "%(count)s crybwylliad heb eu darllen": "other"
         },
         "recent_rooms": "Ystafelloedd diweddar",
         "room_messsage_not_sent": "Agor ystafell %(roomName)s gyda neges heb ei gosod.",
         "room_n_unread_invite": "Agor gwahoddiad i ystafell %(roomName)s.",
         "room_n_unread_messages": {
-            "zero": "Ystafell agored%(roomName)s gyda %(count)s negeseuon heb eu darllen.",
-            "one": "Ystafell agored %(roomName)s gydag 1 neges heb ei darllen.",
-            "two": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
-            "few": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
-            "many": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.",
-            "other": "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen."
+            "Ystafell agored%(roomName)s gyda %(count)s negeseuon heb eu darllen.": "zero",
+            "Ystafell agored %(roomName)s gydag 1 neges heb ei darllen.": "one",
+            "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.": "other"
         },
         "room_n_unread_messages_mentions": {
-            "zero": "Ystafell agored %(roomName)s gyda %(count)s negeseuon heb eu darllen gan gynnwys crybwylliadau.",
-            "one": "Ystafell agored %(roomName)s gydag 1 crybwylliad heb ei ddarllen.",
-            "two": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
-            "few": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
-            "many": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.",
-            "other": "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau."
+            "Ystafell agored %(roomName)s gyda %(count)s negeseuon heb eu darllen gan gynnwys crybwylliadau.": "zero",
+            "Ystafell agored %(roomName)s gydag 1 crybwylliad heb ei ddarllen.": "one",
+            "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.": "other"
         },
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
@@ -402,6 +390,7 @@
             "fallback_button": "Dechrau dilysu",
             "mas_cross_signing_reset_cta": "Mynd i'ch cyfrif",
             "mas_cross_signing_reset_description": "Ailosodwch eich hunaniaeth trwy ddarparwr eich cyfrif ac yna dewch yn ôl a chlicio \"Ailgynnig\".",
+            "mas_cross_signing_reset_title": "Ewch i'ch cyfrif i ailosod eich hunaniaeth",
             "msisdn": "Mae neges destun wedi'i hanfon at %(msisdn)s",
             "msisdn_token_incorrect": "Tocyn yn anghywir",
             "msisdn_token_prompt": "Rhowch y cod sydd ynddo:",
@@ -2030,6 +2019,7 @@
         "failed_add_tag": "Wedi methu ag ychwanegu tag %(tagName)s i'r ystafell",
         "failed_remove_tag": "Wedi methu â thynnu'r tag %(tagName)s o'r ystafell",
         "failed_set_dm_tag": "Wedi methu gosod tag neges uniongyrchol",
+        "filter": "Hidl",
         "filters": {
             "favourite": "Ffefrynnau",
             "people": "Pobl",
@@ -2055,13 +2045,24 @@
             "open_room": "Agor ystafell %(roomName)s"
         },
         "room_options": "Dewisiadau Ystafelloedd",
+        "secondary_filter": {
+            "all_activity": "Pob gweithgaredd",
+            "invites_only": "Gwahoddiadau yn unig",
+            "low_priority": "Blaenoriaeth isel",
+            "mentions_only": "Crybwylliadau'n unig"
+        },
         "secondary_filters": "Hidlyddion eilradd",
         "show_less": "Dangos llai",
         "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",
+        "sort": "Trefnu",
         "sort_by": "Trefnu yn ôl",
         "sort_by_activity": "Gweithgaredd",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Gweithgaredd",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Dangos ystafelloedd gyda negeseuon heb eu darllen yn gyntaf",
         "space_menu": {
             "home": "Cartref gofod",
@@ -2333,6 +2334,10 @@
         "recent_changes_heading": "Newidiadau diweddar sydd heb eu derbyn eto",
         "title": "Nid yw'r gweinydd yn ymateb"
     },
+    "service_worker_error": {
+        "description": "Mae angen gweithiwr gwasanaeth ar %(brand)s i lwytho cyfryngau dilys o storfeydd cynnwys Matrix. Nid yw hyn yn cael ei gefnogi gan eich porwr felly efallai y byddwch yn profi bod cyfryngau'n methu â llwytho.",
+        "title": "Methwyd llwytho gweithiwr gwasanaeth"
+    },
     "seshat": {
         "error_initialising": "Nid oedd modd cychwyn chwilio negeseuon, gwiriwch <a>eich gosodiadau</a> am ragor o wybodaeth",
         "reset_button": "Ailosod storfa digwyddiad",
@@ -2511,6 +2516,7 @@
             "discovery_needs_terms_title": "Gadewch i bobl ddod o hyd i chi",
             "display_name": "Enw Dangos",
             "display_name_error": "Methu gosod enw dangos",
+            "email_adding_unsupported_by_hs": "Nid yw'r gweinydd cartref hwn yn cefnogi ychwanegu cyfeiriadau e-bost at eich cyfrif.",
             "email_address_in_use": "Mae'r cyfeiriad e-bost hwn eisoes yn cael ei ddefnyddio",
             "email_address_label": "Cyfeiriad e-bost",
             "email_not_verified": "Nid yw eich cyfeiriad e-bost wedi'i wirio eto",
@@ -2535,7 +2541,9 @@
             "error_share_msisdn_discovery": "Methu rhannu rhif ffôn",
             "identity_server_no_token": "Heb ganfod docyn mynediad adnabod",
             "identity_server_not_set": "Heb osod gweinydd hunaniaeth",
+            "invalid_phone_number": "Nid yw'n ymddangos bod y rhif ffôn a ddarparwyd yn ddilys.",
             "language_section": "Iaith",
+            "msisdn_adding_unsupported_by_hs": "Nid yw'r gweinydd cartref hwn yn cefnogi ychwanegu rhifau ffôn at eich cyfrif.",
             "msisdn_in_use": "Mae'r rhif ffôn hwn eisoes yn cael ei ddefnyddio",
             "msisdn_label": "Rhif Ffôn",
             "msisdn_verification_field_label": "Cod dilysu",
@@ -3067,6 +3075,7 @@
         "heading_without_query": "Chwilio am",
         "join_button_text": "Ymuno â %(roomAddress)s",
         "keyboard_scroll_hint": "Defnydd<arrows/> i sgrolio",
+        "messages_label": "Negeseuon",
         "other_rooms_in_space": "Ystafelloedd eraill yn %(spaceName)s",
         "public_rooms_label": "Ystafelloedd cyhoeddus",
         "public_spaces_label": "Gofodau cyhoeddus",
@@ -3469,6 +3478,7 @@
         "description": "I greu dolen rhannu, mae angen i chi ganiatáu i westeion ymuno â'r ystafell hon. Gall hyn wneud yr ystafell yn llai diogel. Pan fyddwch wedi gorffen gyda'r alwad, gallwch wneud yr ystafell yn breifat eto.",
         "dont_change_description": "Fel arall, gallwch gynnal yr alwad mewn ystafell ar wahân.",
         "no_change": "Dydw i ddim eisiau newid y lefel mynediad.",
+        "revert_access_description": "(Mae modddychwelyd hwn i&#39;r gwerth blaenorol yng Ngosodiadau&#39;r Ystafell: <b>Diogelwch a Phreifatrwydd</b> / <b>Mynediad</b> )",
         "title": "Newid lefel mynediad yr ystafell"
     },
     "upload_failed_generic": "Methodd y ffeil '%(fileName)s' â llwytho i fyny.",

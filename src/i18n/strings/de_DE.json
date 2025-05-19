@@ -2166,9 +2166,14 @@
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
+        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
+        "sort_type": {
+            "activity": "Aktivität",
+            "atoz": "A–Z"
+        },
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
         "space_menu": {
             "home": "Space-Übersicht",
