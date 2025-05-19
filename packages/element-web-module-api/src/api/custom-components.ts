@@ -18,6 +18,9 @@ export enum CustomComponentTarget {
     MessageContextMenu = "MessageContextMenu",
 }
 
+/**
+ * @public
+ */
 export interface ContextMenuItem {
     /**
      * The human readable label for an event.
@@ -49,7 +52,7 @@ export type CustomComponentProps = {
          */
         mxEvent: RoomEvent;
         /**
-         * Words to highlight on (e.g. from search results).\
+         * Words to highlight on (e.g. from search results).
          * May be undefined if the client does not need to highlight
          */
         highlights?: string[];
