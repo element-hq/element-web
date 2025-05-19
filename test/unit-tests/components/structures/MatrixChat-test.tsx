@@ -1053,14 +1053,14 @@ describe("<MatrixChat />", () => {
         describe("showScreen", () => {
             it("should show the 'share' screen", async () => {
                 await getComponent({
-                    initialScreenAfterLogin: { screen: "share", params: { msg: "Hello", format: "B" } },
+                    initialScreenAfterLogin: { screen: "share", params: { msg: "Hello", format: ShareFormat.Text } },
                 });
 
                 await waitFor(() => {
                     expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                         action: "share",
                         msg: "Hello",
-                        format: "B",
+                        format: ShareFormat.Text,
                     });
                 });
             });
