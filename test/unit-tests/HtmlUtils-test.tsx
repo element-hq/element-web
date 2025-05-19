@@ -17,10 +17,6 @@ import { SettingLevel } from "../../src/settings/SettingLevel";
 import SdkConfig from "../../src/SdkConfig";
 
 describe("topicToHtml", () => {
-    afterEach(() => {
-        SettingsStore.reset();
-    });
-
     function getContent() {
         return screen.getByRole("contentinfo").children[0].innerHTML;
     }
@@ -36,19 +32,16 @@ describe("topicToHtml", () => {
     });
 
     it("converts literal HTML topic to HTML", async () => {
-        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("<b>pizza</b>", undefined, null, false)}</div>);
         expect(getContent()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
     });
 
     it("converts true HTML topic to HTML", async () => {
-        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
         expect(getContent()).toEqual("<b>pizza</b>");
     });
 
     it("converts true HTML topic with emoji to HTML", async () => {
-        SettingsStore.setValue("feature_html_topic", null, SettingLevel.DEVICE, true);
         render(<div role="contentinfo">{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
         expect(getContent()).toEqual('<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });

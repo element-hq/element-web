@@ -29,6 +29,9 @@ test.describe("Room list", () => {
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+
+        // focus the user menu to avoid to have hover decoration
+        await page.getByRole("button", { name: "User menu" }).focus();
     });
 
     test.describe("Room list", () => {
@@ -43,7 +46,8 @@ test.describe("Room list", () => {
             await expect(roomListView.getByRole("gridcell", { name: "Open room room29" })).toBeVisible();
             await expect(roomListView).toMatchScreenshot("room-list.png");
 
-            await roomListView.hover();
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
@@ -105,13 +109,10 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
-            // Remove hover on the room list item
-            await roomListView.hover();
-
-            // Scroll to the bottom of the list
-            await page.getByRole("grid", { name: "Room list" }).evaluate((e) => {
-                e.scrollTop = e.scrollHeight;
-            });
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
+            // Scroll to the end of the room list
+            await page.mouse.wheel(0, 1000);
 
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
@@ -129,7 +130,8 @@ test.describe("Room list", () => {
 
         test("should scroll to the current room", async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            await roomListView.hover();
+            // Put focus on the room list
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
 
@@ -183,6 +185,57 @@ test.describe("Room list", () => {
                 await expect(page.getByRole("heading", { name: "1 notification", level: 1 })).toBeVisible();
             });
         });
+
+        test.describe("Keyboard navigation", () => {
+            test("should navigate to the room list", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+
+                const room29 = roomListView.getByRole("gridcell", { name: "Open room room29" });
+                const room28 = roomListView.getByRole("gridcell", { name: "Open room room28" });
+
+                // open the room
+                await room29.click();
+                // put focus back on the room list item
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                await page.keyboard.press("ArrowDown");
+                await expect(room28).toBeFocused();
+                await expect(room29).not.toBeFocused();
+
+                await page.keyboard.press("ArrowUp");
+                await expect(room29).toBeFocused();
+                await expect(room28).not.toBeFocused();
+            });
+
+            test("should navigate to the notification menu", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("gridcell", { name: "Open room room29" });
+                const moreButton = room29.getByRole("button", { name: "More options" });
+                const notificationButton = room29.getByRole("button", { name: "Notification options" });
+
+                await room29.click();
+                // put focus back on the room list item
+                await room29.click();
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+                await page.keyboard.press("Tab");
+                await expect(notificationButton).toBeFocused();
+
+                // Open the menu
+                await notificationButton.click();
+                // Wait for the menu to be open
+                await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
+                    "aria-selected",
+                    "true",
+                );
+
+                // Close the menu
+                await page.keyboard.press("Escape");
+                // Focus should be back on the room list item
+                await expect(room29).toBeFocused();
+            });
+        });
     });
 
     test.describe("Avatar decoration", () => {
@@ -191,6 +244,10 @@ test.describe("Room list", () => {
         test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "public room", visibility: "public" });
+
+            // focus the user menu to avoid to have hover decoration
+            await page.getByRole("button", { name: "User menu" }).focus();
+
             const roomListView = getRoomList(page);
             const publicRoom = roomListView.getByRole("gridcell", { name: "public room" });
 
@@ -206,6 +263,10 @@ test.describe("Room list", () => {
 
             const roomListView = getRoomList(page);
             const videoRoom = roomListView.getByRole("gridcell", { name: "video room" });
+
+            // focus the user menu to avoid to have hover decoration
+            await page.getByRole("button", { name: "User menu" }).focus();
+
             await expect(videoRoom).toBeVisible();
             await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
         });
@@ -278,6 +339,10 @@ test.describe("Room list", () => {
             await page.getByRole("menuitemcheckbox", { name: "Show message previews" }).click();
 
             const roomId = await app.client.createRoom({ name: "activity" });
+
+            // focus the user menu to avoid to have hover decoration
+            await page.getByRole("button", { name: "User menu" }).focus();
+
             await app.client.inviteUser(roomId, bot.credentials.userId);
             await bot.joinRoom(roomId);
             await bot.sendMessage(roomId, "I am a robot. Beep.");
@@ -326,8 +391,8 @@ test.describe("Room list", () => {
             await room.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "mark as unread" }).click();
 
-            // Remove hover on the room list item
-            await roomListView.hover();
+            // focus the user menu to avoid to have hover decoration
+            await page.getByRole("button", { name: "User menu" }).focus();
 
             await expect(room).toMatchScreenshot("room-list-item-mark-as-unread.png");
         });

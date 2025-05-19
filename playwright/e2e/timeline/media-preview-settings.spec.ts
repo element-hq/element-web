@@ -15,6 +15,9 @@ const MEDIA_FILE = fs.readFileSync("playwright/sample-files/riot.png");
 test.describe("Media preview settings", () => {
     test.use({
         displayName: "Alan",
+        botCreateOpts: {
+            displayName: "Bob",
+        },
         room: async ({ app, page, homeserver, bot, user }, use) => {
             const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
             const roomId = await bot.createRoom({
@@ -39,7 +42,14 @@ test.describe("Media preview settings", () => {
         await app.viewRoomById(room.roomId);
         await expect(
             page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
-        ).toMatchScreenshot("invite-no-avatar.png");
+        ).toMatchScreenshot("invite-no-avatar.png", {
+            // Hide the mxid, which is not stable.
+            css: `
+                .mx_RoomPreviewBar_inviter_mxid {
+                    display: none !important;
+                }
+            `,
+        });
         await expect(
             page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
         ).toMatchScreenshot("invite-room-tree-no-avatar.png");
@@ -52,7 +62,14 @@ test.describe("Media preview settings", () => {
         await app.viewRoomById(room.roomId);
         await expect(
             page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
-        ).toMatchScreenshot("invite-with-avatar.png");
+        ).toMatchScreenshot("invite-with-avatar.png", {
+            // Hide the mxid, which is not stable.
+            css: `
+                .mx_RoomPreviewBar_inviter_mxid {
+                    display: none !important;
+                }
+            `,
+        });
         await expect(
             page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
         ).toMatchScreenshot("invite-room-tree-with-avatar.png");

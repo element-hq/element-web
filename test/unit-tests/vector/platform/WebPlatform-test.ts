@@ -12,6 +12,9 @@ import { UpdateCheckStatus } from "../../../../src/BasePlatform";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import WebPlatform from "../../../../src/vector/platform/WebPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
+import ToastStore from "../../../../src/stores/ToastStore.ts";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher.ts";
+import { emitPromise } from "../../../test-utils";
 
 fetchMock.config.overwriteRoutes = true;
 
@@ -26,11 +29,32 @@ describe("WebPlatform", () => {
         expect(platform.getHumanReadableName()).toEqual("Web Platform");
     });
 
-    it("registers service worker", () => {
-        // @ts-ignore - mocking readonly object
-        navigator.serviceWorker = { register: jest.fn() };
-        new WebPlatform();
-        expect(navigator.serviceWorker.register).toHaveBeenCalled();
+    describe("service worker", () => {
+        it("registers successfully", () => {
+            // @ts-expect-error - mocking readonly object
+            navigator.serviceWorker = {
+                register: jest.fn().mockResolvedValue({
+                    update: jest.fn(),
+                }),
+                addEventListener: jest.fn(),
+            };
+            new WebPlatform();
+            expect(navigator.serviceWorker.register).toHaveBeenCalled();
+        });
+
+        it("handles errors", async () => {
+            // @ts-expect-error - mocking readonly object
+            navigator.serviceWorker = {
+                register: undefined,
+            };
+            new WebPlatform();
+
+            defaultDispatcher.dispatch({ action: "client_started" });
+            await emitPromise(ToastStore.sharedInstance(), "update");
+            const toasts = ToastStore.sharedInstance().getToasts();
+            expect(toasts).toHaveLength(1);
+            expect(toasts[0].title).toEqual("Failed to load service worker");
+        });
     });
 
     it("should call reload on window location object", () => {
@@ -146,24 +170,20 @@ describe("WebPlatform", () => {
         });
 
         describe("pollForUpdate()", () => {
-            it(
-                "should return not available and call showNoUpdate when current version " +
-                    "matches most recent version",
-                async () => {
-                    // @ts-ignore
-                    WebPlatform.VERSION = prodVersion;
-                    fetchMock.getOnce("/version", prodVersion);
-                    const platform = new WebPlatform();
+            it("should return not available and call showNoUpdate when current version matches most recent version", async () => {
+                // @ts-ignore
+                WebPlatform.VERSION = prodVersion;
+                fetchMock.getOnce("/version", prodVersion);
+                const platform = new WebPlatform();
 
-                    const showUpdate = jest.fn();
-                    const showNoUpdate = jest.fn();
-                    const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
+                const showUpdate = jest.fn();
+                const showNoUpdate = jest.fn();
+                const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
-                    expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
-                    expect(showUpdate).not.toHaveBeenCalled();
-                    expect(showNoUpdate).toHaveBeenCalled();
-                },
-            );
+                expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
+                expect(showUpdate).not.toHaveBeenCalled();
+                expect(showNoUpdate).toHaveBeenCalled();
+            });
 
             it("should strip v prefix from versions before comparing", async () => {
                 // @ts-ignore

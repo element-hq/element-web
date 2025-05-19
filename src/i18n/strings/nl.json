@@ -764,7 +764,6 @@
             "accepting": "Toestaan…",
             "after_new_login": {
                 "device_verified": "Apparaat geverifieerd",
-                "reset_confirmation": "Echt je verificatiesleutels resetten?",
                 "skip_verification": "Verificatie voorlopig overslaan",
                 "unable_to_verify": "Kan dit apparaat niet verifiëren",
                 "verify_this_device": "Verifieer dit apparaat"
@@ -826,7 +825,6 @@
             "verify_emoji_prompt": "Verifieer door unieke emoji te vergelijken.",
             "verify_emoji_prompt_qr": "Als je bovenstaande code niet kan scannen, verifieer dan door unieke emoji te vergelijken.",
             "verify_later": "Ik verifieer het later",
-            "verify_reset_warning_1": "Het resetten van je verificatiesleutels kan niet ongedaan worden gemaakt. Na het resetten heb je geen toegang meer tot oude versleutelde berichten, en vrienden die je eerder hebben geverifieerd zullen veiligheidswaarschuwingen zien totdat je opnieuw bij hen geverifieert bent.",
             "verify_using_device": "Verifieer met andere apparaat",
             "verify_using_key": "Verifieer met veiligheidssleutel",
             "verify_using_key_or_phrase": "Verifieer met veiligheidssleutel of -wachtwoord",
@@ -2417,7 +2415,6 @@
         "heading_without_query": "Zoeken naar",
         "join_button_text": "%(roomAddress)s toetreden",
         "keyboard_scroll_hint": "Gebruik <arrows/> om te scrollen",
-        "message_search_section_title": "Andere zoekopdrachten",
         "other_rooms_in_space": "Andere kamers in %(spaceName)s",
         "public_rooms_label": "Publieke kamers",
         "recent_searches_section_title": "Recente zoekopdrachten",
@@ -2426,7 +2423,6 @@
         "result_may_be_hidden_privacy_warning": "Sommige resultaten kunnen om privacyredenen verborgen zijn",
         "result_may_be_hidden_warning": "Sommige resultaten zijn mogelijk verborgen",
         "search_dialog": "Dialoogvenster Zoeken",
-        "search_messages_hint": "Om berichten te zoeken, zoek naar dit icoon bovenaan een kamer <icon/>",
         "spaces_title": "Spaces waar u in zit",
         "start_group_chat_button": "Start een groepsgesprek"
     },

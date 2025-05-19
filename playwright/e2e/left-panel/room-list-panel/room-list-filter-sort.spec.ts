@@ -5,8 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Locator, type Page } from "@playwright/test";
+
 import { expect, test } from "../../../element-web-test";
-import type { Page } from "@playwright/test";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -18,8 +21,16 @@ test.describe("Room list filters and sort", () => {
         labsFlags: ["feature_new_room_list"],
     });
 
-    function getPrimaryFilters(page: Page) {
+    function getPrimaryFilters(page: Page): Locator {
         return page.getByRole("listbox", { name: "Room list filters" });
+    }
+
+    function getSecondaryFilters(page: Page): Locator {
+        return page.getByRole("button", { name: "Filter" });
+    }
+
+    function getRoomOptionsMenu(page: Page): Locator {
+        return page.getByRole("button", { name: "Room Options" });
     }
 
     /**
@@ -33,6 +44,65 @@ test.describe("Room list filters and sort", () => {
     test.beforeEach(async ({ page, app, bot, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+    });
+
+    test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
+        // This bug shows up with this setting turned on
+        await app.settings.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, true);
+
+        /*
+        We will first create a room named 'Old Room' and will invite the bot user to this room.
+        We will also send a simple message in this room.
+        */
+        const oldRoomId = await app.client.createRoom({ name: "Old Room" });
+        await app.client.inviteUser(oldRoomId, bot.credentials.userId);
+        await bot.joinRoom(oldRoomId);
+        const response = await app.client.sendMessage(oldRoomId, "Hello!");
+
+        /*
+        At this point, we haven't done anything interesting.
+        So we expect 'Old Room' to show up in the room list.
+        */
+        const roomListView = getRoomList(page);
+        const oldRoomTile = roomListView.getByRole("gridcell", { name: "Open room Old Room" });
+        await expect(oldRoomTile).toBeVisible();
+
+        /*
+        Now let's tombstone 'Old Room'.
+        First we create a new room ('New Room') with the predecessor set to the old room..
+        */
+        const newRoomId = await bot.createRoom({
+            name: "New Room",
+            creation_content: {
+                predecessor: {
+                    event_id: response.event_id,
+                    room_id: oldRoomId,
+                },
+            },
+            visibility: "public" as Visibility,
+        });
+
+        /*
+        Now we can send the tombstone event itself to the 'Old Room'.
+        */
+        await app.client.sendStateEvent(oldRoomId, "m.room.tombstone", {
+            body: "This room has been replaced",
+            replacement_room: newRoomId,
+        });
+
+        // Let's join the replaced room.
+        await app.client.joinRoom(newRoomId);
+
+        // We expect 'Old Room' to be hidden from the room list.
+        await expect(oldRoomTile).not.toBeVisible();
+
+        /*
+        Let's say some user in the 'Old Room' changes their display name.
+        This will send events to the all the rooms including 'Old Room'.
+        Nevertheless, the replaced room should not be shown in the room list.
+        */
+        await bot.setDisplayName("MyNewName");
+        await expect(oldRoomTile).not.toBeVisible();
     });
 
     test.describe("Scroll behaviour", () => {
@@ -106,6 +176,11 @@ test.describe("Room list filters and sort", () => {
             await app.client.evaluate(async (client, favouriteId) => {
                 await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
             }, favouriteId);
+
+            const lowPrioId = await app.client.createRoom({ name: "Low prio room" });
+            await app.client.evaluate(async (client, id) => {
+                await client.setRoomTag(id, "m.lowpriority", { order: 0.5 });
+            }, lowPrioId);
         });
 
         test("should filter the list (with primary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
@@ -137,7 +212,19 @@ test.describe("Room list filters and sort", () => {
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "favourite room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "empty room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(3);
+            expect(await roomList.locator("role=gridcell").count()).toBe(4);
+        });
+
+        test("should filter the list (with secondary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomList = getRoomList(page);
+            const secondaryFilters = getSecondaryFilters(page);
+            await secondaryFilters.click();
+
+            await expect(page.getByRole("menu", { name: "Filter" })).toMatchScreenshot("filter-menu.png");
+
+            await page.getByRole("menuitem", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "Low prio room" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(1);
         });
 
         test(
@@ -169,6 +256,23 @@ test.describe("Room list filters and sort", () => {
                 await expect(roomListView.getByRole("gridcell", { name: "Open room unread dm" })).not.toBeVisible();
             },
         );
+
+        test("should sort the room list alphabetically", async ({ page }) => {
+            const roomListView = getRoomList(page);
+
+            await getRoomOptionsMenu(page).click();
+            await page.getByRole("menuitemradio", { name: "A-Z" }).click();
+
+            await expect(roomListView.getByRole("gridcell").first()).toHaveText(/empty room/);
+        });
+
+        test("should move room to the top on message when sorting by activity", async ({ page, bot }) => {
+            const roomListView = getRoomList(page);
+
+            await bot.sendMessage(unReadDmId, "Hello!");
+
+            await expect(roomListView.getByRole("gridcell").first()).toHaveText(/unread dm/);
+        });
     });
 
     test.describe("Empty room list", () => {

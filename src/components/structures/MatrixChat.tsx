@@ -19,7 +19,7 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -107,6 +107,7 @@ import Views from "../../Views";
 import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForgetRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
@@ -215,7 +216,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private firstSyncComplete = false;
-    private firstSyncPromise: IDeferred<void>;
+    private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
@@ -254,7 +255,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -1229,7 +1230,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
             description: (
                 <span>
@@ -1245,16 +1246,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ),
             button: _t("action|leave"),
             danger: warnings.length > 0,
-            onFinished: async (shouldLeave) => {
-                if (shouldLeave) {
-                    await leaveRoomBehaviour(cli, roomId);
+        });
 
-                    dis.dispatch<AfterLeaveRoomPayload>({
-                        action: Action.AfterLeaveRoom,
-                        room_id: roomId,
-                    });
-                }
-            },
+        finished.then(async ([shouldLeave]) => {
+            if (shouldLeave) {
+                await leaveRoomBehaviour(cli, roomId);
+
+                dis.dispatch<AfterLeaveRoomPayload>({
+                    action: Action.AfterLeaveRoom,
+                    room_id: roomId,
+                });
+            }
         });
     }
 
@@ -1268,10 +1270,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({ action: Action.ViewHomePage });
                 }
 
-                // We have to manually update the room list because the forgotten room will not
-                // be notified to us, therefore the room list will have no other way of knowing
-                // the room is forgotten.
-                if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                if (room) {
+                    // Legacy room list store needs to be told to manually remove this room
+                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    // New room list store will remove the room on the following dispatch
+                    dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
+                }
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("error|unknown_error_code");
@@ -1470,11 +1474,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // since we're about to start the client and therefore about to do the first sync
         // We resolve the existing promise with the new one to update any existing listeners
         if (!this.firstSyncComplete) {
-            const firstSyncPromise = defer<void>();
+            const firstSyncPromise = Promise.withResolvers<void>();
             this.firstSyncPromise.resolve(firstSyncPromise.promise);
             this.firstSyncPromise = firstSyncPromise;
         } else {
-            this.firstSyncPromise = defer();
+            this.firstSyncPromise = Promise.withResolvers();
         }
         this.firstSyncComplete = false;
         const cli = MatrixClientPeg.safeGet();
@@ -1558,7 +1562,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         });
         cli.on(HttpApiEvent.NoConsent, function (message, consentUri) {
-            Modal.createDialog(
+            const { finished } = Modal.createDialog(
                 QuestionDialog,
                 {
                     title: _t("terms|tac_title"),
@@ -1569,16 +1573,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     ),
                     button: _t("terms|tac_button"),
                     cancelButton: _t("action|dismiss"),
-                    onFinished: (confirmed) => {
-                        if (confirmed) {
-                            const wnd = window.open(consentUri, "_blank")!;
-                            wnd.opener = null;
-                        }
-                    },
                 },
                 undefined,
                 true,
             );
+            finished.then(([confirmed]) => {
+                if (confirmed) {
+                    const wnd = window.open(consentUri, "_blank")!;
+                    wnd.opener = null;
+                }
+            });
         });
 
         DecryptionFailureTracker.instance

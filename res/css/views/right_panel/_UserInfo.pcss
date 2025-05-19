@@ -109,6 +109,15 @@ Please see LICENSE files in the repository root for full details.
             font-size: $font-20px;
             line-height: $font-25px;
 
+            /* E2E icon wrapper */
+            .mx_Flex > span {
+                display: inline-block;
+            }
+        }
+
+        .mx_UserInfo_profile_name {
+            min-height: 30px;
+
             /* limit to 2 lines, show an ellipsis if it overflows */
             /* this looks webkit specific but is supported by Firefox 68+ */
             display: -webkit-box;
@@ -118,15 +127,6 @@ Please see LICENSE files in the repository root for full details.
             overflow: hidden;
             word-break: break-all;
             text-overflow: ellipsis;
-
-            /* E2E icon wrapper */
-            .mx_Flex > span {
-                display: inline-block;
-            }
-        }
-
-        .mx_UserInfo_profile_name {
-            height: 30px;
         }
 
         .mx_UserInfo_profile_mxid {

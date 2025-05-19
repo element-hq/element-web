@@ -50,11 +50,11 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -81,7 +81,7 @@ jobs:
                   yarn build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: webapp
                   path: webapp
@@ -89,7 +89,7 @@ jobs:
 
             - name: Calculate runner variables
               id: runner-vars
-              uses: actions/github-script@v7
+              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
               with:
                   script: |
                       const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
@@ -129,18 +129,18 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
               with:
                   name: webapp
                   path: webapp
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
               with:
                   cache: "yarn"
                   cache-dependency-path: yarn.lock
@@ -154,7 +154,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@v4
+              uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
               id: playwright-cache
               with:
                   path: |
@@ -180,7 +180,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
                   path: blob-report
@@ -192,13 +192,13 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               if: inputs.skip != true
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
               if: inputs.skip != true
               with:
                   cache: "yarn"
@@ -210,7 +210,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports
@@ -226,7 +226,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: html-report
                   path: playwright-report

@@ -72,7 +72,7 @@ export default abstract class BasePlatform {
     protected _favicon?: Favicon;
 
     protected constructor() {
-        dis.register(this.onAction);
+        dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
@@ -85,14 +85,14 @@ export default abstract class BasePlatform {
      */
     public abstract getDefaultDeviceDisplayName(): string;
 
-    protected onAction = (payload: ActionPayload): void => {
+    protected onAction(payload: ActionPayload): void {
         switch (payload.action) {
             case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;
         }
-    };
+    }
 
     // Used primarily for Analytics
     public abstract getHumanReadableName(): string;

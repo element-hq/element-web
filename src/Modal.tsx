@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
-import { type IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
@@ -30,12 +29,25 @@ export type ComponentType =
       }>
     | React.ComponentType<any>;
 
-// Generic type which returns the props of the Modal component with the onFinished being optional.
+/**
+ * The parameter types of the `onFinished` callback property exposed by the component which forms the
+ * body of the dialog.
+ *
+ * @typeParam C - The type of the React component which forms the body of the dialog.
+ */
+type OnFinishedParams<C extends ComponentType> = Parameters<React.ComponentProps<C>["onFinished"]>;
+
+/**
+ * The properties exposed by the `props` argument to {@link Modal.createDialog}: the same as
+ * those exposed by the underlying component, with the exception of `onFinished`, which is provided by
+ * `createDialog`.
+ *
+ * @typeParam C - The type of the React component which forms the body of the dialog.
+ */
 export type ComponentProps<C extends ComponentType> = Defaultize<
     Omit<React.ComponentProps<C>, "onFinished">,
     C["defaultProps"]
-> &
-    Partial<Pick<React.ComponentProps<C>, "onFinished">>;
+>;
 
 export interface IModal<C extends ComponentType> {
     elem: React.ReactNode;
@@ -43,15 +55,44 @@ export interface IModal<C extends ComponentType> {
     beforeClosePromise?: Promise<boolean>;
     closeReason?: ModalCloseReason;
     onBeforeClose?(reason?: ModalCloseReason): Promise<boolean>;
-    onFinished: ComponentProps<C>["onFinished"];
-    close(...args: Parameters<ComponentProps<C>["onFinished"]>): void;
+
+    /**
+     * Run the {@link deferred} with the given arguments, and close this modal.
+     *
+     * This method is passed as the `onFinished` callback to the underlying component,
+     * as well as being returned by {@link Modal.createDialog} to the caller.
+     */
+    close(...args: OnFinishedParams<C> | []): void;
+
     hidden?: boolean;
-    deferred?: IDeferred<Parameters<ComponentProps<C>["onFinished"]>>;
+
+    /** A deferred to resolve when the dialog closes, with the results as provided by
+     * the call to {@link close} (normally from the `onFinished` callback).
+     */
+    deferred?: PromiseWithResolvers<OnFinishedParams<C> | []>;
 }
 
+/** The result of {@link Modal.createDialog}.
+ *
+ * @typeParam C - The type of the React component which forms the body of the dialog.
+ */
 export interface IHandle<C extends ComponentType> {
-    finished: Promise<Parameters<ComponentProps<C>["onFinished"]>>;
-    close(...args: Parameters<ComponentProps<C>["onFinished"]>): void;
+    /**
+     * A promise which will resolve when the dialog closes.
+     *
+     * If the dialog body component calls the `onFinished` property, or the caller calls {@link close},
+     * the promise resolves with an array holding the arguments to that call.
+     *
+     * If the dialog is closed by clicking in the background, the promise resolves with an empty array.
+     */
+    finished: Promise<OnFinishedParams<C> | []>;
+
+    /**
+     * A function which, if called, will close the dialog.
+     *
+     * @param args - Arguments to return to {@link finished}.
+     */
+    close(...args: OnFinishedParams<C>): void;
 }
 
 interface IOptions<C extends ComponentType> {
@@ -164,7 +205,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         const modals = filterBoolean([...this.modals, this.staticModal, this.priorityModal]);
         for (const modal of modals) {
             modal.deferred?.resolve([]);
-            if (modal.onFinished) modal.onFinished.apply(null);
             this.emitClosed();
         }
 
@@ -188,7 +228,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         onFinishedProm: IHandle<C>["finished"];
     } {
         const modal = {
-            onFinished: props?.onFinished,
             onBeforeClose: options?.onBeforeClose,
             className,
 
@@ -196,8 +235,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             elem: null,
         } as IModal<C>;
 
-        // never call this from onFinished() otherwise it will loop
-        const [closeDialog, onFinishedProm] = this.getCloseFn<C>(modal, props);
+        const [closeDialog, onFinishedProm] = this.getCloseFn<C>(modal);
 
         // don't attempt to reuse the same AsyncWrapper for different dialogs,
         // otherwise we'll get confused.
@@ -214,13 +252,10 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return { modal, closeDialog, onFinishedProm };
     }
 
-    private getCloseFn<C extends ComponentType>(
-        modal: IModal<C>,
-        props?: ComponentProps<C>,
-    ): [IHandle<C>["close"], IHandle<C>["finished"]] {
-        modal.deferred = defer<Parameters<ComponentProps<C>["onFinished"]>>();
+    private getCloseFn<C extends ComponentType>(modal: IModal<C>): [IHandle<C>["close"], IHandle<C>["finished"]] {
+        modal.deferred = Promise.withResolvers<OnFinishedParams<C> | []>();
         return [
-            async (...args: Parameters<ComponentProps<C>["onFinished"]>): Promise<void> => {
+            async (...args: OnFinishedParams<C>): Promise<void> => {
                 if (modal.beforeClosePromise) {
                     await modal.beforeClosePromise;
                 } else if (modal.onBeforeClose) {
@@ -232,7 +267,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                     }
                 }
                 modal.deferred?.resolve(args);
-                if (props?.onFinished) props.onFinished.apply(null, args);
                 const i = this.modals.indexOf(modal);
                 if (i >= 0) {
                     this.modals.splice(i, 1);
@@ -280,7 +314,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      *                  using React.lazy to async load the component.
      *                  e.g. `lazy(() => import('./MyComponent'))`
      *
-     * @param props properties to pass to the displayed component. (We will also pass an 'onFinished' property.)
+     * @param props properties to pass to the displayed component. (We will also pass an `onFinished` property; when
+     *     called, that property will close the dialog and return the results to the caller via {@link IHandle.finished}.)
      *
      * @param className CSS class to apply to the modal wrapper
      *
@@ -295,7 +330,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      *                                 static at a time.
      * @param options? extra options for the dialog
      * @param options.onBeforeClose a callback to decide whether to close the dialog
-     * @returns Object with 'close' parameter being a function that will close the dialog
+     * @returns {@link IHandle} object.
      */
     public createDialog<C extends ComponentType>(
         component: C,

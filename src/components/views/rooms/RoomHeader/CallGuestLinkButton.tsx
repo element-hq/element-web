@@ -14,10 +14,11 @@ import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import Modal from "../../../../Modal";
 import { ShareDialog } from "../../dialogs/ShareDialog";
 import { _t } from "../../../../languageHandler";
-import SettingsStore from "../../../../settings/SettingsStore";
 import { calculateRoomVia } from "../../../../utils/permalinks/Permalinks";
 import BaseDialog from "../../dialogs/BaseDialog";
 import { useGuestAccessInformation } from "../../../../hooks/room/useGuestAccessInformation";
+import JoinRuleSettings from "../../settings/JoinRuleSettings";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 /**
  * Display a button to open a dialog to share a link to the call using a element call guest spa url (`element_call:guest_spa_url` in the EW config).
@@ -114,33 +115,32 @@ export const JoinRuleDialog: React.FC<{
                 "",
             );
             // Show the dialog for a bit to give the user feedback
-            setTimeout(() => onFinished(), 500);
+            setTimeout(() => onFinished(), 1000);
         },
         [isUpdating, onFinished, room.client, room.roomId],
     );
     return (
         <BaseDialog title={_t("update_room_access_modal|title")} onFinished={onFinished} className="mx_JoinRuleDialog">
-            <p>{_t("update_room_access_modal|description")}</p>
-            <div className="mx_JoinRuleDialogButtons">
-                {askToJoinEnabled && canInvite && (
-                    <Button
-                        kind="secondary"
-                        className="mx_Dialog_nonDialogButton"
-                        disabled={isUpdating === JoinRule.Knock}
-                        onClick={() => changeJoinRule(JoinRule.Knock)}
-                    >
-                        {_t("action|ask_to_join")}
-                    </Button>
-                )}
-                <Button
-                    className="mx_Dialog_nonDialogButton"
-                    kind="destructive"
-                    disabled={isUpdating === JoinRule.Public}
-                    onClick={() => changeJoinRule(JoinRule.Public)}
-                >
-                    {_t("common|public")}
-                </Button>
-            </div>
+            <p>{_t("update_room_access_modal|description", {}, { b: (sub) => <strong>{sub}</strong> })}</p>
+            <p>
+                {_t("update_room_access_modal|revert_access_description", {}, { b: (sub) => <strong>{sub}</strong> })}
+            </p>
+            <JoinRuleSettings
+                recommendedOption={JoinRule.Knock}
+                room={room}
+                disabledOptions={new Set([JoinRule.Invite, JoinRule.Private, JoinRule.Restricted])}
+                hiddenOptions={
+                    new Set([JoinRule.Restricted].concat(askToJoinEnabled && canInvite ? [] : [JoinRule.Knock]))
+                }
+                beforeChange={async (newRule) => {
+                    await changeJoinRule(newRule).catch(() => {
+                        return false;
+                    });
+                    return true;
+                }}
+                closeSettingsFn={() => {}}
+                onError={(error: unknown) => logger.error("Could not generate change access level:", error)}
+            />
             <p>{_t("update_room_access_modal|dont_change_description")}</p>
             <div className="mx_JoinRuleDialogButtons">
                 <Button
