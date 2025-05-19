@@ -858,6 +858,34 @@ describe("<MatrixChat />", () => {
                         formatted_body: "Hello <em>world</em>",
                     });
                 });
+
+                it("should strip malicious tags from shared html message", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({
+                        action: Action.Share,
+                        format: ShareFormat.Html,
+                        msg: `evil<script src="http://evil.dummy/bad.js" />`,
+                    });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: "evil",
+                        formatted_body: "evil",
+                    });
+                });
             });
 
             describe("logout", () => {
