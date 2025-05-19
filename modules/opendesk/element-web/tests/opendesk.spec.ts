@@ -87,7 +87,7 @@ test.use({
         },
         "net.nordeck.element_web.module.widget_toggles": {
             config: {
-                types: [],
+                types: ["jitsi"],
             },
         },
         "net.nordeck.element_web.module.widget_lifecycle": {

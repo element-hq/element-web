@@ -41,7 +41,7 @@ declare global {
 }
 
 class OpendeskModule implements Module {
-    public static readonly moduleApiVersion = "^0.1.1";
+    public static readonly moduleApiVersion = "^1.0.0";
 
     public constructor(private api: Api) {}
 
