@@ -31,7 +31,11 @@ describe("ElectronPlatform", () => {
     const mockElectron = {
         on: jest.fn(),
         send: jest.fn(),
-        initialise: jest.fn(),
+        initialise: jest.fn().mockResolvedValue({
+            protocol: "io.element.desktop",
+            sessionId: "session-id",
+            config: {},
+        }),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
