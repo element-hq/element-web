@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 Copyright 2015-2023 The Matrix.org Foundation C.I.C.
 Copyright 2021, 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
@@ -20,6 +20,7 @@ import {
     Thread,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
+import { CustomComponentTarget } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -53,6 +54,7 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { CardContext } from "../right_panel/context";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import ModuleApi from "../../../modules/Api.ts";
 
 interface IReplyInThreadButton {
     mxEvent: MatrixEvent;
@@ -684,6 +686,22 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        const root = (
+            <>
+                {nativeItemsList}
+                {quickItemsList}
+                {commonItemsList}
+                {redactItemList}
+            </>
+        );
+        const wrapped = ModuleApi.customComponents.render(
+            CustomComponentTarget.MessageContextMenu,
+            {
+                mxEvent,
+                closeMenu: this.closeMenu,
+            },
+            root,
+        );
         return (
             <React.Fragment>
                 <IconizedContextMenu
@@ -692,10 +710,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                     compact={true}
                     data-testid="mx_MessageContextMenu"
                 >
-                    {nativeItemsList}
-                    {quickItemsList}
-                    {commonItemsList}
-                    {redactItemList}
+                    {wrapped}
                 </IconizedContextMenu>
                 {reactionPicker}
             </React.Fragment>
