@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type FC } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import { type Api } from "@element-hq/element-web-module-api";
 import { Heading } from "@vector-im/compound-web";
 
@@ -14,7 +14,6 @@ import { type ModuleConfig } from "./config";
 import UniventionMenu from "./Univention/Menu";
 import Menu from "./Menu";
 import Logo from "./Logo.tsx";
-import { theme } from "./theme.ts";
 
 const Root = styled.nav`
     height: ${({ theme }): string => theme.bannerHeight};
@@ -50,17 +49,15 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu }) => {
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Root>
-                {menuJsx}
-                <LogoContainer>
-                    <Logo api={api} src={logoUrl} href={href} height="100%" />
-                </LogoContainer>
-                <Heading size="sm" weight="medium" as="h1">
-                    {api.config.get("brand")}
-                </Heading>
-            </Root>
-        </ThemeProvider>
+        <Root>
+            {menuJsx}
+            <LogoContainer>
+                <Logo api={api} src={logoUrl} href={href} height="100%" />
+            </LogoContainer>
+            <Heading size="sm" weight="medium" as="h1">
+                {api.config.get("brand")}
+            </Heading>
+        </Root>
     );
 };
 

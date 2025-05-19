@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base, expect } from "../../../../playwright/element-web-test.ts";
-import { ModuleConfig } from "../src/config.ts";
+import { type ConfigSchema } from "../src/config.ts";
 
 const test = base.extend<{
     // Resolver for when to respond to the navigation.json request
@@ -39,7 +39,7 @@ test.describe("Banner", () => {
         // We don't take a screenshot as we don't want to assert Element's styling, only our own
     });
 
-    const configs: ModuleConfig[] = [
+    const configs: ConfigSchema["_input"][] = [
         {
             logo_url: "http://localhost:8080/logo.svg",
             logo_link_url: "https://example.com/portal",
@@ -83,6 +83,10 @@ test.describe("Banner", () => {
                 type: "univention",
                 logo_url: "http://localhost:8080/opendesk/logofull.svg",
                 ics_url: "http://localhost:8080/ics/",
+            },
+            theme: {
+                triggerBackgroundColorHover: "#571EFA",
+                triggerBackgroundColorPressed: "#4519C2",
             },
         },
     ];

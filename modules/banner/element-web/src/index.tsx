@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { ThemeProvider } from "styled-components";
+
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
@@ -33,12 +35,14 @@ class BannerModule implements Module {
 
         const root = this.api.createRoot(div);
         root.render(
-            <Banner
-                api={this.api}
-                logoUrl={this.config.logo_url}
-                href={this.config.logo_link_url}
-                menu={this.config.menu}
-            />,
+            <ThemeProvider theme={this.config.theme}>
+                <Banner
+                    api={this.api}
+                    logoUrl={this.config.logo_url}
+                    href={this.config.logo_link_url}
+                    menu={this.config.menu}
+                />
+            </ThemeProvider>,
         );
     }
 }

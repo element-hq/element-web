@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { z } from "zod";
+import { z, ZodSchema, ZodTypeDef } from "zod";
+
+import { Theme } from "./theme.ts";
 
 const StaticConfig = z.object({
     type: z.literal("static"),
@@ -85,15 +87,25 @@ export const ModuleConfig = z.object({
      */
     logo_link_url: z.string().url(),
 
+    /**
+     * Configuration for the menu.
+     */
     menu: z.discriminatedUnion("type", [StaticConfig, UniventionConfig]),
+
+    /**
+     * Theme variable overrides, optional.
+     */
+    theme: Theme.default({}),
 });
 
 export type ModuleConfig = z.infer<typeof ModuleConfig>;
+
+export type ConfigSchema = ZodSchema<z.output<typeof ModuleConfig>, ZodTypeDef, z.input<typeof ModuleConfig>>;
 
 export const CONFIG_KEY = "io.element.element-web-modules.banner";
 
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
-        [CONFIG_KEY]: ModuleConfig;
+        [CONFIG_KEY]: ConfigSchema["_input"];
     }
 }
