@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 const theme = {
     textColor: "var(--cpd-color-text-primary)",
-    subheadingColor: "var(--cpd-color-text-secondary)", // TODO
+    subheadingColor: "var(--cpd-color-text-secondary)",
     bannerBackgroundColor: "var(--cpd-color-bg-canvas-default)",
     bannerHeight: "60px",
     triggerWidth: "68px",

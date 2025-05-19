@@ -32,7 +32,7 @@ const SidebarHeading = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--cpd-space-5x); // TODO check
+    margin-bottom: var(--cpd-space-5x);
 `;
 
 const Trigger = styled.button`
