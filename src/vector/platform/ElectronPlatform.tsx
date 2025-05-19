@@ -17,7 +17,6 @@ import {
     type OidcRegistrationClientMetadata,
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
@@ -97,9 +96,10 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private readonly ssoID: string = secureRandomString(32);
+    private readonly initialised: Promise<void>;
     private protocol!: string;
+    private sessionId!: string;
+    private config!: IConfigOptions;
 
     public constructor() {
         super();
@@ -187,17 +187,21 @@ export default class ElectronPlatform extends BasePlatform {
             await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        void this.initializeProtocolScheme();
-
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+
+        this.initialised = this.initialise();
     }
 
-    private async initializeProtocolScheme(): Promise<void> {
-        this.protocol = await this.ipc.call("initializeProtocolScheme", this.ssoID);
+    private async initialise(): Promise<void> {
+        const { protocol, sessionId, config } = await window.electron!.initialise();
+        this.protocol = protocol;
+        this.sessionId = sessionId;
+        this.config = config;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
-        return this.ipc.call("getConfig");
+        await this.initialised;
+        return this.config;
     }
 
     private onBreadcrumbsUpdate = (): void => {
@@ -396,7 +400,7 @@ export default class ElectronPlatform extends BasePlatform {
     public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
-        url.searchParams.set(SSO_ID_KEY, this.ssoID);
+        url.searchParams.set(SSO_ID_KEY, this.sessionId);
         return url;
     }
 
@@ -474,7 +478,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public getOidcClientState(): string {
-        return `:${SSO_ID_KEY}:${this.ssoID}`;
+        return `:${SSO_ID_KEY}:${this.sessionId}`;
     }
 
     /**
