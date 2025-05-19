@@ -14,7 +14,6 @@ import {
     useRoomListViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListView";
 import { mkRoom, stubClient } from "../../../../../test-utils";
 
@@ -29,13 +28,9 @@ describe("<RoomListView />", () => {
         primaryFilters: [],
         activateSecondaryFilter: jest.fn().mockReturnValue({}),
         activeSecondaryFilter: SecondaryFilters.AllActivity,
-        sort: jest.fn(),
-        activeSortOption: SortOption.Activity,
         createRoom: jest.fn(),
         createChatRoom: jest.fn(),
         canCreateRoom: true,
-        toggleMessagePreview: jest.fn(),
-        shouldShowMessagePreview: false,
         activeIndex: undefined,
     };
     const matrixClient = stubClient();

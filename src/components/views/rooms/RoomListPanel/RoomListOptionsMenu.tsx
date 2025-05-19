@@ -7,11 +7,11 @@
 
 import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
 import React, { type Ref, type JSX, useState, useCallback } from "react";
-import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import FilterIcon from "@vector-im/compound-design-tokens/assets/web/icons/filter";
 
 import { _t } from "../../../../languageHandler";
-import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { SortOption } from "../../../viewmodels/roomlist/useSorter";
+import { type RoomListHeaderViewState } from "../../../viewmodels/roomlist/RoomListHeaderViewModel";
 
 interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
     ref?: Ref<HTMLButtonElement>;
@@ -19,13 +19,8 @@ interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
 
 const MenuTrigger = ({ ref, ...props }: MenuTriggerProps): JSX.Element => (
     <Tooltip label={_t("room_list|room_options")}>
-        <IconButton
-            className="mx_RoomListSecondaryFilters_roomOptionsButton"
-            aria-label={_t("room_list|room_options")}
-            {...props}
-            ref={ref}
-        >
-            <OverflowHorizontalIcon />
+        <IconButton aria-label={_t("room_list|room_options")} {...props} ref={ref}>
+            <FilterIcon color="var(--cpd-color-icon-secondary)" />
         </IconButton>
     </Tooltip>
 );
@@ -34,7 +29,7 @@ interface Props {
     /**
      * The view model for the room list view
      */
-    vm: RoomListViewState;
+    vm: RoomListHeaderViewState;
 }
 
 export function RoomListOptionsMenu({ vm }: Props): JSX.Element {

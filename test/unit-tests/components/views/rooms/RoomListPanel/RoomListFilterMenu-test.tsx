@@ -12,7 +12,6 @@ import { TooltipProvider } from "@vector-im/compound-web";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListFilterMenu } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListFilterMenu";
 
 function getRenderOptions(): RenderOptions {
@@ -34,10 +33,6 @@ describe("<RoomListFilterMenu />", () => {
             primaryFilters: [],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             activeIndex: undefined,
         };
     });

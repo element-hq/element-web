@@ -5,14 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { renderHook } from "jest-matrix-react";
+import { renderHook, act } from "jest-matrix-react";
 import { JoinRule, type MatrixClient, type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import { range } from "lodash";
 
 import { useRoomListHeaderViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import {
@@ -23,6 +24,10 @@ import {
     showSpaceSettings,
 } from "../../../../../src/utils/space";
 import { createRoom, hasCreateRoomRights } from "../../../../../src/components/viewmodels/roomlist/utils";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
+import { SortOption } from "../../../../../src/components/viewmodels/roomlist/useSorter";
+import { SortingAlgorithm } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -198,5 +203,73 @@ describe("useRoomListHeaderViewModel", () => {
         result.current.openSpaceSettings();
 
         expect(showSpaceSettings).toHaveBeenCalledWith(space);
+    });
+
+    describe("Sorting", () => {
+        function mockAndCreateRooms() {
+            const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
+            const fn = jest
+                .spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace")
+                .mockImplementation(() => [...rooms]);
+            return { rooms, fn };
+        }
+
+        it("should change sort order", () => {
+            mockAndCreateRooms();
+            const { result: vm } = render();
+
+            const resort = jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(() => {});
+
+            // Change the sort option
+            act(() => {
+                vm.current.sort(SortOption.AToZ);
+            });
+
+            // Resort method in RLS must have been called
+            expect(resort).toHaveBeenCalledWith(SortingAlgorithm.Alphabetic);
+        });
+
+        it("should set activeSortOption based on value from settings", () => {
+            // Let's say that the user's preferred sorting is alphabetic
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => SortingAlgorithm.Alphabetic);
+
+            mockAndCreateRooms();
+            const { result: vm } = render();
+            expect(vm.current.activeSortOption).toEqual(SortOption.AToZ);
+        });
+    });
+
+    describe("message preview toggle", () => {
+        it("should return shouldShowMessagePreview based on setting", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+            const { result: vm } = render();
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+        });
+
+        it("should update when setting changes", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+
+            let watchFn: CallbackFn;
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, fn) => {
+                if (settingName === "RoomList.showMessagePreview") watchFn = fn;
+                return "";
+            });
+            const { result: vm } = render();
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+            act(() => watchFn("RoomList.showMessagePreview", "", SettingLevel.DEVICE, false, false));
+            expect(vm.current.shouldShowMessagePreview).toEqual(false);
+        });
+
+        it("should change setting on toggle", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+            const fn = jest.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
+
+            const { result: vm } = render();
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+            act(() => vm.current.toggleMessagePreview());
+            expect(fn).toHaveBeenCalledWith("RoomList.showMessagePreview", null, "device", false);
+        });
     });
 });
