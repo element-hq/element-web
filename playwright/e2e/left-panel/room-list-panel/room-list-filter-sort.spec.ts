@@ -316,15 +316,25 @@ test.describe("Room list filters and sort", () => {
             },
         );
 
-        test("should render the placeholder for unread filter", { tag: "@screenshot" }, async ({ page, app, user }) => {
-            const primaryFilters = getPrimaryFilters(page);
-            await primaryFilters.getByRole("option", { name: "Unread" }).click();
+        [
+            { filter: "Unreads", action: "Show all chats" },
+            { filter: "Mentions", action: "See all activity" },
+            { filter: "Invites", action: "See all activity" },
+        ].forEach(({ filter, action }) => {
+            test(
+                `should render the placeholder for ${filter} filter`,
+                { tag: "@screenshot" },
+                async ({ page, app, user }) => {
+                    const primaryFilters = getPrimaryFilters(page);
+                    await primaryFilters.getByRole("option", { name: filter }).click();
 
-            const emptyRoomList = getEmptyRoomList(page);
-            await expect(emptyRoomList).toMatchScreenshot("unread-empty-room-list.png");
+                    const emptyRoomList = getEmptyRoomList(page);
+                    await expect(emptyRoomList).toMatchScreenshot(`${filter}-empty-room-list.png`);
 
-            await emptyRoomList.getByRole("button", { name: "show all chats" }).click();
-            await expect(primaryFilters.getByRole("option", { name: "Unread" })).not.toBeChecked();
+                    await emptyRoomList.getByRole("button", { name: action }).click();
+                    await expect(primaryFilters.getByRole("option", { name: filter })).not.toBeChecked();
+                },
+            );
         });
 
         ["People", "Rooms", "Favourite"].forEach((filter) => {
