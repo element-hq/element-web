@@ -23,7 +23,6 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
-    // (undocumented)
     readonly customComponents: CustomComponentsApi;
     readonly i18n: I18nApi;
     readonly rootNode: HTMLElement;
