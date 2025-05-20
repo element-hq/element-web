@@ -67,8 +67,9 @@ test.describe("Cryptography", function () {
             // Bob has a second, not cross-signed, device
             const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
 
-            // Dismiss the toast nagging us to set up recovery otherwise it gets in the way of clicking the room list
-            await page.getByRole("button", { name: "Not now" }).click();
+            // Dismiss the toasts nagging us, otherwise they get in the way of clicking the room list
+            await page.getByRole("button", { name: "Dismiss" }).click();
+            await page.getByRole("button", { name: "Yes, dismiss" }).click();
 
             await bob.sendEvent(testRoomId, null, "m.room.encrypted", {
                 algorithm: "m.megolm.v1.aes-sha2",
