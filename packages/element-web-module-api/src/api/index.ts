@@ -10,7 +10,7 @@ import { LegacyModuleApiExtension } from "./legacy-modules";
 import { LegacyCustomisationsApiExtension } from "./legacy-customisations";
 import { ConfigApi } from "./config";
 import { I18nApi } from "./i18n";
-import { CustomComponentsApi, CustomComponentTarget } from "./custom-components";
+import { CustomComponentsApi } from "./custom-components";
 
 /**
  * Module interface for modules to implement.
@@ -88,6 +88,10 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
      */
     readonly rootNode: HTMLElement;
 
+    /**
+     * The custom components API.
+     * @public
+     */
     readonly customComponents: CustomComponentsApi;
     /**
      * Create a ReactDOM root for rendering React components.
