@@ -10,14 +10,8 @@ import {
     type CustomComponentsApi as ICustomComponentsApi,
     type CustomComponentProps,
     type CustomComponentRenderFunction,
-    type ContextMenuItem,
 } from "@element-hq/element-web-module-api";
-import React, { JSX } from "react";
-
-import {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../components/views/context_menus/IconizedContextMenu";
+import React from "react";
 
 export class CustomComponentsApi implements ICustomComponentsApi {
     private registeredRenderers = new Map<
@@ -25,10 +19,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         CustomComponentRenderFunction<CustomComponentTarget>[]
     >();
 
-    public register<T extends CustomComponentTarget>(
-        target: T,
-        renderer: CustomComponentRenderFunction<T>,
-    ): void {
+    public register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void {
         const renderSet = this.registeredRenderers.get(target);
         if (renderSet) {
             // This type is safe, registeredRenderers maps T => CustomComponentRenderFunction<T>
@@ -41,7 +32,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     public render<T extends CustomComponentTarget>(
         target: T,
         props: CustomComponentProps[T],
-        originalComponent: React.JSX.Element,
+        originalComponent: () => React.JSX.Element,
     ): React.JSX.Element {
         for (const renderer of this.registeredRenderers.get(target) ?? []) {
             const component = renderer(props, originalComponent);
@@ -49,21 +40,6 @@ export class CustomComponentsApi implements ICustomComponentsApi {
                 return component;
             }
         }
-        return originalComponent;
-    }
-
-    public buildContextMenuBlock(items: ContextMenuItem[]): JSX.Element {
-        return (
-            <IconizedContextMenuOptionList>
-                {items.map((props) => (
-                    <IconizedContextMenuOption
-                        iconClassName={props.iconClassName}
-                        label={props.label}
-                        onClick={props.onClick}
-                        key={props.label}
-                    />
-                ))}
-            </IconizedContextMenuOptionList>
-        );
+        return originalComponent();
     }
 }

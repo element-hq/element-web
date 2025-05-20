@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { CustomComponentTarget } from "@element-hq/element-web-module-api";
 
 import EventContentBody from "./EventContentBody.tsx";
@@ -373,53 +373,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        let widgets;
-        if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            widgets = (
-                <LinkPreviewGroup
-                    links={this.state.links}
-                    mxEvent={this.props.mxEvent}
-                    onCancelClick={this.onCancelClick}
-                />
-            );
-        }
-
-        let root;
-
-        if (isEmote) {
-            root = (
-                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
-                    *&nbsp;
-                    <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
-                        {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
-                    </span>
-                    &nbsp;
-                    {body}
-                    {widgets}
-                </div>
-            );
-        } else if (isNotice) {
-            root = (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
-                    {body}
-                    {widgets}
-                </div>
-            );
-        } else if (isCaption) {
-            root = (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
-                    {body}
-                    {widgets}
-                </div>
-            );
-        } else {
-            root = (
-                <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
-                    {body}
-                    {widgets}
-                </div>
-            );
-        }
         return ModuleApi.customComponents.render(
             CustomComponentTarget.TextualBody,
             {
@@ -428,7 +381,52 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 showUrlPreview: this.props.showUrlPreview,
                 forExport: this.props.forExport,
             },
-            root,
+            () => {
+                let widgets;
+                if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
+                    widgets = (
+                        <LinkPreviewGroup
+                            links={this.state.links}
+                            mxEvent={this.props.mxEvent}
+                            onCancelClick={this.onCancelClick}
+                        />
+                    );
+                }
+                if (isEmote) {
+                    return (
+                        <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
+                            *&nbsp;
+                            <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
+                                {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
+                            </span>
+                            &nbsp;
+                            {body}
+                            {widgets}
+                        </div>
+                    );
+                } else if (isNotice) {
+                    return (
+                        <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                            {body}
+                            {widgets}
+                        </div>
+                    );
+                } else if (isCaption) {
+                    return (
+                        <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
+                            {body}
+                            {widgets}
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                            {body}
+                            {widgets}
+                        </div>
+                    );
+                }
+            },
         );
     }
 }
