@@ -5,8 +5,8 @@
 ```ts
 
 import { JSX } from 'react';
+import { MatrixEvent } from 'matrix-js-sdk';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
-import { RoomEvent } from 'matrix-js-sdk';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
 
@@ -61,41 +61,28 @@ export interface ConfigApi {
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
 
-// @public (undocumented)
-export interface ContextMenuItem {
-    iconClassName: string;
-    label: string;
-    onClick: (e: React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>) => void | Promise<void>;
-}
-
 // @public
 export type CustomComponentProps = {
     [CustomComponentTarget.TextualBody]: {
-        mxEvent: RoomEvent;
+        mxEvent: MatrixEvent;
         highlights?: string[];
         showUrlPreview?: boolean;
         forExport?: boolean;
-    };
-    [CustomComponentTarget.MessageContextMenu]: {
-        mxEvent: RoomEvent;
-        closeMenu: () => void;
     };
 };
 
 // @public
 export type CustomComponentRenderFunction<T extends CustomComponentTarget> = (
 props: CustomComponentProps[T],
-originalComponent: JSX.Element) => JSX.Element | null;
+originalComponent: () => JSX.Element) => JSX.Element | null;
 
 // @public
 export interface CustomComponentsApi {
-    buildContextMenuBlock(items: ContextMenuItem[]): JSX.Element;
     register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void;
 }
 
 // @public
 export enum CustomComponentTarget {
-    MessageContextMenu = "MessageContextMenu",
     TextualBody = "TextualBody"
 }
 
