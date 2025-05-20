@@ -11,6 +11,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import externalGlobals from "rollup-plugin-external-globals";
+import svgr from "vite-plugin-svgr";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -31,6 +32,7 @@ export default defineConfig({
     },
     plugins: [
         react(),
+        svgr(),
         nodePolyfills({
             include: ["events"],
         }),
