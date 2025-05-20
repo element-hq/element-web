@@ -13,7 +13,6 @@ import {
     type RoomListViewState,
     useRoomListViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { RoomListView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListView";
 import { mkRoom, stubClient } from "../../../../../test-utils";
 
@@ -26,8 +25,6 @@ describe("<RoomListView />", () => {
         isLoadingRooms: false,
         rooms: [],
         primaryFilters: [],
-        activateSecondaryFilter: jest.fn().mockReturnValue({}),
-        activeSecondaryFilter: SecondaryFilters.AllActivity,
         createRoom: jest.fn(),
         createChatRoom: jest.fn(),
         canCreateRoom: true,

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
+import { type PrimaryFilter, useFilteredRooms } from "./useFilteredRooms";
 import { createRoom as createRoomFunc, hasCreateRoomRights } from "./utils";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
@@ -60,16 +60,6 @@ export interface RoomListViewState {
     activePrimaryFilter?: PrimaryFilter;
 
     /**
-     * A function to activate a given secondary filter.
-     */
-    activateSecondaryFilter: (filter: SecondaryFilters) => void;
-
-    /**
-     * The currently active secondary filter.
-     */
-    activeSecondaryFilter: SecondaryFilters;
-
-    /**
      * The index of the active room in the room list.
      */
     activeIndex: number | undefined;
@@ -81,14 +71,7 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
-    const {
-        isLoadingRooms,
-        primaryFilters,
-        activePrimaryFilter,
-        rooms: filteredRooms,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
-    } = useFilteredRooms();
+    const { isLoadingRooms, primaryFilters, activePrimaryFilter, rooms: filteredRooms } = useFilteredRooms();
     const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
 
     useRoomListNavigation(rooms);
@@ -111,8 +94,6 @@ export function useRoomListViewModel(): RoomListViewState {
         createChatRoom,
         primaryFilters,
         activePrimaryFilter,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
         activeIndex,
     };
 }

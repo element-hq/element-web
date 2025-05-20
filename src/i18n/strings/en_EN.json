@@ -2112,19 +2112,23 @@
             "no_chats_description_no_room_rights": "Get started by messaging someone",
             "no_favourites": "You don't have favourite chat yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
             "no_rooms": "You’re not in any room yet",
             "no_rooms_description": "You can deselect filters in order to see your other chats",
             "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favourites",
+            "invites": "Invites",
+            "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
             "unread": "Unreads"
@@ -2156,13 +2160,6 @@
             "open_room": "Open room %(roomName)s"
         },
         "room_options": "Room Options",
-        "secondary_filter": {
-            "all_activity": "All activity",
-            "invites_only": "Invites only",
-            "low_priority": "Low priority",
-            "mentions_only": "Mentions only"
-        },
-        "secondary_filters": "Secondary filters",
         "show_less": "Show less",
         "show_message_previews": "Show message previews",
         "show_n_more": {

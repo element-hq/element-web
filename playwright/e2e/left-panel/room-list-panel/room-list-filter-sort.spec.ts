@@ -25,10 +25,6 @@ test.describe("Room list filters and sort", () => {
         return page.getByRole("listbox", { name: "Room list filters" });
     }
 
-    function getSecondaryFilters(page: Page): Locator {
-        return page.getByRole("button", { name: "Filter" });
-    }
-
     function getRoomOptionsMenu(page: Page): Locator {
         return page.getByRole("button", { name: "Room Options" });
     }
@@ -181,6 +177,33 @@ test.describe("Room list filters and sort", () => {
             await app.client.evaluate(async (client, id) => {
                 await client.setRoomTag(id, "m.lowpriority", { order: 0.5 });
             }, lowPrioId);
+
+            await bot.createRoom({
+                name: "invited room",
+                invite: [user.userId],
+                is_direct: true,
+            });
+
+            const mentionRoomId = await app.client.createRoom({ name: "room with mention" });
+            await app.client.inviteUser(mentionRoomId, bot.credentials.userId);
+            await bot.joinRoom(mentionRoomId);
+
+            const clientBot = await bot.prepareClient();
+            await clientBot.evaluate(
+                async (client, { mentionRoomId, userId }) => {
+                    await client.sendMessage(mentionRoomId, {
+                        // @ts-ignore ignore usage of MsgType.text
+                        "msgtype": "m.text",
+                        "body": "User",
+                        "format": "org.matrix.custom.html",
+                        "formatted_body": `<a href="https://matrix.to/#/${userId}">User</a>`,
+                        "m.mentions": {
+                            user_ids: [userId],
+                        },
+                    });
+                },
+                { mentionRoomId, userId: user.userId },
+            );
         });
 
         test("should filter the list (with primary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
@@ -197,7 +220,7 @@ test.describe("Room list filters and sort", () => {
             // only one room should be visible
             await expect(roomList.getByRole("gridcell", { name: "unread dm" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(2);
+            expect(await roomList.locator("role=gridcell").count()).toBe(4);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "Favourite" }).click();
@@ -206,24 +229,23 @@ test.describe("Room list filters and sort", () => {
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
             await expect(roomList.getByRole("gridcell", { name: "unread dm" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(1);
+            await expect(roomList.getByRole("gridcell", { name: "invited room" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(2);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "favourite room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "empty room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(4);
-        });
-
-        test("should filter the list (with secondary filters)", { tag: "@screenshot" }, async ({ page, app, user }) => {
-            const roomList = getRoomList(page);
-            const secondaryFilters = getSecondaryFilters(page);
-            await secondaryFilters.click();
-
-            await expect(page.getByRole("menu", { name: "Filter" })).toMatchScreenshot("filter-menu.png");
-
-            await page.getByRole("menuitem", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "room with mention" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "Low prio room" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(5);
+
+            await primaryFilters.getByRole("option", { name: "Mentions" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "room with mention" })).toBeVisible();
+            expect(await roomList.locator("role=gridcell").count()).toBe(1);
+
+            await primaryFilters.getByRole("option", { name: "Invites" }).click();
+            await expect(roomList.getByRole("gridcell", { name: "invited room" })).toBeVisible();
             expect(await roomList.locator("role=gridcell").count()).toBe(1);
         });
 
@@ -294,15 +316,25 @@ test.describe("Room list filters and sort", () => {
             },
         );
 
-        test("should render the placeholder for unread filter", { tag: "@screenshot" }, async ({ page, app, user }) => {
-            const primaryFilters = getPrimaryFilters(page);
-            await primaryFilters.getByRole("option", { name: "Unread" }).click();
+        [
+            { filter: "Unreads", action: "Show all chats" },
+            { filter: "Mentions", action: "See all activity" },
+            { filter: "Invites", action: "See all activity" },
+        ].forEach(({ filter, action }) => {
+            test(
+                `should render the placeholder for ${filter} filter`,
+                { tag: "@screenshot" },
+                async ({ page, app, user }) => {
+                    const primaryFilters = getPrimaryFilters(page);
+                    await primaryFilters.getByRole("option", { name: filter }).click();
 
-            const emptyRoomList = getEmptyRoomList(page);
-            await expect(emptyRoomList).toMatchScreenshot("unread-empty-room-list.png");
+                    const emptyRoomList = getEmptyRoomList(page);
+                    await expect(emptyRoomList).toMatchScreenshot(`${filter}-empty-room-list.png`);
 
-            await emptyRoomList.getByRole("button", { name: "show all chats" }).click();
-            await expect(primaryFilters.getByRole("option", { name: "Unread" })).not.toBeChecked();
+                    await emptyRoomList.getByRole("button", { name: action }).click();
+                    await expect(primaryFilters.getByRole("option", { name: filter })).not.toBeChecked();
+                },
+            );
         });
 
         ["People", "Rooms", "Favourite"].forEach((filter) => {

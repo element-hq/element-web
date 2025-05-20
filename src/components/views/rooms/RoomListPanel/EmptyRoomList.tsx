@@ -53,7 +53,29 @@ export function EmptyRoomList({ vm }: EmptyRoomListProps): JSX.Element | undefin
                 />
             );
         case FilterKey.UnreadFilter:
-            return <UnreadPlaceholder filter={vm.activePrimaryFilter} />;
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_unread")}
+                    action={_t("room_list|empty|show_chats")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
+        case FilterKey.InvitesFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_invites")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
+        case FilterKey.MentionsFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_mentions")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
         default:
             return undefined;
     }
@@ -131,18 +153,21 @@ function DefaultPlaceholder({ vm }: DefaultPlaceholderProps): JSX.Element {
     );
 }
 
-interface UnreadPlaceholderProps {
+interface ActionPlaceholderProps {
     filter: PrimaryFilter;
+    title: string;
+    action: string;
 }
 
 /**
- * The empty state for the room list when the unread filter is active
+ * A placeholder for the room list when a filter is active
+ * The user can take action to toggle the filter
  */
-function UnreadPlaceholder({ filter }: UnreadPlaceholderProps): JSX.Element {
+function ActionPlaceholder({ filter, title, action }: ActionPlaceholderProps): JSX.Element {
     return (
-        <GenericPlaceholder title={_t("room_list|empty|no_unread")}>
+        <GenericPlaceholder title={title}>
             <Button kind="tertiary" onClick={filter.toggle}>
-                {_t("room_list|empty|show_chats")}
+                {action}
             </Button>
         </GenericPlaceholder>
     );
