@@ -10,8 +10,7 @@ import { type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { type WrappedEvent } from "../MessagePanel";
-import type MessagePanel from "../MessagePanel";
-import type { MessagePanelMethods } from "../MessagePanel-functional";
+import type { GrouperPanel } from "../MessagePanel-functional";
 
 /* Grouper classes determine when events can be grouped together in a summary.
  * Groupers should have the following methods:
@@ -25,7 +24,7 @@ import type { MessagePanelMethods } from "../MessagePanel-functional";
  *   when determining things such as whether a date separator is necessary
  */
 export abstract class BaseGrouper {
-    public static canStartGroup = (_panel: MessagePanel | MessagePanelMethods, _ev: WrappedEvent): boolean => true;
+    public static canStartGroup = (_panel: GrouperPanel, _ev: WrappedEvent): boolean => true;
 
     public events: WrappedEvent[] = [];
     // events that we include in the group but then eject out and place above the group.
@@ -33,7 +32,7 @@ export abstract class BaseGrouper {
     public readMarker: ReactNode;
 
     public constructor(
-        public readonly panel: MessagePanel | MessagePanelMethods,
+        public readonly panel: GrouperPanel,
         public readonly firstEventAndShouldShow: WrappedEvent,
         public readonly prevEvent: MatrixEvent | null,
         public readonly lastShownEvent: MatrixEvent | undefined,

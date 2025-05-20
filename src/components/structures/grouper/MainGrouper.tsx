@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import type MessagePanel from "../MessagePanel";
 import type { WrappedEvent } from "../MessagePanel";
 import { BaseGrouper } from "./BaseGrouper";
 import { hasText } from "../../../TextForEvent";
@@ -18,7 +17,7 @@ import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { SeparatorKind } from "../../views/messages/TimelineSeparator";
-import type { MessagePanelMethods } from "../MessagePanel-functional";
+import type { GrouperPanel } from "../MessagePanel-functional";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -29,10 +28,7 @@ const groupedStateEvents = [
 
 // Wrap consecutive grouped events in a ListSummary
 export class MainGrouper extends BaseGrouper {
-    public static canStartGroup = function (
-        panel: MessagePanel | MessagePanelMethods,
-        { event: ev, shouldShow }: WrappedEvent,
-    ): boolean {
+    public static canStartGroup = function (panel: GrouperPanel, { event: ev, shouldShow }: WrappedEvent): boolean {
         if (!shouldShow) return false;
 
         if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
@@ -51,7 +47,7 @@ export class MainGrouper extends BaseGrouper {
     };
 
     public constructor(
-        public readonly panel: MessagePanel,
+        public readonly panel: GrouperPanel,
         public readonly firstEventAndShouldShow: WrappedEvent,
         public readonly prevEvent: MatrixEvent | null,
         public readonly lastShownEvent: MatrixEvent | undefined,
@@ -145,7 +141,7 @@ export class MainGrouper extends BaseGrouper {
         let highlightInSummary = false;
         let eventTiles: ReactNode[] | null = this.events
             .map((e, i) => {
-                if (e.event.getId() === panel.props.highlightedEventId) {
+                if (e.event.getId() === panel.highlightedEventId) {
                     highlightInSummary = true;
                 }
                 return panel.getTilesForEvent(
@@ -165,7 +161,7 @@ export class MainGrouper extends BaseGrouper {
 
         // If a membership event is the start of visible history, tell the user
         // why they can't see earlier messages
-        if (!this.panel.props.canBackPaginate && !this.prevEvent) {
+        if (!this.panel.canBackPaginate && !this.prevEvent) {
             ret.push(<HistoryTile key="historytile" />);
         }
 
@@ -176,7 +172,7 @@ export class MainGrouper extends BaseGrouper {
                 events={this.events.map((e) => e.event)}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInSummary}
-                layout={this.panel.props.layout}
+                layout={this.panel.layout}
             >
                 {eventTiles}
             </EventListSummary>,

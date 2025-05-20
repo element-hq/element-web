@@ -12,24 +12,20 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
 import { type WrappedEvent } from "../MessagePanel";
-import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
 import { SeparatorKind } from "../../views/messages/TimelineSeparator";
-import type { MessagePanelMethods } from "../MessagePanel-functional";
+import type { GrouperPanel } from "../MessagePanel-functional";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
 // the first non-state event, beacon_info event or membership event which is not regarding the sender of the `m.room.create` event
 
 export class CreationGrouper extends BaseGrouper {
-    public static canStartGroup = function (
-        _panel: MessagePanel | MessagePanelMethods,
-        { event }: WrappedEvent,
-    ): boolean {
+    public static canStartGroup = function (_panel: GrouperPanel, { event }: WrappedEvent): boolean {
         return event.getType() === EventType.RoomCreate;
     };
 
@@ -142,7 +138,7 @@ export class CreationGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={ev.sender ? [ev.sender] : undefined}
                 summaryText={summaryText}
-                layout={(this.panel as MessagePanelMethods).layout ?? (this.panel as MessagePanel).props.layout}
+                layout={this.panel.layout}
             >
                 {eventTiles}
             </GenericEventListSummary>,

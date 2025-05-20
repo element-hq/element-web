@@ -164,18 +164,15 @@ export interface MessagePanelMethods {
 
     scrollToEventIfNeeded: (eventId: string) => void;
 
-    showHiddenEvents: boolean;
-
-    // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
-    onHeightChanged: () => void;
     updateTimelineMinHeight: () => void;
     onTimelineReset: () => void;
     getTileForEventId: (eventId?: string) => UnwrappedEventTile | undefined;
-    // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
-    grouperKeyMap: WeakMap<MatrixEvent, string>;
-    shouldShowEvent: (mxEv: MatrixEvent, forceHideEvents: boolean) => boolean;
-    readMarkerForEvent: (eventId: string, isLastEvent: boolean) => ReactNode;
-    wantsSeparator: (prevEvent: MatrixEvent | null, mxEvent: MatrixEvent) => SeparatorKind;
+    scrollPanel: RefObject<ScrollPanel | null>;
+    getNodeForEventId: (eventId: string) => HTMLElement | undefined;
+    props: IProps;
+}
+
+export interface GrouperPanel {
     getTilesForEvent: (
         prevEvent: MatrixEvent | null,
         wrappedEvent: WrappedEvent,
@@ -185,8 +182,18 @@ export interface MessagePanelMethods {
         nextEventWithTile?: MatrixEvent | null,
     ) => ReactNode[];
     layout?: Layout;
-    scrollPanel: RefObject<ScrollPanel | null>;
-    getNodeForEventId: (eventId: string) => HTMLElement | undefined;
+    // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
+    grouperKeyMap: WeakMap<MatrixEvent, string>;
+    showHiddenEvents: boolean;
+    // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
+    onHeightChanged: () => void;
+    shouldShowEvent: (mxEv: MatrixEvent, forceHideEvents: boolean) => boolean;
+    readMarkerForEvent: (eventId: string, isLastEvent: boolean) => ReactNode;
+    wantsSeparator: (prevEvent: MatrixEvent | null, mxEvent: MatrixEvent) => SeparatorKind;
+    // ID of an event to highlight. If undefined, no event will be highlighted.
+    highlightedEventId?: string;
+    // whether the timeline can visually go back any further
+    canBackPaginate?: boolean;
 }
 
 interface IProps {
@@ -270,7 +277,6 @@ interface IProps {
 
     callEventGroupers: Map<string, LegacyCallEventGrouper>;
     ref: RefObject<MessagePanelMethods | null>;
-    props: IProps;
 }
 
 interface IReadReceiptForUser {
@@ -530,17 +536,40 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
 
     // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     const onHeightChanged = useCallback((): void => scrollPanel.current?.checkScroll(), []);
-    const resizeObserver = useRef(new ResizeObserver(onHeightChanged));
+    const resizeObserverRef = useRef<null | ResizeObserver>(null);
+
+    const getResizeObserver = useCallback((): ResizeObserver => {
+        if (resizeObserverRef.current !== null) return resizeObserverRef.current;
+        const observer = new ResizeObserver(onHeightChanged);
+        resizeObserverRef.current = observer;
+        return observer;
+    }, [onHeightChanged]);
 
     useEffect(() => {
         unmounted.current = true;
-        const observer = resizeObserver.current;
+        const observer = getResizeObserver();
         return () => {
             unmounted.current = false;
             readReceiptMap.current = {};
             observer.disconnect();
         };
-    }, []);
+    }, [getResizeObserver]);
+
+    useEffect(() => {
+        const room = props.room;
+        if (!room) return;
+        const pendingEditItem = getPendingEditItem(room, context.timelineRenderingType);
+        if (!props.editState && room && pendingEditItem) {
+            const event = room.findEventById(pendingEditItem);
+            defaultDispatcher.dispatch({
+                action: Action.EditEvent,
+                event: !event?.isRedacted() ? event : null,
+                timelineRenderingType: context.timelineRenderingType,
+            });
+        }
+        // eslint-disable-next-line react-compiler/react-compiler
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.room]);
 
     const isUnmounting = (): boolean => unmounted.current;
 
@@ -558,86 +587,103 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
     };
 
     // TODO: Implement granular (per-room) hide options
-    const shouldShowEvent = (mxEv: MatrixEvent, forceHideEvents = false): boolean => {
-        if (props.hideThreadedMessages && props.room) {
-            const { shouldLiveInRoom } = props.room.eventShouldLiveIn(mxEv, props.events);
-            if (!shouldLiveInRoom) {
-                return false;
-            }
-        }
-
-        if (MatrixClientPeg.safeGet().isUserIgnored(mxEv.getSender()!)) {
-            return false; // ignored = no show (only happens if the ignore happens after an event was received)
-        }
-
-        if (showHiddenEvents && !forceHideEvents) {
-            return true;
-        }
-
-        if (!haveRendererForEvent(mxEv, MatrixClientPeg.safeGet(), showHiddenEvents.current)) {
-            return false; // no tile = no show
-        }
-
-        // Always show highlighted event
-        if (props.highlightedEventId === mxEv.getId()) return true;
-
-        return !shouldHideEvent(mxEv, context);
-    };
-
-    const readMarkerForEvent = (eventId: string, isLastEvent: boolean): JSX.Element | null => {
-        if (context.timelineRenderingType === TimelineRenderingType.File) return null;
-
-        const visible = !isLastEvent && props.readMarkerVisible;
-
-        if (props.readMarkerEventId === eventId) {
-            let hr;
-            // if the read marker comes at the end of the timeline (except
-            // for local echoes, which are excluded from RMs, because they
-            // don't have useful event ids), we don't want to show it, but
-            // we still want to create the <li/> for it so that the
-            // algorithms which depend on its position on the screen aren't
-            // confused.
-            if (visible) {
-                hr = <hr style={{ opacity: 1, width: "99%" }} />;
+    const shouldShowEvent = useCallback(
+        (mxEv: MatrixEvent, forceHideEvents = false): boolean => {
+            if (props.hideThreadedMessages && props.room) {
+                const { shouldLiveInRoom } = props.room.eventShouldLiveIn(mxEv, props.events);
+                if (!shouldLiveInRoom) {
+                    return false;
+                }
             }
 
-            return (
-                <li
-                    key={"readMarker_" + eventId}
-                    ref={readMarkerNode}
-                    className="mx_MessagePanel_myReadMarker"
-                    data-scroll-tokens={eventId}
-                >
-                    {hr}
-                </li>
-            );
-        } else if (ghostReadMarkers.includes(eventId)) {
-            // We render 'ghost' read markers in the DOM while they
-            // transition away. This allows the actual read marker
-            // to be in the right place straight away without having
-            // to wait for the transition to finish.
-            // There are probably much simpler ways to do this transition,
-            // possibly using react-transition-group which handles keeping
-            // elements in the DOM whilst they transition out, although our
-            // case is a little more complex because only some of the items
-            // transition (ie. the read markers do but the event tiles do not)
-            // and TransitionGroup requires that all its children are Transitions.
-            const hr = (
-                <hr ref={collectGhostReadMarker} onTransitionEnd={onGhostTransitionEnd} data-eventid={eventId} />
-            );
+            if (MatrixClientPeg.safeGet().isUserIgnored(mxEv.getSender()!)) {
+                return false; // ignored = no show (only happens if the ignore happens after an event was received)
+            }
 
-            // give it a key which depends on the event id. That will ensure that
-            // we get a new DOM node (restarting the animation) when the ghost
-            // moves to a different event.
-            return (
-                <li key={"_readuptoghost_" + eventId} className="mx_MessagePanel_myReadMarker">
-                    {hr}
-                </li>
-            );
-        }
+            if (showHiddenEvents.current && !forceHideEvents) {
+                return true;
+            }
 
-        return null;
-    };
+            if (!haveRendererForEvent(mxEv, MatrixClientPeg.safeGet(), showHiddenEvents.current)) {
+                return false; // no tile = no show
+            }
+
+            // Always show highlighted event
+            if (props.highlightedEventId === mxEv.getId()) return true;
+
+            return !shouldHideEvent(mxEv, context);
+        },
+        [context, props.events, props.hideThreadedMessages, props.highlightedEventId, props.room],
+    );
+
+    const readMarkerForEvent = useCallback(
+        (eventId: string, isLastEvent: boolean): JSX.Element | null => {
+            if (context.timelineRenderingType === TimelineRenderingType.File) return null;
+
+            const visible = !isLastEvent && props.readMarkerVisible;
+
+            if (props.readMarkerEventId === eventId) {
+                let hr;
+                // if the read marker comes at the end of the timeline (except
+                // for local echoes, which are excluded from RMs, because they
+                // don't have useful event ids), we don't want to show it, but
+                // we still want to create the <li/> for it so that the
+                // algorithms which depend on its position on the screen aren't
+                // confused.
+                if (visible) {
+                    hr = <hr style={{ opacity: 1, width: "99%" }} />;
+                }
+
+                return (
+                    <li
+                        key={"readMarker_" + eventId}
+                        ref={readMarkerNode}
+                        className="mx_MessagePanel_myReadMarker"
+                        data-scroll-tokens={eventId}
+                    >
+                        {hr}
+                    </li>
+                );
+            } else if (ghostReadMarkers.includes(eventId)) {
+                // We render 'ghost' read markers in the DOM while they
+                // transition away. This allows the actual read marker
+                // to be in the right place straight away without having
+                // to wait for the transition to finish.
+                // There are probably much simpler ways to do this transition,
+                // possibly using react-transition-group which handles keeping
+                // elements in the DOM whilst they transition out, although our
+                // case is a little more complex because only some of the items
+                // transition (ie. the read markers do but the event tiles do not)
+                // and TransitionGroup requires that all its children are Transitions.
+                const hr = (
+                    <hr ref={collectGhostReadMarker} onTransitionEnd={onGhostTransitionEnd} data-eventid={eventId} />
+                );
+
+                // give it a key which depends on the event id. That will ensure that
+                // we get a new DOM node (restarting the animation) when the ghost
+                // moves to a different event.
+                return (
+                    <li key={"_readuptoghost_" + eventId} className="mx_MessagePanel_myReadMarker">
+                        {hr}
+                    </li>
+                );
+            }
+
+            return null;
+        },
+        [
+            collectGhostReadMarker,
+            context.timelineRenderingType,
+            ghostReadMarkers,
+            onGhostTransitionEnd,
+            props.readMarkerEventId,
+            props.readMarkerVisible,
+        ],
+    );
+
+    const collectEventTile = useCallback((eventId: string, node: UnwrappedEventTile): void => {
+        eventTiles.current[eventId] = node;
+    }, []);
 
     useImperativeHandle(props.ref, () => {
         return {
@@ -685,11 +731,6 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
                     });
                 }
             },
-            showHiddenEvents: context?.showHiddenEvents ?? showHiddenEvents.current,
-            // TODO: Implement granular (per-room) hide options
-            shouldShowEvent,
-            readMarkerForEvent,
-            onHeightChanged,
             updateTimelineMinHeight: (): void => {
                 const scrollPanelCurrent = scrollPanel.current;
 
@@ -718,19 +759,206 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
                 }
                 return eventTiles.current[eventId];
             },
-            grouperKeyMap: grouperKeyMapRef.current,
-            wantsSeparator: (prevEvent: MatrixEvent | null, mxEvent: MatrixEvent) =>
-                getWantsSeparator(prevEvent, mxEvent, context.timelineRenderingType, props.canBackPaginate),
-            getTilesForEvent,
-            layout: props.layout,
             scrollPanel,
             getNodeForEventId,
             props,
         };
     });
 
-    const getEventTiles = (): ReactNode[] => {
-        if (!props.ref.current) return [];
+    const getTilesForEvent = useCallback(
+        (
+            prevEvent: MatrixEvent | null,
+            wrappedEvent: WrappedEvent,
+            last = false,
+            isGrouped = false,
+            nextEvent: WrappedEvent | null = null,
+            nextEventWithTile: MatrixEvent | null = null,
+        ): ReactNode[] => {
+            const mxEv = wrappedEvent.event;
+            const ret: ReactNode[] = [];
+
+            const isEditing = props.editState?.getEvent().getId() === mxEv.getId();
+            // local echoes have a fake date, which could even be yesterday. Treat them as 'today' for the date separators.
+            const ts1 = mxEv.getTs() ?? Date.now();
+
+            // do we need a separator since the last event?
+            const wantsSeparator = getWantsSeparator(
+                prevEvent,
+                mxEv,
+                context.timelineRenderingType,
+                props.canBackPaginate,
+            );
+            if (!isGrouped && props.room) {
+                if (wantsSeparator === SeparatorKind.Date) {
+                    ret.push(
+                        <li key={ts1}>
+                            <DateSeparator key={ts1} roomId={props.room.roomId} ts={ts1} />
+                        </li>,
+                    );
+                } else if (wantsSeparator === SeparatorKind.LateEvent) {
+                    const text = _t("timeline|late_event_separator", {
+                        dateTime: formatDate(mxEv.getDate() ?? new Date()),
+                    });
+                    ret.push(
+                        <li key={ts1}>
+                            <TimelineSeparator key={ts1} label={text}>
+                                {text}
+                            </TimelineSeparator>
+                        </li>,
+                    );
+                }
+            }
+
+            const cli = MatrixClientPeg.safeGet();
+            let lastInSection = true;
+            if (nextEventWithTile) {
+                const nextEv = nextEventWithTile;
+                const willWantSeparator = getWantsSeparator(
+                    mxEv,
+                    nextEv,
+                    context.timelineRenderingType,
+                    props.canBackPaginate,
+                );
+                lastInSection =
+                    willWantSeparator === SeparatorKind.Date ||
+                    mxEv.getSender() !== nextEv.getSender() ||
+                    getEventDisplayInfo(cli, nextEv, showHiddenEvents.current).isInfoMessage ||
+                    !shouldFormContinuation(mxEv, nextEv, cli, showHiddenEvents.current, context.timelineRenderingType);
+            }
+
+            // is this a continuation of the previous message?
+            const continuation =
+                wantsSeparator === SeparatorKind.None &&
+                shouldFormContinuation(prevEvent, mxEv, cli, showHiddenEvents.current, context.timelineRenderingType);
+
+            const eventId = mxEv.getId()!;
+            const highlight = eventId === props.highlightedEventId;
+
+            const readReceipts = readReceiptsByEvent.current.get(eventId);
+
+            const callEventGrouper = props.callEventGroupers.get(mxEv.getContent().call_id);
+            // use txnId as key if available so that we don't remount during sending
+            ret.push(
+                <EventTile
+                    key={mxEv.getTxnId() || eventId}
+                    as="li"
+                    ref={(tile) => {
+                        if (tile) collectEventTile(eventId, tile);
+                    }}
+                    alwaysShowTimestamps={props.alwaysShowTimestamps}
+                    mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
+                    editState={isEditing ? props.editState : undefined}
+                    resizeObserver={getResizeObserver()}
+                    readReceipts={readReceipts}
+                    readReceiptMap={readReceiptMap.current}
+                    showUrlPreview={props.showUrlPreview}
+                    checkUnmounting={isUnmounting}
+                    eventSendStatus={mxEv.getAssociatedStatus() ?? undefined}
+                    isTwelveHour={props.isTwelveHour}
+                    permalinkCreator={props.permalinkCreator}
+                    last={last}
+                    lastInSection={lastInSection}
+                    lastSuccessful={wrappedEvent.lastSuccessfulWeSent}
+                    isSelectedEvent={highlight}
+                    getRelationsForEvent={props.getRelationsForEvent}
+                    showReactions={props.showReactions}
+                    layout={props.layout}
+                    showReadReceipts={props.showReadReceipts}
+                    callEventGrouper={callEventGrouper}
+                    hideSender={hideSender}
+                />,
+            );
+
+            return ret;
+        },
+        [
+            collectEventTile,
+            context.timelineRenderingType,
+            getResizeObserver,
+            hideSender,
+            props.alwaysShowTimestamps,
+            props.callEventGroupers,
+            props.canBackPaginate,
+            props.editState,
+            props.getRelationsForEvent,
+            props.highlightedEventId,
+            props.isTwelveHour,
+            props.layout,
+            props.permalinkCreator,
+            props.room,
+            props.showReactions,
+            props.showReadReceipts,
+            props.showUrlPreview,
+        ],
+    );
+
+    // Get an object that maps from event ID to a list of read receipts that
+    // should be shown next to that event. If a hidden event has read receipts,
+    // they are folded into the receipts of the last shown event.
+    const getReadReceiptsByShownEvent = useCallback(
+        (events: WrappedEvent[]): Map<string, IReadReceiptProps[]> => {
+            const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
+            const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
+
+            let lastShownEventId: string | undefined;
+            for (const event of props.events) {
+                if (shouldShowEvent(event)) {
+                    lastShownEventId = event.getId();
+                }
+                if (!lastShownEventId) {
+                    continue;
+                }
+
+                const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
+                const newReceipts = getReadReceiptsForEvent(props.room, event, context.threadId);
+                if (!newReceipts) continue;
+                receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
+
+                // Record these receipts along with their last shown event ID for
+                // each associated user ID.
+                for (const receipt of newReceipts) {
+                    receiptsByUserId.set(receipt.userId, {
+                        lastShownEventId,
+                        receipt,
+                    });
+                }
+            }
+
+            // It's possible in some cases (for example, when a read receipt
+            // advances before we have paginated in the new event that it's marking
+            // received) that we can temporarily not have a matching event for
+            // someone which had one in the last. By looking through our previous
+            // mapping of receipts by user ID, we can cover recover any receipts
+            // that would have been lost by using the same event ID from last time.
+            for (const userId of readReceiptsByUserId.current.keys()) {
+                if (receiptsByUserId.get(userId)) {
+                    continue;
+                }
+                const { lastShownEventId, receipt } = readReceiptsByUserId.current.get(userId)!;
+                const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
+                receiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
+                receiptsByUserId.set(userId, { lastShownEventId, receipt });
+            }
+            readReceiptsByUserId.current = receiptsByUserId;
+
+            // After grouping receipts by shown events, do another pass to sort each
+            // receipt list.
+            for (const receipts of receiptsByEvent.values()) {
+                receipts.sort((r1, r2) => {
+                    return r2.ts - r1.ts;
+                });
+            }
+
+            return receiptsByEvent;
+        },
+        [context.threadId, props.events, props.room, shouldShowEvent],
+    );
+
+    const getEventTiles = useCallback((): ReactNode[] => {
+        if (!grouperPanelRef.current) return [];
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
@@ -810,9 +1038,9 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
             }
 
             for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(props.ref.current, wrappedEvent) && !props.disableGrouping) {
+                if (Grouper.canStartGroup(grouperPanelRef.current, wrappedEvent) && !props.disableGrouping) {
                     grouper = new Grouper(
-                        props.ref.current,
+                        grouperPanelRef.current,
                         wrappedEvent,
                         prevEvent,
                         lastShownEvent,
@@ -844,185 +1072,54 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
         }
 
         return ret;
-    };
+    }, [
+        getReadReceiptsByShownEvent,
+        getTilesForEvent,
+        props.disableGrouping,
+        props.events,
+        props.showReadReceipts,
+        readMarkerForEvent,
+        shouldShowEvent,
+    ]);
 
-    const getTilesForEvent = (
-        prevEvent: MatrixEvent | null,
-        wrappedEvent: WrappedEvent,
-        last = false,
-        isGrouped = false,
-        nextEvent: WrappedEvent | null = null,
-        nextEventWithTile: MatrixEvent | null = null,
-    ): ReactNode[] => {
-        const mxEv = wrappedEvent.event;
-        const ret: ReactNode[] = [];
+    const grouperPanelRef = useRef<GrouperPanel | null>(null);
+    useImperativeHandle(grouperPanelRef, () => {
+        return {
+            grouperKeyMap: grouperKeyMapRef.current,
+            wantsSeparator: (prevEvent: MatrixEvent | null, mxEvent: MatrixEvent) =>
+                getWantsSeparator(prevEvent, mxEvent, context.timelineRenderingType, props.canBackPaginate),
+            getTilesForEvent,
+            layout: props.layout,
+            canBackPaginate: props.canBackPaginate,
+            highlightedEventId: props.highlightedEventId,
+            showHiddenEvents: context?.showHiddenEvents ?? showHiddenEvents.current,
+            // TODO: Implement granular (per-room) hide options
+            shouldShowEvent,
+            readMarkerForEvent,
+            onHeightChanged,
+        };
+    }, [
+        context.showHiddenEvents,
+        context.timelineRenderingType,
+        getTilesForEvent,
+        onHeightChanged,
+        props.canBackPaginate,
+        props.highlightedEventId,
+        props.layout,
+        readMarkerForEvent,
+        shouldShowEvent,
+    ]);
 
-        const isEditing = props.editState?.getEvent().getId() === mxEv.getId();
-        // local echoes have a fake date, which could even be yesterday. Treat them as 'today' for the date separators.
-        const ts1 = mxEv.getTs() ?? Date.now();
-
-        // do we need a separator since the last event?
-        const wantsSeparator = getWantsSeparator(prevEvent, mxEv, context.timelineRenderingType, props.canBackPaginate);
-        if (!isGrouped && props.room) {
-            if (wantsSeparator === SeparatorKind.Date) {
-                ret.push(
-                    <li key={ts1}>
-                        <DateSeparator key={ts1} roomId={props.room.roomId} ts={ts1} />
-                    </li>,
-                );
-            } else if (wantsSeparator === SeparatorKind.LateEvent) {
-                const text = _t("timeline|late_event_separator", {
-                    dateTime: formatDate(mxEv.getDate() ?? new Date()),
-                });
-                ret.push(
-                    <li key={ts1}>
-                        <TimelineSeparator key={ts1} label={text}>
-                            {text}
-                        </TimelineSeparator>
-                    </li>,
-                );
-            }
-        }
-
-        const cli = MatrixClientPeg.safeGet();
-        let lastInSection = true;
-        if (nextEventWithTile) {
-            const nextEv = nextEventWithTile;
-            const willWantSeparator = getWantsSeparator(
-                mxEv,
-                nextEv,
-                context.timelineRenderingType,
-                props.canBackPaginate,
-            );
-            lastInSection =
-                willWantSeparator === SeparatorKind.Date ||
-                mxEv.getSender() !== nextEv.getSender() ||
-                getEventDisplayInfo(cli, nextEv, showHiddenEvents.current).isInfoMessage ||
-                !shouldFormContinuation(mxEv, nextEv, cli, showHiddenEvents.current, context.timelineRenderingType);
-        }
-
-        // is this a continuation of the previous message?
-        const continuation =
-            wantsSeparator === SeparatorKind.None &&
-            shouldFormContinuation(prevEvent, mxEv, cli, showHiddenEvents.current, context.timelineRenderingType);
-
-        const eventId = mxEv.getId()!;
-        const highlight = eventId === props.highlightedEventId;
-
-        const readReceipts = readReceiptsByEvent.current.get(eventId);
-
-        const callEventGrouper = props.callEventGroupers.get(mxEv.getContent().call_id);
-        // use txnId as key if available so that we don't remount during sending
-        ret.push(
-            <EventTile
-                key={mxEv.getTxnId() || eventId}
-                as="li"
-                ref={(tile) => {
-                    if (tile) collectEventTile(eventId, tile);
-                }}
-                alwaysShowTimestamps={props.alwaysShowTimestamps}
-                mxEvent={mxEv}
-                continuation={continuation}
-                isRedacted={mxEv.isRedacted()}
-                replacingEventId={mxEv.replacingEventId()}
-                editState={isEditing ? props.editState : undefined}
-                resizeObserver={resizeObserver.current}
-                readReceipts={readReceipts}
-                readReceiptMap={readReceiptMap.current}
-                showUrlPreview={props.showUrlPreview}
-                checkUnmounting={isUnmounting}
-                eventSendStatus={mxEv.getAssociatedStatus() ?? undefined}
-                isTwelveHour={props.isTwelveHour}
-                permalinkCreator={props.permalinkCreator}
-                last={last}
-                lastInSection={lastInSection}
-                lastSuccessful={wrappedEvent.lastSuccessfulWeSent}
-                isSelectedEvent={highlight}
-                getRelationsForEvent={props.getRelationsForEvent}
-                showReactions={props.showReactions}
-                layout={props.layout}
-                showReadReceipts={props.showReadReceipts}
-                callEventGrouper={callEventGrouper}
-                hideSender={hideSender}
-            />,
-        );
-
-        return ret;
-    };
-
-    // Get an object that maps from event ID to a list of read receipts that
-    // should be shown next to that event. If a hidden event has read receipts,
-    // they are folded into the receipts of the last shown event.
-    const getReadReceiptsByShownEvent = (events: WrappedEvent[]): Map<string, IReadReceiptProps[]> => {
-        const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
-        const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
-
-        let lastShownEventId: string | undefined;
-        for (const event of props.events) {
-            if (shouldShowEvent(event)) {
-                lastShownEventId = event.getId();
-            }
-            if (!lastShownEventId) {
-                continue;
-            }
-
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            const newReceipts = getReadReceiptsForEvent(props.room, event, context.threadId);
-            if (!newReceipts) continue;
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
-
-            // Record these receipts along with their last shown event ID for
-            // each associated user ID.
-            for (const receipt of newReceipts) {
-                receiptsByUserId.set(receipt.userId, {
-                    lastShownEventId,
-                    receipt,
-                });
-            }
-        }
-
-        // It's possible in some cases (for example, when a read receipt
-        // advances before we have paginated in the new event that it's marking
-        // received) that we can temporarily not have a matching event for
-        // someone which had one in the last. By looking through our previous
-        // mapping of receipts by user ID, we can cover recover any receipts
-        // that would have been lost by using the same event ID from last time.
-        for (const userId of readReceiptsByUserId.current.keys()) {
-            if (receiptsByUserId.get(userId)) {
-                continue;
-            }
-            const { lastShownEventId, receipt } = readReceiptsByUserId.current.get(userId)!;
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
-            receiptsByUserId.set(userId, { lastShownEventId, receipt });
-        }
-        readReceiptsByUserId.current = receiptsByUserId;
-
-        // After grouping receipts by shown events, do another pass to sort each
-        // receipt list.
-        for (const receipts of receiptsByEvent.values()) {
-            receipts.sort((r1, r2) => {
-                return r2.ts - r1.ts;
-            });
-        }
-
-        return receiptsByEvent;
-    };
-
-    const collectEventTile = (eventId: string, node: UnwrappedEventTile): void => {
-        eventTiles.current[eventId] = node;
-    };
-
-    const onTypingShown = (): void => {
+    const onTypingShown = useCallback((): void => {
         const scrollPanelCurrent = scrollPanel.current;
         // this will make the timeline grow, so checkScroll
         scrollPanelCurrent?.checkScroll();
         if (scrollPanelCurrent && scrollPanelCurrent.getScrollState().stuckAtBottom) {
             scrollPanelCurrent.preventShrinking();
         }
-    };
+    }, []);
 
-    const onTypingHidden = (): void => {
+    const onTypingHidden = useCallback((): void => {
         const scrollPanelCurrent = scrollPanel.current;
         if (scrollPanelCurrent) {
             // as hiding the typing notifications doesn't
@@ -1033,7 +1130,7 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
             // reveal added padding to balance the notifs disappearing.
             scrollPanelCurrent.checkScroll();
         }
-    };
+    }, []);
 
     let topSpinner;
     let bottomSpinner;
@@ -1084,7 +1181,11 @@ export const MessagePanelNew: React.FC<IProps> = (props: IProps) => {
                 fixedChildren={ircResizer}
             >
                 {topSpinner}
-                {getEventTiles()}
+
+                {
+                    // eslint-disable-next-line react-compiler/react-compiler
+                    getEventTiles()
+                }
                 {whoIsTypingDom}
                 {bottomSpinner}
             </ScrollPanel>
