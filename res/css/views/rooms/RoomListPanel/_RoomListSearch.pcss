@@ -21,12 +21,24 @@
         flex: 1;
         font: var(--cpd-font-body-md-regular);
         color: var(--cpd-color-text-secondary);
+        min-width: 0;
 
         span {
             flex: 1;
 
             kbd {
                 font-family: inherit;
+            }
+
+            /* Shrink and truncate the search text */
+            white-space: nowrap;
+            overflow: hidden;
+            .mx_RoomListSearch_search_text {
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: start;
             }
         }
     }

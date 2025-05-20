@@ -2173,9 +2173,14 @@
             "one": "Zobrazit %(count)s další"
         },
         "show_previews": "Zobrazovat náhledy zpráv",
+        "sort": "Řadit",
         "sort_by": "Řadit dle",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A–Z",
+        "sort_type": {
+            "activity": "Aktivita",
+            "atoz": "A–Z"
+        },
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
         "space_menu": {
             "home": "Domov prostoru",

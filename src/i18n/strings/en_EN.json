@@ -157,6 +157,7 @@
         "view_message": "View message",
         "view_source": "View Source",
         "yes": "Yes",
+        "yes_dismiss": "Yes, dismiss",
         "zoom_in": "Zoom in",
         "zoom_out": "Zoom out"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Back up your keys before signing out to avoid losing them."
         },
+        "turn_on_key_storage": "Turn on key storage",
+        "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
@@ -2109,19 +2112,23 @@
             "no_chats_description_no_room_rights": "Get started by messaging someone",
             "no_favourites": "You don't have favourite chat yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
             "no_rooms": "You’re not in any room yet",
             "no_rooms_description": "You can deselect filters in order to see your other chats",
             "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favourites",
+            "invites": "Invites",
+            "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
             "unread": "Unreads"
@@ -2153,13 +2160,6 @@
             "open_room": "Open room %(roomName)s"
         },
         "room_options": "Room Options",
-        "secondary_filter": {
-            "all_activity": "All activity",
-            "invites_only": "Invites only",
-            "low_priority": "Low priority",
-            "mentions_only": "Mentions only"
-        },
-        "secondary_filters": "Secondary filters",
         "show_less": "Show less",
         "show_message_previews": "Show message previews",
         "show_n_more": {
@@ -2167,9 +2167,14 @@
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
+        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Activity",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Show rooms with unread messages first",
         "space_menu": {
             "home": "Space home",
@@ -2554,6 +2559,8 @@
                 "session_key": "Session key:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
+            "confirm_key_storage_off_description": "If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
