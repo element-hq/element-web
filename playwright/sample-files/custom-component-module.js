@@ -15,9 +15,7 @@ export default class CustomComponentModule {
                 return originalComponent();
             }
             return `Custom text for ${body}`;
-        })
+        });
     }
-    async load() {
-
-    }
+    async load() {}
 }

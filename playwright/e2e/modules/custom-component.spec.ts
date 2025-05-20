@@ -19,18 +19,24 @@ test.describe("Custom Component Module", () => {
             await use(page);
         },
         room: async ({ page, app, user, bot }, use) => {
-            const roomId = await app.client.createRoom({ name: 'TestRoom' });
+            const roomId = await app.client.createRoom({ name: "TestRoom" });
             await use({ roomId });
         },
     });
-    test("should replace the render method of a textual event",  { tag: "@screenshot" }, async ({ page, room, app  }) => {
+    test("should replace the render method of a textual event", { tag: "@screenshot" }, async ({ page, room, app }) => {
         await app.viewRoomById(room.roomId);
-        await app.client.sendMessage(room.roomId, 'Simple message');
+        await app.client.sendMessage(room.roomId, "Simple message");
         await expect(await page.getByText("Simple message")).toMatchScreenshot("custom-component-tile.png");
     });
-    test("should render the original content of a textual event conditionally",  { tag: "@screenshot" }, async ({ page, room, app  }) => {
-        await app.viewRoomById(room.roomId);
-        await app.client.sendMessage(room.roomId, 'Do not replace me');
-        await expect(await page.getByText("Do not replace me")).toMatchScreenshot("custom-component-tile-original.png");
-    });
+    test(
+        "should render the original content of a textual event conditionally",
+        { tag: "@screenshot" },
+        async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Do not replace me");
+            await expect(await page.getByText("Do not replace me")).toMatchScreenshot(
+                "custom-component-tile-original.png",
+            );
+        },
+    );
 });
