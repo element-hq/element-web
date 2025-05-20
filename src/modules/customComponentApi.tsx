@@ -11,7 +11,8 @@ import {
     type CustomComponentProps,
     type CustomComponentRenderFunction,
 } from "@element-hq/element-web-module-api";
-import React from "react";
+
+import type React from "react";
 
 export class CustomComponentsApi implements ICustomComponentsApi {
     private registeredRenderers = new Map<

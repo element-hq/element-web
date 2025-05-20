@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
-import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 import { CustomComponentTarget } from "@element-hq/element-web-module-api";
 
 import EventContentBody from "./EventContentBody.tsx";
