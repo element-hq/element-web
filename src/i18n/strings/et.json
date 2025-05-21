@@ -157,6 +157,7 @@
         "view_message": "Vaata sõnumit",
         "view_source": "Vaata lähtekoodi",
         "yes": "Jah",
+        "yes_dismiss": "Jah, loobu",
         "zoom_in": "Suumi sisse",
         "zoom_out": "Suumi välja"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Vältimaks nende kaotamist, varunda krüptovõtmed enne väljalogimist."
         },
+        "turn_on_key_storage": "Võta krüptovõtmete hoidla kasutusele",
+        "turn_on_key_storage_description": "Salvesta oma krüptoidentiteet ja sõnumite krüptovõtmed turvaliselt serveris. See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes.",
         "udd": {
             "interactive_verification_button": "Verifitseeri interaktiivselt emoji abil",
             "other_ask_verify_text": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
@@ -2109,19 +2112,23 @@
             "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
             "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
             "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
+            "no_invites": "Sul pole lugemata kutseid",
+            "no_mentions": "Sul pole lugemata mainimisi",
             "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
             "no_people_description": "Kõikide muude vestluste nägemiseks eemalda otsingufiltrid",
             "no_rooms": "Sa veel ei osale mitte üheski jututoas",
             "no_rooms_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
             "no_unread": "Õnnitlused! Sul pole ühtegi lugemata sõnumit",
+            "show_activity": "Vaata kõiki tegevusi",
             "show_chats": "Näita kõiki vestlusi"
         },
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
-        "filter": "Filtreerimise alus",
         "filters": {
             "favourite": "Lemmikud",
+            "invites": "Kutsed",
+            "mentions": "Mainimised",
             "people": "Inimesed",
             "rooms": "Jututoad",
             "unread": "Lugemata"
@@ -2153,13 +2160,6 @@
             "open_room": "Ava jututuba: %(roomName)s"
         },
         "room_options": "Jututoa valikud",
-        "secondary_filter": {
-            "all_activity": "Kõik tegevused",
-            "invites_only": "Vaid kutsed",
-            "low_priority": "Vähetähtsad",
-            "mentions_only": "Vaid mainimised"
-        },
-        "secondary_filters": "Teisesed filtrid",
         "show_less": "Näita vähem",
         "show_message_previews": "Näita sõnumite eelvaateid",
         "show_n_more": {
@@ -2559,6 +2559,8 @@
                 "session_key": "Sessioonivõti:",
                 "title": "Täiendav teave"
             },
+            "confirm_key_storage_off": "Kas sa oled kindel, et tahad krüptovõtmete hoidlat mitte kasutada?",
+            "confirm_key_storage_off_description": "Kui sa logid välja kõikidest oma seadmetest, siis kaotad ligipääsu oma sõnumite ajaloole ning pead kõik olemasolevad kontaktid uuesti verifitseerima. <a>Lisateave</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Kustuta krüptovõtmete hoidla",
                 "confirm": "Kustuta krüptovõtmete hoidla",
