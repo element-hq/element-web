@@ -78,6 +78,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
      * correct, returns a `KeyParams` structure.
      */
     private async validateRecoveryKey(recoveryKey: string): Promise<KeyParams | undefined> {
+        recoveryKey = recoveryKey.trim();
+
         if (recoveryKey === "") {
             this.setState({
                 recoveryKeyCorrect: null,

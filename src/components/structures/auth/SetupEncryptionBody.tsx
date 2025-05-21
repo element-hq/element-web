@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -19,6 +19,7 @@ import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStor
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
+import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
 
 function keyHasPassphrase(keyInfo: SecretStorageKeyDescription): boolean {
     return Boolean(keyInfo.passphrase && keyInfo.passphrase.salt && keyInfo.passphrase.iterations);
@@ -89,14 +90,15 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         // We need to call onFinished now to close this dialog, and
         // again later to signal that the verification is complete.
         this.props.onFinished();
-        Modal.createDialog(VerificationRequestDialog, {
+        const { finished: verificationFinished } = Modal.createDialog(VerificationRequestDialog, {
             verificationRequestPromise: requestPromise,
             member: cli.getUser(userId) ?? undefined,
-            onFinished: async (): Promise<void> => {
-                const request = await requestPromise;
-                request.cancel();
-                this.props.onFinished();
-            },
+        });
+
+        verificationFinished.then(async () => {
+            const request = await requestPromise;
+            request.cancel();
+            this.props.onFinished();
         });
     };
 
@@ -112,19 +114,15 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     private onResetClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
-        const store = SetupEncryptionStore.sharedInstance();
-        store.reset();
-    };
-
-    private onResetConfirmClick = (): void => {
-        this.props.onFinished();
-        const store = SetupEncryptionStore.sharedInstance();
-        store.resetConfirm();
-    };
-
-    private onResetBackClick = (): void => {
-        const store = SetupEncryptionStore.sharedInstance();
-        store.returnAfterReset();
+        Modal.createDialog(ResetIdentityDialog, {
+            onReset: () => {
+                // The user completed the reset process - close this dialog
+                this.props.onFinished();
+                const store = SetupEncryptionStore.sharedInstance();
+                store.done();
+            },
+            variant: "confirm",
+        });
     };
 
     private onDoneClick = (): void => {
@@ -157,7 +155,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <p>{_t("encryption|verification|no_key_or_device")}</p>
 
                         <div className="mx_CompleteSecurity_actionRow">
-                            <AccessibleButton kind="primary" onClick={this.onResetConfirmClick}>
+                            <AccessibleButton kind="primary" onClick={this.onResetClick}>
                                 {_t("encryption|verification|reset_proceed_prompt")}
                             </AccessibleButton>
                         </div>
@@ -241,22 +239,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                             {_t("encryption|verification|verify_later")}
                         </AccessibleButton>
                         <AccessibleButton kind="primary" onClick={this.onSkipBackClick}>
-                            {_t("action|go_back")}
-                        </AccessibleButton>
-                    </div>
-                </div>
-            );
-        } else if (phase === Phase.ConfirmReset) {
-            return (
-                <div>
-                    <p>{_t("encryption|verification|verify_reset_warning_1")}</p>
-                    <p>{_t("encryption|verification|verify_reset_warning_2")}</p>
-
-                    <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="danger_outline" onClick={this.onResetConfirmClick}>
-                            {_t("encryption|verification|reset_proceed_prompt")}
-                        </AccessibleButton>
-                        <AccessibleButton kind="primary" onClick={this.onResetBackClick}>
                             {_t("action|go_back")}
                         </AccessibleButton>
                     </div>

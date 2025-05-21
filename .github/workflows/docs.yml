@@ -17,23 +17,23 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Fetch element-desktop
-              uses: actions/checkout@v4
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               with:
                   repository: element-hq/element-desktop
                   path: element-desktop
 
             - name: Fetch element-web
-              uses: actions/checkout@v4
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               with:
                   path: element-web
 
             - name: Fetch matrix-js-sdk
-              uses: actions/checkout@v4
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               with:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
               with:
                   cache: "yarn"
                   cache-dependency-path: element-web/yarn.lock
@@ -47,7 +47,7 @@ jobs:
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@v2
+              uses: peaceiris/actions-mdbook@ee69d230fe19748b7abf22df32acaa93833fad08 # v2
               with:
                   mdbook-version: "0.4.10"
 
@@ -88,7 +88,7 @@ jobs:
               run: mdbook build
 
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
               with:
                   path: ./book
 
@@ -104,4 +104,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@v4
+              uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

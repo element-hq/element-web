@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, forwardRef, useContext, useMemo } from "react";
+import React, { memo, useContext, useMemo, type Ref } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -28,6 +28,7 @@ import {
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { filterBoolean } from "../../../utils/arrays.ts";
+import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 
 /**
  * Returns a RegExp pattern for the keyword in the push rule of the given Matrix event, if any
@@ -138,6 +139,7 @@ interface Props extends ReplacerOptions {
      * Whether to include the `dir="auto"` attribute on the rendered element
      */
     includeDir?: boolean;
+    ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -147,50 +149,50 @@ interface Props extends ReplacerOptions {
  * Returns a div or span depending on `as`, the `dir` on a `div` is always set to `"auto"` but set by `includeDir` otherwise.
  */
 const EventContentBody = memo(
-    forwardRef<HTMLElement, Props>(
-        ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ...options }, ref) => {
-            const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
+    ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ref, ...options }: Props) => {
+        const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
+        const [mediaIsVisible] = useMediaVisible(mxEvent?.getId(), mxEvent?.getRoomId());
 
-            const replacer = useReplacer(content, mxEvent, options);
-            const linkifyOptions = useMemo(
-                () => ({
-                    render: replacerToRenderFunction(replacer),
+        const replacer = useReplacer(content, mxEvent, options);
+        const linkifyOptions = useMemo(
+            () => ({
+                render: replacerToRenderFunction(replacer),
+            }),
+            [replacer],
+        );
+
+        const isEmote = content.msgtype === MsgType.Emote;
+
+        const { strippedBody, formattedBody, emojiBodyElements, className } = useMemo(
+            () =>
+                bodyToNode(content, highlights, {
+                    disableBigEmoji: isEmote || !enableBigEmoji,
+                    // Part of Replies fallback support
+                    stripReplyFallback: stripReply,
+                    mediaIsVisible,
                 }),
-                [replacer],
-            );
+            [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply],
+        );
 
-            const isEmote = content.msgtype === MsgType.Emote;
+        if (as === "div") includeDir = true; // force dir="auto" on divs
 
-            const { strippedBody, formattedBody, emojiBodyElements, className } = useMemo(
-                () =>
-                    bodyToNode(content, highlights, {
-                        disableBigEmoji: isEmote || !enableBigEmoji,
-                        // Part of Replies fallback support
-                        stripReplyFallback: stripReply,
-                    }),
-                [content, enableBigEmoji, highlights, isEmote, stripReply],
-            );
+        const As = as;
+        const body = formattedBody ? (
+            <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
+                {parse(formattedBody, {
+                    replace: replacer,
+                })}
+            </As>
+        ) : (
+            <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
+                {applyReplacerOnString(emojiBodyElements || strippedBody, replacer)}
+            </As>
+        );
 
-            if (as === "div") includeDir = true; // force dir="auto" on divs
+        if (!linkify) return body;
 
-            const As = as;
-            const body = formattedBody ? (
-                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
-                    {parse(formattedBody, {
-                        replace: replacer,
-                    })}
-                </As>
-            ) : (
-                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
-                    {applyReplacerOnString(emojiBodyElements || strippedBody, replacer)}
-                </As>
-            );
-
-            if (!linkify) return body;
-
-            return <Linkify options={linkifyOptions}>{body}</Linkify>;
-        },
-    ),
+        return <Linkify options={linkifyOptions}>{body}</Linkify>;
+    },
 );
 
 export default EventContentBody;

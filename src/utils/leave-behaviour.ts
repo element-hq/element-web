@@ -171,20 +171,20 @@ export async function leaveRoomBehaviour(
 }
 
 export const leaveSpace = (space: Room): void => {
-    Modal.createDialog(
+    const { finished } = Modal.createDialog(
         LeaveSpaceDialog,
         {
             space,
-            onFinished: async (leave: boolean, rooms: Room[]): Promise<void> => {
-                if (!leave) return;
-                await bulkSpaceBehaviour(space, rooms, (room) => leaveRoomBehaviour(space.client, room.roomId));
-
-                dis.dispatch<AfterLeaveRoomPayload>({
-                    action: Action.AfterLeaveRoom,
-                    room_id: space.roomId,
-                });
-            },
         },
         "mx_LeaveSpaceDialog_wrapper",
     );
+    finished.then(async ([leave, rooms]) => {
+        if (!leave) return;
+        await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(space.client, room.roomId));
+
+        dis.dispatch<AfterLeaveRoomPayload>({
+            action: Action.AfterLeaveRoom,
+            room_id: space.roomId,
+        });
+    });
 };

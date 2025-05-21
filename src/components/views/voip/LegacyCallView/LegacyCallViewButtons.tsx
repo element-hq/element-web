@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useState, forwardRef } from "react";
+import React, { createRef, useState, type Ref, type FC } from "react";
 import classNames from "classnames";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
@@ -41,31 +41,40 @@ type ButtonProps = Omit<AccessibleButtonProps<"div">, "title" | "element"> & {
     offLabel?: string;
     forceHide?: boolean;
     onHover?: (hovering: boolean) => void;
+    ref?: Ref<HTMLElement>;
 };
 
-const LegacyCallViewToggleButton = forwardRef<HTMLElement, ButtonProps>(
-    ({ children, state: isOn, className, onLabel, offLabel, forceHide, onHover, ...props }, ref) => {
-        const classes = classNames("mx_LegacyCallViewButtons_button", className, {
-            mx_LegacyCallViewButtons_button_on: isOn,
-            mx_LegacyCallViewButtons_button_off: !isOn,
-        });
+const LegacyCallViewToggleButton: FC<ButtonProps> = ({
+    children,
+    state: isOn,
+    className,
+    onLabel,
+    offLabel,
+    forceHide,
+    onHover,
+    ref,
+    ...props
+}) => {
+    const classes = classNames("mx_LegacyCallViewButtons_button", className, {
+        mx_LegacyCallViewButtons_button_on: isOn,
+        mx_LegacyCallViewButtons_button_off: !isOn,
+    });
 
-        const title = forceHide ? undefined : isOn ? onLabel : offLabel;
+    const title = forceHide ? undefined : isOn ? onLabel : offLabel;
 
-        return (
-            <AccessibleButton
-                ref={ref}
-                className={classes}
-                title={title}
-                placement="top"
-                onTooltipOpenChange={onHover}
-                {...props}
-            >
-                {children}
-            </AccessibleButton>
-        );
-    },
-);
+    return (
+        <AccessibleButton
+            ref={ref}
+            className={classes}
+            title={title}
+            placement="top"
+            onTooltipOpenChange={onHover}
+            {...props}
+        >
+            {children}
+        </AccessibleButton>
+    );
+};
 
 interface IDropdownButtonProps extends ButtonProps {
     deviceKinds: MediaDeviceKindEnum[];

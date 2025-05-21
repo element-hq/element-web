@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type AriaRole, forwardRef, useCallback, useContext, useEffect, useState } from "react";
+import React, { type AriaRole, type JSX, type Ref, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ClientEvent, type SyncState } from "matrix-js-sdk/src/matrix";
 import { Avatar } from "@vector-im/compound-web";
@@ -34,6 +34,7 @@ interface IProps {
     tabIndex?: number;
     altText?: string;
     role?: AriaRole;
+    ref?: Ref<HTMLElement>;
 }
 
 const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {
@@ -87,7 +88,7 @@ const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [
     return [imageUrl, onError];
 };
 
-const BaseAvatar = forwardRef<HTMLElement, IProps>((props, ref) => {
+const BaseAvatar = (props: IProps): JSX.Element => {
     const {
         name,
         idName,
@@ -99,6 +100,7 @@ const BaseAvatar = forwardRef<HTMLElement, IProps>((props, ref) => {
         className,
         type = "round",
         altText = _t("common|avatar"),
+        ref,
         ...otherProps
     } = props;
 
@@ -134,7 +136,7 @@ const BaseAvatar = forwardRef<HTMLElement, IProps>((props, ref) => {
             data-testid="avatar-img"
         />
     );
-});
+};
 
 export default BaseAvatar;
 export type BaseAvatarType = React.FC<IProps>;

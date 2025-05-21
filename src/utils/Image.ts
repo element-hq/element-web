@@ -31,13 +31,13 @@ export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): 
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.
             // Based on https://developers.google.com/speed/webp/docs/riff_container#extended_file_format
-            const arr = await blob.slice(0, 17).arrayBuffer();
+            const arr = await blob.slice(0, 21).arrayBuffer();
             if (
                 arrayBufferReadStr(arr, 0, 4) === "RIFF" &&
                 arrayBufferReadStr(arr, 8, 4) === "WEBP" &&
                 arrayBufferReadStr(arr, 12, 4) === "VP8X"
             ) {
-                const [flags] = arrayBufferRead(arr, 16, 1);
+                const [flags] = arrayBufferRead(arr, 20, 1);
                 // Flags: R R I L E X _A_ R (reversed)
                 const animationFlagMask = 1 << 1;
                 return (flags & animationFlagMask) != 0;

@@ -197,7 +197,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_1qbcf_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" referrerpolicy="no-referrer" class="_image_1qbcf_41" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Member</span></a></bdi>"`,
+                `"Chat with <bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_1qbcf_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" referrerpolicy="no-referrer" class="_image_1qbcf_41" data-type="round" width="16px" height="16px" src="mxc://avatar.url/image.png"></span><span class="mx_Pill_text">Member</span></a></bdi>"`,
             );
         });
 

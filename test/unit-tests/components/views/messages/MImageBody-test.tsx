@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { act } from "react";
+import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
@@ -24,10 +24,11 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    withClientContextRenderOptions,
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -42,6 +43,7 @@ describe("<MImageBody/>", () => {
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
         getRooms: jest.fn().mockReturnValue([]),
+        getRoom: jest.fn(),
         getIgnoredUsers: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({
             unstable_features: {
@@ -85,6 +87,7 @@ describe("<MImageBody/>", () => {
     });
 
     afterEach(() => {
+        SettingsStore.reset();
         mocked(encrypt.decryptAttachment).mockReset();
     });
 
@@ -97,6 +100,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         // thumbnail with dimensions present
@@ -112,6 +116,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         expect(fetchMock).toHaveBeenCalledWith(url);
@@ -129,6 +134,7 @@ describe("<MImageBody/>", () => {
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
+            withClientContextRenderOptions(cli),
         );
 
         await screen.findByText("Error decrypting image");
@@ -136,25 +142,12 @@ describe("<MImageBody/>", () => {
 
     describe("with image previews/thumbnails disabled", () => {
         beforeEach(() => {
-            act(() => {
-                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
-            });
-        });
-
-        afterEach(() => {
-            act(() => {
-                SettingsStore.setValue(
-                    "showImages",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showImages"),
-                );
-                SettingsStore.setValue(
-                    "showMediaEventIds",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showMediaEventIds"),
-                );
+            const origFn = SettingsStore.getValue;
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+                if (setting === "mediaPreviewConfig") {
+                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off };
+                }
+                return origFn(setting, ...args);
             });
         });
 
@@ -167,6 +160,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli),
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();
@@ -183,6 +177,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli),
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();
@@ -220,6 +215,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         const img = container.querySelector(".mx_MImageBody_thumbnail")!;
@@ -273,6 +269,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         // Wait for spinners to go away
@@ -298,6 +295,7 @@ describe("<MImageBody/>", () => {
 
         const { container } = render(
             <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
         );
 
         const img = container.querySelector(".mx_MImageBody_thumbnail")!;

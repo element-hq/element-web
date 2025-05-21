@@ -14,7 +14,7 @@ exports[`link-tooltip wraps single anchor 1`] = `
     
                 
     <span
-      aria-labelledby=":r0:"
+      aria-labelledby="«r0»"
       tabindex="0"
     >
       <a

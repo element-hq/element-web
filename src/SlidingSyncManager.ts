@@ -49,7 +49,7 @@ import {
     SlidingSyncState,
 } from "matrix-js-sdk/src/sliding-sync";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 // how long to long poll for
 const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;
@@ -184,7 +184,7 @@ export class SlidingSyncManager {
     public slidingSync?: SlidingSync;
     private client?: MatrixClient;
 
-    private configureDefer = defer<void>();
+    private configureDefer = Promise.withResolvers<void>();
 
     public static get instance(): SlidingSyncManager {
         return SlidingSyncManager.internalInstance;

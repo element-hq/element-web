@@ -164,6 +164,7 @@ export function createTestClient(): MatrixClient {
         getVisibleRooms: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
         on: eventEmitter.on.bind(eventEmitter),
+        once: eventEmitter.once.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
         emit: eventEmitter.emit.bind(eventEmitter),
@@ -303,10 +304,14 @@ export function createTestClient(): MatrixClient {
         getLocalAliases: jest.fn().mockReturnValue([]),
         uploadDeviceSigningKeys: jest.fn(),
         isKeyBackupKeyStored: jest.fn().mockResolvedValue(null),
-
+        getIgnoredUsers: jest.fn().mockReturnValue([]),
+        setIgnoredUsers: jest.fn(),
+        reportRoom: jest.fn(),
         pushProcessor: {
             getPushRuleById: jest.fn(),
         },
+        search: jest.fn().mockResolvedValue({}),
+        processRoomEventsSearch: jest.fn().mockResolvedValue({ highlights: [], results: [] }),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

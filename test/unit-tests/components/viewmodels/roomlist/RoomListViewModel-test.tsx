@@ -9,21 +9,21 @@ import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
-import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/RoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { SortingAlgorithm } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 import { SortOption } from "../../../../../src/components/viewmodels/roomlist/useSorter";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../../../../src/stores/spaces";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -73,7 +73,7 @@ describe("RoomListViewModel", () => {
             // should have 4 filters
             expect(vm.current.primaryFilters).toHaveLength(4);
             // check the order
-            for (const [i, name] of ["Unread", "Favourites", "People", "Rooms"].entries()) {
+            for (const [i, name] of ["Unreads", "People", "Rooms", "Favourites"].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
                 expect(vm.current.primaryFilters[i].active).toEqual(false);
             }
@@ -218,9 +218,13 @@ describe("RoomListViewModel", () => {
             [
                 "Mentions only",
                 { secondary: SecondaryFilters.MentionsOnly, filterKey: FilterKey.MentionsFilter },
-                "Unread",
+                "Unreads",
             ],
-            ["Invites only", { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter }, "Unread"],
+            [
+                "Invites only",
+                { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter },
+                "Unreads",
+            ],
             [
                 "Invites only",
                 { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter },
@@ -234,27 +238,6 @@ describe("RoomListViewModel", () => {
         ];
 
         describe.each(testcases)("For secondary filter: %s", (secondaryFilterName, secondary, primaryFilterName) => {
-            it(`should unapply incompatible primary filter that is already active: ${primaryFilterName}`, () => {
-                const { fn } = mockAndCreateRooms();
-                const { result: vm } = renderHook(() => useRoomListViewModel());
-
-                // Apply the primary filter
-                const i = vm.current.primaryFilters.findIndex((f) => f.name === primaryFilterName);
-                act(() => {
-                    vm.current.primaryFilters[i].toggle();
-                });
-
-                // Apply the secondary filter
-                act(() => {
-                    vm.current.activateSecondaryFilter(secondary.secondary);
-                });
-
-                // RLS call should only include the secondary filter
-                expect(fn).toHaveBeenLastCalledWith([secondary.filterKey]);
-                // Primary filter should have been unapplied
-                expect(vm.current.primaryFilters[i].active).toEqual(false);
-            });
-
             it(`should hide incompatible primary filter: ${primaryFilterName}`, () => {
                 mockAndCreateRooms();
                 const { result: vm } = renderHook(() => useRoomListViewModel());
@@ -304,6 +287,25 @@ describe("RoomListViewModel", () => {
             expect(vm.current.shouldShowMessagePreview).toEqual(true);
         });
 
+        it("should update when setting changes", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+
+            let watchFn: CallbackFn;
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((_settingname, _roomId, fn) => {
+                watchFn = fn;
+                return "";
+            });
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+            act(() => {
+                watchFn("RoomList.showMessagePreview", "", SettingLevel.DEVICE, false, false);
+            });
+            expect(vm.current.shouldShowMessagePreview).toEqual(false);
+        });
+
         it("should change setting on toggle", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
             const fn = jest.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
@@ -313,8 +315,7 @@ describe("RoomListViewModel", () => {
             act(() => {
                 vm.current.toggleMessagePreview();
             });
-            expect(vm.current.shouldShowMessagePreview).toEqual(false);
-            expect(fn).toHaveBeenCalled();
+            expect(fn).toHaveBeenCalledWith("RoomList.showMessagePreview", null, "device", false);
         });
     });
 
@@ -350,6 +351,43 @@ describe("RoomListViewModel", () => {
             expect(vm.activeIndex).toEqual(i);
             expect(vm.rooms[i].roomId).toEqual(roomId);
         }
+
+        it("active index is calculated with the last opened room in a space", () => {
+            // Let's say there's two spaces: !space1:matrix.org and !space2:matrix.org
+            // Let's also say that the current active space is !space1:matrix.org
+            let currentSpace = "!space1:matrix.org";
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => currentSpace);
+
+            const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
+            // Let's say all the rooms are in space1
+            const roomsInSpace1 = [...rooms];
+            // Let's say all rooms with even index are in space 2
+            const roomsInSpace2 = [...rooms].filter((_, i) => i % 2 === 0);
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockImplementation(() =>
+                currentSpace === "!space1:matrix.org" ? roomsInSpace1 : roomsInSpace2,
+            );
+
+            // Let's say that the room at index 4 is currently active
+            const roomId = rooms[4].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.activeIndex).toEqual(4);
+
+            // Let's say that space is changed to "!space2:matrix.org"
+            currentSpace = "!space2:matrix.org";
+            // Let's say that room[6] is active in space 2
+            const activeRoomIdInSpace2 = rooms[6].roomId;
+            jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockImplementation(
+                () => activeRoomIdInSpace2,
+            );
+            act(() => {
+                RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT);
+            });
+
+            // Active index should be 3 even without the room change event.
+            expectActiveRoom(vm.current, 3, activeRoomIdInSpace2);
+        });
 
         it("active room and active index are retained on order change", () => {
             const { rooms } = mockAndCreateRooms();

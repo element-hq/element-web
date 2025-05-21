@@ -25,7 +25,7 @@ interface AuthHeaderAction {
 export type AuthHeaderReducer = Reducer<ComponentProps<typeof AuthHeaderModifier>[], AuthHeaderAction>;
 
 export function AuthHeaderProvider({ children }: PropsWithChildren): JSX.Element {
-    const [state, dispatch] = useReducer<AuthHeaderReducer>(
+    const [state, dispatch] = useReducer<ComponentProps<typeof AuthHeaderModifier>[], [AuthHeaderAction]>(
         (state: ComponentProps<typeof AuthHeaderModifier>[], action: AuthHeaderAction) => {
             switch (action.type) {
                 case AuthHeaderActionType.Add:

@@ -498,9 +498,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (results.length >= limit) break;
             if (since !== undefined && ev.getId() === since) break;
 
-            if (ev.getType() !== eventType || ev.isState()) continue;
+            if (ev.getType() !== eventType) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (ev.getStateKey() !== undefined && stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
             results.push(ev);
         }
 
@@ -557,19 +557,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
+        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
-
-            onFinished: async (confirm): Promise<void> => {
-                if (!confirm) {
-                    return observer.update({ state: OpenIDRequestState.Blocked });
-                }
-
-                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-            },
         });
+        const [confirm] = await finished;
+        if (!confirm) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
+        }
     }
 
     public async navigate(uri: string): Promise<void> {

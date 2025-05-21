@@ -21,7 +21,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -153,7 +152,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     private _enabledMetaSpaces: MetaSpace[] = [];
     /** Whether the feature flag is set for MSC3946 */
     private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
-    private _storeReadyDeferred = defer();
+    private _storeReadyDeferred = Promise.withResolvers<void>();
 
     public constructor() {
         super(defaultDispatcher, {});
@@ -270,7 +269,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
         if (contextSwitch) {
             // view last selected room from space
-            const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+            const roomId = this.getLastSelectedRoomIdForSpace(space);
 
             // if the space being selected is an invite then always view that invite
             // else if the last viewed room in this space is joined then view that
@@ -318,6 +317,17 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 false,
             );
         }
+    }
+
+    /**
+     * Returns the room-id of the last active room in a given space.
+     * This is the room that would be opened when you switch to a given space.
+     * @param space The space you're interested in.
+     * @returns room-id of the room or null if there's no last active room.
+     */
+    public getLastSelectedRoomIdForSpace(space: SpaceKey): string | null {
+        const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+        return roomId;
     }
 
     private async loadSuggestedRooms(space: Room): Promise<void> {

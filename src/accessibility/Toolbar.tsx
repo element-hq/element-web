@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef } from "react";
+import React, { type Ref, type JSX } from "react";
 
 import { RovingTabIndexProvider } from "./RovingTabIndex";
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 
-interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {}
+interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
+    ref?: Ref<HTMLDivElement>;
+}
 
 // This component implements the Toolbar design pattern from the WAI-ARIA Authoring Practices guidelines.
 // https://www.w3.org/TR/wai-aria-practices-1.1/#toolbar
 // All buttons passed in children must use RovingTabIndex to set `onFocus`, `isActive`, `ref`
-const Toolbar = forwardRef<HTMLDivElement, IProps>(({ children, ...props }, ref) => {
+const Toolbar = ({ children, ref, ...props }: IProps): JSX.Element => {
     const onKeyDown = (ev: React.KeyboardEvent): void => {
         const target = ev.target as HTMLElement;
         // Don't interfere with input default keydown behaviour
@@ -55,6 +57,6 @@ const Toolbar = forwardRef<HTMLDivElement, IProps>(({ children, ...props }, ref)
             )}
         </RovingTabIndexProvider>
     );
-});
+};
 
 export default Toolbar;

@@ -4,6 +4,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
 <DocumentFragment>
   <aside
     class="mx_RightPanel"
+    data-testid="right-panel"
     id="mx_RightPanel"
   >
     <div
@@ -30,7 +31,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           />
         </div>
         <button
-          aria-labelledby=":r0:"
+          aria-labelledby="«r0»"
           class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
           data-testid="base-card-close-button"
           role="button"
@@ -336,8 +337,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby=":r2j:"
-                aria-labelledby=":r2i:"
+                aria-describedby="«r2j»"
+                aria-labelledby="«r2i»"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg

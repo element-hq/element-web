@@ -608,6 +608,21 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             {filterToLabel(Filter.People)}
                         </Option>
                     )}
+                    {filter === null && (
+                        <Option
+                            id="mx_SpotlightDialog_button_searchMessages"
+                            className="mx_SpotlightDialog_searchMessages"
+                            onClick={() => {
+                                defaultDispatcher.dispatch({
+                                    action: Action.FocusMessageSearch,
+                                    initialText: trimmedQuery,
+                                });
+                                onFinished();
+                            }}
+                        >
+                            {_t("spotlight_dialog|messages_label")}
+                        </Option>
+                    )}
                 </div>
             </div>
         );
@@ -997,28 +1012,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let messageSearchSection: JSX.Element | undefined;
-        if (filter === null) {
-            messageSearchSection = (
-                <div
-                    className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"
-                    role="group"
-                    aria-labelledby="mx_SpotlightDialog_section_messageSearch"
-                >
-                    <h4 id="mx_SpotlightDialog_section_messageSearch">
-                        {_t("spotlight_dialog|message_search_section_title")}
-                    </h4>
-                    <div className="mx_SpotlightDialog_otherSearches_messageSearchText">
-                        {_t(
-                            "spotlight_dialog|search_messages_hint",
-                            {},
-                            { icon: () => <div className="mx_SpotlightDialog_otherSearches_messageSearchIcon" /> },
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
         content = (
             <>
                 {peopleSection}
@@ -1031,7 +1024,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 {hiddenResultsSection}
                 {otherSearchesSection}
                 {groupChatSection}
-                {messageSearchSection}
             </>
         );
     } else {
