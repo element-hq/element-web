@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
 
@@ -136,7 +136,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         // Let's pick a title, body, and other params text that we'll show to the user. The order
         // is most specific first, so stagePhase > our props > defaults.
 
-        let title = this.state.authError ? "Error" : this.props.title || _t("common|authentication");
+        let title = this.state.authError ? "Error" : (this.props.title ?? _t("common|authentication"));
         let body = this.state.authError ? null : this.props.body;
         let continueText: string | undefined;
         let continueKind: ContinueKind | undefined;

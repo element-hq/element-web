@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React, {
+    type JSX,
     type ComponentProps,
     type ComponentPropsWithoutRef,
-    forwardRef,
-    type FunctionComponent,
     type ReactElement,
     type KeyboardEvent,
     type Ref,
@@ -99,6 +98,8 @@ type Props<T extends ElementType = "div"> = {
      * Whether the tooltip should be disabled.
      */
     disableTooltip?: TooltipProps["disabled"];
+
+    ref?: Ref<HTMLElementTagNameMap[T]>;
 };
 
 export type ButtonProps<T extends ElementType> = Props<T> & Omit<ComponentPropsWithoutRef<T>, keyof Props<T>>;
@@ -118,28 +119,33 @@ type RenderedElementProps<T extends ElementType> = React.InputHTMLAttributes<Ele
  * @param {Object} props  react element properties
  * @returns {Object} rendered react
  */
-const AccessibleButton = forwardRef(function <T extends ElementType = typeof defaultElement>(
-    {
-        element,
-        onClick,
-        children,
-        kind,
-        disabled,
-        className,
-        onKeyDown,
-        onKeyUp,
-        triggerOnMouseDown,
-        title,
-        caption,
-        placement = "right",
-        onTooltipOpenChange,
-        disableTooltip,
-        ...restProps
-    }: ButtonProps<T>,
-    ref: Ref<HTMLElementTagNameMap[T]>,
-): JSX.Element {
-    const newProps = restProps as RenderedElementProps<T>;
-    newProps["aria-label"] = newProps["aria-label"] ?? title;
+const AccessibleButton = function AccessibleButton<T extends ElementType = typeof defaultElement>({
+    element,
+    onClick,
+    children,
+    kind,
+    disabled,
+    className,
+    onKeyDown,
+    onKeyUp,
+    triggerOnMouseDown,
+    title,
+    caption,
+    placement = "right",
+    onTooltipOpenChange,
+    disableTooltip,
+    role = "button",
+    tabIndex = 0,
+    ref,
+    ...restProps
+}: ButtonProps<T>): JSX.Element {
+    const newProps = {
+        ...restProps,
+        tabIndex,
+        role,
+        "aria-label": restProps["aria-label"] ?? title,
+    } as RenderedElementProps<T>;
+
     if (disabled) {
         newProps["aria-disabled"] = true;
         newProps["disabled"] = true;
@@ -218,14 +224,7 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
         );
     }
     return button;
-});
-
-// Type assertion required due to forwardRef type workaround in react.d.ts
-(AccessibleButton as FunctionComponent).defaultProps = {
-    role: "button",
-    tabIndex: 0,
 };
-(AccessibleButton as FunctionComponent).displayName = "AccessibleButton";
 
 interface RefProp<T extends ElementType> {
     ref?: Ref<HTMLElementTagNameMap[T]>;

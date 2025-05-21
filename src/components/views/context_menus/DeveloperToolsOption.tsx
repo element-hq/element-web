@@ -25,7 +25,6 @@ export const DeveloperToolsOption: React.FC<Props> = ({ onFinished, roomId }) =>
                 Modal.createDialog(
                     DevtoolsDialog,
                     {
-                        onFinished: () => {},
                         roomId: roomId,
                     },
                     "mx_DevtoolsDialog_wrapper",

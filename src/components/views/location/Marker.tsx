@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useState } from "react";
+import React, { type JSX, type ReactNode, type Ref, useState } from "react";
 import classNames from "classnames";
 import { type RoomMember } from "matrix-js-sdk/src/matrix";
 import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
@@ -21,6 +21,7 @@ interface Props {
     // use member text color as background
     useMemberColor?: boolean;
     tooltip?: ReactNode;
+    ref?: Ref<HTMLDivElement>;
 }
 
 /**
@@ -55,7 +56,7 @@ const OptionalTooltip: React.FC<{
 /**
  * Generic location marker
  */
-const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMemberColor, tooltip }, ref) => {
+const Marker = ({ id, roomMember, useMemberColor, tooltip, ref }: Props): JSX.Element => {
     const memberColorClass = useMemberColor && roomMember ? getUserNameColorClass(roomMember.userId) : "";
     return (
         <div
@@ -82,6 +83,6 @@ const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMem
             </OptionalTooltip>
         </div>
     );
-});
+};
 
 export default Marker;

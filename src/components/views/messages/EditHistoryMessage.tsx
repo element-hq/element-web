@@ -6,15 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import * as HtmlUtils from "../../../HtmlUtils";
+import EventContentBody from "./EventContentBody.tsx";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
-import { pillifyLinks } from "../../../utils/pillify";
-import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import RedactedBody from "./RedactedBody";
@@ -23,7 +21,6 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { ReactRootManager } from "../../../utils/react";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -48,8 +45,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
-    private pills = new ReactRootManager();
-    private tooltips = new ReactRootManager();
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -94,35 +89,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         );
     };
 
-    private pillifyLinks(): void {
-        // not present for redacted events
-        if (this.content.current) {
-            pillifyLinks(this.context, this.content.current.children, this.props.mxEvent, this.pills);
-        }
-    }
-
-    private tooltipifyLinks(): void {
-        // not present for redacted events
-        if (this.content.current) {
-            tooltipifyLinks(this.content.current.children, this.pills.elements, this.tooltips);
-        }
-    }
-
-    public componentDidMount(): void {
-        this.pillifyLinks();
-        this.tooltipifyLinks();
-    }
-
     public componentWillUnmount(): void {
-        this.pills.unmount();
-        this.tooltips.unmount();
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
-    }
-
-    public componentDidUpdate(): void {
-        this.pillifyLinks();
-        this.tooltipifyLinks();
     }
 
     private renderActionBar(): React.ReactNode {
@@ -164,9 +133,20 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToSpan(content, null, {
-                    stripReplyFallback: true,
-                });
+                contentElements = (
+                    <EventContentBody
+                        as="span"
+                        mxEvent={mxEvent}
+                        content={content}
+                        highlights={[]}
+                        stripReply
+                        renderTooltipsForAmbiguousLinks
+                        renderMentionPills
+                        renderCodeBlocks
+                        renderSpoilers
+                        linkify
+                    />
+                );
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();

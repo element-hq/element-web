@@ -7,16 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type ReactNode } from "react";
+import React, { type JSX, type ReactNode, type RefObject } from "react";
 
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 import AccessibleButton, { type ButtonProps } from "../../elements/AccessibleButton";
-import { type Ref } from "../../../../accessibility/roving/types";
 
 type TooltipOptionProps<T extends keyof HTMLElementTagNameMap> = ButtonProps<T> & {
     className?: string;
     endAdornment?: ReactNode;
-    inputRef?: Ref;
+    inputRef?: RefObject<HTMLElement | null>;
 };
 
 export const TooltipOption = <T extends keyof HTMLElementTagNameMap>({

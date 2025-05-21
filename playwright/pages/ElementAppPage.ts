@@ -114,7 +114,7 @@ export class ElementAppPage {
      * @param isRightPanel whether to select the right panel composer, otherwise the main timeline composer
      */
     public getComposerField(isRightPanel?: boolean): Locator {
-        return this.getComposer(isRightPanel).locator("[contenteditable]");
+        return this.getComposer(isRightPanel).locator("div[contenteditable]");
     }
 
     /**

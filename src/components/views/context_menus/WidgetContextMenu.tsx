@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, useContext } from "react";
+import React, { type JSX, type ComponentProps, useContext } from "react";
 import { type ClientWidgetApi, type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
@@ -187,14 +187,15 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                 onDeleteClick();
             } else if (roomId) {
                 // Show delete confirmation dialog
-                Modal.createDialog(QuestionDialog, {
+                const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("widget|context_menu|delete"),
                     description: _t("widget|context_menu|delete_warning"),
                     button: _t("widget|context_menu|delete"),
-                    onFinished: (confirmed) => {
-                        if (!confirmed) return;
-                        WidgetUtils.setRoomWidget(cli, roomId, app.id);
-                    },
+                });
+
+                finished.then(([confirmed]) => {
+                    if (!confirmed) return;
+                    WidgetUtils.setRoomWidget(cli, roomId, app.id);
                 });
             }
 

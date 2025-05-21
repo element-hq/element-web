@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { type JSX, createRef } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
@@ -66,26 +66,15 @@ interface IState {
 }
 
 function getFullScreenElement(): Element | null {
-    return (
-        document.fullscreenElement ||
-        // moz omitted because firefox supports this unprefixed now (webkit here for safari)
-        document.webkitFullscreenElement ||
-        document.msFullscreenElement
-    );
+    return document.fullscreenElement;
 }
 
 function requestFullscreen(element: Element): void {
-    const method =
-        element.requestFullscreen ||
-        // moz omitted since firefox supports unprefixed now
-        element.webkitRequestFullScreen ||
-        element.msRequestFullscreen;
-    if (method) method.call(element);
+    element.requestFullscreen();
 }
 
 function exitFullscreen(): void {
-    const exitMethod = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-    if (exitMethod) exitMethod.call(document);
+    document.exitFullscreen();
 }
 
 export default class LegacyCallView extends React.Component<IProps, IState> {

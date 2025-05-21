@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
+import { waitFor } from "jest-matrix-react";
 
 import type BasePlatform from "../../../src/BasePlatform";
 import SdkConfig from "../../../src/SdkConfig";
@@ -14,6 +15,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
+import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController.ts";
 
 const TEST_DATA = [
     {
@@ -138,6 +140,62 @@ describe("SettingsStore", () => {
             client.emit(ClientEvent.Sync, SyncState.Prepared, null);
 
             expect(room.getAccountData).not.toHaveBeenCalled();
+        });
+
+        describe("Migrate media preview configuration", () => {
+            beforeEach(() => {
+                MatrixClientBackedController.matrixClient = client;
+                client.getAccountData = jest.fn().mockImplementation((type) => {
+                    if (type === "im.vector.web.settings") {
+                        return {
+                            getContent: jest.fn().mockReturnValue({
+                                showImages: false,
+                                showAvatarsOnInvites: false,
+                            }),
+                        };
+                    } else {
+                        return undefined;
+                    }
+                });
+            });
+
+            it("migrates media preview configuration immediately", async () => {
+                client.setAccountData = jest.fn();
+                SettingsStore.runMigrations(false);
+                expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
+                    invite_avatars: "off",
+                    media_previews: "off",
+                });
+            });
+            it("migrates media preview configuration once client is ready", async () => {
+                client.setAccountData = jest.fn();
+                const mockInitialSync = (client.isInitialSyncComplete = jest.fn().mockReturnValue(false));
+                SettingsStore.runMigrations(false);
+                mockInitialSync.mockReturnValue(true);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                // Update is asynchronous
+                waitFor(() => {
+                    expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
+                        invite_avatars: "off",
+                        media_previews: "off",
+                    });
+                });
+            });
+
+            it("does not migrate media preview configuration if the session is fresh", async () => {
+                client.setAccountData = jest.fn();
+                SettingsStore.runMigrations(true);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
+
+            it("does not migrate media preview configuration if the account data is already set", async () => {
+                client.setAccountData = jest.fn();
+                client.getAccountData = jest.fn().mockReturnValue({});
+                SettingsStore.runMigrations(false);
+                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+                expect(client.setAccountData).not.toHaveBeenCalled();
+            });
         });
     });
 });

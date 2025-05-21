@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, lazy } from "react";
+import React, { type JSX, createRef, lazy } from "react";
 import {
     ClientEvent,
     createClient,
@@ -19,7 +19,7 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -107,6 +107,7 @@ import Views from "../../Views";
 import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForgetRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
@@ -165,12 +166,6 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
-
-    // Used by tests, this function is called when session initialisation starts
-    // with a promise that resolves or rejects once the initialiation process
-    // has finished, so that tests can wait for this to avoid them executing over
-    // each other.
-    initPromiseCallback?: (p: Promise<void>) => void;
 }
 
 interface IState {
@@ -221,7 +216,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private firstSyncComplete = false;
-    private firstSyncPromise: IDeferred<void>;
+    private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
@@ -235,6 +230,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SdkContextClass;
+    private loadSessionAbortController = new AbortController();
 
     public constructor(props: IProps) {
         super(props);
@@ -259,7 +255,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -290,9 +286,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private startInitSession = (): void => {
         const initProm = this.initSession();
-        if (this.props.initPromiseCallback) {
-            this.props.initPromiseCallback(initProm);
-        }
 
         initProm.catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom
@@ -327,7 +320,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // When the session loads it'll be detected as soft logged out and a dispatch
             // will be sent out to say that, triggering this MatrixChat to show the soft
             // logout page.
-            Lifecycle.loadSession();
+            Lifecycle.loadSession({ abortSignal: this.loadSessionAbortController.signal });
             return;
         }
 
@@ -552,6 +545,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     guestHsUrl: this.getServerProperties().serverConfig.hsUrl,
                     guestIsUrl: this.getServerProperties().serverConfig.isUrl,
                     defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+                    abortSignal: this.loadSessionAbortController.signal,
                 });
             })
             .then((loadedSession) => {
@@ -708,36 +702,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case "copy_room":
                 this.copyRoom(payload.room_id);
-                break;
-            case "reject_invite":
-                Modal.createDialog(QuestionDialog, {
-                    title: _t("reject_invitation_dialog|title"),
-                    description: _t("reject_invitation_dialog|confirmation"),
-                    onFinished: (confirm) => {
-                        if (confirm) {
-                            // FIXME: controller shouldn't be loading a view :(
-                            const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
-
-                            MatrixClientPeg.safeGet()
-                                .leave(payload.room_id)
-                                .then(
-                                    () => {
-                                        modal.close();
-                                        if (this.state.currentRoomId === payload.room_id) {
-                                            dis.dispatch({ action: Action.ViewHomePage });
-                                        }
-                                    },
-                                    (err) => {
-                                        modal.close();
-                                        Modal.createDialog(ErrorDialog, {
-                                            title: _t("reject_invitation_dialog|failed"),
-                                            description: err.toString(),
-                                        });
-                                    },
-                                );
-                        }
-                    },
-                });
                 break;
             case "view_user_info":
                 this.viewUser(payload.userId, payload.subAction);
@@ -1030,10 +994,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
         if (!this.firstSyncComplete) {
-            if (!this.firstSyncPromise) {
-                logger.warn("Cannot view a room before first sync. room_id:", roomInfo.room_id);
-                return;
-            }
             await this.firstSyncPromise.promise;
         }
 
@@ -1144,8 +1104,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewUser(userId: string, subAction: string): void {
         // Wait for the first sync so that `getRoom` gives us a room object if it's
         // in the sync response
-        const waitForSync = this.firstSyncPromise ? this.firstSyncPromise.promise : Promise.resolve();
-        waitForSync.then(() => {
+        this.firstSyncPromise.promise.then(() => {
             if (subAction === "chat") {
                 this.chatCreateOrReuse(userId);
                 return;
@@ -1271,7 +1230,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: isSpace ? _t("space|leave_dialog_action") : _t("action|leave_room"),
             description: (
                 <span>
@@ -1287,16 +1246,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ),
             button: _t("action|leave"),
             danger: warnings.length > 0,
-            onFinished: async (shouldLeave) => {
-                if (shouldLeave) {
-                    await leaveRoomBehaviour(cli, roomId);
+        });
 
-                    dis.dispatch<AfterLeaveRoomPayload>({
-                        action: Action.AfterLeaveRoom,
-                        room_id: roomId,
-                    });
-                }
-            },
+        finished.then(async ([shouldLeave]) => {
+            if (shouldLeave) {
+                await leaveRoomBehaviour(cli, roomId);
+
+                dis.dispatch<AfterLeaveRoomPayload>({
+                    action: Action.AfterLeaveRoom,
+                    room_id: roomId,
+                });
+            }
         });
     }
 
@@ -1310,10 +1270,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({ action: Action.ViewHomePage });
                 }
 
-                // We have to manually update the room list because the forgotten room will not
-                // be notified to us, therefore the room list will have no other way of knowing
-                // the room is forgotten.
-                if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                if (room) {
+                    // Legacy room list store needs to be told to manually remove this room
+                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    // New room list store will remove the room on the following dispatch
+                    dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
+                }
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("error|unknown_error_code");
@@ -1388,7 +1350,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // so show the homepage.
                 dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
             }
-        } else {
+        } else if (!(await this.shouldForceVerification())) {
             this.showScreenAfterLogin();
         }
 
@@ -1508,11 +1470,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * (useful for setting listeners)
      */
     private onWillStartClient(): void {
-        // reset the 'have completed first sync' flag,
-        // since we're about to start the client and therefore about
-        // to do the first sync
+        // Reset the 'have completed first sync' flag,
+        // since we're about to start the client and therefore about to do the first sync
+        // We resolve the existing promise with the new one to update any existing listeners
+        if (!this.firstSyncComplete) {
+            const firstSyncPromise = Promise.withResolvers<void>();
+            this.firstSyncPromise.resolve(firstSyncPromise.promise);
+            this.firstSyncPromise = firstSyncPromise;
+        } else {
+            this.firstSyncPromise = Promise.withResolvers();
+        }
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
         const cli = MatrixClientPeg.safeGet();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
@@ -1565,29 +1533,36 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.fire(Action.FocusSendMessageComposer);
         });
 
-        cli.on(HttpApiEvent.SessionLoggedOut, function (errObj) {
+        cli.on(HttpApiEvent.SessionLoggedOut, (errObj) => {
+            this.loadSessionAbortController.abort(errObj);
+            this.loadSessionAbortController = new AbortController();
+
             if (Lifecycle.isLoggingOut()) return;
 
             // A modal might have been open when we were logged out by the server
             Modal.forceCloseAllModals();
 
-            if (errObj.httpStatus === 401 && errObj.data && errObj.data["soft_logout"]) {
+            if (errObj.httpStatus === 401 && errObj.data?.["soft_logout"]) {
                 logger.warn("Soft logout issued by server - avoiding data deletion");
                 Lifecycle.softLogout();
                 return;
             }
 
+            dis.dispatch(
+                {
+                    action: "logout",
+                },
+                true,
+            );
+
+            // The above dispatch closes all modals, so open the modal after calling it synchronously
             Modal.createDialog(ErrorDialog, {
                 title: _t("auth|session_logged_out_title"),
                 description: _t("auth|session_logged_out_description"),
             });
-
-            dis.dispatch({
-                action: "logout",
-            });
         });
         cli.on(HttpApiEvent.NoConsent, function (message, consentUri) {
-            Modal.createDialog(
+            const { finished } = Modal.createDialog(
                 QuestionDialog,
                 {
                     title: _t("terms|tac_title"),
@@ -1598,16 +1573,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     ),
                     button: _t("terms|tac_button"),
                     cancelButton: _t("action|dismiss"),
-                    onFinished: (confirmed) => {
-                        if (confirmed) {
-                            const wnd = window.open(consentUri, "_blank")!;
-                            wnd.opener = null;
-                        }
-                    },
                 },
                 undefined,
                 true,
             );
+            finished.then(([confirmed]) => {
+                if (confirmed) {
+                    const wnd = window.open(consentUri, "_blank")!;
+                    wnd.opener = null;
+                }
+            });
         });
 
         DecryptionFailureTracker.instance
@@ -2003,9 +1978,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     // complete security / e2e setup has finished
-    private onCompleteSecurityE2eSetupFinished = (): void => {
-        // This is async but we making this function async to wait for it isn't useful
-        this.onShowPostLoginScreen().catch((e) => {
+    private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
+        const forceVerify = await this.shouldForceVerification();
+        if (forceVerify) {
+            const isVerified = await MatrixClientPeg.safeGet().getCrypto()?.isCrossSigningReady();
+            if (!isVerified) {
+                // We must verify but we haven't yet verified - don't continue logging in
+                return;
+            }
+        }
+
+        await this.onShowPostLoginScreen().catch((e) => {
             logger.error("Exception showing post-login screen", e);
         });
     };

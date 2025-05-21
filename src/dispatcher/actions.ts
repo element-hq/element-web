@@ -236,6 +236,12 @@ export enum Action {
     AfterLeaveRoom = "after_leave_room",
 
     /**
+     * Dispatched after a room has been successfully forgotten
+     * Should be used with AfterForgetRoomPayload.
+     */
+    AfterForgetRoom = "after_forget_room",
+
+    /**
      * Used to defer actions until after sync is complete
      * LifecycleStore will emit deferredAction payload after 'MatrixActions.sync'
      */
@@ -362,7 +368,7 @@ export enum Action {
     View3pidInvite = "view_3pid_invite",
 
     /**
-     * Opens right panel room summary and focuses the search input
+     * Opens right panel room summary and focuses the search input. Use with a FocusMessageSearchPayload.
      */
     FocusMessageSearch = "focus_search",
 

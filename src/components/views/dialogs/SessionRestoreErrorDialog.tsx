@@ -31,13 +31,13 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
     };
 
     private onClearStorageClick = (): void => {
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("action|sign_out"),
             description: <div>{_t("error|session_restore|clear_storage_description")}</div>,
             button: _t("action|sign_out"),
             danger: true,
-            onFinished: this.props.onFinished,
         });
+        finished.then(([ok]) => this.props.onFinished(ok));
     };
 
     private onRefreshClick = (): void => {

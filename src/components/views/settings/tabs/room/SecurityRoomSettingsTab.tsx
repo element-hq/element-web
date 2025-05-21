@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import {
     GuestAccess,
     HistoryVisibility,
@@ -62,8 +62,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const state = this.props.room.currentState;
 
@@ -155,7 +155,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             if (!confirm) return;
         }
 
-        Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("room_settings|security|enable_encryption_confirm_title"),
             description: _t(
                 "room_settings|security|enable_encryption_confirm_description",
@@ -164,23 +164,23 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     a: (sub) => <ExternalLink href={SdkConfig.get("help_encryption_url")}>{sub}</ExternalLink>,
                 },
             ),
-            onFinished: (confirm) => {
-                if (!confirm) {
-                    this.setState({ encrypted: false });
-                    return;
-                }
+        });
+        finished.then(([confirm]) => {
+            if (!confirm) {
+                this.setState({ encrypted: false });
+                return;
+            }
 
-                const beforeEncrypted = this.state.encrypted;
-                this.setState({ encrypted: true });
-                this.context
-                    .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
-                        algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
-                    })
-                    .catch((e) => {
-                        logger.error(e);
-                        this.setState({ encrypted: beforeEncrypted });
-                    });
-            },
+            const beforeEncrypted = this.state.encrypted;
+            this.setState({ encrypted: true });
+            this.context
+                .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
+                    algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+                })
+                .catch((e) => {
+                    logger.error(e);
+                    this.setState({ encrypted: beforeEncrypted });
+                });
         });
     };
 
@@ -213,9 +213,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            await createRoom(this.context, opts);
+            await createRoom(this.context, opts!);
         }
-        return shouldCreate;
+        return shouldCreate ?? false;
     };
 
     private onHistoryRadioToggle = (history: HistoryVisibility): void => {

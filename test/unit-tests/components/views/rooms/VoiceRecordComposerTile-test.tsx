@@ -34,7 +34,7 @@ jest.mock("../../../../../src/stores/VoiceRecordingStore", () => ({
 }));
 
 describe("<VoiceRecordComposerTile/>", () => {
-    let voiceRecordComposerTile: RefObject<VoiceRecordComposerTile>;
+    let voiceRecordComposerTile: RefObject<VoiceRecordComposerTile | null>;
     let mockRecorder: VoiceMessageRecording;
     let mockUpload: IUpload;
     let mockClient: MatrixClient;

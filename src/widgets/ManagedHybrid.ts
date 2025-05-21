@@ -10,7 +10,6 @@ import { type IWidget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getCallBehaviourWellKnown } from "../utils/WellKnownUtils";
 import WidgetUtils from "../utils/WidgetUtils";
 import { type IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -37,7 +36,7 @@ function getWidgetBuildUrl(room: Room): string | undefined {
         return SdkConfig.get().widget_build_url;
     }
 
-    const wellKnown = getCallBehaviourWellKnown(MatrixClientPeg.safeGet());
+    const wellKnown = getCallBehaviourWellKnown(room.client);
     if (isDm && wellKnown?.ignore_dm) {
         return undefined;
     }

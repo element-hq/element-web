@@ -1,0 +1,76 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/**
+ * The RoomListItemView has the following structure:
+ * button--------------------------------------------------|
+ * | <-12px-> container------------------------------------|
+ * |          | room avatar <-8px-> content----------------|
+ * |          |                      | room_name <- 20px ->|
+ * |          |                      | --------------------| <-- border
+ * |-------------------------------------------------------|
+ */
+.mx_RoomListItemView {
+    all: unset;
+    cursor: pointer;
+
+    .mx_RoomListItemView_container {
+        padding-left: var(--cpd-space-3x);
+        font: var(--cpd-font-body-md-regular);
+        height: 100%;
+
+        .mx_RoomListItemView_content {
+            height: 100%;
+            flex: 1;
+            /* The border is only under the room name and the future hover menu  */
+            border-bottom: var(--cpd-border-width-0-5) solid var(--cpd-color-bg-subtle-secondary);
+            box-sizing: border-box;
+            min-width: 0;
+            padding-right: var(--cpd-space-5x);
+
+            .mx_RoomListItemView_text {
+                min-width: 0;
+            }
+
+            .mx_RoomListItemView_roomName {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mx_RoomListItemView_messagePreview {
+                font: var(--cpd-font-body-sm-regular);
+                color: var(--cpd-color-text-secondary);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
+.mx_RoomListItemView_hover {
+    background-color: var(--cpd-color-bg-action-secondary-hovered);
+}
+
+.mx_RoomListItemView_menu_open .mx_RoomListItemView_container .mx_RoomListItemView_content {
+    /**
+     * The figma uses 16px padding (--cpd-space-4x) but due to https://github.com/element-hq/compound-web/issues/331
+     * the icon size of the menu is 18px instead of 20px with a different internal padding
+     * We need to use 18px to align the icon with the others icons
+     * 18px is not available in compound spacing
+     */
+    padding-right: 18px;
+}
+
+.mx_RoomListItemView_selected {
+    background-color: var(--cpd-color-bg-action-secondary-pressed);
+}
+
+.mx_RoomListItemView_bold .mx_RoomListItemView_roomName {
+    font: var(--cpd-font-body-md-semibold);
+}

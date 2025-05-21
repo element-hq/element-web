@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useEffect, useState } from "react";
+import React, { type JSX, type ReactNode, useEffect, useState } from "react";
 import { ClientEvent, type Room, type RoomMember, RoomStateEvent, UserEvent } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -26,7 +26,7 @@ interface Props {
     children: ReactNode;
 }
 
-enum Presence {
+export enum Presence {
     // Note: the names here are used in CSS class names
     Online = "ONLINE",
     Away = "AWAY",
@@ -52,14 +52,14 @@ function getDmMember(room: Room): RoomMember | null {
     return otherUserId ? room.getMember(otherUserId) : null;
 }
 
-export const useDmMember = (room: Room): RoomMember | null => {
-    const [dmMember, setDmMember] = useState<RoomMember | null>(getDmMember(room));
+export const useDmMember = (room?: Room): RoomMember | null => {
+    const [dmMember, setDmMember] = useState<RoomMember | null>(room ? getDmMember(room) : null);
     const updateDmMember = (): void => {
-        setDmMember(getDmMember(room));
+        setDmMember(room ? getDmMember(room) : null);
     };
 
-    useEventEmitter(room.currentState, RoomStateEvent.Members, updateDmMember);
-    useEventEmitter(room.client, ClientEvent.AccountData, updateDmMember);
+    useEventEmitter(room?.currentState, RoomStateEvent.Members, updateDmMember);
+    useEventEmitter(room?.client, ClientEvent.AccountData, updateDmMember);
     useEffect(updateDmMember, [room]);
 
     return dmMember;
@@ -86,7 +86,7 @@ function getPresence(member: RoomMember | null): Presence | null {
     return null;
 }
 
-const usePresence = (room: Room, member: RoomMember | null): Presence | null => {
+export const usePresence = (room: Room, member: RoomMember | null): Presence | null => {
     const [presence, setPresence] = useState<Presence | null>(getPresence(member));
     const updatePresence = (): void => {
         setPresence(getPresence(member));

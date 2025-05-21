@@ -1,7 +1,7 @@
-# syntax=docker.io/docker/dockerfile:1.14-labs
+# syntax=docker.io/docker/dockerfile:1.15-labs@sha256:94edd5b349df43675bd6f542e2b9a24e7177432dec45fe3066bfcf2ab14c4355
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:22-bullseye AS builder
+FROM --platform=$BUILDPLATFORM node:22-bullseye@sha256:ed0338dd02fd86861a59dc1cbc2e12152f3a93c4ce5933d347d6677232000dc7 AS builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
@@ -19,7 +19,10 @@ RUN /src/scripts/docker-package.sh
 RUN cp /src/config.sample.json /src/webapp/config.json
 
 # App
-FROM nginx:alpine-slim
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:0a49675e3e35cc2f89ce831f00f767af9c32df04f5a80167739fd32346f1fe99
+
+# Need root user to install packages & manipulate the usr directory
+USER root
 
 # Install jq and moreutils for sponge, both used by our entrypoints
 RUN apk add jq moreutils
@@ -30,13 +33,6 @@ COPY --from=builder /src/webapp /app
 # through `envsubst` by the nginx docker image entry point.
 COPY /docker/nginx-templates/* /etc/nginx/templates/
 COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
-
-# Tell nginx to put its pidfile elsewhere, so it can run as non-root
-RUN sed -i -e 's,/var/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf
-
-# nginx user must own the cache and etc directory to write cache and tweak the nginx config
-RUN chown -R nginx:0 /var/cache/nginx /etc/nginx
-RUN chmod -R g+w /var/cache/nginx /etc/nginx
 
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html

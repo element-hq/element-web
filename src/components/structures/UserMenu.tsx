@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type ReactNode } from "react";
+import React, { type JSX, createRef, type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -81,10 +81,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
     private readonly dndWatcherRef?: string;
-    private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
+    private buttonRef = createRef<HTMLButtonElement>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             contextMenuPosition: null,
@@ -370,6 +370,13 @@ export default class UserMenu extends React.Component<IProps, IState> {
             ? toRightOf(this.state.contextMenuPosition)
             : below(this.state.contextMenuPosition);
 
+        const userIdentifierString = UserIdentifierCustomisations.getDisplayUserIdentifier(
+            MatrixClientPeg.safeGet().getSafeUserId(),
+            {
+                withDisplayName: true,
+            },
+        );
+
         return (
             <IconizedContextMenu {...position} onFinished={this.onCloseMenu} className="mx_UserMenu_contextMenu">
                 <div className="mx_UserMenu_contextMenu_header">
@@ -377,13 +384,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         <span className="mx_UserMenu_contextMenu_displayName">
                             {OwnProfileStore.instance.displayName}
                         </span>
-                        <span className="mx_UserMenu_contextMenu_userId">
-                            {UserIdentifierCustomisations.getDisplayUserIdentifier(
-                                MatrixClientPeg.safeGet().getSafeUserId(),
-                                {
-                                    withDisplayName: true,
-                                },
-                            )}
+                        <span className="mx_UserMenu_contextMenu_userId" title={userIdentifierString || ""}>
+                            {userIdentifierString}
                         </span>
                     </div>
 

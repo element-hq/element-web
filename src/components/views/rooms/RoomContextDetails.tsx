@@ -7,16 +7,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { type HTMLAttributes, type ReactHTML } from "react";
+import React, { type JSX, type HTMLAttributes } from "react";
 
 import { roomContextDetails } from "../../../utils/i18n-helpers";
 
-type Props<T extends keyof ReactHTML> = HTMLAttributes<T> & {
+type Props<T extends keyof HTMLElementTagNameMap> = HTMLAttributes<T> & {
     component?: T;
     room: Room;
 };
 
-export function RoomContextDetails<T extends keyof ReactHTML>({ room, component, ...other }: Props<T>): JSX.Element {
+export function RoomContextDetails<T extends keyof HTMLElementTagNameMap>({
+    room,
+    component,
+    ...other
+}: Props<T>): JSX.Element {
     const contextDetails = roomContextDetails(room);
     if (contextDetails) {
         return React.createElement(

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React, { type JSX } from "react";
 import { createRef } from "react";
 import classNames from "classnames";
 
@@ -379,13 +379,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         const containerClasses = classNames({
             mx_LeftPanel: true,
+            mx_LeftPanel_newRoomList: useNewRoomList,
             mx_LeftPanel_minimized: this.props.isMinimized,
         });
 
         const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
-        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         if (useNewRoomList) {
             return (
                 <div className={containerClasses}>

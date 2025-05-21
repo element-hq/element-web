@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type PropsWithChildren } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 import { type User } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 

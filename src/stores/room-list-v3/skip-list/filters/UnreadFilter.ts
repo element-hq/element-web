@@ -8,10 +8,11 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Filter } from ".";
 import { FilterKey } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
+import { getMarkedUnreadState } from "../../../../utils/notifications";
 
 export class UnreadFilter implements Filter {
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).isUnread;
+        return RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount || !!getMarkedUnreadState(room);
     }
 
     public get key(): FilterKey.UnreadFilter {

@@ -8,21 +8,44 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type PrimaryFilter, useFilteredRooms } from "./useFilteredRooms";
+import { createRoom as createRoomFunc, hasCreateRoomRights } from "./utils";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useStickyRoomList } from "./useStickyRoomList";
+import { useRoomListNavigation } from "./useRoomListNavigation";
 
 export interface RoomListViewState {
+    /**
+     * Whether the list of rooms is being loaded.
+     */
+    isLoadingRooms: boolean;
+
     /**
      * A list of rooms to be displayed in the left panel.
      */
     rooms: Room[];
 
     /**
-     * Open the room having given roomId.
+     * Create a chat room
+     * @param e - The click event
      */
-    openRoom: (roomId: string) => void;
+    createChatRoom: () => void;
+
+    /**
+     * Whether the user can create a room in the current space
+     */
+    canCreateRoom: boolean;
+
+    /**
+     * Create a room
+     * @param e - The click event
+     */
+    createRoom: () => void;
 
     /**
      * A list of objects that provide the view enough information
@@ -31,14 +54,15 @@ export interface RoomListViewState {
     primaryFilters: PrimaryFilter[];
 
     /**
-     * A function to activate a given secondary filter.
+     * The currently active primary filter.
+     * If no primary filter is active, this will be undefined.
      */
-    activateSecondaryFilter: (filter: SecondaryFilters) => void;
+    activePrimaryFilter?: PrimaryFilter;
 
     /**
-     * The currently active secondary filter.
+     * The index of the active room in the room list.
      */
-    activeSecondaryFilter: SecondaryFilters;
+    activeIndex: number | undefined;
 }
 
 /**
@@ -46,21 +70,30 @@ export interface RoomListViewState {
  * @see {@link RoomListViewState} for more information about what this view model returns.
  */
 export function useRoomListViewModel(): RoomListViewState {
-    const { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter } = useFilteredRooms();
+    const matrixClient = useMatrixClientContext();
+    const { isLoadingRooms, primaryFilters, activePrimaryFilter, rooms: filteredRooms } = useFilteredRooms();
+    const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
 
-    const openRoom = useCallback((roomId: string): void => {
-        dispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: roomId,
-            metricsTrigger: "RoomList",
-        });
-    }, []);
+    useRoomListNavigation(rooms);
+
+    const currentSpace = useEventEmitterState<Room | null>(
+        SpaceStore.instance,
+        UPDATE_SELECTED_SPACE,
+        () => SpaceStore.instance.activeSpaceRoom,
+    );
+    const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
+
+    const createChatRoom = useCallback(() => dispatcher.fire(Action.CreateChat), []);
+    const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
+        isLoadingRooms,
         rooms,
-        openRoom,
+        canCreateRoom,
+        createRoom,
+        createChatRoom,
         primaryFilters,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
+        activePrimaryFilter,
+        activeIndex,
     };
 }

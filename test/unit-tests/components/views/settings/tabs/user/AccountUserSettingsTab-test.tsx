@@ -153,7 +153,8 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
@@ -167,14 +168,16 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
 
             await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
 
-            createDialogFn.mock.calls[0][1].onFinished(true);
+            finishedDeferred.resolve([true]);
+            await flushPromises();
 
             expect(defaultProps.closeSettingsFn).toHaveBeenCalled();
         });
@@ -183,14 +186,16 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
 
             await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
 
-            createDialogFn.mock.calls[0][1].onFinished(false);
+            finishedDeferred.resolve([false]);
+            await flushPromises();
 
             expect(defaultProps.closeSettingsFn).not.toHaveBeenCalled();
         });

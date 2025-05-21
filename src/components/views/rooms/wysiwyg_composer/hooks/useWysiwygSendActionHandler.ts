@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MutableRefObject, useCallback, useRef } from "react";
+import { type RefObject, useCallback, useRef } from "react";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
@@ -22,7 +22,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
-    composerElement: MutableRefObject<HTMLElement>,
+    composerElement: RefObject<HTMLElement | null> | undefined,
     composerFunctions: ComposerFunctions,
 ): void {
     const roomContext = useScopedRoomContext("timelineRenderingType");

@@ -15,6 +15,7 @@ import {
     useRoomListHeaderViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
 import { RoomListHeaderView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListHeaderView";
+import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel", () => ({
     useRoomListHeaderViewModel: jest.fn(),
@@ -29,6 +30,10 @@ describe("<RoomListHeaderView />", () => {
         canCreateVideoRoom: true,
         canInviteInSpace: true,
         canAccessSpaceSettings: true,
+        sort: jest.fn(),
+        activeSortOption: SortOption.Activity,
+        shouldShowMessagePreview: false,
+        toggleMessagePreview: jest.fn(),
         createRoom: jest.fn(),
         createVideoRoom: jest.fn(),
         createChatRoom: jest.fn(),
@@ -42,6 +47,13 @@ describe("<RoomListHeaderView />", () => {
         jest.resetAllMocks();
     });
 
+    it("should render 'room options' button", async () => {
+        mocked(useRoomListHeaderViewModel).mockReturnValue(defaultValue);
+        const { asFragment } = render(<RoomListHeaderView />);
+        expect(screen.getByRole("button", { name: "Room Options" })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     describe("compose menu", () => {
         it("should display the compose menu", () => {
             mocked(useRoomListHeaderViewModel).mockReturnValue(defaultValue);
@@ -51,12 +63,16 @@ describe("<RoomListHeaderView />", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
-        it("should not display the compose menu", () => {
+        it("should not display the compose menu", async () => {
+            const user = userEvent.setup();
             mocked(useRoomListHeaderViewModel).mockReturnValue({ ...defaultValue, displayComposeMenu: false });
 
             const { asFragment } = render(<RoomListHeaderView />);
             expect(screen.queryByRole("button", { name: "Add" })).toBeNull();
             expect(asFragment()).toMatchSnapshot();
+
+            await user.click(screen.getByRole("button", { name: "New message" }));
+            expect(defaultValue.createChatRoom).toHaveBeenCalled();
         });
 
         it("should display all the buttons when the menu is opened", async () => {

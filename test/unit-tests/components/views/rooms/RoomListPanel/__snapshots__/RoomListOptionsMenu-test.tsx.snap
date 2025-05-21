@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListOptionsMenu /> should match snapshot 1`] = `
+<DocumentFragment>
+  <button
+    aria-disabled="false"
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-label="Room Options"
+    aria-labelledby="«r2»"
+    class="_icon-button_m2erp_8"
+    data-state="closed"
+    id="radix-«r0»"
+    role="button"
+    style="--cpd-icon-button-size: 32px;"
+    tabindex="0"
+    type="button"
+  >
+    <div
+      class="_indicator-icon_zr2a0_17"
+      style="--cpd-icon-button-size: 100%;"
+    >
+      <svg
+        color="var(--cpd-color-icon-secondary)"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+        />
+      </svg>
+    </div>
+  </button>
+</DocumentFragment>
+`;

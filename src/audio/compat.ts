@@ -16,12 +16,11 @@ import { SAMPLE_RATE } from "./VoiceRecording";
 
 export function createAudioContext(opts?: AudioContextOptions): AudioContext {
     if (window.AudioContext) {
-        return new AudioContext(opts);
-    } else if (window.webkitAudioContext) {
-        // While the linter is correct that "a constructor name should not start with
-        // a lowercase letter", it's also wrong to think that we have control over this.
-        // eslint-disable-next-line new-cap
-        return new window.webkitAudioContext(opts);
+        const ctx = new AudioContext(opts);
+        // Initialize in suspended state, as Firefox starts using
+        // CPU/battery right away, even if we don't play any sound yet.
+        void ctx.suspend();
+        return ctx;
     } else {
         throw new Error("Unsupported browser");
     }

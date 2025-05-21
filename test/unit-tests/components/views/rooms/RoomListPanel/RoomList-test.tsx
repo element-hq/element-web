@@ -7,14 +7,14 @@
 
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { render, screen, waitFor } from "jest-matrix-react";
-import userEvent from "@testing-library/user-event";
+import { render } from "jest-matrix-react";
+import { fireEvent } from "@testing-library/dom";
 
 import { mkRoom, stubClient } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
+import { Landmark, LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 
 describe("<RoomList />", () => {
     let matrixClient: MatrixClient;
@@ -29,11 +29,13 @@ describe("<RoomList />", () => {
         matrixClient = stubClient();
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
         vm = {
+            isLoadingRooms: false,
             rooms,
-            openRoom: jest.fn(),
             primaryFilters: [],
-            activateSecondaryFilter: () => {},
-            activeSecondaryFilter: SecondaryFilters.AllActivity,
+            createRoom: jest.fn(),
+            createChatRoom: jest.fn(),
+            canCreateRoom: true,
+            activeIndex: undefined,
         };
 
         // Needed to render a room list cell
@@ -46,14 +48,15 @@ describe("<RoomList />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should open the room", async () => {
-        const user = userEvent.setup();
+    it.each([
+        { shortcut: { key: "F6", ctrlKey: true, shiftKey: true }, isPreviousLandmark: true, label: "PreviousLandmark" },
+        { shortcut: { key: "F6", ctrlKey: true }, isPreviousLandmark: false, label: "NextLandmark" },
+    ])("should navigate to the landmark on NextLandmark.$label action", ({ shortcut, isPreviousLandmark }) => {
+        const spyFindLandmark = jest.spyOn(LandmarkNavigation, "findAndFocusNextLandmark").mockReturnValue();
+        const { getByTestId } = render(<RoomList vm={vm} />);
+        const roomList = getByTestId("room-list");
+        fireEvent.keyDown(roomList, shortcut);
 
-        render(<RoomList vm={vm} />);
-        await waitFor(async () => {
-            expect(screen.getByRole("gridcell", { name: "Open room room9" })).toBeVisible();
-            await user.click(screen.getByRole("gridcell", { name: "Open room room9" }));
-        });
-        expect(vm.openRoom).toHaveBeenCalledWith(vm.rooms[9].roomId);
+        expect(spyFindLandmark).toHaveBeenCalledWith(Landmark.ROOM_LIST, isPreviousLandmark);
     });
 });

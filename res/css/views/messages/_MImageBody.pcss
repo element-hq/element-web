@@ -25,7 +25,7 @@ Please see LICENSE files in the repository root for full details.
     overflow: hidden;
 
     /* Hardcoded colours because it's the same on all themes */
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgb(0, 0, 0, 0.6);
     color: #ffffff;
 }
 
@@ -78,40 +78,4 @@ Please see LICENSE files in the repository root for full details.
     border: 2px solid $imagebody-giflabel-border;
     color: $imagebody-giflabel-color;
     pointer-events: none;
-}
-
-.mx_HiddenImagePlaceholder {
-    position: absolute;
-    inset: 0;
-
-    /* To center the text in the middle of the frame */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-
-    cursor: pointer;
-    background-color: $header-panel-bg-color;
-
-    .mx_HiddenImagePlaceholder_button {
-        color: $accent;
-
-        span.mx_HiddenImagePlaceholder_eye {
-            margin-right: 8px;
-
-            background-color: $accent;
-            mask-image: url("$(res)/img/element-icons/eye.svg");
-            display: inline-block;
-            width: 18px;
-            height: 14px;
-        }
-
-        span:not(.mx_HiddenImagePlaceholder_eye) {
-            vertical-align: text-bottom;
-        }
-    }
-}
-
-.mx_EventTile:hover .mx_HiddenImagePlaceholder {
-    background-color: $background;
 }
