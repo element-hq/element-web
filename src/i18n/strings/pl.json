@@ -2135,7 +2135,6 @@
         "failed_add_tag": "Nie można dodać tagu %(tagName)s do pokoju",
         "failed_remove_tag": "Nie udało się usunąć tagu %(tagName)s z pokoju",
         "failed_set_dm_tag": "Nie udało się ustawić tagu wiadomości prywatnych",
-        "filter": "Filtr",
         "filters": {
             "favourite": "Ulubione",
             "people": "Osoby",
@@ -2169,13 +2168,6 @@
             "open_room": "Pokój otwarty %(roomName)s"
         },
         "room_options": "Opcje pokoju",
-        "secondary_filter": {
-            "all_activity": "Cała aktywność",
-            "invites_only": "Tylko zaproszenie",
-            "low_priority": "Niski priorytet",
-            "mentions_only": "Tylko wzmianki"
-        },
-        "secondary_filters": "Filtry poboczne",
         "show_less": "Pokaż mniej",
         "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {

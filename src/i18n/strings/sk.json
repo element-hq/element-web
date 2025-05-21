@@ -2149,7 +2149,6 @@
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
         "failed_remove_tag": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
-        "filter": "Filter",
         "filters": {
             "favourite": "Obľúbené",
             "people": "Ľudia",
@@ -2185,13 +2184,6 @@
             "open_room": "Otvoriť miestnosť %(roomName)s"
         },
         "room_options": "Možnosti miestnosti",
-        "secondary_filter": {
-            "all_activity": "Všetka aktivita",
-            "invites_only": "Len pozvánky",
-            "low_priority": "Nízka priorita",
-            "mentions_only": "Iba zmienky"
-        },
-        "secondary_filters": "Sekundárne filtre",
         "show_less": "Zobraziť menej",
         "show_message_previews": "Zobraziť náhľady správ",
         "show_n_more": {

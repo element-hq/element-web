@@ -2019,7 +2019,6 @@
         "failed_add_tag": "Wedi methu ag ychwanegu tag %(tagName)s i'r ystafell",
         "failed_remove_tag": "Wedi methu â thynnu'r tag %(tagName)s o'r ystafell",
         "failed_set_dm_tag": "Wedi methu gosod tag neges uniongyrchol",
-        "filter": "Hidl",
         "filters": {
             "favourite": "Ffefrynnau",
             "people": "Pobl",
@@ -2045,13 +2044,6 @@
             "open_room": "Agor ystafell %(roomName)s"
         },
         "room_options": "Dewisiadau Ystafelloedd",
-        "secondary_filter": {
-            "all_activity": "Pob gweithgaredd",
-            "invites_only": "Gwahoddiadau yn unig",
-            "low_priority": "Blaenoriaeth isel",
-            "mentions_only": "Crybwylliadau'n unig"
-        },
-        "secondary_filters": "Hidlyddion eilradd",
         "show_less": "Dangos llai",
         "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",

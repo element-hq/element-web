@@ -1851,10 +1851,6 @@
         "room": {
             "open_room": "Avoin huone %(roomName)s"
         },
-        "secondary_filter": {
-            "mentions_only": "Vain maininnat"
-        },
-        "secondary_filters": "Toissijaiset suodattimet",
         "show_less": "Näytä vähemmän",
         "show_message_previews": "Näytä viestien esikatselut",
         "show_n_more": {
