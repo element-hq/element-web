@@ -6,7 +6,39 @@
  */
 
 .mx_RoomListPrimaryFilters {
-    margin: unset;
-    list-style-type: none;
-    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-3x);
+    min-height: 46px;
+    max-height: 46px;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    &[data-expanded="true"] {
+        min-height: unset;
+        max-height: unset;
+        overflow: unset;
+    }
+
+    ul {
+        margin: unset;
+        padding: unset;
+        list-style-type: none;
+        /**
+         * The InteractionObserver needs the height to be set for to work properly.
+         */
+        height: 100%;
+    }
+
+    .mx_RoomListPrimaryFilters_IconButton {
+        background-color: var(--cpd-color-bg-subtle-secondary);
+
+        svg {
+            transition: transform 0.1s linear;
+        }
+    }
+
+    .mx_RoomListPrimaryFilters_IconButton[aria-expanded="true"] {
+        svg {
+            transform: rotate(180deg);
+        }
+    }
 }
