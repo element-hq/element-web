@@ -6,6 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import "./index.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/600.css";
 
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -153,15 +155,6 @@ async function initPage(): Promise<void> {
     if (hsUrl && !hsUrl.endsWith("/")) hsUrl += "/";
     if (isUrl && !isUrl.endsWith("/")) isUrl += "/";
 
-    await updateDocument(metadata, serverName, hsUrl, isUrl);
-}
-
-async function updateDocument(
-    metadata: AppMetadata,
-    serverName: string | undefined,
-    hsUrl: string,
-    isUrl?: string,
-): Promise<void> {
     let deepLinkUrl = `https://mobile.element.io${metadata.deepLinkPath}`;
 
     if (metadata.usesLegacyDeepLink) {
@@ -173,6 +166,15 @@ async function updateDocument(
         deepLinkUrl += `?account_provider=${serverName}`;
     }
 
+    await updateDocument(metadata, deepLinkUrl, serverName, hsUrl);
+}
+
+async function updateDocument(
+    metadata: AppMetadata,
+    deepLinkUrl: string,
+    serverName: string | undefined,
+    hsUrl: string,
+): Promise<void> {
     const appleMeta = document.querySelector('meta[name="apple-itunes-app"]') as Element;
     appleMeta.setAttribute("content", `app-id=${metadata.appleAppId}`);
 
@@ -188,7 +190,7 @@ async function updateDocument(
     }
 
     (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
-    document.getElementById("step1_heading")!.innerHTML = `Step 1: Download ${metadata.name}`;
+    document.getElementById("step1_heading")!.innerHTML = `Download ${metadata.name}`;
     document.getElementById("step2_container")!.style.display = "block";
 }
 

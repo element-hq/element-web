@@ -1,3 +1,5 @@
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
+
 /* By default, hide the custom IS stuff - enabled in JS */
 #custom_is,
 #is_url {
@@ -14,17 +16,28 @@ body {
     max-width: 680px;
     margin: 0 auto;
     padding-bottom: 178px; /* Match the height of the gradient */
-    font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
-        "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: var(--cpd-font-family-sans);
+    color: #1b1d22;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #e1e6ec;
+    color: #e1e6ec;
+    margin: 0;
+}
+
+p {
+    margin: 4px 0;
+    padding: 0;
+    color: #474a51;
 }
 
 .mx_Button {
     border: 0;
     border-radius: 100px;
-    font-size: 18px;
-    margin-left: 4px;
-    margin-right: 4px;
+    font-size: 16px;
     min-width: 80px;
     background-color: #1b1d22;
     color: #fff;
@@ -34,13 +47,34 @@ body {
     text-decoration: none;
 }
 
-.mx_ClearDecoration {
+#deep_link_button {
+    margin-top: 12px;
+    display: inline-block;
+    width: auto;
+    box-sizing: border-box;
+}
+
+.mx_StoreLinks {
+    margin: 15px 0 12px 0;
+}
+
+.mx_StoreBadge {
     text-decoration: none !important;
-    margin: 16px 0;
+    margin: 16px 16px 16px 0px;
+}
+
+#f_droid_link {
+    color: #007a61;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#f_droid_link:visited {
+    color: #007a61;
 }
 
 .mx_HomePage_header {
-    color: #2e2f32;
+    color: #474a51;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -67,6 +101,7 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-start;
 }
 
 .mx_HomePage_container {
@@ -87,12 +122,13 @@ body {
 .mx_HomePage_container h3,
 .mx_HomePage_container h4 {
     font-weight: 600;
-    margin-bottom: 32px;
-    margin-top: 0px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    margin-top: 4px;
 }
 
 .mx_Spacer {
-    margin-top: 24px;
+    margin-top: 48px;
 }
 
 .mx_BottomGradient {
@@ -109,16 +145,31 @@ body {
     margin-left: calc(50% - 50vw); /* Center the gradient regardless of body width */
 }
 
+.mx_HomePage_step_number {
+    display: flex;
+    align-items: flex-start;
+    margin-right: 8px;
+}
+
+.mx_HomePage_step_number span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #e1e6ec;
+    background-color: transparent;
+    color: #656d77;
+    font-size: 14px;
+}
+
 @media screen and (max-width: 1120px) {
     body {
         font-size: 16px;
     }
 
-    h1 {
-        font-size: 20px;
-    }
-
-    h4 {
+    h2 {
         font-size: 16px;
     }
 
@@ -132,6 +183,6 @@ body {
     }
 
     .mx_Spacer {
-        margin-top: 24px;
+        margin-top: 48px;
     }
 }
