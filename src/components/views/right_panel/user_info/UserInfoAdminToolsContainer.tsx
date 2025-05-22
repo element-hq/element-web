@@ -16,11 +16,11 @@ import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave"
 
 import { _t } from "../../../../languageHandler";
 import { type IPowerLevelsContent } from "../UserInfo";
-import { useUserInfoAdminToolsContainerViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
-import { useMuteButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel";
-import { useBanButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel";
-import { useRoomKickButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel";
-import { useRedactMessagesButtonViewModel } from "../../../viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel";
+import { useUserInfoAdminToolsContainerViewModel } from "../../../viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
+import { useMuteButtonViewModel } from "../../../viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel";
+import { useBanButtonViewModel } from "../../../viewmodels/right_panel/user_info/admin/UserInfoBanButtonViewModel";
+import { useRoomKickButtonViewModel } from "../../../viewmodels/right_panel/user_info/admin/UserInfoKickButtonViewModel";
+import { useRedactMessagesButtonViewModel } from "../../../viewmodels/right_panel/user_info/admin/UserInfoRedactButtonViewModel";
 
 const Container: React.FC<{
     children: ReactNode;

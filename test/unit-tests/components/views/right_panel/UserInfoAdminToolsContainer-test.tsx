@@ -11,11 +11,11 @@ import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { UserInfoAdminToolsContainer } from "../../../../../src/components/views/right_panel/user_info/UserInfoAdminToolsContainer";
-import { useUserInfoAdminToolsContainerViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
-import { useRoomKickButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel";
-import { useBanButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel";
-import { useMuteButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel";
-import { useRedactMessagesButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel";
+import { useUserInfoAdminToolsContainerViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
+import { useRoomKickButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoKickButtonViewModel";
+import { useBanButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoBanButtonViewModel";
+import { useMuteButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel";
+import { useRedactMessagesButtonViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoRedactButtonViewModel";
 import { stubClient } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
@@ -32,7 +32,7 @@ jest.mock("../../../../../src/utils/DMRoomMap", () => {
 });
 
 jest.mock(
-    "../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel",
+    "../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel",
     () => ({
         useUserInfoAdminToolsContainerViewModel: jest.fn().mockReturnValue({
             isCurrentUserInTheRoom: true,
@@ -44,7 +44,7 @@ jest.mock(
     }),
 );
 
-jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel", () => ({
+jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoKickButtonViewModel", () => ({
     useRoomKickButtonViewModel: jest.fn().mockReturnValue({
         canUserBeKicked: true,
         kickLabel: "Kick",
@@ -52,14 +52,14 @@ jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/
     }),
 }));
 
-jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoBanButtonViewModel", () => ({
+jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoBanButtonViewModel", () => ({
     useBanButtonViewModel: jest.fn().mockReturnValue({
         banLabel: "Ban",
         onBanOrUnbanClick: jest.fn(),
     }),
 }));
 
-jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel", () => ({
+jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel", () => ({
     useMuteButtonViewModel: jest.fn().mockReturnValue({
         isMemberInTheRoom: true,
         muteLabel: "Mute",
@@ -67,7 +67,7 @@ jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/
     }),
 }));
 
-jest.mock("../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel", () => ({
+jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoRedactButtonViewModel", () => ({
     useRedactMessagesButtonViewModel: jest.fn().mockReturnValue({
         onRedactAllMessagesClick: jest.fn(),
     }),

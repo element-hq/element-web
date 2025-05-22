@@ -11,8 +11,8 @@ import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matr
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
-import { useRoomKickButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoKickButtonViewModel";
+import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
+import { useRoomKickButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoKickButtonViewModel";
 import Modal from "../../../../../../../src/Modal";
 import { withClientContextRenderOptions } from "../../../../../../test-utils";
 
