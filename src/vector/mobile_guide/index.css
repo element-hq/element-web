@@ -1,0 +1,154 @@
+/* By default, hide the custom IS stuff - enabled in JS */
+#custom_is,
+#is_url {
+    display: none;
+}
+
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    background: #fff;
+    max-width: 680px;
+    margin: 0 auto;
+    padding-bottom: 178px; /* Match the height of the gradient */
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.mx_Button {
+    border: 0;
+    border-radius: 100px;
+    font-size: 18px;
+    margin-left: 4px;
+    margin-right: 4px;
+    min-width: 80px;
+    background-color: #1b1d22;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px 22px;
+    word-break: break-word;
+    text-decoration: none;
+}
+
+.mx_Center {
+    justify-content: center;
+}
+
+.mx_ClearDecoration {
+    text-decoration: none !important;
+    margin: 16px 0;
+}
+
+.mx_HomePage_header {
+    color: #2e2f32;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.mx_HomePage_header #header_title {
+    margin-top: 8px;
+    margin-bottom: 0px;
+}
+
+.mx_HomePage h3 {
+    margin-top: 30px;
+}
+
+.mx_HomePage_col {
+    display: flex;
+    flex-direction: row;
+}
+
+.mx_HomePage_row {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.mx_HomePage_container {
+    display: block !important;
+    margin: 10px 20px;
+}
+
+.mx_HomePage_errorContainer {
+    display: none; /* shown in JS if needed */
+    margin: 20px;
+    border: 1px solid red;
+    background-color: #ffb9b9;
+    padding: 5px;
+}
+
+.mx_HomePage_container h1,
+.mx_HomePage_container h2,
+.mx_HomePage_container h3,
+.mx_HomePage_container h4 {
+    font-weight: 600;
+    margin-bottom: 32px;
+    margin-top: 0px;
+}
+
+.mx_Spacer {
+    margin-top: 24px;
+}
+
+.mx_FooterLink {
+    color: #0dbd8b;
+    text-decoration: none;
+}
+
+.mx_Subtext {
+    font-size: 14px;
+}
+
+.mx_SubtextTop {
+    margin-top: 32px;
+}
+
+.mx_BottomGradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 178px;
+    background-image: url("assets/bottom-gradient.svg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: -1;
+    margin-left: calc(50% - 50vw); /* Center the gradient regardless of body width */
+}
+
+@media screen and (max-width: 1120px) {
+    body {
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h4 {
+        font-size: 16px;
+    }
+
+    .mx_Button {
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+
+    .mx_HomePage_header {
+        justify-content: left;
+    }
+
+    .mx_Spacer {
+        margin-top: 24px;
+    }
+}

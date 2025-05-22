@@ -5,9 +5,56 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import "./index.css";
+
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getVectorConfig } from "../getconfig";
+
+enum MobileAppVariant {
+    Classic = "classic",
+    X = "x",
+    Pro = "pro",
+}
+
+interface AppMetadata {
+    name: string;
+    appleAppId: string;
+    appStoreUrl: string;
+    playStoreUrl: string;
+    fDroidUrl?: string;
+    deepLinkPath: string;
+    usesLegacyDeepLink: boolean;
+}
+
+const appVariants: Record<MobileAppVariant, AppMetadata> = {
+    [MobileAppVariant.Classic]: {
+        name: "Element",
+        appleAppId: "id1083446067",
+        appStoreUrl: "https://apps.apple.com/app/element-messenger/id1083446067",
+        playStoreUrl: "https://play.google.com/store/apps/details?id=im.vector.app",
+        fDroidUrl: "https://f-droid.org/packages/im.vector.app",
+        deepLinkPath: "",
+        usesLegacyDeepLink: true,
+    },
+    [MobileAppVariant.X]: {
+        name: "Element X",
+        appleAppId: "id1631335820",
+        appStoreUrl: "https://apps.apple.com/app/element-x-secure-chat-call/id1631335820",
+        playStoreUrl: "https://play.google.com/store/apps/details?id=io.element.android.x",
+        fDroidUrl: "https://f-droid.org/packages/io.element.android.x",
+        deepLinkPath: "/element",
+        usesLegacyDeepLink: false,
+    },
+    [MobileAppVariant.Pro]: {
+        name: "Element Pro",
+        appleAppId: "id6502951615",
+        appStoreUrl: "https://apps.apple.com/app/element-pro-for-work/id6502951615",
+        playStoreUrl: "https://play.google.com/store/apps/details?id=io.element.enterprise",
+        deepLinkPath: "/element-pro",
+        usesLegacyDeepLink: false,
+    },
+};
 
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
@@ -46,9 +93,11 @@ async function initPage(): Promise<void> {
     // calling that function pulls in roughly 4mb of JS we don't use.
 
     const wkConfig = config?.["default_server_config"]; // overwritten later under some conditions
-    const serverName = config?.["default_server_name"];
+    let serverName = config?.["default_server_name"];
     const defaultHsUrl = config?.["default_hs_url"];
     const defaultIsUrl = config?.["default_is_url"];
+
+    const metadata = appVariants[MobileAppVariant.X];
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
     if (defaultHsUrl && (wkConfig || serverName)) {
@@ -66,6 +115,7 @@ async function initPage(): Promise<void> {
 
     if (!serverName && typeof wkConfig?.["m.homeserver"]?.["base_url"] === "string") {
         hsUrl = wkConfig["m.homeserver"]["base_url"];
+        serverName = wkConfig["m.homeserver"]["server_name"];
 
         if (typeof wkConfig["m.identity_server"]?.["base_url"] === "string") {
             isUrl = wkConfig["m.identity_server"]["base_url"];
@@ -110,21 +160,50 @@ async function initPage(): Promise<void> {
     if (hsUrl && !hsUrl.endsWith("/")) hsUrl += "/";
     if (isUrl && !isUrl.endsWith("/")) isUrl += "/";
 
-    if (hsUrl !== "https://matrix.org/") {
-        let url = "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl);
+    await updateDocument(metadata, serverName, hsUrl, isUrl);
+}
 
+async function updateDocument(
+    metadata: AppMetadata,
+    serverName: string | undefined,
+    hsUrl: string,
+    isUrl?: string,
+): Promise<void> {
+    let deepLinkUrl = `https://mobile.element.io${metadata.deepLinkPath}`;
+
+    if (metadata.usesLegacyDeepLink) {
+        deepLinkUrl += `?hs_url=${encodeURIComponent(hsUrl)}`;
         if (isUrl) {
-            document.getElementById("custom_is")!.style.display = "block";
-            document.getElementById("is_url")!.style.display = "block";
-            document.getElementById("is_url")!.innerText = isUrl;
-            url += "&is_url=" + encodeURIComponent(isUrl ?? "");
+            deepLinkUrl += `&is_url=${encodeURIComponent(isUrl)}`;
         }
-
-        (document.getElementById("configure_element_button") as HTMLAnchorElement).href = url;
-        document.getElementById("step1_heading")!.innerHTML = "1: Install the app";
-        document.getElementById("step2_container")!.style.display = "block";
-        document.getElementById("hs_url")!.innerText = hsUrl;
+    } else if (serverName) {
+        deepLinkUrl += `?account_provider=${serverName}`;
     }
+
+    const appleMeta = document.querySelector('meta[name="apple-itunes-app"]') as Element;
+    appleMeta.setAttribute("content", `app-id=${metadata.appleAppId}`);
+
+    (document.getElementById("header_title") as HTMLHeadingElement).innerText =
+        `Join ${serverName ?? hsUrl} on Element`;
+    (document.getElementById("app_store_link") as HTMLAnchorElement).href = metadata.appStoreUrl;
+    (document.getElementById("play_store_link") as HTMLAnchorElement).href = metadata.playStoreUrl;
+
+    if (metadata.fDroidUrl) {
+        (document.getElementById("f_droid_link") as HTMLAnchorElement).href = metadata.fDroidUrl;
+    } else {
+        document.getElementById("f_droid_section")!.style.display = "none";
+    }
+
+    if (isUrl) {
+        document.getElementById("custom_is")!.style.display = "block";
+        document.getElementById("is_url")!.style.display = "block";
+        document.getElementById("is_url")!.innerText = isUrl;
+    }
+
+    (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
+    document.getElementById("step1_heading")!.innerHTML = `Step 1: Download ${metadata.name}`;
+    document.getElementById("step2_container")!.style.display = "block";
+    document.getElementById("hs_url")!.innerText = hsUrl;
 }
 
 void initPage();
