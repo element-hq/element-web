@@ -34,10 +34,6 @@ body {
     text-decoration: none;
 }
 
-.mx_Center {
-    justify-content: center;
-}
-
 .mx_ClearDecoration {
     text-decoration: none !important;
     margin: 16px 0;
@@ -97,11 +93,6 @@ body {
 
 .mx_Spacer {
     margin-top: 24px;
-}
-
-.mx_FooterLink {
-    color: #0dbd8b;
-    text-decoration: none;
 }
 
 .mx_BottomGradient {

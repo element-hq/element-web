@@ -56,12 +56,6 @@ const appVariants: Record<MobileAppVariant, AppMetadata> = {
     },
 };
 
-function onBackToElementClick(): void {
-    // Cookie should expire in 4 hours
-    document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
-    window.location.href = "../";
-}
-
 // NEVER pass user-controlled content to this function! Hardcoded strings only please.
 function renderConfigError(message: string): void {
     const contactMsg =
@@ -85,8 +79,6 @@ function renderConfigError(message: string): void {
 }
 
 async function initPage(): Promise<void> {
-    document.getElementById("back_to_element_button")!.onclick = onBackToElementClick;
-
     const config = await getVectorConfig("..");
 
     // We manually parse the config similar to how validateServerConfig works because
