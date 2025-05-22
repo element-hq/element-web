@@ -157,6 +157,7 @@
         "view_message": "Nachricht anzeigen",
         "view_source": "Rohdaten anzeigen",
         "yes": "Ja",
+        "yes_dismiss": "Ja, verwerfen",
         "zoom_in": "Vergrößern",
         "zoom_out": "Verkleinern"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
         },
+        "turn_on_key_storage": "Schlüsselspeicher einschalten",
+        "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
         "udd": {
             "interactive_verification_button": "Interaktiv per Emoji verifizieren",
             "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
@@ -2118,7 +2121,6 @@
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
         "failed_remove_tag": "Entfernen der Raum-Kennzeichnung %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favoriten",
             "people": "Personen",
@@ -2152,13 +2154,6 @@
             "open_room": "Raum öffnen %(roomName)s"
         },
         "room_options": "Chatroomoptionen",
-        "secondary_filter": {
-            "all_activity": "Alle Aktivitäten",
-            "invites_only": "Nur Einladungen",
-            "low_priority": "Niedrige Priorität",
-            "mentions_only": "Nur Erwähnungen"
-        },
-        "secondary_filters": "Sekundäre Filter",
         "show_less": "Weniger anzeigen",
         "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_n_more": {
@@ -2166,9 +2161,14 @@
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
+        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
+        "sort_type": {
+            "activity": "Aktivität",
+            "atoz": "A–Z"
+        },
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
         "space_menu": {
             "home": "Space-Übersicht",
@@ -2553,6 +2553,7 @@
                 "session_key": "Sitzungsschlüssel:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Soll die Speicherung der Schlüssel wirklich deaktiviert sein?",
             "delete_key_storage": {
                 "breadcrumb_page": "Schlüsselspeicher löschen",
                 "confirm": "Schlüsselspeicher löschen",

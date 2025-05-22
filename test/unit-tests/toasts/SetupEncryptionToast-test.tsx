@@ -14,6 +14,8 @@ import ToastContainer from "../../../src/components/structures/ToastContainer";
 import { Kind, showToast } from "../../../src/toasts/SetupEncryptionToast";
 import dis from "../../../src/dispatcher/dispatcher";
 import DeviceListener from "../../../src/DeviceListener";
+import Modal from "../../../src/Modal";
+import ConfirmKeyStorageOffDialog from "../../../src/components/views/dialogs/ConfirmKeyStorageOffDialog";
 
 jest.mock("../../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),
@@ -81,6 +83,57 @@ describe("SetupEncryptionToast", () => {
                 initialTabId: "USER_ENCRYPTION_TAB",
                 props: { initialEncryptionState: "reset_identity_sync_failed" },
             });
+        });
+    });
+
+    describe("Turn on key storage", () => {
+        it("should render the toast", async () => {
+            showToast(Kind.TURN_ON_KEY_STORAGE);
+
+            await expect(screen.findByText("Turn on key storage")).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Dismiss" })).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Continue" })).resolves.toBeInTheDocument();
+        });
+
+        it("should open settings to the Encryption tab when 'Continue' clicked", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "recordKeyBackupDisabled");
+
+            showToast(Kind.TURN_ON_KEY_STORAGE);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Continue" }));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+            });
+
+            expect(DeviceListener.sharedInstance().recordKeyBackupDisabled).not.toHaveBeenCalled();
+        });
+
+        it("should open the confirm key storage off dialog when 'Dismiss' clicked", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "recordKeyBackupDisabled");
+
+            // Given that as soon as the dialog opens, it closes and says "yes they clicked dismiss"
+            jest.spyOn(Modal, "createDialog").mockImplementation(() => {
+                return { finished: Promise.resolve([true]) } as any;
+            });
+
+            // When we show the toast, and click Dismiss
+            showToast(Kind.TURN_ON_KEY_STORAGE);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Dismiss" }));
+
+            // Then the dialog was opened
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ConfirmKeyStorageOffDialog,
+                undefined,
+                "mx_ConfirmKeyStorageOffDialog",
+            );
+
+            // And the backup was disabled when the dialog's onFinished was called
+            expect(DeviceListener.sharedInstance().recordKeyBackupDisabled).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -157,6 +157,7 @@
         "view_message": "Afficher le message",
         "view_source": "Voir la source",
         "yes": "Oui",
+        "yes_dismiss": "Oui, rejeter",
         "zoom_in": "Zoomer",
         "zoom_out": "Dé-zoomer"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
         },
+        "turn_on_key_storage": "Activer le stockage des clés",
+        "turn_on_key_storage_description": "Stockez votre identité cryptographique et vos clés de message en toute sécurité sur le serveur. Cela vous permettra de consulter l'historique de vos messages sur tous les nouveaux appareils.",
         "udd": {
             "interactive_verification_button": "Vérifier de façon interactive avec des émojis",
             "other_ask_verify_text": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
@@ -2108,19 +2111,23 @@
             "no_chats_description_no_room_rights": "Commencez par envoyer un message à quelqu'un",
             "no_favourites": "Vous n'avez pas encore de discussion favorite",
             "no_favourites_description": "Vous pouvez ajouter une discussion à vos favoris dans les paramètres de discussion",
+            "no_invites": "Vous n'avez aucune invitation non lue",
+            "no_mentions": "Vous n'avez aucune mention non lue",
             "no_people": "Vous n'avez encore de discussions",
             "no_people_description": "Veuillez désélectionner des filtres pour voir vos discussions",
             "no_rooms": "Vous n’êtes membre d’aucun salon",
             "no_rooms_description": "Veuillez désélectionner des filtres pour voir vos discussions",
             "no_unread": "Félicitations ! Vous n'avez aucun message non lu",
+            "show_activity": "Voir toutes les activités",
             "show_chats": "Afficher toutes les discussions"
         },
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
-        "filter": "Filtre",
         "filters": {
             "favourite": "Favoris",
+            "invites": "Invitations",
+            "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
             "unread": "Non-lus"
@@ -2152,13 +2159,6 @@
             "open_room": "Ouvrir salon %(roomName)s"
         },
         "room_options": "Options du salon",
-        "secondary_filter": {
-            "all_activity": "Toutes les activités",
-            "invites_only": "Invitations uniquement",
-            "low_priority": "Faible priorité",
-            "mentions_only": "Mentions uniquement"
-        },
-        "secondary_filters": "Filtres secondaires",
         "show_less": "En voir moins",
         "show_message_previews": "Afficher les aperçus des messages",
         "show_n_more": {
@@ -2558,6 +2558,8 @@
                 "session_key": "Clé de session :",
                 "title": "Avancé"
             },
+            "confirm_key_storage_off": "Êtes-vous sûr de vouloir désactiver le stockage des clés ?",
+            "confirm_key_storage_off_description": "Si vous vous déconnectez de tous vos appareils, vous perdrez l'historique de vos messages et vous devrez vérifier à nouveau tous vos contacts existants. <a>En savoir plus </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Désactiver la sauvegarde",
                 "confirm": "Désactiver la sauvegarde",

@@ -317,6 +317,25 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
 }
 
 /**
+ * Open the encryption settings and disable key storage (and recovery)
+ * Assumes that the current device has been verified
+ */
+export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
+
+    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    if (await keyStorageToggle.isChecked()) {
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+        await encryptionTab.getByRole("button", { name: "Delete key storage" }).click();
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).isVisible();
+
+        // Wait for the update to account data to stick
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+    await app.settings.closeDialog();
+}
+
+/**
  * Go through the "Set up Secure Backup" dialog (aka the `CreateSecretStorageDialog`).
  *
  * Assumes the dialog is already open for some reason (see also {@link enableKeyBackup}).

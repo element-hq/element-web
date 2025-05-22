@@ -97,6 +97,7 @@ export default class DeviceListener {
         this.client.on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
+        this.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
@@ -132,7 +133,7 @@ export default class DeviceListener {
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;
         this.keyBackupFetchedAt = null;
-        this.cachedKeyBackupStatus = undefined;
+        this.cachedKeyBackupUploadActive = undefined;
         this.ourDeviceIdsAtStart = null;
         this.displayingToastsForDeviceIds = new Set();
         this.client = undefined;
@@ -155,6 +156,13 @@ export default class DeviceListener {
     public dismissEncryptionSetup(): void {
         this.dismissedThisDeviceToast = true;
         this.recheck();
+    }
+
+    /**
+     * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
+     */
+    public async recordKeyBackupDisabled(): Promise<void> {
+        await this.client?.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
     }
 
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
@@ -192,6 +200,11 @@ export default class DeviceListener {
         this.recheck();
     };
 
+    private onKeyBackupStatusChanged = (): void => {
+        this.cachedKeyBackupUploadActive = undefined;
+        this.recheck();
+    };
+
     private onCrossSingingKeysChanged = (): void => {
         this.recheck();
     };
@@ -201,11 +214,13 @@ export default class DeviceListener {
         // * migrated SSSS to symmetric
         // * uploaded keys to secret storage
         // * completed secret storage creation
+        // * disabled key backup
         // which result in account data changes affecting checks below.
         if (
             ev.getType().startsWith("m.secret_storage.") ||
             ev.getType().startsWith("m.cross_signing.") ||
-            ev.getType() === "m.megolm_backup.v1"
+            ev.getType() === "m.megolm_backup.v1" ||
+            ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY
         ) {
             this.recheck();
         }
@@ -324,7 +339,16 @@ export default class DeviceListener {
                 (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
             );
 
-        const allSystemsReady = crossSigningReady && secretStorageReady && allCrossSigningSecretsCached;
+        const keyBackupUploadActive = await this.isKeyBackupUploadActive();
+        const backupDisabled = await this.recheckBackupDisabled(cli);
+
+        // We warn if key backup upload is turned off and we have not explicitly
+        // said we are OK with that.
+        const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
+
+        const allSystemsReady =
+            crossSigningReady && keyBackupIsOk && secretStorageReady && allCrossSigningSecretsCached;
+
         await this.reportCryptoSessionStateToAnalytics(cli);
 
         if (this.dismissedThisDeviceToast || allSystemsReady) {
@@ -353,14 +377,19 @@ export default class DeviceListener {
                     crossSigningStatus.privateKeysCachedLocally,
                 );
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
+            } else if (!keyBackupIsOk) {
+                logSpan.info("Key backup upload is unexpectedly turned off: showing TURN_ON_KEY_STORAGE toast");
+                showSetupEncryptionToast(SetupKind.TURN_ON_KEY_STORAGE);
             } else if (defaultKeyId === null) {
-                // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to key storage)
-                const disabledEvent = cli.getAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
-                if (!disabledEvent?.getContent().disabled) {
+                // The user just hasn't set up 4S yet: if they have key
+                // backup, prompt them to turn on recovery too. (If not, they
+                // have explicitly opted out, so don't hassle them.)
+                if (keyBackupUploadActive) {
                     logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
                     showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
                 } else {
                     logSpan.info("No default 4S key but backup disabled: no toast needed");
+                    hideSetupEncryptionToast();
                 }
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
@@ -444,6 +473,16 @@ export default class DeviceListener {
     }
 
     /**
+     * Fetch the account data for `backup_disabled`. If this is the first time,
+     * fetch it from the server (in case the initial sync has not finished).
+     * Otherwise, fetch it from the store as normal.
+     */
+    private async recheckBackupDisabled(cli: MatrixClient): Promise<boolean> {
+        const backupDisabled = await cli.getAccountDataFromServer(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
+        return !!backupDisabled?.disabled;
+    }
+
+    /**
      * Reports current recovery state to analytics.
      * Checks if the session is verified and if the recovery is correctly set up (i.e all secrets known locally and in 4S).
      * @param cli - the matrix client
@@ -512,7 +551,7 @@ export default class DeviceListener {
      * trigger an auto-rageshake).
      */
     private checkKeyBackupStatus = async (): Promise<void> => {
-        if (!(await this.getKeyBackupStatus())) {
+        if (!(await this.isKeyBackupUploadActive())) {
             dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
         }
     };
@@ -520,28 +559,34 @@ export default class DeviceListener {
     /**
      * Is key backup enabled? Use a cached answer if we have one.
      */
-    private getKeyBackupStatus = async (): Promise<boolean> => {
+    private isKeyBackupUploadActive = async (): Promise<boolean> => {
         if (!this.client) {
             // To preserve existing behaviour, if there is no client, we
-            // pretend key storage is on.
+            // pretend key backup upload is on.
             //
             // Someone looking to improve this code could try throwing an error
             // here since we don't expect client to be undefined.
             return true;
         }
 
+        const crypto = this.client.getCrypto();
+        if (!crypto) {
+            // If there is no crypto, there is no key backup
+            return false;
+        }
+
         // If we've already cached the answer, return it.
-        if (this.cachedKeyBackupStatus !== undefined) {
-            return this.cachedKeyBackupStatus;
+        if (this.cachedKeyBackupUploadActive !== undefined) {
+            return this.cachedKeyBackupUploadActive;
         }
 
         // Fetch the answer and cache it
-        const activeKeyBackupVersion = await this.client.getCrypto()?.getActiveSessionBackupVersion();
-        this.cachedKeyBackupStatus = !!activeKeyBackupVersion;
+        const activeKeyBackupVersion = await crypto.getActiveSessionBackupVersion();
+        this.cachedKeyBackupUploadActive = !!activeKeyBackupVersion;
 
-        return this.cachedKeyBackupStatus;
+        return this.cachedKeyBackupUploadActive;
     };
-    private cachedKeyBackupStatus: boolean | undefined = undefined;
+    private cachedKeyBackupUploadActive: boolean | undefined = undefined;
 
     private onRecordClientInformationSettingChange: CallbackFn = (
         _originalSettingName,

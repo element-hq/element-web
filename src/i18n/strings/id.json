@@ -2111,7 +2111,6 @@
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favorit",
             "people": "Orang",
@@ -2145,13 +2144,6 @@
             "open_room": "Buka ruangan %(roomName)s"
         },
         "room_options": "Opsi Ruangan",
-        "secondary_filter": {
-            "all_activity": "Semua aktivitas",
-            "invites_only": "Hanya undangan",
-            "low_priority": "Prioritas rendah",
-            "mentions_only": "Sebutan saja"
-        },
-        "secondary_filters": "Saringan sekunder",
         "show_less": "Tampilkan lebih sedikit",
         "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {

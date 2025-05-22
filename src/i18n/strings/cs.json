@@ -2125,7 +2125,6 @@
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
-        "filter": "Filtr",
         "filters": {
             "favourite": "Oblíbené",
             "people": "Lidé",
@@ -2159,13 +2158,6 @@
             "open_room": "Otevřít místnost %(roomName)s"
         },
         "room_options": "Možnosti místnosti",
-        "secondary_filter": {
-            "all_activity": "Veškerá aktivita",
-            "invites_only": "Pouze pozvané",
-            "low_priority": "Nízká priorita",
-            "mentions_only": "Pouze zmínky"
-        },
-        "secondary_filters": "Sekundární filtry",
         "show_less": "Zobrazit méně",
         "show_message_previews": "Zobrazit náhledy zpráv",
         "show_n_more": {

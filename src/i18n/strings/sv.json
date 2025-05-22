@@ -2150,7 +2150,6 @@
             "open_room": "Öppet rummet %(roomName)s"
         },
         "room_options": "Rumsalternativ",
-        "secondary_filters": "Sekundära filter",
         "show_less": "Visa mindre",
         "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {

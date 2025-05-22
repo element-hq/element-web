@@ -157,9 +157,8 @@ jobs:
               uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
               id: playwright-cache
               with:
-                  path: |
-                      ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+                  path: ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -186,9 +185,19 @@ jobs:
                   path: blob-report
                   retention-days: 1
 
+    downstream-modules:
+        name: Downstream Playwright tests [element-modules]
+        needs: build
+        if: inputs.skip != true && github.event_name == 'merge_group'
+        uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main
+        with:
+            webapp-artifact: webapp
+
     complete:
         name: end-to-end-tests
-        needs: playwright
+        needs:
+            - playwright
+            - downstream-modules
         if: always()
         runs-on: ubuntu-24.04
         steps:
@@ -232,5 +241,5 @@ jobs:
                   path: playwright-report
                   retention-days: 14
 
-            - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
