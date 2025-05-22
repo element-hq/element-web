@@ -263,7 +263,7 @@ export async function verifySession(app: ElementAppPage, securityKey: string) {
     const settings = await app.settings.openUserSettings("Encryption");
     await settings.getByRole("button", { name: "Verify this device" }).click();
     await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
-    await app.page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
+    await app.page.locator(".mx_Dialog").locator("textarea").fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
     await app.settings.closeDialog();
