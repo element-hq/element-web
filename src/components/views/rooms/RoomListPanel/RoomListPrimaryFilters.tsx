@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useEffect, useId, useState } from "react";
+import React, { type JSX, useEffect, useId, useRef, useState } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
@@ -32,48 +32,71 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     // this value is arbitrary, we want we to have a bit of flexibility
     const { isVisible, rootRef, nodeRef } = useIsNodeVisible<HTMLLIElement, HTMLUListElement>({ threshold: 0.5 });
     const { filters, onFilterChange } = useFilters(vm.primaryFilters, isExpanded, isVisible);
+    //
+    const ref = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const observer = new ResizeObserver(() => {
+            ref.current?.style.setProperty("--height", `${ref?.current.scrollHeight}px`);
+        });
+        console.log("ref.current", ref.current.scrollHeight);
+        observer.observe(ref.current);
+        //  ref.current.style.setProperty("--height", `${ref.current.scrollHeight}px`);
+        return () => observer.disconnect();
+    }, [ref]);
 
     return (
-        <Flex id={id} className="mx_RoomListPrimaryFilters" gap="var(--cpd-space-3x)" data-expanded={isExpanded}>
-            <Flex
-                as="ul"
-                role="listbox"
-                aria-label={_t("room_list|primary_filters")}
-                align="center"
-                gap="var(--cpd-space-2x)"
-                wrap="wrap"
-                ref={rootRef}
-            >
-                {filters.map((filter) => (
-                    <li
-                        ref={filter.active ? nodeRef : undefined}
-                        role="option"
-                        aria-selected={filter.active}
-                        key={filter.name}
+        <div className="mx_RoomListPrimaryFilters">
+            <div ref={ref} className="mx_RoomListPrimaryFilters_container" data-expanded={isExpanded}>
+                <Flex
+                    id={id}
+                    className="mx_RoomListPrimaryFilters_animated"
+                    gap="var(--cpd-space-3x)"
+                    data-expanded={isExpanded}
+                >
+                    <Flex
+                        as="ul"
+                        role="listbox"
+                        aria-label={_t("room_list|primary_filters")}
+                        align="center"
+                        gap="var(--cpd-space-2x)"
+                        wrap="wrap"
+                        ref={rootRef}
+                        data-expanded={isExpanded}
                     >
-                        <ChatFilter
-                            selected={filter.active}
-                            onClick={() => {
-                                onFilterChange();
-                                filter.toggle();
-                            }}
-                        >
-                            {filter.name}
-                        </ChatFilter>
-                    </li>
-                ))}
-            </Flex>
-            <IconButton
-                aria-expanded={isExpanded}
-                aria-controls={id}
-                className="mx_RoomListPrimaryFilters_IconButton"
-                aria-label={_t("room_list|room_options")}
-                size="28px"
-                onClick={() => setIsExpanded((_expanded) => !_expanded)}
-            >
-                <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
-            </IconButton>
-        </Flex>
+                        {filters.map((filter) => (
+                            <li
+                                ref={filter.active ? nodeRef : undefined}
+                                role="option"
+                                aria-selected={filter.active}
+                                key={filter.name}
+                            >
+                                <ChatFilter
+                                    selected={filter.active}
+                                    onClick={() => {
+                                        onFilterChange();
+                                        filter.toggle();
+                                    }}
+                                >
+                                    {filter.name}
+                                </ChatFilter>
+                            </li>
+                        ))}
+                    </Flex>
+                    <IconButton
+                        aria-expanded={isExpanded}
+                        aria-controls={id}
+                        className="mx_RoomListPrimaryFilters_IconButton"
+                        aria-label={_t("room_list|room_options")}
+                        size="28px"
+                        onClick={() => setIsExpanded((_expanded) => !_expanded)}
+                    >
+                        <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                    </IconButton>
+                </Flex>
+            </div>
+        </div>
     );
 }
 
