@@ -10,7 +10,7 @@ import { type Mocked, mocked } from "jest-mock";
 import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import { useRedactMessagesButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoRedactButtonViewModel";
+import { useRedactMessagesButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoRedactButtonViewModel";
 import Modal from "../../../../../../../src/Modal";
 import BulkRedactDialog from "../../../../../../../src/components/views/dialogs/BulkRedactDialog";
 import { withClientContextRenderOptions } from "../../../../../../test-utils";

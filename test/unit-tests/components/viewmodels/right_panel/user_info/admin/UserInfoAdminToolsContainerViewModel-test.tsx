@@ -14,7 +14,7 @@ import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import {
     type RoomAdminToolsContainerProps,
     useUserInfoAdminToolsContainerViewModel,
-} from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
+} from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
 import { withClientContextRenderOptions } from "../../../../../../test-utils";
 
 describe("UserInfoAdminToolsContainerViewModel", () => {

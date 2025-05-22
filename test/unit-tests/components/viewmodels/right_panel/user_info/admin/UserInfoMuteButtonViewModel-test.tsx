@@ -17,8 +17,8 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoAdminToolsContainerViewModel";
-import { useMuteButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user-info/admin/UserInfoMuteButtonViewModel";
+import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
+import { useMuteButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel";
 import { isMuted } from "../../../../../../../src/components/views/right_panel/UserInfo";
 import { withClientContextRenderOptions } from "../../../../../../test-utils";
 
