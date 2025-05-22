@@ -195,16 +195,9 @@ async function updateDocument(
         document.getElementById("f_droid_section")!.style.display = "none";
     }
 
-    if (isUrl) {
-        document.getElementById("custom_is")!.style.display = "block";
-        document.getElementById("is_url")!.style.display = "block";
-        document.getElementById("is_url")!.innerText = isUrl;
-    }
-
     (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
     document.getElementById("step1_heading")!.innerHTML = `Step 1: Download ${metadata.name}`;
     document.getElementById("step2_container")!.style.display = "block";
-    document.getElementById("hs_url")!.innerText = hsUrl;
 }
 
 void initPage();

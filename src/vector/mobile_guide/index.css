@@ -104,14 +104,6 @@ body {
     text-decoration: none;
 }
 
-.mx_Subtext {
-    font-size: 14px;
-}
-
-.mx_SubtextTop {
-    margin-top: 32px;
-}
-
 .mx_BottomGradient {
     position: absolute;
     bottom: 0;
