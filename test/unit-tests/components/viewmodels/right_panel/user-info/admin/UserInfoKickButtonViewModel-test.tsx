@@ -159,13 +159,26 @@ describe("useRoomKickButtonViewModel", () => {
         const { result: result2 } = renderKickButtonHook(propsWithInviteMembership);
         expect(result2.current.kickLabel).toBe("Disinvite from room");
         cleanup();
+    });
 
-        // test for space
-        const { result: result3 } = renderKickButtonHook({ ...propsWithJoinMembership, room: mockSpace });
+    it("renders the correct label for space", () => {
+        const propsWithInviteMembership = {
+            ...defaultAdminToolsProps,
+            room: mockSpace,
+            member: memberWithInviteMembership,
+        };
+
+        const propsWithJoinMembership = {
+            ...defaultAdminToolsProps,
+            room: mockSpace,
+            member: memberWithJoinMembership,
+        };
+
+        const { result: result3 } = renderKickButtonHook(propsWithJoinMembership);
         expect(result3.current.kickLabel).toBe("Remove from space");
         cleanup();
 
-        const { result: result4 } = renderKickButtonHook({ ...propsWithInviteMembership, room: mockSpace });
+        const { result: result4 } = renderKickButtonHook(propsWithInviteMembership);
         expect(result4.current.kickLabel).toBe("Disinvite from space");
         cleanup();
     });

@@ -7,7 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { renderHook } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
-import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixClient,
+    RoomMember,
+    type MatrixEvent,
+    type ISendEventResponse,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
@@ -80,6 +86,31 @@ describe("useMuteButtonViewModel", () => {
 
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+
+        mockClient.setPowerLevel.mockImplementation(() => Promise.resolve({} as ISendEventResponse));
+
+        mockRoom.currentState.getStateEvents.mockReturnValueOnce({
+            getContent: jest.fn().mockReturnValue({
+                events: {
+                    "m.room.message": 0,
+                },
+                events_default: 0,
+            }),
+        } as unknown as MatrixEvent);
+
+        jest.spyOn(mockClient, "setPowerLevel").mockImplementation(() => Promise.resolve({} as ISendEventResponse));
+        jest.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValue({
+            getContent: jest.fn().mockReturnValue({
+                events: {
+                    "m.room.message": 0,
+                },
+                events_default: 0,
+            }),
+        } as unknown as MatrixEvent);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     const renderMuteButtonHook = (props = defaultAdminToolsProps) => {
@@ -87,10 +118,6 @@ describe("useMuteButtonViewModel", () => {
     };
 
     it("should early return when isUpdating=true", async () => {
-        const mockMeMember = new RoomMember(mockRoom.roomId, "arbitraryId");
-        mockMeMember.powerLevel = 51; // defaults to 50
-        mockRoom.getMember.mockReturnValueOnce(mockMeMember);
-
         const defaultMemberWithPowerLevelAndJoinMembership = {
             ...defaultMember,
             powerLevel: 0,
@@ -106,6 +133,63 @@ describe("useMuteButtonViewModel", () => {
         const resultClick = await result.current.onMuteButtonClick();
 
         expect(resultClick).toBe(undefined);
+    });
+
+    it("should stop updating when level is NaN", async () => {
+        const { result } = renderMuteButtonHook({
+            ...defaultAdminToolsProps,
+            member: defaultMember,
+            isUpdating: false,
+        });
+
+        jest.spyOn(mockRoom.currentState, "getStateEvents").mockReturnValueOnce({
+            getContent: jest.fn().mockReturnValue({
+                events: {
+                    "m.room.message": NaN,
+                },
+                events_default: NaN,
+            }),
+        } as unknown as MatrixEvent);
+
+        await result.current.onMuteButtonClick();
+
+        expect(defaultAdminToolsProps.stopUpdating).toHaveBeenCalled();
+    });
+
+    it("should set powerlevel to default when user is muted", async () => {
+        const defaultMutedMember = {
+            ...defaultMember,
+            powerLevel: -1,
+            membership: KnownMembership.Join,
+        } as RoomMember;
+
+        const { result } = renderMuteButtonHook({
+            ...defaultAdminToolsProps,
+            member: defaultMutedMember,
+            isUpdating: false,
+        });
+
+        await result.current.onMuteButtonClick();
+
+        expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, 0);
+    });
+
+    it("should set powerlevel - 1 when user is unmuted", async () => {
+        const defaultUnmutedMember = {
+            ...defaultMember,
+            powerLevel: 0,
+            membership: KnownMembership.Join,
+        } as RoomMember;
+
+        const { result } = renderMuteButtonHook({
+            ...defaultAdminToolsProps,
+            member: defaultUnmutedMember,
+            isUpdating: false,
+        });
+
+        await result.current.onMuteButtonClick();
+
+        expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, -1);
     });
 
     it("returns false if either argument is falsy", () => {
