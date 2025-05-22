@@ -67,7 +67,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private validateRecoveryKeyOnChange = debounce(async (): Promise<void> => {
-        // FIXME: don't call this if we're already validating
         await this.validateRecoveryKey(this.state.recoveryKey);
     }, VALIDATION_THROTTLE_MS);
 
@@ -133,7 +132,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         const keyParams = await this.validateRecoveryKey(this.state.recoveryKey);
 
-        if (this.state.recoveryKeyCorrect) {
+        if (keyParams !== undefined) {
             this.props.onFinished(keyParams);
         } else {
             this.inputRef.current?.focus();
