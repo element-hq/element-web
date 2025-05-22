@@ -2103,7 +2103,6 @@
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
         "failed_remove_tag": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
-        "filter": "Szűrő",
         "filters": {
             "favourite": "Kedvencek",
             "people": "Emberek",
@@ -2135,13 +2134,6 @@
             "open_room": "A(z) %(roomName)s szoba megnyitása"
         },
         "room_options": "Szobabeállítások",
-        "secondary_filter": {
-            "all_activity": "Összes tevékenység",
-            "invites_only": "Csak meghívók",
-            "low_priority": "Alacsony prioritás",
-            "mentions_only": "Csak megemlítések"
-        },
-        "secondary_filters": "Másodlagos szűrők",
         "show_less": "Kevesebb megjelenítése",
         "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_n_more": {

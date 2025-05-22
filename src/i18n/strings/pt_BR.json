@@ -157,6 +157,7 @@
         "view_message": "Ver mensagem",
         "view_source": "Ver código-fonte",
         "yes": "Sim",
+        "yes_dismiss": "Sim, dispensar",
         "zoom_in": "Aumentar zoom",
         "zoom_out": "Diminuir zoom"
     },
@@ -981,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
         },
+        "turn_on_key_storage": "Ativar o armazenamento de chaves",
+        "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
         "udd": {
             "interactive_verification_button": "Verificar interativamente por emoji",
             "other_ask_verify_text": "Peça a este usuário para confirmar a sessão dele, ou confirme-a manualmente abaixo.",
@@ -2108,19 +2111,23 @@
             "no_chats_description_no_room_rights": "Comece enviando uma mensagem para alguém",
             "no_favourites": "Você ainda não tem o bate-papo favorito",
             "no_favourites_description": "Você pode adicionar um bate-papo aos seus favoritos nas configurações de bate-papo",
+            "no_invites": "Você não tem nenhum convite não lido",
+            "no_mentions": "Você não tem nenhuma menção não lida",
             "no_people": "Você ainda não tem conversas diretas com ninguém",
             "no_people_description": "Você pode desmarcar os filtros para ver suas outras conversas",
             "no_rooms": "Você não está em nenhuma sala ainda",
             "no_rooms_description": "Você pode desmarcar os filtros para ver suas outras conversas.",
             "no_unread": "Parabéns! Você não tem nenhuma mensagem não lida",
+            "show_activity": "Ver todas as atividades",
             "show_chats": "Mostrar todas as conversas"
         },
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
-        "filter": "Filtro",
         "filters": {
             "favourite": "Favoritos",
+            "invites": "Convites",
+            "mentions": "Menções",
             "people": "Pessoas",
             "rooms": "Salas",
             "unread": "Não lido"
@@ -2152,13 +2159,6 @@
             "open_room": "Abrir sala %(roomName)s"
         },
         "room_options": "Opções da Sala",
-        "secondary_filter": {
-            "all_activity": "Toda a atividade",
-            "invites_only": "Somente para convidados",
-            "low_priority": "Baixa prioridade",
-            "mentions_only": "Apenas menções"
-        },
-        "secondary_filters": "Filtros secundários",
         "show_less": "Mostrar menos",
         "show_message_previews": "Mostrar prévias de mensagens",
         "show_n_more": {
@@ -2558,6 +2558,8 @@
                 "session_key": "Chave da sessão:",
                 "title": "Avançado"
             },
+            "confirm_key_storage_off": "Tem certeza de que deseja manter o armazenamento de chaves desativado?",
+            "confirm_key_storage_off_description": "Se você sair de todos os seus dispositivos, perderá o histórico de mensagens e precisará verificar todos os seus contatos existentes novamente. <a>Saiba mais</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Excluir armazenamento de chaves",
                 "confirm": "Excluir armazenamento de chaves",
