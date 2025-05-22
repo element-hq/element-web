@@ -228,8 +228,8 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
             await useSecurityKey.click();
         }
         // Fill in the recovery key
-        await page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
-        await page.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
+        await page.locator(".mx_Dialog").locator("textarea").fill(securityKey);
+        await page.getByRole("button", { name: "Continue", disabled: false }).click();
         await page.getByRole("button", { name: "Done" }).click();
     }
 }
