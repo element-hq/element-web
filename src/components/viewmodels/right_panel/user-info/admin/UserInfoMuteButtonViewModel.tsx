@@ -86,6 +86,7 @@ export const useMuteButtonViewModel = (props: RoomAdminToolsProps): MuteButtonSt
         }
         level = parseInt(level);
 
+        console.log("level", level);
         if (isNaN(level)) {
             stopUpdating();
             return;
