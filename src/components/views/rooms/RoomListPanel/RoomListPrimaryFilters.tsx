@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useEffect, useId, useState } from "react";
+import React, { type JSX, useEffect, useId, useState, useRef } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
@@ -33,6 +33,19 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     const { isVisible, rootRef, nodeRef } = useIsNodeVisible<HTMLLIElement, HTMLUListElement>({ threshold: 0.5 });
     const { filters, onFilterChange } = useFilters(vm.primaryFilters, isExpanded, isVisible);
 
+    const ref = useRef<HTMLUListElement>(null);
+    const isOverflowing = useIsOverflowing(ref);
+    const displayChevron = isOverflowing || isExpanded;
+
+    console.log("isWrapping", isOverflowing);
+
+    // Hide the chevron button if the last filter is visible
+    // const {
+    //     isVisible: isLastFilterVisible,
+    //     rootRef: listRef,
+    //     nodeRef: lastFilterRef,
+    // } = useIsNodeVisible<HTMLLIElement, HTMLUListElement>({ threshold: 0.5 });
+
     return (
         <Flex id={id} className="mx_RoomListPrimaryFilters" gap="var(--cpd-space-3x)" data-expanded={isExpanded}>
             <Flex
@@ -42,11 +55,18 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                 align="center"
                 gap="var(--cpd-space-2x)"
                 wrap="wrap"
-                ref={rootRef}
+                ref={(node: HTMLUListElement) => {
+                    rootRef(node);
+                    //  listRef(node);
+                    ref.current = node;
+                }}
             >
-                {filters.map((filter) => (
+                {filters.map((filter, i) => (
                     <li
-                        ref={filter.active ? nodeRef : undefined}
+                        ref={(node: HTMLLIElement) => {
+                            //   if (i === filters.length - 1) lastFilterRef(node);
+                            if (filter.active) nodeRef(node);
+                        }}
                         role="option"
                         aria-selected={filter.active}
                         key={filter.name}
@@ -63,18 +83,35 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                     </li>
                 ))}
             </Flex>
-            <IconButton
-                aria-expanded={isExpanded}
-                aria-controls={id}
-                className="mx_RoomListPrimaryFilters_IconButton"
-                aria-label={_t("room_list|room_options")}
-                size="28px"
-                onClick={() => setIsExpanded((_expanded) => !_expanded)}
-            >
-                <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
-            </IconButton>
+            {displayChevron && (
+                <IconButton
+                    aria-expanded={isExpanded}
+                    aria-controls={id}
+                    className="mx_RoomListPrimaryFilters_IconButton"
+                    aria-label={_t("room_list|room_options")}
+                    size="28px"
+                    onClick={() => setIsExpanded((_expanded) => !_expanded)}
+                >
+                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                </IconButton>
+            )}
         </Flex>
     );
+}
+
+function useIsOverflowing(containerRef: React.RefObject<HTMLElement | null>): boolean {
+    const [isOverflowing, setIsOverflowing] = useState(false);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const container = containerRef.current;
+        const observer = new ResizeObserver(() => setIsOverflowing(container.scrollHeight > container.clientHeight));
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, [containerRef]);
+
+    return isOverflowing;
 }
 
 /**
