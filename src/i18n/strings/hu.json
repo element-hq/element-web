@@ -157,6 +157,7 @@
         "view_message": "Üzenet megjelenítése",
         "view_source": "Forrás megjelenítése",
         "yes": "Igen",
+        "yes_dismiss": "Igen, elvetés",
         "zoom_in": "Nagyítás",
         "zoom_out": "Kicsinyítés"
     },
@@ -978,6 +979,8 @@
         "setup_secure_backup": {
             "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat."
         },
+        "turn_on_key_storage": "A kulcstárolás bekapcsolása",
+        "turn_on_key_storage_description": "Tárolja biztonságosan a kriptográfiai azonosító- és üzenetkulcsokat a kiszolgálón. Ez lehetővé teszi az üzenetek előzményeinek megtekintését bármely új eszközön.",
         "udd": {
             "interactive_verification_button": "Interaktív ellenőrzés emodzsikkal",
             "other_ask_verify_text": "Kérje meg a felhasználót, hogy hitelesítse a munkamenetét, vagy ellenőrizze kézzel lentebb.",
@@ -2093,11 +2096,14 @@
             "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
             "no_favourites": "Még nincs kedvenc csevegése",
             "no_favourites_description": "A csevegési beállításokban adhat hozzá csevegést a kedvencekhez",
+            "no_invites": "Nincs olvasatlan meghívója",
+            "no_mentions": "Nincs olvasatlan említése",
             "no_people": "Még nincs közvetlen csevegése senkivel",
             "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
             "no_rooms": "Még nincs egy szobában sem",
             "no_rooms_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
             "no_unread": "Gratulálunk! Nincsenek olvasatlan üzenetei.",
+            "show_activity": "Összes tevékenység megtekintése",
             "show_chats": "Összes csevegés megjelenítése"
         },
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
@@ -2105,6 +2111,8 @@
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
         "filters": {
             "favourite": "Kedvencek",
+            "invites": "Meghívók",
+            "mentions": "Említések",
             "people": "Emberek",
             "rooms": "Szobák",
             "unread": "Olvasatlan"
@@ -2436,7 +2444,7 @@
     },
     "service_worker_error": {
         "description": "Az %(brand)s ún. service workert igényel a hitelesített médiafájlok Matrix tartalomtárolókból történő betöltéséhez. Ezt a böngészője nem támogatja, ezért előfordulhat, hogy a médiafájlok nem töltődnek be.",
-        "title": "A service worker betöltése sikertelen"
+        "title": "Nem sikerült betölteni a service workert"
     },
     "seshat": {
         "error_initialising": "Az üzenetkeresés előkészítése sikertelen, további információkért ellenőrizze a <a>beállításait</a>",
@@ -2531,6 +2539,8 @@
                 "session_key": "Munkamenetkulcs:",
                 "title": "Speciális"
             },
+            "confirm_key_storage_off": "Biztosan kikapcsolva szeretné tartani a kulcstárolást?",
+            "confirm_key_storage_off_description": "Ha kijelentkezik az összes eszközéről, elveszíti üzenetelőzményeit, és újra ellenőriznie kell az összes meglévő kapcsolatát. <a>Tudjon meg többet</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Kulcstároló törlése",
                 "confirm": "Kulcstároló törlése",
