@@ -14,6 +14,8 @@ import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { useIsNodeVisible } from "../../../../hooks/useIsNodeVisible";
 
+const FILTER_HEIGHT = 30;
+
 interface RoomListPrimaryFiltersProps {
     /**
      * The view model for the room list
@@ -34,6 +36,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     const { filters, onFilterChange } = useFilters(vm.primaryFilters, isExpanded, isVisible);
 
     const { ref: containerRef, isExpanded: isSafeExpanded } = useAnimateFilter<HTMLDivElement>(isExpanded);
+    const { ref, isOverflowing: displayChevron } = useIsFilterOverflowing<HTMLUListElement>();
 
     return (
         <div className="mx_RoomListPrimaryFilters" data-testid="primary-filters">
@@ -51,7 +54,12 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                         align="center"
                         gap="var(--cpd-space-2x)"
                         wrap="wrap"
-                        ref={rootRef}
+                        ref={(node: HTMLUListElement) => {
+                            rootRef(node);
+                            // due to https://github.com/facebook/react/issues/29196
+                            // eslint-disable-next-line react-compiler/react-compiler
+                            ref.current = node;
+                        }}
                     >
                         {filters.map((filter) => (
                             <li
@@ -72,16 +80,18 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                             </li>
                         ))}
                     </Flex>
-                    <IconButton
-                        aria-expanded={isSafeExpanded}
-                        aria-controls={id}
-                        className="mx_RoomListPrimaryFilters_IconButton"
-                        aria-label={_t("room_list|room_options")}
-                        size="28px"
-                        onClick={() => setIsExpanded((_expanded) => !_expanded)}
-                    >
-                        <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
-                    </IconButton>
+                    {displayChevron && (
+                        <IconButton
+                            aria-expanded={isSafeExpanded}
+                            aria-controls={id}
+                            className="mx_RoomListPrimaryFilters_IconButton"
+                            aria-label={_t("room_list|room_options")}
+                            size="28px"
+                            onClick={() => setIsExpanded((_expanded) => !_expanded)}
+                        >
+                            <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                        </IconButton>
+                    )}
                 </Flex>
             </div>
         </div>
@@ -157,7 +167,7 @@ function useAnimateFilter<T extends HTMLElement>(
             // For the animation to work, we need `grid-template-rows` to have the same unit at the beginning and the end
             // If px is used at the beginning, we need to use px at the end.
             // In our case, we use fr unit to fully grow when expanded (1fr) so we need to compute the value in fr when the filters are not expanded
-            ref.current?.style.setProperty("--row-height", `${30 / ref?.current.scrollHeight}fr`);
+            ref.current?.style.setProperty("--row-height", `${FILTER_HEIGHT / ref?.current.scrollHeight}fr`);
         });
         observer.observe(ref.current);
         return () => observer.disconnect();
@@ -172,4 +182,24 @@ function useAnimateFilter<T extends HTMLElement>(
     }, [areFiltersExpanded, ref]);
 
     return { ref, isExpanded };
+}
+
+/**
+ * A hook to check if the filter list is overflowing.
+ * The list is overflowing if the scrollHeight is greater than `FILTER_HEIGHT`.
+ */
+function useIsFilterOverflowing<T extends HTMLElement>(): { ref: RefObject<T | undefined>; isOverflowing: boolean } {
+    const ref = useRef<T>(undefined);
+    const [isOverflowing, setIsOverflowing] = useState(false);
+
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const node = ref.current;
+        const observer = new ResizeObserver(() => setIsOverflowing(node.scrollHeight > FILTER_HEIGHT));
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [ref]);
+
+    return { ref, isOverflowing };
 }
