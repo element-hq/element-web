@@ -911,22 +911,13 @@
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Enter your Security Phrase or <button>use your Recovery Key</button> to continue.",
+            "alternatives": "If you have a security key or security phrase, this will work too.",
             "key_validation_text": {
-                "invalid_security_key": "Invalid Recovery Key",
-                "recovery_key_is_correct": "Looks good!",
-                "wrong_file_type": "Wrong file type",
-                "wrong_security_key": "Wrong Recovery Key"
+                "wrong_security_key": "The recovery key you entered is not correct."
             },
-            "reset_title": "Reset everything",
-            "reset_warning_1": "Only do this if you have no other device to complete verification with.",
-            "reset_warning_2": "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.",
+            "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Recovery Key",
-            "security_phrase_incorrect_error": "Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
-            "security_phrase_title": "Security Phrase",
-            "separator": "%(securityKey)s or %(recoveryFile)s",
-            "use_security_key_prompt": "Use your Recovery Key to continue."
+            "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
         "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
