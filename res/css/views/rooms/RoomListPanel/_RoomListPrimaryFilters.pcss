@@ -7,15 +7,31 @@
 
 .mx_RoomListPrimaryFilters {
     padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-3x);
-    min-height: 46px;
-    max-height: 46px;
-    overflow: hidden;
-    box-sizing: border-box;
 
-    &[data-expanded="true"] {
-        min-height: unset;
-        max-height: unset;
-        overflow: unset;
+    .mx_RoomListPrimaryFilters_container {
+        /**
+         * Set (in fr unit) at every resize of this container.
+         */
+        --row-height: 30px;
+
+        overflow: hidden;
+        /**
+         * Using grid to animate the height of the container.
+         */
+        display: grid;
+        grid-template-rows: var(--row-height);
+        transition: 0.1s ease-in-out;
+
+        &[data-expanded="true"] {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    .mx_RoomListPrimaryFilters_animated {
+        /**
+         * Required to make the collapse work
+         */
+        min-height: 0;
     }
 
     ul {
@@ -26,6 +42,10 @@
          * The InteractionObserver needs the height to be set for to work properly.
          */
         height: 100%;
+
+        li {
+            height: 30px;
+        }
     }
 
     .mx_RoomListPrimaryFilters_IconButton {

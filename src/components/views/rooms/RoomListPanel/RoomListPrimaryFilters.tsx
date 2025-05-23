@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useEffect, useId, useState } from "react";
+import React, { type JSX, useEffect, useId, useRef, useState, type RefObject } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
@@ -33,47 +33,58 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     const { isVisible, rootRef, nodeRef } = useIsNodeVisible<HTMLLIElement, HTMLUListElement>({ threshold: 0.5 });
     const { filters, onFilterChange } = useFilters(vm.primaryFilters, isExpanded, isVisible);
 
+    const { ref: containerRef, isExpanded: isSafeExpanded } = useAnimateFilter<HTMLDivElement>(isExpanded);
+
     return (
-        <Flex id={id} className="mx_RoomListPrimaryFilters" gap="var(--cpd-space-3x)" data-expanded={isExpanded}>
-            <Flex
-                as="ul"
-                role="listbox"
-                aria-label={_t("room_list|primary_filters")}
-                align="center"
-                gap="var(--cpd-space-2x)"
-                wrap="wrap"
-                ref={rootRef}
+        <div className="mx_RoomListPrimaryFilters" data-testid="primary-filters">
+            <div
+                ref={containerRef}
+                className="mx_RoomListPrimaryFilters_container"
+                data-expanded={isSafeExpanded}
+                data-testid="filter-container"
             >
-                {filters.map((filter) => (
-                    <li
-                        ref={filter.active ? nodeRef : undefined}
-                        role="option"
-                        aria-selected={filter.active}
-                        key={filter.name}
+                <Flex id={id} className="mx_RoomListPrimaryFilters_animated" gap="var(--cpd-space-3x)">
+                    <Flex
+                        as="ul"
+                        role="listbox"
+                        aria-label={_t("room_list|primary_filters")}
+                        align="center"
+                        gap="var(--cpd-space-2x)"
+                        wrap="wrap"
+                        ref={rootRef}
                     >
-                        <ChatFilter
-                            selected={filter.active}
-                            onClick={() => {
-                                onFilterChange();
-                                filter.toggle();
-                            }}
-                        >
-                            {filter.name}
-                        </ChatFilter>
-                    </li>
-                ))}
-            </Flex>
-            <IconButton
-                aria-expanded={isExpanded}
-                aria-controls={id}
-                className="mx_RoomListPrimaryFilters_IconButton"
-                aria-label={_t("room_list|room_options")}
-                size="28px"
-                onClick={() => setIsExpanded((_expanded) => !_expanded)}
-            >
-                <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
-            </IconButton>
-        </Flex>
+                        {filters.map((filter) => (
+                            <li
+                                ref={filter.active ? nodeRef : undefined}
+                                role="option"
+                                aria-selected={filter.active}
+                                key={filter.name}
+                            >
+                                <ChatFilter
+                                    selected={filter.active}
+                                    onClick={() => {
+                                        onFilterChange();
+                                        filter.toggle();
+                                    }}
+                                >
+                                    {filter.name}
+                                </ChatFilter>
+                            </li>
+                        ))}
+                    </Flex>
+                    <IconButton
+                        aria-expanded={isSafeExpanded}
+                        aria-controls={id}
+                        className="mx_RoomListPrimaryFilters_IconButton"
+                        aria-label={_t("room_list|room_options")}
+                        size="28px"
+                        onClick={() => setIsExpanded((_expanded) => !_expanded)}
+                    >
+                        <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                    </IconButton>
+                </Flex>
+            </div>
+        </div>
     );
 }
 
@@ -126,4 +137,39 @@ function useFilters(
         setFilterState({ filters, isSorted: false });
     };
     return { filters: filterState.filters, onFilterChange };
+}
+
+/**
+ * A hook to animate the filter list when it is expanded or not.
+ * @param areFiltersExpanded
+ */
+function useAnimateFilter<T extends HTMLElement>(
+    areFiltersExpanded: boolean,
+): { ref: RefObject<T | null>; isExpanded: boolean } {
+    const ref = useRef<T | null>(null);
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const observer = new ResizeObserver(() => {
+            // Remove transition to avoid the animation to run when the new --row-height is not set yet
+            // If the animation runs at this moment, the first row will jump
+            ref.current?.style.setProperty("transition", "unset");
+            // For the animation to work, we need `grid-template-rows` to have the same unit at the beginning and the end
+            // If px is used at the beginning, we need to use px at the end.
+            // In our case, we use fr unit to fully grow when expanded (1fr) so we need to compute the value in fr when the filters are not expanded
+            ref.current?.style.setProperty("--row-height", `${30 / ref?.current.scrollHeight}fr`);
+        });
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [ref]);
+
+    // Put back the transition to the element when the expanded state changes
+    // because we want to animate it
+    const [isExpanded, setExpanded] = useState(areFiltersExpanded);
+    useEffect(() => {
+        ref.current?.style.setProperty("transition", "0.1s ease-in-out");
+        setExpanded(areFiltersExpanded);
+    }, [areFiltersExpanded, ref]);
+
+    return { ref, isExpanded };
 }
