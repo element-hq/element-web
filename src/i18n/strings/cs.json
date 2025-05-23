@@ -159,6 +159,7 @@
         "view_message": "Zobrazit zprávu",
         "view_source": "Zobrazit zdroj",
         "yes": "Ano",
+        "yes_dismiss": "Ano, zamítnout",
         "zoom_in": "Přiblížit",
         "zoom_out": "Oddálit"
     },
@@ -983,6 +984,8 @@
         "setup_secure_backup": {
             "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
         },
+        "turn_on_key_storage": "Zapnout úložiště klíčů",
+        "turn_on_key_storage_description": "Bezpečně uložte svou kryptografickou identitu a klíče zpráv na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních.",
         "udd": {
             "interactive_verification_button": "Interaktivní ověření pomocí emoji",
             "other_ask_verify_text": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
@@ -2115,11 +2118,14 @@
             "no_chats_description_no_room_rights": "Začněte tím, že někomu pošlete zprávu",
             "no_favourites": "Zatím nemáte oblíbený chat",
             "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
+            "no_invites": "Nemáte žádné nepřečtené pozvánky",
+            "no_mentions": "Nemáte žádné nepřečtené zmínky",
             "no_people": "Zatím s nikým nemáte přímé chaty",
             "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
             "no_rooms": "Ještě nejste v žádné místnosti",
             "no_rooms_description": "Můžete zrušit výběr filtrů, abyste viděli své další chaty",
             "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
+            "show_activity": "Zobrazit veškerou aktivitu",
             "show_chats": "Zobrazit všechny chaty"
         },
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
@@ -2127,6 +2133,8 @@
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
         "filters": {
             "favourite": "Oblíbené",
+            "invites": "Pozvánky",
+            "mentions": "Zmínky",
             "people": "Lidé",
             "rooms": "Místnosti",
             "unread": "Nepřečtené"
@@ -2557,6 +2565,8 @@
                 "session_key": "Klíč relace:",
                 "title": "Rozšířené"
             },
+            "confirm_key_storage_off": "Opravdu chcete ponechat úložiště klíčů vypnuté?",
+            "confirm_key_storage_off_description": "Pokud se odhlásíte ze všech svých zařízení, ztratíte historii zpráv a budete muset znovu ověřit všechny své stávající kontakty. <a>Další informace</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Smazat úložiště klíčů",
                 "confirm": "Smazat úložiště klíčů",

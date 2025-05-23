@@ -161,6 +161,7 @@
         "view_message": "Zobraziť správu",
         "view_source": "Zobraziť zdroj",
         "yes": "Áno",
+        "yes_dismiss": "Áno, zamietnuť",
         "zoom_in": "Priblížiť",
         "zoom_out": "Oddialiť"
     },
@@ -990,6 +991,8 @@
         "setup_secure_backup": {
             "explainer": "Zálohujte si šifrovacie kľúče pred odhlásením, aby ste zabránili ich strate."
         },
+        "turn_on_key_storage": "Zapnúť úložisko kľúčov",
+        "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
         "udd": {
             "interactive_verification_button": "Interaktívne overte pomocou emotikonov",
             "other_ask_verify_text": "Poproste tohto používateľa, aby si overil svoju reláciu alebo ju nižšie manuálne overte.",
@@ -2139,11 +2142,14 @@
             "no_chats_description_no_room_rights": "Začnite tým, že niekomu napíšete správu",
             "no_favourites": "Zatiaľ nemáte obľúbenú konverzáciu",
             "no_favourites_description": "V nastaveniach konverzácií môžete pridať konverzáciu medzi obľúbené",
+            "no_invites": "Nemáte žiadne neprečítané pozvánky",
+            "no_mentions": "Nemáte žiadne neprečítané zmienky",
             "no_people": "Zatiaľ s nikým nemáte priame konverzácie",
             "no_people_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
             "no_rooms": "Zatiaľ ešte nie ste v žiadnej miestnosti",
             "no_rooms_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
             "no_unread": "Gratulujeme! Nemáte žiadne neprečítané správy",
+            "show_activity": "Zobraziť všetku aktivitu",
             "show_chats": "Zobraziť všetky konverzácie"
         },
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
@@ -2151,6 +2157,8 @@
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
         "filters": {
             "favourite": "Obľúbené",
+            "invites": "Pozvánky",
+            "mentions": "Zmienky",
             "people": "Ľudia",
             "rooms": "Miestnosti",
             "unread": "Neprečítané"
@@ -2587,6 +2595,8 @@
                 "session_key": "Kľúč relácie:",
                 "title": "Pokročilé"
             },
+            "confirm_key_storage_off": "Naozaj chcete ponechať úložisko kľúčov vypnuté?",
+            "confirm_key_storage_off_description": "Ak sa zo všetkých zariadení odhlásite, stratíte históriu správ a budete musieť znova overiť všetky existujúce kontakty. <a>Prečítajte si viac </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Odstrániť úložisko kľúčov",
                 "confirm": "Odstrániť úložisko kľúčov",

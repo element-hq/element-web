@@ -161,6 +161,7 @@
         "view_message": "Gweld neges",
         "view_source": "Gweld Ffynhonnell",
         "yes": "Iawn",
+        "yes_dismiss": "Iawn, diystyru",
         "zoom_in": "Chwyddo mewn",
         "zoom_out": "Chwyddo allan"
     },
@@ -965,6 +966,8 @@
         "setup_secure_backup": {
             "explainer": "Gwnewch gopi wrth gefn o'ch allweddi cyn allgofnodi er mwyn osgoi eu colli."
         },
+        "turn_on_key_storage": "Troi storfa allweddi ymlaen",
+        "turn_on_key_storage_description": "Cadwch eich hunaniaeth cryptograffig a'ch allweddi neges yn ddiogel ar y gweinydd. Bydd hyn yn caniatáu ichi weld hanes eich neges ar unrhyw ddyfeisiau newydd. %1$s.",
         "udd": {
             "interactive_verification_button": "Dilyswch yn rhyngweithiol trwy emoji",
             "other_ask_verify_text": "Gofynnwch i'r defnyddiwr hwn wirio ei sesiwn, neu ei wirio â llaw isod.",
@@ -2009,11 +2012,14 @@
             "no_chats_description_no_room_rights": "Dechreuwch trwy anfon neges at rywun",
             "no_favourites": "Nid oes gennych hoff sgwrs eto",
             "no_favourites_description": "Gallwch ychwanegu sgwrs at eich ffefrynnau yn y gosodiadau sgwrsio",
+            "no_invites": "Does gennych chi ddim gwahoddiadau heb eu darllen",
+            "no_mentions": "Does gennych chi ddim crybwylliadau heb eu darllen",
             "no_people": "Nid oes gennych chi sgyrsiau uniongyrchol gydag unrhyw un eto",
             "no_people_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
             "no_rooms": "Nid ydych mewn unrhyw ystafell eto",
             "no_rooms_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
             "no_unread": "Llongyfarchiadau! Nid oes gennych unrhyw negeseuon heb eu darllen",
+            "show_activity": "Gweld yr holl weithgarwch",
             "show_chats": "Dangos pob sgwrs"
         },
         "failed_add_tag": "Wedi methu ag ychwanegu tag %(tagName)s i'r ystafell",
@@ -2021,6 +2027,8 @@
         "failed_set_dm_tag": "Wedi methu gosod tag neges uniongyrchol",
         "filters": {
             "favourite": "Ffefrynnau",
+            "invites": "Gwahoddiadau",
+            "mentions": "Crybwylliadau",
             "people": "Pobl",
             "rooms": "Ystafelloedd",
             "unread": "Heb ei ddarllen"
@@ -2423,6 +2431,8 @@
                 "session_key": "Allwedd sesiwn:",
                 "title": "Uwch"
             },
+            "confirm_key_storage_off": "Ydych chi'n siŵr eich bod chi eisiau cadw storfa allweddi wedi'i diffodd?",
+            "confirm_key_storage_off_description": "Os byddwch chi'n allgofnodi o'ch holl ddyfeisiau byddwch chi'n colli'ch hanes negeseuon a bydd angen i chi wirio'ch holl gysylltiadau presennol eto. <a>Dysgu mwy</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Dileu storfa allweddi",
                 "confirm": "Dileu storfa allweddi",
