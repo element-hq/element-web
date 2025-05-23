@@ -12,51 +12,7 @@ import "@fontsource/inter/600.css";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getVectorConfig } from "../getconfig";
-
-enum MobileAppVariant {
-    Classic = "classic",
-    X = "x",
-    Pro = "pro",
-}
-
-interface AppMetadata {
-    name: string;
-    appleAppId: string;
-    appStoreUrl: string;
-    playStoreUrl: string;
-    fDroidUrl?: string;
-    deepLinkPath: string;
-    usesLegacyDeepLink: boolean;
-}
-
-const appVariants: Record<MobileAppVariant, AppMetadata> = {
-    [MobileAppVariant.Classic]: {
-        name: "Element",
-        appleAppId: "id1083446067",
-        appStoreUrl: "https://apps.apple.com/app/element-messenger/id1083446067",
-        playStoreUrl: "https://play.google.com/store/apps/details?id=im.vector.app",
-        fDroidUrl: "https://f-droid.org/packages/im.vector.app",
-        deepLinkPath: "",
-        usesLegacyDeepLink: true,
-    },
-    [MobileAppVariant.X]: {
-        name: "Element X",
-        appleAppId: "id1631335820",
-        appStoreUrl: "https://apps.apple.com/app/element-x-secure-chat-call/id1631335820",
-        playStoreUrl: "https://play.google.com/store/apps/details?id=io.element.android.x",
-        fDroidUrl: "https://f-droid.org/packages/io.element.android.x",
-        deepLinkPath: "/element",
-        usesLegacyDeepLink: false,
-    },
-    [MobileAppVariant.Pro]: {
-        name: "Element Pro",
-        appleAppId: "id6502951615",
-        appStoreUrl: "https://apps.apple.com/app/element-pro-for-work/id6502951615",
-        playStoreUrl: "https://play.google.com/store/apps/details?id=io.element.enterprise",
-        deepLinkPath: "/element-pro",
-        usesLegacyDeepLink: false,
-    },
-};
+import { type MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
 
 // NEVER pass user-controlled content to this function! Hardcoded strings only please.
 function renderConfigError(message: string): void {
@@ -92,7 +48,7 @@ async function initPage(): Promise<void> {
     const defaultIsUrl = config?.["default_is_url"];
 
     const appVariant = (config?.["mobile_guide_app_variant"] ?? "classic") as MobileAppVariant;
-    const metadata = appVariants[appVariant];
+    const metadata = mobileApps[appVariant];
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
     if (defaultHsUrl && (wkConfig || serverName)) {
@@ -166,32 +122,7 @@ async function initPage(): Promise<void> {
         deepLinkUrl += `?account_provider=${serverName}`;
     }
 
-    await updateDocument(metadata, deepLinkUrl, serverName, hsUrl);
-}
-
-async function updateDocument(
-    metadata: AppMetadata,
-    deepLinkUrl: string,
-    serverName: string | undefined,
-    hsUrl: string,
-): Promise<void> {
-    const appleMeta = document.querySelector('meta[name="apple-itunes-app"]') as Element;
-    appleMeta.setAttribute("content", `app-id=${metadata.appleAppId}`);
-
-    (document.getElementById("header_title") as HTMLHeadingElement).innerText =
-        `Join ${serverName ?? hsUrl} on Element`;
-    (document.getElementById("app_store_link") as HTMLAnchorElement).href = metadata.appStoreUrl;
-    (document.getElementById("play_store_link") as HTMLAnchorElement).href = metadata.playStoreUrl;
-
-    if (metadata.fDroidUrl) {
-        (document.getElementById("f_droid_link") as HTMLAnchorElement).href = metadata.fDroidUrl;
-    } else {
-        document.getElementById("f_droid_section")!.style.display = "none";
-    }
-
-    (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
-    document.getElementById("step1_heading")!.innerHTML = `Download ${metadata.name}`;
-    document.getElementById("step2_container")!.style.display = "block";
+    updateMobilePage(metadata, deepLinkUrl, serverName ?? hsUrl);
 }
 
 void initPage();
