@@ -1,0 +1,187 @@
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
+
+/*
+ * Please note: This page is also used at mobile.element.io and as such, any
+ * changes should be reflected there too in order to maintain consistency.
+ */
+
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    background: #fff;
+    max-width: 680px;
+    margin: 0 auto;
+    padding-bottom: 178px; /* Match the height of the gradient */
+    font-family: var(--cpd-font-family-sans);
+    color: #1b1d22;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #e1e6ec;
+    color: #e1e6ec;
+    margin: 0;
+}
+
+p {
+    margin: 4px 0;
+    padding: 0;
+    color: #474a51;
+}
+
+.mx_Button {
+    border: 0;
+    border-radius: 100px;
+    font-size: 16px;
+    min-width: 80px;
+    background-color: #1b1d22;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px 22px;
+    word-break: break-word;
+    text-decoration: none;
+}
+
+#deep_link_button {
+    margin-top: 12px;
+    display: inline-block;
+    width: auto;
+    box-sizing: border-box;
+}
+
+.mx_StoreLinks {
+    margin: 15px 0 12px 0;
+}
+
+.mx_StoreBadge {
+    text-decoration: none !important;
+    margin: 16px 16px 16px 0px;
+}
+
+#f_droid_link {
+    color: #007a61;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#f_droid_link:visited {
+    color: #007a61;
+}
+
+.mx_HomePage_header {
+    color: #474a51;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.mx_HomePage_header #header_title {
+    margin-top: 8px;
+    margin-bottom: 0px;
+}
+
+.mx_HomePage h3 {
+    margin-top: 30px;
+}
+
+.mx_HomePage_col {
+    display: flex;
+    flex-direction: row;
+}
+
+.mx_HomePage_row {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.mx_HomePage_container {
+    display: block !important;
+    margin: 10px 20px;
+}
+
+.mx_HomePage_errorContainer {
+    display: none; /* shown in JS if needed */
+    margin: 20px;
+    border: 1px solid red;
+    background-color: #ffb9b9;
+    padding: 5px;
+}
+
+.mx_HomePage_container h1,
+.mx_HomePage_container h2,
+.mx_HomePage_container h3,
+.mx_HomePage_container h4 {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+}
+
+.mx_Spacer {
+    margin-top: 48px;
+}
+
+.mx_BottomGradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 178px;
+    background-image: url("assets/bottom-gradient.svg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: -1;
+    margin-left: calc(50% - 50vw); /* Center the gradient regardless of body width */
+}
+
+.mx_HomePage_step_number {
+    display: flex;
+    align-items: flex-start;
+    margin-right: 8px;
+}
+
+.mx_HomePage_step_number span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #e1e6ec;
+    background-color: transparent;
+    color: #656d77;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 1120px) {
+    body {
+        font-size: 16px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .mx_Button {
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+
+    .mx_HomePage_header {
+        justify-content: left;
+    }
+
+    .mx_Spacer {
+        margin-top: 48px;
+    }
+}
