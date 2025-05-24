@@ -230,6 +230,8 @@ export interface EventTileProps {
     inhibitInteraction?: boolean;
 
     ref?: Ref<UnwrappedEventTile>;
+
+    isScrolling?: boolean;
 }
 
 interface IState {
@@ -1049,7 +1051,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             needsSenderProfile = true;
         }
 
-        if (this.props.mxEvent.sender && avatarSize !== null) {
+        if (this.props.mxEvent.sender && avatarSize !== null && !this.props.isScrolling) {
             let member: RoomMember | null = null;
             // set member to receiver (target) if it is a 3PID invite
             // so that the correct avatar is shown as the text is
@@ -1077,7 +1079,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        if (needsSenderProfile && this.props.hideSender !== true) {
+        if (needsSenderProfile && this.props.hideSender !== true && !this.props.isScrolling) {
             if (
                 this.context.timelineRenderingType === TimelineRenderingType.Room ||
                 this.context.timelineRenderingType === TimelineRenderingType.Search ||
@@ -1093,19 +1095,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const showMessageActionBar = !isEditing && !this.props.forExport;
-        const actionBar = showMessageActionBar ? (
-            <MessageActionBar
-                mxEvent={this.props.mxEvent}
-                reactions={this.state.reactions}
-                permalinkCreator={this.props.permalinkCreator}
-                getTile={this.getTile}
-                getReplyChain={this.getReplyChain}
-                onFocusChange={this.onActionBarFocusChange}
-                isQuoteExpanded={isQuoteExpanded}
-                toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-            />
-        ) : undefined;
+        const actionBar =
+            showMessageActionBar && !this.props.isScrolling ? (
+                <MessageActionBar
+                    mxEvent={this.props.mxEvent}
+                    reactions={this.state.reactions}
+                    permalinkCreator={this.props.permalinkCreator}
+                    getTile={this.getTile}
+                    getReplyChain={this.getReplyChain}
+                    onFocusChange={this.onActionBarFocusChange}
+                    isQuoteExpanded={isQuoteExpanded}
+                    toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                />
+            ) : undefined;
 
         const showTimestamp =
             this.props.mxEvent.getTs() &&
@@ -1168,14 +1171,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         ) : null;
 
         const useIRCLayout = this.props.layout === Layout.IRC;
-        const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
-        const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
+        const groupTimestamp = !useIRCLayout && !this.props.isScrolling ? linkedTimestamp : null;
+        const ircTimestamp = useIRCLayout && !this.props.isScrolling ? linkedTimestamp : null;
         const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : undefined;
-        const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
-        const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
+        const groupPadlock = !useIRCLayout && !isBubbleMessage && !this.props.isScrolling && this.renderE2EPadlock();
+        const ircPadlock = useIRCLayout && !isBubbleMessage && !this.props.isScrolling && this.renderE2EPadlock();
 
         let msgOption: JSX.Element | undefined;
-        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
+        if (this.props.isScrolling) {
+            msgOption = undefined;
+        } else if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
             msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
         } else if (this.props.showReadReceipts) {
             msgOption = (
@@ -1192,7 +1197,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         let replyChain: JSX.Element | undefined;
         if (
             haveRendererForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), this.context.showHiddenEvents) &&
-            shouldDisplayReply(this.props.mxEvent)
+            shouldDisplayReply(this.props.mxEvent) &&
+            !this.props.isScrolling
         ) {
             replyChain = (
                 <ReplyChain
@@ -1405,6 +1411,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
 
             default: {
+                const contextMenu = this.props.isScrolling ? null : this.renderContextMenu();
                 // Pinned, Room, Search
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
@@ -1429,7 +1436,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         {ircPadlock}
                         {avatar}
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
-                            {this.renderContextMenu()}
+                            {contextMenu}
                             {groupTimestamp}
                             {groupPadlock}
                             {replyChain}
