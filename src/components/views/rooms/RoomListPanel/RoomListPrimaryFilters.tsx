@@ -85,7 +85,9 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                             aria-expanded={isSafeExpanded}
                             aria-controls={id}
                             className="mx_RoomListPrimaryFilters_IconButton"
-                            aria-label={_t("room_list|room_options")}
+                            aria-label={
+                                isSafeExpanded ? _t("room_list|collapse_filters") : _t("room_list|expand_filters")
+                            }
                             size="28px"
                             onClick={() => setIsExpanded((_expanded) => !_expanded)}
                         >
