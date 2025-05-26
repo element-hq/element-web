@@ -1,39 +1,70 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomListPrimaryFilters /> should render primary filters 1`] = `
+exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
 <DocumentFragment>
-  <ul
-    aria-label="Room list filters"
-    class="mx_Flex mx_RoomListPrimaryFilters"
-    role="listbox"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+  <div
+    class="mx_RoomListPrimaryFilters"
+    data-testid="primary-filters"
   >
-    <li
-      aria-selected="false"
-      role="option"
+    <div
+      class="mx_RoomListPrimaryFilters_container"
+      data-expanded="false"
+      data-testid="filter-container"
+      style="transition: 0.1s ease-in-out;"
     >
-      <button
-        aria-selected="false"
-        class="_chat-filter_5qdp0_8"
-        role="button"
-        tabindex="0"
+      <div
+        class="mx_Flex mx_RoomListPrimaryFilters_animated"
+        id="«r0»"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        People
-      </button>
-    </li>
-    <li
-      aria-selected="true"
-      role="option"
-    >
-      <button
-        aria-selected="true"
-        class="_chat-filter_5qdp0_8"
-        role="button"
-        tabindex="0"
-      >
-        Rooms
-      </button>
-    </li>
-  </ul>
+        <ul
+          aria-label="Room list filters"
+          class="mx_Flex"
+          role="listbox"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+        >
+          <li
+            aria-selected="false"
+            role="option"
+          >
+            <button
+              aria-selected="false"
+              class="_chat-filter_5qdp0_8"
+              role="button"
+              tabindex="0"
+            >
+              People
+            </button>
+          </li>
+          <li
+            aria-selected="true"
+            role="option"
+          >
+            <button
+              aria-selected="true"
+              class="_chat-filter_5qdp0_8"
+              role="button"
+              tabindex="0"
+            >
+              Rooms
+            </button>
+          </li>
+          <li
+            aria-selected="false"
+            role="option"
+          >
+            <button
+              aria-selected="false"
+              class="_chat-filter_5qdp0_8"
+              role="button"
+              tabindex="0"
+            >
+              Unreads
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </DocumentFragment>
 `;
