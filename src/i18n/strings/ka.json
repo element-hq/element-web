@@ -658,22 +658,11 @@
     "empty_room_was_name": "ცარიელი ოთახი (იყო%(oldName)s )",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "შეიყვანეთ თქვენი უსაფრთხოების ფრაზა ან<button> გამოიყენეთ თქვენი უსაფრთხოების გასაღები</button> გააგრძელოს.",
             "key_validation_text": {
-                "invalid_security_key": "უსაფრთხოების გასაღები არასწორია",
-                "recovery_key_is_correct": "კარგად გამოიყურება!",
-                "wrong_file_type": "არასწორი ფაილის ტიპი",
                 "wrong_security_key": "არასწორი უსაფრთხოების გასაღები"
             },
-            "reset_title": "გადააყენე ყველაფერი",
-            "reset_warning_1": "გააკეთეთ ეს მხოლოდ იმ შემთხვევაში, თუ სხვა მოწყობილობა არ გაქვთ დადასტურების დასასრულებლად.",
-            "reset_warning_2": "თუ ყველაფერს გადატვირთავთ, გადატვირთავთ სანდო სესიების გარეშე, სანდო მომხმარებლების გარეშე და შესაძლოა ვერ დაინახოთ წარსული შეტყობინებები.",
             "restoring": "გასაღებების აღდგენა სარეზერვო ასლიდან",
-            "security_key_title": "უსაფრთხოების გასაღები",
-            "security_phrase_incorrect_error": "საიდუმლო მეხსიერებაზე წვდომა შეუძლებელია. გთხოვთ, დაადასტუროთ, რომ შეიყვანეთ უსაფრთხოების სწორი ფრაზა.",
-            "security_phrase_title": "უსაფრთხოების ფრაზა",
-            "separator": "%(securityKey)sან%(recoveryFile)s",
-            "use_security_key_prompt": "გამოიყენეთ თქვენი უსაფრთხოების გასაღები გასაგრძელებლად."
+            "security_key_title": "უსაფრთხოების გასაღები"
         },
         "bootstrap_title": "გასაღებების დაყენება",
         "cancel_entering_passphrase_description": "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ პაროლის შეყვანა?",

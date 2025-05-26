@@ -916,22 +916,11 @@
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Wprowadź swoją frazę bezpieczeństwa lub <button>użyj klucza przywracania</button>, aby kontynuować.",
             "key_validation_text": {
-                "invalid_security_key": "Nieprawidłowy klucz przywracania",
-                "recovery_key_is_correct": "Wygląda dobrze!",
-                "wrong_file_type": "Błędny typ pliku",
                 "wrong_security_key": "Błędny klucz przywracania"
             },
-            "reset_title": "Resetuj wszystko",
-            "reset_warning_1": "Zrób to tylko wtedy, gdy nie masz innego urządzenia, za pomocą którego mógłbyś zakończyć weryfikację.",
-            "reset_warning_2": "Jeśli zresetujesz wszystko, stracisz wszystkie sesje zaufane, użytkowników zaufanych i możliwe, że nie będziesz w stanie przeglądać historii czatu.",
             "restoring": "Przywracanie kluczy z kopii zapasowej",
-            "security_key_title": "Klucz przywracania",
-            "security_phrase_incorrect_error": "Nie można uzyskać dostępu do sekretnego magazynu. Upewnij się, że wprowadzono poprawne Hasło bezpieczeństwa.",
-            "security_phrase_title": "Hasło bezpieczeństwa",
-            "separator": "%(securityKey)s lub %(recoveryFile)s",
-            "use_security_key_prompt": "Użyj klucza przywracania, aby kontynuować."
+            "security_key_title": "Klucz przywracania"
         },
         "bootstrap_title": "Konfigurowanie kluczy",
         "cancel_entering_passphrase_description": "Czy na pewno chcesz anulować wpisywanie hasła?",

@@ -716,22 +716,11 @@
     "empty_room_was_name": "Phòng trống (trước kia là %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Nhập Chuỗi bảo mật hoặc <button>sử dụng Khóa bảo mật</button> của bạn để tiếp tục.",
             "key_validation_text": {
-                "invalid_security_key": "Khóa bảo mật không hợp lệ",
-                "recovery_key_is_correct": "Có vẻ tốt!",
-                "wrong_file_type": "Loại tệp sai",
                 "wrong_security_key": "Khóa bảo mật sai"
             },
-            "reset_title": "Đặt lại mọi thứ",
-            "reset_warning_1": "Chỉ thực hiện việc này nếu bạn không có thiết bị nào khác để hoàn tất quá trình xác thực.",
-            "reset_warning_2": "Nếu bạn đặt lại mọi thứ, bạn sẽ khởi động lại mà không có phiên nào đáng tin cậy, không có người dùng đáng tin cậy và có thể không xem được các tin nhắn trước đây.",
             "restoring": "Khôi phục khóa từ sao lưu",
-            "security_key_title": "Chìa khóa bảo mật",
-            "security_phrase_incorrect_error": "Không thể truy cập bộ nhớ bí mật. Vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
-            "security_phrase_title": "Cụm từ Bảo mật",
-            "separator": "%(securityKey)s hay %(recoveryFile)s",
-            "use_security_key_prompt": "Sử dụng Khóa bảo mật của bạn để tiếp tục."
+            "security_key_title": "Chìa khóa bảo mật"
         },
         "bootstrap_title": "Đang thiết lập khóa bảo mật",
         "cancel_entering_passphrase_description": "Bạn có chắc chắn muốn hủy nhập cụm mật khẩu không?",

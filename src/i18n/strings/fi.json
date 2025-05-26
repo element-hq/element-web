@@ -789,18 +789,11 @@
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Kirjoita turvalause tai <button>käytä turva-avain</button> jatkaaksesi.",
             "key_validation_text": {
-                "invalid_security_key": "Virheellinen palautusavain",
-                "recovery_key_is_correct": "Hyvältä näyttää!",
-                "wrong_file_type": "Väärä tiedostotyyppi",
                 "wrong_security_key": "Väärä palautusavain"
             },
             "restoring": "Palautetaan avaimia varmuuskopiosta",
-            "security_key_title": "Palautusavain",
-            "security_phrase_title": "Turvalause",
-            "separator": "%(securityKey)s tai %(recoveryFile)s",
-            "use_security_key_prompt": "Käytä palautusavainta jatkaaksesi."
+            "security_key_title": "Palautusavain"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
         "cancel_entering_passphrase_description": "Haluatko varmasti peruuttaa salasanan syöttämisen?",
