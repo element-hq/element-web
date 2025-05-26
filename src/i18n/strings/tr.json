@@ -883,22 +883,11 @@
     "empty_room_was_name": "Boş oda (%(oldName)s idi)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Devam etmek için Güvenlik İfadenizi girin veya <button>Güvenlik Anahtarınızı kullanın</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Geçersiz Güvenlik Anahtarı",
-                "recovery_key_is_correct": "Güzel görünüyor!",
-                "wrong_file_type": "Yanlış dosya türü",
                 "wrong_security_key": "Yanlış Güvenlik Anahtarı"
             },
-            "reset_title": "Hepsini sıfırla",
-            "reset_warning_1": "Bunu yalnızca doğrulamayı tamamlamak için başka bir cihazınız yoksa yapın.",
-            "reset_warning_2": "Her şeyi sıfırlarsanız, güvenilen oturumlar ve güvenilen kullanıcılar olmadan yeniden başlarsınız ve geçmiş mesajları göremeyebilirsiniz.",
             "restoring": "Anahtarları yedekten geri yükle",
-            "security_key_title": "Güvenlik anahtarı",
-            "security_phrase_incorrect_error": "Gizli depolama alanına erişilemiyor. Lütfen doğru Güvenlik İfadesini girdiğinizi doğrulayın.",
-            "security_phrase_title": "Güvenlik İfadesi",
-            "separator": "%(securityKey)s veya %(recoveryFile)s",
-            "use_security_key_prompt": "Devam etmek için Güvenlik Anahtarınızı kullanın."
+            "security_key_title": "Güvenlik anahtarı"
         },
         "bootstrap_title": "Anahtarları ayarla",
         "cancel_entering_passphrase_description": "Parola girmeyi iptal etmek istediğinizden emin misiniz?",

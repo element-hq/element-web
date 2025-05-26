@@ -911,22 +911,13 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduza a sua Frase de Segurança ou <button>use a sua Chave de Recuperação</button> para continuar.",
+            "alternatives": "Se você tiver uma chave de segurança ou frase de segurança, isso também funcionará.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de recuperação inválida",
-                "recovery_key_is_correct": "Muito bem!",
-                "wrong_file_type": "Tipo errado de arquivo",
-                "wrong_security_key": "Chave de recuperação incorreta"
+                "wrong_security_key": "A chave de recuperação que você inseriu não está correta."
             },
-            "reset_title": "Redefinir tudo",
-            "reset_warning_1": "Faça isso somente se você não tiver outro dispositivo para concluir a verificação.",
-            "reset_warning_2": "Se você redefinir tudo, reiniciará sem sessões confiáveis, sem usuários confiáveis e talvez não consiga ver as mensagens anteriores.",
+            "privacy_warning": "Certifique-se de que ninguém possa ver essa tela!",
             "restoring": "Restaurando chaves do backup",
-            "security_key_title": "Chave de recuperação",
-            "security_phrase_incorrect_error": "Não foi possível acessar o armazenamento secreto. Verifique se você digitou a Frase de Segurança correta.",
-            "security_phrase_title": "Frase de segurança",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Use sua chave de recuperação para continuar."
+            "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "Configurar chaves",
         "cancel_entering_passphrase_description": "Tem certeza que quer cancelar a introdução da frase de senha?",

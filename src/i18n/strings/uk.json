@@ -913,22 +913,11 @@
     "empty_room_was_name": "Порожня кімната (були %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Щоб продовжити, введіть свою фразу безпеки або <button>скористайтесь ключем відновлення</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Недійсний ключ відновлення",
-                "recovery_key_is_correct": "Виглядає файно!",
-                "wrong_file_type": "Тип файлу не підтримується",
                 "wrong_security_key": "Неправильний ключ відновлення"
             },
-            "reset_title": "Скинути все",
-            "reset_warning_1": "Робіть це лише якщо у вас немає іншого пристрою для виконання перевірки.",
-            "reset_warning_2": "Якщо ви скинете все, то почнете заново без довірених сеансів, користувачів і доступу до минулих повідомлень.",
             "restoring": "Відновлення ключів із резервної копії",
-            "security_key_title": "Ключ відновлення",
-            "security_phrase_incorrect_error": "Не вдалося зайти до таємного сховища. Переконайтеся, що ввели правильну фразу безпеки.",
-            "security_phrase_title": "Фраза безпеки",
-            "separator": "%(securityKey)s або %(recoveryFile)s",
-            "use_security_key_prompt": "Щоб продовжити, скористайтеся ключем відновлення."
+            "security_key_title": "Ключ відновлення"
         },
         "bootstrap_title": "Налаштовування ключів",
         "cancel_entering_passphrase_description": "Ви точно хочете скасувати введення парольної фрази?",

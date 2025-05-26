@@ -726,22 +726,11 @@
     "empty_room_was_name": "空房间（曾是%(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "输入安全短语或<button>使用安全密钥</button>以继续。",
             "key_validation_text": {
-                "invalid_security_key": "安全密钥无效",
-                "recovery_key_is_correct": "看着不错！",
-                "wrong_file_type": "错误文件类型",
                 "wrong_security_key": "安全密钥错误"
             },
-            "reset_title": "全部重置",
-            "reset_warning_1": "当你没有其他设备可以用于完成验证时，方可执行此操作。",
-            "reset_warning_2": "如果你全部重置，你将会在没有受信任的会话重新开始、没有受信任的用户，且可能会看不到过去的消息。",
             "restoring": "从备份恢复密钥",
-            "security_key_title": "安全密钥",
-            "security_phrase_incorrect_error": "无法访问秘密存储。请确认你输入了正确的安全短语。",
-            "security_phrase_title": "安全短语",
-            "separator": "%(securityKey)s或%(recoveryFile)s",
-            "use_security_key_prompt": "使用你的安全密钥以继续。"
+            "security_key_title": "安全密钥"
         },
         "bootstrap_title": "设置密钥",
         "cancel_entering_passphrase_description": "你确定要取消输入口令词组吗？",

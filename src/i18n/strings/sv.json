@@ -909,22 +909,11 @@
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ange din säkerhetsfras eller <button>använd din säkerhetsnyckel</button> för att fortsätta.",
             "key_validation_text": {
-                "invalid_security_key": "Ogiltig säkerhetsnyckel",
-                "recovery_key_is_correct": "Ser bra ut!",
-                "wrong_file_type": "Fel filtyp",
                 "wrong_security_key": "Fel säkerhetsnyckel"
             },
-            "reset_title": "Återställ allt",
-            "reset_warning_1": "Gör detta endast om du inte har någon annan enhet att slutföra verifikationen med.",
-            "reset_warning_2": "Om du återställer allt så kommer du att börja om utan betrodda sessioner eller betrodda användare, och kommer kanske inte kunna se gamla meddelanden.",
             "restoring": "Återställer nycklar från säkerhetskopia",
-            "security_key_title": "Säkerhetsnyckel",
-            "security_phrase_incorrect_error": "Kan inte komma åt hemlig lagring. Vänligen verifiera att du angav rätt säkerhetsfras.",
-            "security_phrase_title": "Säkerhetsfras",
-            "separator": "%(securityKey)s eller %(recoveryFile)s",
-            "use_security_key_prompt": "Använd din säkerhetsnyckel för att fortsätta."
+            "security_key_title": "Säkerhetsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
         "cancel_entering_passphrase_description": "Är du säker på att du vill avbryta inmatning av lösenfrasen?",

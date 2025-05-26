@@ -920,22 +920,13 @@
     "empty_room_was_name": "Prázdna miestnosť (bola %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Zadajte svoju bezpečnostnú frázu alebo <button>použite svoj kľúč na obnovenie</button> pre pokračovanie.",
+            "alternatives": "Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež.",
             "key_validation_text": {
-                "invalid_security_key": "Neplatný kľúč na obnovenie",
-                "recovery_key_is_correct": "Vyzerá to super!",
-                "wrong_file_type": "Nesprávny typ súboru",
-                "wrong_security_key": "Nesprávny kľúč na obnovenie"
+                "wrong_security_key": "Zadaný kľúč na obnovenie nie je správny."
             },
-            "reset_title": "Obnoviť všetko",
-            "reset_warning_1": "Urobte to len vtedy, ak nemáte iné zariadenie, pomocou ktorého by ste mohli dokončiť overenie.",
-            "reset_warning_2": "Ak všetko obnovíte, reštartujete bez dôveryhodných relácií, bez dôveryhodných používateľov a možno nebudete môcť vidieť predchádzajúce správy.",
+            "privacy_warning": "Uistite sa, že túto obrazovku nikto neuvidí!",
             "restoring": "Obnovenie kľúčov zo zálohy",
-            "security_key_title": "Kľúč na obnovenie",
-            "security_phrase_incorrect_error": "Nie je možné získať prístup k tajnému úložisku. Skontrolujte, či ste zadali správnu bezpečnostnú frázu.",
-            "security_phrase_title": "Bezpečnostná fráza",
-            "separator": "%(securityKey)s alebo %(recoveryFile)s",
-            "use_security_key_prompt": "Ak chcete pokračovať, použite kľúč na obnovenie."
+            "security_key_title": "Kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
         "cancel_entering_passphrase_description": "Naozaj chcete zrušiť zadávanie prístupovej frázy?",

@@ -895,22 +895,11 @@
     "empty_room_was_name": "Ystafell wag (roedd yn %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Rhowch eich Ymadrodd Diogelwch neu <button>defnyddiwch eich Allwedd Adfer</button> i barhau.",
             "key_validation_text": {
-                "invalid_security_key": "Allwedd Adfer Annilys",
-                "recovery_key_is_correct": "Edrych yn dda!",
-                "wrong_file_type": "Math anghywir o ffeil",
                 "wrong_security_key": "Allwedd Adfer Anghywir"
             },
-            "reset_title": "Ailosod popeth",
-            "reset_warning_1": "Gwnewch hyn dim ond os nad oes gennych unrhyw ddyfais arall gyda chi i gwblhau'r dilysu.",
-            "reset_warning_2": "Os byddwch yn ailosod popeth, byddwch yn ailgychwyn heb unrhyw sesiynau dibynadwy, dim defnyddwyr dibynadwy, ac efallai na fyddwch yn gallu gweld negeseuon blaenorol.",
             "restoring": "Adfer allweddi o'r copi wrth gefn",
-            "security_key_title": "Allwedd Adfer",
-            "security_phrase_incorrect_error": "Methu cyrchu storfa gyfrinachol. Gwiriwch eich bod wedi rhoi'r Ymadrodd Diogelwch cywir.",
-            "security_phrase_title": "Ymadrodd Diogelwch",
-            "separator": "%(securityKey)s neu %(recoveryFile)s",
-            "use_security_key_prompt": "Defnyddiwch eich Allwedd Adfer i barhau."
+            "security_key_title": "Allwedd Adfer"
         },
         "bootstrap_title": "Gosod  allweddi",
         "cancel_entering_passphrase_description": "Ydych chi'n siŵr eich bod am ddiddymu'r cyfrinymadrodd?",

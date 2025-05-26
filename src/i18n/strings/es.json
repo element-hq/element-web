@@ -741,22 +741,11 @@
     "empty_room_was_name": "Sala vacía (antes era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Escribe tu frase de seguridad o <button>usa tu clave de seguridad</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Clave de seguridad inválida",
-                "recovery_key_is_correct": "¡Se ve bien!",
-                "wrong_file_type": "Tipo de archivo incorrecto",
                 "wrong_security_key": "Clave de seguridad incorrecta"
             },
-            "reset_title": "Restablecer todo",
-            "reset_warning_1": "Solo haz esto si no tienes ningún otro dispositivo con el que completar la verificación.",
-            "reset_warning_2": "Si restableces todo, volverás a empezar sin sesiones ni usuarios de confianza, y puede que no puedas ver mensajes anteriores.",
             "restoring": "Restaurando las claves desde copia de seguridad",
-            "security_key_title": "Clave de seguridad",
-            "security_phrase_incorrect_error": "No se ha podido acceder al almacenamiento seguro. Por favor, comprueba que la frase de seguridad es correcta.",
-            "security_phrase_title": "Frase de seguridad",
-            "separator": "%(securityKey)s o %(recoveryFile)s",
-            "use_security_key_prompt": "Usa tu llave de seguridad para continuar."
+            "security_key_title": "Clave de seguridad"
         },
         "bootstrap_title": "Configurando claves",
         "cancel_entering_passphrase_description": "¿Estas seguro que quieres cancelar el ingresar tu contraseña de recuperación?",
