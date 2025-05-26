@@ -2106,6 +2106,7 @@
         "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
+        "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
@@ -2122,6 +2123,7 @@
             "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_filters": "Expand filter list",
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
