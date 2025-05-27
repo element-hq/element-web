@@ -242,8 +242,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     public render(): React.ReactNode {
-        const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS;
-
         const browserTimezoneLabel: string = _t("settings|preferences|default_timezone", {
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
@@ -263,11 +261,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SpellCheckSection />
                     </SettingsSubsection>
 
-                    {roomListSettings.length > 0 && (
-                        <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
-                            {this.renderGroup(roomListSettings)}
-                        </SettingsSubsection>
-                    )}
+                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                        {/* The settings is on device level where the other room list settings are on account level  */}
+                        <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                    </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
