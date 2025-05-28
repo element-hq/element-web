@@ -1678,16 +1678,16 @@
   integrity sha512-FYId5tYgaKvpqAXRXqs0pY4+7/A09bEl1mCxFqlS9jlZOCjlMZVvZuv8spbY8ZN9HaMvuVmx9J00Fn2gCJd0TQ==
 
 "@element-hq/element-web-playwright-common@^1.1.5":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.1.6.tgz#39d154df95d32ed48df51e36e88c0354e54a7404"
-  integrity sha512-KJikM1D2fr7HONYD6zrEEEJFueN+Nis6NDO8gFMxxyv68CzBwHU85BWQ1eYx/2Zeg/9EfsHtXcYC73gNPI4huA==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.2.0.tgz#63808520825899701d9359001430e91b0ca6d1e0"
+  integrity sha512-I+W+0PThZkwwfP03xT19q6C0jrMqSimD+6QjsKV+DdwJyoJrFfhHD10jil8dWelDMwrhyfk+qLiu6Go7UDgaog==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
-    "@testcontainers/postgresql" "^10.24.2"
+    "@testcontainers/postgresql" "^11.0.0"
     lodash-es "^4.17.21"
     mailpit-api "^1.2.0"
     strip-ansi "^7.1.0"
-    testcontainers "^10.24.2"
+    testcontainers "^11.0.0"
     yaml "^2.7.0"
 
 "@emnapi/core@^1.4.3":
@@ -1848,9 +1848,9 @@
     tslib "^2.8.0"
 
 "@grpc/grpc-js@^1.11.1":
-  version "1.13.3"
-  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.13.3.tgz#6ad08d186c2a8651697085f790c5c68eaca45904"
-  integrity sha512-FTXHdOoPbZrBjlVLHuKbDZnsTxXv2BlHF57xw6LuThXacXvtkahEPED0CKMk6obZDf65Hv4k3z62eyPNpvinIg==
+  version "1.13.4"
+  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.13.4.tgz#922fbc496e229c5fa66802d2369bf181c1df1c5a"
+  integrity sha512-GsFaMXCkMqkKIvwCQjCrwH+GHbPKBjhwo/8ZuUkWHqbI73Kky9I+pQltrlT0+MWpedCoosda53lgjYfyEPgxBg==
   dependencies:
     "@grpc/proto-loader" "^0.7.13"
     "@js-sdsl/ordered-map" "^4.4.2"
@@ -3038,12 +3038,12 @@
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
 
-"@testcontainers/postgresql@^10.24.2":
-  version "10.25.0"
-  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.25.0.tgz#3f8c13ee892e8590fd75b8ae72f4646787bab424"
-  integrity sha512-VkpqpX9YZ8aq4wfk6sJRopGTmlBdE1kErzAFWJ/1pY/XrEZ7nxdfFBG+En2icQnbv3BIFQYysEKxEFMNB+hQVw==
+"@testcontainers/postgresql@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-11.0.0.tgz#6590f2398fae2d9ad78a748e92b89053d2380f56"
+  integrity sha512-cw2vIz5MS1AjXkxcPmOQh0NRdh7p6frSLOkjsBFuR5lUo3qnV3LmvCfanyRzgXs5aHGJLwc0mlQNfXnKedBF6Q==
   dependencies:
-    testcontainers "^10.25.0"
+    testcontainers "^11.0.0"
 
 "@testing-library/dom@^10.4.0":
   version "10.4.0"
@@ -3218,9 +3218,9 @@
     "@types/ssh2" "*"
 
 "@types/dockerode@^3.3.35":
-  version "3.3.38"
-  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-3.3.38.tgz#2b949a7fe655d30e366238a43eee4753d8164429"
-  integrity sha512-nnrcfUe2iR+RyOuz0B4bZgQwD9djQa9ADEjp7OAgBs10pYT0KSCtplJjcmBDJz0qaReX5T7GbE5i4VplvzUHvA==
+  version "3.3.39"
+  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-3.3.39.tgz#629adef5db9b3bb955423db1ccd586ee2b36e2e7"
+  integrity sha512-uMPmxehH6ofeYjaslASPtjvyH8FRJdM9fZ+hjhGzL4Jq3bGjr9D7TKmp9soSwgFncNk0HOwmyBxjqOb3ikjjsA==
   dependencies:
     "@types/docker-modem" "*"
     "@types/node" "*"
@@ -3460,7 +3460,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*":
+"@types/node@*", "@types/node@>=13.7.0":
   version "22.15.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.23.tgz#a0b7c03f951f1ffe381a6a345c68d80e48043dd0"
   integrity sha512-7Ec1zaFPF4RJ0eXu1YT/xgiebqwqoJz8rYPDi/O2BcZ++Wpt0Kq9cl0eg6NN6bYbPnR67ZLo7St5Q3UK0SnARw==
@@ -3473,13 +3473,6 @@
   integrity sha512-mqjoYx1RjmN61vjnHWfiWzAlwvBKutoUdm+kYLPnjI5DCh8ZqofUhaTbT3WLl7bt3itR8DuCf8ShnxI0JvIC3g==
   dependencies:
     undici-types "~5.26.4"
-
-"@types/node@>=13.7.0":
-  version "22.15.17"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.17.tgz#355ccec95f705b664e4332bb64a7f07db30b7055"
-  integrity sha512-wIX2aSZL5FE+MR0JlvF87BNVrtFWf6AE6rxSE9X7OwnVvoyCQjpzSRJ+M87se/4QCkCiebQAqrJ0y6fwIyi7nw==
-  dependencies:
-    undici-types "~6.21.0"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.4"
@@ -4476,7 +4469,7 @@ axe-core@~4.10.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.3.tgz#04145965ac7894faddbac30861e5d8f11bfd14fc"
   integrity sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==
 
-axios@^1.8.4:
+axios@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.9.0.tgz#25534e3b72b54540077d33046f77e3b8d7081901"
   integrity sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==
@@ -5690,7 +5683,7 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4:
+debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4, debug@^4.3.5:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.1.tgz#e5a8bc6cbc4c6cd3e64308b0693a3d4fa550189b"
   integrity sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==
@@ -5711,7 +5704,7 @@ debug@^4.3.2:
   dependencies:
     ms "^2.1.3"
 
-debug@^4.3.5, debug@^4.3.7, debug@^4.4.0:
+debug@^4.3.7, debug@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.0.tgz#2b3f2aea2ffeb776477460267377dc8710faba8a"
   integrity sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==
@@ -9142,11 +9135,11 @@ magic-string@0.30.8:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
 mailpit-api@^1.2.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.3.0.tgz#a2365053b7b66179199701d4937f9eb5c0c359fe"
-  integrity sha512-IAqvrkhQr/JyG2PDIfqeiXGVkjinepPcN2lmSnghXs8hcmh5NBOjO/3Ryv7IYhq+yfasbCd/x4HyiFgIseLCVg==
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.4.0.tgz#881b473434b86c13ff85c3d92e9474daf4376135"
+  integrity sha512-A7hMRDQGo0jf1HZM06tw8dSgT2cYEev7lh1ehUXDWIBWXuK+Rq6HHCCQz624uAFYWEngmt4RGG1kMGGUC7iY6A==
   dependencies:
-    axios "^1.8.4"
+    axios "^1.9.0"
 
 make-dir@^4.0.0:
   version "4.0.0"
@@ -10856,9 +10849,9 @@ properties-reader@^2.3.0:
     mkdirp "^1.0.4"
 
 protobufjs@^7.2.5, protobufjs@^7.3.2:
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.5.1.tgz#0567c329db2868672a91438d1b1d3fc011628729"
-  integrity sha512-3qx3IRjR9WPQKagdwrKjO3Gu8RgQR2qqw+1KnigWhoVjFqegIj1K3bP11sGqhxrO46/XL7lekuG4jmjL+4cLsw==
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.4.0.tgz#7efe324ce9b3b61c82aae5de810d287bc08a248a"
+  integrity sha512-mRUWCc3KUU4w1jU8sGxICXH/gNS94DvI1gxqDvBzhj1JpcsimQkYiOJfwsPUykUI5ZaspFbSgmBLER8IrQ3tqw==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -12468,9 +12461,9 @@ tapable@^2.1.1, tapable@^2.2.0:
   integrity sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg==
 
 tar-fs@^3.0.7:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.8.tgz#8f62012537d5ff89252d01e48690dc4ebed33ab7"
-  integrity sha512-ZoROL70jptorGAlgAYiLoBLItEKw/fUxg9BSYK/dF/GAGYFJOJJJMvjPAKDJraCXFwadD456FCuvLWgfhMsPwg==
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.9.tgz#d570793c6370d7078926c41fa422891566a0b617"
+  integrity sha512-XF4w9Xp+ZQgifKakjZYmFdkLoSWd34VGKcsTCwlNWM7QG3ZbaxnTsaBwnjFZqHRf/rROxaR8rXnbtwdvaDI+lA==
   dependencies:
     pump "^3.0.0"
     tar-stream "^3.1.5"
@@ -12479,9 +12472,9 @@ tar-fs@^3.0.7:
     bare-path "^3.0.0"
 
 tar-fs@~2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.2.tgz#425f154f3404cb16cb8ff6e671d45ab2ed9596c5"
-  integrity sha512-EsaAXwxmx8UB7FRKqeozqEPop69DXcmYwTQwXvyAPF352HJsPdkVhvTaDPYqfNgruveJIJy3TA2l+2zj8LJIJA==
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.3.tgz#fb3b8843a26b6f13a08e606f7922875eb1fbbf92"
+  integrity sha512-090nwYJDmlhwFwEW3QQl+vaNnxsO2yVsd45eTKRBzSzu+hlb1w2K9inVq5b0ngXuLVqQ4ApvsUHHnu/zQNkWAg==
   dependencies:
     chownr "^1.1.1"
     mkdirp-classic "^0.5.2"
@@ -12565,7 +12558,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@10.25.0, testcontainers@^10.20.0, testcontainers@^10.24.2, testcontainers@^10.25.0:
+testcontainers@10.25.0, testcontainers@^10.20.0, testcontainers@^11.0.0:
   version "10.25.0"
   resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.25.0.tgz#03eef06b696c0b71a23891c6a966fe57b9229bd7"
   integrity sha512-X3x6cjorEMgei1vVx3M7dnTMzWoWOTi4krpUf3C2iOvOcwsaMUHbca9J4yzpN65ieiWhcK2dA5dxpZyUonwC2Q==
