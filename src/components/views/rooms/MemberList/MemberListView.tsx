@@ -29,7 +29,8 @@ interface IProps {
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const totalRows = vm.members.length;
-    const ref = useRef<VirtuosoHandle | null>(null);
+    const virtusoHandleRef = useRef<VirtuosoHandle | null>(null);
+    const virtusoDomRef = useRef<HTMLElement | Window | null>(null);
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
     const [lastFocusedIndex, setLastFocusedIndex] = React.useState(-1);
     const [visibleRange, setVisibleRange] = React.useState<ListRange | undefined>(undefined);
@@ -69,7 +70,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 
     const scrollToIndex = useCallback(
         (index: number, align?: "center" | "end" | "start"): void => {
-            ref?.current?.scrollIntoView({
+            virtusoHandleRef?.current?.scrollIntoView({
                 index: index,
                 align: align,
                 behavior: "auto",
@@ -78,7 +79,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 },
             });
         },
-        [ref],
+        [virtusoHandleRef],
     );
 
     const scrollToMember = useCallback(
@@ -135,11 +136,10 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         [scrollToIndex, scrollToMember, focusedIndex, vm, visibleRange],
     );
 
-    const onFocus = (e: React.FocusEvent): void => {
-        if (focusedIndex > -1) {
+    const onFocus = (e?: React.FocusEvent): void => {
+        if (e?.currentTarget !== virtusoDomRef.current || focusedIndex > -1) {
             return;
         }
-
         const nextIndex = lastFocusedIndex == -1 ? 0 : lastFocusedIndex;
         scrollToIndex(nextIndex);
         e.stopPropagation();
@@ -149,6 +149,15 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     function footer(): React.ReactNode {
         return <div style={{ height: "32px" }} />;
     }
+
+    const scrollerRef = React.useCallback(
+        (element: HTMLElement | Window | null) => {
+            if (element) {
+                virtusoDomRef.current = element;
+            }
+        },
+        [keyDownCallback],
+    );
 
     return (
         <BaseCard
@@ -169,7 +178,8 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     role="grid"
                     aria-rowcount={vm.members.length}
                     aria-colcount={1}
-                    ref={ref}
+                    scrollerRef={scrollerRef}
+                    ref={virtusoHandleRef}
                     style={{ height: "100%" }}
                     context={{ focusedIndex }}
                     rangeChanged={setVisibleRange}
