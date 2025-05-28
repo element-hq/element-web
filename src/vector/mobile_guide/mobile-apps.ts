@@ -23,6 +23,7 @@ export interface MobileAppMetadata {
     fDroidUrl?: string;
     deepLinkPath: string;
     usesLegacyDeepLink: boolean;
+    isProApp: boolean;
 }
 
 export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
@@ -34,6 +35,7 @@ export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
         fDroidUrl: "https://f-droid.org/packages/im.vector.app",
         deepLinkPath: "",
         usesLegacyDeepLink: true,
+        isProApp: false,
     },
     [MobileAppVariant.X]: {
         name: "Element X",
@@ -43,6 +45,7 @@ export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
         fDroidUrl: "https://f-droid.org/packages/io.element.android.x",
         deepLinkPath: "/element",
         usesLegacyDeepLink: false,
+        isProApp: false,
     },
     [MobileAppVariant.Pro]: {
         name: "Element Pro",
@@ -51,6 +54,7 @@ export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
         playStoreUrl: "https://play.google.com/store/apps/details?id=io.element.enterprise",
         deepLinkPath: "/element-pro",
         usesLegacyDeepLink: false,
+        isProApp: true,
     },
 };
 
@@ -73,4 +77,7 @@ export function updateMobilePage(metadata: MobileAppMetadata, deepLinkUrl: strin
     (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
     document.getElementById("step1_heading")!.innerHTML = `Download ${metadata.name}`;
     document.getElementById("step2_container")!.style.display = "block";
+    if (metadata.isProApp) {
+        document.getElementById("step2_description")!.innerHTML = "Use your work email to join";
+    }
 }
