@@ -37,9 +37,7 @@ export async function registerAccountMas(
 
     await page.getByRole("textbox", { name: "6-digit code" }).fill(code);
     await page.getByRole("button", { name: "Continue" }).click();
-    await page
-        .getByRole("textbox", { name: "Display Name" })
-        .fill(username.slice(0, 1).toUpperCase() + username.slice(1));
+    await page.getByRole("textbox", { name: "Display Name" }).fill(username);
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.getByText("Allow access to your account?")).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
