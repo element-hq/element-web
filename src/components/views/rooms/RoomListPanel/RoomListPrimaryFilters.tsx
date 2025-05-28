@@ -137,9 +137,13 @@ function useFilters(
 
         // Sort the filters with the current filter at first position
         setFilterState({
-            filters: filters
-                .slice()
-                .sort((filterA, filterB) => (filterA.active === filterB.active ? 0 : filterA.active ? -1 : 1)),
+            filters: filters.slice().sort((filterA, filterB) => {
+                // If the filter is active, it should be at the top of the list
+                if (filterA.active && !filterB.active) return -1;
+                if (!filterA.active && filterB.active) return 1;
+                // If both filters are active or not, keep their original order
+                return 0;
+            }),
             isSorted: true,
         });
     }, [filters, isVisible, filterState.isSorted, isExpanded]);
