@@ -54,17 +54,12 @@ export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
     },
 };
 
-export function updateMobilePage(
-    metadata: MobileAppMetadata,
-    deepLinkUrl: string,
-    server: string | undefined,
-): void {
+export function updateMobilePage(metadata: MobileAppMetadata, deepLinkUrl: string, server: string | undefined): void {
     const appleMeta = document.querySelector('meta[name="apple-itunes-app"]') as Element;
     appleMeta.setAttribute("content", `app-id=${metadata.appleAppId}`);
 
     if (server) {
-        (document.getElementById("header_title") as HTMLHeadingElement).innerText =
-            `Join ${server} on Element`;
+        (document.getElementById("header_title") as HTMLHeadingElement).innerText = `Join ${server} on Element`;
     }
     (document.getElementById("app_store_link") as HTMLAnchorElement).href = metadata.appStoreUrl;
     (document.getElementById("play_store_link") as HTMLAnchorElement).href = metadata.playStoreUrl;
