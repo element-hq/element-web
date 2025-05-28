@@ -130,6 +130,12 @@ p {
     margin-top: 48px;
 }
 
+.mx_DesktopLink {
+    color: #007a61;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 .mx_BottomGradient {
     position: absolute;
     bottom: 0;

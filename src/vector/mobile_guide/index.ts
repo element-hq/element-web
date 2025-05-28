@@ -14,6 +14,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { getVectorConfig } from "../getconfig";
 import { type MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
 
+function onBackToElementClick(): void {
+    // Cookie should expire in 4 hours
+    document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
+    window.location.href = "../";
+}
+
 // NEVER pass user-controlled content to this function! Hardcoded strings only please.
 function renderConfigError(message: string): void {
     const contactMsg =
@@ -121,6 +127,9 @@ async function initPage(): Promise<void> {
     } else if (serverName) {
         deepLinkUrl += `?account_provider=${serverName}`;
     }
+
+    // Not part of updateMobilePage as the link is only shown on mobile_guide and not on mobile.element.io
+    document.getElementById("back_to_element_button")!.onclick = onBackToElementClick;
 
     updateMobilePage(metadata, deepLinkUrl, serverName ?? hsUrl);
 }
