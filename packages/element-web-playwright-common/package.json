@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
-    "version": "1.1.7",
+    "version": "1.2.0",
     "license": "SEE LICENSE IN README.md",
     "repository": {
         "type": "git",
@@ -28,11 +28,11 @@
     },
     "dependencies": {
         "@axe-core/playwright": "^4.10.1",
-        "@testcontainers/postgresql": "^10.24.2",
+        "@testcontainers/postgresql": "^11.0.0",
         "lodash-es": "^4.17.21",
         "mailpit-api": "^1.2.0",
         "strip-ansi": "^7.1.0",
-        "testcontainers": "^10.24.2",
+        "testcontainers": "^11.0.0",
         "yaml": "^2.7.0"
     },
     "peerDependencies": {
