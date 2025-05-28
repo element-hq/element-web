@@ -162,26 +162,3 @@ p {
     color: #656d77;
     font-size: 14px;
 }
-
-@media screen and (max-width: 1120px) {
-    body {
-        font-size: 16px;
-    }
-
-    h2 {
-        font-size: 16px;
-    }
-
-    .mx_Button {
-        font-size: 16px;
-        padding: 12px 16px;
-    }
-
-    .mx_HomePage_header {
-        justify-content: left;
-    }
-
-    .mx_Spacer {
-        margin-top: 48px;
-    }
-}
