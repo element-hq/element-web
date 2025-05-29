@@ -17,7 +17,7 @@ import { Features } from "../settings/Settings";
 /**
  * The features are shown in the array order.
  */
-const FEATURES = ["threadsActivityCentre", "pinningMessageList"] as const;
+const FEATURES = ["pinningMessageList"] as const;
 /**
  * All the features that can be shown in the release announcements.
  */

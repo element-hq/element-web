@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type MutableRefObject, type ReactNode, StrictMode } from "react";
+import React, { type RefObject, type ReactNode, StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -54,7 +54,7 @@ interface IProps {
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
 
     // Handle to manually notify this PersistedElement that it needs to move
-    moveRef?: MutableRefObject<(() => void) | undefined>;
+    moveRef?: RefObject<(() => void) | null>;
     children: ReactNode;
 }
 

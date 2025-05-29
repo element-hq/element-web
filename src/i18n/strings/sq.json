@@ -85,7 +85,6 @@
         "react": "Reagoni",
         "refresh": "Rifreskoje",
         "register": "Regjistrohuni",
-        "reject": "Hidheni tej",
         "reload": "Ringarkoje",
         "remove": "Hiqe",
         "rename": "Riemërtojeni",
@@ -411,7 +410,6 @@
         "capabilities": "Aftësi",
         "copied": "U kopjua!",
         "credits": "Kredite",
-        "cross_signing": "<em>Cross-signing</em>",
         "dark": "E errët",
         "description": "Përshkrim",
         "deselect_all": "Shpërzgjidhi krejt",
@@ -757,44 +755,23 @@
     "empty_room_was_name": "Dhomë e zbrazët (qe %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Që të vazhdohet, jepni Frazën tuaj të Sigurisë, ose <button>përdorni Kyçin tuaj të Sigurisë</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Kyç Sigurie i Pavlefshëm",
-                "recovery_key_is_correct": "Mirë duket!",
-                "wrong_file_type": "Lloj i gabuar kartele",
                 "wrong_security_key": "Kyç Sigurie i Gabuar"
             },
-            "reset_title": "Kthe gjithçka te parazgjedhjet",
-            "reset_warning_1": "Bëjeni këtë vetëm nëse s’keni pajisje tjetër me të cilën të plotësoni verifikimin.",
-            "reset_warning_2": "Nëse riktheni gjithçka te parazgjedhjet, do të rifilloni pa sesione të besuara, pa përdorues të besuar, dhe mund të mos jeni në gjendje të shihni mesazhe të dikurshëm.",
             "restoring": "Po rikthehen kyçesh nga kopjeruajtje",
-            "security_key_title": "Kyç Sigurie",
-            "security_phrase_incorrect_error": "S’arrihet të hyhet në depozitë të fshehtë. Ju lutemi, verifikoni se keni dhënë Frazën e saktë të Sigurisë.",
-            "security_phrase_title": "Frazë Sigurie",
-            "separator": "%(securityKey)s ose %(recoveryFile)s",
-            "use_security_key_prompt": "Që të vazhdohet përdorni Kyçin tuaj të Sigurisë."
+            "security_key_title": "Kyç Sigurie"
         },
         "bootstrap_title": "Ujdisje kyçesh",
         "cancel_entering_passphrase_description": "Jeni i sigurt se doni të anulohet dhënie frazëkalimi?",
         "cancel_entering_passphrase_title": "Të anulohet dhënue frazëkalimi?",
         "confirm_encryption_setup_body": "Klikoni mbi butonin më poshtë që të ripohoni ujdisjen e fshehtëzimit.",
         "confirm_encryption_setup_title": "Ripohoni ujdisje fshehtëzimi",
-        "cross_signing_not_ready": "“Cross-signing” s’është ujdisur.",
-        "cross_signing_ready": "“Cross-signing” është gati për përdorim.",
-        "cross_signing_ready_no_backup": "“Cross-signing” është gati, por kyçet s’janë koperuajtur.",
         "cross_signing_room_normal": "Kjo dhomë është e fshehtëzuar skaj-më-skaj",
         "cross_signing_room_verified": "Gjithkush në këtë dhomë është verifikuar",
         "cross_signing_room_warning": "Dikush po përdor një sesion të panjohur",
-        "cross_signing_unsupported": "Shërbyesi juaj Home nuk mbulon <em>cross-signing</em>.",
-        "cross_signing_untrusted": "Llogaria juaj ka një identitet <em>cross-signing</em> në depozitë të fshehtë, por s’është ende i besuar në këtë sesion.",
         "cross_signing_user_normal": "S’e keni verifikuar këtë përdorues.",
         "cross_signing_user_verified": "E keni verifikuar këtë përdorues. Ky përdorues ka verifikuar krejt sesionet e veta.",
         "cross_signing_user_warning": "Ky përdorues s’ka verifikuar krejt sesionet e tij.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Spastro kyçe <em>cross-signing</em>",
-            "title": "Të shkatërrohen kyçet <em>cross-signing</em>?",
-            "warning": "Fshirja e kyçeve <em>cross-signing</em> është e përhershme. Cilido që keni verifikuar me to, do të shohë një sinjalizim sigurie. Thuajse e sigurt që s’keni pse ta bëni një gjë të tillë, veç në paçi humbur çdo pajisje prej nga mund të bëni <em>cross-sign</em>."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "Mirëfilltësia e këtij mesazhi të fshehtëzuar s’mund të garantohet në këtë pajisje.",
         "event_shield_reason_mismatched_sender_key": "Fshehtëzuar nga një sesion i paverifikuar",
         "export_unsupported": "Shfletuesi juaj nuk mbulon zgjerimet kriptografike të domosdoshme",
@@ -814,7 +791,6 @@
             "title": "Metodë e Re Rimarrjesh",
             "warning": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
-        "not_supported": "<nuk mbulohet>",
         "recovery_method_removed": {
             "description_1": "Ky sesion ka pikasur se Fraza e Sigurisë dhe kyçi juaj për Mesazhe të Sigurt janë hequr.",
             "description_2": "Nëse këtë e keni bërë pa dashje, mund të ujdisni Mesazhe të Sigurt në këtë sesion, gjë që do të sjellë rifshehtëzimin e historikut të mesazheve të sesionit me një metodë të re rimarrjesh.",
@@ -825,8 +801,7 @@
         "set_up_toast_description": "Mbrohuni nga humbja e hyrjes te mesazhe & të dhëna të fshehtëzuara",
         "set_up_toast_title": "Ujdisni Kopjeruajtje të Sigurt",
         "setup_secure_backup": {
-            "explainer": "Kopjeruajini kyçet tuaj, përpara se të dilni, që të shmangni humbjen e tyre.",
-            "title": "Rregulloje"
+            "explainer": "Kopjeruajini kyçet tuaj, përpara se të dilni, që të shmangni humbjen e tyre."
         },
         "udd": {
             "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
@@ -841,7 +816,6 @@
             "accepting": "Po pranohet…",
             "after_new_login": {
                 "device_verified": "Pajisja u verifikua",
-                "reset_confirmation": "Të kthehen vërtet te parazgjedhjet kyçet e verifikimit?",
                 "skip_verification": "Anashkaloje verifikimin hëpërhë",
                 "unable_to_verify": "S’arrihet të verifikohet kjo pajisje",
                 "verify_this_device": "Verifikoni këtë pajisje"
@@ -911,8 +885,6 @@
             "verify_emoji_prompt": "Verifikoje duke krahasuar emoji unik.",
             "verify_emoji_prompt_qr": "Nëse s’e skanoni dot kodin më sipër, verifikojeni duke krahasuar emoji unik.",
             "verify_later": "Do ta verifikoj më vonë",
-            "verify_reset_warning_1": "Rikthimi te parazgjedhjet i kyçeve tuaj të verifikimit s’mund të zhbëhet. Pas rikthimit te parazgjedhjet, s’do të mund të hyni dot te mesazhe të dikurshëm të fshehtëzuar dhe, cilido shok që ju ka verifikuar më parë, do të shohë një sinjalizim sigurie deri sa të ribëni verifikimin me ta.",
-            "verify_reset_warning_2": "Ju lutemi, ecni më tej vetëm nëse jeni i sigurt se keni humbur krejt pajisjet tuaja të tjera dhe Kyçin tuaj të Sigurisë.",
             "verify_using_device": "Verifikojeni me pajisje tjetër",
             "verify_using_key": "Verifikoje me Kyç Sigurie",
             "verify_using_key_or_phrase": "Verifikojeni me Kyç ose Frazë Sigurie",
@@ -971,11 +943,7 @@
             "title": "S’arrihet të kopjohet lidhja e dhomës"
         },
         "error_loading_user_profile": "S’u ngarkua dot profili i përdoruesit",
-        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Shërbyesi mund të jetë i pakapshëm, i mbingarkuar, ose kërkimit i mbaroi koha :(",
-            "title": "Kërkimi shtoi"
-        }
+        "forget_room_failed": "S’u arrit të harrohej dhoma %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1540,11 +1508,6 @@
         "ongoing": "Po hiqet…",
         "reason_label": "Arsye (opsionale)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Jeni i sigurt se doni të hidhet tej kjo ftesë?",
-        "failed": "S’u arrit të hidhej poshtë ftesa",
-        "title": "Hidheni tej ftesën"
-    },
     "report_content": {
         "description": "Raportimi i këtij mesazhi do të shkaktojë dërgimin e 'ID-së së aktit' unike te përgjegjësi i shërbyesit tuaj Home. Nëse mesazhet në këtë dhomë fshehtëzohen, përgjegjësi i shërbyesit tuaj Home s’do të jetë në gjendje të lexojë tekstin e mesazhit apo të shohë çfarëdo kartelë apo figurë.",
         "disagree": "S’pajtohem",
@@ -1712,7 +1675,6 @@
             "you_created": "Krijuat këtë dhomë."
         },
         "invite_email_mismatch_suggestion": "Që të merrni ftesa drejt e te %(brand)s, ndajeni me të tjerët këtë email, te Rregullimet.",
-        "invite_reject_ignore": "Hidhe poshtë & Shpërfille përdoruesin",
         "invite_sent_to_email": "Kjo ftesë u dërgua për %(email)s",
         "invite_sent_to_email_room": "Kjo ftesë për %(roomName)s u dërgua te %(email)s",
         "invite_subtitle": "Ju ftoi <userName/>",
@@ -2201,7 +2163,6 @@
             "remove_msisdn_prompt": "Të hiqet %(phone)s?",
             "spell_check_locale_placeholder": "Zgjidhni vendore"
         },
-        "image_thumbnails": "Shfaq për figurat paraparje/miniatura",
         "inline_url_previews_default": "Aktivizo, si parazgjedhje, paraparje URL-sh brendazi",
         "inline_url_previews_room": "Aktivizo, si parazgjedhje, paraparje URL-sh për pjesëmarrësit në këtë dhomë",
         "inline_url_previews_room_account": "Aktivizo paraparje URL-sh për këtë dhomë (prek vetëm ju)",
@@ -2309,50 +2270,16 @@
         "prompt_invite": "Pyet, përpara se të dërgohen ftesa te ID Matrix potencialisht të pavlefshme",
         "replace_plain_emoji": "Zëvendëso automatikisht emotikone tekst të thjeshtë me Emoji",
         "security": {
-            "4s_public_key_in_account_data": "në të dhëna llogarie",
-            "4s_public_key_status": "Kyç publik depozite të fshehtë:",
-            "backup_key_cached_status": "Kyç kopjeruajtjesh i ruajtur në fshehtinë:",
-            "backup_key_stored_status": "Kyç kopjeruajtjesh i depozituar:",
-            "backup_key_unexpected_type": "lloj i papritur",
-            "backup_key_well_formed": "e mirëformuar",
-            "backup_keys_description": "Kopjeruani kyçet tuaj të fshehtëzimit me të dhënat e llogarisë tuaj, për ditën kur mund të humbni hyrje në sesionet tuaja. Kyçet tuaj do të jenë të siguruar me një Kyç unik Sigurie.",
             "bulk_options_accept_all_invites": "Prano krejt ftesat prej %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Mos prano asnjë ftesë për në %(invitedRooms)s",
             "bulk_options_section": "Veprime masive",
-            "cross_signing_cached": "ruajtur në fshehtinë lokalisht",
-            "cross_signing_homeserver_support": "Mbulim veçorish nga shërbyesi Home:",
-            "cross_signing_homeserver_support_exists": "ekziston",
-            "cross_signing_in_4s": "në depozitë të fshehtë",
-            "cross_signing_in_memory": "në kujtesë",
-            "cross_signing_master_private_Key": "Kyç privat i përgjithshëm:",
-            "cross_signing_not_cached": "i pagjetur lokalisht",
-            "cross_signing_not_found": "s’u gjet",
-            "cross_signing_not_in_4s": "s’u gjet në depozitë",
-            "cross_signing_not_stored": "e padepozituar",
-            "cross_signing_private_keys": "Kyçe privatë për <em>cross-signing</em>:",
-            "cross_signing_public_keys": "Kyçe publikë për <em>cross-signing</em>:",
-            "cross_signing_self_signing_private_key": "Kyç privat vetënënshkrimi:",
-            "cross_signing_user_signing_private_key": "Kyç privat nënshkrimesh përdoruesi:",
-            "cryptography_section": "Kriptografi",
-            "delete_backup": "Fshije Kopjeruajtjen",
-            "delete_backup_confirm_description": "Jeni i sigurt? Do të humbni mesazhet tuaj të fshehtëzuar, nëse kopjeruajtja për kyçet tuaj nuk bëhet si duhet.",
             "e2ee_default_disabled_warning": "Përgjegjësi i shërbyesit tuaj ka çaktivizuar fshehtëzimin skaj-më-skaj, si parazgjedhje, në dhoma private & Mesazhe të Drejtpërdrejtë.",
             "enable_message_search": "Aktivizo kërkim mesazhesh në dhoma të fshehtëzuara",
             "encryption_section": "Fshehtëzim",
-            "error_loading_key_backup_status": "S’arrihet të ngarkohet gjendje kopjeruajtjeje kyçesh",
-            "export_megolm_keys": "Eksporto kyçe dhome E2E",
             "ignore_users_empty": "S’keni përdorues të shpërfillur.",
             "ignore_users_section": "Përdorues të shpërfillur",
-            "import_megolm_keys": "Importo kyçe E2E dhome",
-            "key_backup_active": "Kjo sesion po bën kopjeruajtje të kyçeve tuaja.",
-            "key_backup_active_version_none": "Asnjë",
             "key_backup_algorithm": "Algoritëm:",
-            "key_backup_complete": "U kopjeruajtën krejt kyçet",
             "key_backup_connect": "Lidhe këtë sesion me Kopjeruajtje Kyçesh",
-            "key_backup_connect_prompt": "Lidheni këtë sesion kopjeruajtje kyçesh, përpara se të dilni, që të shmangni humbje të çfarëdo kyçi që mund të gjendet vetëm në këtë pajisje.",
-            "key_backup_in_progress": "Po kopjeruhen kyçet për %(sessionsRemaining)s…",
-            "key_backup_inactive": "Ky sesion <b>nuk po bën kopjeruajtje të kyçeve tuaja</b>, por keni një kopjeruajtje ekzistuese që mund ta përdorni për rimarrje dhe ta shtoni më tej.",
-            "key_backup_inactive_warning": "Kyçet tuaj <b>nuk po kopjeruhen nga ky sesion</b>.",
             "message_search_disable_warning": "Në u çaktivizoftë, mesazhet prej dhomash të fshehtëzuara s’do të duken në përfundime kërkimi.",
             "message_search_disabled": "Ruaj lokalisht në mënyrë të sigurt në fshehtinë mesazhet që të shfaqen në përfundime kërkimi.",
             "message_search_enabled": {
@@ -2372,13 +2299,7 @@
             "message_search_unsupported": "%(brand)s-it i mungojnë disa përbërës të domosdoshëm për ruajtje lokalisht në mënyrë të sigurt në fshehtinë mesazhe. Nëse do të donit të eksperimentonit me këtë veçori, montoni një Desktop vetjak %(brand)s Desktop me <nativeLink>shtim përbërësish kërkimi</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s s’mund të ruajë lokalisht në fshehtinë në mënyrë të siguruar mesazhe të fshehtëzuar, teksa xhirohet në një shfletues. Që mesazhet e fshehtëzuar të shfaqen te përfundime kërkimi, përdorni <desktopLink>%(brand)s Desktop</desktopLink>.",
             "record_session_details": "Regjistro emrin, versionin dhe URL-në e klientit, për të dalluar më kollaj sesionet te përgjegjës sesionesh",
-            "restore_key_backup": "Riktheje prej Kopjeruajtje",
-            "secret_storage_not_ready": "jo gati",
-            "secret_storage_ready": "gati",
-            "secret_storage_status": "Depozitë e fshehtë:",
             "send_analytics": "Dërgo të dhëna analitike",
-            "session_id": "ID sesioni:",
-            "session_key": "Kyç sesioni:",
             "strict_encryption": "Mos dërgo kurrë prej këtij sesioni mesazhe të fshehtëzuar te sesione të paverifikuar"
         },
         "send_read_receipts": "Dërgo dëftesa leximi",
@@ -2597,8 +2518,6 @@
         "topic": "Merr ose cakton temën e dhomës",
         "topic_none": "Kjo dhomë s’ka temë.",
         "topic_room_error": "S’u arrit të merret tema e dhomës: S’arrihet të gjendet dhomë (%(roomId)s",
-        "tovirtual": "Kalohet te dhoma virtuale e kësaj dhome, në pastë",
-        "tovirtual_not_found": "S’ka dhomë virtuale për këtë dhomë",
         "unban": "I heq dëbimin përdoruesit me ID-në e dhënë",
         "unflip": "E paraprin një mesazh tekst i thjeshtë me ┬──┬ ノ( ゜-゜ノ)",
         "unholdcall": "E heq nga pritja thirrjen në dhomën aktuale",
@@ -2717,7 +2636,6 @@
         "heading_without_query": "Kërkoni për",
         "join_button_text": "Hyni te %(roomAddress)s",
         "keyboard_scroll_hint": "Përdorni <arrows/> për rrëshqitje",
-        "message_search_section_title": "Kërkime të tjera",
         "other_rooms_in_space": "Dhoma të tjera në %(spaceName)s",
         "public_rooms_label": "Dhoma publike",
         "recent_searches_section_title": "Kërkime së fundi",
@@ -2726,7 +2644,6 @@
         "result_may_be_hidden_privacy_warning": "Disa përfundime mund të jenë fshehur, për arsye privatësie",
         "result_may_be_hidden_warning": "Disa përfundime mund të jenë të fshehura",
         "search_dialog": "Dialog Kërkimi",
-        "search_messages_hint": "Që të kërkoni te mesazhet, shihni për këtë ikonë në krye të një dhome <icon/>",
         "spaces_title": "Hapësira ku jeni i pranishëm",
         "start_group_chat_button": "Nisni një fjalosje grupi"
     },

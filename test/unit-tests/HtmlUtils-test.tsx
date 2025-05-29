@@ -7,20 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
 import parse from "html-react-parser";
 
 import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
-
-jest.mock("../../src/settings/SettingsStore");
-
-const enableHtmlTopicFeature = () => {
-    mocked(SettingsStore).getValue.mockImplementation((arg): any => {
-        return arg === "feature_html_topic";
-    });
-};
+import { getMockClientWithEventEmitter } from "../test-utils";
+import { SettingLevel } from "../../src/settings/SettingLevel";
+import SdkConfig from "../../src/SdkConfig";
 
 describe("topicToHtml", () => {
     function getContent() {
@@ -38,19 +32,16 @@ describe("topicToHtml", () => {
     });
 
     it("converts literal HTML topic to HTML", async () => {
-        enableHtmlTopicFeature();
         render(<div role="contentinfo">{topicToHtml("<b>pizza</b>", undefined, null, false)}</div>);
         expect(getContent()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
     });
 
     it("converts true HTML topic to HTML", async () => {
-        enableHtmlTopicFeature();
         render(<div role="contentinfo">{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
         expect(getContent()).toEqual("<b>pizza</b>");
     });
 
     it("converts true HTML topic with emoji to HTML", async () => {
-        enableHtmlTopicFeature();
         render(<div role="contentinfo">{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
         expect(getContent()).toEqual('<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });
@@ -107,7 +98,12 @@ describe("bodyToHtml", () => {
 
     describe("feature_latex_maths", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_latex_maths");
+            SettingsStore.setValue("feature_latex_maths", null, SettingLevel.DEVICE, true);
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
+            SdkConfig.reset();
         });
 
         it("should render inline katex", () => {
@@ -227,5 +223,40 @@ describe("bodyToNode", () => {
         );
 
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it.each([[true], [false]])("should handle inline media when mediaIsVisible is %s", (mediaIsVisible) => {
+        const cli = getMockClientWithEventEmitter({
+            mxcUrlToHttp: jest.fn().mockReturnValue("https://example.org/img"),
+        });
+        const { className, formattedBody } = bodyToNode(
+            {
+                "body": "![foo](mxc://going/knowwhere) Hello there",
+                "format": "org.matrix.custom.html",
+                "formatted_body": `<img src="mxc://going/knowwhere">foo</img> Hello there`,
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: "$eventId",
+                    },
+                },
+                "msgtype": "m.text",
+            },
+            [],
+            {
+                mediaIsVisible,
+            },
+        );
+
+        const { asFragment } = render(
+            <span className={className} dir="auto" dangerouslySetInnerHTML={{ __html: formattedBody! }} />,
+        );
+        expect(asFragment()).toMatchSnapshot();
+        // We do not want to download untrusted media.
+        // eslint-disable-next-line no-restricted-properties
+        expect(cli.mxcUrlToHttp).toHaveBeenCalledTimes(mediaIsVisible ? 1 : 0);
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 });

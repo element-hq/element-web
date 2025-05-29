@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -25,7 +25,7 @@ interface IProps {
  * Quick action button for marking a media event as hidden.
  */
 export const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
-    const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent.getId()!);
+    const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
 
     if (!mediaIsVisible) {
         return;

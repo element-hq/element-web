@@ -10,9 +10,7 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { RoomListPrimaryFilters } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListPrimaryFilters";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { FilterKey } from "../../../../../../src/stores/room-list-v3/skip-list/filters";
 
 describe("<RoomListPrimaryFilters />", () => {
@@ -20,6 +18,7 @@ describe("<RoomListPrimaryFilters />", () => {
 
     beforeEach(() => {
         vm = {
+            isLoadingRooms: false,
             rooms: [],
             canCreateRoom: true,
             createRoom: jest.fn(),
@@ -28,12 +27,6 @@ describe("<RoomListPrimaryFilters />", () => {
                 { name: "People", active: false, toggle: jest.fn(), key: FilterKey.PeopleFilter },
                 { name: "Rooms", active: true, toggle: jest.fn(), key: FilterKey.RoomsFilter },
             ],
-            activateSecondaryFilter: () => {},
-            activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             activeIndex: undefined,
         };
     });

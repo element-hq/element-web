@@ -31,6 +31,8 @@ import {
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { createRoom, hasCreateRoomRights } from "./utils";
+import { type SortOption, useSorter } from "./useSorter";
+import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 /**
  * Hook to get the active space and its title.
@@ -117,6 +119,22 @@ export interface RoomListHeaderViewState {
      * Open the space settings
      */
     openSpaceSettings: () => void;
+    /**
+     * Change the sort order of the room-list.
+     */
+    sort: (option: SortOption) => void;
+    /**
+     * The currently active sort option.
+     */
+    activeSortOption: SortOption;
+    /**
+     * Whether message previews must be shown or not.
+     */
+    shouldShowMessagePreview: boolean;
+    /**
+     * A function to turn on/off message previews.
+     */
+    toggleMessagePreview: () => void;
 }
 
 /**
@@ -128,8 +146,8 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const isSpaceRoom = Boolean(activeSpace);
 
     const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
-    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
-    const displayComposeMenu = canCreateRoom || canCreateVideoRoom;
+    const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms") && canCreateRoom;
+    const displayComposeMenu = canCreateRoom;
     const displaySpaceMenu = isSpaceRoom;
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
@@ -137,6 +155,9 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
     /* Actions */
+
+    const { activeSortOption, sort } = useSorter();
+    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
     const createChatRoom = useCallback((e: Event) => {
         defaultDispatcher.fire(Action.CreateChat);
@@ -207,5 +228,9 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         inviteInSpace,
         openSpacePreferences,
         openSpaceSettings,
+        activeSortOption,
+        sort,
+        shouldShowMessagePreview,
+        toggleMessagePreview,
     };
 }

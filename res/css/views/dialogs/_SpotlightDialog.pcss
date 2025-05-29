@@ -412,7 +412,8 @@ Please see LICENSE files in the repository root for full details.
             .mx_SpotlightDialog_joinRoomAlias,
             .mx_SpotlightDialog_explorePublicRooms,
             .mx_SpotlightDialog_explorePublicSpaces,
-            .mx_SpotlightDialog_startGroupChat {
+            .mx_SpotlightDialog_startGroupChat,
+            .mx_SpotlightDialog_searchMessages {
                 padding-left: $spacing-32;
                 position: relative;
 
@@ -451,21 +452,13 @@ Please see LICENSE files in the repository root for full details.
                 mask-image: url("$(res)/img/element-icons/group-members.svg");
             }
 
+            .mx_SpotlightDialog_searchMessages::before {
+                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
+            }
+
             .mx_SpotlightDialog_otherSearches_messageSearchText {
                 font-size: $font-15px;
                 line-height: $font-24px;
-            }
-
-            .mx_SpotlightDialog_otherSearches_messageSearchIcon {
-                display: inline-block;
-                width: 24px;
-                height: 24px;
-                background-color: $secondary-content;
-                vertical-align: text-bottom;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
             }
         }
 

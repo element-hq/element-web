@@ -79,6 +79,7 @@
         "new_video_room": "Tạo phòng truyền hình",
         "next": "Tiếp",
         "no": "Không",
+        "ok": "Ok",
         "open": "Mở",
         "pause": "Tạm dừng",
         "pin": "Ghim",
@@ -88,7 +89,6 @@
         "react": "Phản ứng",
         "refresh": "Làm tươi",
         "register": "Đăng ký",
-        "reject": "Từ chối",
         "reload": "Tải lại",
         "remove": "Xoá",
         "rename": "Đặt lại tên",
@@ -369,6 +369,7 @@
     },
     "common": {
         "access_token": "Token truy cập",
+        "accessibility": "Trợ năng",
         "advanced": "Nâng cao",
         "analytics": "Về dữ liệu phân tích",
         "and_n_others": {
@@ -385,7 +386,6 @@
         "cameras": "Máy quay",
         "copied": "Đã sao chép!",
         "credits": "Ghi công",
-        "cross_signing": "Xác thực chéo",
         "dark": "Tối",
         "description": "Sự mô tả",
         "deselect_all": "Bỏ chọn tất cả",
@@ -516,6 +516,8 @@
         "edit_composer_label": "Chỉnh sửa tin nhắn",
         "format_bold": "In đậm",
         "format_code_block": "Khối mã",
+        "format_decrease_indent": "Giảm thụt lề",
+        "format_increase_indent": "Tăng thụt lề",
         "format_inline_code": "Mã",
         "format_insert_link": "Chèn liên kết",
         "format_italic": "Nghiêng",
@@ -625,7 +627,9 @@
         "subspace_join_rule_restricted_description": "Bất kỳ ai trong <SpaceName/> đều có thể tìm và tham gia."
     },
     "credits": {
-        "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>."
+        "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji": "Bộ <twemoji>Twemoji</twemoji> được © <author>Twitter, Inc and other contributors</author> sử dụng dưới các điều khoản trong giấy phép <terms>CC-BY 4.0</terms>.",
+        "twemoji_colr": "<colr>twemoji-colr</colr> được Quỹ ©<author>Mozilla Foundation</author> sử dụng dựa trên các điều khoản trong giấy phép <terms>Apache 2.0</terms>."
     },
     "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "devtools": {
@@ -712,44 +716,23 @@
     "empty_room_was_name": "Phòng trống (trước kia là %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Nhập Chuỗi bảo mật hoặc <button>sử dụng Khóa bảo mật</button> của bạn để tiếp tục.",
             "key_validation_text": {
-                "invalid_security_key": "Khóa bảo mật không hợp lệ",
-                "recovery_key_is_correct": "Có vẻ tốt!",
-                "wrong_file_type": "Loại tệp sai",
                 "wrong_security_key": "Khóa bảo mật sai"
             },
-            "reset_title": "Đặt lại mọi thứ",
-            "reset_warning_1": "Chỉ thực hiện việc này nếu bạn không có thiết bị nào khác để hoàn tất quá trình xác thực.",
-            "reset_warning_2": "Nếu bạn đặt lại mọi thứ, bạn sẽ khởi động lại mà không có phiên nào đáng tin cậy, không có người dùng đáng tin cậy và có thể không xem được các tin nhắn trước đây.",
             "restoring": "Khôi phục khóa từ sao lưu",
-            "security_key_title": "Chìa khóa bảo mật",
-            "security_phrase_incorrect_error": "Không thể truy cập bộ nhớ bí mật. Vui lòng xác minh rằng bạn đã nhập đúng Cụm từ bảo mật.",
-            "security_phrase_title": "Cụm từ Bảo mật",
-            "separator": "%(securityKey)s hay %(recoveryFile)s",
-            "use_security_key_prompt": "Sử dụng Khóa bảo mật của bạn để tiếp tục."
+            "security_key_title": "Chìa khóa bảo mật"
         },
         "bootstrap_title": "Đang thiết lập khóa bảo mật",
         "cancel_entering_passphrase_description": "Bạn có chắc chắn muốn hủy nhập cụm mật khẩu không?",
         "cancel_entering_passphrase_title": "Hủy nhập cụm mật khẩu?",
         "confirm_encryption_setup_body": "Nhấp vào nút bên dưới để xác nhận thiết lập mã hóa.",
         "confirm_encryption_setup_title": "Xác nhận thiết lập mã hóa",
-        "cross_signing_not_ready": "Tính năng xác thực chéo chưa được thiết lập.",
-        "cross_signing_ready": "Xác thực chéo đã sẵn sàng để sử dụng.",
-        "cross_signing_ready_no_backup": "Xác thực chéo đã sẵn sàng nhưng các khóa chưa được sao lưu.",
         "cross_signing_room_normal": "Phòng này được mã hóa end-to-end",
         "cross_signing_room_verified": "Mọi người trong phòng này đã được xác thực",
         "cross_signing_room_warning": "Ai đó đang sử dụng một phiên không xác định",
-        "cross_signing_unsupported": "Máy chủ của bạn không hỗ trợ xác thực chéo.",
-        "cross_signing_untrusted": "Tài khoản của bạn có danh tính xác thực chéo trong vùng lưu trữ bí mật, nhưng chưa được phiên này tin cậy.",
         "cross_signing_user_normal": "Bạn chưa xác thực người dùng này.",
         "cross_signing_user_verified": "Bạn đã xác thực người dùng này. Người dùng này đã xác thực tất cả các phiên của họ.",
         "cross_signing_user_warning": "Người dùng này chưa xác thực tất cả các phiên của họ.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Xóa các khóa ký chéo",
-            "title": "Hủy khóa xác thực chéo?",
-            "warning": "Xóa khóa ký chéo là vĩnh viễn. Bất kỳ ai mà bạn đã xác thực đều sẽ thấy cảnh báo bảo mật. Bạn gần như chắc chắn không muốn làm điều này, trừ khi bạn bị mất mọi thiết bị mà bạn có thể đăng nhập chéo."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "Tính xác thực của tin nhắn được mã hóa này không thể được đảm bảo trên thiết bị này.",
         "event_shield_reason_mismatched_sender_key": "Được mã hóa bởi một phiên chưa được xác thực",
         "export_unsupported": "Trình duyệt của bạn không hỗ trợ chức năng mã hóa",
@@ -769,7 +752,6 @@
             "title": "Phương pháp Khôi phục mới",
             "warning": "Nếu bạn không đặt phương pháp khôi phục mới, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
-        "not_supported": "<không được hỗ trợ>",
         "recovery_method_removed": {
             "description_1": "Phiên này đã phát hiện rằng Cụm từ bảo mật và khóa cho Tin nhắn an toàn của bạn đã bị xóa.",
             "description_2": "Nếu bạn vô tình làm điều này, bạn có thể Cài đặt Tin nhắn được bảo toàn trên phiên này. Tính năng này sẽ mã hóa lại lịch sử tin nhắn của phiên này bằng một phương pháp khôi phục mới.",
@@ -780,8 +762,7 @@
         "set_up_toast_description": "Bảo vệ chống mất quyền truy cập vào tin nhắn và dữ liệu được mã hóa",
         "set_up_toast_title": "Thiết lập Sao lưu Bảo mật",
         "setup_secure_backup": {
-            "explainer": "Sao lưu chìa khóa của bạn trước khi đăng xuất để tránh mất chúng.",
-            "title": "Cài đặt"
+            "explainer": "Sao lưu chìa khóa của bạn trước khi đăng xuất để tránh mất chúng."
         },
         "udd": {
             "interactive_verification_button": "Xác thực có tương tác bằng biểu tượng cảm xúc",
@@ -796,7 +777,6 @@
             "accepting": "Đang chấp nhận…",
             "after_new_login": {
                 "device_verified": "Thiết bị được xác thực",
-                "reset_confirmation": "Thực sự đặt lại các khóa xác minh?",
                 "skip_verification": "Bỏ qua xác thực ngay bây giờ",
                 "unable_to_verify": "Không thể xác thực thiết bị này",
                 "verify_this_device": "Xác thực thiết bị này"
@@ -866,8 +846,6 @@
             "verify_emoji_prompt": "Xác thực bằng cách so sánh biểu tượng cảm xúc độc đáo.",
             "verify_emoji_prompt_qr": "Nếu bạn không thể quét mã ở trên, hãy xác thực bằng cách so sánh biểu tượng cảm xúc duy nhất.",
             "verify_later": "Tôi sẽ xác thực sau",
-            "verify_reset_warning_1": "Sẽ không thể hoàn tác lại việc đặt lại các khóa xác thực của bạn. Sau khi đặt lại, bạn sẽ không có quyền truy cập vào các tin nhắn đã được mã hóa cũ, và bạn bè đã được xác thực trước đó bạn sẽ thấy các cảnh báo bảo mật cho đến khi bạn xác thực lại với họ.",
-            "verify_reset_warning_2": "Chỉ tiếp tục nếu bạn chắc chắn là mình đã mất mọi thiết bị khác và khóa bảo mật.",
             "verify_using_device": "Xác thực bằng thiết bị khác",
             "verify_using_key": "Xác thực bằng Khóa Bảo mật",
             "verify_using_key_or_phrase": "Xác thực bằng Khóa hoặc Chuỗi Bảo mật",
@@ -926,11 +904,7 @@
             "title": "Không thể sao chép liên kết phòng"
         },
         "error_loading_user_profile": "Không thể tải hồ sơ người dùng",
-        "forget_room_failed": "Không thể quên phòng %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Máy chủ có thể không khả dụng, quá tải hoặc hết thời gian tìm kiếm :(",
-            "title": "Tìm kiếm không thành công"
-        }
+        "forget_room_failed": "Không thể quên phòng %(errCode)s"
     },
     "error_user_not_logged_in": "Người dùng đang không đăng nhập",
     "event_preview": {
@@ -990,6 +964,7 @@
         "generating_zip": "Tạo ZIP",
         "html_title": "Dữ liệu được trích xuất",
         "include_attachments": "Bao gồm các đính kèm",
+        "json": "JSON",
         "media_omitted": "Phương tiện bị bỏ qua",
         "media_omitted_file_size": "Phương tiện bị bỏ qua - kích thước tệp vượt quá giới hạn",
         "messages": "Tin nhắn",
@@ -1154,6 +1129,7 @@
     },
     "keyboard": {
         "activate_button": "Kích hoạt nút đã chọn",
+        "alt": "Alt",
         "autocomplete_cancel": "Hủy tự động hoàn thành",
         "backspace": "Phím lùi",
         "cancel_reply": "Hủy trả lời tin nhắn",
@@ -1174,6 +1150,7 @@
         "composer_toggle_link": "Chuyển đổi liên kết",
         "composer_toggle_quote": "Chuyển sang Trích dẫn",
         "composer_undo": "Hoàn tác chỉnh sửa",
+        "control": "Phím Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Bỏ qua điểm đánh dấu đã đọc và chuyển xuống cuối",
         "end": "Kết thúc",
         "enter": "Vào",
@@ -1195,6 +1172,7 @@
         "scroll_up_timeline": "Cuộn lên trong dòng thời gian",
         "search": "Tìm kiếm (phải được bật)",
         "send_sticker": "Gửi nhãn dán",
+        "shift": "Phím Shift",
         "space": "space",
         "toggle_microphone_mute": "Chuyển đổi chế độ tắt tiếng micrô",
         "toggle_right_panel": "Chuyển đổi bảng điều khiển bên phải",
@@ -1468,11 +1446,6 @@
         "ongoing": "Đang xóa…",
         "reason_label": "Lý do (không bắt buộc)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Bạn có chắc chắn muốn từ chối lời mời không?",
-        "failed": "Không thể từ chối lời mời",
-        "title": "Từ chối lời mời"
-    },
     "report_content": {
         "description": "Báo cáo thông báo này sẽ gửi 'ID sự kiện' duy nhất của nó đến quản trị viên của máy chủ của bạn. Nếu tin nhắn trong phòng này được mã hóa, quản trị viên máy chủ của bạn sẽ không thể đọc nội dung tin nhắn hoặc xem bất kỳ tệp hoặc hình ảnh nào.",
         "disagree": "Không đồng ý",
@@ -1615,7 +1588,6 @@
             "you_created": "Bạn đã tạo phòng này."
         },
         "invite_email_mismatch_suggestion": "Chia sẻ địa chỉ thư điện tử này trong Cài đặt để nhận lời mời trực tiếp trong %(brand)s.",
-        "invite_reject_ignore": "Từ chối & Bỏ qua người dùng",
         "invite_sent_to_email": "Lời mời này đã được gửi tới %(email)s",
         "invite_sent_to_email_room": "Lời mời đến %(roomName)s này đã được gửi tới %(email)s",
         "invite_subtitle": "<userName/> đã mời bạn",
@@ -2101,7 +2073,6 @@
             "remove_msisdn_prompt": "Xóa %(phone)s?",
             "spell_check_locale_placeholder": "Chọn vùng miền"
         },
-        "image_thumbnails": "Hiển thị bản xem trước / hình thu nhỏ cho hình ảnh",
         "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",
         "inline_url_previews_room": "Bật xem trước nội dung liên kết cho mọi người trong phòng này",
         "inline_url_previews_room_account": "Bật xem trước nội dung liên kết trong phòng này (chỉ với bạn)",
@@ -2213,50 +2184,16 @@
         "prompt_invite": "Nhắc trước khi gửi lời mời đến các ID Matrix có khả năng không hợp lệ",
         "replace_plain_emoji": "Tự động thay thế hình biểu tượng",
         "security": {
-            "4s_public_key_in_account_data": "trong dữ liệu tài khoản",
-            "4s_public_key_status": "Khóa công khai lưu trữ bí mật:",
-            "backup_key_cached_status": "Đệm các khóa được sao lưu:",
-            "backup_key_stored_status": "Lưu trữ hóa được sao lưu:",
-            "backup_key_unexpected_type": "loại bất ngờ",
-            "backup_key_well_formed": "được hình thành một cách hoàn hảo",
-            "backup_keys_description": "Sao lưu các khóa mã hóa với dữ liệu tài khoản của bạn trong trường hợp bạn mất quyền truy cập vào các phiên của mình. Các khóa của bạn sẽ được bảo mật bằng Khóa bảo mật duy nhất.",
             "bulk_options_accept_all_invites": "Chấp nhận tất cả các lời mời từ %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Từ chối tất cả lời mời từ %(invitedRooms)s",
             "bulk_options_section": "Tùy chọn hàng loạt",
-            "cross_signing_cached": "được lưu trữ cục bộ",
-            "cross_signing_homeserver_support": "Tính năng được hỗ trợ bởi máy chủ:",
-            "cross_signing_homeserver_support_exists": "tồn tại",
-            "cross_signing_in_4s": "trong vùng lưu trữ bí mật",
-            "cross_signing_in_memory": "trong bộ nhớ",
-            "cross_signing_master_private_Key": "Khóa cá nhân chính:",
-            "cross_signing_not_cached": "không tìm thấy ở địa phương",
-            "cross_signing_not_found": "không tìm thấy",
-            "cross_signing_not_in_4s": "không tìm thấy trong bộ nhớ",
-            "cross_signing_not_stored": "không được lưu trữ",
-            "cross_signing_private_keys": "Khóa cá nhân xác thực chéo:",
-            "cross_signing_public_keys": "Khóa công khai xác thực chéo:",
-            "cross_signing_self_signing_private_key": "Khóa cá nhân tự ký:",
-            "cross_signing_user_signing_private_key": "Người dùng ký khóa cá nhân:",
-            "cryptography_section": "Mã hóa bảo mật",
-            "delete_backup": "Xóa Sao lưu",
-            "delete_backup_confirm_description": "Bạn có chắc không? Bạn sẽ mất các tin nhắn được mã hóa nếu các khóa của bạn không được sao lưu đúng cách.",
             "e2ee_default_disabled_warning": "Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.",
             "enable_message_search": "Bật tính năng tìm kiếm tin nhắn trong các phòng được mã hóa",
             "encryption_section": "Mã hóa",
-            "error_loading_key_backup_status": "Không thể tải trạng thái sao lưu khóa",
-            "export_megolm_keys": "Xuất các mã khoá phòng E2E",
             "ignore_users_empty": "Bạn không có người dùng bị bỏ qua.",
             "ignore_users_section": "Người dùng bị bỏ qua",
-            "import_megolm_keys": "Nhập các mã khoá phòng E2E",
-            "key_backup_active": "Phiên này đang sao lưu các khóa.",
-            "key_backup_active_version_none": "Không có",
             "key_backup_algorithm": "Thuật toán:",
-            "key_backup_complete": "Tất cả các khóa được sao lưu",
             "key_backup_connect": "Kết nối phiên này với Khóa Sao lưu",
-            "key_backup_connect_prompt": "Kết nối phiên này với máy chủ sao lưu khóa trước khi đăng xuất để tránh mất bất kỳ khóa nào có thể chỉ có trong phiên này.",
-            "key_backup_in_progress": "Đang sao lưu %(sessionsRemaining)s khóa…",
-            "key_backup_inactive": "Phiên này đang <b>không sao lưu các khóa</b>, nhưng bạn có một bản sao lưu hiện có, bạn có thể khôi phục và thêm vào để về sau.",
-            "key_backup_inactive_warning": "Các khóa của bạn <b>not being backed up from this session</b>.",
             "message_search_disable_warning": "Nếu bị tắt, tin nhắn từ các phòng được mã hóa sẽ không xuất hiện trong kết quả tìm kiếm.",
             "message_search_disabled": "Bộ nhớ cache an toàn các tin nhắn được mã hóa cục bộ để chúng xuất hiện trong kết quả tìm kiếm.",
             "message_search_enabled": {
@@ -2276,13 +2213,7 @@
             "message_search_unsupported": "%(brand)s thiếu một số thành phần thiết yếu để lưu trữ cục bộ an toàn các tin nhắn được mã hóa. Nếu bạn muốn thử nghiệm với tính năng này, hãy dựng một bản %(brand)s tùy chỉnh cho máy tính có thêm <nativeLink>các thành phần để tìm kiếm</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s không thể lưu trữ cục bộ an toàn các tin nhắn được mã hóa khi đang chạy trong trình duyệt web. Sử dụng <desktopLink>%(brand)s cho máy tính</desktopLink> để các tin nhắn được mã hóa xuất hiện trong kết quả tìm kiếm.",
             "record_session_details": "Ghi lại tên phần mềm máy khách, phiên bản, và đường dẫn để nhận diện các phiên dễ dàng hơn trong trình quản lý phiên",
-            "restore_key_backup": "Khôi phục từ Sao lưu",
-            "secret_storage_not_ready": "chưa sẵn sàng",
-            "secret_storage_ready": "Sẵn sàng",
-            "secret_storage_status": "Lưu trữ bí mật:",
             "send_analytics": "Gửi dữ liệu phân tích",
-            "session_id": "Định danh (ID) phiên:",
-            "session_key": "Khóa phiên:",
             "strict_encryption": "Không bao giờ gửi tin nhắn được mã hóa đến các phiên chưa được xác thực từ phiên này"
         },
         "send_read_receipts": "Gửi thông báo đã đọc",
@@ -2504,8 +2435,6 @@
         "topic": "Lấy hoặc đặt chủ đề phòng",
         "topic_none": "Phòng này chưa có chủ đề.",
         "topic_room_error": "Không thể lấy chủ đề phòng: Không tìm thấy phòng (%(roomId)s)",
-        "tovirtual": "Chuyển sang phòng ảo của phòng này, nếu nó có",
-        "tovirtual_not_found": "Không có phòng ảo của phòng này",
         "unban": "Gỡ cấm thành viên có ID chỉ định",
         "unflip": "Thêm ┬──┬ ノ( ゜-゜ノ) vào tin nhắn văn bản thuần túy",
         "unholdcall": "Nối lại cuộc gọi trong phòng hiện tại",
@@ -2620,14 +2549,12 @@
         "heading_without_query": "Tìm",
         "join_button_text": "Tham gia %(roomAddress)s",
         "keyboard_scroll_hint": "Dùng <arrows/> để cuộn",
-        "message_search_section_title": "Các tìm kiếm khác",
         "other_rooms_in_space": "Các phòng khác trong %(spaceName)s",
         "public_rooms_label": "Các phòng công cộng",
         "recent_searches_section_title": "Các tìm kiếm gần đây",
         "recently_viewed_section_title": "Được xem gần đây",
         "result_may_be_hidden_privacy_warning": "Một số kết quả có thể bị ẩn để đảm bảo quyền riêng tư",
         "result_may_be_hidden_warning": "Một số kết quả có thể bị ẩn",
-        "search_messages_hint": "Để tìm các tin nhắn, hãy tìm biểu tượng này ở đầu phòng <icon/>",
         "spaces_title": "Các Space bạn đang trong đó",
         "start_group_chat_button": "Bắt đầu cuộc trò chuyện nhóm"
     },

@@ -62,14 +62,14 @@ export async function startAnyRegistrationFlow(
                   </button>,
               ]
             : [],
-        onFinished: (proceed) => {
-            if (proceed) {
-                dis.dispatch({ action: "start_login", screenAfterLogin: options.screen_after });
-            } else if (options.go_home_on_cancel) {
-                dis.dispatch({ action: Action.ViewHomePage });
-            } else if (options.go_welcome_on_cancel) {
-                dis.dispatch({ action: "view_welcome_page" });
-            }
-        },
+    });
+    modal.finished.then(([proceed]) => {
+        if (proceed) {
+            dis.dispatch({ action: "start_login", screenAfterLogin: options.screen_after });
+        } else if (options.go_home_on_cancel) {
+            dis.dispatch({ action: Action.ViewHomePage });
+        } else if (options.go_welcome_on_cancel) {
+            dis.dispatch({ action: "view_welcome_page" });
+        }
     });
 }

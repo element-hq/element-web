@@ -39,7 +39,6 @@ describe("MLocationBody", () => {
             mxEvent: defaultEvent,
             highlights: [],
             highlightLink: "",
-            onHeightChanged: jest.fn(),
             onMessageAllowed: jest.fn(),
             permalinkCreator: {} as RoomPermalinkCreator,
             mediaEventHelper: {} as MediaEventHelper,

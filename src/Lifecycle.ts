@@ -321,7 +321,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
 
-        await onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
+        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
 }
@@ -468,13 +468,16 @@ type TryAgainFunction = () => void;
  * @param description error description
  * @param tryAgain OPTIONAL function to call on try again button from error dialog
  */
-async function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): Promise<void> {
-    Modal.createDialog(ErrorDialog, {
+function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): void {
+    const { finished } = Modal.createDialog(ErrorDialog, {
         title: _t("auth|oidc|error_title"),
         description,
         button: _t("action|try_again"),
+    });
+
+    finished.then(([shouldTryAgain]) => {
         // if we have a tryAgain callback, call it the primary 'try again' button was clicked in the dialog
-        onFinished: tryAgain ? (shouldTryAgain?: boolean) => shouldTryAgain && tryAgain() : undefined,
+        if (shouldTryAgain) tryAgain?.();
     });
 }
 
@@ -699,6 +702,43 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
     stopMatrixClient();
     credentials.pickleKey = await loadOrCreatePickleKey(credentials);
     return doSetLoggedIn(credentials, true, true);
+}
+
+/**
+ * Hydrates an existing session by using the credentials provided. This will
+ * not clear any local storage, unlike setLoggedIn().
+ *
+ * Stops the existing Matrix client (without clearing its data) and starts a
+ * new one in its place. This additionally starts all other react-sdk services
+ * which use the new Matrix client.
+ *
+ * If the credentials belong to a different user from the session already stored,
+ * the old session will be cleared automatically.
+ *
+ * @param {IMatrixClientCreds} credentials The credentials to use
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
+ */
+export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+    const oldUserId = MatrixClientPeg.safeGet().getUserId();
+    const oldDeviceId = MatrixClientPeg.safeGet().getDeviceId();
+
+    stopMatrixClient(); // unsets MatrixClientPeg.get()
+    localStorage.removeItem("mx_soft_logout");
+    _isLoggingOut = false;
+
+    const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
+    if (overwrite) {
+        logger.warn("Clearing all data: Old session belongs to a different user/session");
+    }
+
+    if (!credentials.pickleKey && credentials.deviceId !== undefined) {
+        logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
+        credentials.pickleKey =
+            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
+    }
+
+    return doSetLoggedIn(credentials, overwrite, false);
 }
 
 /**
@@ -1075,7 +1115,9 @@ export async function onLoggedOut(): Promise<void> {
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+    logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
+
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
         const language = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);

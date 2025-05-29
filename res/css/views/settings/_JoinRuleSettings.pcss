@@ -53,6 +53,14 @@ Please see LICENSE files in the repository root for full details.
         display: block;
     }
 
+    &.mx_StyledRadioButton_disabled {
+        opacity: 0.5;
+    }
+
+    &.mx_StyledRadioButton_disabled + span {
+        opacity: 0.5;
+    }
+
     & + span {
         display: inline-block;
         margin-left: 34px;
@@ -70,4 +78,8 @@ Please see LICENSE files in the repository root for full details.
 .mx_JoinRuleSettings_labelledCheckbox {
     font: var(--cpd-font-body-md-regular);
     margin-top: var(--cpd-space-2x);
+}
+
+.mx_JoinRuleSettings_recommended {
+    color: $accent-1000;
 }

@@ -83,7 +83,6 @@
         "react": "Reacciona",
         "refresh": "Actualizar",
         "register": "Rexistrar",
-        "reject": "Rexeitar",
         "remove": "Eliminar",
         "rename": "Cambiar nome",
         "reply": "Resposta",
@@ -370,7 +369,6 @@
         "capabilities": "Capacidades",
         "copied": "Copiado!",
         "credits": "Créditos",
-        "cross_signing": "Sinatura cruzada",
         "dark": "Escuro",
         "description": "Descrición",
         "deselect_all": "Retirar selección a todos",
@@ -671,44 +669,23 @@
     "empty_room_was_name": "Sala baleira (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de Seguridade non válida",
-                "recovery_key_is_correct": "Pinta ben!",
-                "wrong_file_type": "Tipo de ficheiro erróneo",
                 "wrong_security_key": "Chave de Seguridade incorrecta"
             },
-            "reset_title": "Restablecer todo",
-            "reset_warning_1": "Fai isto únicamente se non tes outro dispositivo co que completar a verificación.",
-            "reset_warning_2": "Se restableces todo, volverás a comezar sen sesións verificadas, usuarias de confianza, e poderías non poder ver as mensaxes anteriores.",
             "restoring": "Restablecendo chaves desde a copia",
-            "security_key_title": "Chave de Seguridade",
-            "security_phrase_incorrect_error": "Non se puido acceder ao almacenaxe segredo. Comproba que escribiches correctamente a Frase de Seguridade.",
-            "security_phrase_title": "Frase de seguridade",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Usa a túa Chave de Seguridade para continuar."
+            "security_key_title": "Chave de Seguridade"
         },
         "bootstrap_title": "Configurando as chaves",
         "cancel_entering_passphrase_description": "¿Estás seguro de que non queres escribir a frase de paso?",
         "cancel_entering_passphrase_title": "Cancelar a escrita da frase de paso?",
         "confirm_encryption_setup_body": "Preme no botón inferior para confirmar os axustes do cifrado.",
         "confirm_encryption_setup_title": "Confirma os axustes de cifrado",
-        "cross_signing_not_ready": "Non está configurada a Sinatura-Cruzada.",
-        "cross_signing_ready": "A Sinatura-Cruzada está lista para usar.",
-        "cross_signing_ready_no_backup": "A sinatura-cruzada está preparada pero non hai copia das chaves.",
         "cross_signing_room_normal": "Esta sala está cifrada extremo-a-extremo",
         "cross_signing_room_verified": "Todas nesta sala están verificadas",
         "cross_signing_room_warning": "Alguén está a usar unha sesión descoñecida",
-        "cross_signing_unsupported": "O teu servidor non soporta a sinatura cruzada.",
-        "cross_signing_untrusted": "A túa conta ten unha identidade de sinatura cruzada no almacenaxe segredo, pero aínda non confiaches nela nesta sesión.",
         "cross_signing_user_normal": "Non verificaches esta usuaria.",
         "cross_signing_user_verified": "Verificaches esta usuaria. A usuaria verificou todas as súas sesións.",
         "cross_signing_user_warning": "Esta usuaria non verificou ningunha das súas sesións.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Baleirar chaves de sinatura-cruzada",
-            "title": "Destruír chaves de sinatura-cruzada?",
-            "warning": "O eliminación das chaves de sinatura cruzada é permanente. Calquera a quen verificases con elas verá alertas de seguridade. Seguramente non queres facer esto, a menos que perdeses todos os dispositivos nos que podías asinar."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "A autenticidade desta mensaxe cifrada non está garantida neste dispositivo.",
         "event_shield_reason_mismatched_sender_key": "Cifrada por unha sesión non verificada",
         "export_unsupported": "O seu navegador non soporta as extensións de criptografía necesarias",
@@ -728,7 +705,6 @@
             "title": "Novo Método de Recuperación",
             "warning": "Se non configuras o novo método de recuperación, un atacante podería intentar o acceso á túa conta. Cambia inmediatamente o contrasinal da conta e configura un novo método de recuperación nos Axustes."
         },
-        "not_supported": "<non soportado>",
         "recovery_method_removed": {
             "description_1": "Esta sesión detectou que se eliminaron a túa Frase de Seguridade e chave para Mensaxes Seguras.",
             "description_2": "Se fixeches esto sen querer, podes configurar Mensaxes Seguras nesta sesión e volverá a cifrar as mensaxes da sesión cun novo método de recuperación.",
@@ -739,8 +715,7 @@
         "set_up_toast_description": "Protéxete de perder o acceso a mensaxes e datos cifrados",
         "set_up_toast_title": "Configurar Copia de apoio Segura",
         "setup_secure_backup": {
-            "explainer": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas.",
-            "title": "Configurar"
+            "explainer": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas."
         },
         "udd": {
             "interactive_verification_button": "Verificar interactivamente usando emoji",
@@ -755,7 +730,6 @@
             "accepting": "Aceptando…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "Queres restablecer as chaves de verificación?",
                 "skip_verification": "Omitir a verificación por agora",
                 "unable_to_verify": "Non se puido verificar este dispositivo",
                 "verify_this_device": "Verifica este dispositivo"
@@ -818,7 +792,6 @@
             "verify_emoji_prompt": "Verficación por comparación de emoticonas.",
             "verify_emoji_prompt_qr": "Se non podes escanear o código superior, verifica comparando as emoticonas.",
             "verify_later": "Verificarei máis tarde",
-            "verify_reset_warning_1": "O restablecemento das chaves de seguridade non se pode desfacer. Tras o restablecemento, non terás acceso ás antigas mensaxes cifradas, e calquera amizade que verificaras con anterioridade vai ver un aviso de seguridade ata que volvades a verificarvos mutuamente.",
             "verify_using_device": "Verifica usando outro dispositivo",
             "verify_using_key": "Verificar coa Chave de Seguridade",
             "verify_using_key_or_phrase": "Verificar coa Chave ou Frase de Seguridade",
@@ -873,11 +846,7 @@
             "title": "Non se puido copiar ligazón da sala"
         },
         "error_loading_user_profile": "Non se cargou o perfil da usuaria",
-        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor podería non estar dispoñible, sobrecargado, ou caducou a busca :(",
-            "title": "Fallou a busca"
-        }
+        "forget_room_failed": "Fallo ao esquecer sala %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1407,11 +1376,6 @@
         "ongoing": "Eliminando…",
         "reason_label": "Razón (optativa)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Seguro que desexa rexeitar o convite?",
-        "failed": "Fallo ao rexeitar o convite",
-        "title": "Rexeitar convite"
-    },
     "report_content": {
         "description": "Ao denunciar esta mensaxe vasnos enviar o seu 'event ID' único á administración do servidor. Se as mensaxes da sala están cifradas, a administración do servidor non poderá ler o texto da mensaxe ou ver imaxes ou ficheiros.",
         "disagree": "En desacordo",
@@ -1540,7 +1504,6 @@
             "you_created": "Creaches esta sala."
         },
         "invite_email_mismatch_suggestion": "Comparte este email en Axustes para recibir convites directamente en %(brand)s.",
-        "invite_reject_ignore": "Rexeitar e Ignorar usuaria",
         "invite_sent_to_email": "Este convite enviouse a %(email)s",
         "invite_sent_to_email_room": "Este convite para %(roomName)s foi enviado a %(email)s",
         "invite_subtitle": "<userName/> convidoute",
@@ -1995,7 +1958,6 @@
             "remove_msisdn_prompt": "Eliminar %(phone)s?",
             "spell_check_locale_placeholder": "Elixe o idioma"
         },
-        "image_thumbnails": "Mostrar miniaturas/vista previa das imaxes",
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",
         "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
         "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",
@@ -2093,48 +2055,16 @@
         "prompt_invite": "Avisar antes de enviar convites a IDs de Matrix potencialmente incorrectos",
         "replace_plain_emoji": "Substituír automaticamente Emoji en texto plano",
         "security": {
-            "4s_public_key_in_account_data": "nos datos da conta",
-            "4s_public_key_status": "Chave pública da almacenaxe segreda:",
-            "backup_key_cached_status": "Chave da copia na caché:",
-            "backup_key_stored_status": "Chave da copia gardada:",
-            "backup_key_unexpected_type": "tipo non agardado",
-            "backup_key_well_formed": "ben formado",
-            "backup_keys_description": "Fai unha copia de apoio das chaves de cifrado da túa conta en caso de perder o acceso ás túas sesións. As chaves estarán seguras cunha única Chave de Seguridade.",
             "bulk_options_accept_all_invites": "Aceptar os %(invitedRooms)s convites",
             "bulk_options_reject_all_invites": "Rexeitar todos os %(invitedRooms)s convites",
             "bulk_options_section": "Opcións agrupadas",
-            "cross_signing_cached": "na caché local",
-            "cross_signing_homeserver_support": "Soporte de funcións do servidor:",
-            "cross_signing_homeserver_support_exists": "existe",
-            "cross_signing_in_4s": "no almacenaxe segredo",
-            "cross_signing_in_memory": "en memoria",
-            "cross_signing_master_private_Key": "Chave mestra principal:",
-            "cross_signing_not_cached": "non se atopa localmente",
-            "cross_signing_not_found": "non atopado",
-            "cross_signing_not_in_4s": "non atopado no almacenaxe",
-            "cross_signing_not_stored": "non gardado",
-            "cross_signing_private_keys": "Chaves privadas da sinatura cruzada:",
-            "cross_signing_public_keys": "Chaves públicas da sinatura cruzada:",
-            "cross_signing_self_signing_private_key": "Auto asinado da chave privada:",
-            "cross_signing_user_signing_private_key": "Chave privada de sinatura da usuaria:",
-            "cryptography_section": "Criptografía",
-            "delete_backup": "Borrar copia de apoio",
-            "delete_backup_confirm_description": "Estás seguro? Perderás as mensaxes cifradas se non tes unha copia de apoio das chaves de cifrado.",
             "e2ee_default_disabled_warning": "A administración do servidor desactivou por defecto o cifrado extremo-a-extremo en salas privadas e Mensaxes Directas.",
             "enable_message_search": "Activar a busca de mensaxes en salas cifradas",
             "encryption_section": "Cifrado",
-            "error_loading_key_backup_status": "Non se puido cargar o estado das chaves de apoio",
-            "export_megolm_keys": "Exportar chaves E2E da sala",
             "ignore_users_empty": "Non tes usuarias ignoradas.",
             "ignore_users_section": "Usuarias ignoradas",
-            "import_megolm_keys": "Importar chaves E2E da sala",
-            "key_backup_active_version_none": "Nada",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_complete": "Copiaronse todas as chaves",
             "key_backup_connect": "Conecta esta sesión a Copia de Apoio de chaves",
-            "key_backup_connect_prompt": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
-            "key_backup_inactive": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
-            "key_backup_inactive_warning": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>.",
             "message_search_disable_warning": "Se está desactivado, as mensaxes das salas cifradas non aparecerán nos resultados das buscas.",
             "message_search_disabled": "Gardar de xeito seguro mensaxes cifradas na caché local para que aparezan nos resultados de buscas.",
             "message_search_enabled": {
@@ -2153,13 +2083,7 @@
             "message_search_space_used": "Espazo utilizado:",
             "message_search_unsupported": "Falta un compoñente de %(brand)s requerido para almacenar localmente mensaxes cifradas na caché. Se queres experimentar con esta función, compila unha versión personalizada de %(brand)s Desktop <nativeLink>cos compoñentes de busca engadidos</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s non pode por na caché local de xeito as mensaxes cifradas cando usa un navegador web. Usa <desktopLink>%(brand)s Desktop</desktopLink> para que as mensaxes cifradas aparezan nos resultados.",
-            "restore_key_backup": "Restaurar desde copia de apoio",
-            "secret_storage_not_ready": "non lista",
-            "secret_storage_ready": "lista",
-            "secret_storage_status": "Almacenaxe segreda:",
             "send_analytics": "Enviar datos de análises",
-            "session_id": "ID da sesión:",
-            "session_key": "Chave da sesión:",
             "strict_encryption": "Non enviar nunca desde esta sesión mensaxes cifradas a sesións non verificadas"
         },
         "send_read_receipts": "Enviar resgardos de lectura",
@@ -2317,8 +2241,6 @@
         "topic": "Obtén ou establece o asunto da sala",
         "topic_none": "Esta sala non ten asunto.",
         "topic_room_error": "Non se obtivo o asunto da sala: Non se atopou a sala (%(roomId)s)",
-        "tovirtual": "Cambia á sala virtual desta sala, se é que existe",
-        "tovirtual_not_found": "No hai sala virtual para esta sala",
         "unban": "Desbloquea usuaria co ID dado",
         "unflip": "Antecede con ┬──┬ ノ( ゜-゜ノ) a unha mensaxe de texto plano",
         "unholdcall": "Acepta a chamada na sala actual",
@@ -2437,7 +2359,6 @@
         "heading_without_query": "Buscar",
         "join_button_text": "Unirse a %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> para desprazarte",
-        "message_search_section_title": "Outras buscas",
         "other_rooms_in_space": "Outras salas en %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "recent_searches_section_title": "Buscas recentes",
@@ -2446,7 +2367,6 @@
         "result_may_be_hidden_privacy_warning": "Algúns resultados poden estar agochados por privacidade",
         "result_may_be_hidden_warning": "Algúns resultados poderían estar agochados",
         "search_dialog": "Diálogo de busca",
-        "search_messages_hint": "Para buscar mensaxes, busca esta icona arriba de todo na sala <icon/>",
         "spaces_title": "Espazos nos que estás",
         "start_group_chat_button": "Inicia un chat en grupo"
     },

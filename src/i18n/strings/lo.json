@@ -82,7 +82,6 @@
         "react": "ປະຕິກິລິຍາ",
         "refresh": "ໂຫຼດຫນ້າຈໍຄືນ",
         "register": "ລົງທະບຽນ",
-        "reject": "ປະຕິເສດ",
         "remove": "ເອົາອອກ",
         "rename": "ປ່ຽນຊື່",
         "reply": "ຕອບ",
@@ -369,7 +368,6 @@
         "capabilities": "ຄວາມສາມາດ",
         "copied": "ສຳເນົາແລ້ວ!",
         "credits": "ສິນເຊື່ອ",
-        "cross_signing": "ການເຂົ້າລະຫັດແບບໄຂ້ວ",
         "dark": "ມືດ",
         "description": "ລາຍລະອຽດ",
         "deselect_all": "ຍົກເລີກການເລືອກທັງໝົດ",
@@ -663,43 +661,23 @@
     "empty_room": "ຫ້ອງຫວ່າງ",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "ກະລຸນາໃສ່ປະໂຫຍກຄວາມປອດໄພຂອງທ່ານ ຫຼື <button>ໃຊ້ກະແຈຄວາມປອດໄພຂອງທ່ານ</button> ເພື່ອສືບຕໍ່.",
             "key_validation_text": {
-                "invalid_security_key": "ກະແຈຄວາມປອດໄພບໍ່ຖືກຕ້ອງ",
-                "recovery_key_is_correct": "ດີ!",
-                "wrong_file_type": "ປະເພດໄຟລ໌ບໍ່ຖຶກຕ້ອງ",
                 "wrong_security_key": "ກະແຈຄວາມປອດໄພບໍ່ຖຶກຕ້ອງ"
             },
-            "reset_title": "ຕັ້ງຄ່າໃໝ່ທຸກຢ່າງ",
-            "reset_warning_1": "ເຮັດແນວນີ້ກໍ່ຕໍ່ເມື່ອທ່ານບໍ່ມີອຸປະກອນອື່ນເພື່ອການຢັ້ງຢືນດ້ວຍ.",
-            "reset_warning_2": "ຖ້າທ່ານຕັ້ງຄ່າຄືນໃໝ່ທຸກຢ່າງ, ທ່ານຈະຣີສະຕາດໂດຍບໍ່ມີລະບົບທີ່ເຊື່ອຖືໄດ້, ບໍ່ມີຜູ້ໃຊ້ທີ່ເຊື່ອຖືໄດ້ ແລະ ອາດຈະບໍ່ເຫັນຂໍ້ຄວາມທີ່ຜ່ານມາ.",
             "restoring": "ການຟື້ນຟູລະຫັດຈາກການສໍາຮອງຂໍ້ມູນ",
-            "security_key_title": "ກະແຈຄວາມປອດໄພ",
-            "security_phrase_incorrect_error": "ບໍ່ສາມາດເຂົ້າເຖິງບ່ອນເກັບຂໍ້ມູນລັບໄດ້. ກະລຸນາກວດສອບວ່າທ່ານໃສ່ປະໂຫຍກຄວາມປອດໄພທີ່ຖືກຕ້ອງ.",
-            "security_phrase_title": "ປະໂຫຍກລະຫັດຄວາມປອດໄພ",
-            "use_security_key_prompt": "ໃຊ້ກະແຈຄວາມປອດໄພຂອງທ່ານເພື່ອສືບຕໍ່."
+            "security_key_title": "ກະແຈຄວາມປອດໄພ"
         },
         "bootstrap_title": "ການຕັ້ງຄ່າກະແຈ",
         "cancel_entering_passphrase_description": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຍົກເລີກການໃສ່ປະໂຫຍກລະຫັດຜ່ານ?",
         "cancel_entering_passphrase_title": "ຍົກເລີກການໃສ່ປະໂຫຍກລະຫັດຜ່ານບໍ?",
         "confirm_encryption_setup_body": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການຕັ້ງຄ່າການເຂົ້າລະຫັດ.",
         "confirm_encryption_setup_title": "ຢືນຢັນການຕັ້ງຄ່າການເຂົ້າລະຫັດ",
-        "cross_signing_not_ready": "ບໍ່ໄດ້ຕັ້ງຄ່າ Cross-signing.",
-        "cross_signing_ready": "ການລົງຊື່ຂ້າມແມ່ນກຽມພ້ອມສໍາລັບການໃຊ້ງານ.",
-        "cross_signing_ready_no_backup": "ການລົງຊື່ຂ້າມແມ່ນພ້ອມແລ້ວແຕ່ກະແຈບໍ່ໄດ້ສຳຮອງໄວ້.",
         "cross_signing_room_normal": "ຫ້ອງນີ້ຖືກເຂົ້າລະຫັດແບບຕົ້ນທາງ-ເຖິງປາຍທາງ",
         "cross_signing_room_verified": "ທຸກຄົນຢູ່ໃນຫ້ອງນີ້ໄດ້ຮັບການຢັ້ງຢືນແລ້ວ",
         "cross_signing_room_warning": "ບາງຄົນກໍາລັງໃຊ້ເງື່ອນໄຂທີ່ບໍ່ຮູ້ຈັກ",
-        "cross_signing_unsupported": "homeserverຂອງທ່ານບໍ່ຮອງຮັບການລົງຊື່ຂ້າມ.",
-        "cross_signing_untrusted": "ບັນຊີຂອງທ່ານມີຂໍ້ມູນແບບ cross-signing ໃນການເກັບຮັກສາຄວາມລັບ, ແຕ່ວ່າຍັງບໍ່ມີຄວາມເຊື່ອຖືໃນລະບົບນີ້.",
         "cross_signing_user_normal": "ທ່ານຍັງບໍ່ໄດ້ຢືນຢັນຜູ້ໃຊ້ນີ້.",
         "cross_signing_user_verified": "ທ່ານໄດ້ຢັ້ງຢືນຜູ້ໃຊ້ນີ້ແລ້ວ. ຜູ້ໃຊ້ນີ້ໄດ້ຢັ້ງຢືນທຸກເງິຶອນໄຂຂອງເຂົາເຈົ້າແລ້ວ.",
         "cross_signing_user_warning": "ຜູ້ໃຊ້ນີ້ຍັງບໍ່ໄດ້ຢຶນຢັນການເຂົ້າຮ່ວມຂອງເຂົາເຈົ້າທັງຫມົດຂອງ.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "ລຶບກະເເຈ cross-signing",
-            "title": "ທໍາລາຍກະແຈການເຊັນຮ່ວມ cross-signing ບໍ?",
-            "warning": "ການລຶບລະຫັດ cross-signing ແມ່ນຖາວອນ. ໃຜກໍຕາມທີ່ທ່ານໄດ້ຢັ້ງຢືນດ້ວຍຈະເຫັນການແຈ້ງເຕືອນຄວາມປອດໄພ. ທ່ານບໍ່ຕ້ອງເຮັດສິ່ງນີ້ເລີຍ, ເວັ້ນເສຍແຕ່ວ່າທ່ານເຮັດທຸກອຸກອນເສຍ ທີ່ທ່ານສາມາດຂ້າມເຂົ້າສູ່ລະບົບໄດ້."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "ອຸປະກອນນີ້ບໍ່ສາມາດຮັບປະກັນຄວາມຖືກຕ້ອງຂອງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດນີ້ໄດ້.",
         "event_shield_reason_mismatched_sender_key": "ເຂົ້າລະຫັດໂດຍພາກສ່ວນທີ່ບໍ່ໄດ້ຮັບການຢືນຢັນ",
         "export_unsupported": "ບຣາວເຊີຂອງທ່ານບໍ່ຮອງຮັບການເພິ່ມເຂົ້າລະຫັດລັບທີ່ຕ້ອງການ",
@@ -719,7 +697,6 @@
             "title": "ວິທີການກູ້ຄືນໃຫມ່",
             "warning": "ຖ້າທ່ານບໍ່ໄດ້ກຳນົດວິທີການກູ້ຄືນໃໝ່, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະກຳນົດ ວິທີການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ."
         },
-        "not_supported": "<ບໍ່ຮອງຮັບ>",
         "recovery_method_removed": {
             "description_1": "ລະບົບນີ້ໄດ້ກວດພົບປະໂຫຍກຄວາມປອດໄພ ແລະ ກະແຈຂໍ້ຄວາມທີ່ປອດໄພຂອງທ່ານໄດ້ຖືກເອົາອອກແລ້ວ.",
             "description_2": "ຖ້າທ່ານດຳເນີນການສິ່ງນີ້ໂດຍບໍ່ໄດ້ຕັ້ງໃຈ, ທ່ານສາມາດຕັ້ງຄ່າຄວາມປອດໄພຂອງຂໍ້ຄວາມ ໃນລະບົບນີ້ ເຊິ່ງຈະມີການເຂົ້າລະຫັດປະຫວັດຂໍ້ຄວາມຂອງລະບົບນີ້ຄືນໃໝ່ດ້ວຍຂະບວນການກູ້ຂໍ້ມູນໃໝ່.",
@@ -730,8 +707,7 @@
         "set_up_toast_description": "ປ້ອງກັນການສູນເສຍການເຂົ້າເຖິງຂໍ້ຄວາມ ແລະຂໍ້ມູນທີ່ເຂົ້າລະຫັດ",
         "set_up_toast_title": "ຕັ້ງຄ່າການສໍາຮອງຂໍ້ມູນທີ່ປອດໄພ",
         "setup_secure_backup": {
-            "explainer": "ສຳຮອງຂໍ້ມູນກະແຈຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບເພື່ອຫຼີກເວັ້ນການສູນເສຍຂໍ້ມູນ.",
-            "title": "ຕັ້ງຄ່າ"
+            "explainer": "ສຳຮອງຂໍ້ມູນກະແຈຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບເພື່ອຫຼີກເວັ້ນການສູນເສຍຂໍ້ມູນ."
         },
         "udd": {
             "other_ask_verify_text": "ຂໍໃຫ້ຜູ້ໃຊ້ນີ້ກວດສອບລະບົບຂອງເຂົາເຈົ້າ, ຫຼື ຢືນຢັນດ້ວຍຕົນເອງຂ້າງລຸ່ມນີ້.",
@@ -745,7 +721,6 @@
             "accepting": "ກຳລັງຍອມຮັບ…",
             "after_new_login": {
                 "device_verified": "ຢັ້ງຢືນອຸປະກອນແລ້ວ",
-                "reset_confirmation": "ຕັ້ງຄ່າຢືນຢັນກະແຈຄືນໃໝ່ບໍ?",
                 "skip_verification": "ຂ້າມການຢັ້ງຢືນດຽວນີ້",
                 "unable_to_verify": "ບໍ່ສາມາດຢັ້ງຢືນອຸປະກອນນີ້ໄດ້",
                 "verify_this_device": "ຢັ້ງຢືນອຸປະກອນນີ້"
@@ -807,7 +782,6 @@
             "verify_emoji_prompt": "ຢັ້ງຢືນໂດຍການປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ.",
             "verify_emoji_prompt_qr": "ຖ້າທ່ານບໍ່ສາມາດສະແກນລະຫັດຂ້າງເທິງໄດ້, ໃຫ້ກວດສອບໂດຍການປຽບທຽບອີໂມຈິທີ່ເປັນເອກະລັກ.",
             "verify_later": "ຂ້ອຍຈະກວດສອບພາຍຫຼັງ",
-            "verify_reset_warning_1": "ການຕັ້ງຄ່າລະຫັດຢືນຢັນຂອງທ່ານບໍ່ສາມາດຍົກເລີກໄດ້. ຫຼັງຈາກການຕັ້ງຄ່າແລ້ວ, ທ່ານຈະບໍ່ສາມາດເຂົ້າເຖິງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດເກົ່າໄດ້, ແລະ ໝູ່ເພື່ອນທີ່ຢືນຢັນໄປກ່ອນໜ້ານີ້ ທ່ານຈະເຫັນຄຳເຕືອນຄວາມປອດໄພຈົນກວ່າທ່ານຈະຢືນຢັນກັບພວກມັນຄືນໃໝ່.",
             "verify_using_device": "ຢັ້ງຢືນດ້ວຍອຸປະກອນອື່ນ",
             "verify_using_key": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ",
             "verify_using_key_or_phrase": "ຢືນຢັນດ້ວຍກະແຈຄວາມປອດໄພ ຫຼືປະໂຫຍກ",
@@ -862,11 +836,7 @@
             "title": "ບໍ່ສາມາດສຳເນົາລິ້ງຫ້ອງໄດ້"
         },
         "error_loading_user_profile": "ບໍ່ສາມາດໂຫຼດໂປຣໄຟລ໌ຂອງຜູ້ໃຊ້ໄດ້",
-        "forget_room_failed": "ບໍ່ສາມາດລືມຫ້ອງ ໄດ້%(errCode)s",
-        "search_failed": {
-            "server_unavailable": "ເຊີບເວີອາດຈະບໍ່ມີຢູ່, ໂຫຼດເກີນ, ຫຼື ໝົດເວລາການຊອກຫາ :(",
-            "title": "ຄົ້ນຫາບໍ່ສຳເລັດ"
-        }
+        "forget_room_failed": "ບໍ່ສາມາດລືມຫ້ອງ ໄດ້%(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1372,11 +1342,6 @@
         "ongoing": "ກຳລັງລຶບ…",
         "reason_label": "ເຫດຜົນ (ທາງເລືອກ)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປະຕິເສດຄຳເຊີນ?",
-        "failed": "ປະຕິເສດຄຳເຊີນບໍ່ສຳເລັດ",
-        "title": "ປະຕິເສດຄຳເຊີນ"
-    },
     "report_content": {
         "description": "ການລາຍງານຂໍ້ຄວາມນີ້ຈະສົ່ງ 'ID ເຫດການ' ທີ່ບໍ່ຊໍ້າກັນໄປຫາຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານ. ຖ້າຂໍ້ຄວາມຢູ່ໃນຫ້ອງນີ້ຖືກເຂົ້າລະຫັດໄວ້, ຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານຈະບໍ່ສາມາດອ່ານຂໍ້ຄວາມ ຫຼືເບິ່ງໄຟລ໌ ຫຼືຮູບພາບຕ່າງໆໄດ້.",
         "disagree": "ບໍ່ເຫັນດີ",
@@ -1506,7 +1471,6 @@
             "you_created": "ທ່ານສ້າງຫ້ອງນີ້."
         },
         "invite_email_mismatch_suggestion": "ແບ່ງປັນອີເມວນີ້ໃນການຕັ້ງຄ່າເພື່ອຮັບການເຊີນໂດຍກົງໃນ %(brand)s.",
-        "invite_reject_ignore": "ປະຕິເສດ ແລະ ບໍ່ສົນໃຈຜູ້ໃຊ້",
         "invite_sent_to_email": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s",
         "invite_sent_to_email_room": "ການເຊີນນີ້ໄປຫາ %(roomName)s ໄດ້ຖືກສົ່ງໄປຫາ %(email)s",
         "invite_subtitle": "<userName/> ເຊີນທ່ານ",
@@ -1955,7 +1919,6 @@
             "remove_email_prompt": "ລຶບ %(email)s ອອກບໍ?",
             "remove_msisdn_prompt": "ລຶບ %(phone)sອອກບໍ?"
         },
-        "image_thumbnails": "ສະແດງຕົວຢ່າງ/ຮູບຕົວຢ່າງສຳລັບຮູບພາບ",
         "inline_url_previews_default": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໃນແຖວຕາມຄ່າເລີ່ມຕົ້ນ",
         "inline_url_previews_room": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້",
         "inline_url_previews_room_account": "ເປີດໃຊ້ຕົວຢ່າງ URL ສໍາລັບຫ້ອງນີ້ (ມີຜົນຕໍ່ທ່ານເທົ່ານັ້ນ)",
@@ -2050,48 +2013,16 @@
         "prompt_invite": "ເຕືອນກ່ອນທີ່ຈະສົ່ງຄໍາເຊີນໄປຫາ ID matrix ທີ່ອາດຈະບໍ່ຖືກຕ້ອງ",
         "replace_plain_emoji": "ປ່ຽນແທນ Emoji ຂໍ້ຄວາມທຳມະດາໂດຍອັດຕະໂນມັດ",
         "security": {
-            "4s_public_key_in_account_data": "ໃນຂໍ້ມູນບັນຊີ",
-            "4s_public_key_status": "ກະເເຈສາທາລະນະການເກັບຮັກສາຄວາມລັບ:",
-            "backup_key_cached_status": "ລະຫັດສໍາຮອງຂໍ້ມູນທີ່ເກັບໄວ້:",
-            "backup_key_stored_status": "ກະແຈສຳຮອງທີ່ເກັບໄວ້:",
-            "backup_key_unexpected_type": "ປະເພດທີ່ບໍ່ຄາດຄິດ",
-            "backup_key_well_formed": "ສ້າງຕັ້ງຂຶ້ນ",
-            "backup_keys_description": "ສຳຮອງຂໍ້ມູນລະຫັດການເຂົ້າລະຫັດຂອງທ່ານດ້ວຍຂໍ້ມູນບັນຊີຂອງທ່ານໃນກໍລະນີທີ່ທ່ານສູນເສຍການເຂົ້າເຖິງລະບົບຂອງທ່ານ. ກະແຈຂອງທ່ານຈະຖືກຮັກສາໄວ້ດ້ວຍກະແຈຄວາມປອດໄພທີ່ເປັນເອກະລັກ.",
             "bulk_options_accept_all_invites": "ຍອມຮັບການເຊີນທັງໝົດ %(invitedRooms)s",
             "bulk_options_reject_all_invites": "ປະຕິເສດການເຊີນທັງໝົດ %(invitedRooms)s",
             "bulk_options_section": "ຕົວເລືອກຈຳນວນຫຼາຍ",
-            "cross_signing_cached": "ເກັບໄວ້ໃນ cached ເຄື່ອງ",
-            "cross_signing_homeserver_support": "ສະຫນັບສະຫນູນຄຸນນະສົມບັດ Homeserver:",
-            "cross_signing_homeserver_support_exists": "ມີຢູ່",
-            "cross_signing_in_4s": "ໃນການເກັບຮັກສາຄວາມລັບ",
-            "cross_signing_in_memory": "ໃນຄວາມຊົງຈໍາ",
-            "cross_signing_master_private_Key": "ລະຫັດສ່ວນຕົວຫຼັກ:",
-            "cross_signing_not_cached": "ບໍ່ພົບຢູ່ໃນເຄື່ອງ",
-            "cross_signing_not_found": "ບໍ່ພົບເຫັນ",
-            "cross_signing_not_in_4s": "ບໍ່ພົບຢູ່ໃນບ່ອນເກັບມ້ຽນ",
-            "cross_signing_not_stored": "ບໍ່ໄດ້ເກັບຮັກສາໄວ້",
-            "cross_signing_private_keys": "ກະແຈສ່ວນຕົວCross-signing :",
-            "cross_signing_public_keys": "ກະແຈສາທາລະນະທີ່ມີ Cross-signing:",
-            "cross_signing_self_signing_private_key": "ລະຫັດສ່ວນຕົວທີ່ເຊັນດ້ວຍຕົນເອງ:",
-            "cross_signing_user_signing_private_key": "ຜູ້ໃຊ້ເຂົ້າສູ່ລະບົບລະຫັດສ່ວນຕົວ:",
-            "cryptography_section": "ການເຂົ້າລະຫັດລັບ",
-            "delete_backup": "ລຶບການສຳຮອງຂໍ້ມູນ",
-            "delete_backup_confirm_description": "ທ່ານແນ່ໃຈບໍ່? ທ່ານຈະສູນເສຍຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໄວ້ຫາກກະແຈຂອງທ່ານບໍ່ຖືກສຳຮອງຂໍ້ມູນຢ່າງຖືກຕ້ອງ.",
             "e2ee_default_disabled_warning": "ຜູ້ຄຸມເຊີບເວີຂອງທ່ານໄດ້ປິດການນຳໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງໂດຍຄ່າເລີ່ມຕົ້ນໃນຫ້ອງສ່ວນຕົວ ແລະ ຂໍ້ຄວາມໂດຍກົງ.",
             "enable_message_search": "ເປີດໃຊ້ການຊອກຫາຂໍ້ຄວາມຢູ່ໃນຫ້ອງທີ່ຖືກເຂົ້າລະຫັດ",
             "encryption_section": "ການເຂົ້າລະຫັດ",
-            "error_loading_key_backup_status": "ບໍ່ສາມາດໂຫຼດສະຖານະສຳຮອງລະຫັດໄດ້",
-            "export_megolm_keys": "ສົ່ງກະແຈຫ້ອງ E2E ອອກ",
             "ignore_users_empty": "ທ່ານບໍ່ມີຜູ້ໃຊ້ທີ່ຖືກລະເລີຍ.",
             "ignore_users_section": "ຜູ້ໃຊ້ຖືກຍົກເວັ້ນ",
-            "import_megolm_keys": "ນຳເຂົ້າກະແຈຫ້ອງ E2E",
-            "key_backup_active_version_none": "ບໍ່ມີ",
             "key_backup_algorithm": "ສູດການຄິດໄລ່:",
-            "key_backup_complete": "ກະແຈທັງໝົດຖືກສຳຮອງໄວ້",
             "key_backup_connect": "ເຊື່ອມຕໍ່ລະບົບນີ້ກັບ ກະເເຈສຳຮອງ",
-            "key_backup_connect_prompt": "ເຊື່ອມຕໍ່ລະບົບນີ້ກັບການສໍາຮອງກະແຈກ່ອນທີ່ຈະອອກຈາກລະບົບເພື່ອຫຼີກເວັ້ນການສູນເສຍກະແຈທີ່ອາດຢູ່ໃນລະບົບນີ້ເທົ່ານັ້ນ.",
-            "key_backup_inactive": "ລະບົບນີ້ແມ່ນ <b>ບໍ່ໄດ້ສໍາຮອງລະຫັດຂອງທ່ານ</b>, ແຕ່ທ່ານມີການສໍາຮອງຂໍ້ມູນທີ່ມີຢູ່ແລ້ວທີ່ທ່ານສາມາດກູ້ຄືນຈາກ ແລະເພີ່ມຕໍ່ໄປ.",
-            "key_backup_inactive_warning": "ກະແຈຂອງທ່ານ <b>ບໍ່ຖືກສຳຮອງຂໍ້ມູນຈາກລະບົບນີ້</b>.",
             "message_search_disable_warning": "ຖ້າປິດໃຊ້ງານ, ຂໍ້ຄວາມຈາກຫ້ອງທີ່ເຂົ້າລະຫັດຈະບໍ່ປາກົດຢູ່ໃນຜົນການຄົ້ນຫາ.",
             "message_search_disabled": "ເກັບຮັກສາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຄົ້ນຫາ.",
             "message_search_enabled": {
@@ -2110,13 +2041,7 @@
             "message_search_space_used": "ພື້ນທີ່ໃຊ້ແລ້ວ:",
             "message_search_unsupported": "%(brand)s ຂາດບາງອົງປະກອບທີ່ຕ້ອງການສໍາລັບການເກັບຂໍ້ຄວາມເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ. ຖ້າທ່ານຕ້ອງການທົດລອງໃຊ້ຄຸນສົມບັດນີ້, ສ້າງ %(brand)s Desktop ແບບກຳນົດເອງດ້ວຍການເພີ່ມ <nativeLink>ອົງປະກອບການຄົ້ນຫາ</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s ບໍ່ສາມາດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ ໃນຂະນະທີ່ກຳລັງດຳເນີນການໃນເວັບບຣາວເຊີ. ໃຊ້ <desktopLink>%(brand)s Desktop</desktopLink> ເພື່ອໃຫ້ຂໍ້ຄວາມເຂົ້າລະຫັດຈະປາກົດໃນຜົນການຊອກຫາ.",
-            "restore_key_backup": "ກູ້ຄືນຈາກການສໍາຮອງຂໍ້ມູນ",
-            "secret_storage_not_ready": "ບໍ່ພ້ອມ",
-            "secret_storage_ready": "ພ້ອມ",
-            "secret_storage_status": "ການເກັບຮັກສາຄວາມລັບ:",
             "send_analytics": "ສົ່ງຂໍ້ມູນການວິເຄາະ",
-            "session_id": "ID ລະບົບ:",
-            "session_key": "ກະແຈລະບົບ:",
             "strict_encryption": "ບໍ່ສົ່ງຂໍ້ຄວາມເຂົ້າລະຫັດໄປຫາລະບົບທີ່ບໍ່ໄດ້ຢືນຢັນຈາກລະບົບນີ້"
         },
         "send_typing_notifications": "ສົ່ງການແຈ້ງເຕືອນການພິມ",
@@ -2243,8 +2168,6 @@
         "topic": "ໄດ້ຮັບ ຫຼື ກໍານົດຫົວຂໍ້ຫ້ອງ",
         "topic_none": "ຫ້ອງນີ້ບໍ່ມີຫົວຂໍ້.",
         "topic_room_error": "ໂຫຼດຫົວຂໍ້ຫ້ອງບໍ່ສຳເລັດ: ບໍ່ສາມາດຊອກຫາຫ້ອງ (%(roomId)s",
-        "tovirtual": "ສະຫຼັບໄປໃຊ້ຫ້ອງສະເໝືອນຈິງ, ຖ້າມີອີກຫ້ອງໜຶ່ງ",
-        "tovirtual_not_found": "ບໍ່ມີຫ້ອງສະເໝືອນຈິງສຳລັບຫ້ອງນີ້",
         "unban": "ຍົກເລີກການຫ້າມຜູ້ໃຊ້ທີ່ມີ ID",
         "unflip": "ນຳໜ້າ ┬──┬ ノ( ゜-゜ノ)ເປັນຂໍ້ຄວາມທຳມະດາ",
         "unholdcall": "ການຮັບສາຍໃນຫ້ອງປະຈຸບັນຖຶກປິດໄວ້",
@@ -2350,13 +2273,11 @@
         "heading_with_query": "ໃຊ້ \"%(query)s\" ເພື່ອຊອກຫາ",
         "join_button_text": "ເຂົ້າຮ່ວມ %(roomAddress)s",
         "keyboard_scroll_hint": "ໃຊ້ <arrows/> ເພື່ອເລື່ອນ",
-        "message_search_section_title": "ການຄົ້ນຫາອື່ນໆ",
         "other_rooms_in_space": "ຫ້ອງອື່ນໆ%(spaceName)s",
         "public_rooms_label": "ຫ້ອງສາທາລະນະ",
         "recent_searches_section_title": "ການຄົ້ນຫາທີ່ຜ່ານມາ",
         "recently_viewed_section_title": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
         "search_dialog": "ຊອກຫາ ກ່ອງໂຕ້ຕອບ",
-        "search_messages_hint": "ເພື່ອຊອກຫາຂໍ້ຄວາມ, ຊອກຫາໄອຄອນນີ້ຢູ່ເທິງສຸດຂອງຫ້ອງ <icon/>",
         "spaces_title": "ຊ່ອງທີ່ທ່ານຢູ່"
     },
     "stickers": {

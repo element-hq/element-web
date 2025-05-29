@@ -89,13 +89,12 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     private onClearAll = (): void => {
-        Modal.createDialog(ConfirmWipeDeviceDialog, {
-            onFinished: (wipeData) => {
-                if (!wipeData) return;
+        const { finished } = Modal.createDialog(ConfirmWipeDeviceDialog);
+        finished.then(([wipeData]) => {
+            if (!wipeData) return;
 
-                logger.log("Clearing data from soft-logged-out session");
-                Lifecycle.logout(this.context.oidcClientStore);
-            },
+            logger.log("Clearing data from soft-logged-out session");
+            Lifecycle.logout(this.context.oidcClientStore);
         });
     };
 
@@ -168,7 +167,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return;
         }
 
-        Lifecycle.setLoggedIn(credentials).catch((e) => {
+        Lifecycle.hydrateSession(credentials).catch((e) => {
             logger.error(e);
             this.setState({ busy: false, errorText: _t("auth|failed_soft_logout_auth") });
         });
@@ -204,7 +203,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return false;
         }
 
-        return Lifecycle.setLoggedIn(credentials)
+        return Lifecycle.hydrateSession(credentials)
             .then(() => {
                 if (this.props.onTokenLoginCompleted) {
                     this.props.onTokenLoginCompleted();

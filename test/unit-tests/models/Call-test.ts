@@ -34,7 +34,6 @@ import type { Mocked } from "jest-mock";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     type JitsiCallMemberContent,
-    Layout,
     Call,
     CallEvent,
     ConnectionState,
@@ -49,8 +48,9 @@ import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagin
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
+import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
+import SdkConfig from "../../../src/SdkConfig.ts";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [
@@ -664,6 +664,7 @@ describe("ElementCall", () => {
     beforeEach(() => {
         jest.useFakeTimers();
         ({ client, room, alice } = setUpClientRoomAndStores());
+        SdkConfig.reset();
     });
 
     afterEach(() => {
@@ -681,6 +682,23 @@ describe("ElementCall", () => {
             ElementCall.create(room);
             expect(Call.get(room)).toBeInstanceOf(ElementCall);
             Call.get(room)?.destroy();
+        });
+
+        it("should use element call URL from developer settings if present", async () => {
+            const originalGetValue = SettingsStore.getValue;
+            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
+                if (name === "Developer.elementCallUrl") {
+                    return "https://call.element.dev";
+                }
+                return excludeDefault
+                    ? originalGetValue(name, roomId, excludeDefault)
+                    : originalGetValue(name, roomId, excludeDefault);
+            };
+            await ElementCall.create(room);
+            const call = ElementCall.get(room);
+            expect(call?.widget.url.startsWith("https://call.element.dev/")).toBeTruthy();
+            SettingsStore.getValue = originalGetValue;
+            call?.destroy();
         });
 
         it("finds ongoing calls that are created by the session manager", async () => {
@@ -758,7 +776,14 @@ describe("ElementCall", () => {
             SettingsStore.getValue = originalGetValue;
         });
 
-        it("passes analyticsID through widget URL", async () => {
+        it("passes analyticsID and posthog params through widget URL", async () => {
+            SdkConfig.put({
+                posthog: {
+                    api_host: "https://posthog",
+                    project_api_key: "DEADBEEF",
+                },
+            });
+            jest.spyOn(PosthogAnalytics.instance, "getAnonymity").mockReturnValue(Anonymity.Pseudonymous);
             client.getAccountData.mockImplementation((eventType: string) => {
                 if (eventType === PosthogAnalytics.ANALYTICS_EVENT_TYPE) {
                     return new MatrixEvent({ content: { id: "123456789987654321", pseudonymousAnalyticsOptIn: true } });
@@ -771,6 +796,9 @@ describe("ElementCall", () => {
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBe("123456789987654321");
+            expect(urlParams.get("posthogUserId")).toBe("123456789987654321");
+            expect(urlParams.get("posthogApiHost")).toBe("https://posthog");
+            expect(urlParams.get("posthogApiKey")).toBe("DEADBEEF");
             call.destroy();
         });
 
@@ -788,7 +816,7 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("analyticsID")).toBe("");
+            expect(urlParams.get("analyticsID")).toBeFalsy();
             call.destroy();
         });
 
@@ -827,7 +855,7 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("analyticsID")).toBe("");
+            expect(urlParams.get("analyticsID")).toBeFalsy();
         });
     });
 
@@ -864,13 +892,6 @@ describe("ElementCall", () => {
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
             await connect;
             expect(call.connectionState).toBe(ConnectionState.Connected);
-        });
-
-        it("fails to connect if the widget returns an error", async () => {
-            // we only send a JoinCall action if the widget is preloading
-            call.widget.data = { ...call.widget, preload: true };
-            mocked(messaging.transport).send.mockRejectedValue(new Error("never!!1! >:("));
-            await expect(call.start()).rejects.toBeDefined();
         });
 
         it("fails to disconnect if the widget returns an error", async () => {
@@ -919,33 +940,6 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
-        it("tracks layout", async () => {
-            await callConnectProcedure(call);
-            expect(call.layout).toBe(Layout.Tile);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.SpotlightLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(call.layout).toBe(Layout.Spotlight);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.TileLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(call.layout).toBe(Layout.Tile);
-        });
-
-        it("sets layout", async () => {
-            await callConnectProcedure(call);
-
-            await call.setLayout(Layout.Spotlight);
-            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.SpotlightLayout, {});
-
-            await call.setLayout(Layout.Tile);
-            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
-        });
-
         it("acknowledges mute_device widget action", async () => {
             await callConnectProcedure(call);
             const preventDefault = jest.fn();
@@ -983,24 +977,6 @@ describe("ElementCall", () => {
             expect(onParticipants.mock.calls).toEqual([[new Map([[alice, new Set(["alices_device"])]]), new Map()]]);
 
             call.off(CallEvent.Participants, onParticipants);
-        });
-
-        it("emits events when layout changes", async () => {
-            await callConnectProcedure(call);
-            const onLayout = jest.fn();
-            call.on(CallEvent.Layout, onLayout);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.SpotlightLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            messaging.emit(
-                `action:${ElementWidgetActions.TileLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(onLayout.mock.calls).toEqual([[Layout.Spotlight], [Layout.Tile]]);
-
-            call.off(CallEvent.Layout, onLayout);
         });
 
         it("ends the call immediately if the session ended", async () => {

@@ -10,8 +10,6 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { EmptyRoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/EmptyRoomList";
 import { FilterKey } from "../../../../../../src/stores/room-list-v3/skip-list/filters";
 
@@ -20,17 +18,12 @@ describe("<EmptyRoomList />", () => {
 
     beforeEach(() => {
         vm = {
+            isLoadingRooms: false,
             rooms: [],
             primaryFilters: [],
-            activateSecondaryFilter: jest.fn().mockReturnValue({}),
-            activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
             canCreateRoom: true,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             activeIndex: undefined,
         };
     });
@@ -57,13 +50,17 @@ describe("<EmptyRoomList />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should display the empty state for the unread filter", async () => {
+    it.each([
+        { key: FilterKey.UnreadFilter, name: "unread", action: "Show all chats" },
+        { key: FilterKey.MentionsFilter, name: "mention", action: "See all activity" },
+        { key: FilterKey.InvitesFilter, name: "invite", action: "See all activity" },
+    ])("should display the empty state for the $name filter", async ({ key, name, action }) => {
         const user = userEvent.setup();
         const activePrimaryFilter = {
             toggle: jest.fn(),
             active: true,
-            name: "unread",
-            key: FilterKey.UnreadFilter,
+            name,
+            key,
         };
         const newState = {
             ...vm,
@@ -71,7 +68,7 @@ describe("<EmptyRoomList />", () => {
         };
 
         const { asFragment } = render(<EmptyRoomList vm={newState} />);
-        await user.click(screen.getByRole("button", { name: "Show all chats" }));
+        await user.click(screen.getByRole("button", { name: action }));
         expect(activePrimaryFilter.toggle).toHaveBeenCalled();
         expect(asFragment()).toMatchSnapshot();
     });

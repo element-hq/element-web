@@ -11,6 +11,7 @@ import { type Locator, type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { checkRoomSummaryCard, viewRoomSummaryByName } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { Bot } from "../../pages/bot";
 
 const ROOM_NAME = "Test room";
 const ROOM_NAME_LONG =
@@ -21,20 +22,23 @@ const ROOM_NAME_LONG =
     "officia deserunt mollit anim id est laborum.";
 const SPACE_NAME = "Test space";
 const NAME = "Alice";
+const LONG_NAME = "Bob long long long long long long long long long long long long long long long name";
+
 const ROOM_ADDRESS_LONG =
     "loremIpsumDolorSitAmetConsecteturAdipisicingElitSedDoEiusmodTemporIncididuntUtLaboreEtDoloreMagnaAliqua";
 
 function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
+    return page.locator(".mx_MemberListView .mx_MemberTileView_name").filter({ hasText: name });
 }
 
 test.describe("RightPanel", () => {
+    let testRoomId: string;
     test.use({
         displayName: NAME,
     });
 
     test.beforeEach(async ({ app, user }) => {
-        await app.client.createRoom({ name: ROOM_NAME });
+        testRoomId = await app.client.createRoom({ name: ROOM_NAME });
         await app.client.createSpace({ name: SPACE_NAME });
     });
 
@@ -77,10 +81,12 @@ test.describe("RightPanel", () => {
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-leave-room.png");
         });
 
-        test("should handle clicking add widgets", async ({ page, app }) => {
+        test("should handle clicking add widgets", { tag: "@screenshot" }, async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
             await page.getByRole("menuitem", { name: "Extensions" }).click();
+            await expect(page.getByTestId("right-panel")).toMatchScreenshot("with-extensions.png");
+
             await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
         });
@@ -134,15 +140,63 @@ test.describe("RightPanel", () => {
             await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
+
+        test(
+            "should handle viewing long room member name",
+            { tag: "@screenshot" },
+            async ({ page, homeserver, app }) => {
+                const bobLongName = new Bot(page, homeserver, { displayName: LONG_NAME });
+                await bobLongName.prepareClient();
+                await app.client.inviteUser(testRoomId, bobLongName.credentials.userId);
+                await bobLongName.joinRoom(testRoomId);
+
+                await viewRoomSummaryByName(page, app, ROOM_NAME);
+
+                await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
+                await expect(page.locator(".mx_MemberListView")).toBeVisible();
+
+                await getMemberTileByName(page, LONG_NAME).click();
+                await expect(page.locator(".mx_UserInfo")).toBeVisible();
+                await expect(page.locator(".mx_UserInfo_profile").getByText(LONG_NAME)).toBeVisible();
+
+                await expect(page.locator(".mx_UserInfo")).toMatchScreenshot("with-long-name.png", {
+                    mask: [page.locator(".mx_UserInfo_profile_mxid")],
+                    css: `
+                        /* Use monospace font for consistent mask width */
+                        .mx_UserInfo_profile_mxid {
+                            font-family: Inconsolata !important;
+                        }
+                    `,
+                });
+            },
+        );
+
         test.describe("room reporting", () => {
             test.skip(isDendrite, "Dendrite does not implement room reporting");
-            test("should handle reporting a room", async ({ page, app }) => {
+            test("should handle reporting a room", { tag: "@screenshot" }, async ({ page, app }) => {
                 await viewRoomSummaryByName(page, app, ROOM_NAME);
+
                 await page.getByRole("menuitem", { name: "Report room" }).click();
                 const dialog = await page.getByRole("dialog", { name: "Report Room" });
                 await dialog.getByLabel("reason").fill("This room should be reported");
+                await expect(dialog).toMatchScreenshot("room-report-dialog.png");
                 await dialog.getByRole("button", { name: "Send report" }).click();
-                await expect(page.getByText("Your report was sent.")).toBeVisible();
+
+                // Dialog should have gone
+                await expect(page.locator(".mx_Dialog")).toHaveCount(0);
+            });
+            test("should handle reporting a room and leaving the room", async ({ page, app }) => {
+                await viewRoomSummaryByName(page, app, ROOM_NAME);
+
+                await page.getByRole("menuitem", { name: "Report room" }).click();
+                const dialog = await page.getByRole("dialog", { name: "Report room" });
+                await dialog.getByRole("switch", { name: "Leave room" }).click();
+                await dialog.getByLabel("reason").fill("This room should be reported");
+                await dialog.getByRole("button", { name: "Send report" }).click();
+                await page.getByRole("dialog", { name: "Leave room" }).getByRole("button", { name: "Leave" }).click();
+
+                // Dialog should have gone
+                await expect(page.locator(".mx_Dialog")).toHaveCount(0);
             });
         });
     });

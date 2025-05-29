@@ -87,7 +87,7 @@ describe("<MasUnlockCrossSigningAuthEntry/>", () => {
         const spy = jest.spyOn(global.window, "open");
         renderAuth();
 
-        fireEvent.click(screen.getByRole("button", { name: "Go to your account" }));
+        fireEvent.click(screen.getByRole("button", { name: "Continue to account" }));
         expect(spy).toHaveBeenCalledWith("https://example.com", "_blank");
     });
 

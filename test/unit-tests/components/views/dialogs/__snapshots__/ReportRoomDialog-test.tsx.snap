@@ -21,16 +21,33 @@ exports[`ReportRoomDialog displays admin message 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Report Room
+        Report room
       </h1>
     </div>
     <form
       class="_root_19upo_16"
       id="mx_ReportEventDialog"
     >
-      <p>
-        Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.
-      </p>
+      <div
+        class="_field_19upo_26"
+      >
+        <label
+          class="_label_19upo_59"
+          for="mx_ReportRoomDialog_reason"
+        >
+          Describe the reason
+        </label>
+        <textarea
+          id="mx_ReportRoomDialog_reason"
+          rows="5"
+        />
+        <span
+          class="_message_19upo_85 _help-message_19upo_91"
+          id="radix-«r8»"
+        >
+          Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.
+        </span>
+      </div>
       <p>
         <h1>
           You should know
@@ -48,19 +65,29 @@ exports[`ReportRoomDialog displays admin message 1`] = `
 
       </p>
       <div
-        class="_field_19upo_26"
+        class="mx_SettingsFlag"
       >
-        <label
-          class="_label_19upo_59"
-          for="mx_ReportRoomDialog_reason"
+        <span
+          class="mx_SettingsFlag_label"
         >
-          Reason
-        </label>
-        <textarea
-          id="mx_ReportRoomDialog_reason"
-          placeholder=" Reason for reporting..."
-          rows="5"
-        />
+          <div
+            id="mx_LabelledToggleSwitch_«r9»"
+          >
+            Leave room
+          </div>
+        </span>
+        <div
+          aria-checked="false"
+          aria-disabled="false"
+          aria-labelledby="mx_LabelledToggleSwitch_«r9»"
+          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+          role="switch"
+          tabindex="0"
+        >
+          <div
+            class="mx_ToggleSwitch_ball"
+          />
+        </div>
       </div>
       <div
         class="mx_Dialog_buttons"
@@ -75,8 +102,9 @@ exports[`ReportRoomDialog displays admin message 1`] = `
             Cancel
           </button>
           <button
-            class="mx_Dialog_primary"
+            class="mx_Dialog_primary danger"
             data-testid="dialog-primary-button"
+            disabled=""
             type="button"
           >
             Send report

@@ -86,7 +86,6 @@
         "react": "Bregðast við",
         "refresh": "Endurlesa",
         "register": "Nýskrá",
-        "reject": "Hafna",
         "remove": "Fjarlægja",
         "rename": "Endurnefna",
         "reply": "Svara",
@@ -369,7 +368,6 @@
         "capabilities": "Geta",
         "copied": "Afritað!",
         "credits": "Framlög",
-        "cross_signing": "Kross-undirritun",
         "dark": "Dökkt",
         "description": "Lýsing",
         "deselect_all": "Afvelja allt",
@@ -675,38 +673,22 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Ógildur öryggislykill",
-                "recovery_key_is_correct": "Lítur vel út!",
-                "wrong_file_type": "Röng skráartegund",
                 "wrong_security_key": "Rangur öryggislykill"
             },
-            "reset_title": "Frumstilla allt",
             "restoring": "Endurheimti lykla úr öryggisafriti",
-            "security_key_title": "Öryggislykill",
-            "security_phrase_title": "Öryggisfrasi",
-            "separator": "%(securityKey)s eða %(recoveryFile)s",
-            "use_security_key_prompt": "Notaðu öryggislykilinn þinn til að halda áfram."
+            "security_key_title": "Öryggislykill"
         },
         "bootstrap_title": "Set upp dulritunarlykla",
         "cancel_entering_passphrase_description": "Viltu örugglega hætta við að setja inn lykilfrasa?",
         "cancel_entering_passphrase_title": "Hætta við að setja inn lykilfrasa?",
         "confirm_encryption_setup_body": "Smelltu á hnappinn hér að neðan til að staðfesta uppsetningu á dulritun.",
         "confirm_encryption_setup_title": "Staðfestu uppsetningu dulritunar",
-        "cross_signing_not_ready": "Kross-undirritun er ekki uppsett.",
-        "cross_signing_ready": "Kross-undirritun er tilbúin til notkunar.",
-        "cross_signing_ready_no_backup": "Kross-undirritun er tilbúin en ekki er búið að öryggisafrita dulritunarlykla.",
         "cross_signing_room_normal": "Þessi spjallrás er enda-í-enda dulrituð",
         "cross_signing_room_verified": "Allir á þessari spjallrás eru staðfestir",
         "cross_signing_room_warning": "Einhver er að nota óþekkta setu",
-        "cross_signing_unsupported": "Heimaþjónninn þinn styður ekki kross-undirritun.",
-        "cross_signing_untrusted": "Aðgangurinn þinn er með auðkenni kross-undirritunar í leynigeymslu, en þessu er ekki ennþá treyst í þessari setu.",
         "cross_signing_user_normal": "Þér hefur ekki sannreynt þennan notanda.",
         "cross_signing_user_verified": "Þú hefur sannreynt þennan notanda. Þessi notandi hefur sannreynt öll tæki þeirra.",
         "cross_signing_user_warning": "Þessi notandi hefur ekki sannreynt öll tæki þeirra.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Hreinsa kross-undirritunarlykla",
-            "title": "Eyða kross-undirritunarlyklum?"
-        },
         "event_shield_reason_mismatched_sender_key": "Dulritað meðf ósannreyndu tæki",
         "export_unsupported": "Vafrinn þinn styður ekki nauðsynlegar dulritunarviðbætur",
         "import_invalid_keyfile": "Er ekki gild %(brand)s lykilskrá",
@@ -719,7 +701,6 @@
         "new_recovery_method_detected": {
             "title": "Ný endurheimtuaðferð"
         },
-        "not_supported": "<ekki stutt>",
         "recovery_method_removed": {
             "title": "Endurheimtuaðferð fjarlægð"
         },
@@ -727,8 +708,7 @@
         "set_up_toast_description": "Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum",
         "set_up_toast_title": "Setja upp varið öryggisafrit",
         "setup_secure_backup": {
-            "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki.",
-            "title": "Setja upp"
+            "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki."
         },
         "udd": {
             "interactive_verification_button": "Sannprófa gagnvirkt með táknmyndum",
@@ -742,7 +722,6 @@
             "accepting": "Samþykki…",
             "after_new_login": {
                 "device_verified": "Tæki er sannreynt",
-                "reset_confirmation": "Viltu í alvörunni endurstilla sannvottunarlyklana?",
                 "skip_verification": "Sleppa sannvottun í bili",
                 "unable_to_verify": "Tókst ekki að sannreyna þetta tæki",
                 "verify_this_device": "Sannreyna þetta tæki"
@@ -844,10 +823,7 @@
             "title": "Tókst ekki að afrita tengil spjallrásar"
         },
         "error_loading_user_profile": "Gat ekki hlaðið inn notandasniði",
-        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s",
-        "search_failed": {
-            "title": "Leit mistókst"
-        }
+        "forget_room_failed": "Mistókst að gleyma spjallrásinni %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1357,11 +1333,6 @@
         "ongoing": "Er að fjarlægja…",
         "reason_label": "Ástæða (valkvætt)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Ertu viss um að þú viljir hafna þessu boði?",
-        "failed": "Mistókst að hafna boði",
-        "title": "Hafna boði"
-    },
     "report_content": {
         "description": "Tilkynning um þessi skilaboð mun senda einstakt 'atviksauðkenni' til stjórnanda heimaþjóns. Ef skilaboð í þessari spjallrás eru dulrituð getur stjórnandi heimaþjóns ekki lesið skilaboðatextann eða skoðað skrár eða myndir.",
         "disagree": "Ósammála",
@@ -1482,7 +1453,6 @@
             "user_created": "%(displayName)s bjó til þessa spjallrás.",
             "you_created": "Þú bjóst til þessa spjallrás."
         },
-        "invite_reject_ignore": "Hafna og hunsa notanda",
         "invite_sent_to_email": "Þetta boð var sent til %(email)s",
         "invite_sent_to_email_room": "Þetta boð í %(roomName)s var sent til %(email)s",
         "invite_subtitle": "<userName/> bauð þér",
@@ -1884,7 +1854,6 @@
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
-        "image_thumbnails": "Birta forskoðun/smámyndir fyrir myndir",
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
         "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
         "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
@@ -1982,47 +1951,16 @@
         "prompt_invite": "Spyrja áður en boð eru send á mögulega ógild matrix-auðkenni",
         "replace_plain_emoji": "Skipta sjálfkrafa út Emoji-táknum á hreinum texta",
         "security": {
-            "4s_public_key_in_account_data": "í gögnum notandaaðgangs",
-            "4s_public_key_status": "Dreifilykill leynigeymslu:",
-            "backup_key_cached_status": "Öryggisafritunarlykill í skyndiminni:",
-            "backup_key_stored_status": "Geymdur öryggisafritunarlykill:",
-            "backup_key_unexpected_type": "óvænt tegund",
-            "backup_key_well_formed": "rétt sniðið",
-            "backup_keys_description": "Taktu öryggisafrit af dulritunarlyklunum þínum ásamt gögnum notandaaðgangsins fari svo að þú missir aðgang að setunum þínum. Dulritunarlyklarnir verða varðir með einstökum öryggislykli.",
             "bulk_options_accept_all_invites": "Samþykkja alla boðsgesti %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Hafna öllum boðsgestum %(invitedRooms)s",
             "bulk_options_section": "Valkostir magnvinnslu",
-            "cross_signing_cached": "í staðværu skyndiminni",
-            "cross_signing_homeserver_support": "Heimaþjónninn styður eftirfarandi eiginleika:",
-            "cross_signing_homeserver_support_exists": "er til staðar",
-            "cross_signing_in_4s": "í leynigeymslu",
-            "cross_signing_in_memory": "í minni",
-            "cross_signing_master_private_Key": "Aðal-einkalykill:",
-            "cross_signing_not_cached": "fannst ekki á tækinu",
-            "cross_signing_not_found": "fannst ekki",
-            "cross_signing_not_in_4s": "fannst ekki í geymslu",
-            "cross_signing_not_stored": "ekki geymt",
-            "cross_signing_private_keys": "Kross-undirritun einkalykla:",
-            "cross_signing_public_keys": "Kross-undirritun dreifilykla:",
-            "cross_signing_self_signing_private_key": "Sjálf-undirritaður einkalykill:",
-            "cross_signing_user_signing_private_key": "Notanda-undirritaður einkalykill:",
-            "cryptography_section": "Dulritun",
-            "delete_backup": "Eyða öryggisafriti",
-            "delete_backup_confirm_description": "Ertu viss? Þú munt tapa dulrituðu skilaboðunum þínum ef dulritunarlyklarnir þínir eru ekki rétt öryggisafritaðir.",
             "e2ee_default_disabled_warning": "Kerfisstjóri netþjónsins þíns hefur lokað á sjálfvirka dulritun í einkaspjallrásum og beinum skilaboðum.",
             "enable_message_search": "Virka skilaboðleit í dulrituðum spjallrásum",
             "encryption_section": "Dulritun",
-            "error_loading_key_backup_status": "Tókst ekki að hlaða inn stöðu öryggisafritunar dulritunarlykla",
-            "export_megolm_keys": "Flytja út E2E dulritunarlykla spjallrásar",
             "ignore_users_empty": "Þú ert ekki með neina hunsaða notendur.",
             "ignore_users_section": "Hunsaðir notendur",
-            "import_megolm_keys": "Flytja inn E2E dulritunarlykla spjallrásar",
-            "key_backup_active_version_none": "Ekkert",
             "key_backup_algorithm": "Reiknirit:",
-            "key_backup_complete": "Allir lyklar öryggisafritaðir",
             "key_backup_connect": "Tengja þessa setu við öryggisafrit af lykli",
-            "key_backup_inactive": "Þessi seta er <b>ekki að öryggisafrita dulritunarlyklana þína</b>, en þú ert með fyrirliggjandi öryggisafrit sem þú getur endurheimt úr og notað til að halda áfram.",
-            "key_backup_inactive_warning": "Dulritunarlyklarnir þínir eru <b>ekki öryggisafritaðir úr þessari setu</b>.",
             "message_search_disable_warning": "Ef þetta er óvirkt, munu skilaboð frá dulrituðum spjallrásum ekki birtast í leitarniðurstöðum.",
             "message_search_disabled": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum.",
             "message_search_enabled": {
@@ -2040,13 +1978,7 @@
             "message_search_sleep_time": "Hve hratt ætti að hlaða niður skilaboðum.",
             "message_search_space_used": "Notað geymslupláss:",
             "message_search_unsupported_web": "%(brand)s nær ekki að setja dulrituð skilaboð leynilega í skyndiminni á tækinu á meðan keyrt er í vafra. Notaðu <desktopLink>%(brand)s Desktop vinnutölvuútgáfuna</desktopLink> svo skilaboðin birtist í leitarniðurstöðum.",
-            "restore_key_backup": "Endurheimta úr öryggisafriti",
-            "secret_storage_not_ready": "ekki tilbúið",
-            "secret_storage_ready": "tilbúið",
-            "secret_storage_status": "Leynigeymsla:",
             "send_analytics": "Senda greiningargögn",
-            "session_id": "Auðkenni setu:",
-            "session_key": "Setulykill:",
             "strict_encryption": "Aldrei senda dulrituð skilaboð af þessu tæki til ósannvottaðra tækja"
         },
         "send_read_receipts": "Senda leskvittanir",
@@ -2239,8 +2171,6 @@
         "topic": "Nær í eða stillir umfjöllunarefni spjallrásar",
         "topic_none": "Þessi spjallrás er ekki með umfjöllunarefni.",
         "topic_room_error": "Mistókst að ná í umfjöllunarefni spjallrásar: Gat ekki fundið spjallrásina (%(roomId)s",
-        "tovirtual": "Skiptir yfir í sýndarspjallrás þessarar spjallrásar, ef hún er til staðar",
-        "tovirtual_not_found": "Engin sýndarspjallrás fyrir þessa spjallrás",
         "unban": "Tekur bann af notanda með uppgefið auðkenni",
         "unflip": "Setur ┬──┬ ノ( ゜-゜ノ) framan við hrein textaskilaboð",
         "unholdcall": "Tekur símtalið í fyrirliggjandi spjallrás úr bið",
@@ -2353,7 +2283,6 @@
         "heading_without_query": "Leita að",
         "join_button_text": "Taka þátt í %(roomAddress)s",
         "keyboard_scroll_hint": "Notaðu <arrows/> til að skruna",
-        "message_search_section_title": "Aðrar leitir",
         "other_rooms_in_space": "Aðrar spjallrásir í %(spaceName)s",
         "public_rooms_label": "Almenningsspjallrásir",
         "recent_searches_section_title": "Nýlegar leitir",

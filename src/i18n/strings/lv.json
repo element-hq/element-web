@@ -95,7 +95,6 @@
         "react": "Reaģēt",
         "refresh": "Atsvaidzināt",
         "register": "Reģistrēties",
-        "reject": "Noraidīt",
         "reload": "Pārlādēt",
         "remove": "Dzēst",
         "rename": "Pārdēvēt",
@@ -461,7 +460,6 @@
         "capabilities": "Iespējas",
         "copied": "Nokopēts!",
         "credits": "Apliecinājumi",
-        "cross_signing": "Savstarpēja parakstīšana",
         "dark": "Tumša",
         "description": "Apraksts",
         "deselect_all": "Neizvēlēt nevienu",
@@ -835,44 +833,23 @@
     "empty_room_was_name": "Tukša istaba (bija %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ievadiet savu drošības frāzi vai <button>izmantojiet savu drošības atslēgu</button>, lai turpinātu.",
             "key_validation_text": {
-                "invalid_security_key": "Kļūdaina drošības atslēga",
-                "recovery_key_is_correct": "Izskatās labi!",
-                "wrong_file_type": "Nepareizs datnes veids",
                 "wrong_security_key": "Nepareiza drošības atslēga"
             },
-            "reset_title": "Atiestatīt visu",
-            "reset_warning_1": "Dariet to tikai tad, ja jums nav citas ierīces, ar kuru pabeigt verifikāciju.",
-            "reset_warning_2": "Ja viss tiks attiestatīts, tiks atkal uzsākts bez uzticamām sesijām un lietotājiem un varētu nebūt iespējams redzēt iepriekšējās ziņas.",
             "restoring": "Atslēgu atjaunošana no rezerves kopijas",
-            "security_key_title": "Drošības atslēga",
-            "security_phrase_incorrect_error": "Nebija iespējams piekļūt slepenajai krātuvei. Lūgums pārliecināties, ka ir ievadīta pareiza drošības vārdkopa.",
-            "security_phrase_title": "Slepenā frāze",
-            "separator": "%(securityKey)s vai %(recoveryFile)s",
-            "use_security_key_prompt": "Izmantojiet savu drošības atslēgu, lai turpinātu."
+            "security_key_title": "Drošības atslēga"
         },
         "bootstrap_title": "Atslēgu iestatīšana",
         "cancel_entering_passphrase_description": "Vai tiešām atcelt paroles vārdkopas ievadīšanu?",
         "cancel_entering_passphrase_title": "Atcelt frāzveida paroles ievadi?",
         "confirm_encryption_setup_body": "Noklikšķiniet uz tālāk esošās pogas, lai apstiprinātu šifrēšanas iestatīšanu.",
         "confirm_encryption_setup_title": "Apstiprināt šifrēšanas iestatīšanu",
-        "cross_signing_not_ready": "Krusteniskā parakstīšana nav iestatīta.",
-        "cross_signing_ready": "Krusteniskā parakstīšana ir gatava lietošanai.",
-        "cross_signing_ready_no_backup": "Krusteniskā parakstīšana ir gatava, bet atslēgas netiek dublētas.",
         "cross_signing_room_normal": "Šajā istabā tiek veikta pilnīga šifrēšana",
         "cross_signing_room_verified": "Visi šajā istabā esošie ir verificēti",
         "cross_signing_room_warning": "Kāds izmanto nezināmu sesiju",
-        "cross_signing_unsupported": "Tavs mājasserveris nenodrošina savstarpējo parakstīšanu.",
-        "cross_signing_untrusted": "Jūsu kontam slepenajā krātuvē ir krusteniskās parakstīšanas identitāte, taču šī sesija tai vēl neuzticas.",
         "cross_signing_user_normal": "Šis lietotājs nav apstiprināts.",
         "cross_signing_user_verified": "Tu apliecināji šo lietotāju. Šis lietotājs ir apliecinājis visas savas sesijas.",
         "cross_signing_user_warning": "Šis lietotājs nav apliecinājis visas savas sesijas.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Dzēst krusteniskās parakstīšanas atslēgas",
-            "title": "Iznīcināt krusteniskās parakstīšanas atslēgas?",
-            "warning": "Krustiskās parakstīšanas atslēgu dzēšana ir neatgriezeniska. Ikviens, ar kuru esat veicis verifikāciju, redzēs drošības brīdinājumus. Jūs gandrīz noteikti nevēlaties to darīt, ja vien neesat pazaudējis katru ierīci, no kuras varat krusteniski parakstīties."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "Šīs šifrētās ziņas autentiskums nevar tikt garantēts šajā ierīcē.",
         "event_shield_reason_mismatched_sender_key": "Šifrēts neapliecinātā sesijā",
         "event_shield_reason_unknown_device": "Šifrēts ar nezināmu vai dzēstu ierīci.",
@@ -895,7 +872,6 @@
             "title": "Jauna atkopšanas metode",
             "warning": "Ja neiestatīji jaunu atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties iestatījumos jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
-        "not_supported": "<netiek atbalstīts>",
         "recovery_method_removed": {
             "description_1": "Šajā sesijā tika konstatēts, ka jūsu drošības frāze un drošo ziņojumu atslēga ir noņemta.",
             "description_2": "Ja to izdarījāt nejauši, šajā sesijā varat iestatīt drošas ziņas, kas atkārtoti šifrēs šīs sesijas ziņu vēsturi, izmantojot jaunu atkopšanas metodi.",
@@ -906,8 +882,7 @@
         "set_up_toast_description": "Pasargājieties pret piekļuves zaudēšanu šifrētām ziņām un datiem",
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
         "setup_secure_backup": {
-            "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas.",
-            "title": "Iestatīt"
+            "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas."
         },
         "udd": {
             "interactive_verification_button": "Mijiedarbīga apliecināšana ar emocijzīmēm",
@@ -922,7 +897,6 @@
             "accepting": "Apstiprina…",
             "after_new_login": {
                 "device_verified": "Ierīce ir verificēta",
-                "reset_confirmation": "Vai tiešām atiestatīt verifikācijas atslēgas?",
                 "skip_verification": "Pagaidām izlaist verifikāciju",
                 "unable_to_verify": "Neizdevās verificēt šo ierīci",
                 "verify_this_device": "Verificēt šo ierīci"
@@ -993,8 +967,6 @@
             "verify_emoji_prompt": "Apliecināt ar vienreizēju emocijzīmu salīdzināšanu.",
             "verify_emoji_prompt_qr": "Ja nevar nolasīt augstāk esošo kodu, var apliecināt ar vienreizēju emocijzīmju salīdzināšanu.",
             "verify_later": "Es verificēšu vēlāk",
-            "verify_reset_warning_1": "Verifikācijas atslēgu atiestatīšanu nevar atsaukt. Pēc atiestatīšanas jūs nevarēsit piekļūt vecām šifrētām ziņām, un visi draugi, kas jūs iepriekš ir verificējuši, redzēs drošības brīdinājumus, līdz veiksit atkārtotu verifikāciju.",
-            "verify_reset_warning_2": "Lūdzu, turpiniet tikai tad, ja esat pārliecināts, ka esat zaudējis visas pārējās ierīces un drošības atslēgu.",
             "verify_using_device": "Verificēt ar citu ierīci",
             "verify_using_key": "Verificēt ar drošības atslēgu",
             "verify_using_key_or_phrase": "Verificēt, izmantojot drošības atslēgu vai frāzi",
@@ -1045,11 +1017,7 @@
             "title": "Istabas saiti nevar ievietot starpliktuvē"
         },
         "error_loading_user_profile": "Nevarēja ielādēt lietotāja profilu",
-        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Serveris izskatās nesasniedzams, ir pārslogots, vai arī meklēšana beigusies ar savienojuma noildzi :(",
-            "title": "Meklēšana neizdevās"
-        }
+        "forget_room_failed": "Neizdevās \"aizmirst\" istabu %(errCode)s"
     },
     "error_user_not_logged_in": "Lietotājs nav pieteicies",
     "event_preview": {
@@ -1576,11 +1544,6 @@
         "ongoing": "Dzēš…",
         "reason_label": "Iemesls (izvēles)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Vai tiešām noraidīt šo uzaicinājumu?",
-        "failed": "Neizdevās noraidīt uzaicinājumu",
-        "title": "Noraidīt uzaicinājumu"
-    },
     "report_content": {
         "description": "Ziņojuma par šo ziņu iesniegšana nosūtīs tās neatkārtojamo notikuma identifikatoru mājasservera pārvaldniekam. Ja ziņas šajā istabā ir šifrētas, mājasservera pārvaldnieks nevarēs lasīt ziņas saturu vai skatīt jebkādas datnes vai attēlus.",
         "disagree": "Nepiekrist",
@@ -1754,7 +1717,6 @@
             "you_created": "Tu izveidoji šo istabu."
         },
         "invite_email_mismatch_suggestion": "Kopīgojiet šo e-pastu sadaļā Iestatījumi, lai saņemtu ielūgumus tieši uz %(brand)s.",
-        "invite_reject_ignore": "Noraidīt un neņemt vērā lietotāju",
         "invite_sent_to_email": "Šis uzaicinājums tika nosūtīts uz %(email)s",
         "invite_sent_to_email_room": "Šis uzaicinājums uz %(roomName)s tika nosūtīts %(email)s",
         "invite_subtitle": "<userName/> uzaicināja Tevi",
@@ -2259,7 +2221,6 @@
             "remove_msisdn_prompt": "Dzēst %(phone)s?",
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
-        "image_thumbnails": "Rādīt attēlu priekšskatījumus/sīktēlus",
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
@@ -2395,54 +2356,17 @@
         "prompt_invite": "Pārjautāt pirms uzaicinājuma nosūtīšanas potenciāli nederīgiem matrix ID",
         "replace_plain_emoji": "Automātiski aizstāt vienkāršā teksta emocijzīmes",
         "security": {
-            "4s_public_key_in_account_data": "konta datos",
-            "4s_public_key_status": "Slepenās krātuves publiskā atslēga:",
             "analytics_description": "Kopīgojiet anonīmus datus, lai palīdzētu mums noteikt problēmas. Nekā personīga. Trešās personas nav iesaistītas..",
-            "backup_key_cached_status": "Rezerves atslēga kešatmiņā:",
-            "backup_key_stored_status": "Rezerves atslēga saglabāta:",
-            "backup_key_unexpected_type": "negaidīts veids",
-            "backup_key_well_formed": "labi veidots",
-            "backup_keys_description": "Izveido savu šifrēšanas atslēgu rezerves kopijas ar sava konta datiem gadījumam, ja tiek zaudēta piekļuve savām sesijām. Atslēgas tiks aizsargātas ar neatkārtojamu drošības atslēgu.",
             "bulk_options_accept_all_invites": "Pieņemt visus %(invitedRooms)s uzaicinājumus",
             "bulk_options_reject_all_invites": "Noraidīt visus %(invitedRooms)s uzaicinājumus",
             "bulk_options_section": "Apjoma iespējas",
-            "cross_signing_cached": "lokāli saglabāts kešatmiņā",
-            "cross_signing_homeserver_support": "Mājasservera iespēju atbalsts:",
-            "cross_signing_homeserver_support_exists": "pastāv",
-            "cross_signing_in_4s": "slepenā krātuvē",
-            "cross_signing_in_memory": "atmiņā",
-            "cross_signing_master_private_Key": "Galvenā privātā atslēga:",
-            "cross_signing_not_cached": "nav atrasts lokāli",
-            "cross_signing_not_found": "nav atrasts",
-            "cross_signing_not_in_4s": "nav atrodams krātuvē",
-            "cross_signing_not_stored": "netiek uzglabāta",
-            "cross_signing_private_keys": "Savstarpējas parakstīšanas privātās atslēgas:",
-            "cross_signing_public_keys": "Savstarpējas parakstīšanas publiskās atslēgas:",
-            "cross_signing_self_signing_private_key": "Pašparaksta privātā atslēga:",
-            "cross_signing_user_signing_private_key": "Lietotāja paraksta privātā atslēga:",
-            "cryptography_section": "Kriptogrāfija",
-            "delete_backup": "Izdzēst rezerves kopiju",
-            "delete_backup_confirm_description": "Vai tiešām? Tiks zaudētas visas Tavas šifrētās ziņas, ja Tavām atslēgām nav pienācīgi veikta rezerves kopēšana.",
             "e2ee_default_disabled_warning": "Jūsu servera administrators pēc noklusējuma ir atspējojis pilnīgu šifrēšanu privātajās istabās un tiešajos ziņās.",
             "enable_message_search": "Iespējot ziņu meklēšanu šifrētās istabās",
             "encryption_section": "Šifrēšana",
-            "error_loading_key_backup_status": "Nevar ielādēt atslēgas rezerves kopijas statusu",
-            "export_megolm_keys": "Eksportēt istabas šifrēšanas atslēgas",
             "ignore_users_empty": "Nav vērā neņemtu lietotāju.",
             "ignore_users_section": "Vērā neņemtie lietotāji",
-            "import_megolm_keys": "Importēt E2E istabas atslēgas",
-            "key_backup_active": "Šī sesija veido jūsu atslēgas rezerves kopijas.",
-            "key_backup_active_version": "Aktīvā rezerves kopijas versija:",
-            "key_backup_active_version_none": "Neviena",
             "key_backup_algorithm": "Algoritms:",
-            "key_backup_can_be_restored": "Šo rezerves kopiju var atjaunot šajā sesijā",
-            "key_backup_complete": "Visas atslēgas ir dublētas",
             "key_backup_connect": "Savienojiet šo sesiju ar atslēgu dublēšanu",
-            "key_backup_connect_prompt": "Pirms izrakstīšanās savienojiet šo sesiju ar atslēgu dublējumu, lai nepazaudētu atslēgas, kas var būt pieejamas tikai šajā sesijā.",
-            "key_backup_in_progress": "Veido %(sessionsRemaining)s atslēgu rezerves kopijas…",
-            "key_backup_inactive": "Šī sesija <b>nedublē jūsu atslēgas</b>, bet jums ir esošs dublējums, no kura varat atjaunot un pievienot turpmākajai darbībai.",
-            "key_backup_inactive_warning": "Jūsu atslēgas <b>netiek dublētas no šīs sesijas</b>.",
-            "key_backup_latest_version": "Jaunākā rezerves kopijas versija serverī:",
             "message_search_disable_warning": "Ja šī opcija ir atspējota, ziņas no šifrētām istabām neparādīsies meklēšanas rezultātos.",
             "message_search_disabled": "Drošā veidā saglabājiet lokālajā kešatmiņā šifrētās ziņas, lai tās parādītos meklēšanas rezultātos.",
             "message_search_enabled": {
@@ -2463,13 +2387,7 @@
             "message_search_unsupported": "%(brand)s trūkst dažu komponentu, kas nepieciešami šifrētu ziņu drošai glabāšanai lokālā kešatmiņā. Ja vēlaties eksperimentēt ar šo funkciju, uzbūvejiet pielāgotu %(brand)s Desktop ar <nativeLink>pievienotiem meklēšanas komponentiem</nativeLink> .",
             "message_search_unsupported_web": "%(brand)s nevar droši glabāt lokālā kešatmiņā šifrētas ziņas, darbojoties tīmekļa pārlūkprogrammā. Izmantojiet <desktopLink>%(brand)s Desktop</desktopLink>, lai šifrēti ziņojumi tiktu parādīti meklēšanas rezultātos.",
             "record_session_details": "Klienta nosaukuma, versijas un URL ierakstīšana palīdz vieglāk atpazīt sesijas sesiju pārvaldniekā",
-            "restore_key_backup": "Atjaunot no rezerves kopijas",
-            "secret_storage_not_ready": "nav gatavs",
-            "secret_storage_ready": "gatavs",
-            "secret_storage_status": "Slepenā krātuve:",
             "send_analytics": "Sūtīt analītikas datus",
-            "session_id": "Sesijas ID:",
-            "session_key": "Sesijas atslēga:",
             "strict_encryption": "Nekad šajā sesijā nesūtīt šifrētas ziņas neapliecinātām sesijām"
         },
         "send_read_receipts": "Sūtīt lasīšanas apliecinājumus",
@@ -2711,8 +2629,6 @@
         "topic": "Nolasa vai iestata istabas tematu",
         "topic_none": "Istabai nav temata.",
         "topic_room_error": "Neizdevās iegūt istabas tēmu: Nevar atrast istabu (%(roomId)s",
-        "tovirtual": "Pārslēdzas uz šīs istabas virtuālo istabu, ja tāda pastāv",
-        "tovirtual_not_found": "Šai istabai nav virtuālas istabas",
         "unban": "Atceļ pieejas liegumu lietotājam ar norādīto id",
         "unflip": "Pievieno ┬──┬ ノ( ゜-゜ノ) pirms vienkārša teksta ziņas",
         "unholdcall": "Šajā istabā iepauzētās sazvana atpauzēšana",
@@ -2835,7 +2751,6 @@
         "heading_with_query": "Izmantot \"%(query)s\" meklēšanai",
         "heading_without_query": "Meklēt",
         "keyboard_scroll_hint": "Lietojiet <arrows/> ritināšanai",
-        "message_search_section_title": "Citi meklējumi",
         "other_rooms_in_space": "Citas istabas %(spaceName)s",
         "public_rooms_label": "Publiskas istabas",
         "public_spaces_label": "Publiskās telpas",
@@ -2844,7 +2759,6 @@
         "remove_filter": "Noņemt meklēšanas filtru %(filter)s",
         "result_may_be_hidden_privacy_warning": "Daži rezultāti var būt slēpti dēļ privātuma",
         "result_may_be_hidden_warning": "Atsevišķi rezultāti var būt slēpti",
-        "search_messages_hint": "Lai meklētu ziņas, istabas augšpusē meklējiet šo ikonu <icon/>",
         "spaces_title": "Telpas, kurās atrodaties",
         "start_group_chat_button": "Uzsākt grupas tērzēšanu"
     },

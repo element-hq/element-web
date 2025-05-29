@@ -81,7 +81,6 @@ describe("<TextualBody />", () => {
         highlights: [] as string[],
         highlightLink: "",
         onMessageAllowed: jest.fn(),
-        onHeightChanged: jest.fn(),
         mediaEventHelper: {} as MediaEventHelper,
     };
 
@@ -198,7 +197,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_1qbcf_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" referrerpolicy="no-referrer" class="_image_1qbcf_41" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Member</span></a></bdi>"`,
+                `"Chat with <bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_1qbcf_8 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" referrerpolicy="no-referrer" class="_image_1qbcf_41" data-type="round" width="16px" height="16px" src="mxc://avatar.url/image.png"></span><span class="mx_Pill_text">Member</span></a></bdi>"`,
             );
         });
 
@@ -426,10 +425,7 @@ describe("<TextualBody />", () => {
 
         it("renders url previews correctly", () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
-            const { container, rerender } = getComponent(
-                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() },
-                matrixClient,
-            );
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient);
 
             expect(container).toHaveTextContent(ev.getContent().body);
             expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
@@ -450,11 +446,7 @@ describe("<TextualBody />", () => {
             jest.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
             ev.makeReplaced(ev2);
 
-            getComponent(
-                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn(), replacingEventId: ev.getId() },
-                matrixClient,
-                rerender,
-            );
+            getComponent({ mxEvent: ev, showUrlPreview: true, replacingEventId: ev.getId() }, matrixClient, rerender);
 
             expect(container).toHaveTextContent(ev2.getContent()["m.new_content"].body + "(edited)");
 
@@ -468,13 +460,10 @@ describe("<TextualBody />", () => {
         it("should listen to showUrlPreview change", () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
 
-            const { container, rerender } = getComponent(
-                { mxEvent: ev, showUrlPreview: false, onHeightChanged: jest.fn() },
-                matrixClient,
-            );
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
-            getComponent({ mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() }, matrixClient, rerender);
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
         });
     });

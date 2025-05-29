@@ -11,7 +11,10 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import { useRoomListItemMenuViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemMenuViewModel";
-import { hasAccessToOptionsMenu } from "../../../../../src/components/viewmodels/roomlist/utils";
+import {
+    hasAccessToNotificationMenu,
+    hasAccessToOptionsMenu,
+} from "../../../../../src/components/viewmodels/roomlist/utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { useUnreadNotifications } from "../../../../../src/hooks/useUnreadNotifications";
@@ -19,13 +22,20 @@ import { NotificationLevel } from "../../../../../src/stores/notifications/Notif
 import { clearRoomNotification, setMarkedUnreadState } from "../../../../../src/utils/notifications";
 import { tagRoom } from "../../../../../src/utils/room/tagRoom";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
+import { useNotificationState } from "../../../../../src/hooks/useRoomNotificationState";
+import { RoomNotifState } from "../../../../../src/RoomNotifs";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
+    hasAccessToNotificationMenu: jest.fn().mockReturnValue(false),
 }));
 
 jest.mock("../../../../../src/hooks/useUnreadNotifications", () => ({
     useUnreadNotifications: jest.fn(),
+}));
+
+jest.mock("../../../../../src/hooks/useRoomNotificationState", () => ({
+    useNotificationState: jest.fn(),
 }));
 
 jest.mock("../../../../../src/utils/notifications", () => ({
@@ -49,6 +59,7 @@ describe("RoomListItemMenuViewModel", () => {
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
 
         mocked(useUnreadNotifications).mockReturnValue({ symbol: null, count: 0, level: NotificationLevel.None });
+        mocked(useNotificationState).mockReturnValue([RoomNotifState.AllMessages, jest.fn()]);
         jest.spyOn(dispatcher, "dispatch");
     });
 
@@ -74,6 +85,12 @@ describe("RoomListItemMenuViewModel", () => {
         mocked(hasAccessToOptionsMenu).mockReturnValue(true);
         const { result } = render();
         expect(result.current.showMoreOptionsMenu).toBe(true);
+    });
+
+    it("should has showNotificationMenu to be true", () => {
+        mocked(hasAccessToNotificationMenu).mockReturnValue(true);
+        const { result } = render();
+        expect(result.current.showNotificationMenu).toBe(true);
     });
 
     it("should be able to invite", () => {
@@ -104,6 +121,29 @@ describe("RoomListItemMenuViewModel", () => {
         const { result } = render();
         expect(result.current.canMarkAsRead).toBe(true);
         expect(result.current.canMarkAsUnread).toBe(false);
+    });
+
+    it("should has isNotificationAllMessage to be true", () => {
+        const { result } = render();
+        expect(result.current.isNotificationAllMessage).toBe(true);
+    });
+
+    it("should has isNotificationAllMessageLoud to be true", () => {
+        mocked(useNotificationState).mockReturnValue([RoomNotifState.AllMessagesLoud, jest.fn()]);
+        const { result } = render();
+        expect(result.current.isNotificationAllMessageLoud).toBe(true);
+    });
+
+    it("should has isNotificationMentionOnly to be true", () => {
+        mocked(useNotificationState).mockReturnValue([RoomNotifState.MentionsOnly, jest.fn()]);
+        const { result } = render();
+        expect(result.current.isNotificationMentionOnly).toBe(true);
+    });
+
+    it("should has isNotificationMute to be true", () => {
+        mocked(useNotificationState).mockReturnValue([RoomNotifState.Mute, jest.fn()]);
+        const { result } = render();
+        expect(result.current.isNotificationMute).toBe(true);
     });
 
     // Actions
@@ -169,5 +209,13 @@ describe("RoomListItemMenuViewModel", () => {
             action: "leave_room",
             room_id: room.roomId,
         });
+    });
+
+    it("should call setRoomNotifState", () => {
+        const setRoomNotifState = jest.fn();
+        mocked(useNotificationState).mockReturnValue([RoomNotifState.AllMessages, setRoomNotifState]);
+        const { result } = render();
+        result.current.setRoomNotifState(RoomNotifState.Mute);
+        expect(setRoomNotifState).toHaveBeenCalledWith(RoomNotifState.Mute);
     });
 });

@@ -75,7 +75,6 @@
         "react": "Reagi",
         "refresh": "Aktualigi",
         "register": "Registri",
-        "reject": "Rifuzi",
         "remove": "Forigi",
         "reply": "Respondi",
         "report_content": "Raporti enhavon",
@@ -347,7 +346,6 @@
         "camera": "Kamerao",
         "copied": "Kopiita!",
         "credits": "Dankoj",
-        "cross_signing": "Delegaj subskriboj",
         "dark": "Malhela",
         "description": "Priskribo",
         "edited": "redaktita",
@@ -600,41 +598,22 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Nevalida Sekureca ŝlosilo",
-                "recovery_key_is_correct": "Ŝajnas bona!",
-                "wrong_file_type": "Neĝusta dosiertipo",
                 "wrong_security_key": "Malĝusta Sekureca ŝlosilo"
             },
-            "reset_title": "Restarigi ĉion",
-            "reset_warning_1": "Faru tion ĉi nur se vi ne havas alian aparaton, per kiu vi kontrolus ceterajn.",
-            "reset_warning_2": "Se vi restarigos ĉion, vi rekomencos sen fidataj salutaĵoj, uzantoj, kaj eble ne povos vidi antaŭajn mesaĝojn.",
             "restoring": "Rehavo de ŝlosiloj el savkopio",
-            "security_key_title": "Sekureca ŝlosilo",
-            "security_phrase_incorrect_error": "Ne povas akiri sekretandeponejon. Bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
-            "security_phrase_title": "Sekureca frazo",
-            "use_security_key_prompt": "Uzu vian sekurecan ŝlosilon por daŭrigi."
+            "security_key_title": "Sekureca ŝlosilo"
         },
         "bootstrap_title": "Agordo de klavoj",
         "cancel_entering_passphrase_description": "Ĉu vi certe volas nuligi enigon de pasfrazo?",
         "cancel_entering_passphrase_title": "Ĉu nuligi enigon de pasfrazo?",
         "confirm_encryption_setup_body": "Klaku sube la butonon por konfirmi agordon de ĉifrado.",
         "confirm_encryption_setup_title": "Konfirmi agordon de ĉifrado",
-        "cross_signing_not_ready": "Delegaj subskriboj ne estas agorditaj.",
-        "cross_signing_ready": "Delegaj subskriboj estas pretaj por uzado.",
-        "cross_signing_ready_no_backup": "Delegaj subskriboj pretas, sed ŝlosiloj ne estas savkopiitaj.",
         "cross_signing_room_normal": "Ĉi tiu ĉambro uzas tutvojan ĉifradon",
         "cross_signing_room_verified": "Ĉiu en la ĉambro estas kontrolita",
         "cross_signing_room_warning": "Iu uzas nekonatan salutaĵon",
-        "cross_signing_unsupported": "Via hejmservilo ne subtenas delegajn subskribojn.",
-        "cross_signing_untrusted": "Via konto havas identecon por delegaj subskriboj en sekreta deponejo, sed ĉi tiu salutaĵo ankoraŭ ne fidas ĝin.",
         "cross_signing_user_normal": "Vi ne kontrolis tiun ĉi uzanton.",
         "cross_signing_user_verified": "Vi kontrolis tiun ĉi uzanton. Ĝi kontrolis ĉiomon da siaj salutaĵoj.",
         "cross_signing_user_warning": "Ĉi tiu uzanto ne kontrolis ĉiomon da siaj salutaĵoj.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Vakigi delege ĉifrajn ŝlosilojn",
-            "title": "Ĉu detrui delege ĉifrajn ŝlosilojn?",
-            "warning": "Forigo de delege ĉifraj ŝlosiloj estas porĉiama. Ĉiu, kun kiu vi interkontrolis, vidos avertojn pri sekureco. Vi preskaŭ certe ne volas ĉi tion fari, malse vi perdis ĉiun aparaton, el kiu vi povus delege subskribadi."
-        },
         "event_shield_reason_authenticity_not_guaranteed": "La aŭtentikeco de ĉi tiu ĉifrita mesaĝo ne povas esti garantiita sur ĉi tiu aparato.",
         "event_shield_reason_mismatched_sender_key": "Ĉifrita de nekontrolita salutaĵo",
         "export_unsupported": "Via foliumilo ne subtenas la bezonatajn ĉifrajn kromprogramojn",
@@ -651,7 +630,6 @@
             "title": "Nova rehava metodo",
             "warning": "Se vi ne agordis la novan rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
-        "not_supported": "<nesubtenata>",
         "recovery_method_removed": {
             "description_1": "Tiu ĉi salutaĵo trovis, ke viaj Sekureca frazo kaj ŝlosilo por Sekuraj mesaĝoj foriĝis.",
             "description_2": "Se vi faris tion akcidente, vi povas agordi Sekurajn mesaĝojn en ĉi tiu salutaĵo, kio reĉifros la historion de mesaj de ĉi tiu salutaĵo kun nova rehava metodo.",
@@ -662,8 +640,7 @@
         "set_up_toast_description": "Malhelpu perdon de aliro al ĉifritaj mesaĝoj kaj datumoj",
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
         "setup_secure_backup": {
-            "explainer": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi.",
-            "title": "Agordi"
+            "explainer": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi."
         },
         "udd": {
             "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
@@ -777,11 +754,7 @@
             "title": "Ne povas kopii ligilon al ĉambro"
         },
         "error_loading_user_profile": "Ne povis enlegi profilon de uzanto",
-        "forget_room_failed": "Malsukcesis forgesi ĉambron %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Aŭ la servilo estas neatingebla aŭ troŝarĝita, aŭ la serĉo eltempiĝis :(",
-            "title": "Serĉo malsukcesis"
-        }
+        "forget_room_failed": "Malsukcesis forgesi ĉambron %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1219,11 +1192,6 @@
         "ongoing": "Forigante…",
         "reason_label": "Kialo (malnepra)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Ĉu vi certe volas rifuzi la inviton?",
-        "failed": "Malsukcesis rifuzi la inviton",
-        "title": "Rifuzi inviton"
-    },
     "report_content": {
         "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn.",
         "disagree": "Malkonsento",
@@ -1324,7 +1292,6 @@
             "you_created": "Vi kreis ĉi tiun ĉambron."
         },
         "invite_email_mismatch_suggestion": "Havigu ĉi tiun retpoŝtadreson per Agordoj por ricevadi invitojn rekte per %(brand)s.",
-        "invite_reject_ignore": "Rifuzi kaj malatenti uzanton",
         "invite_sent_to_email_room": "La invito al %(roomName)s sendiĝis al %(email)s",
         "invite_subtitle": "<userName/> vin invitis",
         "invite_this_room": "Inviti al ĉi tiu ĉambro",
@@ -1726,7 +1693,6 @@
             "remove_email_prompt": "Ĉu forigi %(email)s?",
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
-        "image_thumbnails": "Montri antaŭrigardojn/bildetojn por bildoj",
         "inline_url_previews_default": "Ŝalti entekstan antaŭrigardon al retadresoj",
         "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
         "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
@@ -1818,48 +1784,16 @@
         "prompt_invite": "Averti antaŭ ol sendi invitojn al eble nevalidaj Matrix-identigiloj",
         "replace_plain_emoji": "Memfare anstataŭigi tekstajn mienetojn",
         "security": {
-            "4s_public_key_in_account_data": "en datumoj de konto",
-            "4s_public_key_status": "Publika ŝlosilo de sekreta deponejo:",
-            "backup_key_cached_status": "Kaŝmemorita Savkopia ŝlosilo:",
-            "backup_key_stored_status": "Deponita Savkopia ŝlosilo:",
-            "backup_key_unexpected_type": "neatendita tipo",
-            "backup_key_well_formed": "bone formita",
-            "backup_keys_description": "Savkopiu viajn čifrajn šlosilojn kune kun la datumoj de via konto, okaze ke vi perdos aliron al viaj salutaĵoj. Viaj ŝlosiloj sekuriĝos per unika Sekureca ŝlosilo.",
             "bulk_options_accept_all_invites": "Akcepti ĉiujn %(invitedRooms)s invitojn",
             "bulk_options_reject_all_invites": "Rifuzi ĉiujn %(invitedRooms)s invitojn",
             "bulk_options_section": "Amasaj elektebloj",
-            "cross_signing_cached": "kaŝmemorita loke",
-            "cross_signing_homeserver_support": "Funkciaj kapabloj de hejmservilo:",
-            "cross_signing_homeserver_support_exists": "ekzistas",
-            "cross_signing_in_4s": "en sekreta deponejo",
-            "cross_signing_in_memory": "en memoro",
-            "cross_signing_master_private_Key": "Ĉefa privata ŝlosilo:",
-            "cross_signing_not_cached": "ne trovita loke",
-            "cross_signing_not_found": "ne trovita",
-            "cross_signing_not_in_4s": "netrovite en deponejo",
-            "cross_signing_not_stored": "ne deponita",
-            "cross_signing_private_keys": "Delegaj privataj ŝlosiloj:",
-            "cross_signing_public_keys": "Delegaj publikaj ŝlosiloj:",
-            "cross_signing_self_signing_private_key": "Memsubskriba privata ŝlosilo:",
-            "cross_signing_user_signing_private_key": "Uzantosubskriba privata ŝlosilo:",
-            "cryptography_section": "Ĉifroteĥnikaro",
-            "delete_backup": "Forigi savkopion",
-            "delete_backup_confirm_description": "Ĉu vi certas? Vi perdos ĉiujn viajn ĉifritajn mesaĝojn, se viaj ŝlosiloj ne estas savkopiitaj.",
             "e2ee_default_disabled_warning": "La administranto de via servilo malŝaltis implicitan tutvojan ĉifradon en privataj kaj individuaj ĉambroj.",
             "enable_message_search": "Ŝalti serĉon de mesaĝoj en ĉifritaj ĉambroj",
             "encryption_section": "Ĉifrado",
-            "error_loading_key_backup_status": "Ne povas enlegi staton de ŝlosila savkopio",
-            "export_megolm_keys": "Elporti tutvoje ĉifrajn ŝlosilojn de la ĉambro",
             "ignore_users_empty": "Vi malatentas neniujn uzantojn.",
             "ignore_users_section": "Malatentaj uzantoj",
-            "import_megolm_keys": "Enporti tutvoje ĉifrajn ĉambrajn ŝlosilojn",
-            "key_backup_active_version_none": "Neniu",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_complete": "Ĉiuj ŝlosiloj estas savkopiitaj",
             "key_backup_connect": "Konekti ĉi tiun salutaĵon al Savkopiado de ŝlosiloj",
-            "key_backup_connect_prompt": "Konektu ĉi tiun salutaĵon al savkopiado de ŝlosiloj antaŭ ol vi adiaŭos, por ne perdi ŝlosilojn, kiuj povus troviĝi nur en ĉi tiu salutaĵo.",
-            "key_backup_inactive": "Ĉi tiu salutaĵo <b>ne savkopias viajn ŝlosilojn</b>, sed vi jam havas savkopion, el kiu vi povas rehavi datumojn, kaj ilin kreskigi plue.",
-            "key_backup_inactive_warning": "Viaj ŝlosiloj <b>ne estas savkopiataj el ĉi tiu salutaĵo</b>.",
             "message_search_disable_warning": "Post malŝalto, mesaĝoj el ĉifritaj ĉambroj ne aperos en serĉorezultoj.",
             "message_search_disabled": "Sekure kaŝmemori ĉifritajn mesaĝojn loke, por aperigi ilin en serĉrezultoj.",
             "message_search_enabled": {
@@ -1878,13 +1812,7 @@
             "message_search_space_used": "Spaco uzita:",
             "message_search_unsupported": "%(brand)s malhavas kelkajn partojn bezonajn por sekura loka kaŝmemorado de ĉirfitaj mesaĝoj. Se vi volas eksperimenti pri ĉi tiu kapablo, kunmetu propran klienton «%(brand)s Dekstop» kun <nativeLink>aldonitaj serĉopartoj</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s ne povas sekure kaŝkopii ĉifritajn mesaĝojn loke, funkciante per foliumilo. Uzu <desktopLink>%(brand)s Desktop</desktopLink> por aperigi ĉifritajn mesaĝojn en serĉrezultoj.",
-            "restore_key_backup": "Rehavi el savkopio",
-            "secret_storage_not_ready": "neprete",
-            "secret_storage_ready": "prete",
-            "secret_storage_status": "Sekreta deponejo:",
             "send_analytics": "Sendi statistikajn datumojn",
-            "session_id": "Identigilo de salutaĵo:",
-            "session_key": "Ŝlosilo de salutaĵo:",
             "strict_encryption": "Neniam sendi ĉifritajn mesaĝojn al nekontrolitaj salutaĵoj de ĉi tiu salutaĵo"
         },
         "send_read_receipts": "Sendi legitajn kvitanojn",
@@ -2015,8 +1943,6 @@
         "topic": "Ekhavas aŭ agordas la temon de la ĉambro",
         "topic_none": "Ĉi tiu ĉambro ne havas temon.",
         "topic_room_error": "Malsukcesis akiri temo de ĉambro: Ne povas trovi ĉambron (%(roomId)s)",
-        "tovirtual": "Iri al virtuala ĉambro de tiu ĉambro, se la virtuala ĉambro ekzistas",
-        "tovirtual_not_found": "Tiu ĉambro ne havas virtuala ĉambro",
         "unban": "Malforbaras uzanton kun la donita identigilo",
         "unflip": "Antaŭmetas ┬──┬ ノ( ゜-゜ノ) al platteksta mesaĝo",
         "unholdcall": "Malpaŭzigas la vokon en la nuna ĉambro",

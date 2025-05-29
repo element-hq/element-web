@@ -23,11 +23,17 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
-    <span
-      class="_unread-counter_1ibqq_8"
+    <svg
+      fill="var(--cpd-color-icon-accent-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      1
-    </span>
+      <path
+        d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 5.111a1 1 0 0 0 .514.874l7 3.89a1 1 0 0 0 .972 0l7-3.89a1 1 0 1 0-.972-1.748L12 11.856 5.486 8.237A1 1 0 0 0 4 9.111"
+      />
+    </svg>
   </div>
 </DocumentFragment>
 `;
@@ -51,7 +57,7 @@ exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
       />
     </svg>
     <span
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     >
       1
     </span>
@@ -92,7 +98,7 @@ exports[`<NotificationDecoration /> should render the notification decoration 1`
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <span
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     >
       1
     </span>
@@ -108,7 +114,7 @@ exports[`<NotificationDecoration /> should render the notification decoration wi
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <div
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     />
   </div>
 </DocumentFragment>
@@ -129,7 +135,29 @@ exports[`<NotificationDecoration /> should render the unset message decoration 1
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+        d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the video decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      fill="var(--cpd-color-icon-accent-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
       />
     </svg>
   </div>

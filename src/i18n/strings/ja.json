@@ -85,7 +85,6 @@
         "react": "リアクション",
         "refresh": "再読み込み",
         "register": "登録",
-        "reject": "拒否",
         "remove": "削除",
         "rename": "表示名を変更",
         "reply": "返信",
@@ -409,7 +408,6 @@
         "capabilities": "機能",
         "copied": "コピーしました！",
         "credits": "クレジット",
-        "cross_signing": "クロス署名",
         "dark": "ダーク",
         "description": "詳細",
         "deselect_all": "全ての選択を解除",
@@ -755,44 +753,23 @@
     "empty_room_was_name": "空のルーム（以前の名前は%(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "続行するにはセキュリティーフレーズを入力するか、<button>セキュリティーキーを使用</button>してください。",
             "key_validation_text": {
-                "invalid_security_key": "セキュリティーキーが正しくありません",
-                "recovery_key_is_correct": "問題ありません！",
-                "wrong_file_type": "正しくないファイルの種類",
                 "wrong_security_key": "正しくないセキュリティーキー"
             },
-            "reset_title": "全てリセット",
-            "reset_warning_1": "認証を行える端末がない場合のみ行ってください。",
-            "reset_warning_2": "全てをリセットすると、履歴とメッセージが消去され、信頼済の端末、信頼済のユーザーが取り消されます。また、過去のメッセージを表示できなくなる可能性があります。",
             "restoring": "バックアップから鍵を復元",
-            "security_key_title": "セキュリティーキー",
-            "security_phrase_incorrect_error": "機密ストレージにアクセスできません。正しいセキュリティーフレーズを入力したことを確認してください。",
-            "security_phrase_title": "セキュリティーフレーズ",
-            "separator": "%(securityKey)sまたは%(recoveryFile)s",
-            "use_security_key_prompt": "続行するにはセキュリティーキーを使用してください。"
+            "security_key_title": "セキュリティーキー"
         },
         "bootstrap_title": "鍵のセットアップ",
         "cancel_entering_passphrase_description": "パスフレーズの入力をキャンセルしてよろしいですか？",
         "cancel_entering_passphrase_title": "パスフレーズの入力をキャンセルしますか？",
         "confirm_encryption_setup_body": "以下のボタンをクリックして、暗号化の設定を承認してください。",
         "confirm_encryption_setup_title": "暗号化の設定を承認してください",
-        "cross_signing_not_ready": "クロス署名が設定されていません。",
-        "cross_signing_ready": "クロス署名の使用準備が完了しました。",
-        "cross_signing_ready_no_backup": "クロス署名は準備できましたが、鍵はバックアップされていません。",
         "cross_signing_room_normal": "このルームはエンドツーエンドで暗号化されています",
         "cross_signing_room_verified": "このルーム内の全員を認証済",
         "cross_signing_room_warning": "誰かが不明なセッションを使用しています",
-        "cross_signing_unsupported": "あなたのホームサーバーはクロス署名に対応していません。",
-        "cross_signing_untrusted": "あなたのアカウントではクロス署名の認証情報が機密ストレージに保存されていますが、このセッションでは信頼されていません。",
         "cross_signing_user_normal": "あなたはこのユーザーを認証していません。",
         "cross_signing_user_verified": "このユーザーを認証しました。このユーザーは全てのセッションを認証しました。",
         "cross_signing_user_warning": "このユーザーは全てのセッションを確認していません。",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "クロス署名鍵を削除",
-            "title": "クロス署名鍵を破棄してよろしいですか？",
-            "warning": "クロス署名鍵の削除は取り消せません。認証した相手には、セキュリティーに関する警告が表示されます。クロス署名を行える全ての端末を失ったのでない限り、続行すべきではありません。"
-        },
         "event_shield_reason_authenticity_not_guaranteed": "この暗号化されたメッセージの真正性はこの端末では保証できません。",
         "event_shield_reason_mismatched_sender_key": "未認証のセッションによる暗号化",
         "export_unsupported": "お使いのブラウザーは、必要な暗号化拡張機能をサポートしていません",
@@ -812,7 +789,6 @@
             "title": "新しい復元方法",
             "warning": "新しい復元方法を設定しなかった場合、攻撃者がアカウントへアクセスしようとしている可能性があります。設定画面ですぐにアカウントのパスワードを変更し、新しい復元方法を設定してください。"
         },
-        "not_supported": "<サポート対象外>",
         "recovery_method_removed": {
             "description_1": "セキュリティーフレーズと、セキュアメッセージの鍵が削除されました。",
             "description_2": "偶然削除してしまった場合は、このセッションで、メッセージの暗号化を設定することができます。設定すると、新しい復元方法でセッションのデータを改めて暗号化します。",
@@ -823,8 +799,7 @@
         "set_up_toast_description": "暗号化されたメッセージとデータへのアクセスが失われるのを防ぎましょう",
         "set_up_toast_title": "セキュアバックアップを設定",
         "setup_secure_backup": {
-            "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。",
-            "title": "設定"
+            "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。"
         },
         "udd": {
             "interactive_verification_button": "絵文字で認証",
@@ -839,7 +814,6 @@
             "accepting": "承認しています…",
             "after_new_login": {
                 "device_verified": "端末が認証されました",
-                "reset_confirmation": "本当に認証鍵をリセットしますか？",
                 "skip_verification": "認証をスキップ",
                 "unable_to_verify": "この端末を認証できません",
                 "verify_this_device": "この端末を認証"
@@ -906,8 +880,6 @@
             "verify_emoji_prompt": "絵文字の並びを比較して認証。",
             "verify_emoji_prompt_qr": "上記のコードをスキャンできない場合は、絵文字による確認を行ってください。",
             "verify_later": "後で認証",
-            "verify_reset_warning_1": "認証鍵のリセットは取り消せません。リセットすると、以前の暗号化されたメッセージにはアクセスできなくなります。また、あなたのアカウントを認証した連絡先には、再認証するまで、セキュリティーに関する警告が表示されます。",
-            "verify_reset_warning_2": "全ての端末とセキュリティーキーを紛失してしまったことが確かである場合にのみ、続行してください。",
             "verify_using_device": "別の端末で認証",
             "verify_using_key": "セキュリティーキーで認証",
             "verify_using_key_or_phrase": "セキュリティーキーあるいはセキュリティーフレーズで認証",
@@ -963,11 +935,7 @@
             "title": "ルームのリンクをコピーできません"
         },
         "error_loading_user_profile": "ユーザーのプロフィールを読み込めませんでした",
-        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "サーバーが使用できないか、オーバーロードしているか、または検索がタイムアウトした可能性があります :(",
-            "title": "検索に失敗しました"
-        }
+        "forget_room_failed": "ルームの履歴を消去するのに失敗しました %(errCode)s"
     },
     "event_preview": {
         "m.call.answer": {
@@ -1525,11 +1493,6 @@
         "ongoing": "削除しています…",
         "reason_label": "理由（任意）"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "招待を辞退してよろしいですか？",
-        "failed": "招待を辞退できませんでした",
-        "title": "招待を辞退"
-    },
     "report_content": {
         "description": "このメッセージを報告すると、このメッセージの一意の「イベントID」があなたのホームサーバーの管理者に送信されます。このルーム内のメッセージが暗号化されている場合、ホームサーバーの管理者はメッセージのテキストを読んだり、ファイルや画像を表示したりすることはできません。",
         "disagree": "同意しない",
@@ -1667,7 +1630,6 @@
             "you_created": "このルームを作成しました。"
         },
         "invite_email_mismatch_suggestion": "このメールアドレスを設定から共有すると、%(brand)sから招待を受け取れます。",
-        "invite_reject_ignore": "拒否した上で、このユーザーを無視",
         "invite_sent_to_email": "招待が%(email)sに送信されました",
         "invite_sent_to_email_room": "ルーム %(roomName)sへの招待がメールアドレス %(email)s へ送信されました",
         "invite_subtitle": "<userName/>があなたを招待しています",
@@ -2137,7 +2099,6 @@
             "remove_msisdn_prompt": "%(phone)sを削除しますか？",
             "spell_check_locale_placeholder": "ロケールを選択"
         },
-        "image_thumbnails": "画像のプレビューまたはサムネイルを表示",
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
         "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
         "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
@@ -2243,50 +2204,16 @@
         "prompt_invite": "不正の可能性があるMatrix IDに招待を送信する前に確認",
         "replace_plain_emoji": "自動的にプレーンテキストの絵文字を置き換える",
         "security": {
-            "4s_public_key_in_account_data": "アカウントデータ内",
-            "4s_public_key_status": "機密ストレージの公開鍵：",
-            "backup_key_cached_status": "バックアップキーのキャッシュ：",
-            "backup_key_stored_status": "バックアップキーの保存：",
-            "backup_key_unexpected_type": "予期しない種類",
-            "backup_key_well_formed": "正常な形式です",
-            "backup_keys_description": "セッションにアクセスできなくなる場合に備えて、アカウントデータと暗号鍵をバックアップしましょう。鍵は一意のセキュリティーキーで保護されます。",
             "bulk_options_accept_all_invites": "%(invitedRooms)sの全ての招待を承認",
             "bulk_options_reject_all_invites": "%(invitedRooms)sの全ての招待を拒否",
             "bulk_options_section": "一括オプション",
-            "cross_signing_cached": "ローカルでキャッシュ",
-            "cross_signing_homeserver_support": "ホームサーバーの対応状況：",
-            "cross_signing_homeserver_support_exists": "対応",
-            "cross_signing_in_4s": "機密ストレージ内",
-            "cross_signing_in_memory": "メモリー内",
-            "cross_signing_master_private_Key": "マスター秘密鍵：",
-            "cross_signing_not_cached": "ローカルにありません",
-            "cross_signing_not_found": "ありません",
-            "cross_signing_not_in_4s": "ストレージ内にありません",
-            "cross_signing_not_stored": "保存されていません",
-            "cross_signing_private_keys": "クロス署名の秘密鍵：",
-            "cross_signing_public_keys": "クロス署名の公開鍵：",
-            "cross_signing_self_signing_private_key": "自己署名の秘密鍵：",
-            "cross_signing_user_signing_private_key": "ユーザー署名の秘密鍵：",
-            "cryptography_section": "暗号",
-            "delete_backup": "バックアップを削除",
-            "delete_backup_confirm_description": "本当によろしいですか？ もし鍵が正常にバックアップされていない場合、暗号化されたメッセージにアクセスできなくなります。",
             "e2ee_default_disabled_warning": "サーバー管理者は、非公開のルームとダイレクトメッセージで既定でエンドツーエンド暗号化を無効にしています。",
             "enable_message_search": "暗号化されたルームでメッセージの検索を有効にする",
             "encryption_section": "暗号化",
-            "error_loading_key_backup_status": "鍵のバックアップの状態を読み込めません",
-            "export_megolm_keys": "ルームのエンドツーエンド暗号鍵をエクスポート",
             "ignore_users_empty": "無視しているユーザーはいません。",
             "ignore_users_section": "無視しているユーザー",
-            "import_megolm_keys": "ルームのエンドツーエンド暗号鍵をインポート",
-            "key_backup_active": "このセッションは鍵をバックアップしています。",
-            "key_backup_active_version_none": "なし",
             "key_backup_algorithm": "アルゴリズム：",
-            "key_backup_complete": "全ての鍵がバックアップされています",
             "key_backup_connect": "このセッションを鍵のバックアップに接続",
-            "key_backup_connect_prompt": "サインアウトする前に、このセッションにだけある鍵を失わないよう、セッションを鍵のバックアップに接続しましょう。",
-            "key_backup_in_progress": "%(sessionsRemaining)s個の鍵をバックアップしています…",
-            "key_backup_inactive": "このセッションでは<b>鍵をバックアップしていません</b>が、復元に使用したり、今後鍵を追加したりできるバックアップがあります。",
-            "key_backup_inactive_warning": "鍵は<b>このセッションからバックアップされていません</b>。",
             "message_search_disable_warning": "無効にすると、暗号化されたルームのメッセージは検索結果に表示されません。",
             "message_search_disabled": "検索結果の表示用に、暗号化されたメッセージをローカルに安全にキャッシュしています。",
             "message_search_enabled": {
@@ -2306,13 +2233,7 @@
             "message_search_unsupported": "暗号化されたメッセージの安全なキャッシュをローカルに保存するためのコンポーネントが%(brand)sにありません。この機能を試してみたい場合は、<nativeLink>検索コンポーネントが追加された</nativeLink>%(brand)sデスクトップのカスタム版をビルドしてください。",
             "message_search_unsupported_web": "Webブラウザー上で動作する%(brand)sは、暗号化メッセージの安全なキャッシュをローカルに保存できません。<desktopLink>%(brand)s デスクトップ</desktopLink>を使用すると、暗号化メッセージを検索結果に表示することができます。",
             "record_session_details": "クライアントの名称、バージョン、URLを記録し、セッションマネージャーでより容易にセッションを認識できるよう設定",
-            "restore_key_backup": "バックアップから復元",
-            "secret_storage_not_ready": "準備ができていません",
-            "secret_storage_ready": "準備ができました",
-            "secret_storage_status": "機密ストレージ：",
             "send_analytics": "分析データを送信",
-            "session_id": "セッションID：",
-            "session_key": "セッションキー：",
             "strict_encryption": "このセッションでは、未認証のセッションに対して暗号化されたメッセージを送信しない"
         },
         "send_read_receipts": "開封確認メッセージを送信",
@@ -2527,8 +2448,6 @@
         "topic": "ルームのトピックを取得または設定",
         "topic_none": "このルームにはトピックがありません。",
         "topic_room_error": "ルームのトピックの取得に失敗しました：ルームを発見できません（%(roomId)s）",
-        "tovirtual": "このルームのバーチャルルームに移動（あれば）",
-        "tovirtual_not_found": "このルームのバーチャルルームはありません",
         "unban": "指定したIDのユーザーのブロックを解除",
         "unflip": "プレーンテキストメッセージの前に ┬──┬ ノ( ゜-゜ノ) を付ける",
         "unholdcall": "現在のルームの通話を保留から外す",
@@ -2647,7 +2566,6 @@
         "heading_without_query": "検索",
         "join_button_text": "%(roomAddress)sに参加",
         "keyboard_scroll_hint": "<arrows/>でスクロール",
-        "message_search_section_title": "その他の検索",
         "other_rooms_in_space": "%(spaceName)sの他のルーム",
         "public_rooms_label": "公開ルーム",
         "recent_searches_section_title": "最近の検索",
@@ -2656,7 +2574,6 @@
         "result_may_be_hidden_privacy_warning": "プライバシーの観点から表示していない結果があります",
         "result_may_be_hidden_warning": "いくつかの結果が表示されていない可能性があります",
         "search_dialog": "検索ダイアログ",
-        "search_messages_hint": "メッセージを検索する場合は、ルームの上に表示されるアイコン<icon/>をクリックしてください。",
         "spaces_title": "参加しているスペース",
         "start_group_chat_button": "グループチャットを開始"
     },

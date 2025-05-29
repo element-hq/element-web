@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type RefObject } from "react";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
@@ -16,7 +16,7 @@ import ScrollableBaseModal, { type IScrollableBaseState } from "./ScrollableBase
 import { _t } from "../../../languageHandler";
 
 interface IProps<P extends DialogProps, C extends DialogContent<P>> {
-    contentFactory: (props: P, ref: React.RefObject<C>) => React.ReactNode;
+    contentFactory: (props: P, ref: React.RefObject<C | null>) => React.ReactNode;
     additionalContentProps: Omit<P, keyof DialogProps> | undefined;
     initialOptions: ModuleUiDialogOptions;
     moduleApi: ModuleApi;
@@ -27,10 +27,10 @@ interface IState extends IScrollableBaseState {
     // nothing special
 }
 
-export class ModuleUiDialog<P extends DialogProps, C extends DialogContent<P>> extends ScrollableBaseModal<
-    IProps<P, C>,
-    IState
-> {
+export class ModuleUiDialog<
+    P extends DialogProps = DialogProps,
+    C extends DialogContent<P> = DialogContent<P>,
+> extends ScrollableBaseModal<IProps<P, C>, IState> {
     private contentRef = createRef<C>();
 
     public constructor(props: IProps<P, C>) {
@@ -74,6 +74,11 @@ export class ModuleUiDialog<P extends DialogProps, C extends DialogContent<P>> e
             ...dialogProps,
         } as unknown as P;
 
-        return <div className="mx_ModuleUiDialog">{this.props.contentFactory(contentProps, this.contentRef)}</div>;
+        // XXX: we have to fudge the types here a little as the react-sdk-module-api lacks React 19 support
+        return (
+            <div className="mx_ModuleUiDialog">
+                {this.props.contentFactory(contentProps, this.contentRef as RefObject<C>)}
+            </div>
+        );
     }
 }

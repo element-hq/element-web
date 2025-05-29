@@ -16,6 +16,7 @@ import {
     type SSOAction,
     encodeUnpaddedBase64,
     type OidcRegistrationClientMetadata,
+    MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -71,7 +72,7 @@ export default abstract class BasePlatform {
     protected _favicon?: Favicon;
 
     protected constructor() {
-        dis.register(this.onAction);
+        dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
@@ -84,14 +85,14 @@ export default abstract class BasePlatform {
      */
     public abstract getDefaultDeviceDisplayName(): string;
 
-    protected onAction = (payload: ActionPayload): void => {
+    protected onAction(payload: ActionPayload): void {
         switch (payload.action) {
             case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;
         }
-    };
+    }
 
     // Used primarily for Analytics
     public abstract getHumanReadableName(): string;
@@ -227,6 +228,16 @@ export default abstract class BasePlatform {
             dis.dispatch(payload);
             window.focus();
         };
+
+        const closeHandler = (): void => notification.close();
+
+        // Clear a notification from a redacted event.
+        if (ev) {
+            ev.once(MatrixEventEvent.BeforeRedaction, closeHandler);
+            notification.onclose = () => {
+                ev.off(MatrixEventEvent.BeforeRedaction, closeHandler);
+            };
+        }
 
         return notification;
     }

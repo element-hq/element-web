@@ -30,6 +30,11 @@ Please see LICENSE files in the repository root for full details.
         width: 68px;
     }
 
+    &.newUi {
+        background-color: var(--cpd-color-bg-canvas-default);
+        border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+    }
+
     .mx_SpacePanel_toggleCollapse {
         position: absolute;
         width: 18px;
@@ -352,9 +357,9 @@ Please see LICENSE files in the repository root for full details.
             mask-image: linear-gradient(
                 to top,
                 transparent,
-                rgba(255, 255, 255, 30%) 4px,
-                rgba(255, 255, 255, 55%) 8px,
-                rgba(255, 255, 255, 75%) 12px,
+                rgb(255, 255, 255, 30%) 4px,
+                rgb(255, 255, 255, 55%) 8px,
+                rgb(255, 255, 255, 75%) 12px,
                 black 16px
             );
         }
@@ -370,9 +375,9 @@ Please see LICENSE files in the repository root for full details.
                 linear-gradient(
                     to top,
                     transparent,
-                    rgba(255, 255, 255, 30%) 4px,
-                    rgba(255, 255, 255, 55%) 8px,
-                    rgba(255, 255, 255, 75%) 12px,
+                    rgb(255, 255, 255, 30%) 4px,
+                    rgb(255, 255, 255, 55%) 8px,
+                    rgb(255, 255, 255, 75%) 12px,
                     black 16px
                 );
             mask-position:
@@ -398,6 +403,11 @@ Please see LICENSE files in the repository root for full details.
         .mx_UserMenu_userAvatar_BaseAvatar {
             display: block;
         }
+    }
+
+    &.newUi .mx_UserMenu {
+        margin-top: var(--cpd-space-4x);
+        border-bottom: none;
     }
 }
 

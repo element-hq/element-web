@@ -31,6 +31,11 @@ describe("ElectronPlatform", () => {
     const mockElectron = {
         on: jest.fn(),
         send: jest.fn(),
+        initialise: jest.fn().mockResolvedValue({
+            protocol: "io.element.desktop",
+            sessionId: "session-id",
+            config: { _config: true },
+        }),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
@@ -62,6 +67,17 @@ describe("ElectronPlatform", () => {
 
         expect(logSpy).toHaveBeenCalled();
         expect(rageshake.flush).toHaveBeenCalled();
+    });
+
+    it("should load config", async () => {
+        const platform = new ElectronPlatform();
+        await expect(platform.getConfig()).resolves.toEqual({ _config: true });
+    });
+
+    it("should return oidc client state as expected", async () => {
+        const platform = new ElectronPlatform();
+        await platform.getConfig();
+        expect(platform.getOidcClientState()).toMatchInlineSnapshot(`":element-desktop-ssoid:session-id"`);
     });
 
     it("dispatches view settings action on preferences event", () => {
@@ -287,7 +303,7 @@ describe("ElectronPlatform", () => {
         });
     });
 
-    describe("breacrumbs", () => {
+    describe("breadcrumbs", () => {
         it("should send breadcrumb updates over the IPC", () => {
             const spy = jest.spyOn(BreadcrumbsStore.instance, "on");
             new ElectronPlatform();

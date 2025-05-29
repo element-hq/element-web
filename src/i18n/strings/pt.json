@@ -64,7 +64,8 @@
         "go": "Ir",
         "go_back": "Voltar",
         "got_it": "Entendi",
-        "hide_advanced": "Ocultar avançado",
+        "hide": "Ocultar",
+        "hide_advanced": "Ocultar avançadas",
         "hold": "Espera",
         "ignore": "Ignorar",
         "import": "Importar",
@@ -80,12 +81,14 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
+        "new_message": "Nova mensagem",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
         "no": "Não",
         "ok": "OK",
         "open": "Abrir",
+        "open_menu": "Abrir menu",
         "pause": "Pausar",
         "pin": "Fixar",
         "play": "Reproduzir",
@@ -94,7 +97,6 @@
         "react": "Reagir",
         "refresh": "Atualizar",
         "register": "Registar",
-        "reject": "Rejeitar",
         "reload": "Recarregar",
         "remove": "Remover",
         "rename": "Renomear",
@@ -405,6 +407,15 @@
         "download_logs": "Descarrega os registos",
         "downloading_logs": "Descarregando registos",
         "error_empty": "Diz-nos o que correu mal ou, melhor ainda, cria uma questão no GitHub que descreva o problema.",
+        "failed_download_logs": "Falha ao descarregar os registos de depuração: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "O teu relatório de erro foi rejeitado. O servidor rageshake não suporta esta aplicação.",
+            "rejected_generic": "O teu relatório de bug foi rejeitado. O servidor do rageshake rejeitou o conteúdo do relatório devido a uma política.",
+            "rejected_recovery_key": "O teu relatório de erro foi rejeitado por razões de segurança, pois continha uma chave de recuperação.",
+            "rejected_version": "O teu relatório de erro foi rejeitado porque a versão que estás a executar é demasiado antiga.",
+            "server_unknown_error": "O servidor do rageshake encontrou um erro desconhecido e não pôde processar o relatório.",
+            "unknown_error": "Não conseguiste enviar os registos."
+        },
         "github_issue": "Problema no GitHub",
         "introduction": "Se submeteste um erro através do GitHub, os registos de depuração podem ajudar-nos a localizar o problema. ",
         "log_request": "Para nos ajudar a evitar esta situação no futuro, envia-nos os registos para <a></a> .",
@@ -444,6 +455,7 @@
         "access_token": "Token de acesso",
         "accessibility": "Acessibilidade",
         "advanced": "Avançado",
+        "all_chats": "Todas as conversas",
         "analytics": "Análise",
         "and_n_others": {
             "other": "e %(count)s outros...",
@@ -462,7 +474,6 @@
         "capabilities": "Capacidades",
         "copied": "Copiado!",
         "credits": "Créditos",
-        "cross_signing": "Assinatura cruzada",
         "dark": "Escuro",
         "description": "Descrição",
         "deselect_all": "Desmarcar todos",
@@ -874,44 +885,23 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduz a tua frase de segurança ou <button>utiliza a tua chave de recuperação</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de recuperação inválida",
-                "recovery_key_is_correct": "Parece bom!",
-                "wrong_file_type": "Tipo de ficheiro errado",
                 "wrong_security_key": "Chave de recuperação errada"
             },
-            "reset_title": "Repor tudo",
-            "reset_warning_1": "Faz isto apenas se não tiveres outro dispositivo para completar a verificação.",
-            "reset_warning_2": "Se reiniciares tudo, irás reiniciar sem sessões de confiança, sem utilizadores de confiança e poderás não conseguir ver mensagens anteriores.",
             "restoring": "Restaurar chaves a partir de uma cópia de segurança",
-            "security_key_title": "Chave de recuperação",
-            "security_phrase_incorrect_error": "Não é possível aceder ao armazenamento secreto. Verifica se introduziste a frase de segurança correcta.",
-            "security_phrase_title": "Frase de segurança",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Utiliza a tua chave de recuperação para continuar."
+            "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "A configurar chaves",
         "cancel_entering_passphrase_description": "Tem a certeza que quer cancelar a introdução da frase-passe?",
         "cancel_entering_passphrase_title": "Cancelar a introdução da frase-passe?",
         "confirm_encryption_setup_body": "Clica no botão abaixo para confirmar a configuração da encriptação.",
         "confirm_encryption_setup_title": "Confirma a configuração da encriptação",
-        "cross_signing_not_ready": "A assinatura cruzada não está configurada.",
-        "cross_signing_ready": "A assinatura cruzada está pronta a ser utilizada.",
-        "cross_signing_ready_no_backup": "A assinatura cruzada está pronta, mas as chaves não têm cópia de segurança.",
         "cross_signing_room_normal": "Esta sala é encriptada de ponta a ponta",
         "cross_signing_room_verified": "Toda a gente nesta sala é verificada",
         "cross_signing_room_warning": "Alguém está a utilizar uma sessão desconhecida",
-        "cross_signing_unsupported": "O teu servidor doméstico não suporta assinatura cruzada.",
-        "cross_signing_untrusted": "A tua conta tem uma identidade de assinatura cruzada no armazenamento secreto, mas ainda não é de confiança para esta sessão.",
         "cross_signing_user_normal": "Não verificaste este utilizador.",
         "cross_signing_user_verified": "Verificaste este utilizador. Este utilizador verificou todas as suas sessões.",
         "cross_signing_user_warning": "Este utilizador não verificou todas as suas sessões.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Chaves de assinatura cruzada claras",
-            "title": "Destrói as chaves de assinatura cruzada?",
-            "warning": "A eliminação das chaves de assinatura cruzada é permanente. Qualquer pessoa com quem tenhas feito a verificação verá alertas de segurança. É quase certo que não vais querer fazer isto, a menos que tenhas perdido todos os dispositivos a partir dos quais podes fazer a assinatura cruzada."
-        },
         "enter_recovery_key": "Introduzir a chave de recuperação",
         "event_shield_reason_authenticity_not_guaranteed": "A autenticidade desta mensagem encriptada não pode ser garantida neste dispositivo.",
         "event_shield_reason_mismatched_sender_key": "Encriptado por uma sessão não verificada",
@@ -938,9 +928,8 @@
             "title": "Novo método de recuperação",
             "warning": "Se não tiveres definido o novo método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
-        "not_supported": "<não suportado>",
-        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) parece ter mudado.<a> Saber mais</a>",
-        "pinned_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> parece ter mudado. <a>Saiba mais</a>",
+        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) foi alterada. <a> Saber mais</a>",
+        "pinned_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
         "recovery_method_removed": {
             "description_1": "Esta sessão detectou que a tua frase de segurança e a chave para as mensagens seguras foram removidas.",
             "description_2": "Se o fizeste acidentalmente, podes configurar as Mensagens seguras nesta sessão, o que criptografará novamente o histórico de mensagens desta sessão com um novo método de recuperação.",
@@ -954,8 +943,7 @@
         "set_up_toast_description": "Protege-te contra a perda de acesso a mensagens e dados encriptados",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
         "setup_secure_backup": {
-            "explainer": "Guarda as tuas chaves antes de saíres para evitar perdê-las.",
-            "title": "Configurar"
+            "explainer": "Guarda as tuas chaves antes de saíres para evitar perdê-las."
         },
         "udd": {
             "interactive_verification_button": "Verifica interactivamente por emoji",
@@ -970,7 +958,6 @@
             "accepting": "Aceitando...",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "Repõe mesmo as chaves de verificação?",
                 "skip_verification": "Ignora a verificação por enquanto",
                 "unable_to_verify": "Não é possível verificar este dispositivo",
                 "verify_this_device": "Verifica este dispositivo"
@@ -1041,8 +1028,6 @@
             "verify_emoji_prompt": "Verifica comparando o emoji único.",
             "verify_emoji_prompt_qr": "Se não conseguires ler o código acima, verifica-o comparando emojis.",
             "verify_later": "Verificarei mais tarde",
-            "verify_reset_warning_1": "A reposição das tuas chaves de verificação não pode ser anulada. Após a reposição, não terás acesso a mensagens encriptadas antigas e todos os amigos que te tenham verificado anteriormente verão avisos de segurança até voltares a verificar com eles.",
-            "verify_reset_warning_2": "Só avances se tiveres a certeza de que perdeste todos os teus outros dispositivos e a tua chave de recuperação.",
             "verify_using_device": "Verifica com outro dispositivo",
             "verify_using_key": "Verifica com a chave de recuperação",
             "verify_using_key_or_phrase": "Verifica com a chave ou frase de recuperação",
@@ -1053,7 +1038,7 @@
         },
         "verification_requested_toast_title": "Verificação solicitada",
         "verified_identity_changed": "%(displayName)s(<b>%(userId)s</b>) mudou a tua identidade verificada. <a>Saber mais</a>",
-        "verified_identity_changed_no_displayname": "A identidade verificada de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
+        "verified_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
         "verify_toast_description": "Outros utilizadores podem não confiar nisto",
         "verify_toast_title": "Verifica esta sessão",
         "withdraw_verification_action": "Retirar verificação"
@@ -1111,11 +1096,7 @@
             "title": "Não é possível copiar o link da sala"
         },
         "error_loading_user_profile": "Não foi possível carregar o perfil do utilizador",
-        "forget_room_failed": "Falha ao esquecer a sala %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
-            "title": "Busca falhou"
-        }
+        "forget_room_failed": "Falha ao esquecer a sala %(errCode)s"
     },
     "error_user_not_logged_in": "Utilizador não tem sessão iniciada",
     "event_preview": {
@@ -1240,6 +1221,7 @@
         "change": "Altera o servidor de identidade",
         "change_prompt": "Desligar do servidor de identidade <current /> e ligar a <new /> em vez disso?",
         "change_server_prompt": "Se não pretenderes utilizar <server /> para descobrir e ser descoberto pelos contactos existentes que conheces, introduz outro servidor de identidade abaixo.",
+        "changed": "O teu servidor de identidade foi alterado",
         "checking": "A verificar o servidor",
         "description_connected": "Atualmente, estás a utilizar <server></server> para descobrires e seres descoberto pelos contactos existentes que conheces. Podes alterar o teu servidor de identidade abaixo.",
         "description_disconnected": "Atualmente, não estás a utilizar um servidor de identidade. Para descobrires e seres descoberto pelos contactos existentes que conheces, adiciona um abaixo.",
@@ -1282,7 +1264,9 @@
         "title": "%(brand)s não suporta este browser",
         "use_desktop_heading": "Utiliza antes o %(brand)s Desktop",
         "use_mobile_heading": "Utiliza antes o %(brand)s no telemóvel",
-        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel"
+        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel",
+        "windows_64bit": "Windows (64 bits)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informação",
     "integration_manager": {
@@ -1291,6 +1275,7 @@
         "error_connecting_heading": "Não é possível conectar-se ao gerenciador de integração",
         "explainer": "Os gestores de integração recebem dados de configuração e podem modificar widgets, enviar convites para salas e definir níveis de potência em teu nome.",
         "manage_title": "Gere as integrações",
+        "toggle_label": "Ativar o gestor de integração",
         "use_im": "Utiliza um gestor de integração para gerir bots, widgets e pacotes de autocolantes.",
         "use_im_default": "Utiliza um gestor de integração <b>(%(serverName)s)</b> para gerir bots, widgets e pacotes de autocolantes."
     },
@@ -1766,11 +1751,6 @@
         "ongoing": "A remover...",
         "reason_label": "Motivo (opcional)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Você tem certeza que deseja rejeitar este convite?",
-        "failed": "Falha ao tentar rejeitar convite",
-        "title": "Rejeitar convite"
-    },
     "report_content": {
         "description": "Ao reportar esta mensagem, envias o seu \"ID de evento\" único para o administrador do teu servidor. Se as mensagens nesta sala estiverem cifradas, o administrador não poderá ler o texto ou ver quaisquer ficheiros ou imagens.",
         "disagree": "Não concordo",
@@ -1976,7 +1956,6 @@
             "you_created": "Tu criaste esta sala."
         },
         "invite_email_mismatch_suggestion": "Partilha este e-mail nas Definições para receberes convites diretamente em %(brand)s.",
-        "invite_reject_ignore": "Rejeitar e ignorar o utilizador",
         "invite_sent_to_email": "Este convite foi enviado para %(email)s",
         "invite_sent_to_email_room": "Este convite para %(roomName)s foi enviado para %(email)s",
         "invite_subtitle": "Convidado por <userName/>",
@@ -2080,19 +2059,53 @@
         "add_space_label": "Adiciona espaço",
         "breadcrumbs_empty": "Nenhuma sala visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
+        "empty": {
+            "no_chats": "Ainda sem conversas",
+            "no_chats_description": "Começa a enviar mensagens a alguém ou a crie uma sala",
+            "no_chats_description_no_room_rights": "Começa por enviar uma mensagem a alguém",
+            "no_favourites": "Ainda não tem um conversa favorita",
+            "no_favourites_description": "Pode adicionar uma conversa aos seus favoritos nas definições de conversa",
+            "no_people": "Ainda não tem conversas diretas com ninguém",
+            "no_people_description": "Pode desseleccionar filtros para veres as suas outras conversas",
+            "no_rooms": "Você ainda não está em nenhuma sala",
+            "no_rooms_description": "Pode desmarcar filtros para ver as suas outras conversas",
+            "no_unread": "Parabéns! Não tens nenhuma mensagem por ler",
+            "show_chats": "Mostra todas as conversas"
+        },
         "failed_add_tag": "Falha ao adicionar %(tagName)s à sala",
         "failed_remove_tag": "Não foi possível remover a marcação %(tagName)s desta sala",
         "failed_set_dm_tag": "Falha ao definir a etiqueta de mensagem direta",
+        "filters": {
+            "favourite": "Favoritos",
+            "people": "Pessoas",
+            "rooms": "Salas",
+            "unread": "Não lido"
+        },
         "home_menu_label": "Opções de casa",
         "join_public_room_label": "Participa na sala pública",
         "joining_rooms_status": {
             "one": "Atualmente ingressando%(count)s sala",
             "other": "Atualmente ingressando%(count)s salas"
         },
+        "list_title": "Lista de salas",
+        "more_options": {
+            "copy_link": "Copiar link da sala",
+            "favourited": "Adicionado aos favoritos",
+            "leave_room": "Sair da sala",
+            "low_priority": "Baixa prioridade",
+            "mark_read": "Marcar como lido",
+            "mark_unread": "Marcar como não lido"
+        },
         "notification_options": "Opções de notificação",
+        "open_space_menu": "Abrir menu do espaço",
+        "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens na %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
+        },
+        "room": {
+            "more_options": "Mais opções",
+            "open_room": "Abrir a sala %(roomName)s"
         },
         "show_less": "Mostrar menos",
         "show_n_more": {
@@ -2104,6 +2117,10 @@
         "sort_by_activity": "Atividade",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Mostra primeiro as salas com mensagens não lidas",
+        "space_menu": {
+            "home": "Casa do espaço",
+            "space_settings": "Configurações de espaço"
+        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Lista de opções",
         "suggested_rooms_heading": "Salas sugeridas"
@@ -2137,7 +2154,7 @@
             "upgrade_dwarning_ialog_title_public": "Atualizar sala pública",
             "upgrade_warning_dialog_description": "A atualização de uma divisão é uma ação avançada e é normalmente recomendada quando uma divisão está instável devido a erros, funcionalidades em falta ou vulnerabilidades de segurança.",
             "upgrade_warning_dialog_explainer": "<b>Tem em atenção que a atualização fará uma nova versão da sala</b>. Todas as mensagens actuais permanecerão nesta sala arquivada.",
-            "upgrade_warning_dialog_footer": "Actualizarás este quarto de <oldVersion /> para <newVersion />.",
+            "upgrade_warning_dialog_footer": "Esta sala será atualizada de <oldVersion /> para <newVersion />.",
             "upgrade_warning_dialog_invite_label": "Convida automaticamente os membros desta sala para a nova sala",
             "upgrade_warning_dialog_report_bug_prompt": "Normalmente, isto só afecta a forma como a sala é processada no servidor. Se estiveres a ter problemas com o teu %(brand)s, por favor reporta um erro.",
             "upgrade_warning_dialog_report_bug_prompt_link": "Normalmente, isto apenas afecta a forma como a sala é processada no servidor. Se estiveres a ter problemas com o teu %(brand)s, por favor <a>reporta um bug</a>.",
@@ -2277,7 +2294,7 @@
             "encrypted_room_public_confirm_description_1": "<b>Não é recomendável tornar públicas as salas encriptadas.</b> Isso significa que qualquer pessoa pode encontrar e entrar na sala, pelo que qualquer pessoa pode ler as mensagens. Não terás nenhum dos benefícios da encriptação. Encriptar mensagens numa sala pública tornará a receção e o envio de mensagens mais lento.",
             "encrypted_room_public_confirm_description_2": "Para evitar estes problemas, cria uma <a>nova sala pública</a> para a conversa que pretendes ter.",
             "encrypted_room_public_confirm_title": "Tens a certeza de que queres tornar pública esta sala encriptada?",
-            "encryption_forced": "O teu servidor requer que a encriptação seja desactivada.",
+            "encryption_forced": "O servidor requer que a encriptação seja desativada.",
             "encryption_permanent": "Uma vez activada, a encriptação não pode ser desactivada.",
             "error_join_rule_change_title": "Falha ao atualizar as regras de adesão",
             "error_join_rule_change_unknown": "Falha desconhecida",
@@ -2332,7 +2349,7 @@
             "public_without_alias_warning": "Para estabelecer uma ligação a esta sala, adiciona um endereço.",
             "publish_room": "Torna esta sala visível no diretório público de salas.",
             "publish_space": "Torna este espaço visível no diretório de salas públicas.",
-            "strict_encryption": "Nunca envia mensagens encriptadas para sessões não verificadas nesta sala a partir desta sessão",
+            "strict_encryption": "Enviar mensagens apenas a utilizadores verificados.",
             "title": "Segurança e privacidade"
         },
         "title": "Configurações da sala -%(roomName)s",
@@ -2466,20 +2483,35 @@
                 "breadcrumb_title_forgot": "Esqueceu-se da sua chave de recuperação? Terá de repor a sua identidade.",
                 "breadcrumb_warning": "Faz isto apenas se acreditares que a tua conta foi comprometida.",
                 "details_title": "Detalhes da encriptação",
+                "do_not_close_warning": "Não feches esta janela até que a reposição esteja concluída",
                 "export_keys": "Exportar chaves",
                 "import_keys": "Importar chaves",
                 "other_people_device_description": "Por predefinição, nas salas encriptadas, não envies mensagens encriptadas a ninguém até as teres verificado",
                 "other_people_device_label": "Nunca enviar mensagens encriptadas para dispositivos não verificados",
                 "other_people_device_title": "Dispositivos de outras pessoas",
                 "reset_identity": "Redefinir identidade criptográfica",
+                "reset_in_progress": "Reposição em curso...",
                 "session_id": "ID da sessão:",
                 "session_key": "Chave da sessão:",
                 "title": "Avançadas"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Excluir armazenamento de chaves",
+                "confirm": "Excluir armazenamento de chaves",
+                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
+                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
+                "list_second": "Irá perder o acesso às suas mensagens encriptadas se se desconectar de %(brand)s em qualquer lugar",
+                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
             },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",
             "dialog_title": "<strong>Configurações:</strong> Encriptação",
+            "key_storage": {
+                "allow_key_storage": "Permitir armazenamento de chaves",
+                "description": "Armazene sua identidade criptográfica e chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em quaisquer novos dispositivos. <a>Saiba mais</a>",
+                "title": "Armazenamento de chaves"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirmar nova chave de recuperação",
                 "change_recovery_confirm_description": "Introduz a tua nova chave de recuperação abaixo para terminar. A tua chave antiga deixará de funcionar.",
@@ -2591,7 +2623,6 @@
             "unable_to_load_msisdns": "Não é possível carregar números de telefone",
             "username": "Nome de utilizador"
         },
-        "image_thumbnails": "Mostrar pré-visualizações/miniaturas de imagens",
         "inline_url_previews_default": "Ativar pré-visualizações de URL embutidas por predefinição",
         "inline_url_previews_room": "Ativar pré-visualizações de URL por defeito para os participantes nesta sala",
         "inline_url_previews_room_account": "Ativar pré-visualizações URL para esta sala (só te afeta a ti)",
@@ -2739,57 +2770,20 @@
         "prompt_invite": "Avisa antes de enviar convites para IDs de matrix potencialmente inválidos",
         "replace_plain_emoji": "Substituir Emoji de texto automaticamente",
         "security": {
-            "4s_public_key_in_account_data": "nos dados da conta",
-            "4s_public_key_status": "Chave pública de armazenamento secreto:",
             "analytics_description": "Partilha dados anónimos para nos ajudar a identificar problemas. Nada de pessoal. Sem terceiros.",
-            "backup_key_cached_status": "Chave de backup armazenada em cache:",
-            "backup_key_stored_status": "Chave de backup armazenada:",
-            "backup_key_unexpected_type": "tipo inesperado",
-            "backup_key_well_formed": "bem formado",
-            "backup_keys_description": "Faça backup de suas chaves de criptografia com os dados da sua conta para o caso de perder o acesso às suas sessões. As suas chaves serão protegidas com uma chave de recuperação exclusiva.",
             "bulk_options_accept_all_invites": "Aceita todos os convites de %(invitedRooms)s ",
             "bulk_options_reject_all_invites": "Rejeitar todos os %(invitedRooms)s convites",
             "bulk_options_section": "Opções em massa",
-            "cross_signing_cached": "armazenado em cache localmente",
-            "cross_signing_homeserver_support": "Suporte a recursos de servidor doméstico:",
-            "cross_signing_homeserver_support_exists": "existe",
-            "cross_signing_in_4s": "em armazenamento secreto",
-            "cross_signing_in_memory": "na memória",
-            "cross_signing_master_private_Key": "Chave mestra privada:",
-            "cross_signing_not_cached": "não encontrado localmente",
-            "cross_signing_not_found": "não encontrado",
-            "cross_signing_not_in_4s": "não encontrado no armazenamento",
-            "cross_signing_not_stored": "não armazenado",
-            "cross_signing_private_keys": "Assinatura cruzada de chaves privadas:",
-            "cross_signing_public_keys": "Assinatura cruzada de chaves públicas:",
-            "cross_signing_self_signing_private_key": "Chave privada com assinatura automática:",
-            "cross_signing_user_signing_private_key": "Chave privada de assinatura do utilizador:",
-            "cryptography_section": "Criptografia",
             "dehydrated_device_description": "A funcionalidade de dispositivo offline permite-te receber mensagens encriptadas mesmo quando não tens sessão iniciada em nenhum dispositivo",
             "dehydrated_device_enabled": "Dispositivo offline ativado",
-            "delete_backup": "Eliminar cópia de segurança",
-            "delete_backup_confirm_description": "Tens a certeza? Perderás as tuas mensagens encriptadas se as tuas chaves não forem guardadas corretamente.",
             "dialog_title": "<strong>Definições:</strong> Segurança e privacidade",
             "e2ee_default_disabled_warning": "O administrador do teu servidor desactivou a encriptação de ponta a ponta por defeito nas salas privadas e nas Mensagens directas.",
             "enable_message_search": "Ativar a pesquisa de mensagens em salas encriptadas",
             "encryption_section": "Encriptação",
-            "error_loading_key_backup_status": "Não é possível carregar o estado da cópia de segurança da chave",
-            "export_megolm_keys": "Exportar chaves ponta-a-ponta da sala",
             "ignore_users_empty": "Não tens utilizadores ignorados.",
             "ignore_users_section": "Utilizadores ignorados",
-            "import_megolm_keys": "Importar chave de criptografia ponta-a-ponta (E2E) da sala",
-            "key_backup_active": "Esta sessão está a realizar as cópias de segurança das tuas chaves.",
-            "key_backup_active_version": "Versão de cópia de segurança ativa:",
-            "key_backup_active_version_none": "Nenhum",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_can_be_restored": "Esta cópia de segurança pode ser restaurada nesta sessão",
-            "key_backup_complete": "Cópia de segurança de todas as chaves realizada",
             "key_backup_connect": "Liga esta sessão à cópia de segurança das chaves",
-            "key_backup_connect_prompt": "Liga esta sessão à cópia de segurança de chaves antes de terminares a sessão para evitar perderes quaisquer chaves que possam estar apenas nesta sessão.",
-            "key_backup_in_progress": "Fazendo backup das chaves de %(sessionsRemaining)s...",
-            "key_backup_inactive": "Esta sessão não <b>está a realizar as cópias de segurança das tuas chaves</b>, mas tens uma cópia de segurança existente a partir da qual podes restaurar e adicionar mais.",
-            "key_backup_inactive_warning": "As tuas chaves <b>não estão a ser copiadas em segurança a partir desta sessão</b>.",
-            "key_backup_latest_version": "Versão mais recente da cópia de segurança no servidor:",
             "message_search_disable_warning": "Se estiver desactivada, as mensagens de salas encriptadas não aparecerão nos resultados da pesquisa.",
             "message_search_disabled": "Armazena em cache de forma segura as mensagens encriptadas localmente para que apareçam nos resultados de pesquisa.",
             "message_search_enabled": {
@@ -2809,14 +2803,8 @@
             "message_search_unsupported": "%(brand)s não tem alguns componentes necessários para guardar mensagens encriptadas localmente de forma segura. Se quiseres experimentar esta funcionalidade, constrói um ambiente de trabalho %(brand)s personalizado com <nativeLink>componentes de pesquisa adicionados</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s não é possível armazenar mensagens encriptadas em cache com segurança localmente durante a execução num navegador da Web. Usa <desktopLink>%(brand)s Desktop</desktopLink> para que as mensagens encriptadas apareçam nos resultados da pesquisa.",
             "record_session_details": "Grava o nome do cliente, a versão e o URL para reconhecer mais facilmente as sessões no gestor de sessões",
-            "restore_key_backup": "Restaurar a partir da cópia de segurança",
-            "secret_storage_not_ready": "não está pronto",
-            "secret_storage_ready": "pronto",
-            "secret_storage_status": "Armazenamento secreto:",
             "send_analytics": "Envia dados analíticos",
-            "session_id": "Identificação de sessão:",
-            "session_key": "Chave da sessão:",
-            "strict_encryption": "Nunca envies mensagens encriptadas para sessões não verificadas a partir desta sessão"
+            "strict_encryption": "Enviar mensagens apenas a utilizadores verificados"
         },
         "send_read_receipts": "Enviar recibos lidos",
         "send_read_receipts_unsupported": "O teu servidor não suporta a desativação do envio de recibos de leitura.",
@@ -3058,8 +3046,6 @@
         "topic": "Obtém ou define o tópico da sala",
         "topic_none": "Esta sala não tem tópico.",
         "topic_room_error": "Falha ao obter o tópico da sala: Não foi possível encontrar a sala (%(roomId)s",
-        "tovirtual": "Muda para a sala virtual desta sala, se houver uma",
-        "tovirtual_not_found": "Não há sala virtual para esta sala",
         "unban": "Cancela o utilizador com um determinado ID",
         "unflip": "Pré-anexa ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
         "unholdcall": "Tira a chamada da sala atual da espera",
@@ -3077,6 +3063,7 @@
         "view": "Visualiza a sala com o endereço indicado",
         "whois": "Apresenta informações sobre um utilizador"
     },
+    "sliding_sync_legacy_no_longer_supported": "A Sliding Sync Legacy não é mais suportada: faça logout e login novamente para ativar a nova opção de Sliding Sync",
     "space": {
         "add_existing_room_space": {
             "create": "Queres acrescentar uma nova sala em vez disso?",
@@ -3181,7 +3168,6 @@
         "heading_without_query": "Pesquisar por",
         "join_button_text": "Aderir %(roomAddress)s",
         "keyboard_scroll_hint": "Utiliza <arrows/> para te deslocares",
-        "message_search_section_title": "Outras pesquisas",
         "other_rooms_in_space": "Outras salas em %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "public_spaces_label": "Espaços públicos",
@@ -3191,7 +3177,6 @@
         "result_may_be_hidden_privacy_warning": "Alguns resultados podem estar ocultos por motivos de privacidade",
         "result_may_be_hidden_warning": "Alguns resultados podem estar ocultos",
         "search_dialog": "Diálogo de pesquisa",
-        "search_messages_hint": "Para procurar mensagens, procura este ícone na parte superior de uma sala <icon/>",
         "spaces_title": "Espaços em que te encontras",
         "start_group_chat_button": "Inicia uma conversa de grupo"
     },
@@ -3240,9 +3225,7 @@
     "threads_activity_centre": {
         "header": "Atividade de tópicos",
         "no_rooms_with_threads_notifs": "Ainda não tens salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos.",
-        "release_announcement_description": "As notificações de tópicos foram movidas, encontre-as aqui a partir de agora.",
-        "release_announcement_header": "Centro de Actividades Tópicos"
+        "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
     },
     "time": {
         "about_day_ago": "há cerca de um dia",
@@ -3454,6 +3437,7 @@
             "left_reason": "%(targetName)s saiu da sala:%(reason)s",
             "no_change": "%(senderName)s não fez nenhuma alteração",
             "reject_invite": "%(targetName)s rejeitou o convite",
+            "reject_invite_reason": "%(targetName)s rejeitou o convite: %(reason)s",
             "remove_avatar": "%(senderName)s removeu a sua fotografia de perfil",
             "remove_name": "%(senderName)s removeu o seu nome de apresentação (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s colocou uma foto de perfil",
@@ -4048,7 +4032,7 @@
         "error_need_to_be_logged_in": "Você tem que estar logado.",
         "error_unable_start_audio_stream_description": "Não é possível iniciar a transmissão de áudio.",
         "error_unable_start_audio_stream_title": "Falha ao iniciar a transmissão ao vivo",
-        "modal_data_warning": "Os dados neste ecrã são partilhados com %(widgetDomain)s",
+        "modal_data_warning": "Os dados abaixo são partilhados com %(widgetDomain)s",
         "modal_title_default": "Widget Modal",
         "no_name": "Aplicação desconhecida",
         "open_id_permissions_dialog": {

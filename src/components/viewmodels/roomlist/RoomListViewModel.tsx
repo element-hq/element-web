@@ -8,9 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
-import { type SortOption, useSorter } from "./useSorter";
-import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
+import { type PrimaryFilter, useFilteredRooms } from "./useFilteredRooms";
 import { createRoom as createRoomFunc, hasCreateRoomRights } from "./utils";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
@@ -19,8 +17,14 @@ import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useStickyRoomList } from "./useStickyRoomList";
+import { useRoomListNavigation } from "./useRoomListNavigation";
 
 export interface RoomListViewState {
+    /**
+     * Whether the list of rooms is being loaded.
+     */
+    isLoadingRooms: boolean;
+
     /**
      * A list of rooms to be displayed in the left panel.
      */
@@ -56,36 +60,6 @@ export interface RoomListViewState {
     activePrimaryFilter?: PrimaryFilter;
 
     /**
-     * A function to activate a given secondary filter.
-     */
-    activateSecondaryFilter: (filter: SecondaryFilters) => void;
-
-    /**
-     * The currently active secondary filter.
-     */
-    activeSecondaryFilter: SecondaryFilters;
-
-    /**
-     * Change the sort order of the room-list.
-     */
-    sort: (option: SortOption) => void;
-
-    /**
-     * The currently active sort option.
-     */
-    activeSortOption: SortOption;
-
-    /**
-     * Whether message previews must be shown or not.
-     */
-    shouldShowMessagePreview: boolean;
-
-    /**
-     * A function to turn on/off message previews.
-     */
-    toggleMessagePreview: () => void;
-
-    /**
      * The index of the active room in the room list.
      */
     activeIndex: number | undefined;
@@ -97,14 +71,10 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
-    const {
-        primaryFilters,
-        activePrimaryFilter,
-        rooms: filteredRooms,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
-    } = useFilteredRooms();
+    const { isLoadingRooms, primaryFilters, activePrimaryFilter, rooms: filteredRooms } = useFilteredRooms();
     const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
+
+    useRoomListNavigation(rooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
@@ -113,25 +83,17 @@ export function useRoomListViewModel(): RoomListViewState {
     );
     const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
 
-    const { activeSortOption, sort } = useSorter();
-    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
-
     const createChatRoom = useCallback(() => dispatcher.fire(Action.CreateChat), []);
     const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
+        isLoadingRooms,
         rooms,
         canCreateRoom,
         createRoom,
         createChatRoom,
         primaryFilters,
         activePrimaryFilter,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
-        activeSortOption,
-        sort,
-        shouldShowMessagePreview,
-        toggleMessagePreview,
         activeIndex,
     };
 }

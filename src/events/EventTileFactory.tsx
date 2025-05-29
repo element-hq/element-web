@@ -52,7 +52,6 @@ export interface EventTileTypeProps
         | "highlights"
         | "highlightLink"
         | "showUrlPreview"
-        | "onHeightChanged"
         | "forExport"
         | "getRelationsForEvent"
         | "editState"
@@ -70,7 +69,7 @@ export interface EventTileTypeProps
 }
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
-type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
+type Factory<X = FactoryProps> = (ref: React.RefObject<any> | undefined, props: X) => JSX.Element;
 
 export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
@@ -274,7 +273,6 @@ export function renderTile(
         highlightLink,
         showUrlPreview,
         permalinkCreator,
-        onHeightChanged,
         callEventGrouper,
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
@@ -292,7 +290,6 @@ export function renderTile(
                 highlights,
                 highlightLink,
                 showUrlPreview,
-                onHeightChanged,
                 editState,
                 replacingEventId,
                 getRelationsForEvent,
@@ -311,7 +308,6 @@ export function renderTile(
                 highlightLink,
                 showUrlPreview,
                 permalinkCreator,
-                onHeightChanged,
                 callEventGrouper,
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
@@ -344,7 +340,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,
@@ -359,7 +354,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,

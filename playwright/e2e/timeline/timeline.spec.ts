@@ -1341,4 +1341,44 @@ test.describe("Timeline", () => {
             );
         });
     });
+
+    test.describe("spoilers", { tag: "@screenshot" }, () => {
+        test("clicking a spoiler containing the pill de-spoilers on 1st click, then follows link on 2nd", async ({
+            page,
+            user,
+            app,
+            room,
+        }) => {
+            // View room
+            await page.goto(`/#/room/${room.roomId}`);
+
+            // Send a spoilered pill
+            await app.client.sendMessage(room.roomId, {
+                msgtype: "m.text",
+                body: user.userId,
+                format: "org.matrix.custom.html",
+                formatted_body: `<span data-mx-spoiler>https://matrix.to/#/${user.userId}</span>`,
+            });
+
+            const screenshotOptions = {
+                css: `
+                    .mx_MessageTimestamp {
+                        display: none !important;
+                    }
+                `,
+            };
+
+            const eventTile = page.locator(".mx_RoomView_body .mx_EventTile_last");
+            await expect(eventTile).toMatchScreenshot("spoiler.png", screenshotOptions);
+
+            const rightPanelButton = page.getByText("Share profile");
+            const pill = page.locator(".mx_UserPill");
+            await pill.click({ force: true }); // force to click the spoiler wrapper instead
+            await expect(eventTile).toMatchScreenshot("spoiler-uncovered.png", screenshotOptions);
+            await expect(rightPanelButton).not.toBeVisible(); // assert the right panel is not yet open
+
+            await pill.click();
+            await expect(rightPanelButton).toBeVisible(); // assert the right panel is open
+        });
+    });
 });

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type Key, type MutableRefObject, type ReactElement, type RefCallback } from "react";
+import React, { type Key, type RefObject, type ReactElement, type RefCallback, type HTMLAttributes } from "react";
 
 interface IChildProps {
     style: React.CSSProperties;
@@ -20,7 +20,7 @@ interface IProps {
     // a list of state objects to apply to each child node in turn
     startStyles: React.CSSProperties[];
 
-    innerRef?: MutableRefObject<any>;
+    innerRef?: RefObject<any>;
 }
 
 function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number]): c is ReactElement {
@@ -57,7 +57,8 @@ export default class NodeAnimator extends React.Component<IProps> {
      * @param {React.CSSProperties} styles a key/value pair of CSS properties
      * @returns {void}
      */
-    private applyStyles(node: HTMLElement, styles: React.CSSProperties): void {
+    private applyStyles(node: HTMLElement, styles?: React.CSSProperties): void {
+        if (!styles) return;
         Object.entries(styles).forEach(([property, value]) => {
             node.style[property as keyof Omit<CSSStyleDeclaration, "length" | "parentRule">] = value;
         });
@@ -68,21 +69,22 @@ export default class NodeAnimator extends React.Component<IProps> {
         this.children = {};
         React.Children.toArray(newChildren).forEach((c) => {
             if (!isReactElement(c)) return;
+            const props = c.props as HTMLAttributes<HTMLElement>;
             if (oldChildren[c.key!]) {
                 const old = oldChildren[c.key!];
                 const oldNode = this.nodes[old.key!];
 
-                if (oldNode && oldNode.style.left !== c.props.style.left) {
-                    this.applyStyles(oldNode, { left: c.props.style.left });
+                if (oldNode && props.style && oldNode.style.left !== props.style.left) {
+                    this.applyStyles(oldNode, { left: props.style.left });
                 }
                 // clone the old element with the props (and children) of the new element
                 // so prop updates are still received by the children.
-                this.children[c.key!] = React.cloneElement(old, c.props, c.props.children);
+                this.children[c.key!] = React.cloneElement(old, props, props.children);
             } else {
                 // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations
                 const newProps: Partial<IChildProps> = {};
-                const restingStyle = c.props.style;
+                const restingStyle = props.style;
 
                 const startStyles = this.props.startStyles;
                 if (startStyles.length > 0) {
@@ -97,7 +99,7 @@ export default class NodeAnimator extends React.Component<IProps> {
         });
     }
 
-    private collectNode(k: Key, domNode: HTMLElement | null, restingStyle: React.CSSProperties): void {
+    private collectNode(k: Key, domNode: HTMLElement | null, restingStyle?: React.CSSProperties): void {
         const key = typeof k === "bigint" ? Number(k) : k;
         if (domNode && this.nodes[key] === undefined && this.props.startStyles.length > 0) {
             const startStyles = this.props.startStyles;

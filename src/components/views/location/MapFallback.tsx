@@ -16,7 +16,6 @@ import Spinner from "../elements/Spinner";
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
     isLoading?: boolean;
-    children?: React.ReactNode | React.ReactNodeArray;
 }
 
 const MapFallback: React.FC<Props> = ({ className, isLoading, children, ...rest }) => {

@@ -21,6 +21,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
+import { type ResetIdentityBodyVariant } from "../../encryption/ResetIdentityBody";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
@@ -39,6 +40,7 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
+ *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
  *  - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
  *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
@@ -52,6 +54,7 @@ export type State =
     | "set_recovery_key"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
+    | "reset_identity_sync_failed"
     | "secrets_not_cached"
     | "key_storage_delete";
 
@@ -120,11 +123,12 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
             break;
         case "reset_identity_compromised":
         case "reset_identity_forgot":
+        case "reset_identity_sync_failed":
             content = (
                 <ResetIdentityPanel
-                    variant={state === "reset_identity_compromised" ? "compromised" : "forgot"}
+                    variant={findResetVariant(state)}
                     onCancelClick={checkEncryptionState}
-                    onFinish={checkEncryptionState}
+                    onReset={checkEncryptionState}
                 />
             );
             break;
@@ -138,6 +142,23 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
             {content}
         </SettingsTab>
     );
+}
+
+/**
+ * Given what state we want the tab to be in, what variant of the
+ * ResetIdentityPanel do we need?
+ */
+function findResetVariant(state: State): ResetIdentityBodyVariant {
+    switch (state) {
+        case "reset_identity_compromised":
+            return "compromised";
+        case "reset_identity_sync_failed":
+            return "sync_failed";
+
+        default:
+        case "reset_identity_forgot":
+            return "forgot";
+    }
 }
 
 /**
@@ -226,7 +247,10 @@ function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Elem
             <Button
                 size="sm"
                 Icon={ComputerIcon}
-                onClick={() => Modal.createDialog(SetupEncryptionDialog, { onFinished: onFinish })}
+                onClick={() => {
+                    const { finished } = Modal.createDialog(SetupEncryptionDialog);
+                    finished.then(onFinish);
+                }}
             >
                 {_t("settings|encryption|device_not_verified_button")}
             </Button>

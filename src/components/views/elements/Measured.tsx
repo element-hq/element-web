@@ -11,7 +11,7 @@ import React, { type RefObject } from "react";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 
 interface IProps {
-    sensor: RefObject<Element>;
+    sensor: RefObject<Element | null>;
     breakpoint: number;
     onMeasurement(narrow: boolean): void;
 }
@@ -42,7 +42,7 @@ export default class Measured extends React.PureComponent<IProps> {
             UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
         }
         if (current) {
-            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor.current);
+            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, current);
         }
     }
 

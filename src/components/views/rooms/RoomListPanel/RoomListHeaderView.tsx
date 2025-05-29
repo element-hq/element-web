@@ -21,6 +21,7 @@ import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
 } from "../../../viewmodels/roomlist/RoomListHeaderViewModel";
+import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
 
 /**
  * The header view for the room list
@@ -42,14 +43,17 @@ export function RoomListHeaderView(): JSX.Element {
                 <h1 title={vm.title}>{vm.title}</h1>
                 {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
             </Flex>
-            {/* If we don't display the compose menu, it means that the user can only send DM */}
-            {vm.displayComposeMenu ? (
-                <ComposeMenu vm={vm} />
-            ) : (
-                <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
-                    <ComposeIcon />
-                </IconButton>
-            )}
+            <Flex align="center" gap="var(--cpd-space-2x)">
+                <RoomListOptionsMenu vm={vm} />
+                {/* If we don't display the compose menu, it means that the user can only send DM */}
+                {vm.displayComposeMenu ? (
+                    <ComposeMenu vm={vm} />
+                ) : (
+                    <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
+                        <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                    </IconButton>
+                )}
+            </Flex>
         </Flex>
     );
 }
@@ -76,20 +80,36 @@ function SpaceMenu({ vm }: SpaceMenuProps): JSX.Element {
             align="start"
             trigger={
                 <IconButton className="mx_SpaceMenu_button" aria-label={_t("room_list|open_space_menu")} size="20px">
-                    <ChevronDownIcon />
+                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
                 </IconButton>
             }
         >
-            <MenuItem Icon={HomeIcon} label={_t("room_list|space_menu|home")} onSelect={vm.openSpaceHome} />
+            <MenuItem
+                Icon={HomeIcon}
+                label={_t("room_list|space_menu|home")}
+                onSelect={vm.openSpaceHome}
+                hideChevron={true}
+            />
             {vm.canInviteInSpace && (
-                <MenuItem Icon={UserAddIcon} label={_t("action|invite")} onSelect={vm.inviteInSpace} />
+                <MenuItem
+                    Icon={UserAddIcon}
+                    label={_t("action|invite")}
+                    onSelect={vm.inviteInSpace}
+                    hideChevron={true}
+                />
             )}
-            <MenuItem Icon={PreferencesIcon} label={_t("common|preferences")} onSelect={vm.openSpacePreferences} />
+            <MenuItem
+                Icon={PreferencesIcon}
+                label={_t("common|preferences")}
+                onSelect={vm.openSpacePreferences}
+                hideChevron={true}
+            />
             {vm.canAccessSpaceSettings && (
                 <MenuItem
                     Icon={SettingsIcon}
                     label={_t("room_list|space_menu|space_settings")}
                     onSelect={vm.openSpaceSettings}
+                    hideChevron={true}
                 />
             )}
         </Menu>
@@ -119,14 +139,26 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
             align="start"
             trigger={
                 <IconButton aria-label={_t("action|add")}>
-                    <ComposeIcon />
+                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
                 </IconButton>
             }
         >
-            <MenuItem Icon={UserAddIcon} label={_t("action|new_message")} onSelect={vm.createChatRoom} />
-            {vm.canCreateRoom && <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={vm.createRoom} />}
+            <MenuItem
+                Icon={UserAddIcon}
+                label={_t("action|new_message")}
+                onSelect={vm.createChatRoom}
+                hideChevron={true}
+            />
+            {vm.canCreateRoom && (
+                <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={vm.createRoom} hideChevron={true} />
+            )}
             {vm.canCreateVideoRoom && (
-                <MenuItem Icon={VideoCallIcon} label={_t("action|new_video_room")} onSelect={vm.createVideoRoom} />
+                <MenuItem
+                    Icon={VideoCallIcon}
+                    label={_t("action|new_video_room")}
+                    onSelect={vm.createVideoRoom}
+                    hideChevron={true}
+                />
             )}
         </Menu>
     );

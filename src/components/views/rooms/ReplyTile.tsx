@@ -33,17 +33,12 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
     highlights?: string[];
     highlightLink?: string;
-    onHeightChanged?(): void;
     toggleExpandedQuote?: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
 export default class ReplyTile extends React.PureComponent<IProps> {
     private anchorElement = createRef<HTMLAnchorElement>();
-
-    public static defaultProps = {
-        onHeightChanged: () => {},
-    };
 
     public componentDidMount(): void {
         this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
@@ -59,9 +54,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
     private onDecrypted = (): void => {
         this.forceUpdate();
-        if (this.props.onHeightChanged) {
-            this.props.onHeightChanged();
-        }
     };
 
     private onEventRequiresUpdate = (): void => {
@@ -170,7 +162,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                             // appease TS
                             highlights: this.props.highlights,
                             highlightLink: this.props.highlightLink,
-                            onHeightChanged: this.props.onHeightChanged,
                             permalinkCreator: this.props.permalinkCreator,
                         },
                         false /* showHiddenEvents shouldn't be relevant */,
