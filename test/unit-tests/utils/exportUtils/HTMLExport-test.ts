@@ -31,7 +31,7 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 
-jest.mock("jszip");
+jest.mock("@zip.js/zip.js");
 
 const EVENT_MESSAGE: IRoomEvent = {
     event_id: "$1",
