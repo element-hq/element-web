@@ -33,6 +33,7 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
+import { InviteControlsPanel } from "../../InviteControlsPanel.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -337,6 +338,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
+                        <InviteControlsPanel />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>

@@ -200,7 +200,6 @@ export interface Settings {
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
-    "feature_invite_controls": IFeature;
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
@@ -529,21 +528,6 @@ export const SETTINGS: Settings = {
             [["org.matrix.msc3030"], ["org.matrix.msc3030.stable"]],
             "v1.6",
             _td("labs|jump_to_date_msc_support"),
-        ),
-    },
-    "feature_invite_controls": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        displayName: _td("labs|invite_controls"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-        controller: new ServerSupportUnstableFeatureController(
-            "feature_invite_controls",
-            defaultWatchManager,
-            [["org.matrix.msc4155"]],
-            "v1.6",
-            _td("labs|invite_controls_msc_support"),
         ),
     },
     "RoomList.backgroundImage": {

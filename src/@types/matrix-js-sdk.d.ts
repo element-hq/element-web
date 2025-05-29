@@ -16,8 +16,6 @@ import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 
-type InviteConfigAccountDataRule = "allow" | "block";
-
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
     export interface FileInfo {
@@ -64,18 +62,12 @@ declare module "matrix-js-sdk/src/types" {
     }
 
     export interface InviteConfigAccountData {
-        /**
-         * Rule exceptions for users. Takes priority over `default` and `server_exceptions`.
-         */
-        user_exceptions: Record<string, InviteConfigAccountDataRule>;
-        /**
-         * Rule exceptions for users. Takes priority over `default`.
-         */
-        server_exceptions: Record<string, InviteConfigAccountDataRule>;
-        /**
-         * The default rule for invite handling when no exceptions match.
-         */
-        default: InviteConfigAccountDataRule;
+        allowed_users: string[];
+        blocked_users: string[];
+        ignored_users: string[];
+        allowed_servers: string[];
+        blocked_servers: string[];
+        ignored_servers: string[];
     }
 
     export interface AccountDataEvents {
