@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { createClient, MatrixClient, MatrixError, OidcClientConfig } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { createClient, type MatrixClient, MatrixError, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import SdkConfig, { DEFAULTS } from "../../../../../src/SdkConfig";
@@ -158,24 +158,26 @@ describe("Registration", function () {
     describe("when delegated authentication is configured and enabled", () => {
         const authConfig = makeDelegatedAuthConfig();
         const clientId = "test-client-id";
-        // @ts-ignore
-        authConfig.metadata["prompt_values_supported"] = ["create"];
+        authConfig.prompt_values_supported = ["create"];
 
         beforeEach(() => {
             // mock a statically registered client to avoid dynamic registration
             SdkConfig.put({
                 oidc_static_clients: {
-                    [authConfig.metadata.issuer]: {
+                    [authConfig.issuer]: {
                         client_id: clientId,
                     },
                 },
             });
 
             fetchMock.get(`${defaultHsUrl}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`, {
-                issuer: authConfig.metadata.issuer,
+                issuer: authConfig.issuer,
             });
-            fetchMock.get("https://auth.org/.well-known/openid-configuration", authConfig.metadata);
-            fetchMock.get(authConfig.metadata.jwks_uri!, { keys: [] });
+            fetchMock.get("https://auth.org/.well-known/openid-configuration", {
+                ...authConfig,
+                signingKeys: undefined,
+            });
+            fetchMock.get(authConfig.jwks_uri!, { keys: [] });
         });
 
         it("should display oidc-native continue button", async () => {

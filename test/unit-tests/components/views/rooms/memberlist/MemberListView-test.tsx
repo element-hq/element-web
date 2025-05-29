@@ -7,18 +7,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { act } from "react";
+import { act } from "react";
 import { waitFor } from "jest-matrix-react";
-import { Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type JSX } from "react";
 
 import { filterConsole } from "../../../../../test-utils";
-import { Rendered, renderMemberList } from "./common";
+import { type Rendered, renderMemberList } from "./common";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-type Children = (args: { height: number; width: number }) => React.JSX.Element;
+type Children = (args: { height: number; width: number }) => JSX.Element;
 jest.mock("react-virtualized", () => {
     const ReactVirtualized = jest.requireActual("react-virtualized");
     return {

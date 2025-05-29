@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Wysiwyg, WysiwygEvent } from "@vector-im/matrix-wysiwyg";
+import { type Wysiwyg, type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 import { useCallback } from "react";
-import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
@@ -16,20 +16,20 @@ import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts
 import { findEditableEvent } from "../../../../../utils/EventUtils";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { IRoomState } from "../../../../structures/RoomView";
-import { ComposerContextState, useComposerContext } from "../ComposerContext";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import { type IRoomState } from "../../../../structures/RoomView";
+import { type ComposerContextState, useComposerContext } from "../ComposerContext";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { isCaretAtEnd, isCaretAtStart } from "../utils/selection";
 import { getEventsFromEditorStateTransfer, getEventsFromRoom } from "../utils/event";
 import { endEditing } from "../utils/editing";
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 export function useInputEventProcessor(
     onSend: () => void,
-    autocompleteRef: React.RefObject<Autocomplete>,
+    autocompleteRef: React.RefObject<Autocomplete | null>,
     initialContent?: string,
     eventRelation?: IEventRelation,
 ): (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => WysiwygEvent | null {
@@ -97,7 +97,7 @@ function handleKeyboardEvent(
     roomContext: Pick<IRoomState, "liveTimeline" | "timelineRenderingType" | "room">,
     composerContext: ComposerContextState,
     mxClient: MatrixClient | undefined,
-    autocompleteRef: React.RefObject<Autocomplete>,
+    autocompleteRef: React.RefObject<Autocomplete | null>,
 ): KeyboardEvent | null {
     const { editorStateTransfer } = composerContext;
     const isEditing = Boolean(editorStateTransfer);

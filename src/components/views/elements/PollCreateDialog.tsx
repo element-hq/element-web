@@ -6,20 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef } from "react";
+import React, { type ChangeEvent, createRef } from "react";
 import {
-    Room,
-    MatrixEvent,
-    KnownPollKind,
+    type Room,
+    type MatrixEvent,
+    type KnownPollKind,
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_START,
-    IPartialEvent,
-    TimelineEvents,
+    type IPartialEvent,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
-import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
+import ScrollableBaseModal, { type IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
@@ -167,18 +167,18 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             .then(() => this.props.onFinished(true))
             .catch((e) => {
                 console.error("Failed to post poll:", e);
-                Modal.createDialog(QuestionDialog, {
+                const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("poll|failed_send_poll_title"),
                     description: _t("poll|failed_send_poll_description"),
                     button: _t("action|try_again"),
                     cancelButton: _t("action|cancel"),
-                    onFinished: (tryAgain: boolean) => {
-                        if (!tryAgain) {
-                            this.cancel();
-                        } else {
-                            this.setState({ busy: false, canSubmit: true });
-                        }
-                    },
+                });
+                finished.then(([tryAgain]) => {
+                    if (!tryAgain) {
+                        this.cancel();
+                    } else {
+                        this.setState({ busy: false, canSubmit: true });
+                    }
                 });
             });
     }

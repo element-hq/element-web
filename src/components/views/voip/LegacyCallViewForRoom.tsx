@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import React from "react";
 import { Resizable } from "re-resizable";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
 import LegacyCallView from "./LegacyCallView";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 
 interface IProps {
     // What room we should display the call for

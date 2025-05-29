@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { useEffect, useState } from "react";
 
 import { PillType } from "../components/views/elements/Pill";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
+import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
 /**
  * Tries to determine the initial room.

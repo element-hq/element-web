@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { createTestClient, flushPromises, setupAsyncStoreWithClient } from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";

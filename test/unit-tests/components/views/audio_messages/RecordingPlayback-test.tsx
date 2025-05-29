@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 
 import RecordingPlayback, {
     PlaybackLayout,
@@ -18,7 +18,7 @@ import { Playback } from "../../../../../src/audio/Playback";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { createAudioContext } from "../../../../../src/audio/compat";
 import { flushPromises } from "../../../../test-utils";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/WorkerManager", () => ({
@@ -65,7 +65,7 @@ describe("<RecordingPlayback />", () => {
     beforeEach(() => {
         jest.spyOn(logger, "error").mockRestore();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
-        mockAudioContext.decodeAudioData.mockReset().mockImplementation((_b, callback) => callback(mockAudioBuffer));
+        mockAudioContext.decodeAudioData.mockReset().mockResolvedValue(mockAudioBuffer);
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 

@@ -6,27 +6,33 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, MatrixEvent, MatrixEventEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixEvent,
+    MatrixEventEvent,
+    type MatrixClient,
+    ClientEvent,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     ClientWidgetApi,
-    IModalWidgetOpenRequest,
-    IRoomEvent,
-    IStickerActionRequest,
-    IStickyActionRequest,
-    ITemplateParams,
-    IWidget,
-    IWidgetApiErrorResponseData,
-    IWidgetApiRequest,
-    IWidgetApiRequestEmptyData,
-    IWidgetData,
+    type IModalWidgetOpenRequest,
+    type IRoomEvent,
+    type IStickerActionRequest,
+    type IStickyActionRequest,
+    type ITemplateParams,
+    type IWidget,
+    type IWidgetApiErrorResponseData,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestEmptyData,
+    type IWidgetData,
     MatrixCapabilities,
     runTemplate,
     Widget,
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
-import { Optional } from "matrix-events-sdk";
 import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -37,25 +43,25 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
-import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
+import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
-import { IApp, isAppWidget } from "../WidgetStore";
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import { type IApp, isAppWidget } from "../WidgetStore";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Destroy all of this code
 
@@ -151,8 +157,12 @@ export class StopGapWidget extends EventEmitter {
     private mockWidget: ElementWidget;
     private scalarToken?: string;
     private roomId?: string;
+    // The room that we're currently allowing the widget to interact with. Only
+    // used for account widgets, which may follow the user to different rooms.
+    private viewedRoomId: string | null = null;
     private kind: WidgetKind;
     private readonly virtual: boolean;
+    private readonly themeWatcher = new ThemeWatcher();
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
     // This promise will be called and needs to resolve before the widget will actually become sticky.
     private stickyPromise?: () => Promise<void>;
@@ -175,17 +185,6 @@ export class StopGapWidget extends EventEmitter {
         this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
         this.virtual = isAppWidget(app) && app.eventId === undefined;
         this.stickyPromise = appTileProps.stickyPromise;
-    }
-
-    private get eventListenerRoomId(): Optional<string> {
-        // When widgets are listening to events, we need to make sure they're only
-        // receiving events for the right room. In particular, room widgets get locked
-        // to the room they were added in while account widgets listen to the currently
-        // active room.
-
-        if (this.roomId) return this.roomId;
-
-        return SdkContextClass.instance.roomViewStore.getRoomId();
     }
 
     public get widgetApi(): ClientWidgetApi | null {
@@ -214,7 +213,7 @@ export class StopGapWidget extends EventEmitter {
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: this.themeWatcher.getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
@@ -246,6 +245,10 @@ export class StopGapWidget extends EventEmitter {
         return !!this.messaging;
     }
 
+    private onThemeChange = (theme: string): void => {
+        this.messaging?.updateTheme({ name: theme });
+    };
+
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
@@ -259,6 +262,17 @@ export class StopGapWidget extends EventEmitter {
             });
         }
     };
+
+    // This listener is only active for account widgets, which may follow the
+    // user to different rooms
+    private onRoomViewStoreUpdate = (): void => {
+        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        if (roomId !== this.viewedRoomId) {
+            this.messaging!.setViewedRoomId(roomId);
+            this.viewedRoomId = roomId;
+        }
+    };
+
     /**
      * This starts the messaging for the widget if it is not in the state `started` yet.
      * @param iframe the iframe the widget should use
@@ -278,12 +292,28 @@ export class StopGapWidget extends EventEmitter {
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
-        this.messaging.on("ready", () => {
+        this.messaging.once("ready", () => {
             WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging!);
             this.emit("ready");
+
+            this.themeWatcher.start();
+            this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
+            // Theme may have changed while messaging was starting
+            this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         });
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
+
+        // When widgets are listening to events, we need to make sure they're only
+        // receiving events for the right room
+        if (this.roomId === undefined) {
+            // Account widgets listen to the currently active room
+            this.messaging.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
+            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        } else {
+            // Room widgets get locked to the room they were added in
+            this.messaging.setViewedRoomId(this.roomId);
+        }
 
         // Always attach a handler for ViewRoom, but permission check it internally
         this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
@@ -329,6 +359,7 @@ export class StopGapWidget extends EventEmitter {
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
         this.client.on(ClientEvent.Event, this.onEvent);
         this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.on(RoomStateEvent.Events, this.onStateUpdate);
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
 
         this.messaging.on(
@@ -457,8 +488,11 @@ export class StopGapWidget extends EventEmitter {
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget, this.roomId);
         this.messaging = null;
 
+        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.off(RoomStateEvent.Events, this.onStateUpdate);
         this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
     }
 
@@ -469,6 +503,14 @@ export class StopGapWidget extends EventEmitter {
 
     private onEventDecrypted = (ev: MatrixEvent): void => {
         this.feedEvent(ev);
+    };
+
+    private onStateUpdate = (ev: MatrixEvent): void => {
+        if (this.messaging === null) return;
+        const raw = ev.getEffectiveEvent();
+        this.messaging.feedStateUpdate(raw as IRoomEvent).catch((e) => {
+            logger.error("Error sending state update to widget: ", e);
+        });
     };
 
     private onToDeviceEvent = async (ev: MatrixEvent): Promise<void> => {
@@ -570,7 +612,7 @@ export class StopGapWidget extends EventEmitter {
                 this.eventsToFeed.add(ev);
             } else {
                 const raw = ev.getEffectiveEvent();
-                this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
+                this.messaging.feedEvent(raw as IRoomEvent).catch((e) => {
                     logger.error("Error sending event to widget: ", e);
                 });
             }

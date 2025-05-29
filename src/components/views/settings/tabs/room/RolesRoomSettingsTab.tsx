@@ -6,13 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { EventType, RoomMember, RoomState, RoomStateEvent, Room, IContent } from "matrix-js-sdk/src/matrix";
+import React, { type JSX } from "react";
+import {
+    EventType,
+    type RoomMember,
+    type RoomState,
+    RoomStateEvent,
+    type Room,
+    type IContent,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
-import { KnownMembership, RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
-import { _t, _td, TranslationKey } from "../../../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";

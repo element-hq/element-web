@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { encode } from "blurhash";
 
-import { WorkerPayload } from "./worker";
+import { type WorkerPayload } from "./worker";
 
 const ctx: Worker = self as any;
 

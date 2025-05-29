@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, PureComponent, RefCallback, RefObject } from "react";
+import React, { type ComponentProps, PureComponent, type Ref } from "react";
 import classNames from "classnames";
 
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import SdkConfig from "../../../SdkConfig";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
-import Field, { IInputProps } from "../elements/Field";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import Field, { type IInputProps } from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
@@ -22,7 +22,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     className?: string;
     minScore: 0 | 1 | 2 | 3 | 4;
     value: string;
-    fieldRef?: RefCallback<Field> | RefObject<Field>;
+    fieldRef?: Ref<Field>;
     // Additional strings such as a username used to catch bad passwords
     userInputs?: string[];
 

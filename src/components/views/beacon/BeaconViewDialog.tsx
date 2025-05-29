@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useEffect } from "react";
-import { MatrixClient, Beacon, Room } from "matrix-js-sdk/src/matrix";
-import * as maplibregl from "maplibre-gl";
+import { type MatrixClient, type Beacon, type Room } from "matrix-js-sdk/src/matrix";
 
+import type * as maplibregl from "maplibre-gl";
 import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";
 import { useLiveBeacons } from "../../../utils/beacon/useLiveBeacons";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -17,7 +17,7 @@ import BaseDialog from "../dialogs/BaseDialog";
 import Map from "../location/Map";
 import ZoomButtons from "../location/ZoomButtons";
 import BeaconMarker from "./BeaconMarker";
-import { Bounds, getBeaconBounds } from "../../../utils/beacon/bounds";
+import { type Bounds, getBeaconBounds } from "../../../utils/beacon/bounds";
 import { getGeoUri } from "../../../utils/beacon";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -26,7 +26,7 @@ import DialogOwnBeaconStatus from "./DialogOwnBeaconStatus";
 import BeaconStatusTooltip from "./BeaconStatusTooltip";
 import MapFallback from "../location/MapFallback";
 import { MapError } from "../location/MapError";
-import { LocationShareError } from "../../../utils/location";
+import { type LocationShareError } from "../../../utils/location";
 
 export interface IProps {
     roomId: Room["roomId"];

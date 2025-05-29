@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EventEmitter from "events";
 import { act } from "jest-matrix-react";
 
-import { ActionPayload } from "../../src/dispatcher/payloads";
+import type EventEmitter from "events";
+import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
-import { DispatcherAction } from "../../src/dispatcher/actions";
+import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));

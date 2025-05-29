@@ -6,26 +6,19 @@
  */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { mocked } from "jest-mock";
 
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { RecoveryPanel } from "../../../../../../src/components/views/settings/encryption/RecoveryPanel";
-import { accessSecretStorage } from "../../../../../../src/SecurityManager";
-
-jest.mock("../../../../../../src/SecurityManager", () => ({
-    accessSecretStorage: jest.fn(),
-}));
 
 describe("<RecoveryPanel />", () => {
     let matrixClient: MatrixClient;
 
     beforeEach(() => {
         matrixClient = createTestClient();
-        mocked(accessSecretStorage).mockClear().mockResolvedValue();
     });
 
     function renderRecoverPanel(onChangeRecoveryKeyClick = jest.fn()) {
@@ -54,18 +47,6 @@ describe("<RecoveryPanel />", () => {
 
         await user.click(screen.getByRole("button", { name: "Set up recovery" }));
         expect(onChangeRecoveryKeyClick).toHaveBeenCalledWith(true);
-    });
-
-    it("should ask to enter the recovery key when secrets are not cached", async () => {
-        jest.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue("default key");
-        const user = userEvent.setup();
-        const { asFragment } = renderRecoverPanel();
-
-        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
-        expect(asFragment()).toMatchSnapshot();
-
-        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
-        expect(accessSecretStorage).toHaveBeenCalled();
     });
 
     it("should allow to change the recovery key when everything is good", async () => {

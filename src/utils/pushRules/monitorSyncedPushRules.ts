@@ -6,15 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixEvent, EventType, RuleId, IAnnotatedPushRule } from "matrix-js-sdk/src/matrix";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import {
+    type MatrixClient,
+    type MatrixEvent,
+    EventType,
+    type RuleId,
+    type IAnnotatedPushRule,
+    type IPushRule,
+    type PushRuleKind,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { VectorPushRulesDefinitions, VectorPushRuleDefinition } from "../../notifications";
+import { VectorPushRulesDefinitions, type VectorPushRuleDefinition } from "../../notifications";
 import { updateExistingPushRulesWithActions } from "./updatePushRuleActions";
 
 const pushRuleAndKindToAnnotated = (
-    ruleAndKind: ReturnType<PushProcessor["getPushRuleAndKindById"]>,
+    ruleAndKind: { rule: IPushRule; kind: PushRuleKind } | null,
 ): IAnnotatedPushRule | undefined =>
     ruleAndKind
         ? {
@@ -28,23 +35,21 @@ const pushRuleAndKindToAnnotated = (
  * And updates any that are out of sync
  * Ignores ruleIds that do not exist for the user
  * @param matrixClient - cli
- * @param pushProcessor - processor used to retrieve current state of rules
  * @param ruleId - primary rule
  * @param definition - VectorPushRuleDefinition of the primary rule
  */
 const monitorSyncedRule = async (
     matrixClient: MatrixClient,
-    pushProcessor: PushProcessor,
     ruleId: RuleId | string,
     definition: VectorPushRuleDefinition,
 ): Promise<void> => {
-    const primaryRule = pushRuleAndKindToAnnotated(pushProcessor.getPushRuleAndKindById(ruleId));
+    const primaryRule = pushRuleAndKindToAnnotated(matrixClient.pushProcessor.getPushRuleAndKindById(ruleId));
 
     if (!primaryRule) {
         return;
     }
     const syncedRules: IAnnotatedPushRule[] | undefined = definition.syncedRuleIds
-        ?.map((ruleId) => pushRuleAndKindToAnnotated(pushProcessor.getPushRuleAndKindById(ruleId)))
+        ?.map((ruleId) => pushRuleAndKindToAnnotated(matrixClient.pushProcessor.getPushRuleAndKindById(ruleId)))
         .filter((n?: IAnnotatedPushRule): n is IAnnotatedPushRule => Boolean(n));
 
     // no synced rules to manage
@@ -88,11 +93,10 @@ export const monitorSyncedPushRules = async (
     if (accountDataEvent?.getType() !== EventType.PushRules) {
         return;
     }
-    const pushProcessor = new PushProcessor(matrixClient);
 
     Object.entries(VectorPushRulesDefinitions).forEach(async ([ruleId, definition]) => {
         try {
-            await monitorSyncedRule(matrixClient, pushProcessor, ruleId, definition);
+            await monitorSyncedRule(matrixClient, ruleId, definition);
         } catch (error) {
             logger.error(`Failed to fully synchronise push rules for ${ruleId}`, error);
         }

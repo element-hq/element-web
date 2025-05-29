@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
-import WidgetStore, { IApp } from "../../../src/stores/WidgetStore";
+import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import { stubClient } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";

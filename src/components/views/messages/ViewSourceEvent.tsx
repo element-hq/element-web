@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { CollapseIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     mxEvent: MatrixEvent;

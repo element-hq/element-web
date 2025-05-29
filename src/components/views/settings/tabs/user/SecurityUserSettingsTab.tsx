@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
+import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -17,19 +17,15 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { ActionPayload } from "../../../../../dispatcher/payloads";
-import CryptographyPanel from "../../CryptographyPanel";
+import { type ActionPayload } from "../../../../../dispatcher/payloads";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
-import type { IServerVersions } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -43,21 +39,20 @@ interface IIgnoredUserProps {
     inProgress: boolean;
 }
 
-const DehydratedDeviceStatus: React.FC = () => {
+const SecureBackup: React.FC = () => {
     const { dehydratedDeviceId } = useOwnDevices();
+    if (!dehydratedDeviceId) return null;
 
-    if (dehydratedDeviceId) {
-        return (
+    return (
+        <SettingsSubsection heading={_t("common|secure_backup")}>
             <div className="mx_SettingsSubsection_content">
                 <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
                 <div className="mx_SettingsSubsection_text">
                     {_t("settings|security|dehydrated_device_description")}
                 </div>
             </div>
-        );
-    } else {
-        return null;
-    }
+        </SettingsSubsection>
+    );
 };
 
 export class IgnoredUser extends React.Component<IIgnoredUserProps> {
@@ -68,7 +63,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     public render(): React.ReactNode {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
-            <div className="mx_SecurityUserSettingsTab_ignoredUser">
+            <li className="mx_SecurityUserSettingsTab_ignoredUser" aria-label={this.props.userId}>
                 <AccessibleButton
                     onClick={this.onUnignoreClicked}
                     kind="primary_sm"
@@ -78,7 +73,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
                     {_t("action|unignore")}
                 </AccessibleButton>
                 <span id={id}>{this.props.userId}</span>
-            </div>
+            </li>
         );
     }
 }
@@ -235,23 +230,34 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     private renderIgnoredUsers(): JSX.Element {
         const { waitingUnignored, ignoredUserIds } = this.state;
-
-        const userIds = !ignoredUserIds?.length
-            ? _t("settings|security|ignore_users_empty")
-            : ignoredUserIds.map((u) => {
-                  return (
-                      <IgnoredUser
-                          userId={u}
-                          onUnignored={this.onUserUnignored}
-                          key={u}
-                          inProgress={waitingUnignored.includes(u)}
-                      />
-                  );
-              });
+        if (!ignoredUserIds?.length) {
+            return (
+                <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
+                    <SettingsSubsectionText>{_t("settings|security|ignore_users_empty")}</SettingsSubsectionText>
+                </SettingsSubsection>
+            );
+        }
 
         return (
-            <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
-                <SettingsSubsectionText>{userIds}</SettingsSubsectionText>
+            <SettingsSubsection
+                id="mx_SecurityUserSettingsTab_ignoredUsersHeading"
+                heading={_t("settings|security|ignore_users_section")}
+            >
+                <SettingsSubsectionText>
+                    <ul
+                        aria-label={_t("settings|security|ignore_users_section")}
+                        className="mx_SecurityUserSettingsTab_ignoredUsers"
+                    >
+                        {ignoredUserIds.map((u) => (
+                            <IgnoredUser
+                                userId={u}
+                                onUnignored={this.onUserUnignored}
+                                key={u}
+                                inProgress={waitingUnignored.includes(u)}
+                            />
+                        ))}
+                    </ul>
+                </SettingsSubsectionText>
             </SettingsSubsection>
         );
     }
@@ -287,26 +293,11 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        const secureBackup = (
-            <SettingsSubsection heading={_t("common|secure_backup")}>
-                <SecureBackupPanel />
-                <DehydratedDeviceStatus />
-            </SettingsSubsection>
-        );
+        const secureBackup = <SecureBackup />;
 
         const eventIndex = (
             <SettingsSubsection heading={_t("settings|security|message_search_section")}>
                 <EventIndexPanel />
-            </SettingsSubsection>
-        );
-
-        // XXX: There's no such panel in the current cross-signing designs, but
-        // it's useful to have for testing the feature. If there's no interest
-        // in having advanced details here once all flows are implemented, we
-        // can remove this.
-        const crossSigning = (
-            <SettingsSubsection heading={_t("common|cross_signing")}>
-                <CrossSigningPanel />
             </SettingsSubsection>
         );
 
@@ -319,7 +310,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             );
         }
 
-        let privacySection;
+        let posthogSection;
         if (PosthogAnalytics.instance.isEnabled()) {
             const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
@@ -327,9 +318,8 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     hasCancel: false,
                 });
             };
-            privacySection = (
-                <SettingsSection heading={_t("common|privacy")}>
-                    <DiscoverySettings />
+            posthogSection = (
+                <>
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t("settings|security|analytics_description")}
@@ -344,7 +334,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
-                </SettingsSection>
+                </>
             );
         }
 
@@ -370,10 +360,11 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 <SettingsSection heading={_t("settings|security|encryption_section")}>
                     {secureBackup}
                     {eventIndex}
-                    {crossSigning}
-                    <CryptographyPanel />
                 </SettingsSection>
-                {privacySection}
+                <SettingsSection heading={_t("common|privacy")}>
+                    <DiscoverySettings />
+                    {posthogSection}
+                </SettingsSection>
                 {advancedSection}
             </SettingsTab>
         );

@@ -10,15 +10,16 @@ import {
     EventType,
     HistoryVisibility,
     JoinRule,
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
+    type MRoomTopicEventContent,
     Room,
-    RoomMember,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "jest-matrix-react";
-import { ReactElement } from "react";
-import { Mocked, mocked } from "jest-mock";
+import { type ReactElement } from "react";
+import { type Mocked, mocked } from "jest-mock";
 
 import { textForEvent } from "../../src/TextForEvent";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -518,6 +519,49 @@ describe("TextForEvent", () => {
                 ),
             ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
         });
+
+        it("should handle rejected invites", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.member",
+                        sender: "@a:foo",
+                        content: {
+                            membership: KnownMembership.Leave,
+                        },
+                        unsigned: {
+                            prev_content: {
+                                membership: KnownMembership.Invite,
+                            },
+                        },
+                        state_key: "@a:foo",
+                    }),
+                    mockClient,
+                ),
+            ).toMatchInlineSnapshot(`"Member rejected the invitation"`);
+        });
+
+        it("should handle rejected invites with a reason", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.member",
+                        sender: "@a:foo",
+                        content: {
+                            membership: KnownMembership.Leave,
+                            reason: "I don't want to be in this room.",
+                        },
+                        unsigned: {
+                            prev_content: {
+                                membership: KnownMembership.Invite,
+                            },
+                        },
+                        state_key: "@a:foo",
+                    }),
+                    mockClient,
+                ),
+            ).toMatchInlineSnapshot(`"Member rejected the invitation: I don't want to be in this room."`);
+        });
     });
 
     describe("textForJoinRulesEvent()", () => {
@@ -612,5 +656,48 @@ describe("TextForEvent", () => {
                 ).toEqual(result);
             },
         );
+    });
+
+    describe("textForTopicEvent()", () => {
+        type TestCase = [string, MRoomTopicEventContent, { result: string }];
+        const testCases: TestCase[] = [
+            ["the legacy key", { topic: "My topic" }, { result: '@a changed the topic to "My topic".' }],
+            [
+                "the legacy key with an empty m.topic key",
+                { "topic": "My topic", "m.topic": [] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            [
+                "the m.topic key",
+                { "topic": "Ignore this", "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            [
+                "the m.topic key and the legacy key undefined",
+                { "topic": undefined, "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            ["the legacy key undefined", { topic: undefined }, { result: "@a removed the topic." }],
+            ["the legacy key empty string", { topic: "" }, { result: "@a removed the topic." }],
+            [
+                "both the legacy and new keys removed",
+                { "topic": undefined, "m.topic": [] },
+                { result: "@a removed the topic." },
+            ],
+        ];
+
+        it.each(testCases)("returns correct message for topic event with %s", (_caseName, content, { result }) => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.topic",
+                        sender: "@a",
+                        content: content,
+                        state_key: "",
+                    }),
+                    mockClient,
+                ),
+            ).toEqual(result);
+        });
     });
 });

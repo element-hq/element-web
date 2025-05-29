@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
-import { toDataURL, QRCodeSegment, QRCodeToDataURLOptions, QRCodeRenderersOptions } from "qrcode";
+import React from "react";
+import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions, type QRCodeRenderersOptions } from "qrcode";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

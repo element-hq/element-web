@@ -12,7 +12,7 @@ import { uniqueId } from "lodash";
 import { expect, type Page } from "@playwright/test";
 
 import type { ClientEvent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { Client } from "../pages/client";
+import { type Client } from "../pages/client";
 
 /**
  * Resolves when room state matches predicate.

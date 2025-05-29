@@ -10,11 +10,11 @@ import React from "react";
 import { mocked } from "jest-mock";
 import {
     ConnectionError,
-    IProtocol,
-    IPublicRoomsChunkRoom,
+    type IProtocol,
+    type IPublicRoomsChunkRoom,
     JoinRule,
-    MatrixClient,
-    Room,
+    type MatrixClient,
+    type Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -353,12 +353,12 @@ describe("Spotlight Dialog", () => {
         });
 
         it("should find Rooms", () => {
-            expect(options).toHaveLength(4);
+            expect(options).toHaveLength(5);
             expect(options[0]!.innerHTML).toContain(testRoom.name);
         });
 
         it("should not find LocalRooms", () => {
-            expect(options).toHaveLength(4);
+            expect(options).toHaveLength(5);
             expect(options[0]!.innerHTML).not.toContain(testLocalRoom.name);
         });
     });
@@ -647,5 +647,21 @@ describe("Spotlight Dialog", () => {
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.PromptAskToJoin });
             });
         });
+    });
+
+    it("should allow jumping into message search", async () => {
+        const onFinished = jest.fn();
+        render(<SpotlightDialog initialText="search term" onFinished={onFinished} />);
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        fireEvent.click(screen.getByText("Messages"));
+
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: Action.FocusMessageSearch,
+                initialText: "search term",
+            }),
+        );
     });
 });

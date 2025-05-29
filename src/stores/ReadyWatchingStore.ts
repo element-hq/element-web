@@ -6,14 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { ActionPayload } from "../dispatcher/payloads";
-import { IDestroyable } from "../utils/IDestroyable";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type IDestroyable } from "../utils/IDestroyable";
 import { Action } from "../dispatcher/actions";
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
     protected matrixClient?: MatrixClient;

@@ -19,7 +19,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         context,
         page,
         homeserver,
-        mailhogClient,
+        mailpitClient,
         mas,
     }, testInfo) => {
         await page.clock.install();
@@ -33,7 +33,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         const userId = `alice_${testInfo.testId}`;
-        await registerAccountMas(page, mailhogClient, userId, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
@@ -73,4 +73,32 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
+
+    test(
+        "it should log out the user & wipe data when logging out via MAS",
+        { tag: "@screenshot" },
+        async ({ mas, page, mailpitClient }, testInfo) => {
+            // We use this over the `user` fixture to ensure we get an OIDC session rather than a compatibility one
+            await page.goto("/#/login");
+            await page.getByRole("button", { name: "Continue" }).click();
+
+            const userId = `alice_${testInfo.testId}`;
+            await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
+
+            await expect(page.getByText("Welcome")).toBeVisible();
+            await page.goto("about:blank");
+
+            const result = await mas.manage("kill-sessions", userId);
+            expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
+
+            await page.goto("http://localhost:8080");
+            await expect(
+                page.getByText("For security, this session has been signed out. Please sign in again."),
+            ).toBeVisible();
+            await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
+
+            const localStorageKeys = await page.evaluate(() => Object.keys(localStorage));
+            expect(localStorageKeys).toHaveLength(0);
+        },
+    );
 });

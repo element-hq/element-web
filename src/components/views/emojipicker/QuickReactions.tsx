@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../../../languageHandler";
 import Emoji from "./Emoji";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import Toolbar from "../../../accessibility/Toolbar";
 
 // We use the variation-selector Heart in Quick Reactions for some reason

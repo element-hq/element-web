@@ -6,22 +6,30 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RelationType, MatrixEvent, Thread, M_POLL_START, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    RelationType,
+    type MatrixEvent,
+    type Thread,
+    M_POLL_START,
+    RoomEvent,
+    type EmptyObject,
+} from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { PollStartEventPreview } from "./previews/PollStartEventPreview";
-import { TagID } from "./models";
+import { type TagID } from "./models";
 import { LegacyCallInviteEventPreview } from "./previews/LegacyCallInviteEventPreview";
 import { LegacyCallAnswerEventPreview } from "./previews/LegacyCallAnswerEventPreview";
 import { LegacyCallHangupEvent } from "./previews/LegacyCallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { IPreview } from "./previews/IPreview";
+import { type IPreview } from "./previews/IPreview";
 import shouldHideEvent from "../../shouldHideEvent";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
@@ -76,10 +84,6 @@ const MAX_EVENTS_BACKWARDS = 50;
 type TAG_ANY = "im.vector.any"; // eslint-disable-line @typescript-eslint/naming-convention
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
-interface IState {
-    // Empty because we don't actually use the state
-}
-
 export interface MessagePreview {
     event: MatrixEvent;
     isThreadReply: boolean;
@@ -117,7 +121,7 @@ const mkMessagePreview = (text: string, event: MatrixEvent): MessagePreview => {
     };
 };
 
-export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
+export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new MessagePreviewStore();
         instance.start();

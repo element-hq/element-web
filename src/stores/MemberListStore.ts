@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../settings/SettingsStore";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContext";
 import SdkConfig from "../SdkConfig";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
@@ -122,7 +122,7 @@ export class MemberListStore {
      * @returns True if enabled
      */
     private async isLazyLoadingEnabled(roomId: string): Promise<boolean> {
-        if (SettingsStore.getValue("feature_sliding_sync")) {
+        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             // only unencrypted rooms use lazy loading
             return !(await this.stores.client?.getCrypto()?.isEncryptionEnabledInRoom(roomId));
         }
@@ -134,7 +134,7 @@ export class MemberListStore {
      * @returns True if there is storage for lazy loading members
      */
     private isLazyMemberStorageEnabled(): boolean {
-        if (SettingsStore.getValue("feature_sliding_sync")) {
+        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             return false;
         }
         return this.stores.client!.hasLazyLoadMembersEnabled();

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { CARET_NODE_CHAR, isCaretNode } from "./render";
 import DocumentOffset from "./offset";
-import EditorModel from "./model";
-import Range from "./range";
+import type EditorModel from "./model";
+import type Range from "./range";
 
 type Predicate = (node: Node) => boolean;
 type Callback = (node: Node) => void;

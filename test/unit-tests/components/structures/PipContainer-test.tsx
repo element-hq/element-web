@@ -7,14 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 import { screen, render, act, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { Widget, ClientWidgetApi } from "matrix-widget-api";
-import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
+import {
+    type MatrixClient,
+    PendingEventOrdering,
+    Room,
+    RoomStateEvent,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
+import { Widget, type ClientWidgetApi } from "matrix-widget-api";
+import { type UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import {
     useMockedCalls,
     MockedCall,
@@ -36,7 +41,7 @@ import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
-import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { TestSdkContext } from "../../TestSdkContext";
 import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
 import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
@@ -143,6 +148,8 @@ describe("PipContainer", () => {
             WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                 stop: () => {},
+                hasCapability: jest.fn(),
+                feedStateUpdate: jest.fn().mockResolvedValue(undefined),
             } as unknown as ClientWidgetApi);
 
             await call.start();
@@ -266,7 +273,10 @@ describe("PipContainer", () => {
                     Parameters<ClientWidgetApi["transport"]["send"]>
                 >()
                 .mockResolvedValue({});
-            const mockMessaging = { transport: { send: sendSpy }, stop: () => {} } as unknown as ClientWidgetApi;
+            const mockMessaging = {
+                transport: { send: sendSpy },
+                stop: () => {},
+            } as unknown as ClientWidgetApi;
             WidgetMessagingStore.instance.storeMessaging(new Widget(widget), room.roomId, mockMessaging);
             await user.click(screen.getByRole("button", { name: "Leave" }));
             expect(sendSpy).toHaveBeenCalledWith(ElementWidgetActions.HangupCall, {});

@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import type { JSHandle, Page } from "@playwright/test";
 import type { MatrixEvent, Room, IndexedDBStore, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../element-web-test";
-import { Bot } from "../../pages/bot";
-import { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
+import { type Client } from "../../pages/client";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 type RoomRef = { name: string; roomId: string };
 
@@ -526,9 +526,10 @@ class Helpers {
         await expect(threadPanel).toBeVisible();
         await threadPanel.evaluate(($panel) => {
             const $button = $panel.querySelector<HTMLElement>('[data-testid="base-card-back-button"]');
+            const title = $panel.querySelector<HTMLElement>(".mx_BaseCard_header_title")?.textContent;
             // If the Threads back button is present then click it - the
             // threads button can open either threads list or thread panel
-            if ($button) {
+            if ($button && title !== "Threads") {
                 $button.click();
             }
         });

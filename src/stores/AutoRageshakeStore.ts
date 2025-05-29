@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     ClientEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    SyncStateData,
-    SyncState,
+    type SyncStateData,
+    type SyncState,
     ToDeviceMessageId,
 } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -22,7 +22,7 @@ import SdkConfig from "../SdkConfig";
 import sendBugReport from "../rageshake/submit-rageshake";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
 import { Action } from "../dispatcher/actions";
 

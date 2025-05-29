@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { render, screen, waitFor, cleanup } from "jest-matrix-react";
-import { MatrixClient, MatrixError, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixError, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
@@ -172,7 +172,7 @@ describe("AddRemoveThreepids", () => {
 
         const countryDropdown = await screen.findByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
-        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
+        const gbOption = screen.getByText("United Kingdom (+44)");
         await userEvent.click(gbOption);
 
         const input = screen.getByRole("textbox", { name: "Phone Number" });
@@ -511,7 +511,7 @@ describe("AddRemoveThreepids", () => {
 
         const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
-        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
+        const gbOption = screen.getByText("United Kingdom (+44)");
         await userEvent.click(gbOption);
 
         const input = screen.getByRole("textbox", { name: "Phone Number" });

@@ -9,14 +9,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { _td, UserFriendlyError } from "../languageHandler";
 import { EffectiveMembership, getEffectiveMembership } from "../utils/membership";
 import { warnSelfDemote } from "../components/views/right_panel/UserInfo";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { canAffectPowerlevels, success, reject } from "./utils";
-import { CommandCategories, RunResult } from "./interface";
+import { CommandCategories, type RunResult } from "./interface";
 import { Command } from "./command";
 
 const updatePowerLevel = async (room: Room, member: RoomMember, powerLevel: number | undefined): Promise<unknown> => {

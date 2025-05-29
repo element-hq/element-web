@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MockedObject } from "jest-mock";
-import { EventTimeline, EventType, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MockedObject } from "jest-mock";
+import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { IRoomState, MainSplitContentType } from "../../src/components/structures/RoomView";
+import { type IRoomState, MainSplitContentType } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
@@ -80,7 +80,6 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         canSelfRedact: false,
         resizing: false,
         narrow: false,
-        activeCall: null,
         msc3946ProcessDynamicPredecessor: false,
         canAskToJoin: false,
         promptAskToJoin: false,

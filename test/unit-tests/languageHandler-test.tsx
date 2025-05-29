@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { Translation } from "matrix-web-i18n";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+import { type Translation } from "matrix-web-i18n";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 
 import SdkConfig from "../../src/SdkConfig";
 import {
@@ -21,11 +21,12 @@ import {
     setLanguage,
     setMissingEntryGenerator,
     substitute,
-    TranslatedString,
+    type TranslatedString,
     UserFriendlyError,
-    TranslationKey,
-    IVariables,
-    Tags,
+    type TranslationKey,
+    type IVariables,
+    type Tags,
+    getLanguagesFromBrowser,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
 import { setupLanguageMock } from "../setup/setupLanguage";
@@ -196,6 +197,29 @@ describe("languageHandler", () => {
                 ]
             `);
             setupLanguageMock(); // restore language mock
+        });
+    });
+
+    describe("getLanguagesFromBrowser", () => {
+        beforeEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("should return navigator.languages if available", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue(["en", "de"]);
+            expect(getLanguagesFromBrowser()).toEqual(["en", "de"]);
+        });
+
+        it("should return navigator.language if available", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
+            jest.spyOn(window.navigator, "language", "get").mockReturnValue("de");
+            expect(getLanguagesFromBrowser()).toEqual(["de"]);
+        });
+
+        it("should return 'en' otherwise", () => {
+            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
+            jest.spyOn(window.navigator, "language", "get").mockReturnValue(undefined as any);
+            expect(getLanguagesFromBrowser()).toEqual(["en"]);
         });
     });
 });

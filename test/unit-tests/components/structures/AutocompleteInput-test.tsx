@@ -10,8 +10,8 @@ import React from "react";
 import { screen, render, fireEvent, waitFor, within, act } from "jest-matrix-react";
 
 import * as TestUtils from "../../../test-utils";
-import AutocompleteProvider from "../../../../src/autocomplete/AutocompleteProvider";
-import { ICompletion } from "../../../../src/autocomplete/Autocompleter";
+import type AutocompleteProvider from "../../../../src/autocomplete/AutocompleteProvider";
+import { type ICompletion } from "../../../../src/autocomplete/Autocompleter";
 import { AutocompleteInput } from "../../../../src/components/structures/AutocompleteInput";
 
 describe("AutocompleteInput", () => {
@@ -63,12 +63,12 @@ describe("AutocompleteInput", () => {
 
         const input = getEditorInput();
 
-        act(() => {
+        await act(async () => {
             fireEvent.focus(input);
             fireEvent.change(input, { target: { value: "user" } });
+            await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         });
 
-        await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         expect(screen.getByTestId("autocomplete-matches").childNodes).toHaveLength(mockCompletion.length);
     });
 
@@ -152,12 +152,12 @@ describe("AutocompleteInput", () => {
 
         const input = getEditorInput();
 
-        act(() => {
+        await act(async () => {
             fireEvent.focus(input);
             fireEvent.change(input, { target: { value: "user" } });
+            await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         });
 
-        await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         expect(screen.getAllByTestId("custom-suggestion-element")).toHaveLength(mockCompletion.length);
     });
 

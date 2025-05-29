@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 
-import AutoHideScrollbar, { IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
+import AutoHideScrollbar, { type IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
@@ -21,8 +21,6 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollb
     // scroll horizontally rather than vertically. This should only be used on components
     // with no vertical scroll opportunity.
     verticalScrollsHorizontally?: boolean;
-
-    children: React.ReactNode;
 };
 
 interface IState {

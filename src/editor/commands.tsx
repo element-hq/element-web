@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
-import EditorModel from "./model";
+import type EditorModel from "./model";
 import { Type } from "./parts";
-import { Command, CommandCategories, getCommand } from "../SlashCommands";
+import { type Command, CommandCategories, getCommand } from "../SlashCommands";
 import { UserFriendlyError, _t, _td } from "../languageHandler";
 import Modal from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";

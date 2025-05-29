@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import { type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import Spinner from "../../elements/Spinner";
@@ -17,7 +17,7 @@ import DeviceDetails from "./DeviceDetails";
 import { DeviceExpandDetailsButton } from "./DeviceExpandDetailsButton";
 import DeviceTile from "./DeviceTile";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
-import { ExtendedDevice } from "./types";
+import { type ExtendedDevice } from "./types";
 import { KebabContextMenu } from "../../context_menus/KebabContextMenu";
 import { IconizedContextMenuOption } from "../../context_menus/IconizedContextMenu";
 

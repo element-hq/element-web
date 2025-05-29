@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { fireEvent, render, screen, within } from "jest-matrix-react";
 import React from "react";
-import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
-import { MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SdkContextClass, SDKContext } from "../../../../../../../src/contexts/SDKContext";
@@ -24,7 +24,7 @@ import {
     flushPromises,
 } from "../../../../../../test-utils";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
-import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
+import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
 
@@ -153,7 +153,8 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
@@ -167,14 +168,16 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
 
             await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
 
-            createDialogFn.mock.calls[0][1].onFinished(true);
+            finishedDeferred.resolve([true]);
+            await flushPromises();
 
             expect(defaultProps.closeSettingsFn).toHaveBeenCalled();
         });
@@ -183,14 +186,16 @@ describe("<AccountUserSettingsTab />", () => {
                 (settingName) => settingName === UIFeature.Deactivate,
             );
 
-            const createDialogFn = jest.fn();
+            const finishedDeferred = Promise.withResolvers<[boolean]>();
+            const createDialogFn = jest.fn().mockReturnValue({ finished: finishedDeferred.promise });
             jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
 
             render(getComponent());
 
             await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
 
-            createDialogFn.mock.calls[0][1].onFinished(false);
+            finishedDeferred.resolve([false]);
+            await flushPromises();
 
             expect(defaultProps.closeSettingsFn).not.toHaveBeenCalled();
         });

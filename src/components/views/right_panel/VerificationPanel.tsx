@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import {
-    ShowQrCodeCallbacks,
-    ShowSasCallbacks,
+    type ShowQrCodeCallbacks,
+    type ShowSasCallbacks,
     VerificationPhase as Phase,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
     VerifierEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { Device, RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { type Device, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 

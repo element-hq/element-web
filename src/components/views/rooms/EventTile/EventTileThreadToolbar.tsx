@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { Icon as ViewInRoomIcon } from "../../../../../res/img/element-icons/view-in-room.svg";
-import { ButtonEvent } from "../../elements/AccessibleButton";
+import { type ButtonEvent } from "../../elements/AccessibleButton";
 
 export function EventTileThreadToolbar({
     viewInRoom,

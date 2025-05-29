@@ -10,24 +10,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, MatrixEvent, OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type Room,
+    type MatrixEvent,
+    type OidcRegistrationClientMetadata,
+} from "matrix-js-sdk/src/matrix";
 import React from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import BasePlatform, { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
-import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
+import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import * as rageshake from "../../rageshake/rageshake";
 import Modal from "../../Modal";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
 import Spinner from "../../components/views/elements/Spinner";
 import { Action } from "../../dispatcher/actions";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { showToast as showUpdateToast } from "../../toasts/UpdateToast";
-import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "../../stores/ToastStore";
 import GenericExpiringToast from "../../components/views/toasts/GenericExpiringToast";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
@@ -92,8 +96,10 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private readonly ssoID: string = randomString(32);
+    private readonly initialised: Promise<void>;
+    private protocol!: string;
+    private sessionId!: string;
+    private config!: IConfigOptions;
 
     public constructor() {
         super();
@@ -181,13 +187,21 @@ export default class ElectronPlatform extends BasePlatform {
             await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        void this.ipc.call("startSSOFlow", this.ssoID);
-
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+
+        this.initialised = this.initialise();
+    }
+
+    private async initialise(): Promise<void> {
+        const { protocol, sessionId, config } = await window.electron!.initialise();
+        this.protocol = protocol;
+        this.sessionId = sessionId;
+        this.config = config;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
-        return this.ipc.call("getConfig");
+        await this.initialised;
+        return this.config;
     }
 
     private onBreadcrumbsUpdate = (): void => {
@@ -386,7 +400,7 @@ export default class ElectronPlatform extends BasePlatform {
     public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
-        url.searchParams.set(SSO_ID_KEY, this.ssoID);
+        url.searchParams.set(SSO_ID_KEY, this.sessionId);
         return url;
     }
 
@@ -464,7 +478,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public getOidcClientState(): string {
-        return `:${SSO_ID_KEY}:${this.ssoID}`;
+        return `:${SSO_ID_KEY}:${this.sessionId}`;
     }
 
     /**
@@ -472,9 +486,9 @@ export default class ElectronPlatform extends BasePlatform {
      */
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
-        url.protocol = "io.element.desktop";
+        url.protocol = this.protocol;
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
-        if (url.href.startsWith(`${url.protocol}://`)) {
+        if (url.href.startsWith(`${url.protocol}//`)) {
             url.href = url.href.replace("://", ":/");
         }
         return url;

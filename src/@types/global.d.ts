@@ -10,41 +10,43 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import "@types/modernizr";
 
+import type { ModuleLoader } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
-import ContentMessages from "../ContentMessages";
-import { IMatrixClientPeg } from "../MatrixClientPeg";
-import ToastStore from "../stores/ToastStore";
-import DeviceListener from "../DeviceListener";
-import { RoomListStore } from "../stores/room-list/Interface";
-import { PlatformPeg } from "../PlatformPeg";
-import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
-import { IntegrationManagers } from "../integrations/IntegrationManagers";
-import { ModalManager } from "../Modal";
-import SettingsStore from "../settings/SettingsStore";
-import { Notifier } from "../Notifier";
-import RightPanelStore from "../stores/right-panel/RightPanelStore";
-import WidgetStore from "../stores/WidgetStore";
-import LegacyCallHandler from "../LegacyCallHandler";
-import UserActivity from "../UserActivity";
-import { ModalWidgetStore } from "../stores/ModalWidgetStore";
-import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import VoipUserMapper from "../VoipUserMapper";
-import { SpaceStoreClass } from "../stores/spaces/SpaceStore";
-import TypingStore from "../stores/TypingStore";
-import { EventIndexPeg } from "../indexing/EventIndexPeg";
-import { VoiceRecordingStore } from "../stores/VoiceRecordingStore";
-import PerformanceMonitor from "../performance";
-import UIStore from "../stores/UIStore";
-import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
-import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
-import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
-import ActiveWidgetStore from "../stores/ActiveWidgetStore";
-import AutoRageshakeStore from "../stores/AutoRageshakeStore";
-import { IConfigOptions } from "../IConfigOptions";
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
-import { DeepReadonly } from "./common";
-import MatrixChat from "../components/structures/MatrixChat";
-import { InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
+import type ContentMessages from "../ContentMessages";
+import { type IMatrixClientPeg } from "../MatrixClientPeg";
+import type ToastStore from "../stores/ToastStore";
+import type DeviceListener from "../DeviceListener";
+import { type RoomListStore } from "../stores/room-list/Interface";
+import { type PlatformPeg } from "../PlatformPeg";
+import type RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
+import { type IntegrationManagers } from "../integrations/IntegrationManagers";
+import { type ModalManager } from "../Modal";
+import type SettingsStore from "../settings/SettingsStore";
+import { type Notifier } from "../Notifier";
+import type RightPanelStore from "../stores/right-panel/RightPanelStore";
+import type WidgetStore from "../stores/WidgetStore";
+import type LegacyCallHandler from "../LegacyCallHandler";
+import type UserActivity from "../UserActivity";
+import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
+import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import type TypingStore from "../stores/TypingStore";
+import { type EventIndexPeg } from "../indexing/EventIndexPeg";
+import { type VoiceRecordingStore } from "../stores/VoiceRecordingStore";
+import type PerformanceMonitor from "../performance";
+import type UIStore from "../stores/UIStore";
+import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
+import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
+import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
+import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import type AutoRageshakeStore from "../stores/AutoRageshakeStore";
+import { type IConfigOptions } from "../IConfigOptions";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type DeepReadonly } from "./common";
+import type MatrixChat from "../components/structures/MatrixChat";
+import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
+import { type ModuleApiType } from "../modules/Api.ts";
+import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -80,23 +82,15 @@ declare global {
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
-        // Needed for Safari, unknown to TypeScript
-        webkitAudioContext: typeof AudioContext;
-
         // https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
         // we only ever check for its existence, so we can ignore its actual type
         MSStream?: unknown;
-
-        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-869224737
-        // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
-        OffscreenCanvas?: {
-            new (width: number, height: number): OffscreenCanvas;
-        };
 
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
+        mxRoomListStoreV3: RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
@@ -109,7 +103,6 @@ declare global {
         mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
@@ -122,6 +115,8 @@ declare global {
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxOnRecaptchaLoaded?: () => void;
+        mxModuleLoader: ModuleLoader;
+        mxModuleApi: ModuleApiType;
 
         // electron-only
         electron?: Electron;
@@ -135,6 +130,11 @@ declare global {
     interface Electron {
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
+        initialise(): Promise<{
+            protocol: string;
+            sessionId: string;
+            config: IConfigOptions;
+        }>;
     }
 
     interface DesktopCapturerSource {
@@ -152,29 +152,8 @@ declare global {
         fetchWindowIcons?: boolean;
     }
 
-    interface Document {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitExitFullscreen(): Promise<void>;
-        msExitFullscreen(): Promise<void>;
-        readonly webkitFullscreenElement: Element | null;
-        readonly msFullscreenElement: Element | null;
-    }
-
-    interface Navigator {
-        userLanguage?: string;
-    }
-
     interface StorageEstimate {
         usageDetails?: { [key: string]: number };
-    }
-
-    interface Element {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
-        msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
-        // scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
@@ -233,13 +212,6 @@ declare global {
     var mx_rage_initStoragePromise: Promise<void>;
     // eslint-disable-next-line no-var, camelcase
     var mx_rage_store: IndexedDBLogStore;
-}
-
-// add method which is missing from the node typing
-declare module "url" {
-    interface Url {
-        format(): string;
-    }
 }
 
 /* eslint-enable @typescript-eslint/naming-convention */

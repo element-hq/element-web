@@ -1,0 +1,433 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListPanel /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
+<DocumentFragment>
+  <section
+    class="mx_Flex mx_RoomListPanel"
+    data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <header
+      aria-label="Room options"
+      class="mx_Flex mx_RoomListHeaderView"
+      data-testid="room-list-header"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="mx_Flex mx_RoomListHeaderView_title"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      >
+        <h1
+          title="Home"
+        >
+          Home
+        </h1>
+      </div>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«rc»"
+          class="_icon-button_m2erp_8"
+          data-state="closed"
+          id="radix-«ra»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="New message"
+          class="_icon-button_m2erp_8"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+    </header>
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+    </ul>
+    <div
+      class="mx_RoomListSkeleton"
+    />
+  </section>
+</DocumentFragment>
+`;
+
+exports[`<RoomListPanel /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
+<DocumentFragment>
+  <section
+    class="mx_Flex mx_RoomListPanel"
+    data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="mx_Flex mx_RoomListSearch"
+      role="search"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+          />
+        </svg>
+        <span
+          class="mx_Flex"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+        >
+          <span
+            class="mx_RoomListSearch_search_text"
+          >
+            Search
+          </span>
+          <kbd>
+            Ctrl K
+          </kbd>
+        </span>
+      </button>
+      <button
+        aria-label="Explore rooms"
+        class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 13a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 12q0-.424.287-.713A.97.97 0 0 1 12 11q.424 0 .713.287.287.288.287.713 0 .424-.287.713A.97.97 0 0 1 12 13m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20m0 0q-3.35 0-5.675-2.325T4 12t2.325-5.675T12 4t5.675 2.325T20 12t-2.325 5.675T12 20m1.675-5.85q.15-.075.275-.2t.2-.275l2.925-6.25q.125-.25-.062-.437-.188-.188-.438-.063l-6.25 2.925q-.15.075-.275.2t-.2.275l-2.925 6.25q-.125.25.063.438.186.186.437.062z"
+          />
+        </svg>
+      </button>
+    </div>
+    <header
+      aria-label="Room options"
+      class="mx_Flex mx_RoomListHeaderView"
+      data-testid="room-list-header"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <div
+        class="mx_Flex mx_RoomListHeaderView_title"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      >
+        <h1
+          title="Home"
+        >
+          Home
+        </h1>
+      </div>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«r2»"
+          class="_icon-button_m2erp_8"
+          data-state="closed"
+          id="radix-«r0»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Add"
+          class="_icon-button_m2erp_8"
+          data-state="closed"
+          id="radix-«r7»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+    </header>
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+    </ul>
+    <div
+      class="mx_RoomListSkeleton"
+    />
+  </section>
+</DocumentFragment>
+`;

@@ -8,18 +8,18 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     ClientEvent,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     MatrixEventEvent,
-    Room,
+    type Room,
     RoomEvent,
-    IRoomTimelineData,
-    RoomState,
+    type IRoomTimelineData,
+    type RoomState,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 
 import dis from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 
 /**
  * Create a MatrixActions.sync action that represents a MatrixClient `sync` event,

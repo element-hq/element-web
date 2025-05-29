@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactElement } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type ReactElement, type RefAttributes, type HTMLAttributes } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import CommandProvider from "./CommandProvider";
 import RoomProvider from "./RoomProvider";
@@ -15,7 +15,8 @@ import UserProvider from "./UserProvider";
 import EmojiProvider from "./EmojiProvider";
 import NotifProvider from "./NotifProvider";
 import { timeout } from "../utils/promise";
-import AutocompleteProvider, { ICommand } from "./AutocompleteProvider";
+import { type ICommand } from "./AutocompleteProvider";
+import type AutocompleteProvider from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { filterBoolean } from "../utils/arrays";
@@ -30,7 +31,7 @@ export interface ICompletion {
     type?: "at-room" | "command" | "community" | "room" | "user";
     completion: string;
     completionId?: string;
-    component: ReactElement;
+    component: ReactElement<RefAttributes<HTMLElement> & HTMLAttributes<HTMLElement>>;
     range: ISelectionRange;
     command?: string;
     suffix?: string;

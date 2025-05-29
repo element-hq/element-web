@@ -7,15 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, useContext, useMemo, useState } from "react";
+import React, { type ChangeEvent, useContext, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../../languageHandler";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import AccessibleButton from "../../elements/AccessibleButton";
 import SettingsStore, { LEVEL_ORDER } from "../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../settings/SettingLevel";
-import { SettingKey, SETTINGS, SettingValueType } from "../../../../settings/Settings";
+import { type SettingLevel } from "../../../../settings/SettingLevel";
+import { type SettingKey, SETTINGS, type SettingValueType } from "../../../../settings/Settings";
 import Field from "../../elements/Field";
 
 const SettingExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {

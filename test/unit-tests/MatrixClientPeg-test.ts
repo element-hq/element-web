@@ -10,7 +10,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "../test-utils";
-import { IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
+import { type IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 
 jest.useFakeTimers();
 
@@ -84,6 +84,27 @@ describe("MatrixClientPeg", () => {
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
             expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+        });
+
+        it("should try to start dehydration if dehydration is enabled", async () => {
+            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockStartDehydration = jest.fn();
+            jest.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
+                isDehydrationSupported: jest.fn().mockResolvedValue(true),
+                startDehydration: mockStartDehydration,
+                setDeviceIsolationMode: jest.fn(),
+            } as any);
+            jest.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
+                "m.homeserver": {
+                    base_url: "http://example.com",
+                },
+                "org.matrix.msc3814": true,
+            } as any);
+
+            const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
+            await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
+            expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+            expect(mockStartDehydration).toHaveBeenCalledWith({ onlyIfKeyCached: true, rehydrate: false });
         });
 
         it("Should migrate existing login", async () => {

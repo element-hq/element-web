@@ -8,16 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { useEffect } from "react";
-import { Beacon, BeaconIdentifier } from "matrix-js-sdk/src/matrix";
+import { type Beacon, type BeaconIdentifier } from "matrix-js-sdk/src/matrix";
 
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import dispatcher from "../../../dispatcher/dispatcher";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface Props {
     isMinimized?: boolean;

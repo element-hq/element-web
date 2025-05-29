@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
-import { Optional } from "matrix-events-sdk";
-import { act, render, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type ClientWidgetApi, type IWidget, MatrixWidgetType } from "matrix-widget-api";
+import { type Optional } from "matrix-events-sdk";
+import { act, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
-    ApprovalOpts,
-    WidgetInfo,
+    type ApprovalOpts,
+    type WidgetInfo,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
@@ -29,7 +29,7 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import WidgetStore, { IApp } from "../../../../../src/stores/WidgetStore";
+import WidgetStore, { type IApp } from "../../../../../src/stores/WidgetStore";
 import ActiveWidgetStore from "../../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";

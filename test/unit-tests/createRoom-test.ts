@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
-import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, type Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg, getMockClientWithEventEmitter } from "../test-utils";

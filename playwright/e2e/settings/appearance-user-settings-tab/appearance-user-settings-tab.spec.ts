@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -50,8 +50,8 @@ test.describe("Appearance user settings tab", () => {
         // Click "Show advanced" link button
         await tab.getByRole("button", { name: "Show advanced" }).click();
 
-        await tab.locator(".mx_Checkbox", { hasText: "Use bundled emoji font" }).click();
-        await tab.locator(".mx_Checkbox", { hasText: "Use a system font" }).click();
+        await tab.getByLabel("Use bundled emoji font").click();
+        await tab.getByLabel("Use a system font").click();
 
         // Assert that the font-family value was removed
         await expect(page.locator("body")).toHaveCSS("font-family", '""');

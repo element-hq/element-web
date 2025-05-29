@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { waitFor, renderHook, act } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useProfileInfo } from "../../../src/hooks/useProfileInfo";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -40,9 +40,10 @@ describe("useProfileInfo", () => {
             result.current.search({ query });
         });
 
-        await waitFor(() => expect(result.current.ready).toBe(true));
-
-        expect(result.current.profile?.display_name).toBe(query);
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+            expect(result.current.profile?.display_name).toBe(query);
+        });
     });
 
     it("should work with empty queries", async () => {
@@ -93,7 +94,7 @@ describe("useProfileInfo", () => {
     });
 
     it("should be able to handle an empty result", async () => {
-        cli.getProfileInfo = () => null as unknown as Promise<{}>;
+        cli.getProfileInfo = () => null as unknown as Promise<EmptyObject>;
         const query = "@user:home.server";
 
         const { result } = render();

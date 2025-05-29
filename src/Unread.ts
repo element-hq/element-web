@@ -6,12 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { M_BEACON, Room, Thread, MatrixEvent, EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { M_BEACON, type Room, Thread, type MatrixEvent, EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
-import SettingsStore from "./settings/SettingsStore";
 import { RoomNotifState, getRoomNotifsState } from "./RoomNotifs";
 
 /**
@@ -44,12 +43,6 @@ export function eventTriggersUnreadCount(client: MatrixClient, ev: MatrixEvent):
 }
 
 export function doesRoomHaveUnreadMessages(room: Room, includeThreads: boolean): boolean {
-    if (SettingsStore.getValue("feature_sliding_sync")) {
-        // TODO: https://github.com/vector-im/element-web/issues/23207
-        // Sliding Sync doesn't support unread indicator dots (yet...)
-        return false;
-    }
-
     const toCheck: Array<Room | Thread> = [room];
     if (includeThreads) {
         toCheck.push(...room.getThreads());

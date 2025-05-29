@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import type { JSHandle } from "@playwright/test";
 import type { MatrixEvent, ISendEventResponse, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { expect } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
-import { Bot } from "../../pages/bot";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
 import { test } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 

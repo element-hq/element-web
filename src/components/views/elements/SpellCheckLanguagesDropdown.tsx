@@ -6,14 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
-import SettingsStore from "../../../settings/SettingsStore";
 import { _t, getUserLanguage } from "../../../languageHandler";
 import Spinner from "./Spinner";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 
 type Languages = {
     value: string;
@@ -105,17 +104,6 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
             return <div key={language.value}>{language.label}</div>;
         }) as NonEmptyArray<ReactElement & { key: string }>;
 
-        // default value here too, otherwise we need to handle null / undefined;
-        // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-        let value: string | undefined;
-        if (language) {
-            value = this.props.value || language;
-        } else {
-            language = navigator.language || navigator.userLanguage;
-            value = this.props.value || language;
-        }
-
         return (
             <Dropdown
                 id="mx_LanguageDropdown"
@@ -123,7 +111,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                 onOptionChange={this.props.onOptionChange}
                 onSearchChange={this.onSearchChange}
                 searchEnabled={true}
-                value={value}
+                value={this.props.value}
                 label={_t("language_dropdown_label")}
                 placeholder={_t("settings|general|spell_check_locale_placeholder")}
             >

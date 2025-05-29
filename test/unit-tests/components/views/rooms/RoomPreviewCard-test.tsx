@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 import { render, screen, act } from "jest-matrix-react";
 import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -44,9 +44,13 @@ describe("RoomPreviewCard", () => {
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
         enabledFeatures = [];
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any =>
-            enabledFeatures.includes(settingName) ? true : undefined,
-        );
+        const origFn = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            if (enabledFeatures.includes(settingName)) {
+                return true;
+            }
+            return origFn(settingName);
+        });
     });
 
     afterEach(() => {

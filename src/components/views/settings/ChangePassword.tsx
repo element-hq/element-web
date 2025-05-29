@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AccessibleButton, { AccessibleButtonKind } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import { UserFriendlyError, _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
@@ -330,7 +330,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
                             <Field
-                                ref={(field) => (this[FIELD_OLD_PASSWORD] = field)}
+                                ref={(field) => {
+                                    this[FIELD_OLD_PASSWORD] = field;
+                                }}
                                 type="password"
                                 label={_t("auth|change_password_current_label")}
                                 value={this.state.oldPassword}
@@ -340,7 +342,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <PassphraseField
-                                fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
+                                fieldRef={(field) => {
+                                    this[FIELD_NEW_PASSWORD] = field;
+                                }}
                                 type="password"
                                 label={_td("auth|change_password_new_label")}
                                 minScore={PASSWORD_MIN_SCORE}
@@ -353,7 +357,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <Field
-                                ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)}
+                                ref={(field) => {
+                                    this[FIELD_NEW_PASSWORD_CONFIRM] = field;
+                                }}
                                 type="password"
                                 label={_t("auth|change_password_confirm_label")}
                                 value={this.state.newPasswordConfirm}

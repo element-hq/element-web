@@ -6,44 +6,44 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ClipboardEvent } from "react";
+import React, { type ClipboardEvent } from "react";
 import {
     ClientEvent,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     RoomStateEvent,
-    MatrixError,
-    IUsageLimit,
-    SyncStateData,
+    type MatrixError,
+    type IUsageLimit,
+    type SyncStateData,
     SyncState,
     EventType,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
 import dis from "../../dispatcher/dispatcher";
-import { IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import ResizeHandle from "../views/elements/ResizeHandle";
 import { CollapseDistributor, Resizer } from "../../resizer";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
 import { hideToast as hideServerLimitToast, showToast as showServerLimitToast } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
-import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
-import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
-import { CollapseItem, ICollapseConfig } from "../../resizer/distributors/collapse";
+import { type CollapseItem, type ICollapseConfig } from "../../resizer/distributors/collapse";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import { IOpts } from "../../createRoom";
+import { type IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import AudioFeedArrayForLegacyCall from "../views/voip/AudioFeedArrayForLegacyCall";
@@ -55,16 +55,16 @@ import UserView from "./UserView";
 import { BackdropPanel } from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import LeftPanelLiveShareWarning from "../views/beacon/LeftPanelLiveShareWarning";
 import HomePage from "./HomePage";
 import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
-import { ConfigOptions } from "../../SdkConfig";
+import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 
@@ -124,9 +124,9 @@ class LoggedInView extends React.Component<IProps, IState> {
     public static displayName = "LoggedInView";
 
     protected readonly _matrixClient: MatrixClient;
-    protected readonly _roomView: React.RefObject<RoomView>;
-    protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
-    protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
+    protected readonly _roomView: React.RefObject<RoomView | null>;
+    protected readonly _resizeContainer: React.RefObject<HTMLDivElement | null>;
+    protected readonly resizeHandler: React.RefObject<HTMLDivElement | null>;
     protected layoutWatcherRef?: string;
     protected compactLayoutWatcherRef?: string;
     protected backgroundImageWatcherRef?: string;
@@ -259,9 +259,11 @@ class LoggedInView extends React.Component<IProps, IState> {
     private createResizer(): Resizer<ICollapseConfig, CollapseItem> {
         let panelSize: number | null;
         let panelCollapsed: boolean;
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+        const toggleSize = useNewRoomList ? 224 : 206 - 50;
         const collapseConfig: ICollapseConfig = {
-            // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-            toggleSize: 206 - 50,
+            toggleSize,
             onCollapsed: (collapsed) => {
                 panelCollapsed = collapsed;
                 if (collapsed) {
@@ -501,9 +503,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 handled = true;
                 break;
             case KeyBindingAction.FilterRooms:
-                dis.dispatch({
-                    action: "focus_room_filter",
-                });
+                dis.fire(Action.OpenSpotlight);
                 handled = true;
                 break;
             case KeyBindingAction.ToggleUserMenu:
@@ -699,10 +699,18 @@ class LoggedInView extends React.Component<IProps, IState> {
             "mx_MatrixChat--with-avatar": this.state.backgroundImage,
         });
 
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+
+        const leftPanelWrapperClasses = classNames({
+            mx_LeftPanel_wrapper: true,
+            mx_LeftPanel_newRoomList: useNewRoomList,
+        });
+
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
+        const shouldUseMinimizedUI = !useNewRoomList && this.props.collapseLhs;
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
                 <div
@@ -714,19 +722,21 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <div className={bodyClasses}>
                         <div className="mx_LeftPanel_outerWrapper">
-                            <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
-                            <div className="mx_LeftPanel_wrapper">
-                                <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
+                            <LeftPanelLiveShareWarning isMinimized={shouldUseMinimizedUI || false} />
+                            <div className={leftPanelWrapperClasses}>
+                                {!useNewRoomList && (
+                                    <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
+                                )}
                                 <SpacePanel />
-                                <BackdropPanel backgroundImage={this.state.backgroundImage} />
+                                {!useNewRoomList && <BackdropPanel backgroundImage={this.state.backgroundImage} />}
                                 <div
                                     className="mx_LeftPanel_wrapper--user"
                                     ref={this._resizeContainer}
-                                    data-collapsed={this.props.collapseLhs ? true : undefined}
+                                    data-collapsed={shouldUseMinimizedUI ? true : undefined}
                                 >
                                     <LeftPanel
                                         pageType={this.props.page_type as PageTypes}
-                                        isMinimized={this.props.collapseLhs || false}
+                                        isMinimized={shouldUseMinimizedUI || false}
                                         resizeNotifier={this.props.resizeNotifier}
                                     />
                                 </div>

@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useState } from "react";
-import { AccountDataEvents, ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents, ClientEvent, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 
-const tryGetContent = <T extends {}>(ev?: MatrixEvent): T | undefined => ev?.getContent<T>();
+const tryGetContent = <T extends object>(ev?: MatrixEvent): T | undefined => ev?.getContent<T>();
 
 // Hook to simplify listening to Matrix account data
-export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: keyof AccountDataEvents): T => {
+export const useAccountData = <T extends object>(cli: MatrixClient, eventType: keyof AccountDataEvents): T => {
     const [value, setValue] = useState<T | undefined>(() => tryGetContent<T>(cli.getAccountData(eventType)));
 
     const handler = useCallback(

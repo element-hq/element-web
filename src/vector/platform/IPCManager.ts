@@ -5,10 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { ElectronChannel } from "../../@types/global";
+import { type ElectronChannel } from "../../@types/global";
 
 interface IPCPayload {
     id?: number;
@@ -17,7 +16,7 @@ interface IPCPayload {
 }
 
 export class IPCManager {
-    private pendingIpcCalls: { [ipcCallId: number]: IDeferred<any> } = {};
+    private pendingIpcCalls: { [ipcCallId: number]: PromiseWithResolvers<any> } = {};
     private nextIpcCallId = 0;
 
     public constructor(
@@ -33,14 +32,14 @@ export class IPCManager {
     public async call(name: string, ...args: any[]): Promise<any> {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
-        const deferred = defer<any>();
+        const deferred = Promise.withResolvers<any>();
         this.pendingIpcCalls[ipcCallId] = deferred;
         // Maybe add a timeout to these? Probably not necessary.
         window.electron!.send(this.sendChannel, { id: ipcCallId, name, args });
         return deferred.promise;
     }
 
-    private onIpcReply = (_ev: {}, payload: IPCPayload): void => {
+    private onIpcReply = (_ev: Event, payload: IPCPayload): void => {
         if (payload.id === undefined) {
             logger.warn("Ignoring IPC reply with no ID");
             return;

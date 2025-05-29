@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from "matrix-encrypt-attachment";
 import { parseErrorResponse } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile, MediaEventInfo } from "matrix-js-sdk/src/types";
+import { type EncryptedFile, type MediaEventInfo } from "matrix-js-sdk/src/types";
 
 import { mediaFromContent } from "../customisations/Media";
 import { getBlobSafeMimeType } from "./blobs";

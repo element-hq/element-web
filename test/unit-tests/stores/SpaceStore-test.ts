@@ -6,21 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventEmitter } from "events";
+import { type EventEmitter } from "events";
 import { mocked } from "jest-mock";
 import {
     EventType,
     RoomMember,
     RoomStateEvent,
     ClientEvent,
-    MatrixEvent,
-    Room,
+    type MatrixEvent,
+    type Room,
     RoomEvent,
     JoinRule,
-    RoomState,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import {
@@ -141,6 +140,8 @@ describe("SpaceStore", () => {
     });
 
     afterEach(async () => {
+        // Disable the new room list feature flag
+        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
         await testUtils.resetAsyncStoreWithClient(store);
     });
 
@@ -1008,7 +1009,7 @@ describe("SpaceStore", () => {
 
         await run();
 
-        const deferred = defer<boolean>();
+        const deferred = Promise.withResolvers<boolean>();
         space.loadMembersIfNeeded.mockImplementation(() => {
             const event = mkEvent({
                 event: true,
@@ -1389,6 +1390,15 @@ describe("SpaceStore", () => {
         await run();
         expect(metaSpaces).toEqual(store.enabledMetaSpaces);
         removeListener();
+    });
+
+    it("Favourites and People meta spaces should not be returned when the feature_new_room_list labs flag is enabled", async () => {
+        // Enable the new room list
+        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
+
+        await run();
+        // Favourites and People meta spaces should not be returned
+        expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
     });
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {

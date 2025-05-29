@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RefObject, useMemo } from "react";
+import { type RefObject, useMemo } from "react";
 
 import { setSelection } from "../utils/selection";
 
 export function useComposerFunctions(
-    ref: RefObject<HTMLDivElement>,
+    ref: RefObject<HTMLDivElement | null>,
     setContent: (content: string) => void,
 ): {
     clear(): void;

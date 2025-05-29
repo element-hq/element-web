@@ -8,8 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as linkifyjs from "linkifyjs";
-import { EventListeners, Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
-import linkifyElement from "linkify-element";
+import { type EventListeners, type Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
 import linkifyString from "linkify-string";
 import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
@@ -20,8 +19,8 @@ import {
 } from "./utils/permalinks/Permalinks";
 import dis from "./dispatcher/dispatcher";
 import { Action } from "./dispatcher/actions";
-import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
@@ -199,7 +198,7 @@ export const options: Opts = {
         rel: "noreferrer noopener",
     },
 
-    ignoreTags: ["pre", "code"],
+    ignoreTags: ["a", "pre", "code"],
 
     className: "linkified",
 
@@ -274,5 +273,4 @@ PERMITTED_URL_SCHEMES.forEach((scheme) => {
 registerCustomProtocol("mxc", false);
 
 export const linkify = linkifyjs;
-export const _linkifyElement = linkifyElement;
 export const _linkifyString = linkifyString;

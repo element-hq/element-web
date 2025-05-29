@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useState } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t } from "../../../../languageHandler";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
-import WidgetStore, { IApp } from "../../../../stores/WidgetStore";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
+import WidgetStore, { type IApp } from "../../../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../../../stores/AsyncStore";
 import FilteredList from "./FilteredList";
 import { StateEventEditor } from "./RoomState";

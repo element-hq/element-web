@@ -6,23 +6,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RefObject, useCallback, useRef } from "react";
+import { type RefObject, useCallback, useRef } from "react";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { ActionPayload } from "../../../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../../../dispatcher/payloads";
 import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
-import { ComposerFunctions } from "../types";
+import { type ComposerFunctions } from "../types";
 import { setSelection } from "../utils/selection";
 import { useComposerContext } from "../ComposerContext";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 export function useWysiwygEditActionHandler(
     disabled: boolean,
-    composerElement: RefObject<HTMLElement>,
+    composerElement: RefObject<HTMLElement | null> | undefined,
     composerFunctions: ComposerFunctions,
 ): void {
     const roomContext = useScopedRoomContext("timelineRenderingType");
@@ -33,7 +33,7 @@ export function useWysiwygEditActionHandler(
         (payload: ActionPayload) => {
             // don't let the user into the composer if it is disabled - all of these branches lead
             // to the cursor being in the composer
-            if (disabled || !composerElement.current) return;
+            if (disabled || !composerElement?.current) return;
 
             const context = payload.context ?? TimelineRenderingType.Room;
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, SyntheticEvent } from "react";
+import React, { type ChangeEvent, createRef, type SyntheticEvent } from "react";
 import { AutoDiscovery } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -18,8 +18,8 @@ import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import ExternalLink from "../elements/ExternalLink";
 
 interface IProps {

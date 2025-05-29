@@ -1,3 +1,279 @@
+Changes in [1.11.101](https://github.com/element-hq/element-web/releases/tag/v1.11.101) (2025-05-20)
+====================================================================================================
+## ✨ Features
+
+* New room list: add keyboard navigation support ([#29805](https://github.com/element-hq/element-web/pull/29805)). Contributed by @florianduros.
+* Use the JoinRuleSettings component for the guest link access prompt. ([#28614](https://github.com/element-hq/element-web/pull/28614)). Contributed by @toger5.
+* Add loading state to the new room list view ([#29725](https://github.com/element-hq/element-web/pull/29725)). Contributed by @langleyd.
+* Make OIDC identity reset consistent with EX ([#29854](https://github.com/element-hq/element-web/pull/29854)). Contributed by @andybalaam.
+* Support error code for email / phone adding unsupported (MSC4178) ([#29855](https://github.com/element-hq/element-web/pull/29855)). Contributed by @dbkr.
+* Update identity reset UI (Make consistent with EX) ([#29701](https://github.com/element-hq/element-web/pull/29701)). Contributed by @andybalaam.
+* Add secondary filters to the new room list ([#29818](https://github.com/element-hq/element-web/pull/29818)). Contributed by @dbkr.
+* Fix battery drain from Web Audio ([#29203](https://github.com/element-hq/element-web/pull/29203)). Contributed by @mbachry.
+
+## 🐛 Bug Fixes
+
+* Fix go home shortcut on macos and change toggle action events shortcut ([#29929](https://github.com/element-hq/element-web/pull/29929)). Contributed by @florianduros.
+* New room list: fix outdated message preview when space or filter change ([#29925](https://github.com/element-hq/element-web/pull/29925)). Contributed by @florianduros.
+* Stop migrating to MSC4278 if the config exists. ([#29924](https://github.com/element-hq/element-web/pull/29924)). Contributed by @Half-Shot.
+* Ensure consistent download file name on download from ImageView ([#29913](https://github.com/element-hq/element-web/pull/29913)). Contributed by @t3chguy.
+* Add error toast when service worker registration fails ([#29895](https://github.com/element-hq/element-web/pull/29895)). Contributed by @t3chguy.
+* New Room List: Prevent old tombstoned rooms from appearing in the list ([#29881](https://github.com/element-hq/element-web/pull/29881)). Contributed by @MidhunSureshR.
+* Remove lag in search field ([#29885](https://github.com/element-hq/element-web/pull/29885)). Contributed by @florianduros.
+* Respect UIFeature.Voip ([#29873](https://github.com/element-hq/element-web/pull/29873)). Contributed by @langleyd.
+* Allow jumping to message search from spotlight ([#29850](https://github.com/element-hq/element-web/pull/29850)). Contributed by @t3chguy.
+
+
+Changes in [1.11.100](https://github.com/element-hq/element-web/releases/tag/v1.11.100) (2025-05-06)
+====================================================================================================
+## ✨ Features
+
+* Move rich topics out of labs / stabilise MSC3765 ([#29817](https://github.com/element-hq/element-web/pull/29817)). Contributed by @Johennes.
+* Spell out that Element Web does \*not\* work on mobile. ([#29211](https://github.com/element-hq/element-web/pull/29211)). Contributed by @ara4n.
+* Add message preview support to the new room list ([#29784](https://github.com/element-hq/element-web/pull/29784)). Contributed by @dbkr.
+* Global configuration flag for media previews ([#29582](https://github.com/element-hq/element-web/pull/29582)). Contributed by @Half-Shot.
+* New room list: add partial keyboard shortcuts support ([#29783](https://github.com/element-hq/element-web/pull/29783)). Contributed by @florianduros.
+* MVVM RoomSummaryCard Topic ([#29710](https://github.com/element-hq/element-web/pull/29710)). Contributed by @MarcWadai.
+* Warn on self change from settings > roles ([#28926](https://github.com/element-hq/element-web/pull/28926)). Contributed by @MarcWadai.
+* New room list: new visual for invitation ([#29773](https://github.com/element-hq/element-web/pull/29773)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* Fix incorrect display of the user info display name ([#29826](https://github.com/element-hq/element-web/pull/29826)). Contributed by @langleyd.
+* RoomListStore: Remove invite rooms on decline ([#29804](https://github.com/element-hq/element-web/pull/29804)). Contributed by @MidhunSureshR.
+* Fix the buttons not being displayed with long preview text ([#29811](https://github.com/element-hq/element-web/pull/29811)). Contributed by @dbkr.
+* New room list: fix missing/incorrect notification decoration  ([#29796](https://github.com/element-hq/element-web/pull/29796)). Contributed by @florianduros.
+* New Room List: Prevent potential scroll jump/flicker when switching spaces ([#29781](https://github.com/element-hq/element-web/pull/29781)). Contributed by @MidhunSureshR.
+* New room list: fix incorrect decoration ([#29770](https://github.com/element-hq/element-web/pull/29770)). Contributed by @florianduros.
+
+
+Changes in [1.11.99](https://github.com/element-hq/element-web/releases/tag/v1.11.99) (2025-04-23)
+==================================================================================================
+No changes, just bumping the version to accommodate a new Element Desktop release
+
+Changes in [1.11.98](https://github.com/element-hq/element-web/releases/tag/v1.11.98) (2025-04-22)
+==================================================================================================
+## ✨ Features
+
+* print better errors in the search view instead of a blocking modal ([#29724](https://github.com/element-hq/element-web/pull/29724)). Contributed by @Jujure.
+* New room list: video room and video call decoration  ([#29693](https://github.com/element-hq/element-web/pull/29693)). Contributed by @florianduros.
+* Remove Secure Backup, Cross-signing and Cryptography sections in `Security & Privacy` user settings ([#29088](https://github.com/element-hq/element-web/pull/29088)). Contributed by @florianduros.
+* Allow reporting a room when rejecting an invite. ([#29570](https://github.com/element-hq/element-web/pull/29570)). Contributed by @Half-Shot.
+* RoomListViewModel: Reset primary and secondary filters on space change ([#29672](https://github.com/element-hq/element-web/pull/29672)). Contributed by @MidhunSureshR.
+* RoomListStore: Support specific sorting requirements for muted rooms ([#29665](https://github.com/element-hq/element-web/pull/29665)). Contributed by @MidhunSureshR.
+* New room list: add notification options menu ([#29639](https://github.com/element-hq/element-web/pull/29639)). Contributed by @florianduros.
+* Room List: Scroll to top of the list when active room is not in the list ([#29650](https://github.com/element-hq/element-web/pull/29650)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* Fix unwanted form submit behaviour in memberlist ([#29747](https://github.com/element-hq/element-web/pull/29747)). Contributed by @MidhunSureshR.
+* New room list: fix public room icon visibility when filter change ([#29737](https://github.com/element-hq/element-web/pull/29737)). Contributed by @florianduros.
+* Fix custom theme support for short hex \& rgba hex strings ([#29726](https://github.com/element-hq/element-web/pull/29726)). Contributed by @t3chguy.
+* New room list: minor visual fixes ([#29723](https://github.com/element-hq/element-web/pull/29723)). Contributed by @florianduros.
+* Fix getOidcCallbackUrl for Element Desktop ([#29711](https://github.com/element-hq/element-web/pull/29711)). Contributed by @t3chguy.
+* Fix some webp images improperly marked as animated ([#29713](https://github.com/element-hq/element-web/pull/29713)). Contributed by @Petersmit27.
+* Revert deletion of hydrateSession ([#29703](https://github.com/element-hq/element-web/pull/29703)). Contributed by @Jujure.
+* Fix converttoroom \& converttodm not working ([#29705](https://github.com/element-hq/element-web/pull/29705)). Contributed by @t3chguy.
+* Ensure forceCloseAllModals also closes priority/static modals ([#29706](https://github.com/element-hq/element-web/pull/29706)). Contributed by @t3chguy.
+* Continue button is disabled when uploading a recovery key file ([#29695](https://github.com/element-hq/element-web/pull/29695)). Contributed by @Giwayume.
+* Catch errors after syncing recovery ([#29691](https://github.com/element-hq/element-web/pull/29691)). Contributed by @andybalaam.
+* New room list: fix multiple visual issues ([#29673](https://github.com/element-hq/element-web/pull/29673)). Contributed by @florianduros.
+* New Room List: Fix mentions filter matching rooms with any highlight ([#29668](https://github.com/element-hq/element-web/pull/29668)). Contributed by @MidhunSureshR.
+*  Fix truncated emoji label during emoji SAS ([#29643](https://github.com/element-hq/element-web/pull/29643)). Contributed by @florianduros.
+* Remove duplicate jitsi link ([#29642](https://github.com/element-hq/element-web/pull/29642)). Contributed by @dbkr.
+
+
+Changes in [1.11.97](https://github.com/element-hq/element-web/releases/tag/v1.11.97) (2025-04-08)
+==================================================================================================
+## ✨ Features
+
+* New room list: reduce padding between avatar and room list border ([#29634](https://github.com/element-hq/element-web/pull/29634)). Contributed by @florianduros.
+* Bundle Element Call with Element Web packages ([#29309](https://github.com/element-hq/element-web/pull/29309)). Contributed by @t3chguy.
+* Hide an event notification if it is redacted ([#29605](https://github.com/element-hq/element-web/pull/29605)). Contributed by @Half-Shot.
+* Docker: Use nginx-unprivileged as base image ([#29353](https://github.com/element-hq/element-web/pull/29353)). Contributed by @AndrewFerr.
+* Switch away from nesting React trees and mangling the DOM ([#29586](https://github.com/element-hq/element-web/pull/29586)). Contributed by @t3chguy.
+* New room list: add notification decoration ([#29552](https://github.com/element-hq/element-web/pull/29552)). Contributed by @florianduros.
+* RoomListStore: Unread filter should match rooms that were marked as unread ([#29580](https://github.com/element-hq/element-web/pull/29580)). Contributed by @MidhunSureshR.
+* Add support for hiding videos ([#29496](https://github.com/element-hq/element-web/pull/29496)). Contributed by @Half-Shot.
+* Use an outline icon for the report room button ([#29573](https://github.com/element-hq/element-web/pull/29573)). Contributed by @robintown.
+* Generate/load pickle key on SSO ([#29568](https://github.com/element-hq/element-web/pull/29568)). Contributed by @Jujure.
+* Add report room dialog button/dialog. ([#29513](https://github.com/element-hq/element-web/pull/29513)). Contributed by @Half-Shot.
+* RoomListViewModel: Make the active room sticky in the list ([#29551](https://github.com/element-hq/element-web/pull/29551)). Contributed by @MidhunSureshR.
+* Replace checkboxes with Compound checkboxes, and appropriately label each checkbox. ([#29363](https://github.com/element-hq/element-web/pull/29363)). Contributed by @Half-Shot.
+* New room list: add selection decoration ([#29531](https://github.com/element-hq/element-web/pull/29531)). Contributed by @florianduros.
+* Simplified Sliding Sync ([#28515](https://github.com/element-hq/element-web/pull/28515)). Contributed by @dbkr.
+* Add ability to hide images after clicking "show image" ([#29467](https://github.com/element-hq/element-web/pull/29467)). Contributed by @Half-Shot.
+
+## 🐛 Bug Fixes
+
+* Fix scroll issues in memberlist ([#29392](https://github.com/element-hq/element-web/pull/29392)). Contributed by @MidhunSureshR.
+* Ensure clicks on spoilers do not get handled by the hidden content ([#29618](https://github.com/element-hq/element-web/pull/29618)). Contributed by @t3chguy.
+* New room list: add cursor pointer on room list item ([#29627](https://github.com/element-hq/element-web/pull/29627)). Contributed by @florianduros.
+* Fix missing ambiguous url tooltips on Element Desktop ([#29619](https://github.com/element-hq/element-web/pull/29619)). Contributed by @t3chguy.
+* New room list: fix spacing and padding ([#29607](https://github.com/element-hq/element-web/pull/29607)). Contributed by @florianduros.
+* Make fetchdep check out matching branch name ([#29601](https://github.com/element-hq/element-web/pull/29601)). Contributed by @dbkr.
+* Fix MFileBody fileName not considering `filename` ([#29589](https://github.com/element-hq/element-web/pull/29589)). Contributed by @t3chguy.
+* Fix token expiry racing with login causing wrong error to be shown ([#29566](https://github.com/element-hq/element-web/pull/29566)). Contributed by @t3chguy.
+* Fix bug which caused startup to hang if the clock was wound back since a previous session ([#29558](https://github.com/element-hq/element-web/pull/29558)). Contributed by @richvdh.
+* RoomListViewModel: Reset any primary filter on secondary filter change ([#29562](https://github.com/element-hq/element-web/pull/29562)). Contributed by @MidhunSureshR.
+* RoomListStore: Unread filter should only filter rooms having unread counts ([#29555](https://github.com/element-hq/element-web/pull/29555)). Contributed by @MidhunSureshR.
+* In force-verify mode, prevent bypassing by cancelling device verification ([#29487](https://github.com/element-hq/element-web/pull/29487)). Contributed by @andybalaam.
+* Add title attribute to user identifier ([#29547](https://github.com/element-hq/element-web/pull/29547)). Contributed by @arpitbatra123.
+
+
+Changes in [1.11.96](https://github.com/element-hq/element-web/releases/tag/v1.11.96) (2025-03-25)
+==================================================================================================
+## ✨ Features
+
+* RoomListViewModel: Track the index of the active room in the list ([#29519](https://github.com/element-hq/element-web/pull/29519)). Contributed by @MidhunSureshR.
+* New room list: add empty state ([#29512](https://github.com/element-hq/element-web/pull/29512)). Contributed by @florianduros.
+* Implement `MessagePreviewViewModel` ([#29514](https://github.com/element-hq/element-web/pull/29514)). Contributed by @MidhunSureshR.
+* RoomListViewModel: Add functionality to toggle message preview setting ([#29511](https://github.com/element-hq/element-web/pull/29511)). Contributed by @MidhunSureshR.
+* New room list: add more options menu on room list item ([#29445](https://github.com/element-hq/element-web/pull/29445)). Contributed by @florianduros.
+* RoomListViewModel: Provide a way to resort the room list and track the active sort method ([#29499](https://github.com/element-hq/element-web/pull/29499)). Contributed by @MidhunSureshR.
+* Change \*All rooms\* meta space name to \*All Chats\* ([#29498](https://github.com/element-hq/element-web/pull/29498)). Contributed by @florianduros.
+* Add setting to hide avatars of rooms you have been invited to. ([#29497](https://github.com/element-hq/element-web/pull/29497)). Contributed by @Half-Shot.
+* Room List Store: Save preferred sorting algorithm and use that on app launch ([#29493](https://github.com/element-hq/element-web/pull/29493)). Contributed by @MidhunSureshR.
+* Add key storage toggle to Encryption settings ([#29310](https://github.com/element-hq/element-web/pull/29310)). Contributed by @dbkr.
+* New room list: add primary filters ([#29481](https://github.com/element-hq/element-web/pull/29481)). Contributed by @florianduros.
+* Implement MSC4142: Remove unintentional intentional mentions in replies ([#28209](https://github.com/element-hq/element-web/pull/28209)). Contributed by @tulir.
+* White background for 'They do not match' button ([#29470](https://github.com/element-hq/element-web/pull/29470)). Contributed by @andybalaam.
+* RoomListViewModel: Support secondary filters in the view model ([#29465](https://github.com/element-hq/element-web/pull/29465)). Contributed by @MidhunSureshR.
+* RoomListViewModel: Support primary filters in the view model ([#29454](https://github.com/element-hq/element-web/pull/29454)). Contributed by @MidhunSureshR.
+* Room List Store: Implement secondary filters ([#29458](https://github.com/element-hq/element-web/pull/29458)). Contributed by @MidhunSureshR.
+* Room List Store: Implement rest of the primary filters ([#29444](https://github.com/element-hq/element-web/pull/29444)). Contributed by @MidhunSureshR.
+* Room List Store: Support filters by implementing just the favourite filter ([#29433](https://github.com/element-hq/element-web/pull/29433)). Contributed by @MidhunSureshR.
+* Move toggle switch for integration manager for a11y ([#29436](https://github.com/element-hq/element-web/pull/29436)). Contributed by @Half-Shot.
+* New room list: basic flat list ([#29368](https://github.com/element-hq/element-web/pull/29368)). Contributed by @florianduros.
+* Improve rageshake upload experience by providing useful error information ([#29378](https://github.com/element-hq/element-web/pull/29378)). Contributed by @Half-Shot.
+* Add more functionality to the room list vm ([#29402](https://github.com/element-hq/element-web/pull/29402)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* New room list: fix compose menu action in space  ([#29500](https://github.com/element-hq/element-web/pull/29500)). Contributed by @florianduros.
+* Change ToggleHiddenEventVisibility \& GoToHome KeyBindingActions ([#29374](https://github.com/element-hq/element-web/pull/29374)). Contributed by @gy-mate.
+* Fix Docker Healthcheck ([#29471](https://github.com/element-hq/element-web/pull/29471)). Contributed by @benbz.
+* Room List Store: Fetch rooms after space store is ready + attach store to window ([#29453](https://github.com/element-hq/element-web/pull/29453)). Contributed by @MidhunSureshR.
+* Room List Store: Fix bug where left rooms appear in room list ([#29452](https://github.com/element-hq/element-web/pull/29452)). Contributed by @MidhunSureshR.
+* Add space to the bottom of the room summary actions below leave room ([#29270](https://github.com/element-hq/element-web/pull/29270)). Contributed by @langleyd.
+* Show error screens in group calls ([#29254](https://github.com/element-hq/element-web/pull/29254)). Contributed by @robintown.
+* Prevent user from accidentally triggering multiple identity resets ([#29388](https://github.com/element-hq/element-web/pull/29388)). Contributed by @uhoreg.
+* Remove buggy tooltip on room intro \& homepage ([#29406](https://github.com/element-hq/element-web/pull/29406)). Contributed by @t3chguy.
+
+
+Changes in [1.11.95](https://github.com/element-hq/element-web/releases/tag/v1.11.95) (2025-03-11)
+==================================================================================================
+## ✨ Features
+
+* Room List Store: Filter rooms by active space ([#29399](https://github.com/element-hq/element-web/pull/29399)). Contributed by @MidhunSureshR.
+* Room List - Update the room list store on actions from the dispatcher ([#29397](https://github.com/element-hq/element-web/pull/29397)). Contributed by @MidhunSureshR.
+* Room List  - Implement a minimal view model ([#29357](https://github.com/element-hq/element-web/pull/29357)). Contributed by @MidhunSureshR.
+* New room list: add space menu in room header ([#29352](https://github.com/element-hq/element-web/pull/29352)). Contributed by @florianduros.
+* Room List - Store sorted rooms in skip list ([#29345](https://github.com/element-hq/element-web/pull/29345)). Contributed by @MidhunSureshR.
+* New room list: add dial to search section ([#29359](https://github.com/element-hq/element-web/pull/29359)). Contributed by @florianduros.
+* New room list: add compose menu for spaces in header ([#29347](https://github.com/element-hq/element-web/pull/29347)). Contributed by @florianduros.
+* Use EditInPlace control for Identity Server picker to improve a11y ([#29280](https://github.com/element-hq/element-web/pull/29280)). Contributed by @Half-Shot.
+* First step to add header to new room list ([#29320](https://github.com/element-hq/element-web/pull/29320)). Contributed by @florianduros.
+* Add Windows 64-bit arm link and remove 32-bit link on compatibility page ([#29312](https://github.com/element-hq/element-web/pull/29312)). Contributed by @t3chguy.
+* Honour the backup disable flag from Element X ([#29290](https://github.com/element-hq/element-web/pull/29290)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Fix edited code block width ([#29394](https://github.com/element-hq/element-web/pull/29394)). Contributed by @florianduros.
+* new room list: keep space name in one line in header ([#29369](https://github.com/element-hq/element-web/pull/29369)). Contributed by @florianduros.
+* Dismiss "Key storage out of sync" toast when secrets received ([#29348](https://github.com/element-hq/element-web/pull/29348)). Contributed by @richvdh.
+* Minor CSS fixes for the new room list ([#29334](https://github.com/element-hq/element-web/pull/29334)). Contributed by @florianduros.
+* Add padding to room header icon ([#29271](https://github.com/element-hq/element-web/pull/29271)). Contributed by @langleyd.
+
+
+Changes in [1.11.94](https://github.com/element-hq/element-web/releases/tag/v1.11.94) (2025-02-27)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] fix: /tmp/element-web-config may already exist preventing the container from booting up ([#29377](https://github.com/element-hq/element-web/pull/29377)). Contributed by @RiotRobot.
+
+
+Changes in [1.11.93](https://github.com/element-hq/element-web/releases/tag/v1.11.93) (2025-02-25)
+==================================================================================================
+## ✨ Features
+
+* [backport] Dynamically load Element Web modules in Docker entrypoint ([#29358](https://github.com/element-hq/element-web/pull/29358)). Contributed by @t3chguy.
+* ChangeRecoveryKey: error handling ([#29262](https://github.com/element-hq/element-web/pull/29262)). Contributed by @richvdh.
+* Dehydration: enable dehydrated device on "Set up recovery" ([#29265](https://github.com/element-hq/element-web/pull/29265)). Contributed by @richvdh.
+* Render reason for invite rejection. ([#29257](https://github.com/element-hq/element-web/pull/29257)). Contributed by @Half-Shot.
+* New room list: add search section ([#29251](https://github.com/element-hq/element-web/pull/29251)). Contributed by @florianduros.
+* New room list: hide favourites and people meta spaces ([#29241](https://github.com/element-hq/element-web/pull/29241)). Contributed by @florianduros.
+* New Room List: Create new labs flag ([#29239](https://github.com/element-hq/element-web/pull/29239)). Contributed by @MidhunSureshR.
+* Stop URl preview from covering message box ([#29215](https://github.com/element-hq/element-web/pull/29215)). Contributed by @edent.
+* Rename "security key" into "recovery key" ([#29217](https://github.com/element-hq/element-web/pull/29217)). Contributed by @florianduros.
+* Add new verification section to user profile ([#29200](https://github.com/element-hq/element-web/pull/29200)). Contributed by @MidhunSureshR.
+* Initial support for runtime modules ([#29104](https://github.com/element-hq/element-web/pull/29104)). Contributed by @t3chguy.
+* Add `Forgot recovery key?` button to encryption tab ([#29202](https://github.com/element-hq/element-web/pull/29202)). Contributed by @florianduros.
+* Add KeyIcon to key storage out of sync toast ([#29201](https://github.com/element-hq/element-web/pull/29201)). Contributed by @florianduros.
+* Improve rendering of empty topics in the timeline  ([#29152](https://github.com/element-hq/element-web/pull/29152)). Contributed by @Half-Shot.
+
+## 🐛 Bug Fixes
+
+* Fix font scaling in member list ([#29285](https://github.com/element-hq/element-web/pull/29285)). Contributed by @florianduros.
+* Grow member list search field when resizing the right panel ([#29267](https://github.com/element-hq/element-web/pull/29267)). Contributed by @langleyd.
+* Don't reload roomview on offline connectivity check ([#29243](https://github.com/element-hq/element-web/pull/29243)). Contributed by @dbkr.
+* Respect user's 12/24 hour preference consistently ([#29237](https://github.com/element-hq/element-web/pull/29237)). Contributed by @t3chguy.
+* Restore the accessibility role on call views ([#29225](https://github.com/element-hq/element-web/pull/29225)). Contributed by @robintown.
+* Revert `GoToHome` keyboard shortcut to `Ctrl`–`Shift`–`H` on macOS ([#28577](https://github.com/element-hq/element-web/pull/28577)). Contributed by @gy-mate.
+* Encryption tab: display correct encryption panel when user cancels the reset identity flow ([#29216](https://github.com/element-hq/element-web/pull/29216)). Contributed by @florianduros.
+
+
+Changes in [1.11.92](https://github.com/element-hq/element-web/releases/tag/v1.11.92) (2025-02-11)
+==================================================================================================
+## ✨ Features
+
+* [Backport staging] Log when we show, and hide, encryption setup toasts ([#29238](https://github.com/element-hq/element-web/pull/29238)). Contributed by @richvdh.
+* Make profile header section match the designs ([#29163](https://github.com/element-hq/element-web/pull/29163)). Contributed by @MidhunSureshR.
+* Always show back button in the right panel ([#29128](https://github.com/element-hq/element-web/pull/29128)). Contributed by @MidhunSureshR.
+* Schedule dehydration on reload if the dehydration key is already cached locally ([#29021](https://github.com/element-hq/element-web/pull/29021)). Contributed by @uhoreg.
+* update to twemoji 15.1.0 ([#29115](https://github.com/element-hq/element-web/pull/29115)). Contributed by @ara4n.
+* Update matrix-widget-api ([#29112](https://github.com/element-hq/element-web/pull/29112)). Contributed by @toger5.
+* Allow navigating through the memberlist using up/down keys ([#28949](https://github.com/element-hq/element-web/pull/28949)). Contributed by @MidhunSureshR.
+* Style room header icons and facepile for toggled state ([#28968](https://github.com/element-hq/element-web/pull/28968)). Contributed by @MidhunSureshR.
+* Move threads header below base card header ([#28969](https://github.com/element-hq/element-web/pull/28969)). Contributed by @MidhunSureshR.
+* Add `Advanced` section to the user settings encryption tab ([#28804](https://github.com/element-hq/element-web/pull/28804)). Contributed by @florianduros.
+* Fix outstanding UX issues with replies/mentions/keyword notifs ([#28270](https://github.com/element-hq/element-web/pull/28270)). Contributed by @taffyko.
+* Distinguish room state and timeline events when dealing with widgets ([#28681](https://github.com/element-hq/element-web/pull/28681)). Contributed by @robintown.
+* Switch OIDC primarily to new `/auth_metadata` API ([#29019](https://github.com/element-hq/element-web/pull/29019)). Contributed by @t3chguy.
+* More memberlist changes ([#29069](https://github.com/element-hq/element-web/pull/29069)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Wire up the "Forgot recovery key" button for the "Key storage out of sync" toast ([#29190](https://github.com/element-hq/element-web/pull/29190)). Contributed by @RiotRobot.
+* Encryption tab: hide `Advanced` section when the key storage is out of sync ([#29129](https://github.com/element-hq/element-web/pull/29129)). Contributed by @florianduros.
+* Fix share button in discovery settings being disabled incorrectly ([#29151](https://github.com/element-hq/element-web/pull/29151)). Contributed by @t3chguy.
+* Ensure switching rooms does not wrongly focus timeline search ([#29153](https://github.com/element-hq/element-web/pull/29153)). Contributed by @t3chguy.
+* Stop showing a dialog prompting the user to enter an old recovery key ([#29143](https://github.com/element-hq/element-web/pull/29143)). Contributed by @richvdh.
+* Make themed widgets reflect the effective theme ([#28342](https://github.com/element-hq/element-web/pull/28342)). Contributed by @robintown.
+* support non-VS16 emoji ligatures in TwemojiMozilla ([#29100](https://github.com/element-hq/element-web/pull/29100)). Contributed by @ara4n.
+* e2e test: Verify session with the encryption tab instead of the security \& privacy tab ([#29090](https://github.com/element-hq/element-web/pull/29090)). Contributed by @florianduros.
+* Work around cloudflare R2 / aws client incompatability ([#29086](https://github.com/element-hq/element-web/pull/29086)). Contributed by @dbkr.
+* Fix identity server settings visibility ([#29083](https://github.com/element-hq/element-web/pull/29083)). Contributed by @dbkr.
+
+
+Changes in [1.11.91](https://github.com/element-hq/element-web/releases/tag/v1.11.91) (2025-01-28)
+==================================================================================================
+## ✨ Features
+
+* Implement changes to memberlist from feedback ([#29029](https://github.com/element-hq/element-web/pull/29029)). Contributed by @MidhunSureshR.
+* Add toast for recovery keys being out of sync ([#28946](https://github.com/element-hq/element-web/pull/28946)). Contributed by @dbkr.
+* Refactor LegacyCallHandler event emitter to use TypedEventEmitter ([#29008](https://github.com/element-hq/element-web/pull/29008)). Contributed by @t3chguy.
+* Add `Recovery` section in the new user settings `Encryption` tab ([#28673](https://github.com/element-hq/element-web/pull/28673)). Contributed by @florianduros.
+* Retry loading chunks to make the app more resilient ([#29001](https://github.com/element-hq/element-web/pull/29001)). Contributed by @t3chguy.
+* Clear account idb table on logout ([#28996](https://github.com/element-hq/element-web/pull/28996)). Contributed by @t3chguy.
+* Implement new memberlist design with MVVM architecture  ([#28874](https://github.com/element-hq/element-web/pull/28874)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Switch to secure random strings ([#29035](https://github.com/element-hq/element-web/pull/29035)). Contributed by @RiotRobot.
+* React to MatrixEvent sender/target being updated for rendering state events ([#28947](https://github.com/element-hq/element-web/pull/28947)). Contributed by @t3chguy.
+
+
 Changes in [1.11.90](https://github.com/element-hq/element-web/releases/tag/v1.11.90) (2025-01-14)
 ==================================================================================================
 ## ✨ Features

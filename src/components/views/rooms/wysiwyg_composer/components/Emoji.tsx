@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 
-import { MenuProps } from "../../../../structures/ContextMenu";
+import { type MenuProps } from "../../../../structures/ContextMenu";
 import { EmojiButton } from "../../EmojiButton";
 import dis from "../../../../../dispatcher/dispatcher";
-import { ComposerInsertPayload } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 

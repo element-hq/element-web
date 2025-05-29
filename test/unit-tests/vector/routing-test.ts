@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { getInitialScreenAfterLogin, init, onNewScreen } from "../../../src/vector/routing";
-import MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
+import type MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {

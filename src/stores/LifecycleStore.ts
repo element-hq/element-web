@@ -12,8 +12,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { Action } from "../dispatcher/actions";
 import dis from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
-import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { AsyncStore } from "./AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "./ToastStore";

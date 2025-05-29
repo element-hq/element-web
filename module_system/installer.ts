@@ -9,7 +9,7 @@ import * as fs from "fs";
 import * as childProcess from "child_process";
 import * as semver from "semver";
 
-import { BuildConfig } from "./BuildConfig";
+import { type BuildConfig } from "./BuildConfig";
 
 // This expects to be run from ./scripts/install.ts
 
@@ -23,10 +23,9 @@ const MODULES_TS_HEADER = `
  * You are not a salmon.
  */
 
-import { RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
 `;
 const MODULES_TS_DEFINITIONS = `
-export const INSTALLED_MODULES: RuntimeModule[] = [];
+export const INSTALLED_MODULES = [];
 `;
 
 export function installer(config: BuildConfig): void {
@@ -78,8 +77,8 @@ export function installer(config: BuildConfig): void {
             return; // hit the finally{} block before exiting
         }
 
-        // If we reach here, everything seems fine. Write modules.ts and log some output
-        // Note: we compile modules.ts in two parts for developer friendliness if they
+        // If we reach here, everything seems fine. Write modules.js and log some output
+        // Note: we compile modules.js in two parts for developer friendliness if they
         // happen to look at it.
         console.log("The following modules have been installed: ", installedModules);
         let modulesTsHeader = MODULES_TS_HEADER;
@@ -193,5 +192,5 @@ function isModuleVersionCompatible(ourApiVersion: string, moduleApiVersion: stri
 }
 
 function writeModulesTs(content: string): void {
-    fs.writeFileSync("./src/modules.ts", content, "utf-8");
+    fs.writeFileSync("./src/modules.js", content, "utf-8");
 }

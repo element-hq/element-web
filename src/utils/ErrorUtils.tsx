@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td, lookupString, Tags, TranslatedString, TranslationKey } from "../languageHandler";
+import { _t, _td, lookupString, type Tags, type TranslatedString, type TranslationKey } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
-import { ValidatedServerConfig } from "./ValidatedServerConfig";
+import { type ValidatedServerConfig } from "./ValidatedServerConfig";
 import ExternalLink from "../components/views/elements/ExternalLink";
+import Modal from "../Modal.tsx";
+import ErrorDialog from "../components/views/dialogs/ErrorDialog.tsx";
 
 export const resourceLimitStrings = {
     "monthly_active_user": _td("error|mau"),
@@ -190,4 +193,28 @@ export function messageForConnectionError(
     }
 
     return errorText;
+}
+
+/**
+ * Utility for handling unexpected errors: pops up the error dialog.
+ *
+ * Example usage:
+ * ```
+ * try {
+ *     /// complicated operation
+ * } catch (e) {
+ *     logErrorAndShowErrorDialog("Failed complicated operation", e);
+ * }
+ * ```
+ *
+ * This isn't particularly intended to be pretty; rather it lets the user know that *something* has gone wrong so that
+ * they can report a bug. The general idea is that it's better to let the user know of a failure, even if they
+ * can't do anything about it, than it is to fail silently with the appearance of success.
+ *
+ * @param title - Title for the error dialog.
+ * @param error - The thrown error. Becomes the content of the error dialog.
+ */
+export function logErrorAndShowErrorDialog(title: string, error: any): void {
+    logger.error(`${title}:`, error);
+    Modal.createDialog(ErrorDialog, { title, description: `${error}` });
 }

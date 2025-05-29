@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, useState } from "react";
-import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
+import { type Room, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";

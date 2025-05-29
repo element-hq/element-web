@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore";
-import { BooleanSettingKey } from "../Settings.tsx";
+import { type BooleanSettingKey } from "../Settings.tsx";
 
 /**
  * Enforces that a boolean setting cannot be enabled if the incompatible setting

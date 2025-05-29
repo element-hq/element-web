@@ -9,19 +9,19 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     createClient,
-    MatrixClient,
-    LoginFlow,
+    type MatrixClient,
+    type LoginFlow,
     DELEGATED_OIDC_COMPATIBILITY,
-    ILoginFlow,
-    LoginRequest,
-    OidcClientConfig,
+    type ILoginFlow,
+    type LoginRequest,
+    type OidcClientConfig,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { IMatrixClientCreds } from "./MatrixClientPeg";
+import { type IMatrixClientCreds } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import { getOidcClientId } from "./utils/oidc/registerClient";
-import { IConfigOptions } from "./IConfigOptions";
+import { type IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
 import { isUserRegistrationSupported } from "./utils/oidc/isUserRegistrationSupported";
 

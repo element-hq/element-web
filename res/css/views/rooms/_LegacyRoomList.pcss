@@ -1,0 +1,36 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyRoomList {
+    padding-right: 7px; /* width of the scrollbar, to line things up */
+}
+
+.mx_LegacyRoomList_iconPlus::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/plus-circle.svg");
+}
+.mx_LegacyRoomList_iconNewRoom::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-plus.svg");
+}
+.mx_LegacyRoomList_iconNewVideoRoom::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-video.svg");
+}
+.mx_LegacyRoomList_iconAddExistingRoom::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash.svg");
+}
+.mx_LegacyRoomList_iconExplore::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
+}
+.mx_LegacyRoomList_iconDialpad::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/dialpad.svg");
+}
+.mx_LegacyRoomList_iconStartChat::before {
+    mask-image: url("@vector-im/compound-design-tokens/icons/user-add-solid.svg");
+}
+.mx_LegacyRoomList_iconInvite::before {
+    mask-image: url("$(res)/img/element-icons/room/share.svg");
+}

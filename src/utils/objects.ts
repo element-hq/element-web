@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { arrayDiff, arrayUnion, arrayIntersection } from "./arrays";
 
-type ObjectExcluding<O extends {}, P extends (keyof O)[]> = { [k in Exclude<keyof O, P[number]>]: O[k] };
+type ObjectExcluding<O extends object, P extends (keyof O)[]> = { [k in Exclude<keyof O, P[number]>]: O[k] };
 
 /**
  * Gets a new object which represents the provided object, excluding some properties.
@@ -16,7 +16,7 @@ type ObjectExcluding<O extends {}, P extends (keyof O)[]> = { [k in Exclude<keyo
  * @param props The property names to remove.
  * @returns The new object without the provided properties.
  */
-export function objectExcluding<O extends {}, P extends Array<keyof O>>(a: O, props: P): ObjectExcluding<O, P> {
+export function objectExcluding<O extends object, P extends Array<keyof O>>(a: O, props: P): ObjectExcluding<O, P> {
     // We use a Map to avoid hammering the `delete` keyword, which is slow and painful.
     const tempMap = new Map<keyof O, any>(Object.entries(a) as [keyof O, any][]);
     for (const prop of props) {
@@ -37,7 +37,7 @@ export function objectExcluding<O extends {}, P extends Array<keyof O>>(a: O, pr
  * @param props The property names to keep.
  * @returns The new object with only the provided properties.
  */
-export function objectWithOnly<O extends {}, P extends Array<keyof O>>(a: O, props: P): { [k in P[number]]: O[k] } {
+export function objectWithOnly<O extends object, P extends Array<keyof O>>(a: O, props: P): { [k in P[number]]: O[k] } {
     const existingProps = Object.keys(a) as (keyof O)[];
     const diff = arrayDiff(existingProps, props);
     if (diff.removed.length === 0) {
@@ -58,7 +58,7 @@ export function objectWithOnly<O extends {}, P extends Array<keyof O>>(a: O, pro
  * First argument is the property key with the second being the current value.
  * @returns A cloned object.
  */
-export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyof O, v: O[keyof O]) => any): O {
+export function objectShallowClone<O extends object>(a: O, propertyCloner?: (k: keyof O, v: O[keyof O]) => any): O {
     const newObj = {} as O;
     for (const [k, v] of Object.entries(a) as [keyof O, O[keyof O]][]) {
         newObj[k] = v;
@@ -77,7 +77,7 @@ export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyo
  * @param b The second object. Must be defined.
  * @returns True if there's a difference between the objects, false otherwise
  */
-export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
+export function objectHasDiff<O extends object>(a: O, b: O): boolean {
     if (a === b) return false;
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
@@ -99,7 +99,7 @@ type Diff<K> = { changed: K[]; added: K[]; removed: K[] };
  * @param b The second object. Must be defined.
  * @returns The difference between the keys of each object.
  */
-export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
+export function objectDiff<O extends object>(a: O, b: O): Diff<keyof O> {
     const aKeys = Object.keys(a) as (keyof O)[];
     const bKeys = Object.keys(b) as (keyof O)[];
     const keyDiff = arrayDiff(aKeys, bKeys);
@@ -118,7 +118,7 @@ export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
  * @returns The keys which have been added, removed, or changed between the
  * two objects.
  */
-export function objectKeyChanges<O extends {}>(a: O, b: O): (keyof O)[] {
+export function objectKeyChanges<O extends object>(a: O, b: O): (keyof O)[] {
     const diff = objectDiff(a, b);
     return arrayUnion(diff.removed, diff.added, diff.changed);
 }
@@ -130,7 +130,7 @@ export function objectKeyChanges<O extends {}>(a: O, b: O): (keyof O)[] {
  * @param obj The object to clone.
  * @returns The cloned object
  */
-export function objectClone<O extends {}>(obj: O): O {
+export function objectClone<O extends object>(obj: O): O {
     return JSON.parse(JSON.stringify(obj));
 }
 

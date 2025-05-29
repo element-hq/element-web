@@ -6,10 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useEffect, useRef, useState } from "react";
+import React, { type JSX, useEffect, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -18,14 +18,14 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import dis from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import { EventPreview } from "./EventPreview.tsx";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.

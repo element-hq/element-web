@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { useMemo } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { parseEvent } from "../../../../../editor/deserialize";
-import { CommandPartCreator, Part } from "../../../../../editor/parts";
+import { CommandPartCreator, type Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {

@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { Action } from "../actions";
-import { ActionPayload } from "../payloads";
+import { type Action } from "../actions";
+import { type ActionPayload } from "../payloads";
 
 export interface OpenReportEventDialogPayload extends ActionPayload {
     action: Action.OpenReportEventDialog;
