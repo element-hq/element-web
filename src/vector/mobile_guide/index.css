@@ -1,3 +1,10 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
 
 /*
@@ -11,35 +18,39 @@ html {
 }
 
 body {
-    background: #fff;
+    background: var(--cpd-color-bg-canvas-default);
     max-width: 680px;
-    margin: 0 auto;
-    padding-bottom: 178px; /* Match the height of the gradient */
+    margin: var(--cpd-space-0x) auto;
+    padding-bottom: 178px; /* Match the height of mx_BottomGradient */
     font-family: var(--cpd-font-family-sans);
-    color: #1b1d22;
+    color: var(--cpd-color-text-primary);
 }
 
 hr {
     border: none;
-    height: 1px;
-    background-color: #e1e6ec;
-    color: #e1e6ec;
+    height: var(--cpd-border-width-1);
+    background-color: var(
+        --cpd-color-bg-subtle-primary /* Design uses Border token from "Compound Marketing" set, but this matches. */
+    );
+    color: var(
+        --cpd-color-bg-subtle-primary /* Design uses Border token from "Compound Marketing" set, but this matches. */
+    );
     margin: 0;
 }
 
 p {
-    margin: 4px 0;
-    padding: 0;
-    color: #474a51;
+    margin: var(--cpd-space-1x) var(--cpd-space-0x);
+    padding: var(--cpd-space-0x);
+    color: #474a51; /* color/text/secondary token from "Compound Marketing" set. */
 }
 
 .mx_Button {
     border: 0;
     border-radius: 100px;
-    font-size: 16px;
+    font-size: var(--cpd-font-size-body-lg); /* Design says 16px, this is 17px */
     min-width: 80px;
-    background-color: #1b1d22;
-    color: #fff;
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    color: var(--cpd-color-text-on-solid-primary);
     cursor: pointer;
     padding: 12px 22px;
     word-break: break-word;
@@ -63,17 +74,17 @@ p {
 }
 
 #f_droid_link {
-    color: #007a61;
+    color: var(--cpd-color-text-action-accent);
     font-weight: bold;
     text-decoration: none;
 }
 
 #f_droid_link:visited {
-    color: #007a61;
+    color: var(--cpd-color-text-action-accent);
 }
 
 .mx_HomePage_header {
-    color: #474a51;
+    color: #474a51; /* color/text/secondary token from "Compound Marketing" set. */
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -111,8 +122,8 @@ p {
 .mx_HomePage_errorContainer {
     display: none; /* shown in JS if needed */
     margin: 20px;
-    border: 1px solid red;
-    background-color: #ffb9b9;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-critical-primary);
+    background-color: var(--cpd-color-bg-critical-subtle);
     padding: 5px;
 }
 
@@ -120,8 +131,8 @@ p {
 .mx_HomePage_container h2,
 .mx_HomePage_container h3,
 .mx_HomePage_container h4 {
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: var(--cpd-font-weight-semibold);
+    font-size: var(--cpd-font-size-body-lg); /* Design says 16px, this is 17px */
     margin-bottom: 8px;
     margin-top: 4px;
 }
@@ -131,18 +142,23 @@ p {
 }
 
 .mx_DesktopLink {
-    color: #007a61;
-    font-weight: bold;
+    color: var(--cpd-color-text-action-accent);
+    font-weight: var(--cpd-font-weight-semibold);
     text-decoration: none;
 }
 
+/*
+ * The bottom gradient is a full-width background image that stretches horizontally across the page.
+ * It is positioned pinned to the bottom of the viewport unless the content is taller than the viewport,
+ * in which case it will be pinned to the bottom of the content.
+ */
 .mx_BottomGradient {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100vw;
-    height: 178px;
+    height: 178px; /* Match the height of assets/bottom-gradient.svg so the gradient only stretches horizontally */
     background-image: url("assets/bottom-gradient.svg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -160,11 +176,11 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: var(--cpd-space-6x);
+    height: var(--cpd-space-6x);
     border-radius: 50%;
-    border: 1px solid #e1e6ec;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-bg-subtle-primary); /* Not a border token, but matches the Design (Border token from the "Compound Marketing" set). */
     background-color: transparent;
-    color: #656d77;
-    font-size: 14px;
+    color: var(--cpd-color-text-secondary);
+    font-size: var(--cpd-font-size-body-md); /* Design says 14px, this is 15px */
 }
