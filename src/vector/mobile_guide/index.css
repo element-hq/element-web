@@ -23,6 +23,7 @@ body {
     margin: var(--cpd-space-0x) auto;
     padding-bottom: 178px; /* Match the height of mx_BottomGradient */
     font-family: var(--cpd-font-family-sans);
+    font-size: var(--cpd-font-size-body-lg); /* Design says 16px, this is 17px */
     color: var(--cpd-color-text-primary);
 }
 
@@ -46,7 +47,6 @@ p {
 .mx_Button {
     border: 0;
     border-radius: 100px;
-    font-size: var(--cpd-font-size-body-lg); /* Design says 16px, this is 17px */
     min-width: 80px;
     background-color: var(--cpd-color-bg-action-primary-rest);
     color: var(--cpd-color-text-on-solid-primary);
