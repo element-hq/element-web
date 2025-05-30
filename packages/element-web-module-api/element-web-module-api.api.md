@@ -61,29 +61,25 @@ export interface ConfigApi {
 }
 
 // @public
-export type CustomComponentProps = {
-    [CustomComponentTarget.TextualBody]: {
-        mxEvent: MatrixEvent;
-        highlights?: string[];
-        showUrlPreview?: boolean;
-        forExport?: boolean;
-    };
+export interface CustomComponentsApi {
+    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @beta
+    registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void;
+}
+
+// @alpha
+export type CustomMessageComponentProps = {
+    mxEvent: MatrixEvent;
+    highlights?: string[];
+    showUrlPreview?: boolean;
+    forExport?: boolean;
 };
 
-// @public
-export type CustomComponentRenderFunction<T extends CustomComponentTarget> = (
-props: CustomComponentProps[T],
-originalComponent: () => JSX.Element) => JSX.Element | null;
-
-// @public
-export interface CustomComponentsApi {
-    register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void;
-}
-
-// @public
-export enum CustomComponentTarget {
-    TextualBody = "TextualBody"
-}
+// Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "CustomMessageComponentProps" which is marked as @alpha
+//
+// @beta
+export type CustomMessageRenderFunction = (
+props: CustomMessageComponentProps,
+originalComponent?: () => React.JSX.Element) => JSX.Element | null;
 
 // @alpha @deprecated (undocumented)
 export interface DirectoryCustomisations {

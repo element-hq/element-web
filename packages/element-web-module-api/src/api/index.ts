@@ -89,7 +89,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
 
     /**
-     * The custom components API.
+     * The custom message component API.
      * @public
      */
     readonly customComponents: CustomComponentsApi;

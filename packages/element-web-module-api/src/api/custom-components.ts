@@ -9,54 +9,42 @@ import type { JSX } from "react";
 import type { MatrixEvent } from "matrix-js-sdk";
 
 /**
- * Targets in Element for custom components.
- * @public
+ * Properties for all message components.
+ * @alpha Subject to change.
  */
-export enum CustomComponentTarget {
+export type CustomMessageComponentProps = {
     /**
-     * Component that renders "m.room.message" events in the room timeline.
+     * The Matrix event for this textual body.
      */
-    TextualBody = "TextualBody",
-}
+    mxEvent: MatrixEvent;
+    /**
+     * Words to highlight on (e.g. from search results).
+     * May be undefined if the client does not need to highlight
+     */
+    highlights?: string[];
+    /**
+     * Should previews be shown for this event
+     */
+    showUrlPreview?: boolean;
+    /**
+     * Is this event being rendered to a static export
+     */
+    forExport?: boolean;
+};
 
 /**
- * Properties for the render component.
- * @public
+ * Function used to render a message component.
+ * @beta Unlikely to change
  */
-export type CustomComponentProps = {
-    [CustomComponentTarget.TextualBody]: {
-        /**
-         * The Matrix event for this textual body.
-         */
-        mxEvent: MatrixEvent;
-        /**
-         * Words to highlight on (e.g. from search results).
-         * May be undefined if the client does not need to highlight
-         */
-        highlights?: string[];
-        /**
-         * Should previews be shown for this event
-         */
-        showUrlPreview?: boolean;
-        /**
-         * Is this event being rendered to a static export
-         */
-        forExport?: boolean;
-    };
-};
-/**
- * Render function. Returning null skips this function and passes it onto the next registered renderer.
- * @public
- */
-export type CustomComponentRenderFunction<T extends CustomComponentTarget> = (
+export type CustomMessageRenderFunction = (
     /**
-     * Properties from the given target to be used for rendering.
+     * Properties for the message to be renderered.
      */
-    props: CustomComponentProps[T],
+    props: CustomMessageComponentProps,
     /**
-     * Render function for the original component.
+     * Render function for the original component. This may be omitted if the message would not normally be rendered.
      */
-    originalComponent: () => JSX.Element,
+    originalComponent?: () => React.JSX.Element,
 ) => JSX.Element | null;
 
 /**
@@ -65,16 +53,18 @@ export type CustomComponentRenderFunction<T extends CustomComponentTarget> = (
  */
 export interface CustomComponentsApi {
     /**
-     * Register a renderer for a component type.
+     * Register a renderer for a message type in the timeline.
+     *
      * The render function should either return a rendered component, or `null` if the
-     * component should not be overidden.
+     * component should not be overidden (for instance, to passthrough to another module or allow
+     * the application complete control)
      *
      * Multiple render function may be registered for a single target, however the first
      * non-null result will be used. If all results are null, or no registrations exist
      * for a target then the original component is used.
      *
-     * @param target - The target location for the component.
-     * @param renderer - The render method.
+     * @param eventType - The event type this renderer is for. Use a RegExp instance if you want to target multiple types.
+     * @param renderer - The render function.
      */
-    register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void;
+    registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void;
 }
