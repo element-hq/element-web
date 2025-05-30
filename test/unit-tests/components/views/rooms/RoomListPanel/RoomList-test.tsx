@@ -14,8 +14,6 @@ import { mkRoom, stubClient } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { Landmark, LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 
 describe("<RoomList />", () => {
@@ -34,12 +32,6 @@ describe("<RoomList />", () => {
             isLoadingRooms: false,
             rooms,
             primaryFilters: [],
-            activateSecondaryFilter: () => {},
-            activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
             canCreateRoom: true,

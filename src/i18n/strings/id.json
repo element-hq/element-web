@@ -155,6 +155,7 @@
         "view_message": "Tampilkan pesan",
         "view_source": "Tampilkan Sumber",
         "yes": "Ya",
+        "yes_dismiss": "Ya, abaikan",
         "zoom_in": "Perbesar",
         "zoom_out": "Perkecil"
     },
@@ -907,22 +908,13 @@
     "empty_room_was_name": "Ruangan kosong (sebelumnya %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Masukkan Frasa Keamanan Anda atau <button>gunakan Kunci Keamanan Anda</button> untuk melanjutkan.",
+            "alternatives": "Jika Anda memiliki kunci keamanan atau frasa keamanan, ini juga bisa digunakan.",
             "key_validation_text": {
-                "invalid_security_key": "Kunci Pemulihan tidak valid",
-                "recovery_key_is_correct": "Kelihatannya bagus!",
-                "wrong_file_type": "Tipe file salah",
-                "wrong_security_key": "Kunci Keamanan salah"
+                "wrong_security_key": "Kunci pemulihan yang Anda masukkan salah."
             },
-            "reset_title": "Atur ulang semuanya",
-            "reset_warning_1": "Hanya lakukan ini jika Anda tidak memiliki perangkat yang lain untuk menyelesaikan verifikasi.",
-            "reset_warning_2": "Jika Anda mengatur ulang semuanya, Anda dengan mulai ulang dengan tidak ada sesi yang dipercayai, tidak ada pengguna yang dipercayai, dan mungkin tidak dapat melihat pesan-pesan lama.",
+            "privacy_warning": "Pastikan tidak ada yang bisa melihat layar ini!",
             "restoring": "Memulihkan kunci-kunci dari cadangan",
-            "security_key_title": "Kunci Keamanan",
-            "security_phrase_incorrect_error": "Tidak dapat mengakses penyimpanan rahasia. Periksa jika Anda memasukkan Frasa Keamanan yang benar.",
-            "security_phrase_title": "Frasa Keamanan",
-            "separator": "%(securityKey)s atau %(recoveryFile)s",
-            "use_security_key_prompt": "Gunakan Kunci Keamanan Anda untuk melanjutkan."
+            "security_key_title": "Kunci pemulihan"
         },
         "bootstrap_title": "Menyiapkan kunci",
         "cancel_entering_passphrase_description": "Apakah Anda yakin untuk membatalkan pemasukkan frasa sandi?",
@@ -978,6 +970,8 @@
         "setup_secure_backup": {
             "explainer": "Cadangkan kunci Anda sebelum keluar untuk menghindari kehilangannya."
         },
+        "turn_on_key_storage": "Aktifkan penyimpanan kunci",
+        "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
         "udd": {
             "interactive_verification_button": "Verifikasi secara interaktif sengan emoji",
             "other_ask_verify_text": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
@@ -2101,19 +2095,23 @@
             "no_chats_description_no_room_rights": "Mulailah dengan mengirim pesan kepada seseorang",
             "no_favourites": "Anda belum memiliki obrolan favorit",
             "no_favourites_description": "Anda dapat menambahkan obrolan ke favorit Anda di pengaturan obrolan",
+            "no_invites": "Anda tidak memiliki undangan yang belum dibaca",
+            "no_mentions": "Anda tidak memiliki sebutan yang belum dibaca",
             "no_people": "Anda belum memiliki obrolan langsung dengan siapa pun",
             "no_people_description": "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain",
             "no_rooms": "Anda belum berada di ruangan mana pun",
             "no_rooms_description": "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain",
             "no_unread": "Selamat! Anda tidak memiliki pesan yang belum dibaca",
+            "show_activity": "Lihat semua aktivitas",
             "show_chats": "Tampilkan semua obrolan"
         },
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favorit",
+            "invites": "Undangan",
+            "mentions": "Sebutan",
             "people": "Orang",
             "rooms": "Ruangan",
             "unread": "Belum dibaca"
@@ -2145,13 +2143,6 @@
             "open_room": "Buka ruangan %(roomName)s"
         },
         "room_options": "Opsi Ruangan",
-        "secondary_filter": {
-            "all_activity": "Semua aktivitas",
-            "invites_only": "Hanya undangan",
-            "low_priority": "Prioritas rendah",
-            "mentions_only": "Sebutan saja"
-        },
-        "secondary_filters": "Saringan sekunder",
         "show_less": "Tampilkan lebih sedikit",
         "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {
@@ -2159,9 +2150,14 @@
             "other": "Tampilkan %(count)s lagi"
         },
         "show_previews": "Tampilkan tampilan pesan",
+        "sort": "Urutkan",
         "sort_by": "Sortir berdasarkan",
         "sort_by_activity": "Aktivitas",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktivitas",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Tampilkan ruangan dengan pesan yang belum dibaca dahulu",
         "space_menu": {
             "home": "Beranda space",
@@ -2546,6 +2542,8 @@
                 "session_key": "Kunci sesi:",
                 "title": "Lanjutan"
             },
+            "confirm_key_storage_off": "Apakah Anda yakin ingin tetap menonaktifkan penyimpanan kunci?",
+            "confirm_key_storage_off_description": "Jika Anda keluar dari semua perangkat, Anda akan kehilangan riwayat pesan dan perlu memverifikasi semua kontak yang ada lagi. <a> Pelajari lebih lanjut</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Hapus penyimpanan kunci",
                 "confirm": "Hapus penyimpanan kunci",

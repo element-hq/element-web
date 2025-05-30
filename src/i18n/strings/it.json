@@ -794,22 +794,11 @@
     "empty_room_was_name": "Stanza vuota (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Inserisci la tua frase di sicurezza o <button>usa la tua chiave di sicurezza</button> per continuare.",
             "key_validation_text": {
-                "invalid_security_key": "Chiave di sicurezza non valida",
-                "recovery_key_is_correct": "Sembra giusta!",
-                "wrong_file_type": "Tipo di file errato",
                 "wrong_security_key": "Chiave di sicurezza sbagliata"
             },
-            "reset_title": "Reimposta tutto",
-            "reset_warning_1": "Fallo solo se non hai altri dispositivi con cui completare la verifica.",
-            "reset_warning_2": "Se reimposti tutto, ricomincerai senza sessioni fidate, senza utenti fidati e potresti non riuscire a vedere i messaggi passati.",
             "restoring": "Ripristino delle chiavi dal backup",
-            "security_key_title": "Chiave di sicurezza",
-            "security_phrase_incorrect_error": "Impossibile accedere all'archivio segreto. Verifica di avere inserito la password di sicurezza giusta.",
-            "security_phrase_title": "Frase di sicurezza",
-            "separator": "%(securityKey)s o %(recoveryFile)s",
-            "use_security_key_prompt": "Usa la tua chiave di sicurezza per continuare."
+            "security_key_title": "Chiave di sicurezza"
         },
         "bootstrap_title": "Configurazione chiavi",
         "cancel_entering_passphrase_description": "Sei sicuro di volere annullare l'inserimento della frase?",

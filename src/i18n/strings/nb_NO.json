@@ -157,6 +157,7 @@
         "view_message": "Se melding",
         "view_source": "Vis kilde",
         "yes": "Ja",
+        "yes_dismiss": "Ja, avvis",
         "zoom_in": "Forstørr",
         "zoom_out": "Forminske"
     },
@@ -910,22 +911,13 @@
     "empty_room_was_name": "Tomt rom (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Skriv inn sikkerhetsfrasen eller <button> bruk sikkerhetsnøkkelen </button> for å fortsette.",
+            "alternatives": "Hvis du har en sikkerhetsnøkkel eller en sikkerhetsfrase, vil dette også fungere.",
             "key_validation_text": {
-                "invalid_security_key": "Ugyldig gjenopprettingsnøkkel",
-                "recovery_key_is_correct": "Ser bra ut!",
-                "wrong_file_type": "Feil filtype",
-                "wrong_security_key": "Feil gjenopprettingsnøkkel"
+                "wrong_security_key": "Gjenopprettingsnøkkelen du skrev inn er ikke riktig."
             },
-            "reset_title": "Tilbakestill alt",
-            "reset_warning_1": "Gjør dette bare hvis du ikke har noen annen enhet å fullføre verifiseringen med.",
-            "reset_warning_2": "Hvis du tilbakestiller alt, starter du på nytt uten klarerte økter, ingen klarerte brukere, og du kan kanskje ikke se tidligere meldinger.",
+            "privacy_warning": "Sørg for at ingen kan se denne skjermen!",
             "restoring": "Gjenoppretter nøkler fra sikkerhetskopi",
-            "security_key_title": "Gjenopprettingsnøkkel",
-            "security_phrase_incorrect_error": "Får ikke tilgang til hemmelig lagring. Kontroller at du har skrevet inn riktig sikkerhetsfrase.",
-            "security_phrase_title": "Sikkerhetsfrase",
-            "separator": "%(securityKey)s eller %(recoveryFile)s",
-            "use_security_key_prompt": "Bruk sikkerhetsnøkkelen din for å fortsette."
+            "security_key_title": "Gjenopprettingsnøkkel"
         },
         "bootstrap_title": "Setter opp nøkler",
         "cancel_entering_passphrase_description": "Er du sikker på at du vil avbryte inntasting av passordfrase?",
@@ -981,6 +973,8 @@
         "setup_secure_backup": {
             "explainer": "Ta sikkerhetskopi av nøklene dine før du logger av for å unngå å miste dem."
         },
+        "turn_on_key_storage": "Slå på nøkkeloppbevaring",
+        "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
         "udd": {
             "interactive_verification_button": "Interaktiv verifisering ved hjelp av emoji",
             "other_ask_verify_text": "Be denne brukeren om å bekrefte sesjonen sin, eller bekreft den manuelt nedenfor.",
@@ -2109,19 +2103,23 @@
             "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
+            "no_invites": "Du har ingen uleste invitasjoner",
+            "no_mentions": "Du har ingen uleste omtaler",
             "no_people": "Du har ikke direkte chatter med noen ennå",
             "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
             "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
+            "show_activity": "Se alle aktiviteter",
             "show_chats": "Vis alle chatter"
         },
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favoritter",
+            "invites": "Invitasjoner",
+            "mentions": "Omtaler",
             "people": "Personer",
             "rooms": "Rom",
             "unread": "Uleste"
@@ -2153,22 +2151,20 @@
             "open_room": "Åpne rom %(roomName)s"
         },
         "room_options": "Rominnstillinger",
-        "secondary_filter": {
-            "all_activity": "All aktivitet",
-            "invites_only": "Kun invitasjoner",
-            "low_priority": "Lav prioritet",
-            "mentions_only": "Kun omtaler"
-        },
-        "secondary_filters": "Sekundære filtre",
         "show_less": "Vis mindre",
         "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
+        "sort": "Sorter",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
+        "sort_type": {
+            "activity": "Aktivitet",
+            "atoz": "A-Å"
+        },
         "sort_unread_first": "Vis rom med uleste meldinger først",
         "space_menu": {
             "home": "Område hjem",
@@ -2456,6 +2452,10 @@
         "recent_changes_heading": "Nylige endringer som ennå ikke er mottatt",
         "title": "Serveren svarer ikke"
     },
+    "service_worker_error": {
+        "description": "%(brand)s krever en tjenestearbeider for å laste inn autentiserte medier fra Matrix-innholdslagre. Dette støttes ikke av nettleseren din, så du kan oppleve at media ikke lastes inn.",
+        "title": "Kunne ikke laste inn servicearbeider"
+    },
     "seshat": {
         "error_initialising": "Initialisering av meldingssøk mislyktes, sjekk innstillingene <a> dine </a> for mer informasjon",
         "reset_button": "Tilbakestill hendelseslageret",
@@ -2549,6 +2549,8 @@
                 "session_key": "Sesjonsnøkkel:",
                 "title": "Avansert"
             },
+            "confirm_key_storage_off": "Er du sikker på at du vil ha nøkkeloppbevaring skrudd av?",
+            "confirm_key_storage_off_description": "Hvis du logger deg av alle enhetene dine, mister du meldingshistorikken og må bekrefte alle eksisterende kontakter igjen. <a>Lær mer </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Slett nøkkellagring",
                 "confirm": "Slett nøkkellagring",
@@ -3802,6 +3804,7 @@
         "description": "For å opprette en delingslenke, lag dette rommet <b>offentlig</b> eller aktiver alternativet for brukere å <b>be om å bli med</b> Dette lar gjester bli med uten å bli invitert.",
         "dont_change_description": "Hvis du ikke ønsker å endre tilgangen til dette rommet, kan du opprette et nytt rom for lenken.",
         "no_change": "Jeg vil ikke endre tilgangsnivået.",
+        "revert_access_description": "(Dette kan tilbakestilles til den forrige verdien i Rominnstillinger: <b>Sikkerhet og personvern</b> / <b>Tilgang</b>)",
         "title": "Tillat gjestebrukere å bli med i dette rommet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",

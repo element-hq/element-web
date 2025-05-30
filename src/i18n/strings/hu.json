@@ -157,6 +157,7 @@
         "view_message": "Üzenet megjelenítése",
         "view_source": "Forrás megjelenítése",
         "yes": "Igen",
+        "yes_dismiss": "Igen, elvetés",
         "zoom_in": "Nagyítás",
         "zoom_out": "Kicsinyítés"
     },
@@ -907,22 +908,11 @@
     "empty_room_was_name": "Üres szoba (%(oldName)s volt)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Adja meg a biztonsági jelmondatot vagy <button>használja a helyreállítási kulcsot</button> a folytatáshoz.",
             "key_validation_text": {
-                "invalid_security_key": "Érvénytelen helyreállítási kulcs",
-                "recovery_key_is_correct": "Jónak tűnik!",
-                "wrong_file_type": "A fájltípus hibás",
                 "wrong_security_key": "Hibás helyreállítási kulcs"
             },
-            "reset_title": "Minden alaphelyzetbe állítása",
-            "reset_warning_1": "Csak akkor tegye meg, ha egyetlen másik eszköze sincs az ellenőrzés elvégzéséhez.",
-            "reset_warning_2": "Ha mindent alaphelyzetbe állít, akkor nem lesz megbízható munkamenete, nem lesznek megbízható felhasználók és a régi üzenetekhez sem biztos, hogy hozzáfér majd.",
             "restoring": "Kulcsok helyreállítása mentésből",
-            "security_key_title": "Helyreállítási kulcs",
-            "security_phrase_incorrect_error": "A biztonsági tárolóhoz nem lehet hozzáférni. Kérjük ellenőrizze, hogy jó Biztonsági jelmondatot adott-e meg.",
-            "security_phrase_title": "Biztonsági jelmondat",
-            "separator": "%(securityKey)s vagy %(recoveryFile)s",
-            "use_security_key_prompt": "A folytatáshoz használja a helyreállítási kulcsot."
+            "security_key_title": "Helyreállítási kulcs"
         },
         "bootstrap_title": "Kulcsok beállítása",
         "cancel_entering_passphrase_description": "Biztos, hogy megszakítja a jelmondat bevitelét?",
@@ -978,6 +968,8 @@
         "setup_secure_backup": {
             "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat."
         },
+        "turn_on_key_storage": "A kulcstárolás bekapcsolása",
+        "turn_on_key_storage_description": "Tárolja biztonságosan a kriptográfiai azonosító- és üzenetkulcsokat a kiszolgálón. Ez lehetővé teszi az üzenetek előzményeinek megtekintését bármely új eszközön.",
         "udd": {
             "interactive_verification_button": "Interaktív ellenőrzés emodzsikkal",
             "other_ask_verify_text": "Kérje meg a felhasználót, hogy hitelesítse a munkamenetét, vagy ellenőrizze kézzel lentebb.",
@@ -2093,19 +2085,23 @@
             "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
             "no_favourites": "Még nincs kedvenc csevegése",
             "no_favourites_description": "A csevegési beállításokban adhat hozzá csevegést a kedvencekhez",
+            "no_invites": "Nincs olvasatlan meghívója",
+            "no_mentions": "Nincs olvasatlan említése",
             "no_people": "Még nincs közvetlen csevegése senkivel",
             "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
             "no_rooms": "Még nincs egy szobában sem",
             "no_rooms_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
             "no_unread": "Gratulálunk! Nincsenek olvasatlan üzenetei.",
+            "show_activity": "Összes tevékenység megtekintése",
             "show_chats": "Összes csevegés megjelenítése"
         },
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
         "failed_remove_tag": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
-        "filter": "Szűrő",
         "filters": {
             "favourite": "Kedvencek",
+            "invites": "Meghívók",
+            "mentions": "Említések",
             "people": "Emberek",
             "rooms": "Szobák",
             "unread": "Olvasatlan"
@@ -2135,22 +2131,20 @@
             "open_room": "A(z) %(roomName)s szoba megnyitása"
         },
         "room_options": "Szobabeállítások",
-        "secondary_filter": {
-            "all_activity": "Összes tevékenység",
-            "invites_only": "Csak meghívók",
-            "low_priority": "Alacsony prioritás",
-            "mentions_only": "Csak megemlítések"
-        },
-        "secondary_filters": "Másodlagos szűrők",
         "show_less": "Kevesebb megjelenítése",
         "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
         },
         "show_previews": "Üzenet-előnézet megjelenítése",
+        "sort": "Rendezés",
         "sort_by": "Rendezés",
         "sort_by_activity": "Aktivitás",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Tevékenység",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elöl",
         "space_menu": {
             "home": "Tér kezdőlapja",
@@ -2437,6 +2431,10 @@
         "recent_changes_heading": "A legutóbbi változások, amelyek még nem érkeztek meg",
         "title": "A kiszolgáló nem válaszol"
     },
+    "service_worker_error": {
+        "description": "Az %(brand)s ún. service workert igényel a hitelesített médiafájlok Matrix tartalomtárolókból történő betöltéséhez. Ezt a böngészője nem támogatja, ezért előfordulhat, hogy a médiafájlok nem töltődnek be.",
+        "title": "Nem sikerült betölteni a service workert"
+    },
     "seshat": {
         "error_initialising": "Az üzenetkeresés előkészítése sikertelen, további információkért ellenőrizze a <a>beállításait</a>",
         "reset_button": "Az eseménytároló alaphelyzetbe állítása",
@@ -2530,6 +2528,8 @@
                 "session_key": "Munkamenetkulcs:",
                 "title": "Speciális"
             },
+            "confirm_key_storage_off": "Biztosan kikapcsolva szeretné tartani a kulcstárolást?",
+            "confirm_key_storage_off_description": "Ha kijelentkezik az összes eszközéről, elveszíti üzenetelőzményeit, és újra ellenőriznie kell az összes meglévő kapcsolatát. <a>Tudjon meg többet</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Kulcstároló törlése",
                 "confirm": "Kulcstároló törlése",

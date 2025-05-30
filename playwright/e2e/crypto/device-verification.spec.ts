@@ -169,8 +169,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Fill the passphrase
         const dialog = page.locator(".mx_Dialog");
-        await dialog.locator("input").fill("new passphrase");
-        await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
+        await dialog.locator("textarea").fill("new passphrase");
+        await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
 
@@ -190,10 +190,9 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Fill the recovery key
         const dialog = page.locator(".mx_Dialog");
-        await dialog.getByRole("button", { name: "use your Recovery Key" }).click();
         const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
-        await dialog.locator("#mx_securityKey").fill(aliceRecoveryKey.encodedPrivateKey);
-        await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
+        await dialog.locator("textarea").fill(aliceRecoveryKey.encodedPrivateKey);
+        await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
 

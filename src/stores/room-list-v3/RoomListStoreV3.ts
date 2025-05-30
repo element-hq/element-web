@@ -321,8 +321,17 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private addRoomAndEmit(room: Room, isNewRoom = false): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
-        if (isNewRoom) this.roomSkipList.addNewRoom(room);
-        else this.roomSkipList.reInsertRoom(room);
+        if (isNewRoom) {
+            if (!VisibilityProvider.instance.isRoomVisible(room)) {
+                logger.info(
+                    `RoomListStoreV3: Refusing to add new room ${room.roomId} because isRoomVisible returned false.`,
+                );
+                return;
+            }
+            this.roomSkipList.addNewRoom(room);
+        } else {
+            this.roomSkipList.reInsertRoom(room);
+        }
         this.emit(LISTS_UPDATE_EVENT);
     }
 

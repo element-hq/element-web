@@ -157,6 +157,7 @@
         "view_message": "Ver mensagem",
         "view_source": "Ver código-fonte",
         "yes": "Sim",
+        "yes_dismiss": "Sim, dispensar",
         "zoom_in": "Aumentar zoom",
         "zoom_out": "Diminuir zoom"
     },
@@ -910,22 +911,13 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduza a sua Frase de Segurança ou <button>use a sua Chave de Recuperação</button> para continuar.",
+            "alternatives": "Se você tiver uma chave de segurança ou frase de segurança, isso também funcionará.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de recuperação inválida",
-                "recovery_key_is_correct": "Muito bem!",
-                "wrong_file_type": "Tipo errado de arquivo",
-                "wrong_security_key": "Chave de recuperação incorreta"
+                "wrong_security_key": "A chave de recuperação que você inseriu não está correta."
             },
-            "reset_title": "Redefinir tudo",
-            "reset_warning_1": "Faça isso somente se você não tiver outro dispositivo para concluir a verificação.",
-            "reset_warning_2": "Se você redefinir tudo, reiniciará sem sessões confiáveis, sem usuários confiáveis e talvez não consiga ver as mensagens anteriores.",
+            "privacy_warning": "Certifique-se de que ninguém possa ver essa tela!",
             "restoring": "Restaurando chaves do backup",
-            "security_key_title": "Chave de recuperação",
-            "security_phrase_incorrect_error": "Não foi possível acessar o armazenamento secreto. Verifique se você digitou a Frase de Segurança correta.",
-            "security_phrase_title": "Frase de segurança",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Use sua chave de recuperação para continuar."
+            "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "Configurar chaves",
         "cancel_entering_passphrase_description": "Tem certeza que quer cancelar a introdução da frase de senha?",
@@ -981,6 +973,8 @@
         "setup_secure_backup": {
             "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
         },
+        "turn_on_key_storage": "Ativar o armazenamento de chaves",
+        "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
         "udd": {
             "interactive_verification_button": "Verificar interativamente por emoji",
             "other_ask_verify_text": "Peça a este usuário para confirmar a sessão dele, ou confirme-a manualmente abaixo.",
@@ -1595,7 +1589,7 @@
         "MapStyleUrlNotConfigured": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​para​•​exibir​•​mapas.",
         "MapStyleUrlNotReachable": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​corretamente​•​para​•​exibir​•​mapas,​•​ou​•​o​•​servidor​•​de​•​mapas​•​configurado​•​pode​•​estar​•​inacessível.",
         "WebGLNotEnabled": "O​•​WebGL​•​é​•​necessário​•​para​•​exibir​•​mapas,​•​ative-o​•​nas​•​configurações​•​do​•​seu​•​navegador.",
-        "click_drop_pin": "Clique​•​para​•​soltar​•​um​•​alfinete",
+        "click_drop_pin": "Clique para soltar um alfinete",
         "click_move_pin": "Clique​•​para​•​mover​•​o​•​alfinete",
         "close_sidebar": "Fechar​•​barra​•​lateral",
         "error_fetch_location": "Não​•​foi​•​possível​•​obter​•​a​•​localização",
@@ -2108,19 +2102,23 @@
             "no_chats_description_no_room_rights": "Comece enviando uma mensagem para alguém",
             "no_favourites": "Você ainda não tem o bate-papo favorito",
             "no_favourites_description": "Você pode adicionar um bate-papo aos seus favoritos nas configurações de bate-papo",
+            "no_invites": "Você não tem nenhum convite não lido",
+            "no_mentions": "Você não tem nenhuma menção não lida",
             "no_people": "Você ainda não tem conversas diretas com ninguém",
             "no_people_description": "Você pode desmarcar os filtros para ver suas outras conversas",
             "no_rooms": "Você não está em nenhuma sala ainda",
             "no_rooms_description": "Você pode desmarcar os filtros para ver suas outras conversas.",
             "no_unread": "Parabéns! Você não tem nenhuma mensagem não lida",
+            "show_activity": "Ver todas as atividades",
             "show_chats": "Mostrar todas as conversas"
         },
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
-        "filter": "Filtro",
         "filters": {
             "favourite": "Favoritos",
+            "invites": "Convites",
+            "mentions": "Menções",
             "people": "Pessoas",
             "rooms": "Salas",
             "unread": "Não lido"
@@ -2152,13 +2150,6 @@
             "open_room": "Abrir sala %(roomName)s"
         },
         "room_options": "Opções da Sala",
-        "secondary_filter": {
-            "all_activity": "Toda a atividade",
-            "invites_only": "Somente para convidados",
-            "low_priority": "Baixa prioridade",
-            "mentions_only": "Apenas menções"
-        },
-        "secondary_filters": "Filtros secundários",
         "show_less": "Mostrar menos",
         "show_message_previews": "Mostrar prévias de mensagens",
         "show_n_more": {
@@ -2166,9 +2157,14 @@
             "one": "Mostrar %(count)s a mais"
         },
         "show_previews": "Mostrar pré-visualizações de mensagens",
+        "sort": "Ordenar",
         "sort_by": "Classificar por",
         "sort_by_activity": "Atividade recente",
         "sort_by_alphabet": "De A a Z",
+        "sort_type": {
+            "activity": "Atividade",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Mostrar salas não lidas em primeiro",
         "space_menu": {
             "home": "Espaço",
@@ -2553,6 +2549,8 @@
                 "session_key": "Chave da sessão:",
                 "title": "Avançado"
             },
+            "confirm_key_storage_off": "Tem certeza de que deseja manter o armazenamento de chaves desativado?",
+            "confirm_key_storage_off_description": "Se você sair de todos os seus dispositivos, perderá o histórico de mensagens e precisará verificar todos os seus contatos existentes novamente. <a>Saiba mais</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Excluir armazenamento de chaves",
                 "confirm": "Excluir armazenamento de chaves",

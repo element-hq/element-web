@@ -416,6 +416,32 @@ describe("RoomListStoreV3", () => {
         }
 
         describe("Spaces", () => {
+            it("Newly created space is not added by the store", async () => {
+                const { client, rooms } = getClientAndRooms();
+                const infoSpy = jest.spyOn(logger, "info");
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Create a space and let the store know about it
+                const { spaceRoom } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.myMembership",
+                        oldMembership: KnownMembership.Leave,
+                        membership: KnownMembership.Invite,
+                        room: spaceRoom,
+                    },
+                    true,
+                );
+
+                // Space room should not be added
+                expect(store.getSortedRooms()).not.toContain(spaceRoom);
+                expect(infoSpy).toHaveBeenCalledWith(
+                    expect.stringContaining("RoomListStoreV3: Refusing to add new room"),
+                );
+            });
+
             it("Filtering by spaces work", async () => {
                 const { client, rooms } = getClientAndRooms();
                 // Let's choose 5 rooms to put in space

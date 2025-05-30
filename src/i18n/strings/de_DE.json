@@ -157,6 +157,7 @@
         "view_message": "Nachricht anzeigen",
         "view_source": "Rohdaten anzeigen",
         "yes": "Ja",
+        "yes_dismiss": "Ja, verwerfen",
         "zoom_in": "Vergrößern",
         "zoom_out": "Verkleinern"
     },
@@ -910,22 +911,11 @@
     "empty_room_was_name": "Leerer Raum (war %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Um fortzufahren, geben Sie Ihre Sicherheitsphrase ein oder <button> verwenden Sie Ihren Wiederherstellungsschlüssel</button>, um fortzufahren.",
             "key_validation_text": {
-                "invalid_security_key": "Ungültiger Wiederherstellungsschlüssel",
-                "recovery_key_is_correct": "Sieht gut aus!",
-                "wrong_file_type": "Falscher Dateityp",
                 "wrong_security_key": "Falscher Wiederherstellungsschlüssel"
             },
-            "reset_title": "Alles zurücksetzen",
-            "reset_warning_1": "Verwende es nur, wenn du kein Gerät, mit dem du dich verifizieren kannst, bei dir hast.",
-            "reset_warning_2": "Wenn du alles zurücksetzt, beginnst du ohne verifizierte Sitzungen und Benutzende von Neuem und siehst eventuell keine alten Nachrichten.",
             "restoring": "Schlüssel aus der Sicherung wiederherstellen",
-            "security_key_title": "Wiederherstellungsschlüssel",
-            "security_phrase_incorrect_error": "Zugriff auf sicheren Speicher nicht möglich. Bitte überprüfe, ob du die richtige Sicherheitsphrase eingegeben hast.",
-            "security_phrase_title": "Sicherheitsphrase",
-            "separator": "%(securityKey)s oder %(recoveryFile)s",
-            "use_security_key_prompt": "Verwenden Sie Ihren Wiederherstellungsschlüssel, um fortzufahren."
+            "security_key_title": "Wiederherstellungsschlüssel"
         },
         "bootstrap_title": "Schlüssel werden eingerichtet",
         "cancel_entering_passphrase_description": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest?",
@@ -981,6 +971,8 @@
         "setup_secure_backup": {
             "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
         },
+        "turn_on_key_storage": "Schlüsselspeicher einschalten",
+        "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
         "udd": {
             "interactive_verification_button": "Interaktiv per Emoji verifizieren",
             "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
@@ -2108,19 +2100,23 @@
             "no_chats_description_no_room_rights": "Beginnen Sie damit, jemandem eine Nachricht zu senden",
             "no_favourites": "Sie haben noch keinen Lieblingschat",
             "no_favourites_description": "Sie können einen Chat in den Chat-Einstellungen zu Ihren Favoriten hinzufügen",
+            "no_invites": "Sie haben keine ungelesenen Einladungen",
+            "no_mentions": "Sie haben keine ungelesenen Erwähnungen",
             "no_people": "Sie haben noch keine direkten Chats",
             "no_people_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
             "no_rooms": "Sie sind noch in keinem Raum",
             "no_rooms_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
             "no_unread": "Glückwunsch! Sie haben keine ungelesenen Nachrichten",
+            "show_activity": "Alle Aktivitäten ansehen",
             "show_chats": "Alle Chats anzeigen"
         },
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
         "failed_remove_tag": "Entfernen der Raum-Kennzeichnung %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favoriten",
+            "invites": "Einladungen",
+            "mentions": "Erwähnungen",
             "people": "Personen",
             "rooms": "Räume",
             "unread": "Ungelesene"
@@ -2152,13 +2148,6 @@
             "open_room": "Raum öffnen %(roomName)s"
         },
         "room_options": "Chatroomoptionen",
-        "secondary_filter": {
-            "all_activity": "Alle Aktivitäten",
-            "invites_only": "Nur Einladungen",
-            "low_priority": "Niedrige Priorität",
-            "mentions_only": "Nur Erwähnungen"
-        },
-        "secondary_filters": "Sekundäre Filter",
         "show_less": "Weniger anzeigen",
         "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_n_more": {
@@ -2166,9 +2155,14 @@
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
+        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
+        "sort_type": {
+            "activity": "Aktivität",
+            "atoz": "A–Z"
+        },
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
         "space_menu": {
             "home": "Space-Übersicht",
@@ -2553,6 +2547,8 @@
                 "session_key": "Sitzungsschlüssel:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Soll die Speicherung der Schlüssel wirklich deaktiviert sein?",
+            "confirm_key_storage_off_description": "Wenn Sie sich von all Ihren Geräten abmelden, verlieren Sie Ihren Nachrichtenverlauf und müssen alle Ihre vorhandenen Kontakte erneut überprüfen. <a>Erfahre mehr </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Schlüsselspeicher löschen",
                 "confirm": "Schlüsselspeicher löschen",

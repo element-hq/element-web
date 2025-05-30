@@ -916,22 +916,11 @@
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Wprowadź swoją frazę bezpieczeństwa lub <button>użyj klucza przywracania</button>, aby kontynuować.",
             "key_validation_text": {
-                "invalid_security_key": "Nieprawidłowy klucz przywracania",
-                "recovery_key_is_correct": "Wygląda dobrze!",
-                "wrong_file_type": "Błędny typ pliku",
                 "wrong_security_key": "Błędny klucz przywracania"
             },
-            "reset_title": "Resetuj wszystko",
-            "reset_warning_1": "Zrób to tylko wtedy, gdy nie masz innego urządzenia, za pomocą którego mógłbyś zakończyć weryfikację.",
-            "reset_warning_2": "Jeśli zresetujesz wszystko, stracisz wszystkie sesje zaufane, użytkowników zaufanych i możliwe, że nie będziesz w stanie przeglądać historii czatu.",
             "restoring": "Przywracanie kluczy z kopii zapasowej",
-            "security_key_title": "Klucz przywracania",
-            "security_phrase_incorrect_error": "Nie można uzyskać dostępu do sekretnego magazynu. Upewnij się, że wprowadzono poprawne Hasło bezpieczeństwa.",
-            "security_phrase_title": "Hasło bezpieczeństwa",
-            "separator": "%(securityKey)s lub %(recoveryFile)s",
-            "use_security_key_prompt": "Użyj klucza przywracania, aby kontynuować."
+            "security_key_title": "Klucz przywracania"
         },
         "bootstrap_title": "Konfigurowanie kluczy",
         "cancel_entering_passphrase_description": "Czy na pewno chcesz anulować wpisywanie hasła?",
@@ -2135,7 +2124,6 @@
         "failed_add_tag": "Nie można dodać tagu %(tagName)s do pokoju",
         "failed_remove_tag": "Nie udało się usunąć tagu %(tagName)s z pokoju",
         "failed_set_dm_tag": "Nie udało się ustawić tagu wiadomości prywatnych",
-        "filter": "Filtr",
         "filters": {
             "favourite": "Ulubione",
             "people": "Osoby",
@@ -2169,13 +2157,6 @@
             "open_room": "Pokój otwarty %(roomName)s"
         },
         "room_options": "Opcje pokoju",
-        "secondary_filter": {
-            "all_activity": "Cała aktywność",
-            "invites_only": "Tylko zaproszenie",
-            "low_priority": "Niski priorytet",
-            "mentions_only": "Tylko wzmianki"
-        },
-        "secondary_filters": "Filtry poboczne",
         "show_less": "Pokaż mniej",
         "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {
@@ -2184,9 +2165,14 @@
             "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
+        "sort": "Sortuj",
         "sort_by": "Sortuj według",
         "sort_by_activity": "Aktywności",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktywność",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
         "space_menu": {
             "home": "Główna przestrzeni",
@@ -3834,6 +3820,7 @@
         "description": "Aby utworzyć link udostępniania, ustaw ten pokój jako <b>publiczny</b> lub włącz opcję umożliwiającą użytkownikom <b>poprosić o dołączenie</b>. Dzięki temu goście będą mogli dołączyć bez zaproszenia.",
         "dont_change_description": "Jeśli nie chcesz zmieniać uprawnień dostępu tego pokoju, możesz utworzyć link połączenia w nowym pokoju.",
         "no_change": "Nie chce zmieniać poziomu uprawnień.",
+        "revert_access_description": "(Przywróć poprzednią wartość w ustawieniach pokoju: <b>Bezpieczeństwo i prywatność</b> / <b>Dostęp</b>)",
         "title": "Zezwól gościom na dołączenie do tego pokoju"
     },
     "upload_failed_generic": "Nie udało się przesłać pliku '%(fileName)s'.",

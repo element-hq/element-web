@@ -784,22 +784,11 @@
     "empty_room_was_name": "空的聊天室（曾為 %(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
             "key_validation_text": {
-                "invalid_security_key": "無效的安全金鑰",
-                "recovery_key_is_correct": "看起來真棒！",
-                "wrong_file_type": "錯誤的檔案類型",
                 "wrong_security_key": "錯誤的安全金鑰"
             },
-            "reset_title": "重設所有東西",
-            "reset_warning_1": "當您沒有其他裝置可以完成驗證時，才執行此動作。",
-            "reset_warning_2": "如果您重設所有東西，您將會在沒有受信任的工作階段、沒有受信任的使用者的情況下重新啟動，且可能會看不到過去的訊息。",
             "restoring": "從備份還原金鑰",
-            "security_key_title": "安全金鑰",
-            "security_phrase_incorrect_error": "無法存取祕密儲存空間。請確認您輸入了正確的安全密語。",
-            "security_phrase_title": "安全密語",
-            "separator": "%(securityKey)s 或 %(recoveryFile)s",
-            "use_security_key_prompt": "使用您的安全金鑰以繼續。"
+            "security_key_title": "安全金鑰"
         },
         "bootstrap_title": "正在產生金鑰",
         "cancel_entering_passphrase_description": "您確定要取消輸入安全密語嗎？",

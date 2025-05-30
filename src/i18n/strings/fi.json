@@ -12,6 +12,7 @@
             "one": "Yksi lukematon maininta."
         },
         "recent_rooms": "Viimeisimmät huoneet",
+        "room_n_unread_invite": "Avaa huoneen %(roomName)s kutsu.",
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
@@ -90,7 +91,7 @@
         "open": "Avaa",
         "open_menu": "Avaa valikko",
         "pause": "Keskeytä",
-        "pin": "Nuppineula",
+        "pin": "Kiinnitä",
         "play": "Toista",
         "proceed": "Jatka",
         "quote": "Lainaa",
@@ -103,6 +104,7 @@
         "reply": "Vastaa",
         "reply_in_thread": "Vastaa ketjuun",
         "report_content": "Ilmoita sisällöstä",
+        "report_room": "Ilmoita huoneesta",
         "resend": "Lähetä uudelleen",
         "reset": "Palauta alkutilaan",
         "resume": "Jatka",
@@ -262,7 +264,7 @@
             "error_other_device_already_signed_in": "Sinun ei tarvitse tehdä mitään muuta.",
             "error_other_device_already_signed_in_title": "Toinen laitteesi on jo kirjautunut sisään",
             "error_rate_limited": "Liikaa yrityksiä lyhyessä ajassa. Odota hetki, ennen kuin yrität uudelleen.",
-            "error_unexpected": "Tapahtui odottamaton virhe.",
+            "error_unexpected": "Tapahtui odottamaton virhe. Toisen laitteen yhdistämispyyntö on peruttu.",
             "error_unsupported_protocol": "Tämä laite ei tue kirjautumista toiseen laitteeseen QR-koodilla.",
             "error_unsupported_protocol_title": "Toinen laite ei ole yhteensopiva",
             "error_user_cancelled": "Kirjautuminen peruutettiin toisella laitteella.",
@@ -706,6 +708,9 @@
         "default_cover_photo": "<photo>Oletuskansikuva</photo> © <author>Jesús Roncero</author>, käytössä <terms>CC-BY-SA 4.0</terms>:n ehtojen mukaisesti.",
         "twemoji_colr": "<colr>twemoji-colr</colr>-fontti © <author>Mozilla Foundation</author>, käytössä <terms>Apache 2.0</terms>:n ehtojen mukaisesti."
     },
+    "decline_invitation_dialog": {
+        "reason_description": "Kerro syy huoneen ilmoittamiseen."
+    },
     "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktiiviset sovelmat",
@@ -740,6 +745,7 @@
         "room_notifications_sender": "Lähettäjä: ",
         "room_notifications_total": "Yhteensä: ",
         "room_notifications_type": "Tyyppi: ",
+        "room_status": "Huoneen tila",
         "save_setting_values": "Tallenna asetusarvot",
         "server_info": "Palvelimen tiedot",
         "server_versions": "Palvelinversiot",
@@ -783,18 +789,11 @@
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Kirjoita turvalause tai <button>käytä turva-avain</button> jatkaaksesi.",
             "key_validation_text": {
-                "invalid_security_key": "Virheellinen turva-avain",
-                "recovery_key_is_correct": "Hyvältä näyttää!",
-                "wrong_file_type": "Väärä tiedostotyyppi",
-                "wrong_security_key": "Väärä turva-avain"
+                "wrong_security_key": "Väärä palautusavain"
             },
             "restoring": "Palautetaan avaimia varmuuskopiosta",
-            "security_key_title": "Turva-avain",
-            "security_phrase_title": "Turvalause",
-            "separator": "%(securityKey)s tai %(recoveryFile)s",
-            "use_security_key_prompt": "Käytä turva-avain jatkaaksesi."
+            "security_key_title": "Palautusavain"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
         "cancel_entering_passphrase_description": "Haluatko varmasti peruuttaa salasanan syöttämisen?",
@@ -807,6 +806,7 @@
         "cross_signing_user_normal": "Et ole varmentanut tätä käyttäjää.",
         "cross_signing_user_verified": "Olet varmentanut tämän käyttäjän. Tämä käyttäjä on varmentanut kaikki istuntonsa.",
         "cross_signing_user_warning": "Tämä käyttäjä ei ole varmentanut kaikkia istuntojaan.",
+        "enter_recovery_key": "Kirjoita palautusavain",
         "event_shield_reason_authenticity_not_guaranteed": "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.",
         "event_shield_reason_mismatched_sender_key": "Salattu varmentamattoman istunnon toimesta",
         "export_unsupported": "Selaimesi ei tue vaadittuja kryptografisia laajennuksia",
@@ -832,6 +832,7 @@
         "reset_all_button": "Unohtanut tai kadottanut kaikki palautustavat? <a>Nollaa kaikki</a>",
         "set_up_recovery": "Määritä palautus",
         "set_up_recovery_later": "Ei nyt",
+        "set_up_recovery_toast_description": "Luo palautusavain, jota voit käyttää salatun viestihistorian palauttamiseen, jos menetät pääsyn laitteisiisi.",
         "set_up_toast_description": "Suojaudu salattuihin viesteihin ja tietoihin pääsyn menettämiseltä",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
         "setup_secure_backup": {
@@ -990,7 +991,8 @@
             "image": "Kuva",
             "poll": "Kysely",
             "video": "Video"
-        }
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Vienti peruttu",
@@ -1032,9 +1034,11 @@
         "media_omitted": "Media jätetty pois",
         "media_omitted_file_size": "Media jätetty pois – tiedoston kokoraja ylitetty",
         "messages": "Viestit",
+        "next_page": "Seuraava viestiryhmä",
         "num_messages": "Viestien määrä",
         "num_messages_min_max": "Viestimäärän täytyy olla luku väliltä %(min)s…%(max)s",
         "number_of_messages": "Määritä viestien lukumäärä",
+        "previous_page": "Edellinen viestiryhmä",
         "processing": "Käsitellään…",
         "processing_event_n": "Käsitellään tapahtumaa %(number)s / %(total)s",
         "size_limit": "Kokoraja",
@@ -1307,7 +1311,7 @@
         "sliding_sync": "Liukuvan synkronoinnin tila",
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "sliding_sync_disabled_notice": "Poista käytöstä kirjautumalla ulos ja takaisin sisään",
-        "sliding_sync_server_no_support": "Palvelimellasi ei ole natiivitukea",
+        "sliding_sync_server_no_support": "Palvelimellasi ei ole tukea",
         "under_active_development": "Aktiivisen kehityksen kohteena.",
         "video_rooms": "Videohuoneet",
         "video_rooms_a_new_way_to_chat": "Uusi tapa keskustella äänen ja videon välityksellä %(brand)sissä.",
@@ -1409,6 +1413,7 @@
         "toast_description": "%(brand)s on mobiiliselaimissa kokeellinen. Paremman kokemuksen ja uusimmat ominaisuudet saat ilmaisella mobiilisovelluksellamme.",
         "toast_title": "Parempi kokemus sovelluksella"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Ei enempää tuloksia",
     "notif_panel": {
         "empty_description": "Sinulla ei ole näkyviä ilmoituksia.",
@@ -1435,7 +1440,8 @@
         "mentions_and_keywords_description": "Vastaanota ilmoitukset maininnoista ja asiasanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
         "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
-        "mute_description": "Et saa ilmoituksia"
+        "mute_description": "Et saa ilmoituksia",
+        "mute_room": "Mykistä huone"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s pyytää varmennusta"
@@ -1529,6 +1535,7 @@
     },
     "redact": {
         "confirm_button": "Varmista poistaminen",
+        "confirm_description": "Haluatko varmasti poistaa tämän tapahtuman?",
         "error": "Et voi poistaa tätä viestiä. (%(code)s)",
         "ongoing": "Poistetaan…",
         "reason_label": "Syy (valinnainen)"
@@ -1543,6 +1550,9 @@
         "report_entire_room": "Raportoi koko huone",
         "spam_or_propaganda": "Roskapostitusta tai propagandaa",
         "toxic_behaviour": "Myrkyllinen käyttäytyminen"
+    },
+    "report_room": {
+        "reason_label": "Kuvaile syy"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s istunnon purkaminen epäonnistui!",
@@ -1568,6 +1578,7 @@
         "extensions_empty_title": "Paranna tuottavuutta työkaluilla, widgeteillä ja boteilla",
         "files_button": "Tiedostot",
         "pinned_messages": {
+            "empty_title": "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti",
             "header": {
                 "one": "1 kiinnitetty viesti",
                 "other": "%(count)s kiinnitettyä viestiä"
@@ -1742,7 +1753,9 @@
         "pinned_message_badge": "Kiinnitetty viesti",
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
-            "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne."
+            "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne.",
+            "go_to_message": "Näytä kiinnitetty viesti aikajanalla.",
+            "title": "<bold>%(index)s/%(length)s</bold> kiinnitettyä viestiä"
         },
         "read_topic": "Lue aihe napsauttamalla",
         "rejecting": "Hylätään kutsua…",
@@ -1784,15 +1797,21 @@
                 "other": "Lähetetään %(filename)s ja %(count)s muuta"
             },
             "uploading_single_file": "Lähetetään %(filename)s"
-        }
+        },
+        "video_room": "Tämä huone on videohuone"
     },
     "room_list": {
         "add_room_label": "Lisää huone",
         "add_space_label": "Lisää avaruus",
+        "appearance": "Ulkoasu",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
         "empty": {
+            "no_chats": "Ei keskusteluja vielä",
+            "no_chats_description": "Aloita lähettämällä viestejä jollekin henkilölle tai luomalla huone",
+            "no_chats_description_no_room_rights": "Aloita lähettämällä viesti jollekin",
             "no_favourites": "Sinulla ei ole vielä suosikkikeskustelua",
+            "no_rooms": "Et ole vielä missään huoneessa",
             "no_unread": "Onnittelut! Sinulla ei ole lukemattomia viestejä",
             "show_chats": "Näytä kaikki keskustelut"
         },
@@ -1813,7 +1832,8 @@
         "more_options": {
             "copy_link": "Kopioi huoneen linkki",
             "leave_room": "Poistu huoneesta",
-            "mark_read": "Merkitse luetuksi"
+            "mark_read": "Merkitse luetuksi",
+            "mark_unread": "Merkitse lukemattomaksi"
         },
         "notification_options": "Ilmoitusasetukset",
         "open_space_menu": "Avaa avaruusvalikko",
@@ -1825,6 +1845,7 @@
             "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
+        "show_message_previews": "Näytä viestien esikatselut",
         "show_n_more": {
             "one": "Näytä %(count)s lisää",
             "other": "Näytä %(count)s lisää"
@@ -1833,6 +1854,9 @@
         "sort_by": "Lajittelutapa",
         "sort_by_activity": "Aktiivisuus",
         "sort_by_alphabet": "A-Ö",
+        "sort_type": {
+            "atoz": "A-Ö"
+        },
         "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
         "space_menu": {
             "space_settings": "Avaruuden asetukset"
@@ -2050,8 +2074,9 @@
             },
             "join_rule_upgrade_upgrading_room": "Päivitetään huonetta",
             "public_without_alias_warning": "Lisää osoite linkittääksesi tähän huoneeseen.",
+            "publish_room": "Aseta tämä huone näkyväksi julkisten huoneiden hakemistossa.",
             "publish_space": "Tee tämä avaruus näkyväksi julkisten huoneiden hakemistossa.",
-            "strict_encryption": "Älä lähetä salattuja viestejä vahvistamattomiin istuntoihin tässä huoneessa tässä istunnossa",
+            "strict_encryption": "Lähetä viestejä vain vahvistetuille käyttäjille.",
             "title": "Tietoturva ja yksityisyys"
         },
         "title": "Huoneen asetukset — %(roomName)s",
@@ -2162,6 +2187,7 @@
         "code_block_line_numbers": "Näytä rivinumerot koodilohkoissa",
         "emoji_autocomplete": "Näytä emoji-ehdotuksia kirjoittaessa",
         "enable_markdown": "Ota Markdown käyttöön",
+        "enable_markdown_description": "Aloita viestit kirjoittamalla <code>/plain</code> lähettääksesi ilman markdownia.",
         "encryption": {
             "advanced": {
                 "details_title": "Salauksen tiedot",
@@ -2175,14 +2201,20 @@
             "device_not_verified_title": "Laitetta ei ole vahvistettu",
             "dialog_title": "<strong>Asetukset:</strong> Salaus",
             "recovery": {
+                "change_recovery_confirm_button": "Vahvista uusi palautusavain",
                 "change_recovery_confirm_title": "Anna uusi palautusavain",
+                "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
                 "description": "Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet kadottanut kaikki olemassa olevat laitteesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
+                "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
                 "save_key_description": "Älä jaa tätä kenenkään kanssa!",
+                "save_key_title": "Palautusavain",
                 "set_up_recovery": "Määritä palautus",
                 "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
+                "set_up_recovery_save_key_title": "Tallenna palautusavain turvalliseen paikkaan",
+                "set_up_recovery_secondary_description": "Kun napsautat Jatka, sinulle luodaan palautusavain.",
                 "title": "Palautuminen"
             },
             "title": "Salaus"
@@ -2204,6 +2236,7 @@
             "avatar_remove_progress": "Poistetaan kuva...",
             "avatar_save_progress": "Lähetetään kuva…",
             "avatar_upload_error_text": "Tiedostomuoto ei ole tuettu tai kuva on suurempi kuin %(size)s.",
+            "avatar_upload_error_text_generic": "Tiedostomuotoa ei ehkä tueta.",
             "confirm_adding_email_body": "Napsauta alapuolella olevaa painiketta lisätäksesi tämän sähköpostiosoitteen.",
             "confirm_adding_email_title": "Vahvista sähköpostin lisääminen",
             "deactivate_confirm_body": "Haluatko varmasti poistaa tilisi pysyvästi?",
@@ -2225,6 +2258,7 @@
             "discovery_needs_terms_title": "Anna ihmisten löytää sinut",
             "display_name": "Näyttönimi",
             "display_name_error": "Näyttönimeä ei voi asettaa",
+            "email_adding_unsupported_by_hs": "Tämä kotipalvelin ei tue sähköpostiosoitteiden lisäämistä tiliisi.",
             "email_address_in_use": "Tämä sähköpostiosoite on jo käytössä",
             "email_address_label": "Sähköpostiosoite",
             "email_not_verified": "Sähköpostiosoitettasi ei ole vielä varmistettu",
@@ -2239,6 +2273,7 @@
             "error_invalid_email_detail": "Tämä ei vaikuta olevan kelvollinen sähköpostiosoite",
             "error_msisdn_verification": "Puhelinnumeron vahvistaminen epäonnistui.",
             "error_password_change_403": "Salasanan vaihtaminen epäonnistui. Onko salasanasi oikein?",
+            "error_password_change_http": "%(errorMessage)s (HTTP-tila %(httpStatus)s)",
             "error_password_change_title": "Virhe salasanan vaihtamisessa",
             "error_password_change_unknown": "Tuntematon salasananvaihtovirhe (%(stringifiedError)s)",
             "error_remove_3pid": "Yhteystietojen poistaminen epäonnistui",
@@ -2247,7 +2282,9 @@
             "error_share_email_discovery": "Sähköpostiosoitetta ei voi jakaa",
             "error_share_msisdn_discovery": "Puhelinnumeroa ei voi jakaa",
             "identity_server_not_set": "Identiteettipalvelinta ei ole asetettu",
+            "invalid_phone_number": "Annettu puhelinnumero ei vaikuta olevan kelvollinen.",
             "language_section": "Kieli",
+            "msisdn_adding_unsupported_by_hs": "Tämä kotipalvelin ei tue puhelinnumeroiden lisäämistä tilillesi.",
             "msisdn_in_use": "Puhelinnumero on jo käytössä",
             "msisdn_label": "Puhelinnumero",
             "msisdn_verification_field_label": "Varmennuskoodi",
@@ -2321,6 +2358,12 @@
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Asetukset:</strong> Ohitetut käyttäjät"
+        },
+        "media_preview": {
+            "hide_media": "Piilota aina",
+            "media_preview_description": "Piilotetun median voi aina näyttää napauttamalla sitä",
+            "media_preview_label": "Näytä media aikajanalla",
+            "show_media": "Näytä aina"
         },
         "notifications": {
             "desktop_notification_message_preview": "Näytä viestin esikatselu työpöytäilmoituksessa",
@@ -2448,6 +2491,7 @@
             "device_verified_description": "Tämä istunto on valmis turvallista viestintää varten.",
             "device_verified_description_current": "Nykyinen istuntosi on valmis turvalliseen viestintään.",
             "dialog_title": "<strong>Asetukset:</strong> Istunnot",
+            "error_set_name": "Istunnon nimen asettaminen epäonnistui",
             "filter_all": "Kaikki",
             "filter_inactive": "Passiivinen",
             "filter_inactive_description": "Passiivinen %(inactiveAgeDays)s päivää tai pidempään",
@@ -2460,6 +2504,7 @@
             "inactive_sessions_list_description": "Harkitse vanhoista (%(inactiveAgeDays)s tai useamman päivän ikäisistä), käyttämättömistä istunnoista uloskirjautumista.",
             "ip": "IP-osoite",
             "last_activity": "Viimeisin toiminta",
+            "manage": "Hallitse tätä istuntoa",
             "mobile_session": "Mobiili-istunto",
             "n_sessions_selected": {
                 "one": "%(count)s istunto valittu",
@@ -2511,6 +2556,7 @@
             "verify_session": "Vahvista istunto",
             "web_session": "Web-istunto"
         },
+        "show_avatar_changes": "Näytä profiilikuvan muutokset",
         "show_breadcrumbs": "Näytä oikotiet viimeksi katsottuihin huoneisiin huoneluettelon yläpuolella",
         "show_chat_effects": "Näytä keskustelutehosteet (animaatiot, kun saat esim. konfettia)",
         "show_displayname_changes": "Näytä näyttönimien muutokset",
@@ -2757,6 +2803,7 @@
         "heading_without_query": "Etsittävät kohteet",
         "join_button_text": "Liity %(roomAddress)s",
         "keyboard_scroll_hint": "Käytä <arrows/> vierittääksesi",
+        "messages_label": "Viestit",
         "other_rooms_in_space": "Muut huoneet avaruudessa %(spaceName)s",
         "public_rooms_label": "Julkiset huoneet",
         "public_spaces_label": "Julkiset avaruudet",
@@ -2850,9 +2897,11 @@
             "historical_event_user_not_joined": "Sinulla ei ole pääsyä tähän viestiin",
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
+        "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "download_failed": "Lataus epäonnistui",
+        "download_failed_description": "Tiedostoa ladattaessa tapahtui virhe",
         "edits": {
             "tooltip_label": "Muokattu %(date)s. Napsauta nähdäksesi muokkaukset.",
             "tooltip_sub": "Napsauta nähdäksesi muokkaukset",
@@ -3274,6 +3323,9 @@
         "toast_title": "Päivitä %(brand)s",
         "unavailable": "Ei saatavilla"
     },
+    "update_room_access_modal": {
+        "title": "Salli vieraskäyttäjien liittyä tähän huoneeseen"
+    },
     "upload_failed_generic": "Tiedoston '%(fileName)s' lähettäminen ei onnistunut.",
     "upload_failed_size": "Tiedoston '%(fileName)s' koko ylittää tämän kotipalvelimen lähetettyjen tiedostojen ylärajan",
     "upload_failed_title": "Lähetys epäonnistui",
@@ -3283,6 +3335,7 @@
         "error_files_too_large": "Tiedostot ovat <b>liian isoja</b> lähetettäväksi. Tiedoston kokoraja on %(limit)s.",
         "error_some_files_too_large": "Osa tiedostoista on <b>liian isoja</b> lähetettäväksi. Tiedoston kokoraja on %(limit)s.",
         "error_title": "Lähetysvirhe",
+        "not_image": "Valitsemasi tiedosto ei ole kelvollinen kuvatiedosto.",
         "title": "Lähetä tiedostot",
         "title_progress": "Lähettää tiedostoa (%(current)s / %(total)s)",
         "upload_all_button": "Lähetä kaikki palvelimelle",

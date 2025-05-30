@@ -130,6 +130,11 @@ declare global {
     interface Electron {
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
+        initialise(): Promise<{
+            protocol: string;
+            sessionId: string;
+            config: IConfigOptions;
+        }>;
     }
 
     interface DesktopCapturerSource {

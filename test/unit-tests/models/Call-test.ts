@@ -34,7 +34,6 @@ import type { Mocked } from "jest-mock";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     type JitsiCallMemberContent,
-    Layout,
     Call,
     CallEvent,
     ConnectionState,
@@ -895,13 +894,6 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
-        it("fails to connect if the widget returns an error", async () => {
-            // we only send a JoinCall action if the widget is preloading
-            call.widget.data = { ...call.widget, preload: true };
-            mocked(messaging.transport).send.mockRejectedValue(new Error("never!!1! >:("));
-            await expect(call.start()).rejects.toBeDefined();
-        });
-
         it("fails to disconnect if the widget returns an error", async () => {
             await callConnectProcedure(call);
             mocked(messaging.transport).send.mockRejectedValue(new Error("never!!1! >:("));
@@ -948,33 +940,6 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
-        it("tracks layout", async () => {
-            await callConnectProcedure(call);
-            expect(call.layout).toBe(Layout.Tile);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.SpotlightLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(call.layout).toBe(Layout.Spotlight);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.TileLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(call.layout).toBe(Layout.Tile);
-        });
-
-        it("sets layout", async () => {
-            await callConnectProcedure(call);
-
-            await call.setLayout(Layout.Spotlight);
-            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.SpotlightLayout, {});
-
-            await call.setLayout(Layout.Tile);
-            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
-        });
-
         it("acknowledges mute_device widget action", async () => {
             await callConnectProcedure(call);
             const preventDefault = jest.fn();
@@ -1012,24 +977,6 @@ describe("ElementCall", () => {
             expect(onParticipants.mock.calls).toEqual([[new Map([[alice, new Set(["alices_device"])]]), new Map()]]);
 
             call.off(CallEvent.Participants, onParticipants);
-        });
-
-        it("emits events when layout changes", async () => {
-            await callConnectProcedure(call);
-            const onLayout = jest.fn();
-            call.on(CallEvent.Layout, onLayout);
-
-            messaging.emit(
-                `action:${ElementWidgetActions.SpotlightLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            messaging.emit(
-                `action:${ElementWidgetActions.TileLayout}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            expect(onLayout.mock.calls).toEqual([[Layout.Spotlight], [Layout.Tile]]);
-
-            call.off(CallEvent.Layout, onLayout);
         });
 
         it("ends the call immediately if the session ended", async () => {
