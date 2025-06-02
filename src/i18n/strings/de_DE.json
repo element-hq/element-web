@@ -911,9 +911,11 @@
     "empty_room_was_name": "Leerer Raum (war %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Wenn Sie einen Sicherheitsschlüssel oder eine Sicherheitsphrase haben, funktioniert das auch.",
             "key_validation_text": {
-                "wrong_security_key": "Falscher Wiederherstellungsschlüssel"
+                "wrong_security_key": "Der eingegebene Wiederherstellungsschlüssel ist nicht korrekt."
             },
+            "privacy_warning": "Stellen Sie sicher, dass niemand diesen Bildschirm sehen kann!",
             "restoring": "Schlüssel aus der Sicherung wiederherstellen",
             "security_key_title": "Wiederherstellungsschlüssel"
         },
