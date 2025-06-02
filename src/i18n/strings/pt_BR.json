@@ -1589,7 +1589,7 @@
         "MapStyleUrlNotConfigured": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​para​•​exibir​•​mapas.",
         "MapStyleUrlNotReachable": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​corretamente​•​para​•​exibir​•​mapas,​•​ou​•​o​•​servidor​•​de​•​mapas​•​configurado​•​pode​•​estar​•​inacessível.",
         "WebGLNotEnabled": "O​•​WebGL​•​é​•​necessário​•​para​•​exibir​•​mapas,​•​ative-o​•​nas​•​configurações​•​do​•​seu​•​navegador.",
-        "click_drop_pin": "Clique​•​para​•​soltar​•​um​•​alfinete",
+        "click_drop_pin": "Clique para soltar um alfinete",
         "click_move_pin": "Clique​•​para​•​mover​•​o​•​alfinete",
         "close_sidebar": "Fechar​•​barra​•​lateral",
         "error_fetch_location": "Não​•​foi​•​possível​•​obter​•​a​•​localização",
