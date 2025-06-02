@@ -258,7 +258,6 @@ test.describe("Room list", () => {
         test("should be a low priority room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "low priority room", visibility: "public" });
-            await page.getByRole("button", { name: "User menu" }).focus();
             const roomListView = getRoomList(page);
             const publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
 
