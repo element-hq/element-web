@@ -32,6 +32,7 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
+import { InviteControlsPanel } from "../../InviteControlsPanel";
 
 interface IIgnoredUserProps {
     userId: string;
@@ -362,6 +363,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {eventIndex}
                 </SettingsSection>
                 <SettingsSection heading={_t("common|privacy")}>
+                    <InviteControlsPanel />
                     <DiscoverySettings />
                     {posthogSection}
                 </SettingsSection>

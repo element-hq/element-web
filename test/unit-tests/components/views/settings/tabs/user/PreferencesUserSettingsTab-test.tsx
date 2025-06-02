@@ -18,20 +18,14 @@ import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import PlatformPeg from "../../../../../../../src/PlatformPeg";
 import { type SettingKey } from "../../../../../../../src/settings/Settings.tsx";
-import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext.tsx";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
-        stubClient();
         mockPlatformPeg();
     });
 
     const renderTab = (): RenderResult => {
-        return render(
-            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                <PreferencesUserSettingsTab closeSettingsFn={() => {}} />
-            </MatrixClientContext.Provider>,
-        );
+        return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
     };
 
     it("should render", () => {
@@ -104,6 +98,7 @@ describe("PreferencesUserSettingsTab", () => {
 
     describe("send read receipts", () => {
         beforeEach(() => {
+            stubClient();
             jest.spyOn(SettingsStore, "setValue");
             jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
         });
