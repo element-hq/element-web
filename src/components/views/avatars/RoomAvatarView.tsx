@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import VideoIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import ArrowDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-down";
 import OnlineOrUnavailableIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-solid-8x8";
 import OfflineIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-outline-8x8";
 import BusyIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-strikethrough-8x8";
@@ -35,39 +36,54 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     // No decoration, we just show the avatar
     if (!vm.hasDecoration) return <RoomAvatar size="32px" room={room} />;
 
+    let icon: React.ReactNode;
+    if (vm.isLowPriority) {
+        icon = (
+            <ArrowDownIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|room_is_low_priority")}
+            />
+        );
+    } else if (vm.isVideoRoom) {
+        icon = (
+            <VideoIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|video_room")}
+            />
+        );
+    } else if (vm.isPublic) {
+        icon = (
+            <PublicIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|header|room_is_public")}
+            />
+        );
+    } else if (vm.presence) {
+        icon = <PresenceDecoration presence={vm.presence} />;
+    }
+
     return (
         <div className="mx_RoomAvatarView">
             <RoomAvatar
                 className={classNames("mx_RoomAvatarView_RoomAvatar", {
                     // Presence indicator and video/public icons don't have the same size
                     // We use different masks
-                    mx_RoomAvatarView_RoomAvatar_icon: vm.isVideoRoom || vm.isPublic,
+                    mx_RoomAvatarView_RoomAvatar_icon: vm.isVideoRoom || vm.isPublic || vm.isLowPriority,
                     mx_RoomAvatarView_RoomAvatar_presence: Boolean(vm.presence),
                 })}
                 size="32px"
                 room={room}
             />
-
-            {/* If the room is a public video room, we prefer to display only the video icon */}
-            {vm.isPublic && !vm.isVideoRoom && (
-                <PublicIcon
-                    width="16px"
-                    height="16px"
-                    className="mx_RoomAvatarView_icon"
-                    color="var(--cpd-color-icon-tertiary)"
-                    aria-label={_t("room|header|room_is_public")}
-                />
-            )}
-            {vm.isVideoRoom && (
-                <VideoIcon
-                    width="16px"
-                    height="16px"
-                    className="mx_RoomAvatarView_icon"
-                    color="var(--cpd-color-icon-tertiary)"
-                    aria-label={_t("room|video_room")}
-                />
-            )}
-            {vm.presence && <PresenceDecoration presence={vm.presence} />}
+            {icon}
         </div>
     );
 }

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
+import { DefaultTagID } from "../../../stores/room-list/models";
 
 export interface RoomAvatarViewState {
     /**
@@ -30,6 +31,10 @@ export interface RoomAvatarViewState {
      * If null, the user is not in a DM room or presence is not enabled.
      */
     presence: Presence | null;
+    /**
+     * Whether this room is tagged as low priority.
+     */
+    isLowPriority: boolean;
 }
 
 /**
@@ -41,10 +46,11 @@ export function useRoomAvatarViewModel(room: Room): RoomAvatarViewState {
     const roomMember = useDmMember(room);
     const presence = usePresence(room, roomMember);
     const isPublic = useIsPublic(room);
+    const isLowPriority = !!room.tags[DefaultTagID.LowPriority];
 
-    const hasDecoration = isPublic || isVideoRoom || presence !== null;
+    const hasDecoration = isPublic || isVideoRoom || isLowPriority || presence !== null;
 
-    return { hasDecoration, isPublic, isVideoRoom, presence };
+    return { hasDecoration, isPublic, isVideoRoom, isLowPriority, presence };
 }
 
 /**
