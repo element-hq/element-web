@@ -12,6 +12,7 @@ import { useRoomAvatarViewModel } from "../../../../../src/components/viewmodels
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import * as PresenceIndicatorModule from "../../../../../src/components/views/avatars/WithPresenceIndicator";
+import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 
 jest.mock("../../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
     getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([]),
@@ -32,19 +33,26 @@ describe("RoomAvatarViewModel", () => {
         jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
     });
 
-    it("should has hasDecoration to false", async () => {
+    it("should have hasDecoration to false", async () => {
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.hasDecoration).toBe(false);
     });
 
-    it("should has isVideoRoom set to true", () => {
+    it("should have isLowPriority set to true", () => {
+        room.tags[DefaultTagID.LowPriority] = {};
+        const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
+        expect(vm.current.isLowPriority).toBe(true);
+        expect(vm.current.hasDecoration).toBe(true);
+    });
+
+    it("should have isVideoRoom set to true", () => {
         jest.spyOn(room, "isCallRoom").mockReturnValue(true);
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.isVideoRoom).toBe(true);
         expect(vm.current.hasDecoration).toBe(true);
     });
 
-    it("should has isPublic set to true", () => {
+    it("should have isPublic set to true", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
 
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
