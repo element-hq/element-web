@@ -2120,6 +2120,7 @@
         "filters": {
             "favourite": "Favourites",
             "invites": "Invites",
+            "low_priority": "Low priority",
             "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
