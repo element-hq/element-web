@@ -85,15 +85,9 @@ export enum ConnectionState {
 export const isConnected = (state: ConnectionState): boolean =>
     state === ConnectionState.Connected || state === ConnectionState.Disconnecting;
 
-export enum Layout {
-    Tile = "tile",
-    Spotlight = "spotlight",
-}
-
 export enum CallEvent {
     ConnectionState = "connection_state",
     Participants = "participants",
-    Layout = "layout",
     Close = "close",
     Destroy = "destroy",
 }
@@ -104,7 +98,6 @@ interface CallEventHandlerMap {
         participants: Map<RoomMember, Set<string>>,
         prevParticipants: Map<RoomMember, Set<string>>,
     ) => void;
-    [CallEvent.Layout]: (layout: Layout) => void;
     [CallEvent.Close]: () => void;
     [CallEvent.Destroy]: () => void;
 }
@@ -658,14 +651,6 @@ export class ElementCall extends Call {
 
     private settingsStoreCallEncryptionWatcher?: string;
     private terminationTimer?: number;
-    private _layout = Layout.Tile;
-    public get layout(): Layout {
-        return this._layout;
-    }
-    protected set layout(value: Layout) {
-        this._layout = value;
-        this.emit(CallEvent.Layout, value);
-    }
 
     public get presented(): boolean {
         return super.presented;
@@ -686,7 +671,6 @@ export class ElementCall extends Call {
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
             // Template variables are used, so that this can be configured using the widget data.
-            preload: "$preload", // We want it to load in the background.
             skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
             returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
@@ -756,17 +740,13 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false, preload = false
+    // Defaults for creating a new widget are: skipLobby = false
     // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby, preload).
-    //
-    // `preload` is deprecated. We used it for optimizing EC by using a custom EW call lobby and preloading the iframe.
-    // now it should always be false.
+    // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
         roomId: string,
         client: MatrixClient,
         skipLobby: boolean | undefined,
-        preload: boolean | undefined,
         returnToLobby: boolean | undefined,
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
@@ -776,9 +756,6 @@ export class ElementCall extends Call {
             const overwrites: IWidgetData = {};
             if (skipLobby !== undefined) {
                 overwrites.skipLobby = skipLobby;
-            }
-            if (preload !== undefined) {
-                overwrites.preload = preload;
             }
             if (returnToLobby !== undefined) {
                 overwrites.returnToLobby = returnToLobby;
@@ -804,7 +781,6 @@ export class ElementCall extends Call {
                     {},
                     {
                         skipLobby: skipLobby ?? false,
-                        preload: preload ?? false,
                         returnToLobby: returnToLobby ?? false,
                     },
                 ),
@@ -870,7 +846,6 @@ export class ElementCall extends Call {
                 room.roomId,
                 room.client,
                 undefined,
-                undefined,
                 isVideoRoom(room),
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
@@ -880,7 +855,7 @@ export class ElementCall extends Call {
     }
 
     public static create(room: Room, skipLobby = false): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, false, isVideoRoom(room));
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
     }
 
     protected async sendCallNotify(): Promise<void> {
@@ -912,19 +887,6 @@ export class ElementCall extends Call {
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
     ): Promise<void> {
-        // The JoinCall action is only send if the widget is waiting for it.
-        if (this.widget.data?.preload) {
-            try {
-                await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-                    audioInput: audioInput?.label ?? null,
-                    videoInput: videoInput?.label ?? null,
-                });
-            } catch (e) {
-                throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
-            }
-        }
-        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.once(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
@@ -968,8 +930,6 @@ export class ElementCall extends Call {
     }
 
     public setDisconnected(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         super.setDisconnected();
@@ -993,15 +953,6 @@ export class ElementCall extends Call {
         // user isn't looking at it (for example, waiting in an empty lobby)
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
-
-    /**
-     * Sets the call's layout.
-     * @param layout The layout to switch to.
-     */
-    public async setLayout(layout: Layout): Promise<void> {
-        const action = layout === Layout.Tile ? ElementWidgetActions.TileLayout : ElementWidgetActions.SpotlightLayout;
-        await this.messaging!.transport.send(action, {});
-    }
 
     private readonly onMembershipChanged = (): void => this.updateParticipants();
 
@@ -1044,18 +995,6 @@ export class ElementCall extends Call {
         this.messaging!.transport.reply(ev.detail, {}); // ack
         // User is done with the call; tell the UI to close it
         this.close();
-    };
-
-    private readonly onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Tile;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-    };
-
-    private readonly onSpotlightLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Spotlight;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
     public clean(): Promise<void> {

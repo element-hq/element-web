@@ -911,22 +911,13 @@
     "empty_room_was_name": "Tühi jututuba (varasema nimega %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma taastevõtit</button>.",
+            "alternatives": "Kui sul on turvavõti või turvafraas, siis need toimivad ka.",
             "key_validation_text": {
-                "invalid_security_key": "Vigane taastevõti",
-                "recovery_key_is_correct": "Tundub õige!",
-                "wrong_file_type": "Vale failitüüp",
-                "wrong_security_key": "Vale taastevõti"
+                "wrong_security_key": "Sinu sisestatud taastevõti pole korrektne."
             },
-            "reset_title": "Alusta kõigega algusest",
-            "reset_warning_1": "Toimi nii vaid siis, kui sul pole jäänud ühtegi seadet, millega verifitseerimist lõpuni teha.",
-            "reset_warning_2": "Kui sa kõik krüptoseosed lähtestad, siis sul esimese hooga pole ühtegi usaldusväärseks tunnistatud sessiooni ega kasutajat ning ilmselt ei saa sa lugeda vanu sõnumeid.",
+            "privacy_warning": "Palun vaata, et keegi teine ei näeks seda ekraanivaadet!",
             "restoring": "Taastan võtmed varundusest",
-            "security_key_title": "Taastevõti",
-            "security_phrase_incorrect_error": "Ei õnnestu saada ligipääsu turvahoidlale. Palun kontrolli, et sa oleksid sisestanud õige turvafraasi.",
-            "security_phrase_title": "Turvafraas",
-            "separator": "%(securityKey)s või %(recoveryFile)s",
-            "use_security_key_prompt": "Jätkamiseks kasuta oma taastevõtit."
+            "security_key_title": "Taastevõti"
         },
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "cancel_entering_passphrase_description": "Kas oled kindel et sa soovid katkestada paroolifraasi sisestamise?",

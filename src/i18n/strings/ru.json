@@ -871,22 +871,11 @@
     "empty_room_was_name": "Пустая комната (без %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Введите секретную фразу или <button> используйте ключ восстановления</button>, чтобы продолжить.",
             "key_validation_text": {
-                "invalid_security_key": "Неверный ключ восстановления",
-                "recovery_key_is_correct": "Выглядит неплохо!",
-                "wrong_file_type": "Неправильный тип файла",
                 "wrong_security_key": "Неправильный ключ восстановления"
             },
-            "reset_title": "Сбросить всё",
-            "reset_warning_1": "Делайте это только в том случае, если у вас нет другого устройства для завершения проверки.",
-            "reset_warning_2": "Если вы сбросите все настройки, вы перезагрузитесь без доверенных сеансов, без доверенных пользователей, и скорее всего не сможете просматривать прошлые сообщения.",
             "restoring": "Восстановление ключей из резервной копии",
-            "security_key_title": "Ключ восстановления",
-            "security_phrase_incorrect_error": "Невозможно получить доступ к секретному хранилищу. Убедитесь, что вы ввели правильную секретную фразу.",
-            "security_phrase_title": "Мнемоническая фраза",
-            "separator": "%(securityKey)s или %(recoveryFile)s",
-            "use_security_key_prompt": "Используйте ключ восстановления, чтобы продолжить."
+            "security_key_title": "Ключ восстановления"
         },
         "bootstrap_title": "Настройка ключей",
         "cancel_entering_passphrase_description": "Вы уверены, что хотите отменить ввод кодовой фразы?",

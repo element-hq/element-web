@@ -178,7 +178,10 @@ export default function RoomHeader({
                                 aria-label={label}
                                 children={children}
                                 className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => videoCallClick(ev, option)}
+                                onClick={(ev) => {
+                                    setMenuOpen(false);
+                                    videoCallClick(ev, option);
+                                }}
                                 Icon={VideoCallIcon}
                                 onSelect={() => {} /* Dummy handler since we want the click event.*/}
                             />

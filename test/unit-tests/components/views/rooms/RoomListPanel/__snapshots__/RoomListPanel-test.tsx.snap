@@ -175,6 +175,19 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           Favourites
         </button>
       </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Low priority
+        </button>
+      </li>
     </ul>
     <div
       class="mx_RoomListSkeleton"
@@ -422,6 +435,19 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
           tabindex="0"
         >
           Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Low priority
         </button>
       </li>
     </ul>

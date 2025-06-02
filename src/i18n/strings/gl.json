@@ -669,22 +669,11 @@
     "empty_room_was_name": "Sala baleira (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de Seguridade non válida",
-                "recovery_key_is_correct": "Pinta ben!",
-                "wrong_file_type": "Tipo de ficheiro erróneo",
                 "wrong_security_key": "Chave de Seguridade incorrecta"
             },
-            "reset_title": "Restablecer todo",
-            "reset_warning_1": "Fai isto únicamente se non tes outro dispositivo co que completar a verificación.",
-            "reset_warning_2": "Se restableces todo, volverás a comezar sen sesións verificadas, usuarias de confianza, e poderías non poder ver as mensaxes anteriores.",
             "restoring": "Restablecendo chaves desde a copia",
-            "security_key_title": "Chave de Seguridade",
-            "security_phrase_incorrect_error": "Non se puido acceder ao almacenaxe segredo. Comproba que escribiches correctamente a Frase de Seguridade.",
-            "security_phrase_title": "Frase de seguridade",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Usa a túa Chave de Seguridade para continuar."
+            "security_key_title": "Chave de Seguridade"
         },
         "bootstrap_title": "Configurando as chaves",
         "cancel_entering_passphrase_description": "¿Estás seguro de que non queres escribir a frase de paso?",

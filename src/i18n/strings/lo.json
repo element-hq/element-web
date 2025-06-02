@@ -661,21 +661,11 @@
     "empty_room": "ຫ້ອງຫວ່າງ",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "ກະລຸນາໃສ່ປະໂຫຍກຄວາມປອດໄພຂອງທ່ານ ຫຼື <button>ໃຊ້ກະແຈຄວາມປອດໄພຂອງທ່ານ</button> ເພື່ອສືບຕໍ່.",
             "key_validation_text": {
-                "invalid_security_key": "ກະແຈຄວາມປອດໄພບໍ່ຖືກຕ້ອງ",
-                "recovery_key_is_correct": "ດີ!",
-                "wrong_file_type": "ປະເພດໄຟລ໌ບໍ່ຖຶກຕ້ອງ",
                 "wrong_security_key": "ກະແຈຄວາມປອດໄພບໍ່ຖຶກຕ້ອງ"
             },
-            "reset_title": "ຕັ້ງຄ່າໃໝ່ທຸກຢ່າງ",
-            "reset_warning_1": "ເຮັດແນວນີ້ກໍ່ຕໍ່ເມື່ອທ່ານບໍ່ມີອຸປະກອນອື່ນເພື່ອການຢັ້ງຢືນດ້ວຍ.",
-            "reset_warning_2": "ຖ້າທ່ານຕັ້ງຄ່າຄືນໃໝ່ທຸກຢ່າງ, ທ່ານຈະຣີສະຕາດໂດຍບໍ່ມີລະບົບທີ່ເຊື່ອຖືໄດ້, ບໍ່ມີຜູ້ໃຊ້ທີ່ເຊື່ອຖືໄດ້ ແລະ ອາດຈະບໍ່ເຫັນຂໍ້ຄວາມທີ່ຜ່ານມາ.",
             "restoring": "ການຟື້ນຟູລະຫັດຈາກການສໍາຮອງຂໍ້ມູນ",
-            "security_key_title": "ກະແຈຄວາມປອດໄພ",
-            "security_phrase_incorrect_error": "ບໍ່ສາມາດເຂົ້າເຖິງບ່ອນເກັບຂໍ້ມູນລັບໄດ້. ກະລຸນາກວດສອບວ່າທ່ານໃສ່ປະໂຫຍກຄວາມປອດໄພທີ່ຖືກຕ້ອງ.",
-            "security_phrase_title": "ປະໂຫຍກລະຫັດຄວາມປອດໄພ",
-            "use_security_key_prompt": "ໃຊ້ກະແຈຄວາມປອດໄພຂອງທ່ານເພື່ອສືບຕໍ່."
+            "security_key_title": "ກະແຈຄວາມປອດໄພ"
         },
         "bootstrap_title": "ການຕັ້ງຄ່າກະແຈ",
         "cancel_entering_passphrase_description": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຍົກເລີກການໃສ່ປະໂຫຍກລະຫັດຜ່ານ?",

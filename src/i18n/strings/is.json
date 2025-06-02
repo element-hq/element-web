@@ -673,17 +673,10 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Ógildur öryggislykill",
-                "recovery_key_is_correct": "Lítur vel út!",
-                "wrong_file_type": "Röng skráartegund",
                 "wrong_security_key": "Rangur öryggislykill"
             },
-            "reset_title": "Frumstilla allt",
             "restoring": "Endurheimti lykla úr öryggisafriti",
-            "security_key_title": "Öryggislykill",
-            "security_phrase_title": "Öryggisfrasi",
-            "separator": "%(securityKey)s eða %(recoveryFile)s",
-            "use_security_key_prompt": "Notaðu öryggislykilinn þinn til að halda áfram."
+            "security_key_title": "Öryggislykill"
         },
         "bootstrap_title": "Set upp dulritunarlykla",
         "cancel_entering_passphrase_description": "Viltu örugglega hætta við að setja inn lykilfrasa?",

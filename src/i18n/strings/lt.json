@@ -499,19 +499,10 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Klaidingas Saugumo Raktas",
-                "recovery_key_is_correct": "Atrodo gerai!",
-                "wrong_file_type": "Netinkamas failo tipas",
                 "wrong_security_key": "Netinkamas Saugumo Raktas"
             },
-            "reset_title": "Iš naujo nustatyti viską",
-            "reset_warning_1": "Taip darykite tik tuo atveju, jei neturite kito prietaiso, kuriuo galėtumėte užbaigti patikrinimą.",
-            "reset_warning_2": "Jei viską nustatysite iš naujo, paleisite iš naujo be patikimų seansų, be patikimų vartotojų ir galbūt negalėsite matyti ankstesnių žinučių.",
             "restoring": "Raktų atkūrimas iš atsarginės kopijos",
-            "security_key_title": "Saugumo Raktas",
-            "security_phrase_incorrect_error": "Nepavyksta pasiekti slaptosios saugyklos. Prašome patvirtinti kad teisingai įvedėte Saugumo Frazę.",
-            "security_phrase_title": "Slaptafrazė",
-            "use_security_key_prompt": "Naudokite Saugumo Raktą kad tęsti."
+            "security_key_title": "Saugumo Raktas"
         },
         "bootstrap_title": "Raktų nustatymas",
         "cancel_entering_passphrase_description": "Ar tikrai norite atšaukti slaptafrazės įvedimą?",
