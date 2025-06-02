@@ -62,12 +62,12 @@ declare module "matrix-js-sdk/src/types" {
     }
 
     export interface InviteConfigAccountData {
-        allowed_users: string[];
-        blocked_users: string[];
-        ignored_users: string[];
-        allowed_servers: string[];
-        blocked_servers: string[];
-        ignored_servers: string[];
+        allowed_users?: string[];
+        blocked_users?: string[];
+        ignored_users?: string[];
+        allowed_servers?: string[];
+        blocked_servers?: string[];
+        ignored_servers?: string[];
     }
 
     export interface AccountDataEvents {

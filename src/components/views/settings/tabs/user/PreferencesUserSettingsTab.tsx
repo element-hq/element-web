@@ -338,8 +338,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
-                        <InviteControlsPanel />
                     </SettingsSubsection>
+
+                    <InviteControlsPanel />
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}

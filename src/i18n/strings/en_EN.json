@@ -2693,7 +2693,8 @@
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms",
             "error_message": "An error occured while trying to change this setting",
-            "title": "Invite controls"
+            "title": "Invite controls",
+            "not_supported": "Your server does not implement this feature."
         },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
