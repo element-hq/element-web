@@ -1,9 +1,10 @@
-import { AccountDataEvents } from "matrix-js-sdk/src/types";
+import { type AccountDataEvents } from "matrix-js-sdk/src/types";
 import { useState, useMemo, useCallback } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface InviteControlsViewModel {
     isSupported: boolean | undefined;
