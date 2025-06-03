@@ -28,6 +28,11 @@ test.describe("Custom Component Module", () => {
         await app.client.sendMessage(room.roomId, "Simple message");
         await expect(await page.getByText("Simple message")).toMatchScreenshot("custom-component-tile.png");
     });
+    test("should fall through if one module does not render a component", { tag: "@screenshot" }, async ({ page, room, app }) => {
+        await app.viewRoomById(room.roomId);
+        await app.client.sendMessage(room.roomId, "Fall through here");
+        await expect(await page.getByText("Fall through here")).toMatchScreenshot("custom-component-tile-fall-through.png");
+    });
     test(
         "should render the original content of a textual event conditionally",
         { tag: "@screenshot" },
