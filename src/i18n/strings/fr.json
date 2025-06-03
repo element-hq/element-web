@@ -1733,9 +1733,9 @@
         },
         "total_no_votes": "Aucun vote exprimé",
         "total_not_ended": "Les résultats seront visibles lorsque le sondage sera terminé",
-        "type_closed": "Sondage terminé",
+        "type_closed": "Réponses révélées à la clôture",
         "type_heading": "Type de sondage",
-        "type_open": "Ouvrir le sondage",
+        "type_open": "Réponses visibles immédiatement",
         "unable_edit_description": "Désolé, vous ne pouvez pas modifier un sondage après que les votes aient été exprimés.",
         "unable_edit_title": "Impossible de modifier le sondage"
     },
