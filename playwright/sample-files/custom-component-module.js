@@ -13,8 +13,7 @@ export default class CustomComponentModule {
             const body = props.mxEvent.getContent().body;
             if (body === "Do not replace me") {
                 return originalComponent();
-            }
-            else if (body === "Fall through here"){
+            } else if (body === "Fall through here") {
                 return null;
             }
             return `Custom text for ${body}`;
