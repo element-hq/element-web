@@ -250,8 +250,8 @@ export default abstract class Exporter {
         return [fileName, "." + ext];
     }
 
-    protected makeUniqueFilePath(details: FileDetails) {
-        const makePath = ({ directory, name, date, extension, count = 0 }: FileDetails) =>
+    protected makeUniqueFilePath(details: FileDetails): string {
+        const makePath = ({ directory, name, date, extension, count = 0 }: FileDetails): string =>
             `${directory}/${name}-${date}${count > 0 ? ` (${count})` : ""}${extension}`;
         const defaultPath = makePath(details);
         const count = this.fileNames.get(defaultPath) || 0;
