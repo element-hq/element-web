@@ -5,42 +5,41 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type CustomComponentTarget,
-    type CustomComponentsApi as ICustomComponentsApi,
-    type CustomComponentProps,
-    type CustomComponentRenderFunction,
+import type {
+    CustomComponentsApi as ICustomComponentsApi,
+    CustomMessageRenderFunction,
+    CustomMessageComponentProps,
 } from "@element-hq/element-web-module-api";
-
 import type React from "react";
 
 export class CustomComponentsApi implements ICustomComponentsApi {
-    private registeredRenderers = new Map<
-        CustomComponentTarget,
-        CustomComponentRenderFunction<CustomComponentTarget>[]
-    >();
+    private readonly registeredMessageRenderers: {
+        eventType: string | RegExp;
+        renderer: CustomMessageRenderFunction;
+    }[] = [];
 
-    public register<T extends CustomComponentTarget>(target: T, renderer: CustomComponentRenderFunction<T>): void {
-        const renderSet = this.registeredRenderers.get(target);
-        if (renderSet) {
-            // This type is safe, registeredRenderers maps T => CustomComponentRenderFunction<T>
-            renderSet.push(renderer as CustomComponentRenderFunction<CustomComponentTarget>);
-        } else {
-            this.registeredRenderers.set(target, [renderer as CustomComponentRenderFunction<CustomComponentTarget>]);
-        }
+    public registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void {
+        this.registeredMessageRenderers.push({ eventType, renderer });
     }
 
-    public render<T extends CustomComponentTarget>(
-        target: T,
-        props: CustomComponentProps[T],
-        originalComponent: () => React.JSX.Element,
-    ): React.JSX.Element {
-        for (const renderer of this.registeredRenderers.get(target) ?? []) {
-            const component = renderer(props, originalComponent);
+    /**
+     * Render the component for a message event.
+     * @param props Props to be passed to the custom renderer.
+     * @param originalComponent Function that will be rendered if no custom renderers are present, or as a child of a custom component.
+     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     */
+    public renderMessage(
+        props: CustomMessageComponentProps,
+        originalComponent?: () => React.JSX.Element,
+    ): React.JSX.Element | null {
+        for (const renderer of this.registeredMessageRenderers.filter((e) =>
+            props.mxEvent.getType().match(e.eventType),
+        ) ?? []) {
+            const component = renderer.renderer(props, originalComponent);
             if (component) {
                 return component;
             }
         }
-        return originalComponent();
+        return originalComponent?.() || null;
     }
 }

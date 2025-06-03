@@ -1,5 +1,5 @@
 /*
-Copyright 2024-2025 New Vector Ltd.
+Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { CustomComponentTarget } from "@element-hq/element-web-module-api";
 
 import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
@@ -30,7 +29,7 @@ import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
-import ModuleApi from "../../../modules/Api.ts";
+
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
     links: string[];
@@ -312,7 +311,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />
             );
         }
-
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
         const isNotice = content.msgtype === MsgType.Notice;
@@ -373,60 +371,51 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        return ModuleApi.customComponents.render(
-            CustomComponentTarget.TextualBody,
-            {
-                mxEvent,
-                highlights: this.props.highlights,
-                showUrlPreview: this.props.showUrlPreview,
-                forExport: this.props.forExport,
-            },
-            () => {
-                let widgets;
-                if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-                    widgets = (
-                        <LinkPreviewGroup
-                            links={this.state.links}
-                            mxEvent={this.props.mxEvent}
-                            onCancelClick={this.onCancelClick}
-                        />
-                    );
-                }
-                if (isEmote) {
-                    return (
-                        <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
-                            *&nbsp;
-                            <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
-                                {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
-                            </span>
-                            &nbsp;
-                            {body}
-                            {widgets}
-                        </div>
-                    );
-                } else if (isNotice) {
-                    return (
-                        <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
-                            {body}
-                            {widgets}
-                        </div>
-                    );
-                } else if (isCaption) {
-                    return (
-                        <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
-                            {body}
-                            {widgets}
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
-                            {body}
-                            {widgets}
-                        </div>
-                    );
-                }
-            },
+        let widgets;
+        if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
+            widgets = (
+                <LinkPreviewGroup
+                    links={this.state.links}
+                    mxEvent={this.props.mxEvent}
+                    onCancelClick={this.onCancelClick}
+                />
+            );
+        }
+
+        if (isEmote) {
+            return (
+                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
+                    *&nbsp;
+                    <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
+                        {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
+                    </span>
+                    &nbsp;
+                    {body}
+                    {widgets}
+                </div>
+            );
+        }
+        if (isNotice) {
+            return (
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                    {body}
+                    {widgets}
+                </div>
+            );
+        }
+        if (isCaption) {
+            return (
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
+                    {body}
+                    {widgets}
+                </div>
+            );
+        }
+        return (
+            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                {body}
+                {widgets}
+            </div>
         );
     }
 }
