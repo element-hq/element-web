@@ -7,11 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
 
-/*
- * Please note: This page is also used at mobile.element.io and as such, any
- * changes should be reflected there too in order to maintain consistency.
- */
-
 html {
     min-height: 100%;
     position: relative;

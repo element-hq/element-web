@@ -74,10 +74,15 @@ export function updateMobilePage(metadata: MobileAppMetadata, deepLinkUrl: strin
         document.getElementById("f_droid_section")!.style.display = "none";
     }
 
-    (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
-    document.getElementById("step1_heading")!.innerHTML = `Download ${metadata.name}`;
-    document.getElementById("step2_container")!.style.display = "block";
-    if (metadata.isProApp) {
-        document.getElementById("step2_description")!.innerHTML = "Use your work email to join";
+    const step1Heading = document.getElementById("step1_heading")!;
+    step1Heading.innerHTML = step1Heading!.innerHTML.replace("Element", metadata.name);
+
+    // Step 2 is only shown on the mobile guide, not on mobile.element.io
+    if (document.getElementById("step2_container")) {
+        document.getElementById("step2_container")!.style.display = "block";
+        if (metadata.isProApp) {
+            document.getElementById("step2_description")!.innerHTML = "Use your work email to join";
+        }
+        (document.getElementById("deep_link_button") as HTMLAnchorElement).href = deepLinkUrl;
     }
 }
