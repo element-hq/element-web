@@ -33,7 +33,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         const userId = `alice_${testInfo.testId}`;
-        await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, userId, `${userId}@email.com`, "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
@@ -83,7 +83,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "Continue" }).click();
 
             const userId = `alice_${testInfo.testId}`;
-            await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
+            await registerAccountMas(page, mailpitClient, userId, `${userId}@email.com`, "Pa$sW0rD!");
 
             await expect(page.getByText("Welcome")).toBeVisible();
             await page.goto("about:blank");
