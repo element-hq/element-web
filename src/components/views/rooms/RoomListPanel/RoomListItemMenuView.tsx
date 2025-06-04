@@ -109,12 +109,12 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 onSelect={vm.toggleFavorite}
                 onClick={(evt) => evt.stopPropagation()}
             />
-            <MenuItem
+            <ToggleMenuItem
+                checked={vm.isLowPriority}
                 Icon={ArrowDownIcon}
                 label={_t("room_list|more_options|low_priority")}
                 onSelect={vm.toggleLowPriority}
                 onClick={(evt) => evt.stopPropagation()}
-                hideChevron={true}
             />
             {vm.canInvite && (
                 <MenuItem
