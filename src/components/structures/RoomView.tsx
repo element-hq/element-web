@@ -1783,6 +1783,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
         try {
+            this.setState({
+                rejecting: true,
+            });
             await this.context.client.leave(this.state.room.roomId);
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
