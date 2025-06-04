@@ -1115,7 +1115,9 @@ export async function onLoggedOut(): Promise<void> {
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+    logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
+
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
         const language = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);

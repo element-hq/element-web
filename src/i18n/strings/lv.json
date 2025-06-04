@@ -833,22 +833,11 @@
     "empty_room_was_name": "Tukša istaba (bija %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ievadiet savu drošības frāzi vai <button>izmantojiet savu drošības atslēgu</button>, lai turpinātu.",
             "key_validation_text": {
-                "invalid_security_key": "Kļūdaina drošības atslēga",
-                "recovery_key_is_correct": "Izskatās labi!",
-                "wrong_file_type": "Nepareizs datnes veids",
                 "wrong_security_key": "Nepareiza drošības atslēga"
             },
-            "reset_title": "Atiestatīt visu",
-            "reset_warning_1": "Dariet to tikai tad, ja jums nav citas ierīces, ar kuru pabeigt verifikāciju.",
-            "reset_warning_2": "Ja viss tiks attiestatīts, tiks atkal uzsākts bez uzticamām sesijām un lietotājiem un varētu nebūt iespējams redzēt iepriekšējās ziņas.",
             "restoring": "Atslēgu atjaunošana no rezerves kopijas",
-            "security_key_title": "Drošības atslēga",
-            "security_phrase_incorrect_error": "Nebija iespējams piekļūt slepenajai krātuvei. Lūgums pārliecināties, ka ir ievadīta pareiza drošības vārdkopa.",
-            "security_phrase_title": "Slepenā frāze",
-            "separator": "%(securityKey)s vai %(recoveryFile)s",
-            "use_security_key_prompt": "Izmantojiet savu drošības atslēgu, lai turpinātu."
+            "security_key_title": "Drošības atslēga"
         },
         "bootstrap_title": "Atslēgu iestatīšana",
         "cancel_entering_passphrase_description": "Vai tiešām atcelt paroles vārdkopas ievadīšanu?",

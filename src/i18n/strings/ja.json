@@ -753,22 +753,11 @@
     "empty_room_was_name": "空のルーム（以前の名前は%(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "続行するにはセキュリティーフレーズを入力するか、<button>セキュリティーキーを使用</button>してください。",
             "key_validation_text": {
-                "invalid_security_key": "セキュリティーキーが正しくありません",
-                "recovery_key_is_correct": "問題ありません！",
-                "wrong_file_type": "正しくないファイルの種類",
                 "wrong_security_key": "正しくないセキュリティーキー"
             },
-            "reset_title": "全てリセット",
-            "reset_warning_1": "認証を行える端末がない場合のみ行ってください。",
-            "reset_warning_2": "全てをリセットすると、履歴とメッセージが消去され、信頼済の端末、信頼済のユーザーが取り消されます。また、過去のメッセージを表示できなくなる可能性があります。",
             "restoring": "バックアップから鍵を復元",
-            "security_key_title": "セキュリティーキー",
-            "security_phrase_incorrect_error": "機密ストレージにアクセスできません。正しいセキュリティーフレーズを入力したことを確認してください。",
-            "security_phrase_title": "セキュリティーフレーズ",
-            "separator": "%(securityKey)sまたは%(recoveryFile)s",
-            "use_security_key_prompt": "続行するにはセキュリティーキーを使用してください。"
+            "security_key_title": "セキュリティーキー"
         },
         "bootstrap_title": "鍵のセットアップ",
         "cancel_entering_passphrase_description": "パスフレーズの入力をキャンセルしてよろしいですか？",

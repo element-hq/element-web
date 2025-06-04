@@ -161,6 +161,7 @@
         "view_message": "Zobraziť správu",
         "view_source": "Zobraziť zdroj",
         "yes": "Áno",
+        "yes_dismiss": "Áno, zamietnuť",
         "zoom_in": "Priblížiť",
         "zoom_out": "Oddialiť"
     },
@@ -919,22 +920,13 @@
     "empty_room_was_name": "Prázdna miestnosť (bola %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Zadajte svoju bezpečnostnú frázu alebo <button>použite svoj kľúč na obnovenie</button> pre pokračovanie.",
+            "alternatives": "Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež.",
             "key_validation_text": {
-                "invalid_security_key": "Neplatný kľúč na obnovenie",
-                "recovery_key_is_correct": "Vyzerá to super!",
-                "wrong_file_type": "Nesprávny typ súboru",
-                "wrong_security_key": "Nesprávny kľúč na obnovenie"
+                "wrong_security_key": "Zadaný kľúč na obnovenie nie je správny."
             },
-            "reset_title": "Obnoviť všetko",
-            "reset_warning_1": "Urobte to len vtedy, ak nemáte iné zariadenie, pomocou ktorého by ste mohli dokončiť overenie.",
-            "reset_warning_2": "Ak všetko obnovíte, reštartujete bez dôveryhodných relácií, bez dôveryhodných používateľov a možno nebudete môcť vidieť predchádzajúce správy.",
+            "privacy_warning": "Uistite sa, že túto obrazovku nikto neuvidí!",
             "restoring": "Obnovenie kľúčov zo zálohy",
-            "security_key_title": "Kľúč na obnovenie",
-            "security_phrase_incorrect_error": "Nie je možné získať prístup k tajnému úložisku. Skontrolujte, či ste zadali správnu bezpečnostnú frázu.",
-            "security_phrase_title": "Bezpečnostná fráza",
-            "separator": "%(securityKey)s alebo %(recoveryFile)s",
-            "use_security_key_prompt": "Ak chcete pokračovať, použite kľúč na obnovenie."
+            "security_key_title": "Kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
         "cancel_entering_passphrase_description": "Naozaj chcete zrušiť zadávanie prístupovej frázy?",
@@ -990,6 +982,8 @@
         "setup_secure_backup": {
             "explainer": "Zálohujte si šifrovacie kľúče pred odhlásením, aby ste zabránili ich strate."
         },
+        "turn_on_key_storage": "Zapnúť úložisko kľúčov",
+        "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
         "udd": {
             "interactive_verification_button": "Interaktívne overte pomocou emotikonov",
             "other_ask_verify_text": "Poproste tohto používateľa, aby si overil svoju reláciu alebo ju nižšie manuálne overte.",
@@ -2139,19 +2133,24 @@
             "no_chats_description_no_room_rights": "Začnite tým, že niekomu napíšete správu",
             "no_favourites": "Zatiaľ nemáte obľúbenú konverzáciu",
             "no_favourites_description": "V nastaveniach konverzácií môžete pridať konverzáciu medzi obľúbené",
+            "no_invites": "Nemáte žiadne neprečítané pozvánky",
+            "no_mentions": "Nemáte žiadne neprečítané zmienky",
             "no_people": "Zatiaľ s nikým nemáte priame konverzácie",
             "no_people_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
             "no_rooms": "Zatiaľ ešte nie ste v žiadnej miestnosti",
             "no_rooms_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
             "no_unread": "Gratulujeme! Nemáte žiadne neprečítané správy",
+            "show_activity": "Zobraziť všetku aktivitu",
             "show_chats": "Zobraziť všetky konverzácie"
         },
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
         "failed_remove_tag": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
-        "filter": "Filter",
         "filters": {
             "favourite": "Obľúbené",
+            "invites": "Pozvánky",
+            "low_priority": "Nízka priorita",
+            "mentions": "Zmienky",
             "people": "Ľudia",
             "rooms": "Miestnosti",
             "unread": "Neprečítané"
@@ -2185,13 +2184,6 @@
             "open_room": "Otvoriť miestnosť %(roomName)s"
         },
         "room_options": "Možnosti miestnosti",
-        "secondary_filter": {
-            "all_activity": "Všetka aktivita",
-            "invites_only": "Len pozvánky",
-            "low_priority": "Nízka priorita",
-            "mentions_only": "Iba zmienky"
-        },
-        "secondary_filters": "Sekundárne filtre",
         "show_less": "Zobraziť menej",
         "show_message_previews": "Zobraziť náhľady správ",
         "show_n_more": {
@@ -2200,9 +2192,14 @@
             "other": "Zobraziť %(count)s ďalších"
         },
         "show_previews": "Zobraziť náhľady správ",
+        "sort": "Zoradiť",
         "sort_by": "Zoradiť podľa",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktivita",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Najprv ukázať miestnosti s neprečítanými správami",
         "space_menu": {
             "home": "Domov priestoru",
@@ -2493,6 +2490,10 @@
         "recent_changes_heading": "Nedávne zmeny, ktoré ešte neboli prijaté",
         "title": "Server neodpovedá"
     },
+    "service_worker_error": {
+        "description": "%(brand)s vyžaduje proces služby na načítanie overených médií z úložísk obsahu Matrix. Váš prehliadač to nepodporuje, takže sa môže vyskytnúť zlyhanie načítania médií.",
+        "title": "Nepodarilo sa načítať proces služby"
+    },
     "seshat": {
         "error_initialising": "Inicializácia vyhľadávania správ zlyhala, pre viac informácií skontrolujte <a>svoje nastavenia</a>",
         "reset_button": "Obnoviť úložisko udalostí",
@@ -2586,6 +2587,8 @@
                 "session_key": "Kľúč relácie:",
                 "title": "Pokročilé"
             },
+            "confirm_key_storage_off": "Naozaj chcete ponechať úložisko kľúčov vypnuté?",
+            "confirm_key_storage_off_description": "Ak sa zo všetkých zariadení odhlásite, stratíte históriu správ a budete musieť znova overiť všetky existujúce kontakty. <a>Prečítajte si viac </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Odstrániť úložisko kľúčov",
                 "confirm": "Odstrániť úložisko kľúčov",

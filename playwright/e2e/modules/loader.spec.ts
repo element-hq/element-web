@@ -15,6 +15,7 @@ test.describe("Module loading", () => {
     test.describe("Example Module", () => {
         test.use({
             config: {
+                brand: "TestBrand",
                 modules: ["/modules/example-module.js"],
             },
             page: async ({ page }, use) => {
@@ -25,11 +26,31 @@ test.describe("Module loading", () => {
             },
         });
 
-        test("should show alert", async ({ page }) => {
-            const dialogPromise = page.waitForEvent("dialog");
-            await page.goto("/");
-            const dialog = await dialogPromise;
-            expect(dialog.message()).toBe("Testing module loading successful!");
-        });
+        const testCases = [
+            ["en", "TestBrand module loading successful!"],
+            ["de", "TestBrand-Module erfolgreich geladen!"],
+        ];
+
+        for (const [lang, message] of testCases) {
+            test.describe(`language-${lang}`, () => {
+                test.use({
+                    config: async ({ config }, use) => {
+                        await use({
+                            ...config,
+                            setting_defaults: {
+                                language: lang,
+                            },
+                        });
+                    },
+                });
+
+                test("should show alert", async ({ page }) => {
+                    const dialogPromise = page.waitForEvent("dialog");
+                    await page.goto("/");
+                    const dialog = await dialogPromise;
+                    expect(dialog.message()).toBe(message);
+                });
+            });
+        }
     });
 });

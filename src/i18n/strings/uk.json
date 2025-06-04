@@ -913,22 +913,11 @@
     "empty_room_was_name": "Порожня кімната (були %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Щоб продовжити, введіть свою фразу безпеки або <button>скористайтесь ключем відновлення</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Недійсний ключ відновлення",
-                "recovery_key_is_correct": "Виглядає файно!",
-                "wrong_file_type": "Тип файлу не підтримується",
                 "wrong_security_key": "Неправильний ключ відновлення"
             },
-            "reset_title": "Скинути все",
-            "reset_warning_1": "Робіть це лише якщо у вас немає іншого пристрою для виконання перевірки.",
-            "reset_warning_2": "Якщо ви скинете все, то почнете заново без довірених сеансів, користувачів і доступу до минулих повідомлень.",
             "restoring": "Відновлення ключів із резервної копії",
-            "security_key_title": "Ключ відновлення",
-            "security_phrase_incorrect_error": "Не вдалося зайти до таємного сховища. Переконайтеся, що ввели правильну фразу безпеки.",
-            "security_phrase_title": "Фраза безпеки",
-            "separator": "%(securityKey)s або %(recoveryFile)s",
-            "use_security_key_prompt": "Щоб продовжити, скористайтеся ключем відновлення."
+            "security_key_title": "Ключ відновлення"
         },
         "bootstrap_title": "Налаштовування ключів",
         "cancel_entering_passphrase_description": "Ви точно хочете скасувати введення парольної фрази?",
@@ -2125,7 +2114,6 @@
         "failed_add_tag": "Не вдалось додати до кімнати мітку %(tagName)s",
         "failed_remove_tag": "Не вдалося прибрати з кімнати мітку %(tagName)s",
         "failed_set_dm_tag": "Не вдалося встановити мітку особистого повідомлення",
-        "filter": "Фільтр",
         "filters": {
             "favourite": "Обрані",
             "people": "Люди",
@@ -2159,13 +2147,6 @@
             "open_room": "Відкрити кімнату %(roomName)s"
         },
         "room_options": "Параметри кімнати",
-        "secondary_filter": {
-            "all_activity": "Уся діяльність",
-            "invites_only": "Лише запрошення",
-            "low_priority": "Неважливі",
-            "mentions_only": "Лише згадки"
-        },
-        "secondary_filters": "Додаткові фільтри",
         "show_less": "Згорнути",
         "show_message_previews": "Показати попередній перегляд повідомлень",
         "show_n_more": {
@@ -2173,9 +2154,14 @@
             "one": "Показати ще %(count)s"
         },
         "show_previews": "Показувати попередній перегляд повідомлень",
+        "sort": "Сортувати",
         "sort_by": "Упорядкувати за",
         "sort_by_activity": "Активністю",
         "sort_by_alphabet": "А-Я",
+        "sort_type": {
+            "activity": "Діяльність",
+            "atoz": "А-Я"
+        },
         "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
         "space_menu": {
             "home": "Домівка простору",

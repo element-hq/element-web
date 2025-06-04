@@ -388,6 +388,7 @@
             "fallback_button": "Rozpocznij uwierzytelnienie",
             "mas_cross_signing_reset_cta": "Przejdź do swojego konta",
             "mas_cross_signing_reset_description": "Zresetuj swoją tożsamość poprzez dostawcę swojego konta, wróć i kliknij „Ponów”.",
+            "mas_cross_signing_reset_title": "Przejdź do swojego konta, aby zresetować swoją tożsamość",
             "msisdn": "Wysłano wiadomość tekstową do %(msisdn)s",
             "msisdn_token_incorrect": "Niepoprawny token",
             "msisdn_token_prompt": "Wpisz kod, który jest tam zawarty:",
@@ -915,22 +916,11 @@
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Wprowadź swoją frazę bezpieczeństwa lub <button>użyj klucza przywracania</button>, aby kontynuować.",
             "key_validation_text": {
-                "invalid_security_key": "Błędny klucz przywracania",
-                "recovery_key_is_correct": "Wygląda dobrze!",
-                "wrong_file_type": "Błędny typ pliku",
                 "wrong_security_key": "Błędny klucz przywracania"
             },
-            "reset_title": "Resetuj wszystko",
-            "reset_warning_1": "Zrób to tylko wtedy, gdy nie masz innego urządzenia, za pomocą którego mógłbyś zakończyć weryfikację.",
-            "reset_warning_2": "Jeśli zresetujesz wszystko, stracisz wszystkie sesje zaufane, użytkowników zaufanych i możliwe, że nie będziesz w stanie przeglądać historii czatu.",
             "restoring": "Przywracanie kluczy z kopii zapasowej",
-            "security_key_title": "Klucz przywracania",
-            "security_phrase_incorrect_error": "Nie można uzyskać dostępu do sekretnego magazynu. Upewnij się, że wprowadzono poprawne Hasło bezpieczeństwa.",
-            "security_phrase_title": "Hasło bezpieczeństwa",
-            "separator": "%(securityKey)s lub %(recoveryFile)s",
-            "use_security_key_prompt": "Użyj klucza przywracania, aby kontynuować."
+            "security_key_title": "Klucz przywracania"
         },
         "bootstrap_title": "Konfigurowanie kluczy",
         "cancel_entering_passphrase_description": "Czy na pewno chcesz anulować wpisywanie hasła?",
@@ -2167,7 +2157,6 @@
             "open_room": "Pokój otwarty %(roomName)s"
         },
         "room_options": "Opcje pokoju",
-        "secondary_filters": "Filtry poboczne",
         "show_less": "Pokaż mniej",
         "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {
@@ -2176,9 +2165,14 @@
             "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
+        "sort": "Sortuj",
         "sort_by": "Sortuj według",
         "sort_by_activity": "Aktywności",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Aktywność",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
         "space_menu": {
             "home": "Główna przestrzeni",
@@ -2466,6 +2460,10 @@
         "recent_changes_heading": "Najnowsze zmiany nie zostały jeszcze wprowadzone",
         "title": "Serwer nie odpowiada"
     },
+    "service_worker_error": {
+        "description": "%(brand)s wymaga workera usługi, aby móc załadować zabezpieczone media z repozytoriów Matrix. Ta funkcja nie jest obsługiwana przez Twoją przeglądarkę, więc niektóre media mogą się nie załadować.",
+        "title": "Nie udało się załadować workera usługi"
+    },
     "seshat": {
         "error_initialising": "Wystąpił błąd inicjalizacji wyszukiwania wiadomości, sprawdź <a>swoje ustawienia</a> po więcej informacji",
         "reset_button": "Resetuj bank wydarzeń",
@@ -2644,6 +2642,7 @@
             "discovery_needs_terms_title": "Pozwól ludziom Cię znaleźć",
             "display_name": "Wyświetlana nazwa",
             "display_name_error": "Nie można ustawić wyświetlanej nazwy",
+            "email_adding_unsupported_by_hs": "Ten serwer domowy nie obsługuje dodawania adresów e-mail do Twojego konta.",
             "email_address_in_use": "Podany adres e-mail jest już w użyciu",
             "email_address_label": "Adres e-mail",
             "email_not_verified": "Twój adres e-mail nie został jeszcze zweryfikowany",
@@ -2668,7 +2667,9 @@
             "error_share_msisdn_discovery": "Nie udało się udostępnić numeru telefonu",
             "identity_server_no_token": "Nie znaleziono tokena dostępu tożsamości",
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
+            "invalid_phone_number": "Podany numer telefonu nie wydaje się być poprawny.",
             "language_section": "Język",
+            "msisdn_adding_unsupported_by_hs": "Ten serwer domowy nie obsługuje dodawania numerów telefonu do Twojego konta.",
             "msisdn_in_use": "Ten numer telefonu jest już zajęty",
             "msisdn_label": "Numer telefonu",
             "msisdn_verification_field_label": "Kod weryfikacyjny",
@@ -3240,6 +3241,7 @@
         "heading_without_query": "Szukaj",
         "join_button_text": "Dołącz %(roomAddress)s",
         "keyboard_scroll_hint": "Użyj <arrows/>, aby przewijać",
+        "messages_label": "Wiadomości",
         "other_rooms_in_space": "Inne pokoje w %(spaceName)s",
         "public_rooms_label": "Pokoje publiczne",
         "public_spaces_label": "Przestrzenie publiczne",
@@ -3286,7 +3288,7 @@
             "other": "%(count)s odpowiedzi"
         },
         "empty_description": "Użyj „%(replyInThread)s” po najechaniu kursorem na wiadomość",
-        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo za nimi podążyć.",
+        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo za nimi podążać.",
         "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
@@ -3815,10 +3817,11 @@
         "unavailable": "Niedostępny"
     },
     "update_room_access_modal": {
-        "description": "Aby utworzyć link udostępniania, musisz zezwolić gościom na dołączenie do tego pokoju. Może to zmniejszyć bezpieczeństwo pokoju. Gdy zakończysz połączenie, możesz ustawić pokój jako prywatny z powrotem.",
-        "dont_change_description": "Możesz również zadzwonić w innym pokoju.",
+        "description": "Aby utworzyć link udostępniania, ustaw ten pokój jako <b>publiczny</b> lub włącz opcję umożliwiającą użytkownikom <b>poprosić o dołączenie</b>. Dzięki temu goście będą mogli dołączyć bez zaproszenia.",
+        "dont_change_description": "Jeśli nie chcesz zmieniać uprawnień dostępu tego pokoju, możesz utworzyć link połączenia w nowym pokoju.",
         "no_change": "Nie chce zmieniać poziomu uprawnień.",
-        "title": "Zmień poziom dostępu pokoju"
+        "revert_access_description": "(Przywróć poprzednią wartość w ustawieniach pokoju: <b>Bezpieczeństwo i prywatność</b> / <b>Dostęp</b>)",
+        "title": "Zezwól gościom na dołączenie do tego pokoju"
     },
     "upload_failed_generic": "Nie udało się przesłać pliku '%(fileName)s'.",
     "upload_failed_size": "Plik '%(fileName)s' przekracza limit rozmiaru dla tego serwera głównego",
