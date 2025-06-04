@@ -55,8 +55,8 @@ export class IPCManager {
         if (payload.error) {
             // `seshat.ts` sends a JavaScript object with a `message` property. Turn it into a proper Error.
             let error = payload.error;
-            if ((error as any).message) {
-                error = new Error((error as any).message);
+            if (typeof error === "object" && error.message) {
+                error = new Error(error.message);
             }
             callbacks.reject(error);
         } else {
