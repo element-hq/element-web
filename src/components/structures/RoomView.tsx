@@ -1731,6 +1731,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onDeclineAndBlockButtonClicked = async (): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
+
         const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(DeclineAndBlockInviteDialog, {
             roomName: this.state.room.name,
         }).finished;
@@ -1745,11 +1746,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const actions: Promise<unknown>[] = [];
 
         if (ignoreUser) {
-            const myMember = this.state.room.getMember(this.context.client!.getSafeUserId());
-            const inviteEvent = myMember!.events.member;
-            const ignoredUsers = this.context.client.getIgnoredUsers();
-            ignoredUsers.push(inviteEvent!.getSender()!); // de-duped internally in the js-sdk
-            actions.push(this.context.client.setIgnoredUsers(ignoredUsers));
+            const doIgnore = async (): Promise<void> => {
+                const ownUserId = this.context.client!.getSafeUserId();
+                const myMember = this.state.room!.getMember(ownUserId);
+                const memberEvent = myMember!.events.member;
+                const senderId = memberEvent!.getSender()!;
+                if (memberEvent?.getContent().membership !== KnownMembership.Invite || senderId === ownUserId) {
+                    // If somehow the membership event has changed under us, we should ensure that we don't
+                    // end up ignoring own user.
+                    throw new Error("Cannot determine which user to ignore since the member event has changed.");
+                }
+                const ignoredUsers = this.context.client!.getIgnoredUsers();
+                ignoredUsers.push(senderId); // de-duped internally in the js-sdk
+                await this.context.client!.setIgnoredUsers(ignoredUsers);
+            };
+            actions.push(doIgnore());
         }
 
         if (reportRoom !== false) {
