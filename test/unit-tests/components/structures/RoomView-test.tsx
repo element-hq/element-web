@@ -77,6 +77,7 @@ import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUs
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
 import Modal from "../../../../src/Modal.tsx";
+import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -274,6 +275,37 @@ describe("RoomView", () => {
             await fireEvent.click(getByRole("button", { name: "Decline and block" }));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
+        });
+        it("prevents ignoring own user", async () => {
+            const member = new RoomMember(room.roomId, cli.getSafeUserId());
+            member.membership = KnownMembership.Invite;
+            member.events.member = new MatrixEvent({
+                /*
+                It doesn't matter that this is an invite event coming from own user, we just
+                want to simulate a situation where the sender of the membership event somehow
+                ends up being own user.
+                 */
+                sender: cli.getSafeUserId(),
+            });
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
+            room.getMember = jest.fn().mockReturnValue(member);
+
+            const { getByRole } = await mountRoomView();
+            cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, true, false]),
+                close: jest.fn(),
+            });
+
+            await act(() => fireEvent.click(getByRole("button", { name: "Decline and block" })));
+
+            // Should show error in a modal dialog
+            expect(Modal.createDialog).toHaveBeenLastCalledWith(ErrorDialog, {
+                title: "Failed to reject invite",
+                description: "Cannot determine which user to ignore since the member event has changed.",
+            });
+            // The ignore call should not go through
+            expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
         });
         it("handles declining an invite and reporting the room", async () => {
             const { getByRole } = await mountRoomView();
