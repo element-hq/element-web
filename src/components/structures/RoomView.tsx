@@ -1768,16 +1768,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (ignoreUser) {
             const doIgnore = async (): Promise<void> => {
                 const ownUserId = this.context.client!.getSafeUserId();
-                const myMember = this.state.room!.getMember(ownUserId);
-                const memberEvent = myMember!.events.member;
-                const senderId = memberEvent!.getSender()!;
-                if (memberEvent?.getContent().membership !== KnownMembership.Invite || senderId === ownUserId) {
-                    // If somehow the membership event has changed under us, we should ensure that we don't
-                    // end up ignoring own user.
-                    throw new Error("Cannot determine which user to ignore since the member event has changed.");
+                if (!this.inviter || this.inviter === ownUserId) {
+                    // This is unlikely to happen since we cache the inviter as early as possible.
+                    // However, we still do this check here to be double sure.
+                    throw new CannotDetermineUserError(
+                        "Cannot determine which user to ignore since the member event has changed.",
+                    );
                 }
                 const ignoredUsers = this.context.client!.getIgnoredUsers();
-                ignoredUsers.push(senderId); // de-duped internally in the js-sdk
+                ignoredUsers.push(this.inviter); // de-duped internally in the js-sdk
                 await this.context.client!.setIgnoredUsers(ignoredUsers);
             };
             actions.push(doIgnore());
@@ -1797,7 +1796,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } catch (error) {
             logger.error(`Failed to reject invite: ${error}`);
 
-            const msg = error instanceof Error ? error.message : JSON.stringify(error);
+            let msg: string = "";
+            if (error instanceof CannotDetermineUserError) {
+                msg = _t("room|failed_determine_user");
+            } else if (error instanceof Error) {
+                msg = error.message;
+            } else {
+                msg = JSON.stringify(error);
+            }
             Modal.createDialog(ErrorDialog, {
                 title: _t("room|failed_reject_invite"),
                 description: msg,
@@ -2645,4 +2651,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </ScopedRoomContextProvider>
         );
     }
+}
+
+class CannotDetermineUserError extends Error {
+    public name = "CannotDetermineUserError";
 }
