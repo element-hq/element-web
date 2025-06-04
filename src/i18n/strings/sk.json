@@ -2149,6 +2149,7 @@
         "filters": {
             "favourite": "Obľúbené",
             "invites": "Pozvánky",
+            "low_priority": "Nízka priorita",
             "mentions": "Zmienky",
             "people": "Ľudia",
             "rooms": "Miestnosti",

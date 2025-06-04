@@ -1940,9 +1940,12 @@
             "unknown": "%(senderDisplayName)s pakeitė prisijungimo taisyklę į %(rule)s"
         },
         "m.room.member": {
+            "accepted_3pid_invite": "%(targetName)s priėmė kvietimą, skirtą %(displayName)s",
+            "accepted_invite": "%(targetName)s priėmė kvietimą",
             "ban": "%(senderName)s užblokavo %(targetName)s",
             "change_avatar": "%(senderName)s pakeitė savo profilio nuotrauką",
             "change_name": "%(oldDisplayName)s pasikeitė savo rodomą vardą į %(displayName)s",
+            "invite": "%(senderName)s pakvietė %(targetName)s",
             "join": "%(targetName)s prisijungė prie kambario",
             "kick": "%(senderName)s pašalino %(targetName)s",
             "kick_reason": "%(senderName)s pašalino %(targetName)s: %(reason)s",
