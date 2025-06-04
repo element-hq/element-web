@@ -370,6 +370,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
 
+    // The userId from which we received this invite.
+    // Only populated if the membership of our user is invite.
+    private inviter?: string;
+
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
     private messagePanel: TimelinePanel | null = null;
@@ -1350,6 +1354,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room): void => {
         if (this.unmounted) return;
+
+        // Store the inviter so that we can know who invited us to this room even if
+        // the membership event changes.
+        this.inviter = this.getInviterFromRoom(room);
+
         // Attach a widget store listener only when we get a room
         this.context.widgetLayoutStore.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
 
@@ -1728,6 +1737,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             room_id: this.getRoomId(),
         });
     };
+
+    private getInviterFromRoom(room: Room): string | undefined {
+        const ownUserId = this.context.client?.getSafeUserId();
+        if (!ownUserId) return;
+
+        const myMember = room.getMember(ownUserId);
+        const memberEvent = myMember?.events.member;
+        const senderId = memberEvent?.getSender();
+
+        if (memberEvent?.getContent().membership === KnownMembership.Invite) return senderId;
+    }
 
     private onDeclineAndBlockButtonClicked = async (): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
