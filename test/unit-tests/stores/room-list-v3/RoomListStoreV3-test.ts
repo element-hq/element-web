@@ -798,4 +798,53 @@ describe("RoomListStoreV3", () => {
             expect(store.getSortedRooms()[34]).toEqual(unmutedRoom);
         });
     });
+
+    describe("Low priority rooms", () => {
+        async function getRoomListStoreWithRooms() {
+            const client = stubClient();
+            const rooms = getMockedRooms(client);
+
+            // Let's say that rooms 34, 84, 64, 14, 57 are low priority
+            const lowPriorityIndices = [34, 84, 64, 14, 57];
+            const lowPriorityRooms = lowPriorityIndices.map((i) => rooms[i]);
+            for (const room of lowPriorityRooms) {
+                room.tags[DefaultTagID.LowPriority] = {};
+            }
+
+            // Let's say that rooms 14, 57, 65, 78, 82, 5, 36 are muted
+            const mutedIndices = [14, 57, 65, 78, 82, 5, 36];
+            const mutedRooms = mutedIndices.map((i) => rooms[i]);
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                const state = {
+                    muted: mutedRooms.includes(room),
+                } as unknown as RoomNotificationState;
+                return state;
+            });
+
+            client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+            jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            // We expect the following order: Low Priority -> Low Priority & Muted -> Muted
+            const expectedRoomIds = [84, 64, 34, 57, 14, 82, 78, 65, 36, 5].map((i) => rooms[i].roomId);
+
+            return {
+                client,
+                rooms,
+                expectedRoomIds,
+                store,
+                dispatcher,
+            };
+        }
+
+        it("Low priority rooms are pushed to the bottom of the list just before muted rooms", async () => {
+            const { store, expectedRoomIds } = await getRoomListStoreWithRooms();
+            const result = store
+                .getSortedRooms()
+                .slice(90)
+                .map((r) => r.roomId);
+            expect(result).toEqual(expectedRoomIds);
+        });
+    });
 });
