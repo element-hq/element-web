@@ -2118,6 +2118,7 @@
         "filters": {
             "favourite": "Favoritos",
             "invites": "Convites",
+            "low_priority": "Baixa prioridade",
             "mentions": "Menções",
             "people": "Pessoas",
             "rooms": "Salas",

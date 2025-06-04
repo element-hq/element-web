@@ -2119,6 +2119,7 @@
         "filters": {
             "favourite": "Lemmikud",
             "invites": "Kutsed",
+            "low_priority": "Vähetähtis",
             "mentions": "Mainimised",
             "people": "Inimesed",
             "rooms": "Jututoad",

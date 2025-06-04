@@ -912,7 +912,7 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "wrong_security_key": "Clé de récupération incorrecte"
+                "wrong_security_key": "La clé de récupération que vous avez saisie est incorrecte."
             },
             "restoring": "Restauration des clés depuis la sauvegarde",
             "security_key_title": "Clé de récupération"
