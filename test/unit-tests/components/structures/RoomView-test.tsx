@@ -238,6 +238,7 @@ describe("RoomView", () => {
             member.membership = KnownMembership.Invite;
             member.events.member = new MatrixEvent({
                 sender: "@bob:example.org",
+                content: { membership: KnownMembership.Invite },
             });
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
             room.getMember = jest.fn().mockReturnValue(member);
@@ -272,7 +273,7 @@ describe("RoomView", () => {
                 finished: Promise.resolve([true, true, false]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
+            await act(() => fireEvent.click(getByRole("button", { name: "Decline and block" })));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
         });
@@ -286,9 +287,10 @@ describe("RoomView", () => {
                 ends up being own user.
                  */
                 sender: cli.getSafeUserId(),
+                content: { membership: KnownMembership.Invite },
             });
-            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
-            room.getMember = jest.fn().mockReturnValue(member);
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
+            jest.spyOn(room, "getMember").mockReturnValue(member);
 
             const { getByRole } = await mountRoomView();
             cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
@@ -300,10 +302,13 @@ describe("RoomView", () => {
             await act(() => fireEvent.click(getByRole("button", { name: "Decline and block" })));
 
             // Should show error in a modal dialog
-            expect(Modal.createDialog).toHaveBeenLastCalledWith(ErrorDialog, {
-                title: "Failed to reject invite",
-                description: "Cannot determine which user to ignore since the member event has changed.",
+            await waitFor(() => {
+                expect(Modal.createDialog).toHaveBeenLastCalledWith(ErrorDialog, {
+                    title: "Failed to reject invite",
+                    description: "Cannot determine which user to ignore since the member event has changed.",
+                });
             });
+
             // The ignore call should not go through
             expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
         });
