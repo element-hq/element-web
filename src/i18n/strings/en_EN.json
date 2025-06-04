@@ -1957,6 +1957,7 @@
         },
         "face_pile_tooltip_shortcut": "Including %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Including you, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Cannot determine which user to ignore since the member event has changed.",
         "failed_reject_invite": "Failed to reject invite",
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
