@@ -17,15 +17,6 @@ export type CustomMessageComponentProps = {
      * The Matrix event for this textual body.
      */
     mxEvent: MatrixEvent;
-    /**
-     * Words to highlight on (e.g. from search results).
-     * May be undefined if the client does not need to highlight
-     */
-    highlights?: string[];
-    /**
-     * Is this event being rendered to a static export
-     */
-    forExport?: boolean;
 };
 
 /**
@@ -35,6 +26,7 @@ export type CustomMessageComponentProps = {
 export type OriginalComponentProps = {
     /**
      * Should previews be shown for this event.
+     * This may be overriden by user preferences.
      */
     showUrlPreview?: boolean;
 };
