@@ -83,6 +83,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             this.setState({
                 recoveryKeyCorrect: null,
             });
+            return;
         }
 
         const hasPassphrase = this.props.keyInfo?.passphrase?.salt && this.props.keyInfo?.passphrase?.iterations;
