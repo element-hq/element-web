@@ -7,7 +7,7 @@
 
 import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
 import React, { type Ref, type JSX, useState, useCallback } from "react";
-import FilterIcon from "@vector-im/compound-design-tokens/assets/web/icons/filter";
+import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { _t } from "../../../../languageHandler";
 import { SortOption } from "../../../viewmodels/roomlist/useSorter";
@@ -20,7 +20,7 @@ interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
 const MenuTrigger = ({ ref, ...props }: MenuTriggerProps): JSX.Element => (
     <Tooltip label={_t("room_list|room_options")}>
         <IconButton aria-label={_t("room_list|room_options")} {...props} ref={ref}>
-            <FilterIcon color="var(--cpd-color-icon-secondary)" />
+            <OverflowHorizontalIcon color="var(--cpd-color-icon-secondary)" />
         </IconButton>
     </Tooltip>
 );
