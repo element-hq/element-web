@@ -365,6 +365,7 @@ export async function uploadFile(
                 type: "application/octet-stream",
             }));
         } catch (e) {
+            if (abortController.signal.aborted) throw new UploadCanceledError();
             console.error("Failed to upload file", e);
             throw new UploadFailedError();
         }
@@ -383,6 +384,7 @@ export async function uploadFile(
         try {
             ({ content_uri: url } = await matrixClient.uploadContent(file, { progressHandler, abortController }));
         } catch (e) {
+            if (abortController.signal.aborted) throw new UploadCanceledError();
             console.error("Failed to upload file", e);
             throw new UploadFailedError();
         }
