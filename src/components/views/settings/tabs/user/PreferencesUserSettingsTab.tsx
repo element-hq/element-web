@@ -246,6 +246,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
 
+        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
+
         // Always Preprend the default option
         const timezones = this.state.timezones.map((tz) => {
             return <div key={tz}>{tz}</div>;
@@ -264,7 +266,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                         {/* The settings is on device level where the other room list settings are on account level  */}
-                        <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                        {newRoomListEnabled && (
+                            <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                        )}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")}>
