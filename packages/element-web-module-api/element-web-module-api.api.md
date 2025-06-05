@@ -69,8 +69,6 @@ export interface CustomComponentsApi {
 // @alpha
 export type CustomMessageComponentProps = {
     mxEvent: MatrixEvent;
-    highlights?: string[];
-    forExport?: boolean;
 };
 
 // Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "CustomMessageComponentProps" which is marked as @alpha

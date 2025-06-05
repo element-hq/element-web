@@ -70,7 +70,11 @@ export interface CustomComponentsApi {
      *       return <YourCustomComponent mxEvent={props.mxEvent} />;
      *  });
      *  customComponents.registerMessageRenderer(/m\.room\.(topic|name)/, (props, originalComponent) => {
-     *       return <YourCustomStateRenderer mxEvent={props.mxEvent} />;
+     *       if (props.mxEvent.isState()) {
+     *           return <YourCustomStateRenderer mxEvent={props.mxEvent} />;
+     *       }
+     *       // Passthrough.
+     *       return null;
      *  });
      * ```
      */
