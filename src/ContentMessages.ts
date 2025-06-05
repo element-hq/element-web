@@ -63,6 +63,7 @@ import { blobIsAnimated } from "./utils/Image.ts";
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export class UploadCanceledError extends Error {}
+export class UploadFailedError extends Error {}
 
 interface IMediaConfig {
     "m.upload.size"?: number;
@@ -355,12 +356,18 @@ export async function uploadFile(
         // Pass the encrypted data as a Blob to the uploader.
         const blob = new Blob([encryptResult.data]);
 
-        const { content_uri: url } = await matrixClient.uploadContent(blob, {
-            progressHandler,
-            abortController,
-            includeFilename: false,
-            type: "application/octet-stream",
-        });
+        let url: string;
+        try {
+            ({ content_uri: url } = await matrixClient.uploadContent(blob, {
+                progressHandler,
+                abortController,
+                includeFilename: false,
+                type: "application/octet-stream",
+            }));
+        } catch (e) {
+            console.error("Failed to upload file", e);
+            throw new UploadFailedError();
+        }
         if (abortController.signal.aborted) throw new UploadCanceledError();
 
         // If the attachment is encrypted then bundle the URL along with the information
@@ -372,7 +379,13 @@ export async function uploadFile(
             } as EncryptedFile,
         };
     } else {
-        const { content_uri: url } = await matrixClient.uploadContent(file, { progressHandler, abortController });
+        let url: string;
+        try {
+            ({ content_uri: url } = await matrixClient.uploadContent(file, { progressHandler, abortController }));
+        } catch (e) {
+            console.error("Failed to upload file", e);
+            throw new UploadFailedError();
+        }
         if (abortController.signal.aborted) throw new UploadCanceledError();
         // If the attachment isn't encrypted then include the URL directly.
         return { url };
@@ -570,7 +583,7 @@ export default class ContentMessages {
                     const imageInfo = await infoForImageFile(matrixClient, roomId, file);
                     Object.assign(content.info, imageInfo);
                 } catch (e) {
-                    if (e instanceof HTTPError) {
+                    if (e instanceof UploadFailedError) {
                         // re-throw to main upload error handler
                         throw e;
                     }
