@@ -22,6 +22,7 @@ import {
 } from "./utils";
 import { type Bot } from "../../pages/bot";
 import { Toasts } from "../../pages/toasts.ts";
+import type { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
@@ -163,35 +164,23 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, credentials);
-
-        // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
-
-        // Fill the passphrase
-        const dialog = page.locator(".mx_Dialog");
-        await dialog.locator("textarea").fill("new passphrase");
-        await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
-
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
-
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
-
-        // Check that the current device is connected to key backup
-        // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
+        await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase");
     });
 
     test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, credentials);
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
 
-        // Select the security phrase
+        await logIntoElement(page, credentials);
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
+
+    /** Helper for the two tests above which verify by recovery key */
+    async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
-        // Fill the recovery key
+        // Enter the recovery key
         const dialog = page.locator(".mx_Dialog");
-        const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
-        await dialog.locator("textarea").fill(aliceRecoveryKey.encodedPrivateKey);
+        await dialog.locator("textarea").fill(recoveryKey);
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
@@ -202,7 +191,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
-    });
+    }
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
         await logIntoElement(page, credentials);
