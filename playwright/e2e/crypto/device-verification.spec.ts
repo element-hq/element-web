@@ -174,16 +174,34 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
     });
 
-    /** Helper for the two tests above which verify by recovery key */
+    test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+
+        await logIntoElement(page, credentials);
+
+        /* Dismiss "Verify this device" */
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
+
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
+
+    /** Helper for the three tests above which verify by recovery key */
     async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
+        await page.getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
         // Enter the recovery key
         const dialog = page.locator(".mx_Dialog");
-        await dialog.locator("textarea").fill(recoveryKey);
+        // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
+        // (cf https://github.com/element-hq/element-web/issues/30089)
+        await dialog.locator("textarea").pressSequentially(recoveryKey);
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
+        await page.getByRole("button", { name: "Done" }).click();
 
         // Check that our device is now cross-signed
         await checkDeviceIsCrossSigned(app);
