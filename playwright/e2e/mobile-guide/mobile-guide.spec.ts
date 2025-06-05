@@ -8,11 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import { MobileAppVariant } from "../../../src/vector/mobile_guide/mobile-apps";
 
-const variants = [
-    MobileAppVariant.Classic,
-    MobileAppVariant.X,
-    MobileAppVariant.Pro,
-];
+const variants = [MobileAppVariant.Classic, MobileAppVariant.X, MobileAppVariant.Pro];
 
 test.describe("Mobile Guide Screenshots", { tag: "@screenshot" }, () => {
     for (const variant of variants) {
