@@ -23,13 +23,20 @@ export type CustomMessageComponentProps = {
      */
     highlights?: string[];
     /**
-     * Should previews be shown for this event
-     */
-    showUrlPreview?: boolean;
-    /**
      * Is this event being rendered to a static export
      */
     forExport?: boolean;
+};
+
+/**
+ * Properties to alter the render function of the original component.
+ * @alpha Subject to change.
+ */
+export type OriginalComponentProps = {
+    /**
+     * Should previews be shown for this event.
+     */
+    showUrlPreview?: boolean;
 };
 
 /**
@@ -44,7 +51,7 @@ export type CustomMessageRenderFunction = (
     /**
      * Render function for the original component. This may be omitted if the message would not normally be rendered.
      */
-    originalComponent?: () => React.JSX.Element,
+    originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
 ) => JSX.Element | null;
 
 /**

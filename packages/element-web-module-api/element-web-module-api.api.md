@@ -70,16 +70,16 @@ export interface CustomComponentsApi {
 export type CustomMessageComponentProps = {
     mxEvent: MatrixEvent;
     highlights?: string[];
-    showUrlPreview?: boolean;
     forExport?: boolean;
 };
 
 // Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "CustomMessageComponentProps" which is marked as @alpha
+// Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "OriginalComponentProps" which is marked as @alpha
 //
 // @beta
 export type CustomMessageRenderFunction = (
 props: CustomMessageComponentProps,
-originalComponent?: () => React.JSX.Element) => JSX.Element | null;
+originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element) => JSX.Element | null;
 
 // @alpha @deprecated (undocumented)
 export interface DirectoryCustomisations {
@@ -204,6 +204,11 @@ export class ModuleLoader {
     // (undocumented)
     start(): Promise<void>;
 }
+
+// @alpha
+export type OriginalComponentProps = {
+    showUrlPreview?: boolean;
+};
 
 // @alpha @deprecated (undocumented)
 export interface RoomListCustomisations<Room> {
