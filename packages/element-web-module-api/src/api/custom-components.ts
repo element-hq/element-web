@@ -64,6 +64,15 @@ export interface CustomComponentsApi {
      *
      * @param eventType - The event type this renderer is for. Use a RegExp instance if you want to target multiple types.
      * @param renderer - The render function.
+     * @example
+     * ```
+     *  customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
+     *       return <YourCustomComponent mxEvent={props.mxEvent} />;
+     *  });
+     *  customComponents.registerMessageRenderer(/m\.room\.(topic|name)/, (props, originalComponent) => {
+     *       return <YourCustomStateRenderer mxEvent={props.mxEvent} />;
+     *  });
+     * ```
      */
     registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void;
 }
