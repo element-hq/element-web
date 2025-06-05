@@ -9,6 +9,7 @@ import type {
     CustomComponentsApi as ICustomComponentsApi,
     CustomMessageRenderFunction,
     CustomMessageComponentProps,
+    OriginalComponentProps,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -30,7 +31,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public renderMessage(
         props: CustomMessageComponentProps,
-        originalComponent?: () => React.JSX.Element,
+        originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
         for (const renderer of this.registeredMessageRenderers.filter((e) =>
             props.mxEvent.getType().match(e.eventType),

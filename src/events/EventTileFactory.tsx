@@ -264,7 +264,6 @@ export function renderTile(
                 mxEvent: props.mxEvent,
                 forExport: props.forExport,
                 highlights: props.highlights,
-                showUrlPreview: props.showUrlPreview,
             },
             undefined,
         );
@@ -300,14 +299,13 @@ export function renderTile(
                     mxEvent: props.mxEvent,
                     forExport: props.forExport,
                     highlights: props.highlights,
-                    showUrlPreview: props.showUrlPreview,
                 },
-                () =>
+                (origProps) =>
                     factory(props.ref, {
                         mxEvent,
                         highlights,
                         highlightLink,
-                        showUrlPreview,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
                         editState,
                         replacingEventId,
                         getRelationsForEvent,
@@ -322,9 +320,8 @@ export function renderTile(
                     mxEvent: props.mxEvent,
                     forExport: props.forExport,
                     highlights: props.highlights,
-                    showUrlPreview: props.showUrlPreview,
                 },
-                () =>
+                (origProps) =>
                     factory(ref, {
                         // NEARLY ALL THE OPTIONS!
                         mxEvent,
@@ -333,7 +330,7 @@ export function renderTile(
                         editState,
                         highlights,
                         highlightLink,
-                        showUrlPreview,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
                         permalinkCreator,
                         callEventGrouper,
                         getRelationsForEvent,
@@ -366,7 +363,6 @@ export function renderReplyTile(
                 mxEvent: props.mxEvent,
                 forExport: props.forExport,
                 highlights: props.highlights,
-                showUrlPreview: props.showUrlPreview,
             },
             undefined,
         );
@@ -392,14 +388,13 @@ export function renderReplyTile(
             mxEvent: props.mxEvent,
             forExport: props.forExport,
             highlights: props.highlights,
-            showUrlPreview: props.showUrlPreview,
         },
-        () =>
+        (origProps) =>
             factory(ref, {
                 mxEvent,
                 highlights,
                 highlightLink,
-                showUrlPreview,
+                showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
                 overrideBodyTypes,
                 overrideEventTypes,
                 replacingEventId,
