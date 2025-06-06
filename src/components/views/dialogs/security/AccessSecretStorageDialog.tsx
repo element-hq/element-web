@@ -142,15 +142,13 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private getRecoveryKeyFeedback(): React.ReactNode | null {
-        if (this.state.recoveryKeyCorrect) {
-            // The recovery key is good. No feedback component needed.
-            return null;
-        }
-
         let validationText: string;
         let classes: string | undefined;
 
-        if (this.state.recoveryKeyCorrect === null) {
+        if (this.state.recoveryKeyCorrect) {
+            // The recovery key is good. Empty feedback.
+            validationText = "\xA0"; // &nbsp;
+        } else if (this.state.recoveryKeyCorrect === null) {
             // The input element is empty. Tell the user they can also use a passphrase.
             validationText = _t("encryption|access_secret_storage_dialog|alternatives");
         } else {
