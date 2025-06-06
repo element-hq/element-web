@@ -14,8 +14,6 @@ import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { useIsNodeVisible } from "../../../../hooks/useIsNodeVisible";
 
-const FILTER_HEIGHT = 30;
-
 interface RoomListPrimaryFiltersProps {
     /**
      * The view model for the room list
@@ -35,8 +33,12 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     const { isVisible, rootRef, nodeRef } = useIsNodeVisible<HTMLLIElement, HTMLUListElement>({ threshold: 0.5 });
     const { filters, onFilterChange } = useFilters(vm.primaryFilters, isExpanded, isVisible);
 
-    const { ref: containerRef, isExpanded: isSafeExpanded } = useAnimateFilter<HTMLDivElement>(isExpanded);
-    const { ref, isOverflowing: displayChevron } = useIsFilterOverflowing<HTMLUListElement>();
+    const { filterHeight, filterRef } = useFilterHeight<HTMLButtonElement>();
+    const { ref: containerRef, isExpanded: isSafeExpanded } = useAnimateFilter<HTMLDivElement>(
+        isExpanded,
+        filterHeight,
+    );
+    const { ref, isOverflowing: displayChevron } = useIsFilterOverflowing<HTMLUListElement>(filterHeight);
 
     return (
         <div className="mx_RoomListPrimaryFilters" data-testid="primary-filters">
@@ -61,7 +63,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                             ref.current = node;
                         }}
                     >
-                        {filters.map((filter) => (
+                        {filters.map((filter, i) => (
                             <li
                                 ref={filter.active ? nodeRef : undefined}
                                 role="option"
@@ -69,6 +71,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                                 key={filter.name}
                             >
                                 <ChatFilter
+                                    ref={i === 0 ? filterRef : undefined}
                                     selected={filter.active}
                                     onClick={() => {
                                         onFilterChange();
@@ -158,26 +161,30 @@ function useFilters(
 /**
  * A hook to animate the filter list when it is expanded or not.
  * @param areFiltersExpanded
+ * @param filterHeight
  */
 function useAnimateFilter<T extends HTMLElement>(
     areFiltersExpanded: boolean,
+    filterHeight: number,
 ): { ref: RefObject<T | null>; isExpanded: boolean } {
     const ref = useRef<T | null>(null);
     useEffect(() => {
         if (!ref.current) return;
 
+        // For the animation to work, we need `grid-template-rows` to have the same unit at the beginning and the end
+        // If px is used at the beginning, we need to use px at the end.
+        // In our case, we use fr unit to fully grow when expanded (1fr) so we need to compute the value in fr when the filters are not expanded
+        ref.current?.style.setProperty("--row-height", `${filterHeight / ref?.current.scrollHeight}fr`);
+
         const observer = new ResizeObserver(() => {
             // Remove transition to avoid the animation to run when the new --row-height is not set yet
             // If the animation runs at this moment, the first row will jump
             ref.current?.style.setProperty("transition", "unset");
-            // For the animation to work, we need `grid-template-rows` to have the same unit at the beginning and the end
-            // If px is used at the beginning, we need to use px at the end.
-            // In our case, we use fr unit to fully grow when expanded (1fr) so we need to compute the value in fr when the filters are not expanded
-            ref.current?.style.setProperty("--row-height", `${FILTER_HEIGHT / ref?.current.scrollHeight}fr`);
+            ref.current?.style.setProperty("--row-height", `${filterHeight / ref?.current.scrollHeight}fr`);
         });
         observer.observe(ref.current);
         return () => observer.disconnect();
-    }, [ref]);
+    }, [ref, filterHeight]);
 
     // Put back the transition to the element when the expanded state changes
     // because we want to animate it
@@ -194,7 +201,9 @@ function useAnimateFilter<T extends HTMLElement>(
  * A hook to check if the filter list is overflowing.
  * The list is overflowing if the scrollHeight is greater than `FILTER_HEIGHT`.
  */
-function useIsFilterOverflowing<T extends HTMLElement>(): { ref: RefObject<T | undefined>; isOverflowing: boolean } {
+function useIsFilterOverflowing<T extends HTMLElement>(
+    filterHeight: number,
+): { ref: RefObject<T | undefined>; isOverflowing: boolean } {
     const ref = useRef<T>(undefined);
     const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -202,10 +211,32 @@ function useIsFilterOverflowing<T extends HTMLElement>(): { ref: RefObject<T | u
         if (!ref.current) return;
 
         const node = ref.current;
-        const observer = new ResizeObserver(() => setIsOverflowing(node.scrollHeight > FILTER_HEIGHT));
+        const observer = new ResizeObserver(() => setIsOverflowing(node.scrollHeight > filterHeight));
         observer.observe(node);
         return () => observer.disconnect();
-    }, [ref]);
+    }, [ref, filterHeight]);
 
     return { ref, isOverflowing };
+}
+
+/**
+ * A hook to get the height of the filter list.
+ * @returns a ref that should be put on the filter button and its height.
+ */
+function useFilterHeight<T extends HTMLElement>(): { filterHeight: number; filterRef: RefObject<T | null> } {
+    const [filterHeight, setFilterHeight] = useState(0);
+    const filterRef = useRef<T>(null);
+
+    useEffect(() => {
+        if (!filterRef.current) return;
+
+        const observer = new ResizeObserver(() => {
+            const height = filterRef.current?.offsetHeight;
+            if (height) setFilterHeight(height);
+        });
+        observer.observe(filterRef.current);
+        return () => observer.disconnect();
+    }, [filterRef]);
+
+    return { filterHeight, filterRef };
 }
