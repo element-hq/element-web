@@ -140,30 +140,28 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private getKeyValidationClasses(): string {
-        return classNames({
-            "mx_AccessSecretStorageDialog_recoveryKeyFeedback": this.state.recoveryKeyCorrect !== null,
-            "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid": this.state.recoveryKeyCorrect === false,
-        });
-    }
-
-    private getKeyValidationText(): string | null {
-        if (this.state.recoveryKeyCorrect) {
-            return null;
-        } else if (this.state.recoveryKeyCorrect === null) {
-            return _t("encryption|access_secret_storage_dialog|alternatives");
-        } else {
-            return _t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key");
-        }
-    }
-
     private getRecoveryKeyFeedback(): React.ReactNode | null {
-        const validationText = this.getKeyValidationText();
-        if (validationText === null) {
+        if (this.state.recoveryKeyCorrect) {
+            // The recovery key is good. No feedback component needed.
             return null;
-        } else {
-            return <div className={this.getKeyValidationClasses()}>{validationText}</div>;
         }
+
+        let validationText: string;
+        let classes: string | undefined;
+
+        if (this.state.recoveryKeyCorrect === null) {
+            // The input element is empty. Tell the user they can also use a passphrase.
+            validationText = _t("encryption|access_secret_storage_dialog|alternatives");
+        } else {
+            // The entered key is not (yet) correct. Tell them so.
+            validationText = _t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key");
+            classes = classNames({
+                "mx_AccessSecretStorageDialog_recoveryKeyFeedback": true,
+                "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid": true,
+            });
+        }
+
+        return <div className={classes}>{validationText}</div>;
     }
 
     public render(): React.ReactNode {
