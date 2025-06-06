@@ -1957,6 +1957,7 @@
         },
         "face_pile_tooltip_shortcut": "Sealhulgas %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Seahulgas Sina, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kuna liikmelisuse sündmus on muutunud, siis ei saa tuvastada, millist kasutajat peaks eirama.",
         "failed_reject_invite": "Kutse tagasilükkamine ei õnnestunud",
         "forget_room": "Unusta see jututuba",
         "forget_space": "Unusta see kogukond",
@@ -2094,7 +2095,6 @@
     "room_list": {
         "add_room_label": "Lisa jututuba",
         "add_space_label": "Lisa kogukonnakeskus",
-        "appearance": "Välimus",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
         "empty": {
@@ -2153,7 +2153,6 @@
         },
         "room_options": "Jututoa valikud",
         "show_less": "Näita vähem",
-        "show_message_previews": "Näita sõnumite eelvaateid",
         "show_n_more": {
             "one": "Näita veel %(count)s vestlust",
             "other": "Näita veel %(count)s vestlust"

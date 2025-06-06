@@ -2105,7 +2105,6 @@
     "room_list": {
         "add_room_label": "Dodaj pokój",
         "add_space_label": "Dodaj przestrzeń",
-        "appearance": "Wygląd",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
         "empty": {
@@ -2158,7 +2157,6 @@
         },
         "room_options": "Opcje pokoju",
         "show_less": "Pokaż mniej",
-        "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
             "few": "Pokaż %(count)s więcej",

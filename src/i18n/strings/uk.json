@@ -2095,7 +2095,6 @@
     "room_list": {
         "add_room_label": "Додати кімнату",
         "add_space_label": "Додати простір",
-        "appearance": "Вигляд",
         "breadcrumbs_empty": "Немає недавно відвіданих кімнат",
         "breadcrumbs_label": "Недавно відвідані кімнати",
         "empty": {
@@ -2148,7 +2147,6 @@
         },
         "room_options": "Параметри кімнати",
         "show_less": "Згорнути",
-        "show_message_previews": "Показати попередній перегляд повідомлень",
         "show_n_more": {
             "other": "Показати ще %(count)s",
             "one": "Показати ще %(count)s"

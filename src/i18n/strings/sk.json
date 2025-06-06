@@ -2124,7 +2124,6 @@
     "room_list": {
         "add_room_label": "Pridať miestnosť",
         "add_space_label": "Pridať priestor",
-        "appearance": "Vzhľad",
         "breadcrumbs_empty": "Žiadne nedávno navštívené miestnosti",
         "breadcrumbs_label": "Nedávno navštívené miestnosti",
         "empty": {
@@ -2185,7 +2184,6 @@
         },
         "room_options": "Možnosti miestnosti",
         "show_less": "Zobraziť menej",
-        "show_message_previews": "Zobraziť náhľady správ",
         "show_n_more": {
             "one": "Zobraziť %(count)s ďalšiu",
             "few": "Zobraziť %(count)s ďalšie",

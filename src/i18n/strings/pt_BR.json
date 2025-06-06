@@ -1956,6 +1956,7 @@
         },
         "face_pile_tooltip_shortcut": "Incluindo %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Incluindo você, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Não é possível determinar qual usuário ignorar, pois o evento do membro foi alterado.",
         "failed_reject_invite": "Não foi possível recusar o convite",
         "forget_room": "Esquecer esta sala",
         "forget_space": "Esqueça este espaço",
@@ -2093,7 +2094,6 @@
     "room_list": {
         "add_room_label": "Adicionar sala",
         "add_space_label": "Adicionar espaço",
-        "appearance": "Aparência",
         "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
         "empty": {
@@ -2152,7 +2152,6 @@
         },
         "room_options": "Opções da Sala",
         "show_less": "Mostrar menos",
-        "show_message_previews": "Mostrar prévias de mensagens",
         "show_n_more": {
             "other": "Mostrar %(count)s a mais",
             "one": "Mostrar %(count)s a mais"
