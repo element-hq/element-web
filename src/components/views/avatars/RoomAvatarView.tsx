@@ -16,7 +16,7 @@ import BusyIcon from "@vector-im/compound-design-tokens/assets/web/icons/presenc
 import classNames from "classnames";
 
 import RoomAvatar from "./RoomAvatar";
-import { useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
+import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
 import { _t } from "../../../languageHandler";
 import { Presence } from "./WithPresenceIndicator";
 
@@ -34,55 +34,20 @@ interface RoomAvatarViewProps {
 export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     const vm = useRoomAvatarViewModel(room);
     // No decoration, we just show the avatar
-    if (!vm.hasDecoration) return <RoomAvatar size="32px" room={room} />;
+    if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;
 
-    let icon: React.ReactNode;
-    if (vm.isLowPriority) {
-        icon = (
-            <ArrowDownIcon
-                width="16px"
-                height="16px"
-                className="mx_RoomAvatarView_icon"
-                color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|room_is_low_priority")}
-            />
-        );
-    } else if (vm.isVideoRoom) {
-        icon = (
-            <VideoIcon
-                width="16px"
-                height="16px"
-                className="mx_RoomAvatarView_icon"
-                color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|video_room")}
-            />
-        );
-    } else if (vm.isPublic) {
-        icon = (
-            <PublicIcon
-                width="16px"
-                height="16px"
-                className="mx_RoomAvatarView_icon"
-                color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|header|room_is_public")}
-            />
-        );
-    } else if (vm.presence) {
-        icon = <PresenceDecoration presence={vm.presence} />;
-    }
+    const icon = getAvatarDecoration(vm.badgeDecoration, vm.presence);
+
+    // Presence indicator and video/public icons don't have the same size
+    // We use different masks
+    const maskClass =
+        vm.badgeDecoration === AvatarBadgeDecoration.Presence
+            ? "mx_RoomAvatarView_RoomAvatar_presence"
+            : "mx_RoomAvatarView_RoomAvatar_icon";
 
     return (
         <div className="mx_RoomAvatarView">
-            <RoomAvatar
-                className={classNames("mx_RoomAvatarView_RoomAvatar", {
-                    // Presence indicator and video/public icons don't have the same size
-                    // We use different masks
-                    mx_RoomAvatarView_RoomAvatar_icon: vm.isVideoRoom || vm.isPublic || vm.isLowPriority,
-                    mx_RoomAvatarView_RoomAvatar_presence: Boolean(vm.presence),
-                })}
-                size="32px"
-                room={room}
-            />
+            <RoomAvatar className={classNames("mx_RoomAvatarView_RoomAvatar", maskClass)} size="32px" room={room} />
             {icon}
         </div>
     );
@@ -140,5 +105,41 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     aria-label={_t("presence|busy")}
                 />
             );
+    }
+}
+
+function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presence | null): React.ReactNode {
+    if (decoration === AvatarBadgeDecoration.LowPriority) {
+        return (
+            <ArrowDownIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|room_is_low_priority")}
+            />
+        );
+    } else if (decoration === AvatarBadgeDecoration.VideoRoom) {
+        return (
+            <VideoIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|video_room")}
+            />
+        );
+    } else if (decoration === AvatarBadgeDecoration.PublicRoom) {
+        return (
+            <PublicIcon
+                width="16px"
+                height="16px"
+                className="mx_RoomAvatarView_icon"
+                color="var(--cpd-color-icon-tertiary)"
+                aria-label={_t("room|header|room_is_public")}
+            />
+        );
+    } else if (decoration === AvatarBadgeDecoration.Presence) {
+        return <PresenceDecoration presence={presence!} />;
     }
 }

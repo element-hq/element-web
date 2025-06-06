@@ -8,7 +8,10 @@
 import { renderHook, waitFor } from "jest-matrix-react";
 import { JoinRule, type MatrixClient, type Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
 
-import { useRoomAvatarViewModel } from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
+import {
+    AvatarBadgeDecoration,
+    useRoomAvatarViewModel,
+} from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import * as PresenceIndicatorModule from "../../../../../src/components/views/avatars/WithPresenceIndicator";
@@ -33,42 +36,60 @@ describe("RoomAvatarViewModel", () => {
         jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);
     });
 
-    it("should have hasDecoration to false", async () => {
-        const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-        expect(vm.current.hasDecoration).toBe(false);
-    });
-
-    it("should have isLowPriority set to true", () => {
+    it("should have badgeDecoration set to LowPriority", () => {
         room.tags[DefaultTagID.LowPriority] = {};
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-        expect(vm.current.isLowPriority).toBe(true);
-        expect(vm.current.hasDecoration).toBe(true);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.LowPriority);
     });
 
-    it("should have isVideoRoom set to true", () => {
+    it("should have badgeDecoration set to VideoRoom", () => {
         jest.spyOn(room, "isCallRoom").mockReturnValue(true);
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-        expect(vm.current.isVideoRoom).toBe(true);
-        expect(vm.current.hasDecoration).toBe(true);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.VideoRoom);
     });
 
-    it("should have isPublic set to true", () => {
+    it("should have badgeDecoration set to PublicRoom", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
-
         const { result: vm } = renderHook(() => useRoomAvatarViewModel(room));
-        expect(vm.current.isPublic).toBe(true);
-        expect(vm.current.hasDecoration).toBe(true);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom);
+    });
+
+    it("should set badgeDecoration based on priority", () => {
+        // 1. Presence has the least priority
+        const user = User.createUser("userId", matrixClient);
+        const roomMember = new RoomMember(room.roomId, "userId");
+        roomMember.user = user;
+        jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
+        jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
+
+        const { result: vm, rerender } = renderHook(() => useRoomAvatarViewModel(room));
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.Presence);
+
+        // 2. With presence and public room, presence takes precedence
+        jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+        rerender(room);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom);
+
+        // 3. With presence, public-room and video room, video room takes precedence
+        jest.spyOn(room, "isCallRoom").mockReturnValue(true);
+        rerender(room);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.VideoRoom);
+
+        // 4. With presence, public room, video room and low priority, low priority takes precedence
+        room.tags[DefaultTagID.LowPriority] = {};
+        rerender(room);
+        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.LowPriority);
     });
 
     it("should recompute isPublic when room changed", async () => {
         const { result: vm, rerender } = renderHook((props) => useRoomAvatarViewModel(props), { initialProps: room });
-        expect(vm.current.isPublic).toBe(false);
+        expect(vm.current.badgeDecoration).not.toBe(AvatarBadgeDecoration.PublicRoom);
 
         const publicRoom = mkStubRoom("roomId2", "roomName2", matrixClient);
         jest.spyOn(publicRoom, "getJoinRule").mockReturnValue(JoinRule.Public);
         rerender(publicRoom);
 
-        await waitFor(() => expect(vm.current.isPublic).toBe(true));
+        await waitFor(() => expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom));
     });
 
     it("should return presence", async () => {

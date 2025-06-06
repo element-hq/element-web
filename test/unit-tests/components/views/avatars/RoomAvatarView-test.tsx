@@ -12,6 +12,7 @@ import { mocked } from "jest-mock";
 import { RoomAvatarView } from "../../../../../src/components/views/avatars/RoomAvatarView";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
 import {
+    AvatarBadgeDecoration,
     type RoomAvatarViewState,
     useRoomAvatarViewModel,
 } from "../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel";
@@ -19,6 +20,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Presence } from "../../../../../src/components/views/avatars/WithPresenceIndicator";
 
 jest.mock("../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel", () => ({
+    ...jest.requireActual("../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel"),
     useRoomAvatarViewModel: jest.fn(),
 }));
 
@@ -33,10 +35,7 @@ describe("<RoomAvatarView />", () => {
 
     beforeEach(() => {
         defaultValue = {
-            hasDecoration: true,
-            isPublic: false,
-            isVideoRoom: false,
-            isLowPriority: false,
+            badgeDecoration: undefined,
             presence: null,
         };
 
@@ -44,13 +43,16 @@ describe("<RoomAvatarView />", () => {
     });
 
     it("should not render a decoration", () => {
-        mocked(useRoomAvatarViewModel).mockReturnValue({ ...defaultValue, hasDecoration: false });
+        mocked(useRoomAvatarViewModel).mockReturnValue({ ...defaultValue });
         const { asFragment } = render(<RoomAvatarView room={room} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render a low priority room decoration", () => {
-        mocked(useRoomAvatarViewModel).mockReturnValue({ ...defaultValue, hasDecoration: true, isLowPriority: true });
+        mocked(useRoomAvatarViewModel).mockReturnValue({
+            ...defaultValue,
+            badgeDecoration: AvatarBadgeDecoration.LowPriority,
+        });
         const { asFragment } = render(<RoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This is a low priority room")).toBeInTheDocument();
@@ -58,7 +60,10 @@ describe("<RoomAvatarView />", () => {
     });
 
     it("should render a video room decoration", () => {
-        mocked(useRoomAvatarViewModel).mockReturnValue({ ...defaultValue, hasDecoration: true, isVideoRoom: true });
+        mocked(useRoomAvatarViewModel).mockReturnValue({
+            ...defaultValue,
+            badgeDecoration: AvatarBadgeDecoration.VideoRoom,
+        });
         const { asFragment } = render(<RoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This room is a video room")).toBeInTheDocument();
@@ -68,50 +73,12 @@ describe("<RoomAvatarView />", () => {
     it("should render a public room decoration", () => {
         mocked(useRoomAvatarViewModel).mockReturnValue({
             ...defaultValue,
-            hasDecoration: true,
-            isPublic: true,
-            isVideoRoom: false,
+            badgeDecoration: AvatarBadgeDecoration.PublicRoom,
         });
         const { asFragment } = render(<RoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This room is public")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
-    });
-
-    it("should render icon depending on precedence", () => {
-        // Precedence is Low priority > Video room > Public room > Presence
-
-        const mockVM = {
-            ...defaultValue,
-            hasDecoration: true,
-            presence: Presence.Online,
-        };
-        mocked(useRoomAvatarViewModel).mockReturnValue(mockVM);
-
-        // 1. Presence has the least priority
-        const { rerender } = render(<RoomAvatarView room={room} />);
-        expect(screen.queryByLabelText("Online")).toBeInTheDocument();
-
-        // 2. With presence and public room, presence takes precedence
-        mockVM.isPublic = true;
-        rerender(<RoomAvatarView room={room} />);
-        expect(screen.queryByLabelText("This room is public")).toBeInTheDocument();
-        expect(screen.queryByLabelText("Online")).not.toBeInTheDocument();
-
-        // 3. With presence, public-room and video room, video room takes precedence
-        mockVM.isVideoRoom = true;
-        rerender(<RoomAvatarView room={room} />);
-        expect(screen.queryByLabelText("This room is a video room")).toBeInTheDocument();
-        expect(screen.queryByLabelText("This room is public")).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("Online")).not.toBeInTheDocument();
-
-        // 4. With presence, public room, video room and low priority, low priority takes precedence
-        mockVM.isLowPriority = true;
-        rerender(<RoomAvatarView room={room} />);
-        expect(screen.queryByLabelText("This is a low priority room")).toBeInTheDocument();
-        expect(screen.queryByLabelText("This room is a video room")).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("This room is public")).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("Online")).not.toBeInTheDocument();
     });
 
     it.each([
@@ -122,7 +89,7 @@ describe("<RoomAvatarView />", () => {
     ])("should render the $presence presence", ({ presence, label }) => {
         mocked(useRoomAvatarViewModel).mockReturnValue({
             ...defaultValue,
-            hasDecoration: true,
+            badgeDecoration: AvatarBadgeDecoration.Presence,
             presence,
         });
         const { asFragment } = render(<RoomAvatarView room={room} />);

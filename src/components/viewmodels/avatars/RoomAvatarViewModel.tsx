@@ -12,29 +12,24 @@ import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
 import { DefaultTagID } from "../../../stores/room-list/models";
 
+export enum AvatarBadgeDecoration {
+    LowPriority = "LowPriority",
+    VideoRoom = "VideoRoom",
+    PublicRoom = "PublicRoom",
+    Presence = "Presence",
+}
+
 export interface RoomAvatarViewState {
-    /**
-     * Whether the room avatar has a decoration.
-     * A decoration can be a public or a video call icon or an indicator of presence.
-     */
-    hasDecoration: boolean;
-    /**
-     * Whether the room is public.
-     */
-    isPublic: boolean;
-    /**
-     * Whether the room is a video room.
-     */
-    isVideoRoom: boolean;
     /**
      * The presence of the user in the DM room.
      * If null, the user is not in a DM room or presence is not enabled.
      */
     presence: Presence | null;
+
     /**
-     * Whether this room is tagged as low priority.
+     * The decoration that should be rendered.
      */
-    isLowPriority: boolean;
+    badgeDecoration?: AvatarBadgeDecoration;
 }
 
 /**
@@ -48,9 +43,18 @@ export function useRoomAvatarViewModel(room: Room): RoomAvatarViewState {
     const isPublic = useIsPublic(room);
     const isLowPriority = !!room.tags[DefaultTagID.LowPriority];
 
-    const hasDecoration = isPublic || isVideoRoom || isLowPriority || presence !== null;
+    let badgeDecoration: AvatarBadgeDecoration | undefined;
+    if (isLowPriority) {
+        badgeDecoration = AvatarBadgeDecoration.LowPriority;
+    } else if (isVideoRoom) {
+        badgeDecoration = AvatarBadgeDecoration.VideoRoom;
+    } else if (isPublic) {
+        badgeDecoration = AvatarBadgeDecoration.PublicRoom;
+    } else if (presence) {
+        badgeDecoration = AvatarBadgeDecoration.Presence;
+    }
 
-    return { hasDecoration, isPublic, isVideoRoom, isLowPriority, presence };
+    return { badgeDecoration, presence };
 }
 
 /**
