@@ -36,12 +36,6 @@ export function useInviteControlsViewModel(): InviteControlsViewModel {
         return await client.doesServerSupportUnstableFeature("org.matrix.msc4155");
     }, [client]);
 
-    // Is enforced by the server.
-    const isEnforcedServerside = useAsyncMemo(async () => {
-        const caps = await client.getCapabilities();
-        return caps["org.matrix.msc4155.invite_permission_config_enforced"]?.enabled;
-    }, [client]);
-
     // This implements a very basic version of MSC4155 that simply allows
     // or disallows all invites by setting a simple glob.
     // Keep in mind that users may configure more powerful rules on other
@@ -75,7 +69,6 @@ export function useInviteControlsViewModel(): InviteControlsViewModel {
     return {
         globalInvitesEnabled,
         isSupported,
-        isEnforcedServerside,
         busy,
         error: hasError,
         toggleGlobalInvites,

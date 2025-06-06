@@ -13,7 +13,7 @@ import { _t } from "../../../languageHandler";
 import { useInviteControlsViewModel } from "../../viewmodels/settings/InviteControlsViewModel";
 
 export const InviteControlsPanel: FC = () => {
-    const { busy, globalInvitesEnabled, toggleGlobalInvites, isEnforcedServerside, isSupported, error } =
+    const { busy, globalInvitesEnabled, toggleGlobalInvites, isSupported, error } =
         useInviteControlsViewModel();
 
     const setValue = useCallback<ChangeEventHandler<HTMLInputElement>>(
@@ -44,7 +44,7 @@ export const InviteControlsPanel: FC = () => {
                 </InlineField>
             </>
         );
-    } else if (isSupported === false || isEnforcedServerside === false) {
+    } else if (isSupported === false) {
         content = (
             <Tooltip description={_t("settings|invite_controls|not_supported")}>
                 <InlineField
