@@ -14,6 +14,7 @@ import React, { type ChangeEvent, type FormEvent } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import Field from "../../elements/Field";
+import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
@@ -161,7 +162,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             });
         }
 
-        return <div className={classes}>{validationText}</div>;
+        return (
+            <Flex align="center" className={classes}>
+                {validationText}
+            </Flex>
+        );
     }
 
     public render(): React.ReactNode {
