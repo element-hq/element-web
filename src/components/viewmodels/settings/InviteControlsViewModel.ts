@@ -15,7 +15,6 @@ import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 
 interface InviteControlsViewModel {
     isSupported: boolean | undefined;
-    isEnforcedServerside: boolean | undefined;
     globalInvitesEnabled: boolean;
     busy: boolean;
     error: boolean;

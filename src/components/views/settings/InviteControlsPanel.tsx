@@ -13,8 +13,7 @@ import { _t } from "../../../languageHandler";
 import { useInviteControlsViewModel } from "../../viewmodels/settings/InviteControlsViewModel";
 
 export const InviteControlsPanel: FC = () => {
-    const { busy, globalInvitesEnabled, toggleGlobalInvites, isSupported, error } =
-        useInviteControlsViewModel();
+    const { busy, globalInvitesEnabled, toggleGlobalInvites, isSupported, error } = useInviteControlsViewModel();
 
     const setValue = useCallback<ChangeEventHandler<HTMLInputElement>>(
         (e) => {
