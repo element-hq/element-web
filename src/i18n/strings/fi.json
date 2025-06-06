@@ -1803,7 +1803,6 @@
     "room_list": {
         "add_room_label": "Lisää huone",
         "add_space_label": "Lisää avaruus",
-        "appearance": "Ulkoasu",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
         "empty": {
@@ -1845,7 +1844,6 @@
             "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
-        "show_message_previews": "Näytä viestien esikatselut",
         "show_n_more": {
             "one": "Näytä %(count)s lisää",
             "other": "Näytä %(count)s lisää"

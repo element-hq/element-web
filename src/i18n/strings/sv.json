@@ -2087,7 +2087,6 @@
     "room_list": {
         "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
         "empty": {
@@ -2140,7 +2139,6 @@
         },
         "room_options": "Rumsalternativ",
         "show_less": "Visa mindre",
-        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"

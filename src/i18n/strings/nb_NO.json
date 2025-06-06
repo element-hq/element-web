@@ -1957,6 +1957,7 @@
         },
         "face_pile_tooltip_shortcut": "Inkludert %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inkludert deg, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan ikke avgjøre hvilken bruker som skal ignoreres siden medlemshendelsen har endret seg.",
         "failed_reject_invite": "Kunne ikke avvise invitasjonen",
         "forget_room": "Glem dette rommet",
         "forget_space": "Glem dette området",
@@ -2094,7 +2095,6 @@
     "room_list": {
         "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
         "empty": {
@@ -2153,7 +2153,6 @@
         },
         "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
-        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },

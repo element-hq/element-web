@@ -2093,7 +2093,6 @@
     "room_list": {
         "add_room_label": "Raum hinzufügen",
         "add_space_label": "Space hinzufügen",
-        "appearance": "Erscheinungsbild",
         "breadcrumbs_empty": "Keine kürzlich besuchten Räume",
         "breadcrumbs_label": "Kürzlich besuchte Räume",
         "empty": {
@@ -2151,7 +2150,6 @@
         },
         "room_options": "Chatroomoptionen",
         "show_less": "Weniger anzeigen",
-        "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"

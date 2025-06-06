@@ -2040,7 +2040,6 @@
     "room_list": {
         "add_room_label": "Ychwanegu ystafell",
         "add_space_label": "Ychwanegu gofod",
-        "appearance": "Gwedd",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
         "empty": {
@@ -2090,7 +2089,6 @@
         },
         "room_options": "Dewisiadau Ystafelloedd",
         "show_less": "Dangos llai",
-        "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",
         "sort": "Trefnu",
         "sort_by": "Trefnu yn ôl",
