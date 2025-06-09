@@ -23,7 +23,13 @@ test.describe("Encryption state after registration", () => {
     test("Key backup is enabled by default", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(
+            page,
+            mailpitClient,
+            `alice_${testInfo.testId}`,
+            `alice_${testInfo.testId}@email.com`,
+            "Pa$sW0rD!",
+        );
 
         // Wait for the ui to load
         await expect(page.locator(".mx_MatrixChat")).toBeVisible();
@@ -35,7 +41,13 @@ test.describe("Encryption state after registration", () => {
     test("user is prompted to set up recovery", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(
+            page,
+            mailpitClient,
+            `alice_${testInfo.testId}`,
+            `alice_${testInfo.testId}@email.com`,
+            "Pa$sW0rD!",
+        );
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
@@ -64,7 +76,7 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailpitClient, testUsername, "alice@email.com", testPassword);
+        await registerAccountMas(page, mailpitClient, testUsername, `${testUsername}@email.com`, testPassword);
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();

@@ -911,22 +911,13 @@
     "empty_room_was_name": "Tomt rom (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Skriv inn sikkerhetsfrasen eller <button> bruk sikkerhetsnøkkelen </button> for å fortsette.",
+            "alternatives": "Hvis du har en sikkerhetsnøkkel eller en sikkerhetsfrase, vil dette også fungere.",
             "key_validation_text": {
-                "invalid_security_key": "Ugyldig gjenopprettingsnøkkel",
-                "recovery_key_is_correct": "Ser bra ut!",
-                "wrong_file_type": "Feil filtype",
-                "wrong_security_key": "Feil gjenopprettingsnøkkel"
+                "wrong_security_key": "Gjenopprettingsnøkkelen du skrev inn er ikke riktig."
             },
-            "reset_title": "Tilbakestill alt",
-            "reset_warning_1": "Gjør dette bare hvis du ikke har noen annen enhet å fullføre verifiseringen med.",
-            "reset_warning_2": "Hvis du tilbakestiller alt, starter du på nytt uten klarerte økter, ingen klarerte brukere, og du kan kanskje ikke se tidligere meldinger.",
+            "privacy_warning": "Sørg for at ingen kan se denne skjermen!",
             "restoring": "Gjenoppretter nøkler fra sikkerhetskopi",
-            "security_key_title": "Gjenopprettingsnøkkel",
-            "security_phrase_incorrect_error": "Får ikke tilgang til hemmelig lagring. Kontroller at du har skrevet inn riktig sikkerhetsfrase.",
-            "security_phrase_title": "Sikkerhetsfrase",
-            "separator": "%(securityKey)s eller %(recoveryFile)s",
-            "use_security_key_prompt": "Bruk sikkerhetsnøkkelen din for å fortsette."
+            "security_key_title": "Gjenopprettingsnøkkel"
         },
         "bootstrap_title": "Setter opp nøkler",
         "cancel_entering_passphrase_description": "Er du sikker på at du vil avbryte inntasting av passordfrase?",
@@ -1966,6 +1957,7 @@
         },
         "face_pile_tooltip_shortcut": "Inkludert %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inkludert deg, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan ikke avgjøre hvilken bruker som skal ignoreres siden medlemshendelsen har endret seg.",
         "failed_reject_invite": "Kunne ikke avvise invitasjonen",
         "forget_room": "Glem dette rommet",
         "forget_space": "Glem dette området",
@@ -2103,7 +2095,6 @@
     "room_list": {
         "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
         "empty": {
@@ -2128,6 +2119,7 @@
         "filters": {
             "favourite": "Favoritter",
             "invites": "Invitasjoner",
+            "low_priority": "Lav prioritet",
             "mentions": "Omtaler",
             "people": "Personer",
             "rooms": "Rom",
@@ -2161,7 +2153,6 @@
         },
         "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
-        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },

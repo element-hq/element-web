@@ -789,18 +789,11 @@
     "empty_room_was_name": "Tyhjä huone (oli %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Kirjoita turvalause tai <button>käytä turva-avain</button> jatkaaksesi.",
             "key_validation_text": {
-                "invalid_security_key": "Virheellinen palautusavain",
-                "recovery_key_is_correct": "Hyvältä näyttää!",
-                "wrong_file_type": "Väärä tiedostotyyppi",
                 "wrong_security_key": "Väärä palautusavain"
             },
             "restoring": "Palautetaan avaimia varmuuskopiosta",
-            "security_key_title": "Palautusavain",
-            "security_phrase_title": "Turvalause",
-            "separator": "%(securityKey)s tai %(recoveryFile)s",
-            "use_security_key_prompt": "Käytä palautusavainta jatkaaksesi."
+            "security_key_title": "Palautusavain"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
         "cancel_entering_passphrase_description": "Haluatko varmasti peruuttaa salasanan syöttämisen?",
@@ -1810,7 +1803,6 @@
     "room_list": {
         "add_room_label": "Lisää huone",
         "add_space_label": "Lisää avaruus",
-        "appearance": "Ulkoasu",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
         "empty": {
@@ -1852,7 +1844,6 @@
             "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
-        "show_message_previews": "Näytä viestien esikatselut",
         "show_n_more": {
             "one": "Näytä %(count)s lisää",
             "other": "Näytä %(count)s lisää"

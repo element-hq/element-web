@@ -333,10 +333,11 @@ test.describe("Room list", () => {
         });
 
         test("should render a message preview", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
-            const roomListView = getRoomList(page);
+            await app.settings.openUserSettings("Preferences");
+            await page.getByRole("switch", { name: "Show message previews" }).click();
+            await app.closeDialog();
 
-            await page.getByRole("button", { name: "Room Options" }).click();
-            await page.getByRole("menuitemcheckbox", { name: "Show message previews" }).click();
+            const roomListView = getRoomList(page);
 
             const roomId = await app.client.createRoom({ name: "activity" });
 

@@ -790,22 +790,11 @@
     "empty_room_was_name": "Efitra banga (dia%(oldName)s )",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ampidiro ny fehezan-teny fiarovana anao na<button> ampiasao ny Security Key</button> hanohy.",
             "key_validation_text": {
-                "invalid_security_key": "Fanalahidy fiarovana tsy mety",
-                "recovery_key_is_correct": "Toa tsara!",
-                "wrong_file_type": "Karazana rakitra diso",
                 "wrong_security_key": "Fanalahidin'ny fiarovana diso"
             },
-            "reset_title": "Avereno ny zava-drehetra",
-            "reset_warning_1": "Ataovy izany raha tsy manana fitaovana hafa hamitana ny fanamarinana ianao.",
-            "reset_warning_2": "Raha averinao daholo ny zava-drehetra dia hanomboka tsy misy fivoriana azo itokisana, tsy misy mpampiasa azo itokisana, ary mety tsy hahita hafatra taloha.",
             "restoring": "Famerenana ny fanalahidy avy amin'ny vakorakitra",
-            "security_key_title": "Kitendry fiarovana",
-            "security_phrase_incorrect_error": "Tsy afaka miditra amin'ny fitahirizana miafina. Azafady, hamarino fa nampiditra ny fehezan-teny fiarovana marina ianao.",
-            "security_phrase_title": "Andian-teny fiarovana",
-            "separator": "%(securityKey)sna%(recoveryFile)s",
-            "use_security_key_prompt": "Ampiasao ny lakilen'ny fiarovana anao hanohizana."
+            "security_key_title": "Kitendry fiarovana"
         },
         "bootstrap_title": "Fametrahana fanalahidy",
         "cancel_entering_passphrase_description": "Tena te-hanafoana ny fampidirana fehezanteny ve ianao?",

@@ -159,6 +159,7 @@
         "view_message": "Zobrazit zprávu",
         "view_source": "Zobrazit zdroj",
         "yes": "Ano",
+        "yes_dismiss": "Ano, zamítnout",
         "zoom_in": "Přiblížit",
         "zoom_out": "Oddálit"
     },
@@ -912,22 +913,13 @@
     "empty_room_was_name": "Prázdná místnost (dříve %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Pro pokračování zadejte bezpečnostní frázi nebo <button>klíč pro obnovení</button>.",
+            "alternatives": "Pokud máte bezpečnostní klíč nebo bezpečnostní frázi, bude to také fungovat.",
             "key_validation_text": {
-                "invalid_security_key": "Neplatný klíč pro obnovení",
-                "recovery_key_is_correct": "To vypadá dobře!",
-                "wrong_file_type": "Špatný typ souboru",
-                "wrong_security_key": "Nesprávný klíč pro obnovení"
+                "wrong_security_key": "Zadaný klíč pro obnovení není správný."
             },
-            "reset_title": "Resetovat vše",
-            "reset_warning_1": "Udělejte to, pouze pokud nemáte žádné jiné zařízení, se kterým byste mohli dokončit ověření.",
-            "reset_warning_2": "Pokud vše resetujete, začnete bez důvěryhodných relací, bez důvěryhodných uživatelů a možná nebudete moci zobrazit minulé zprávy.",
+            "privacy_warning": "Ujistěte se, že tuto obrazovku nikdo nevidí!",
             "restoring": "Obnovení klíčů ze zálohy",
-            "security_key_title": "Klíč pro obnovení",
-            "security_phrase_incorrect_error": "Nelze získat přístup k zabezpečenému úložišti. Ověřte, zda jste zadali správnou bezpečnostní frázi.",
-            "security_phrase_title": "Bezpečnostní fráze",
-            "separator": "%(securityKey)s nebo %(recoveryFile)s",
-            "use_security_key_prompt": "Pokračujte pomocí klíče pro obnovení."
+            "security_key_title": "Klíč pro obnovení"
         },
         "bootstrap_title": "Příprava klíčů",
         "cancel_entering_passphrase_description": "Chcete určitě zrušit zadávání přístupové fráze?",
@@ -983,6 +975,8 @@
         "setup_secure_backup": {
             "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
         },
+        "turn_on_key_storage": "Zapnout úložiště klíčů",
+        "turn_on_key_storage_description": "Bezpečně uložte svou kryptografickou identitu a klíče zpráv na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních.",
         "udd": {
             "interactive_verification_button": "Interaktivní ověření pomocí emoji",
             "other_ask_verify_text": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
@@ -2106,7 +2100,6 @@
     "room_list": {
         "add_room_label": "Přidat místnost",
         "add_space_label": "Přidat prostor",
-        "appearance": "Vzhled",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
         "empty": {
@@ -2115,11 +2108,14 @@
             "no_chats_description_no_room_rights": "Začněte tím, že někomu pošlete zprávu",
             "no_favourites": "Zatím nemáte oblíbený chat",
             "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
+            "no_invites": "Nemáte žádné nepřečtené pozvánky",
+            "no_mentions": "Nemáte žádné nepřečtené zmínky",
             "no_people": "Zatím s nikým nemáte přímé chaty",
             "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
             "no_rooms": "Ještě nejste v žádné místnosti",
             "no_rooms_description": "Můžete zrušit výběr filtrů, abyste viděli své další chaty",
             "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
+            "show_activity": "Zobrazit veškerou aktivitu",
             "show_chats": "Zobrazit všechny chaty"
         },
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
@@ -2127,6 +2123,8 @@
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
         "filters": {
             "favourite": "Oblíbené",
+            "invites": "Pozvánky",
+            "mentions": "Zmínky",
             "people": "Lidé",
             "rooms": "Místnosti",
             "unread": "Nepřečtené"
@@ -2159,7 +2157,6 @@
         },
         "room_options": "Možnosti místnosti",
         "show_less": "Zobrazit méně",
-        "show_message_previews": "Zobrazit náhledy zpráv",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
             "one": "Zobrazit %(count)s další"
@@ -2557,6 +2554,8 @@
                 "session_key": "Klíč relace:",
                 "title": "Rozšířené"
             },
+            "confirm_key_storage_off": "Opravdu chcete ponechat úložiště klíčů vypnuté?",
+            "confirm_key_storage_off_description": "Pokud se odhlásíte ze všech svých zařízení, ztratíte historii zpráv a budete muset znovu ověřit všechny své stávající kontakty. <a>Další informace</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Smazat úložiště klíčů",
                 "confirm": "Smazat úložiště klíčů",

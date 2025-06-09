@@ -598,19 +598,10 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Nevalida Sekureca ŝlosilo",
-                "recovery_key_is_correct": "Ŝajnas bona!",
-                "wrong_file_type": "Neĝusta dosiertipo",
                 "wrong_security_key": "Malĝusta Sekureca ŝlosilo"
             },
-            "reset_title": "Restarigi ĉion",
-            "reset_warning_1": "Faru tion ĉi nur se vi ne havas alian aparaton, per kiu vi kontrolus ceterajn.",
-            "reset_warning_2": "Se vi restarigos ĉion, vi rekomencos sen fidataj salutaĵoj, uzantoj, kaj eble ne povos vidi antaŭajn mesaĝojn.",
             "restoring": "Rehavo de ŝlosiloj el savkopio",
-            "security_key_title": "Sekureca ŝlosilo",
-            "security_phrase_incorrect_error": "Ne povas akiri sekretandeponejon. Bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
-            "security_phrase_title": "Sekureca frazo",
-            "use_security_key_prompt": "Uzu vian sekurecan ŝlosilon por daŭrigi."
+            "security_key_title": "Sekureca ŝlosilo"
         },
         "bootstrap_title": "Agordo de klavoj",
         "cancel_entering_passphrase_description": "Ĉu vi certe volas nuligi enigon de pasfrazo?",

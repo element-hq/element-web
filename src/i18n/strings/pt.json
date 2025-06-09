@@ -885,22 +885,11 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduz a tua frase de segurança ou <button>utiliza a tua chave de recuperação</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de recuperação inválida",
-                "recovery_key_is_correct": "Parece bom!",
-                "wrong_file_type": "Tipo de ficheiro errado",
                 "wrong_security_key": "Chave de recuperação errada"
             },
-            "reset_title": "Repor tudo",
-            "reset_warning_1": "Faz isto apenas se não tiveres outro dispositivo para completar a verificação.",
-            "reset_warning_2": "Se reiniciares tudo, irás reiniciar sem sessões de confiança, sem utilizadores de confiança e poderás não conseguir ver mensagens anteriores.",
             "restoring": "Restaurar chaves a partir de uma cópia de segurança",
-            "security_key_title": "Chave de recuperação",
-            "security_phrase_incorrect_error": "Não é possível aceder ao armazenamento secreto. Verifica se introduziste a frase de segurança correcta.",
-            "security_phrase_title": "Frase de segurança",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Utiliza a tua chave de recuperação para continuar."
+            "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "A configurar chaves",
         "cancel_entering_passphrase_description": "Tem a certeza que quer cancelar a introdução da frase-passe?",

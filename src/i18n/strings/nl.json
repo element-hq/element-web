@@ -692,22 +692,11 @@
     "empty_room_was_name": "Lege ruimte (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Voer uw veiligheidswachtwoord in of <button>gebruik uw veiligheidssleutel</button> om door te gaan.",
             "key_validation_text": {
-                "invalid_security_key": "Ongeldige veiligheidssleutel",
-                "recovery_key_is_correct": "Ziet er goed uit!",
-                "wrong_file_type": "Verkeerd bestandstype",
                 "wrong_security_key": "Verkeerde veiligheidssleutel"
             },
-            "reset_title": "Alles opnieuw instellen",
-            "reset_warning_1": "Doe dit alleen als u geen ander apparaat hebt om de verificatie mee uit te voeren.",
-            "reset_warning_2": "Als u alles reset zult u opnieuw opstarten zonder vertrouwde sessies, zonder vertrouwde personen, en zult u misschien geen oude berichten meer kunnen zien.",
             "restoring": "Sleutels herstellen vanaf back-up",
-            "security_key_title": "Veiligheidssleutel",
-            "security_phrase_incorrect_error": "Geen toegang tot geheime opslag. Controleer of u het juiste veiligheidswachtwoord hebt ingevoerd.",
-            "security_phrase_title": "Veiligheidswachtwoord",
-            "separator": "%(securityKey)s of %(recoveryFile)s",
-            "use_security_key_prompt": "Gebruik uw veiligheidssleutel om verder te gaan."
+            "security_key_title": "Veiligheidssleutel"
         },
         "bootstrap_title": "Sleutelconfiguratie",
         "cancel_entering_passphrase_description": "Weet je zeker, dat je het invoeren van je wachtwoord wilt afbreken?",

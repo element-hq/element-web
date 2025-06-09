@@ -911,26 +911,15 @@
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Enter your Security Phrase or <button>use your Recovery Key</button> to continue.",
+            "alternatives": "If you have a security key or security phrase, this will work too.",
             "key_validation_text": {
-                "invalid_security_key": "Invalid Recovery Key",
-                "recovery_key_is_correct": "Looks good!",
-                "wrong_file_type": "Wrong file type",
-                "wrong_security_key": "Wrong Recovery Key"
+                "wrong_security_key": "The recovery key you entered is not correct."
             },
-            "reset_title": "Reset everything",
-            "reset_warning_1": "Only do this if you have no other device to complete verification with.",
-            "reset_warning_2": "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.",
+            "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Recovery Key",
-            "security_phrase_incorrect_error": "Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
-            "security_phrase_title": "Security Phrase",
-            "separator": "%(securityKey)s or %(recoveryFile)s",
-            "use_security_key_prompt": "Use your Recovery Key to continue."
+            "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
-        "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
-        "cancel_entering_passphrase_title": "Cancel entering passphrase?",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
@@ -1966,6 +1955,7 @@
         },
         "face_pile_tooltip_shortcut": "Including %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Including you, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Cannot determine which user to ignore since the member event has changed.",
         "failed_reject_invite": "Failed to reject invite",
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
@@ -2103,7 +2093,6 @@
     "room_list": {
         "add_room_label": "Add room",
         "add_space_label": "Add space",
-        "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
         "collapse_filters": "Collapse filter list",
@@ -2130,6 +2119,7 @@
         "filters": {
             "favourite": "Favourites",
             "invites": "Invites",
+            "low_priority": "Low priority",
             "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
@@ -2163,7 +2153,6 @@
         },
         "room_options": "Room Options",
         "show_less": "Show less",
-        "show_message_previews": "Show message previews",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
@@ -2993,6 +2982,7 @@
         "show_chat_effects": "Show chat effects (animations when receiving e.g. confetti)",
         "show_displayname_changes": "Show display name changes",
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
+        "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",

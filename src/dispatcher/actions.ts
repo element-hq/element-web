@@ -27,6 +27,11 @@ export enum Action {
     ViewUser = "view_user",
 
     /**
+     * Share a text message by forwarding it to a room selected by the user
+     */
+    Share = "share",
+
+    /**
      * Open the user settings. No additional payload information required.
      * Optionally can include an OpenToTabPayload.
      */

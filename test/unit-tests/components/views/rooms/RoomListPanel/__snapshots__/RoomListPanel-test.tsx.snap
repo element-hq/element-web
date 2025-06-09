@@ -32,10 +32,10 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«rd»"
+          aria-labelledby="«rc»"
           class="_icon-button_m2erp_8"
           data-state="closed"
-          id="radix-«rb»"
+          id="radix-«ra»"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -54,7 +54,7 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
               />
             </svg>
           </div>
@@ -91,109 +91,104 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
         </button>
       </div>
     </header>
-    <div
-      class="mx_RoomListPrimaryFilters"
-      data-testid="primary-filters"
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >
-      <div
-        class="mx_RoomListPrimaryFilters_container"
-        data-expanded="false"
-        data-testid="filter-container"
-        style="transition: 0.1s ease-in-out;"
+      <li
+        aria-selected="false"
+        role="option"
       >
-        <div
-          class="mx_Flex mx_RoomListPrimaryFilters_animated"
-          id="«ri»"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
         >
-          <ul
-            aria-label="Room list filters"
-            class="mx_Flex"
-            role="listbox"
-            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
-          >
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Unreads
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                People
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Rooms
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Mentions
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Invites
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Favourites
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Low priority
+        </button>
+      </li>
+    </ul>
     <div
       class="mx_RoomListSkeleton"
     />
@@ -315,7 +310,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M5 7a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zm3 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm2 5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1"
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
               />
             </svg>
           </div>
@@ -358,109 +353,104 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </button>
       </div>
     </header>
-    <div
-      class="mx_RoomListPrimaryFilters"
-      data-testid="primary-filters"
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >
-      <div
-        class="mx_RoomListPrimaryFilters_container"
-        data-expanded="false"
-        data-testid="filter-container"
-        style="transition: 0.1s ease-in-out;"
+      <li
+        aria-selected="false"
+        role="option"
       >
-        <div
-          class="mx_Flex mx_RoomListPrimaryFilters_animated"
-          id="«r9»"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
         >
-          <ul
-            aria-label="Room list filters"
-            class="mx_Flex"
-            role="listbox"
-            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
-          >
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Unreads
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                People
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Rooms
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Mentions
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Invites
-              </button>
-            </li>
-            <li
-              aria-selected="false"
-              role="option"
-            >
-              <button
-                aria-selected="false"
-                class="_chat-filter_5qdp0_8"
-                role="button"
-                tabindex="0"
-              >
-                Favourites
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+          Unreads
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Mentions
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Invites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Low priority
+        </button>
+      </li>
+    </ul>
     <div
       class="mx_RoomListSkeleton"
     />
