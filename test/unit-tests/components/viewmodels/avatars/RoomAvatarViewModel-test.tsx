@@ -62,12 +62,13 @@ describe("RoomAvatarViewModel", () => {
         jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(roomMember);
         jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(PresenceIndicatorModule.Presence.Online);
 
-        const { result: vm, rerender } = renderHook(() => useRoomAvatarViewModel(room));
-        expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.Presence);
+        const { result: vm1 } = renderHook(() => useRoomAvatarViewModel(room));
+        expect(vm1.current.badgeDecoration).toBe(AvatarBadgeDecoration.Presence);
 
         // 2. With presence and public room, presence takes precedence
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
-        rerender(room);
+        // Render again, it's easier than mocking the event emitter.
+        const { result: vm, rerender } = renderHook(() => useRoomAvatarViewModel(room));
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.PublicRoom);
 
         // 3. With presence, public-room and video room, video room takes precedence
