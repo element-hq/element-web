@@ -17,6 +17,7 @@ import Field from "../../elements/Field";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
+import BaseDialog from "../BaseDialog";
 
 // Don't shout at the user that their key is invalid every time they type a key: wait a short time
 const VALIDATION_THROTTLE_MS = 200;
@@ -205,15 +206,19 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             </div>
         );
 
+        // We wrap the content in `BaseDialog` mostly so that we get a `FocusLock` container; otherwise, if the
+        // SettingsDialog is open, then the `FocusLock` in *that* stops us getting the focus.
         return (
-            <EncryptionCard
-                Icon={LockSolidIcon}
-                className="mx_AccessSecretStorageDialog"
-                title={title}
-                description={_t("encryption|access_secret_storage_dialog|privacy_warning")}
-            >
-                {content}
-            </EncryptionCard>
+            <BaseDialog fixedWidth={false} hasCancel={false}>
+                <EncryptionCard
+                    Icon={LockSolidIcon}
+                    className="mx_AccessSecretStorageDialog"
+                    title={title}
+                    description={_t("encryption|access_secret_storage_dialog|privacy_warning")}
+                >
+                    {content}
+                </EncryptionCard>
+            </BaseDialog>
         );
     }
 }

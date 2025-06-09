@@ -2086,7 +2086,6 @@
     "room_list": {
         "add_room_label": "Tambahkan ruangan",
         "add_space_label": "Tambahkan space",
-        "appearance": "Penampilan",
         "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
         "breadcrumbs_label": "Ruangan yang baru saja dilihat",
         "empty": {
@@ -2144,7 +2143,6 @@
         },
         "room_options": "Opsi Ruangan",
         "show_less": "Tampilkan lebih sedikit",
-        "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {
             "one": "Tampilkan %(count)s lagi",
             "other": "Tampilkan %(count)s lagi"
