@@ -45,7 +45,6 @@ describe("InviteRulesAccountSetting", () => {
         mockSetting({ allBlocked: false }, true);
         const { findByLabelText } = render(<InviteRulesAccountSetting />);
         const result = await findByLabelText("Allow users to invite you to rooms");
-        console.log(result);
         expect(result).toBeChecked();
     });
     it("renders correct state when invites are blocked", async () => {

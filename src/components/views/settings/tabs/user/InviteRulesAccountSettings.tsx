@@ -19,20 +19,16 @@ export const InviteRulesAccountSetting: FC = () => {
     const rules = useSettingValue("inviteRules");
     const settingsDisabled = SettingsStore.disabledMessage("inviteRules");
     const [busy, setBusy] = useState(false);
-    const [error, setError] = useState(false);
 
     const onChange = useCallback((checked: boolean) => {
         (async () => {
-            console.log("Checked", checked);
             try {
-                setError(false);
                 setBusy(true);
                 await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, {
                     allBlocked: !checked,
                 });
             } catch (ex) {
                 logger.error(`Unable to set invite rules`, ex);
-                setError(true);
             } finally {
                 setBusy(false);
             }
@@ -48,7 +44,6 @@ export const InviteRulesAccountSetting: FC = () => {
                 tooltip={settingsDisabled}
                 disabled={!!settingsDisabled || busy}
             />
-            {error && <ErrorMessage>{_t("settings|invite_controls|error_message")}</ErrorMessage>}
         </Root>
     );
 };

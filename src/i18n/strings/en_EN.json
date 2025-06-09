@@ -2688,8 +2688,7 @@
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
-            "default_label": "Allow users to invite you to rooms",
-            "error_message": "An error occured while trying to change this setting"
+            "default_label": "Allow users to invite you to rooms"
         },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
