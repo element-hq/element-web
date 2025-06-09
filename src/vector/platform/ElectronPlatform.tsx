@@ -52,8 +52,6 @@ interface SquirrelUpdate {
 
 const SSO_ID_KEY = "element-desktop-ssoid";
 
-const isMac = navigator.platform.toUpperCase().includes("MAC");
-
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
     if (navigator.userAgent.includes("Macintosh")) {
@@ -70,13 +68,6 @@ function platformFriendlyName(): string {
         return "Linux";
     } else {
         return "Unknown";
-    }
-}
-
-function onAction(payload: ActionPayload): void {
-    // Whitelist payload actions, no point sending most across
-    if (["call_state"].includes(payload.action)) {
-        window.electron!.send("app_onAction", payload);
     }
 }
 
@@ -97,9 +88,11 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     private readonly initialised: Promise<void>;
+    private readonly electron: Electron;
     private protocol!: string;
     private sessionId!: string;
     private config!: IConfigOptions;
+    private supportedSettings?: Record<string, boolean>;
 
     public constructor() {
         super();
@@ -107,15 +100,15 @@ export default class ElectronPlatform extends BasePlatform {
         if (!window.electron) {
             throw new Error("Cannot instantiate ElectronPlatform, window.electron is not set");
         }
+        this.electron = window.electron;
 
-        dis.register(onAction);
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
             false if there is not
             or the error if one is encountered
          */
-        window.electron.on("check_updates", (event, status) => {
+        this.electron.on("check_updates", (event, status) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...getUpdateCheckStatus(status),
@@ -124,44 +117,44 @@ export default class ElectronPlatform extends BasePlatform {
 
         // `userAccessToken` (IPC) is requested by the main process when appending authentication
         // to media downloads. A reply is sent over the same channel.
-        window.electron.on("userAccessToken", () => {
-            window.electron!.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
+        this.electron.on("userAccessToken", () => {
+            this.electron.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
         });
 
         // `homeserverUrl` (IPC) is requested by the main process. A reply is sent over the same channel.
-        window.electron.on("homeserverUrl", () => {
-            window.electron!.send("homeserverUrl", MatrixClientPeg.get()?.getHomeserverUrl());
+        this.electron.on("homeserverUrl", () => {
+            this.electron.send("homeserverUrl", MatrixClientPeg.get()?.getHomeserverUrl());
         });
 
         // `serverSupportedVersions` is requested by the main process when it needs to know if the
         // server supports a particular version. This is primarily used to detect authenticated media
         // support. A reply is sent over the same channel.
-        window.electron.on("serverSupportedVersions", async () => {
-            window.electron!.send("serverSupportedVersions", await MatrixClientPeg.get()?.getVersions());
+        this.electron.on("serverSupportedVersions", async () => {
+            this.electron.send("serverSupportedVersions", await MatrixClientPeg.get()?.getVersions());
         });
 
         // try to flush the rageshake logs to indexeddb before quit.
-        window.electron.on("before-quit", function () {
+        this.electron.on("before-quit", function () {
             logger.log("element-desktop closing");
             rageshake.flush();
         });
 
-        window.electron.on("update-downloaded", this.onUpdateDownloaded);
+        this.electron.on("update-downloaded", this.onUpdateDownloaded);
 
-        window.electron.on("preferences", () => {
+        this.electron.on("preferences", () => {
             dis.fire(Action.ViewUserSettings);
         });
 
-        window.electron.on("userDownloadCompleted", (ev, { id, name }) => {
+        this.electron.on("userDownloadCompleted", (ev, { id, name }) => {
             const key = `DOWNLOAD_TOAST_${id}`;
 
             const onAccept = (): void => {
-                window.electron!.send("userDownloadAction", { id, open: true });
+                this.electron.send("userDownloadAction", { id, open: true });
                 ToastStore.sharedInstance().dismissToast(key);
             };
 
             const onDismiss = (): void => {
-                window.electron!.send("userDownloadAction", { id });
+                this.electron.send("userDownloadAction", { id });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -180,7 +173,7 @@ export default class ElectronPlatform extends BasePlatform {
             });
         });
 
-        window.electron.on("openDesktopCapturerSourcePicker", async () => {
+        this.electron.on("openDesktopCapturerSourcePicker", async () => {
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
             const [source] = await finished;
             // getDisplayMedia promise does not return if no dummy is passed here as source
@@ -192,11 +185,20 @@ export default class ElectronPlatform extends BasePlatform {
         this.initialised = this.initialise();
     }
 
+    protected onAction(payload: ActionPayload): void {
+        super.onAction(payload);
+        // Whitelist payload actions, no point sending most across
+        if (["call_state"].includes(payload.action)) {
+            this.electron.send("app_onAction", payload);
+        }
+    }
+
     private async initialise(): Promise<void> {
-        const { protocol, sessionId, config } = await window.electron!.initialise();
+        const { protocol, sessionId, config, supportedSettings } = await this.electron.initialise();
         this.protocol = protocol;
         this.sessionId = sessionId;
         this.config = config;
+        this.supportedSettings = supportedSettings;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -248,7 +250,7 @@ export default class ElectronPlatform extends BasePlatform {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
-        window.electron!.send("setBadgeCount", count);
+        this.electron.send("setBadgeCount", count);
     }
 
     public supportsNotifications(): boolean {
@@ -288,7 +290,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public loudNotification(ev: MatrixEvent, room: Room): void {
-        window.electron!.send("loudNotification");
+        this.electron.send("loudNotification");
     }
 
     public needsUrlTooltips(): boolean {
@@ -300,21 +302,16 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public supportsSetting(settingName?: string): boolean {
-        switch (settingName) {
-            case "Electron.showTrayIcon": // Things other than Mac support tray icons
-            case "Electron.alwaysShowMenuBar": // This isn't relevant on Mac as Menu bars don't live in the app window
-                return !isMac;
-            default:
-                return true;
-        }
+        if (settingName === undefined) return true;
+        return this.supportedSettings?.[settingName] === true;
     }
 
     public getSettingValue(settingName: string): Promise<any> {
-        return this.ipc.call("getSettingValue", settingName);
+        return this.electron.getSettingValue(settingName);
     }
 
     public setSettingValue(settingName: string, value: any): Promise<void> {
-        return this.ipc.call("setSettingValue", settingName, value);
+        return this.electron.setSettingValue(settingName, value);
     }
 
     public async canSelfUpdate(): Promise<boolean> {
@@ -324,14 +321,14 @@ export default class ElectronPlatform extends BasePlatform {
 
     public startUpdateCheck(): void {
         super.startUpdateCheck();
-        window.electron!.send("check_updates");
+        this.electron.send("check_updates");
     }
 
     public installUpdate(): void {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        window.electron!.send("install_update");
+        this.electron.send("install_update");
     }
 
     public getDefaultDeviceDisplayName(): string {

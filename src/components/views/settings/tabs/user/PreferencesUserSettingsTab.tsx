@@ -357,6 +357,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                                 appName: SdkConfig.get().brand,
                             })}
                         />
+                        <SettingsFlag
+                            name="Electron.enableContentProtection"
+                            level={SettingLevel.PLATFORM}
+                            hideIfCannotSet
+                            label={_t("settings|preferences|Electron.enableContentProtection")}
+                        />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />

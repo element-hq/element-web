@@ -36,6 +36,8 @@ describe("ElectronPlatform", () => {
             sessionId: "session-id",
             config: { _config: true },
         }),
+        setSettingValue: jest.fn(),
+        getSettingValue: jest.fn(),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
