@@ -920,8 +920,6 @@
             "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
-        "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
-        "cancel_entering_passphrase_title": "Cancel entering passphrase?",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
         "cross_signing_room_normal": "This room is end-to-end encrypted",

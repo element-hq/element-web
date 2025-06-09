@@ -29,15 +29,15 @@ describe("AccessSecretStorageDialog", () => {
         render(<AccessSecretStorageDialog {...defaultProps} {...props} />);
     };
 
-    const enterRecoveryKey = (): void => {
-        act(() => {
+    const enterRecoveryKey = async (valueToEnter: string = recoveryKey): Promise<void> => {
+        await act(async () => {
             fireEvent.change(screen.getByRole("textbox"), {
                 target: {
-                    value: recoveryKey,
+                    value: valueToEnter,
                 },
             });
-            // wait for debounce
-            jest.advanceTimersByTime(250);
+            // wait for debounce, and then give `checkPrivateKey` a chance to complete
+            await jest.advanceTimersByTimeAsync(250);
         });
     };
 
@@ -114,6 +114,24 @@ describe("AccessSecretStorageDialog", () => {
         expect(screen.getByRole("textbox")).toHaveValue(recoveryKey);
 
         await expect(screen.findByText("The recovery key you entered is not correct.")).resolves.toBeInTheDocument();
+        expect(screen.getByText("Continue")).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("Clears the 'invalid recovery key' notice when the input is cleared", async function () {
+        renderComponent({ onFinished: () => {}, checkPrivateKey: () => false });
+
+        jest.spyOn(mockClient.secretStorage, "checkKey").mockRejectedValue(new Error("invalid key"));
+
+        // First, enter the wrong recovery key
+        await enterRecoveryKey();
+        expect(screen.getByText("The recovery key you entered is not correct.")).toBeInTheDocument();
+
+        // Now, clear the input: the notice should be cleared.
+        await enterRecoveryKey("");
+        expect(screen.queryByText("The recovery key you entered is not correct.")).not.toBeInTheDocument();
+        expect(
+            screen.getByText("If you have a security key or security phrase, this will work too."),
+        ).toBeInTheDocument();
         expect(screen.getByText("Continue")).toHaveAttribute("aria-disabled", "true");
     });
 });

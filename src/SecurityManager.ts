@@ -19,7 +19,6 @@ import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import { ModuleRunner } from "./modules/ModuleRunner";
-import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -48,17 +47,6 @@ export class AccessCancelledError extends Error {
     public constructor() {
         super("Secret storage access canceled");
     }
-}
-
-async function confirmToDismiss(): Promise<boolean> {
-    const [sure] = await Modal.createDialog(QuestionDialog, {
-        title: _t("encryption|cancel_entering_passphrase_title"),
-        description: _t("encryption|cancel_entering_passphrase_description"),
-        danger: false,
-        button: _t("action|go_back"),
-        cancelButton: _t("action|cancel"),
-    }).finished;
-    return !sure;
 }
 
 function makeInputToKey(
@@ -132,17 +120,6 @@ async function getSecretStorageKey(
             checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
                 return MatrixClientPeg.safeGet().secretStorage.checkKey(key, keyInfo);
-            },
-        },
-        /* className= */ undefined,
-        /* isPriorityModal= */ false,
-        /* isStaticModal= */ false,
-        /* options= */ {
-            onBeforeClose: async (reason): Promise<boolean> => {
-                if (reason === "backgroundClick") {
-                    return confirmToDismiss();
-                }
-                return true;
             },
         },
     );
