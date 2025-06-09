@@ -204,6 +204,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             case "mediaPreviewConfig":
                 // Handled in MediaPreviewConfigController.
                 return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
+                return;
             default:
                 return this.setAccountData(DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }

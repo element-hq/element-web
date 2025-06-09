@@ -2690,9 +2690,7 @@
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms",
-            "error_message": "An error occured while trying to change this setting",
-            "not_supported": "Your server does not implement this feature.",
-            "title": "Invite controls"
+            "error_message": "An error occured while trying to change this setting"
         },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
@@ -2760,6 +2758,7 @@
             "show_in_private": "In private rooms",
             "show_media": "Always show"
         },
+        "not_supported": "Your server does not implement this feature.",
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
             "default_setting_section": "I want to be notified for (Default Setting)",

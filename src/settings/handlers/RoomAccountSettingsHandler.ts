@@ -122,6 +122,9 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             case "mediaPreviewConfig":
                 // Handled in MediaPreviewConfigController.
                 return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
+                return;
             default:
                 return this.setRoomAccountData(roomId, DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }
