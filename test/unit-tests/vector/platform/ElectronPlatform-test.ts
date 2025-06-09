@@ -20,7 +20,6 @@ import DesktopCapturerSourcePicker from "../../../../src/components/views/elemen
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -392,7 +391,7 @@ describe("ElectronPlatform", () => {
     it("should forward call_state dispatcher events via ipc", async () => {
         new ElectronPlatform();
 
-        defaultDispatcher.dispatch(
+        dispatcher.dispatch(
             {
                 action: "call_state",
                 state: "connected",
