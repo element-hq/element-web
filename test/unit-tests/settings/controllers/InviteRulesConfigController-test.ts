@@ -11,7 +11,7 @@ import MatrixClientBackedController from "../../../../src/settings/controllers/M
 import InviteRulesConfigController from "../../../../src/settings/controllers/InviteRulesConfigController";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
-import { INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "../../../../src/@types/invite_rules";
+import { INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "../../../../src/@types/invite-rules";
 
 describe("InviteRulesConfigController", () => {
     afterEach(() => {

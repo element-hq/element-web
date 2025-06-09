@@ -13,7 +13,7 @@ import {
     type ComputedInviteConfig as ComputedInviteRules,
     INVITE_RULES_ACCOUNT_DATA_TYPE,
     type InviteConfigAccountData,
-} from "../../@types/invite_rules.ts";
+} from "../../@types/invite-rules.ts";
 import { _t } from "../../languageHandler.tsx";
 
 /**
@@ -32,7 +32,7 @@ export default class InviteRulesConfigController extends MatrixClientBackedContr
         };
     }
 
-    public initMatrixClient(newClient: MatrixClient) {
+    public initMatrixClient(newClient: MatrixClient): void {
         newClient.doesServerSupportUnstableFeature("org.matrix.msc4155").then((result) => {
             this.featureSupported = result;
         });

@@ -48,7 +48,7 @@ import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
-import { type ComputedInviteConfig } from "../@types/invite_rules.ts";
+import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 
 export const defaultWatchManager = new WatchManager();
 

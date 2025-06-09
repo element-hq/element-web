@@ -10,7 +10,7 @@ import userEvent from "@testing-library/user-event";
 
 import { InviteRulesAccountSetting } from "../../../../../../../src/components/views/settings/tabs/user/InviteRulesAccountSettings";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { type ComputedInviteConfig } from "../../../../../../../src/@types/invite_rules";
+import { type ComputedInviteConfig } from "../../../../../../../src/@types/invite-rules";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 
 function mockSetting(mediaPreviews: ComputedInviteConfig, supported = true) {
