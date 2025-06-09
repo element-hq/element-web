@@ -35,6 +35,7 @@ describe("ElectronPlatform", () => {
             protocol: "io.element.desktop",
             sessionId: "session-id",
             config: { _config: true },
+            supportedSettings: { setting1: false, setting2: true },
         }),
         setSettingValue: jest.fn(),
         getSettingValue: jest.fn(),
@@ -318,6 +319,27 @@ describe("ElectronPlatform", () => {
                     name: "breadcrumbs",
                 }),
             );
+        });
+    });
+
+    describe("settings", () => {
+        let platform: ElectronPlatform;
+        beforeAll(async () => {
+            window.electron = mockElectron;
+            platform = new ElectronPlatform();
+            await platform.getConfig(); // await init
+        });
+
+        it("supportsSetting should return true for the platform", () => {
+            expect(platform.supportsSetting()).toBe(true);
+        });
+
+        it("supportsSetting should return true for available settings", () => {
+            expect(platform.supportsSetting("setting2")).toBe(true);
+        });
+
+        it("supportsSetting should return false for unavailable settings", () => {
+            expect(platform.supportsSetting("setting1")).toBe(false);
         });
     });
 });

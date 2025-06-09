@@ -2810,8 +2810,8 @@
             "voip": "Audio and Video calls"
         },
         "preferences": {
-            "Electron.enableHardwareAcceleration": "Enable hardware acceleration (restart %(appName)s to take effect)",
             "Electron.enableContentProtection": "Prevent the window contents from being captured by other apps",
+            "Electron.enableHardwareAcceleration": "Enable hardware acceleration (restart %(appName)s to take effect)",
             "always_show_menu_bar": "Always show the window menu bar",
             "autocomplete_delay": "Autocomplete delay (ms)",
             "code_blocks_heading": "Code blocks",
