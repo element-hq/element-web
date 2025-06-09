@@ -24,9 +24,9 @@ describe("MatrixToPermalinkConstructor", () => {
         });
 
         it.each([
-            ["(https)", "https://matrix.to/#/@user:example.com"],
-            ["(http)", "http://matrix.to/#/@user:example.com"],
-            ["without protocol", "matrix.to/#/@user:example.com"],
+            ["(https)", "https://connect.vietsmile.com.vn/#/@user:example.com"],
+            ["(http)", "http://connect.vietsmile.com.vn/#/@user:example.com"],
+            ["without protocol", "connect.vietsmile.com.vn/#/@user:example.com"],
         ])("should parse an MXID %s", (name: string, url: string) => {
             expect(peramlinkConstructor.parsePermalink(url)).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),

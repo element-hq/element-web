@@ -222,7 +222,7 @@
                     {
                         "kind": "event_match",
                         "key": "state_key",
-                        "pattern": "@jannetestuser:beta.matrix.org"
+                        "pattern": "@jannetestuser:beta.connect.vietsmile.com.vn"
                     }
                 ],
                 "actions": [
@@ -260,7 +260,7 @@
                     {
                         "kind": "event_property_contains",
                         "key": "content.m\\.mentions.user_ids",
-                        "value": "@jannetestuser:beta.matrix.org"
+                        "value": "@jannetestuser:beta.connect.vietsmile.com.vn"
                     }
                 ],
                 "actions": [

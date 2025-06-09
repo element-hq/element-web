@@ -10,7 +10,7 @@ sections of the README.
 
 Maybe you've got something specific you'd like to work on? If so, make sure you
 create an issue and
-[discuss it with the developers](https://matrix.to/#/#element-dev:matrix.org)
+[discuss it with the developers](https://matrix.to/#/#element-dev:connect.vietsmile.com.vn)
 before you put a lot of time into it.
 
 If you're looking for inspiration on where to start, keep reading!
@@ -26,7 +26,7 @@ The first place to look is for
 
 Look through that list and find something that catches your interest. If there
 is nothing, there, try gently asking in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) for
+[#element-dev:connect.vietsmile.com.vn](https://matrix.to/#/#element-dev:connect.vietsmile.com.vn) for
 someone to add something.
 
 When you're looking through the list, here are some things that might make an
@@ -70,7 +70,7 @@ So you should **always avoid issues tagged with `X-Needs-Design` or
 ## Asking questions
 
 Feel free to ask questions about the issues or how to choose them in the
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) Matrix
+[#element-dev:connect.vietsmile.com.vn](https://matrix.to/#/#element-dev:connect.vietsmile.com.vn) Matrix
 room.
 
 ## Thank you

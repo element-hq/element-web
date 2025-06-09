@@ -16,7 +16,7 @@ import { LocationShareError } from "./LocationShareErrors";
 /**
  * Look up what map tile server style URL was provided in the homeserver's
  * .well-known location, or, failing that, in our local config, or, failing
- * that, defaults to the same tile server listed by matrix.org.
+ * that, defaults to the same tile server listed by connect.vietsmile.com.vn.
  */
 export function findMapStyleUrl(matrixClient: MatrixClient): string {
     const mapStyleUrl = getTileServerWellKnown(matrixClient)?.map_style_url ?? SdkConfig.get().map_style_url;

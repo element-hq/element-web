@@ -754,7 +754,7 @@ test.describe("Timeline", () => {
             // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
             // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
             await context.route(
-                "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
+                "**/_matrix/client/v1/media/thumbnail/connect.vietsmile.com.vn/2022-08-16_yaiSVSRIsNFfxDnV?*",
                 async (route) => {
                     await route.fulfill({
                         path: "playwright/sample-files/riot.png",
@@ -770,7 +770,7 @@ test.describe("Timeline", () => {
                             "og:description": null,
                             "og:image:width": 48,
                             "og:image:height": 48,
-                            "og:image": "mxc://matrix.org/2022-08-16_yaiSVSRIsNFfxDnV",
+                            "og:image": "mxc://connect.vietsmile.com.vn/2022-08-16_yaiSVSRIsNFfxDnV",
                             "og:image:type": "image/png",
                             "matrix:image:size": 2121,
                         },
@@ -781,7 +781,7 @@ test.describe("Timeline", () => {
             const requestPromises: Promise<any>[] = [
                 page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
                 // see context.route above for why we listen for the unauthenticated endpoint
-                page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
+                page.waitForResponse("**/_matrix/media/v3/thumbnail/connect.vietsmile.com.vn/2022-08-16_yaiSVSRIsNFfxDnV?*"),
             ];
 
             await app.client.sendMessage(room.roomId, "https://call.element.io/");

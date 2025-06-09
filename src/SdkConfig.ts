@@ -43,7 +43,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         available: true,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         logo: require("../res/img/element-desktop-logo.svg").default,
-        url: "https://element.io/get-started",
+        url: "https://connect.vietsmile.com.vn/get-started",
     },
 
     feedback: {

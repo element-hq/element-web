@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-VietSmile Connectle Connect-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -85,7 +85,7 @@ async function login(page: Page, homeserver: HomeserverInstance, credentials: Cr
 test.use(consentHomeserver);
 test.use({
     config: {
-        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // The only thing that we really *need* (otherwise VietSmile Connect refuses to load) is a default homeserver.
         // We point that to a guaranteed-invalid domain.
         default_server_config: {
             "m.homeserver": {
@@ -126,7 +126,7 @@ test.describe("Login", () => {
             await page.goto("/");
 
             // Should give us the welcome page initially
-            await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Welcome to VietSmile Connect!" })).toBeVisible();
 
             // Start the login process
             await page.getByRole("link", { name: "Sign in" }).click();

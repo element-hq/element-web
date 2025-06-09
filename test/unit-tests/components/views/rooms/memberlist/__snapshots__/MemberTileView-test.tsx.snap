@@ -4,7 +4,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:connect.vietsmile.com.vn (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
       tabindex="-1"
@@ -22,7 +22,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:connect.vietsmile.com.vn"
           >
             u
           </span>
@@ -38,7 +38,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
               class=""
               dir="auto"
             >
-              @userId:matrix.org
+              @userId:connect.vietsmile.com.vn
             </span>
           </div>
         </div>
@@ -73,7 +73,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:connect.vietsmile.com.vn (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
       tabindex="-1"
@@ -91,7 +91,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:connect.vietsmile.com.vn"
           >
             u
           </span>
@@ -107,7 +107,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
               class=""
               dir="auto"
             >
-              @userId:matrix.org
+              @userId:connect.vietsmile.com.vn
             </span>
           </div>
         </div>
@@ -142,7 +142,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:connect.vietsmile.com.vn (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
       tabindex="-1"
@@ -160,7 +160,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org"
+            title="@userId:connect.vietsmile.com.vn"
           >
             u
           </span>
@@ -176,7 +176,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
               class=""
               dir="auto"
             >
-              @userId:matrix.org
+              @userId:connect.vietsmile.com.vn
             </span>
           </div>
         </div>

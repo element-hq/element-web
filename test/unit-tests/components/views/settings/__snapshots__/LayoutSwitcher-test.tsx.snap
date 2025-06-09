@@ -90,7 +90,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     data-type="round"
                     role="presentation"
                     style="--cpd-avatar-size: 30px;"
-                    title="@userId:matrix.org"
+                    title="@userId:connect.vietsmile.com.vn"
                   >
                     A
                   </span>
@@ -216,7 +216,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     data-type="round"
                     role="presentation"
                     style="--cpd-avatar-size: 30px;"
-                    title="@userId:matrix.org"
+                    title="@userId:connect.vietsmile.com.vn"
                   >
                     A
                   </span>
@@ -342,7 +342,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     data-type="round"
                     role="presentation"
                     style="--cpd-avatar-size: 14px;"
-                    title="@userId:matrix.org"
+                    title="@userId:connect.vietsmile.com.vn"
                   >
                     A
                   </span>

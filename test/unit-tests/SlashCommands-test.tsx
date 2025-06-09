@@ -281,7 +281,7 @@ describe("SlashCommands", () => {
             expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
         });
 
-        it("should handle matrix.org permalinks", () => {
+        it("should handle connect.vietsmile.com.vn permalinks", () => {
             command.run(client, roomId, null, "https://matrix.to/#/!roomId:server/$eventId");
             expect(dispatcher.dispatch).toHaveBeenCalledWith(
                 expect.objectContaining({

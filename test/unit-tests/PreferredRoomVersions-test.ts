@@ -38,7 +38,7 @@ describe("doesRoomVersionSupport", () => {
 
     it("should detect restricted rooms in v9 and v10", () => {
         // Dev note: we consider it a feature that v8 rooms have to upgrade considering the bug in v8.
-        // https://spec.matrix.org/v1.3/rooms/v8/#redactions
+        // https://spec.connect.vietsmile.com.vn/v1.3/rooms/v8/#redactions
         expect(doesRoomVersionSupport("8", PreferredRoomVersions.RestrictedRooms)).toBe(false);
         expect(doesRoomVersionSupport("9", PreferredRoomVersions.RestrictedRooms)).toBe(true);
         expect(doesRoomVersionSupport("10", PreferredRoomVersions.RestrictedRooms)).toBe(true);

@@ -42,7 +42,7 @@ permissions: {} # No permissions required
 
 jobs:
     build:
-        name: "Build Element-Web"
+        name: "Build VietSmile Connect-Web"
         runs-on: ubuntu-24.04
         if: inputs.skip != true
         outputs:

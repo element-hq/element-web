@@ -1,11 +1,11 @@
 {
-    "name": "element-web",
+    "name": "chat.vietsmile.com.vn",
     "version": "1.11.102",
-    "description": "Element: the future of secure communication",
+    "description": "VietSmile Connect: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
-        "url": "https://github.com/element-hq/element-web"
+        "url": "https://github.com/quynhXEM/chat.vietsmile.com.vn"
     },
     "license": "SEE LICENSE IN README.md",
     "files": [

@@ -100,7 +100,7 @@ We own other repositories, but they have more ad-hoc releases and are not part o
 - You must be part of the 2 Releasers GitHub groups:
     - <https://github.com/orgs/element-hq/teams/element-web-releasers>
     - <https://github.com/orgs/matrix-org/teams/element-web-releasers>
-- You will need access to the **VPN** ([docs](https://gitlab.matrix.org/new-vector/internal/-/wikis/SRE/Tailscale)) to be able to follow the instructions under Deploy below.
+- You will need access to the **VPN** ([docs](https://gitlab.connect.vietsmile.com.vn/new-vector/internal/-/wikis/SRE/Tailscale)) to be able to follow the instructions under Deploy below.
 - You will need the ability to **SSH** in to the production machines to be able to follow the instructions under Deploy below. Ensure that your SSH key has a non-empty passphrase, and you registered your SSH key with Ops. Log a ticket at https://github.com/matrix-org/matrix-ansible-private and ask for:
     - Two-factor authentication to be set up on your SSH key. (This is needed to get access to production).
     - SSH access to `horme` (staging.element.io and app.element.io)
@@ -235,7 +235,7 @@ you can run the `deploy.yml` automation choosing an older tag which you wish to 
 We have some manual housekeeping to do in order to prepare for the next release.
 
 - [ ] Update topics using [the automation](https://github.com/element-hq/element-web/actions/workflows/update-topics.yaml). It will autodetect the current latest version. Don't forget the date you supply should be e.g. September 5th (including the "th") for the script to work.
-- [ ] Announce the release in [#element-web-announcements:matrix.org](https://matrix.to/#/#element-web-announcements:matrix.org)
+- [ ] Announce the release in [#element-web-announcements:connect.vietsmile.com.vn](https://matrix.to/#/#element-web-announcements:connect.vietsmile.com.vn)
 
 <details><summary>(show)</summary>
 

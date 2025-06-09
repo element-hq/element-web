@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-VietSmile Connect-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -27,7 +27,7 @@ test(`shows error page if browser lacks WebAssembly support`, { tag: "@screensho
 
     // Lack of WebAssembly support doesn't cause the bundle to fail loading, so we get
     // CompatibilityView, i.e. no iframes.
-    const header = page.getByText("Element does not support this browser");
+    const header = page.getByText("VietSmile Connect does not support this browser");
     await expect(header).toBeVisible();
 
     await expect(page).toMatchScreenshot("unsupported-browser-CompatibilityView.png");

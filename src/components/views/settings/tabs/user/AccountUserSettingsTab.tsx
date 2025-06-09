@@ -105,9 +105,6 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
 
             await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
             const externalAccountManagementUrl = sdkContext.oidcClientStore.accountManagementEndpoint;
-            // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
-            // We support as far back as v1.1 which doesn't have m.3pid_changes
-            // so the behaviour for when it is missing has to be assume true
             const canMake3pidChanges =
                 !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
 

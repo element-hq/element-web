@@ -78,7 +78,7 @@ describe("FilePanel", () => {
                 room: room.roomId,
                 content: {
                     body: "hello",
-                    url: "mxc://matrix.org/1234",
+                    url: "mxc://connect.vietsmile.com.vn/1234",
                     msgtype: "m.file",
                 },
                 event: true,

@@ -31,7 +31,7 @@ describe("DevtoolsDialog", () => {
     beforeEach(() => {
         stubClient();
         cli = MatrixClientPeg.safeGet();
-        room = new Room("!id", cli, "@alice:matrix.org");
+        room = new Room("!id", cli, "@alice:connect.vietsmile.com.vn");
 
         jest.spyOn(cli, "getRoom").mockReturnValue(room);
     });

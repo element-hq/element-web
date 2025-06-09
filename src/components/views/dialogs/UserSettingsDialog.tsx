@@ -204,17 +204,19 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 new Tab(UserTab.Labs, _td("common|labs"), <LabsIcon />, <LabsUserSettingsTab />, "UserSettingsLabs"),
             );
         }
-        if (mjolnirEnabled) {
-            tabs.push(
-                new Tab(
-                    UserTab.Mjolnir,
-                    _td("labs_mjolnir|title"),
-                    <BlockIcon />,
-                    <MjolnirUserSettingsTab />,
-                    "UserSettingMjolnir",
-                ),
-            );
-        }
+
+        // if (mjolnirEnabled) {
+        //     tabs.push(
+        //         new Tab(
+        //             UserTab.Mjolnir,
+        //             _td("labs_mjolnir|title"),
+        //             <BlockIcon />,
+        //             <MjolnirUserSettingsTab />,
+        //             "UserSettingMjolnir",
+        //         ),
+        //     );
+        // }
+        
         tabs.push(
             new Tab(
                 UserTab.Help,

@@ -30,7 +30,7 @@ const webCrypto = new Crypto();
 
 describe("OIDC authorization", () => {
     const issuer = "https://auth.com/";
-    const homeserverUrl = "https://matrix.org";
+    const homeserverUrl = "https://connect.vietsmile.com.vn";
     const identityServerUrl = "https://is.org";
     const clientId = "xyz789";
     const baseUrl = "https://test.com";

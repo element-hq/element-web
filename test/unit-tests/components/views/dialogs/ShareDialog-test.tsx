@@ -39,11 +39,11 @@ describe("ShareDialog", () => {
         return render(<ShareDialog target={target} onFinished={jest.fn()} />, withClientContextRenderOptions(client));
     }
 
-    const getUrl = () => new URL("https://matrix.org/");
+    const getUrl = () => new URL("https://connect.vietsmile.com.vn/");
     const getRoomMember = () => new RoomMember(room.roomId, "@alice:example.org");
 
     test.each([
-        { name: "an URL", title: "Share Link", url: "https://matrix.org/", getTarget: getUrl },
+        { name: "an URL", title: "Share Link", url: "https://connect.vietsmile.com.vn/", getTarget: getUrl },
         {
             name: "a room member",
             title: "Share User",

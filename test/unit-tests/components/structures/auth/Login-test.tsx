@@ -57,7 +57,7 @@ describe("Login", function () {
         });
         fetchMock.resetBehavior();
         fetchMock.resetHistory();
-        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+        fetchMock.get("https://connect.vietsmile.com.vn/_matrix/client/versions", {
             unstable_features: {},
             versions: ["v1.1"],
         });
@@ -73,7 +73,7 @@ describe("Login", function () {
     });
 
     function getRawComponent(
-        hsUrl = "https://matrix.org",
+        hsUrl = "https://connect.vietsmile.com.vn",
         isUrl = "https://vector.im",
         delegatedAuthentication?: OidcClientConfig,
     ) {
@@ -193,7 +193,7 @@ describe("Login", function () {
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         fireEvent.click(container.querySelector(".mx_SSOButton")!);
-        expect(platform.startSingleSignOn.mock.calls[0][0].baseUrl).toBe("https://matrix.org");
+        expect(platform.startSingleSignOn.mock.calls[0][0].baseUrl).toBe("https://connect.vietsmile.com.vn");
 
         fetchMock.get("https://server2/_matrix/client/versions", {
             unstable_features: {},
@@ -328,7 +328,7 @@ describe("Login", function () {
 
     it("should display an error when homeserver fails liveliness check", async () => {
         fetchMock.resetBehavior();
-        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+        fetchMock.get("https://connect.vietsmile.com.vn/_matrix/client/versions", {
             status: 0,
         });
         getComponent();
@@ -340,8 +340,8 @@ describe("Login", function () {
 
     it("should reset liveliness error when server config changes", async () => {
         fetchMock.resetBehavior();
-        // matrix.org is not alive
-        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+        // connect.vietsmile.com.vn is not alive
+        fetchMock.get("https://connect.vietsmile.com.vn/_matrix/client/versions", {
             status: 400,
         });
         // but server2 is
@@ -364,7 +364,7 @@ describe("Login", function () {
     });
 
     describe("OIDC native flow", () => {
-        const hsUrl = "https://matrix.org";
+        const hsUrl = "https://connect.vietsmile.com.vn";
         const isUrl = "https://vector.im";
         const issuer = "https://test.com/";
         const delegatedAuth = makeDelegatedAuthConfig(issuer);

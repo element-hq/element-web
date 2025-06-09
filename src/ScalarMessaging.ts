@@ -254,7 +254,6 @@ get_open_id_token
 Get an openID token for the current user session.
 Request: No parameters
 Response:
- - The openId token object as described in https://spec.matrix.org/v1.2/client-server-api/#post_matrixclientv3useruseridopenidrequest_token
 
 send_event
 ----------
@@ -595,7 +594,6 @@ async function setBotPower(
 
         // If the PL is equal to or greater than the requested PL, ignore.
         if (ignoreIfGreater === true) {
-            // As per https://matrix.org/docs/spec/client_server/r0.6.0#m-room-power-levels
             const currentPl = powerLevels.users?.[userId] ?? powerLevels.users_default ?? 0;
             if (currentPl >= level) {
                 return sendResponse(event, {

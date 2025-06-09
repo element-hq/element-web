@@ -110,7 +110,7 @@ async function initPage(): Promise<void> {
     if (hsUrl && !hsUrl.endsWith("/")) hsUrl += "/";
     if (isUrl && !isUrl.endsWith("/")) isUrl += "/";
 
-    if (hsUrl !== "https://matrix.org/") {
+    if (hsUrl !== "https://connect.vietsmile.com.vn/") {
         let url = "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl);
 
         if (isUrl) {

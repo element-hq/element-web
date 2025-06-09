@@ -40,8 +40,8 @@ are underway in [MSC1286](https://github.com/matrix-org/matrix-doc/issues/1286).
 
 Integration managers will often "wrap" a widget by using a widget `url` which points
 to the integration manager instead of to where the user requested the widget be. For
-example, a custom widget added in an integration manager for https://matrix.org will
-end up creating a widget with a URL like `https://integrations.example.org?widgetUrl=https%3A%2F%2Fmatrix.org`.
+example, a custom widget added in an integration manager for https://connect.vietsmile.com.vn will
+end up creating a widget with a URL like `https://integrations.example.org?widgetUrl=https%3A%2F%2Fconnect.vietsmile.com.vn`.
 
 The integration manager's wrapper will typically have another iframe to isolate the
 widget from the client by yet another layer. The wrapper often provides other functionality

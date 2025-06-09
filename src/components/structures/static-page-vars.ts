@@ -13,6 +13,6 @@ const matrixSvg = require("../../../res/img/matrix.svg").default;
 /**
  * Intended to replace $matrixLogo in the welcome page.
  */
-export const MATRIX_LOGO_HTML = `<a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
+export const MATRIX_LOGO_HTML = `<a href="https://connect.vietsmile.com.vn" target="_blank" rel="noreferrer noopener">
     <img width="79" height="34" alt="Matrix" style="padding-left: 1px;vertical-align: middle" src="${matrixSvg}"/>
 </a>`;

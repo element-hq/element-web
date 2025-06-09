@@ -35,7 +35,7 @@ jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
 }));
 
 describe("RoomGeneralContextMenu", () => {
-    const ROOM_ID = "!123:matrix.org";
+    const ROOM_ID = "!123:connect.vietsmile.com.vn";
 
     let room: Room;
     let mockClient: MatrixClient;

@@ -103,7 +103,7 @@ describe("RoomListStoreV3", () => {
 
             // Let's pretend like a new timeline event came on the room in 37th index.
             const room = rooms[37];
-            const event = mkMessage({ room: room.roomId, user: `@foo${3}:matrix.org`, ts: 1000, event: true });
+            const event = mkMessage({ room: room.roomId, user: `@foo${3}:connect.vietsmile.com.vn`, ts: 1000, event: true });
             room.timeline.push(event);
 
             const payload = {
@@ -193,10 +193,10 @@ describe("RoomListStoreV3", () => {
 
         it("Predecessor room is removed on room upgrade", async () => {
             const { store, rooms, client, dispatcher } = await getRoomListStore();
-            // Let's say that !foo32:matrix.org is being upgraded
+            // Let's say that !foo32:connect.vietsmile.com.vn is being upgraded
             const oldRoom = rooms[32];
             // Create a new room with a predecessor event that points to oldRoom
-            const newRoom = new Room("!foonew:matrix.org", client, client.getSafeUserId(), {});
+            const newRoom = new Room("!foonew:connect.vietsmile.com.vn", client, client.getSafeUserId(), {});
             const createWithPredecessor = new MatrixEvent({
                 type: EventType.RoomCreate,
                 sender: "@foo:foo.org",
@@ -235,14 +235,14 @@ describe("RoomListStoreV3", () => {
 
             // Let's create a m.direct event that we can dispatch
             const content = {
-                "@bar1:matrix.org": ["!foo1:matrix.org", "!foo2:matrix.org"],
-                "@bar2:matrix.org": ["!foo3:matrix.org", "!foo4:matrix.org"],
-                "@bar3:matrix.org": ["!foo5:matrix.org"],
+                "@bar1:connect.vietsmile.com.vn": ["!foo1:connect.vietsmile.com.vn", "!foo2:connect.vietsmile.com.vn"],
+                "@bar2:connect.vietsmile.com.vn": ["!foo3:connect.vietsmile.com.vn", "!foo4:connect.vietsmile.com.vn"],
+                "@bar3:connect.vietsmile.com.vn": ["!foo5:connect.vietsmile.com.vn"],
             };
             const event = mkEvent({
                 event: true,
                 content,
-                user: "@foo:matrix.org",
+                user: "@foo:connect.vietsmile.com.vn",
                 type: EventType.Direct,
             });
 
@@ -269,11 +269,11 @@ describe("RoomListStoreV3", () => {
              have the same name ("My DM Room") since we've mocked the client to return such rooms.
              */
             const ids = [
-                "!foo1:matrix.org",
-                "!foo2:matrix.org",
-                "!foo3:matrix.org",
-                "!foo4:matrix.org",
-                "!foo5:matrix.org",
+                "!foo1:connect.vietsmile.com.vn",
+                "!foo2:connect.vietsmile.com.vn",
+                "!foo3:connect.vietsmile.com.vn",
+                "!foo4:connect.vietsmile.com.vn",
+                "!foo5:connect.vietsmile.com.vn",
             ];
             const rooms = store.getSortedRooms().filter((r) => ids.includes(r.roomId));
             rooms.forEach((room) => expect(room.name).toBe("My DM Room"));
@@ -322,7 +322,7 @@ describe("RoomListStoreV3", () => {
                 {
                     action: "MatrixActions.Event.decrypted",
                     event: {
-                        getRoomId: () => "!doesnotexist:matrix.org",
+                        getRoomId: () => "!doesnotexist:connect.vietsmile.com.vn",
                         getId: () => "some-id",
                     },
                 },
@@ -347,7 +347,7 @@ describe("RoomListStoreV3", () => {
                 const event = mkEvent({
                     event: true,
                     content,
-                    user: "@foo:matrix.org",
+                    user: "@foo:connect.vietsmile.com.vn",
                     type: EventType.Receipt,
                 });
                 return event;
@@ -371,7 +371,7 @@ describe("RoomListStoreV3", () => {
 
             it("Read receipt from other users do not cause room to be re-inserted", async () => {
                 const { store, rooms, dispatcher } = await getRoomListStore();
-                const event = getReadReceiptEvent("@foobar:matrix.org");
+                const event = getReadReceiptEvent("@foobar:connect.vietsmile.com.vn");
                 const fn = jest.fn();
                 store.on(LISTS_UPDATE_EVENT, fn);
                 dispatcher.dispatch(
@@ -393,7 +393,7 @@ describe("RoomListStoreV3", () => {
          */
         function createSpace(rooms: Room[], inSpaceIndices: number[], client: MatrixClient) {
             const roomIds = inSpaceIndices.map((i) => rooms[i].roomId);
-            const spaceRoom = mkSpace(client, "!space1:matrix.org", [], roomIds);
+            const spaceRoom = mkSpace(client, "!space1:connect.vietsmile.com.vn", [], roomIds);
             rooms.push(spaceRoom);
             return { spaceRoom, roomIds };
         }
@@ -598,7 +598,7 @@ describe("RoomListStoreV3", () => {
                 const ids = [8, 27].map((i) => rooms[i].roomId);
                 jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
                     return {
-                        getUserIdForRoomId: (id) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                        getUserIdForRoomId: (id) => (ids.includes(id) ? "@myuser:connect.vietsmile.com.vn" : ""),
                     };
                 }) as () => DMRoomMap);
 
@@ -756,7 +756,7 @@ describe("RoomListStoreV3", () => {
             // Let's say that rooms 14 and 34 get new messages in that order
             let ts = 1000;
             for (const room of [rooms[14], rooms[34]]) {
-                const event = mkMessage({ room: room.roomId, user: `@foo${3}:matrix.org`, ts: 1000, event: true });
+                const event = mkMessage({ room: room.roomId, user: `@foo${3}:connect.vietsmile.com.vn`, ts: 1000, event: true });
                 room.timeline.push(event);
 
                 const payload = {

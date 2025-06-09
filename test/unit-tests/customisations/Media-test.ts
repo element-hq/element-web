@@ -17,15 +17,15 @@ describe("Media", () => {
         const cli = stubClient();
         // eslint-disable-next-line no-restricted-properties
         mocked(cli.mxcUrlToHttp).mockImplementation(
-            (mxc) => `https://matrix.org/_matrix/media/r0/download/${mxc.slice(6)}`,
+            (mxc) => `https://connect.vietsmile.com.vn/_matrix/media/r0/download/${mxc.slice(6)}`,
         );
 
-        fetchMockJest.get("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", {
+        fetchMockJest.get("https://connect.vietsmile.com.vn/_matrix/media/r0/download/connect.vietsmile.com.vn/1234", {
             status: 404,
             body: { errcode: "M_NOT_FOUND", error: "Not found" },
         });
 
-        const media = mediaFromMxc("mxc://matrix.org/1234");
+        const media = mediaFromMxc("mxc://connect.vietsmile.com.vn/1234");
         await expect(media.downloadSource()).rejects.toThrow("Not found");
     });
 });

@@ -351,7 +351,7 @@ describe("Permalinks", function () {
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         const result = creator.forEvent("$something:example.com");
-        expect(result).toBe("https://matrix.to/#/!somewhere:example.org/$something:example.com?via=first&via=second");
+        expect(result).toBe("https://connect.vietsmile.com.vn/#/!somewhere:example.org/$something:example.com?via=first&via=second");
     });
 
     it("should generate a room permalink for room IDs with some candidate servers", function () {
@@ -362,13 +362,13 @@ describe("Permalinks", function () {
             ]);
         });
         const result = makeRoomPermalink(mockClient, "!somewhere:example.org");
-        expect(result).toBe("https://matrix.to/#/!somewhere:example.org?via=first&via=second");
+        expect(result).toBe("https://connect.vietsmile.com.vn/#/!somewhere:example.org?via=first&via=second");
     });
 
     it("should generate a room permalink for room aliases with no candidate servers", function () {
         mockClient.getRoom.mockReturnValue(null);
         const result = makeRoomPermalink(mockClient, "#somewhere:example.org");
-        expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
+        expect(result).toBe("https://connect.vietsmile.com.vn/#/#somewhere:example.org");
     });
 
     it("should generate a room permalink for room aliases without candidate servers", function () {
@@ -379,12 +379,12 @@ describe("Permalinks", function () {
             ]);
         });
         const result = makeRoomPermalink(mockClient, "#somewhere:example.org");
-        expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
+        expect(result).toBe("https://connect.vietsmile.com.vn/#/#somewhere:example.org");
     });
 
     it("should generate a user permalink", function () {
         const result = makeUserPermalink("@someone:example.org");
-        expect(result).toBe("https://matrix.to/#/@someone:example.org");
+        expect(result).toBe("https://connect.vietsmile.com.vn/#/@someone:example.org");
     });
 
     it("should use permalink_prefix for permalinks", function () {
@@ -400,20 +400,20 @@ describe("Permalinks", function () {
 
     describe("parsePermalink", () => {
         it("should correctly parse room permalinks with a via argument", () => {
-            const result = parsePermalink("https://matrix.to/#/!room_id:server?via=some.org");
+            const result = parsePermalink("https://connect.vietsmile.com.vn/#/!room_id:server?via=some.org");
             expect(result?.roomIdOrAlias).toBe("!room_id:server");
             expect(result?.viaServers).toEqual(["some.org"]);
         });
 
         it("should correctly parse room permalink via arguments", () => {
-            const result = parsePermalink("https://matrix.to/#/!room_id:server?via=foo.bar&via=bar.foo");
+            const result = parsePermalink("https://connect.vietsmile.com.vn/#/!room_id:server?via=foo.bar&via=bar.foo");
             expect(result?.roomIdOrAlias).toBe("!room_id:server");
             expect(result?.viaServers).toEqual(["foo.bar", "bar.foo"]);
         });
 
         it("should correctly parse event permalink via arguments", () => {
             const result = parsePermalink(
-                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
+                "https://connect.vietsmile.com.vn/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
             );
             expect(result?.eventId).toBe("$event_id/some_thing_here/foobar");
             expect(result?.roomIdOrAlias).toBe("!room_id:server");
@@ -421,13 +421,13 @@ describe("Permalinks", function () {
         });
 
         it("should correctly parse permalinks with http protocol", () => {
-            expect(parsePermalink("http://matrix.to/#/@user:example.com")).toEqual(
+            expect(parsePermalink("http://connect.vietsmile.com.vn/#/@user:example.com")).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
 
         it("should correctly parse permalinks without protocol", () => {
-            expect(parsePermalink("matrix.to/#/@user:example.com")).toEqual(
+            expect(parsePermalink("connect.vietsmile.com.vn/#/@user:example.com")).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });

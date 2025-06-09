@@ -139,7 +139,7 @@ export default class MultiInviter {
             } else if (member?.membership === KnownMembership.Ban) {
                 let proceed = false;
                 // Check if we can unban the invitee.
-                // See https://spec.matrix.org/v1.7/rooms/v10/#authorization-rules, particularly 4.5.3 and 4.5.4.
+                // See https://spec.connect.vietsmile.com.vn/v1.7/rooms/v10/#authorization-rules, particularly 4.5.3 and 4.5.4.
                 const ourMember = room.getMember(this.matrixClient.getSafeUserId());
                 if (
                     !!ourMember &&

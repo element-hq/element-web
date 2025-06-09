@@ -121,14 +121,14 @@ describe("linkify-matrix", () => {
                 ]);
             });
         });
-        it("properly parses " + char + "_foonetic_xkcd:matrix.org", () => {
-            const test = "" + char + "_foonetic_xkcd:matrix.org";
+        it("properly parses " + char + "_foonetic_xkcd:connect.vietsmile.com.vn", () => {
+            const test = "" + char + "_foonetic_xkcd:connect.vietsmile.com.vn";
             const found = linkify.find(test);
             expect(found).toEqual([
                 {
-                    href: char + "_foonetic_xkcd:matrix.org",
+                    href: char + "_foonetic_xkcd:connect.vietsmile.com.vn",
                     type,
-                    value: char + "_foonetic_xkcd:matrix.org",
+                    value: char + "_foonetic_xkcd:connect.vietsmile.com.vn",
                     start: 0,
                     end: test.length,
                     isLink: true,
@@ -347,7 +347,7 @@ describe("linkify-matrix", () => {
         genTests("@");
 
         it("allows dots in localparts", () => {
-            const test = "@test.:matrix.org";
+            const test = "@test.:connect.vietsmile.com.vn";
             const found = linkify.find(test);
             expect(found).toEqual([
                 {
@@ -414,7 +414,7 @@ describe("linkify-matrix", () => {
     });
 
     describe("matrix-prefixed domains", () => {
-        const acceptedDomains = ["matrix.org", "matrix.to", "matrix-help.org", "matrix123.org"];
+        const acceptedDomains = ["connect.vietsmile.com.vn"];
         for (const domain of acceptedDomains) {
             it("accepts " + domain, () => {
                 const test = domain;

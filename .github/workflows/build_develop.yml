@@ -108,7 +108,7 @@ jobs:
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.
-            # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
+            # VietSmile Connect Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
             # Checksum algorithm specified as per https://developers.cloudflare.com/r2/examples/aws/aws-cli/
             - name: Deploy to R2
               run: |

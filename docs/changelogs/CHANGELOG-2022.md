@@ -309,7 +309,7 @@ Changes in [1.11.4](https://github.com/vector-im/element-web/releases/tag/v1.11.
 * Fixes for [CVE-2022-36059](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D36059) and [CVE-2022-36060](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D36060)
 
 Learn more about what we've been up to at https://element.io/blog/element-web-desktop-1-11-4-a-security-update-deferred-dms-and-more/
-Find more details of the vulnerabilities at https://matrix.org/blog/2022/08/31/security-releases-matrix-js-sdk-19-4-0-and-matrix-react-sdk-3-53-0
+Find more details of the vulnerabilities at https://connect.vietsmile.com.vn/blog/2022/08/31/security-releases-matrix-js-sdk-19-4-0-and-matrix-react-sdk-3-53-0
 
 ## ✨ Features
  * Device manager - scroll to filtered list from security recommendations ([\#9227](https://github.com/matrix-org/matrix-react-sdk/pull/9227)). Contributed by @kerryarchibald.

@@ -15,7 +15,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 
 describe("FallbackIceServerController", () => {
     beforeEach(() => {
-        fetchMockJest.get("https://matrix.org/_matrix/client/versions", { versions: ["v1.4"] });
+        fetchMockJest.get("https://connect.vietsmile.com.vn/_matrix/client/versions", { versions: ["v1.4"] });
     });
 
     afterEach(() => {
@@ -24,8 +24,8 @@ describe("FallbackIceServerController", () => {
 
     it("should update MatrixClient's state when the setting is updated", async () => {
         const client = new MatrixClient({
-            baseUrl: "https://matrix.org",
-            userId: "@alice:matrix.org",
+            baseUrl: "https://connect.vietsmile.com.vn",
+            userId: "@alice:connect.vietsmile.com.vn",
             accessToken: "token",
         });
         MatrixClientBackedController.matrixClient = client;
@@ -38,8 +38,8 @@ describe("FallbackIceServerController", () => {
     it("should force the setting to be disabled if disable_fallback_ice=true", async () => {
         const controller = new FallbackIceServerController();
         const client = new MatrixClient({
-            baseUrl: "https://matrix.org",
-            userId: "@alice:matrix.org",
+            baseUrl: "https://connect.vietsmile.com.vn",
+            userId: "@alice:connect.vietsmile.com.vn",
             accessToken: "token",
         });
         MatrixClientBackedController.matrixClient = client;

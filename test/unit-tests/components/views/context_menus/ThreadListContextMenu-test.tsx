@@ -21,7 +21,7 @@ import { stubClient } from "../../../../test-utils/test-utils";
 import { mkThread } from "../../../../test-utils/threads";
 
 describe("ThreadListContextMenu", () => {
-    const ROOM_ID = "!123:matrix.org";
+    const ROOM_ID = "!123:connect.vietsmile.com.vn";
 
     let room: Room;
     let mockClient: MatrixClient;

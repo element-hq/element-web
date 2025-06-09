@@ -197,7 +197,7 @@ export default class EventIndexPanel extends React.Component<EmptyObject, IState
                         {
                             desktopLink: (sub) => (
                                 <ExternalLink
-                                    href="https://element.io/get-started"
+                                    href="https://connect.vietsmile.com.vn/get-started"
                                     target="_blank"
                                     rel="noreferrer noopener"
                                 >

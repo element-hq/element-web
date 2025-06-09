@@ -60,9 +60,9 @@ although there are circumstances where this changes. An example of a safe call i
 ```javascript
 const isSupported = SettingsStore.isLevelSupported(SettingLevel.ROOM);
 if (isSupported) {
-    const canSetValue = SettingsStore.canSetValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM);
+    const canSetValue = SettingsStore.canSetValue("mySetting", "!curbf:connect.vietsmile.com.vn", SettingLevel.ROOM);
     if (canSetValue) {
-        SettingsStore.setValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM, newValue);
+        SettingsStore.setValue("mySetting", "!curbf:connect.vietsmile.com.vn", SettingLevel.ROOM, newValue);
     }
 }
 ```
@@ -76,7 +76,7 @@ Where possible, the `SettingsFlag` component should be used to set simple "flip-
 `SettingsFlag` also supports simple radio button options, such as the theme the user would like to use.
 
 ```TSX
-<SettingsFlag name="theSettingId" level={SettingsLevel.ROOM} roomId="!curbf:matrix.org"
+<SettingsFlag name="theSettingId" level={SettingsLevel.ROOM} roomId="!curbf:connect.vietsmile.com.vn"
     label={_td("Your label here")} // optional, if falsey then the `SettingsStore` will be used
     onChange={function(newValue) { }} // optional, called after saving
     isExplicit={false} // this is passed along to `SettingsStore.getValueAt`, defaulting to false
@@ -178,7 +178,7 @@ class MyComponent extends React.Component {
         const callback = (settingName, roomId, level, newValAtLevel, newVal) => {
             this.setState({ color: newVal });
         };
-        this.settingWatcherRef = SettingsStore.watchSetting("roomColor", "!example:matrix.org", callback);
+        this.settingWatcherRef = SettingsStore.watchSetting("roomColor", "!example:connect.vietsmile.com.vn", callback);
     }
 
     componentWillUnmount() {

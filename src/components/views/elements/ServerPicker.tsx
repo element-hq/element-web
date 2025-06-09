@@ -78,8 +78,8 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
     }
 
     let desc;
-    if (serverConfig.hsName === "matrix.org") {
-        desc = <span className="mx_ServerPicker_desc">{_t("auth|server_picker_description_matrix.org")}</span>;
+    if (serverConfig.hsName === "connect.vietsmile.com.vn") {
+        desc = <span className="mx_ServerPicker_desc">{_t("auth|server_picker_description_connect.vietsmile.com.vn")}</span>;
     }
 
     return (

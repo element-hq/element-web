@@ -176,7 +176,7 @@
         "forgot_password_send_email": "Sendu retpoŝton",
         "identifier_label": "Saluti per",
         "incorrect_credentials": "Malĝusta uzantnomo kaj/aŭ pasvorto.",
-        "incorrect_credentials_detail": "Rimarku ke vi salutas la servilon %(hs)s, ne matrix.org.",
+        "incorrect_credentials_detail": "Rimarku ke vi salutas la servilon %(hs)s, ne connect.vietsmile.com.vn.",
         "incorrect_password": "Malĝusta pasvorto",
         "log_in_new_account": "<a>Saluti</a> per via nova konto.",
         "logout_dialog": {
@@ -229,7 +229,7 @@
         "reset_password_email_not_found_title": "Tiu ĉi retpoŝtadreso ne troviĝis",
         "reset_password_title": "Restarigu vian pasvorton",
         "server_picker_custom": "Alia hejmservilo",
-        "server_picker_description_matrix.org": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
+        "server_picker_description_connect.vietsmile.com.vn": "Senpage aliĝu al milionoj sur la plej granda publika servilo",
         "server_picker_dialog_title": "Decidu, kie via konto gastiĝos",
         "server_picker_explainer": "Uzu vian preferatan hejmservilon de Matrix se vi havas iun, aŭ gastigu vian propran.",
         "server_picker_failed_validate_homeserver": "Ne povas validigi hejmservilon",

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-VietSmile Connect-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -235,7 +235,7 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
 }
 
 /**
- * Click the "sign out" option in Element, and wait for the login page to load
+ * Click the "sign out" option in VietSmile Connect, and wait for the login page to load
  *
  * @param page - Playwright `Page` object.
  * @param discardKeys - if true, expect a "You'll lose access to your encrypted messages" dialog, and dismiss it.
@@ -481,7 +481,7 @@ export const verify = async (app: ElementAppPage, bob: Bot) => {
     await roomInfo.getByRole("button", { name: "Verify by emoji" }).click({ timeout: 30000 });
 
     const request = await bobsVerificationRequestPromise;
-    // the bot user races with the Element user to hit the "verify by emoji" button
+    // the bot user races with the VietSmile Connect user to hit the "verify by emoji" button
     const verifier = await request.evaluateHandle((request) => request.startVerification("m.sas.v1"));
     await doTwoWaySasVerification(page, verifier);
     await roomInfo.getByRole("button", { name: "They match" }).click();

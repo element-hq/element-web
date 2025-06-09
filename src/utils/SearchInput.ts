@@ -12,7 +12,7 @@ import { parsePermalink } from "./permalinks/Permalinks";
  * Returns the primaryEntityId(roomIdOrAlias or userId) if the search term
  * is a permalink and the primaryEntityId is not null. Otherwise, it returns
  * the original search term.
- * E.g https://matrix.to/#/#element-dev:matrix.org returns #element-dev:matrix.org
+ * E.g https://matrix.to/#/#element-dev:connect.vietsmile.com.vn returns #element-dev:connect.vietsmile.com.vn
  * @param {string} searchTerm The search term.
  * @returns {string} The roomId, alias, userId, or the original search term
  */

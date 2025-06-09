@@ -39,7 +39,7 @@ const event = new MatrixEvent({
     content: {
         body: "test",
         msgtype: "m.image",
-        url: "mxc://matrix.org/1234",
+        url: "mxc://connect.vietsmile.com.vn/1234",
     },
 });
 

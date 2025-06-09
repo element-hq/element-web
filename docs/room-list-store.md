@@ -37,7 +37,7 @@ useful.
 ### Tag sorting algorithm: Manual
 
 Manual sorting makes use of the `order` property present on all tags for a room, per the
-[Matrix specification](https://matrix.org/docs/spec/client_server/r0.6.0#room-tagging). Smaller values
+[Matrix specification](https://connect.vietsmile.com.vn/docs/spec/client_server/r0.6.0#room-tagging). Smaller values
 of `order` cause rooms to appear closer to the top of the list.
 
 ### Tag sorting algorithm: Recent

@@ -51,7 +51,7 @@ describe("RoomSkipList", () => {
         expect(skipList.size).toEqual(totalRooms);
         const sortedRooms = [...skipList];
         for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
+            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:connect.vietsmile.com.vn`);
         }
     });
 
@@ -68,7 +68,7 @@ describe("RoomSkipList", () => {
         // Sorting order should be the same as before
         const sortedRooms = [...skipList];
         for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
+            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:connect.vietsmile.com.vn`);
         }
     });
 
@@ -79,7 +79,7 @@ describe("RoomSkipList", () => {
             const room = rooms[i];
             const event = mkMessage({
                 room: room.roomId,
-                user: `@foo${i}:matrix.org`,
+                user: `@foo${i}:connect.vietsmile.com.vn`,
                 ts: totalRooms - i,
                 event: true,
             });
@@ -89,7 +89,7 @@ describe("RoomSkipList", () => {
         }
         const sortedRooms = [...skipList];
         for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
+            expect(sortedRooms[i].roomId).toEqual(`!foo${i}:connect.vietsmile.com.vn`);
         }
     });
 
@@ -132,7 +132,7 @@ describe("RoomSkipList", () => {
             expect(roomSkipList.size).toEqual(totalRooms);
             const sortedRooms = [...roomSkipList];
             for (let i = 0; i < totalRooms; ++i) {
-                expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
+                expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:connect.vietsmile.com.vn`);
             }
         });
 

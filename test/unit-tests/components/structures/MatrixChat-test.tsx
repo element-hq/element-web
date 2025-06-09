@@ -297,7 +297,7 @@ describe("<MatrixChat />", () => {
 
     describe("when query params have a OIDC params", () => {
         const issuer = "https://auth.com/";
-        const homeserverUrl = "https://matrix.org";
+        const homeserverUrl = "https://connect.vietsmile.com.vn";
         const identityServerUrl = "https://is.org";
         const clientId = "xyz789";
 

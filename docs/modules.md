@@ -47,5 +47,5 @@ The following requirements are key for any module:
 Both `RuntimeModule` and `ModuleApi` have extensive documentation to describe what is proper usage and how to set things
 up.
 
-If you have any questions then please visit [#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) on
+If you have any questions then please visit [#element-dev:connect.vietsmile.com.vn](https://matrix.to/#/#element-dev:connect.vietsmile.com.vn) on
 Matrix and we'll help as best we can.

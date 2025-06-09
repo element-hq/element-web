@@ -211,9 +211,9 @@ export class RoomViewStore extends EventEmitter {
         // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
-            //      - room_alias:   '#somealias:matrix.org'
-            //      - room_id:      '!roomid123:matrix.org'
-            //      - event_id:     '$213456782:matrix.org'
+            //      - room_alias:   '#somealias:connect.vietsmile.com.vn'
+            //      - room_id:      '!roomid123:connect.vietsmile.com.vn'
+            //      - event_id:     '$213456782:connect.vietsmile.com.vn'
             //      - event_offset: 100
             //      - highlighted:  true
             case Action.ViewRoom:

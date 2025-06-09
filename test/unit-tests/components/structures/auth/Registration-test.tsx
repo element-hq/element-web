@@ -64,7 +64,7 @@ describe("Registration", function () {
             return mockClient;
         });
         fetchMock.catch(404);
-        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+        fetchMock.get("https://connect.vietsmile.com.vn/_matrix/client/versions", {
             unstable_features: {},
             versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
         });
@@ -87,7 +87,7 @@ describe("Registration", function () {
         onServerConfigChange: jest.fn(),
     };
 
-    const defaultHsUrl = "https://matrix.org";
+    const defaultHsUrl = "https://connect.vietsmile.com.vn";
     const defaultIsUrl = "https://vector.im";
 
     function getRawComponent(
@@ -142,7 +142,7 @@ describe("Registration", function () {
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         fireEvent.click(container.querySelector(".mx_SSOButton")!);
-        expect(mockClient.baseUrl).toBe("https://matrix.org");
+        expect(mockClient.baseUrl).toBe("https://connect.vietsmile.com.vn");
 
         fetchMock.get("https://server2/_matrix/client/versions", {
             unstable_features: {},

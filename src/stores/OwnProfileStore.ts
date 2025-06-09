@@ -118,7 +118,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         }
 
         // We also have to listen for membership events for ourselves as the above User events
-        // are fired only with presence, which matrix.org (and many others) has disabled.
+        // are fired only with presence, which connect.vietsmile.com.vn (and many others) has disabled.
         this.matrixClient.on(RoomStateEvent.Events, this.onStateEvents);
 
         await this.onProfileUpdate(); // trigger an initial update
@@ -146,7 +146,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
                     /**
                      * Raise any other error than M_NOT_FOUND.
                      * M_NOT_FOUND could occur if there is no user profile.
-                     * {@link https://spec.matrix.org/v1.7/client-server-api/#get_matrixclientv3profileuserid}
+                     * {@link https://spec.connect.vietsmile.com.vn/v1.7/client-server-api/#get_matrixclientv3profileuserid}
                      * We should then assume an empty profile, emit UPDATE_EVENT etc..
                      */
                     throw error;

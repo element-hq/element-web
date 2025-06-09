@@ -172,7 +172,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 if (!count) {
                     return null;
                 }
-                // Deduplicate the events as per the spec https://spec.matrix.org/v1.7/client-server-api/#annotations-client-behaviour
+                // Deduplicate the events as per the spec https://spec.connect.vietsmile.com.vn/v1.7/client-server-api/#annotations-client-behaviour
                 // This isn't done by the underlying data model as applications may still need access to the whole list of events
                 // for moderation purposes.
                 const deduplicatedEvents = uniqBy([...events], (e) => e.getSender());

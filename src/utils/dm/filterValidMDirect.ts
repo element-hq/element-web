@@ -14,7 +14,7 @@ interface FilterValidMDirectResult {
 }
 
 /**
- * Filter m.direct content to be compliant to https://spec.matrix.org/v1.6/client-server-api/#mdirect.
+ * Filter m.direct content to be compliant to https://spec.connect.vietsmile.com.vn/v1.6/client-server-api/#mdirect.
  *
  * @param content - Raw event content to be filerted
  * @returns value as a flag whether to content was valid.

@@ -24,7 +24,7 @@ exports[`<BridgeSettingsTab /> renders when room is bridging messages 1`] = `
               <span>
                 This room is bridging messages to the following platforms. 
                 <a
-                  href="https://matrix.org/bridges/"
+                  href="https://connect.vietsmile.com.vn/bridges/"
                   rel="noreferrer noopener"
                   target="_blank"
                 >
@@ -112,7 +112,7 @@ exports[`<BridgeSettingsTab /> renders when room is not bridging messages to any
             <span>
               This room isn't bridging messages to any platforms. 
               <a
-                href="https://matrix.org/bridges/"
+                href="https://connect.vietsmile.com.vn/bridges/"
                 rel="noreferrer noopener"
                 target="_blank"
               >

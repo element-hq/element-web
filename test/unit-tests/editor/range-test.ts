@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import EditorModel from "../../../src/editor/model";
 import { createPartCreator, createRenderer } from "./mock";
 
-const pillChannel = "#riot-dev:matrix.org";
+const pillChannel = "#riot-dev:connect.vietsmile.com.vn";
 
 describe("editor/range", function () {
     it("range on empty model", function () {

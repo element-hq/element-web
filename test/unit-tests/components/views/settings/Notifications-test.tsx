@@ -146,7 +146,7 @@ const pushRules: IPushRules = {
         room: [
             {
                 actions: [PushRuleActionName.DontNotify],
-                rule_id: "!zJPyWqpMorfCcWObge:matrix.org",
+                rule_id: "!zJPyWqpMorfCcWObge:connect.vietsmile.com.vn",
                 default: false,
                 enabled: true,
             },
@@ -184,7 +184,7 @@ const pushRules: IPushRules = {
                 conditions: [
                     { kind: ConditionKind.EventMatch, key: "type", pattern: "m.room.member" },
                     { kind: ConditionKind.EventMatch, key: "content.membership", pattern: "invite" },
-                    { kind: ConditionKind.EventMatch, key: "state_key", pattern: "@kadev1:matrix.org" },
+                    { kind: ConditionKind.EventMatch, key: "state_key", pattern: "@kadev1:connect.vietsmile.com.vn" },
                 ],
                 actions: [
                     PushRuleActionName.Notify,

@@ -17,7 +17,7 @@ import InteractiveAuthDialog from "../../../../../src/components/views/dialogs/I
 import { clearAllModals, flushPromises, getMockClientWithEventEmitter, unmockClientPeg } from "../../../../test-utils";
 
 describe("InteractiveAuthDialog", function () {
-    const homeserverUrl = "https://matrix.org";
+    const homeserverUrl = "https://connect.vietsmile.com.vn";
     const authUrl = "https://auth.com";
     const mockClient = getMockClientWithEventEmitter({
         generateClientSecret: jest.fn().mockReturnValue("t35tcl1Ent5ECr3T"),

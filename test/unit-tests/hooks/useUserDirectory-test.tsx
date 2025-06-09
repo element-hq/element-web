@@ -24,13 +24,13 @@ describe("useUserDirectory", () => {
         stubClient();
         cli = MatrixClientPeg.safeGet();
 
-        cli.getDomain = () => "matrix.org";
+        cli.getDomain = () => "connect.vietsmile.com.vn";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.searchUserDirectory = ({ term: query }) =>
             Promise.resolve({
                 results: [
                     {
-                        user_id: "@bob:matrix.org",
+                        user_id: "@bob:connect.vietsmile.com.vn",
                         display_name: query,
                     },
                 ],

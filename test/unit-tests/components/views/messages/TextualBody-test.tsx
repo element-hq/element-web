@@ -176,7 +176,7 @@ describe("<TextualBody />", () => {
 
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
         it("linkification get applied correctly into the DOM", () => {
-            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const ev = mkRoomTextMessage("Visit https://connect.vietsmile.com.vn/");
             const { container } = getComponent({ mxEvent: ev });
             expect(container).toHaveTextContent(ev.getContent().body);
             const content = container.querySelector(".mx_EventTile_body");
@@ -300,11 +300,11 @@ describe("<TextualBody />", () => {
 
         it("linkification is not applied to code blocks", () => {
             const ev = mkFormattedMessage(
-                "Visit `https://matrix.org/`\n```\nhttps://matrix.org/\n```",
-                "<p>Visit <code>https://matrix.org/</code></p>\n<pre>https://matrix.org/\n</pre>\n",
+                "Visit `https://connect.vietsmile.com.vn/`\n```\nhttps://connect.vietsmile.com.vn/\n```",
+                "<p>Visit <code>https://connect.vietsmile.com.vn/</code></p>\n<pre>https://connect.vietsmile.com.vn/\n</pre>\n",
             );
             const { container } = getComponent({ mxEvent: ev }, matrixClient);
-            expect(container).toHaveTextContent("Visit https://matrix.org/ 1https://matrix.org/");
+            expect(container).toHaveTextContent("Visit https://connect.vietsmile.com.vn/ 1https://connect.vietsmile.com.vn/");
             const content = container.querySelector(".mx_EventTile_body");
             expect(content).toMatchSnapshot();
         });
@@ -424,11 +424,11 @@ describe("<TextualBody />", () => {
         });
 
         it("renders url previews correctly", () => {
-            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const ev = mkRoomTextMessage("Visit https://connect.vietsmile.com.vn/");
             const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient);
 
             expect(container).toHaveTextContent(ev.getContent().body);
-            expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
+            expect(container.querySelector("a")).toHaveAttribute("href", "https://connect.vietsmile.com.vn/");
 
             // simulate an event edit and check the transition from the old URL preview to the new one
             const ev2 = mkEvent({
@@ -458,7 +458,7 @@ describe("<TextualBody />", () => {
         });
 
         it("should listen to showUrlPreview change", () => {
-            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const ev = mkRoomTextMessage("Visit https://connect.vietsmile.com.vn/");
 
             const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();

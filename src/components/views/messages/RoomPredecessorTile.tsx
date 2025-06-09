@@ -160,7 +160,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
      * The spec says that Room IDs are opaque [1] so this can only ever be a
      * guess. There is no guarantee that this room exists on this server.
      *
-     * [1] https://spec.matrix.org/v1.5/appendices/#room-ids-and-event-ids
+     * [1] https://spec.connect.vietsmile.com.vn/v1.5/appendices/#room-ids-and-event-ids
      */
     function guessLinkForRoomId(roomId: string): string | null {
         const serverName = guessServerNameFromRoomId(roomId);
@@ -180,7 +180,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
  * The spec says that Room IDs are opaque [1] so this can only ever be a
  * guess. There is no guarantee that this room exists on this server.
  *
- * [1] https://spec.matrix.org/v1.5/appendices/#room-ids-and-event-ids
+ * [1] https://spec.connect.vietsmile.com.vn/v1.5/appendices/#room-ids-and-event-ids
  */
 export function guessServerNameFromRoomId(roomId: string): string | null {
     const m = roomId.match(/^[^:]*:(.*)/);

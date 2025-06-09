@@ -1876,7 +1876,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 threepidInvite = invites.find((invite) => invite.roomId === roomString);
             }
 
-            // on our URLs there might be a ?via=matrix.org or similar to help
             // joins to the room succeed. We'll pass these through as an array
             // to other levels. If there's just one ?via= then params.via is a
             // single string. If someone does something like ?via=one.com&via=two.com

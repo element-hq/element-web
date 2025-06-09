@@ -1,4 +1,4 @@
-[![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
+[![Chat](https://img.shields.io/matrix/element-web:connect.vietsmile.com.vn?logo=matrix)](https://matrix.to/#/#element-web:connect.vietsmile.com.vn)
 ![Tests](https://github.com/element-hq/element-web/actions/workflows/tests.yaml/badge.svg)
 ![Static Analysis](https://github.com/element-hq/element-web/actions/workflows/static_analysis.yaml/badge.svg)
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
@@ -7,28 +7,28 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
 
-# Element
+# VietSmile Connect
 
-Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
+VietSmile Connect (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
 JS SDK](https://github.com/matrix-org/matrix-js-sdk).
 
 # Supported Environments
 
-Element has several tiers of support for different environments:
+VietSmile Connect has several tiers of support for different environments:
 
 - Supported
     - Definition:
         - Issues **actively triaged**, regressions **block** the release
     - Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
     - Last 2 versions of Safari
-    - Latest release of official Element Desktop app on desktop OSes
+    - Latest release of official VietSmile Connect Desktop app on desktop OSes
     - Desktop OSes means macOS, Windows, and Linux versions for desktop devices
       that are actively supported by the OS vendor and receive security updates
 - Best effort
     - Definition:
         - Issues **accepted**, regressions **do not block** the release
-        - The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
-        - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
+        - The wider VietSmile Connect Products(including VietSmile Connect Call and the Enterprise Server Suite) do still not officially support these browsers.
+        - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. VietSmile Connect Call) may not function.
     - Last major release of Firefox ESR and Chrome/Edge Extended Stable
 - Community Supported
     - Definition:
@@ -41,29 +41,29 @@ Element has several tiers of support for different environments:
 
 The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
 
-For accessing Element on an Android or iOS device, we currently recommend the
+For accessing VietSmile Connect on an Android or iOS device, we currently recommend the
 native apps [element-android](https://github.com/element-hq/element-android)
 and [element-ios](https://github.com/element-hq/element-ios).
 
 # Getting Started
 
-The easiest way to test Element is to just use the hosted copy at <https://app.element.io>.
+The easiest way to test VietSmile Connect is to just use the hosted copy at <https://app.element.io>.
 The `develop` branch is continuously deployed to <https://develop.element.io>
 for those who like living dangerously.
 
-To host your own instance of Element see [Installing Element Web](docs/install.md).
+To host your own instance of VietSmile Connect see [Installing VietSmile Connect Web](docs/install.md).
 
-To install Element as a desktop application, see [Running as a desktop app](#running-as-a-desktop-app) below.
+To install VietSmile Connect as a desktop application, see [Running as a desktop app](#running-as-a-desktop-app) below.
 
 # Important Security Notes
 
 ## Separate domains
 
-We do not recommend running Element from the same domain name as your Matrix
+We do not recommend running VietSmile Connect from the same domain name as your Matrix
 homeserver. The reason is the risk of XSS (cross-site-scripting)
-vulnerabilities that could occur if someone caused Element to load and render
+vulnerabilities that could occur if someone caused VietSmile Connect to load and render
 malicious user generated content from a Matrix API which then had trusted
-access to Element (or other apps) due to sharing the same domain.
+access to VietSmile Connect (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place. See
@@ -72,9 +72,9 @@ situation, but it's still not good practice to do it in the first place. See
 ## Configuration best practices
 
 Unless you have special requirements, you will want to add the following to
-your web server configuration when hosting Element Web:
+your web server configuration when hosting VietSmile Connect Web:
 
-- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+- The `X-Frame-Options: SAMEORIGIN` header, to prevent VietSmile Connect Web from being
   framed and protect from [clickjacking][owasp-clickjacking].
 - The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
   header, as the modern replacement for `X-Frame-Options` (though both should be
@@ -113,7 +113,7 @@ instead of adding that last line.
 
 # Building From Source
 
-Element is a modular webapp built with modern ES6 and uses a Node.js build system.
+VietSmile Connect is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
@@ -136,14 +136,14 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
    web server.
 
 Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
-which will build all the necessary files into the `webapp` directory. The version of Element
+which will build all the necessary files into the `webapp` directory. The version of VietSmile Connect
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your web server to actually serve up the app, which is
 entirely static content.
 
 # Running as a Desktop app
 
-Element can also be run as a desktop app, wrapped in Electron. You can download a
+VietSmile Connect can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from <https://element.io/get-started> or, if you prefer,
 build it yourself.
 
@@ -155,17 +155,17 @@ The [configuration docs](docs/config.md#desktop-app-configuration) show how to o
 
 # config.json
 
-Element supports a variety of settings to configure default servers, behaviour, themes, etc.
+VietSmile Connect supports a variety of settings to configure default servers, behaviour, themes, etc.
 See the [configuration docs](docs/config.md) for more details.
 
 # Labs Features
 
-Some features of Element may be enabled by flags in the `Labs` section of the settings.
+Some features of VietSmile Connect may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/element-hq/element-web/blob/develop/docs/labs.md).
 
 # Caching requirements
 
-Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
+VietSmile Connect requires the following URLs not to be cached, when/if you are serving VietSmile Connect from your own webserver:
 
 ```
 /config.*.json
@@ -175,8 +175,8 @@ Element requires the following URLs not to be cached, when/if you are serving El
 /index.html
 ```
 
-We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
-webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
+We also recommend that you force browsers to re-validate any cached copy of VietSmile Connect on page load by configuring your
+webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of VietSmile Connect on
 the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
 Dockerfile.
 
@@ -206,11 +206,11 @@ Copyright (c) 2014-2017 OpenMarket Ltd
 Copyright (c) 2017 Vector Creations Ltd
 Copyright (c) 2017-2025 New Vector Ltd
 
-This software is multi licensed by New Vector Ltd (Element). It can be used either:
+This software is multi licensed by New Vector Ltd (VietSmile Connect). It can be used either:
 
 (1) for free under the terms of the GNU Affero General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
 
 (2) for free under the terms of the GNU General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
 
-(3) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to).
+(3) under the terms of a paid-for VietSmile Connect Commercial License agreement between you and VietSmile Connect (the terms of which may vary depending on what you and VietSmile Connect have agreed to).
 Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.

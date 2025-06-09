@@ -28,19 +28,19 @@ describe("RecentAlgorithm", () => {
 
     describe("getLastTs", () => {
         it("returns the last ts", () => {
-            const room = new Room("room123", cli, "@john:matrix.org");
+            const room = new Room("room123", cli, "@john:connect.vietsmile.com.vn");
 
             const event1 = mkMessage({
                 room: room.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@alice:connect.vietsmile.com.vn",
                 ts: 5,
                 event: true,
             });
             const event2 = mkMessage({
                 room: room.roomId,
                 msg: "Howdy!",
-                user: "@bob:matrix.org",
+                user: "@bob:connect.vietsmile.com.vn",
                 ts: 10,
                 event: true,
             });
@@ -48,33 +48,33 @@ describe("RecentAlgorithm", () => {
             room.getMyMembership = () => KnownMembership.Join;
 
             room.addLiveEvents([event1], { addToState: true });
-            expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(5);
-            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(5);
+            expect(algorithm.getLastTs(room, "@jane:connect.vietsmile.com.vn")).toBe(5);
+            expect(algorithm.getLastTs(room, "@john:connect.vietsmile.com.vn")).toBe(5);
 
             room.addLiveEvents([event2], { addToState: true });
 
-            expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(10);
-            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(10);
+            expect(algorithm.getLastTs(room, "@jane:connect.vietsmile.com.vn")).toBe(10);
+            expect(algorithm.getLastTs(room, "@john:connect.vietsmile.com.vn")).toBe(10);
         });
 
         it("returns a fake ts for rooms without a timeline", () => {
             const room = mkRoom(cli, "!new:example.org");
             // @ts-ignore
             room.timeline = undefined;
-            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
+            expect(algorithm.getLastTs(room, "@john:connect.vietsmile.com.vn")).toBe(Number.MAX_SAFE_INTEGER);
         });
 
         it("works when not a member", () => {
             const room = mkRoom(cli, "!new:example.org");
             room.getMyMembership.mockReturnValue(KnownMembership.Invite);
-            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
+            expect(algorithm.getLastTs(room, "@john:connect.vietsmile.com.vn")).toBe(Number.MAX_SAFE_INTEGER);
         });
     });
 
     describe("sortRooms", () => {
         it("orders rooms per last message ts", () => {
-            const room1 = new Room("room1", cli, "@bob:matrix.org");
-            const room2 = new Room("room2", cli, "@bob:matrix.org");
+            const room1 = new Room("room1", cli, "@bob:connect.vietsmile.com.vn");
+            const room2 = new Room("room2", cli, "@bob:connect.vietsmile.com.vn");
 
             room1.getMyMembership = () => KnownMembership.Join;
             room2.getMyMembership = () => KnownMembership.Join;
@@ -82,14 +82,14 @@ describe("RecentAlgorithm", () => {
             const evt = mkMessage({
                 room: room1.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@alice:connect.vietsmile.com.vn",
                 ts: 5,
                 event: true,
             });
             const evt2 = mkMessage({
                 room: room2.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@alice:connect.vietsmile.com.vn",
                 ts: 2,
                 event: true,
             });
@@ -101,8 +101,8 @@ describe("RecentAlgorithm", () => {
         });
 
         it("orders rooms without messages first", () => {
-            const room1 = new Room("room1", cli, "@bob:matrix.org");
-            const room2 = new Room("room2", cli, "@bob:matrix.org");
+            const room1 = new Room("room1", cli, "@bob:connect.vietsmile.com.vn");
+            const room2 = new Room("room2", cli, "@bob:connect.vietsmile.com.vn");
 
             room1.getMyMembership = () => KnownMembership.Join;
             room2.getMyMembership = () => KnownMembership.Join;
@@ -110,7 +110,7 @@ describe("RecentAlgorithm", () => {
             const evt = mkMessage({
                 room: room1.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@alice:connect.vietsmile.com.vn",
                 ts: 5,
                 event: true,
             });
@@ -122,8 +122,8 @@ describe("RecentAlgorithm", () => {
             const { events } = mkThread({
                 room: room1,
                 client: cli,
-                authorId: "@bob:matrix.org",
-                participantUserIds: ["@bob:matrix.org"],
+                authorId: "@bob:connect.vietsmile.com.vn",
+                participantUserIds: ["@bob:connect.vietsmile.com.vn"],
                 ts: 12,
             });
 
@@ -131,8 +131,8 @@ describe("RecentAlgorithm", () => {
         });
 
         it("orders rooms based on thread replies too", () => {
-            const room1 = new Room("room1", cli, "@bob:matrix.org");
-            const room2 = new Room("room2", cli, "@bob:matrix.org");
+            const room1 = new Room("room1", cli, "@bob:connect.vietsmile.com.vn");
+            const room2 = new Room("room2", cli, "@bob:connect.vietsmile.com.vn");
 
             room1.getMyMembership = () => KnownMembership.Join;
             room2.getMyMembership = () => KnownMembership.Join;
@@ -140,8 +140,8 @@ describe("RecentAlgorithm", () => {
             const { rootEvent, events: events1 } = mkThread({
                 room: room1,
                 client: cli,
-                authorId: "@bob:matrix.org",
-                participantUserIds: ["@bob:matrix.org"],
+                authorId: "@bob:connect.vietsmile.com.vn",
+                participantUserIds: ["@bob:connect.vietsmile.com.vn"],
                 ts: 12,
                 length: 5,
             });
@@ -150,8 +150,8 @@ describe("RecentAlgorithm", () => {
             const { events: events2 } = mkThread({
                 room: room2,
                 client: cli,
-                authorId: "@bob:matrix.org",
-                participantUserIds: ["@bob:matrix.org"],
+                authorId: "@bob:connect.vietsmile.com.vn",
+                participantUserIds: ["@bob:connect.vietsmile.com.vn"],
                 ts: 14,
                 length: 10,
             });
@@ -160,7 +160,7 @@ describe("RecentAlgorithm", () => {
             expect(algorithm.sortRooms([room1, room2], DefaultTagID.Untagged)).toEqual([room2, room1]);
 
             const threadReply = makeThreadEvent({
-                user: "@bob:matrix.org",
+                user: "@bob:connect.vietsmile.com.vn",
                 room: room1.roomId,
                 event: true,
                 msg: `hello world`,

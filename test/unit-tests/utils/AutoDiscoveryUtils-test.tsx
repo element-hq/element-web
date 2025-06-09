@@ -45,14 +45,14 @@ describe("AutoDiscoveryUtils", () => {
         const validHsConfig = {
             "m.homeserver": {
                 state: AutoDiscoveryAction.SUCCESS,
-                base_url: "https://matrix.org",
+                base_url: "https://connect.vietsmile.com.vn",
             },
         };
 
         const expectedValidatedConfig = {
             hsName: serverName,
             hsNameIsDifferent: true,
-            hsUrl: "https://matrix.org",
+            hsUrl: "https://connect.vietsmile.com.vn",
             isDefault: false,
             isNameResolvable: true,
             isUrl: "identity.com",
@@ -163,7 +163,7 @@ describe("AutoDiscoveryUtils", () => {
             await expect(AutoDiscoveryUtils.buildValidatedConfigFromDiscovery("", discoveryResult)).resolves.toEqual({
                 ...expectedValidatedConfig,
                 hsNameIsDifferent: false,
-                hsName: "matrix.org",
+                hsName: "connect.vietsmile.com.vn",
                 warning: null,
             });
         });
@@ -211,7 +211,7 @@ describe("AutoDiscoveryUtils", () => {
                 "m.homeserver": {
                     state: AutoDiscoveryAction.FAIL_ERROR,
                     error: AutoDiscovery.ERROR_UNSUPPORTED_HOMESERVER_SPEC_VERSION,
-                    base_url: "https://matrix.org",
+                    base_url: "https://connect.vietsmile.com.vn",
                 },
             };
             const syntaxOnly = true;
@@ -223,7 +223,7 @@ describe("AutoDiscoveryUtils", () => {
         });
 
         it("should validate delegated oidc auth", async () => {
-            const issuer = "https://auth.matrix.org/";
+            const issuer = "https://auth.connect.vietsmile.com.vn/";
             fetchMock.get(
                 `${validHsConfig["m.homeserver"].base_url}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`,
                 {
@@ -363,11 +363,11 @@ describe("AutoDiscoveryUtils", () => {
                         "org.matrix.session_end",
                         "org.matrix.cross_signing_reset",
                     ],
-                    account_management_uri: "https://auth.matrix.org/account/",
-                    authorization_endpoint: "https://auth.matrix.org/auth",
-                    registration_endpoint: "https://auth.matrix.org/registration",
+                    account_management_uri: "https://auth.connect.vietsmile.com.vn/account/",
+                    authorization_endpoint: "https://auth.connect.vietsmile.com.vn/auth",
+                    registration_endpoint: "https://auth.connect.vietsmile.com.vn/registration",
                     signingKeys: [],
-                    token_endpoint: "https://auth.matrix.org/token",
+                    token_endpoint: "https://auth.connect.vietsmile.com.vn/token",
                 }),
                 warning: null,
             });

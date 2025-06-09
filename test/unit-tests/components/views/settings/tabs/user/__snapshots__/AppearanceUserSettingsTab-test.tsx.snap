@@ -220,7 +220,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
-                            @userId:matrix.org
+                            @userId:connect.vietsmile.com.vn
                           </span>
                         </div>
                         <div
@@ -233,7 +233,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             data-type="round"
                             role="presentation"
                             style="--cpd-avatar-size: 30px;"
-                            title="@userId:matrix.org"
+                            title="@userId:connect.vietsmile.com.vn"
                           >
                             u
                           </span>
@@ -346,7 +346,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
-                            @userId:matrix.org
+                            @userId:connect.vietsmile.com.vn
                           </span>
                         </div>
                         <div
@@ -359,7 +359,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             data-type="round"
                             role="presentation"
                             style="--cpd-avatar-size: 30px;"
-                            title="@userId:matrix.org"
+                            title="@userId:connect.vietsmile.com.vn"
                           >
                             u
                           </span>
@@ -472,7 +472,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
-                            @userId:matrix.org
+                            @userId:connect.vietsmile.com.vn
                           </span>
                         </div>
                         <div
@@ -485,7 +485,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                             data-type="round"
                             role="presentation"
                             style="--cpd-avatar-size: 14px;"
-                            title="@userId:matrix.org"
+                            title="@userId:connect.vietsmile.com.vn"
                           >
                             u
                           </span>

@@ -240,7 +240,7 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
                             {},
                             {
                                 a: (sub) => (
-                                    <ExternalLink href="https://matrix.org/security-disclosure-policy/">
+                                    <ExternalLink href="https://connect.vietsmile.com.vn/security-disclosure-policy/">
                                         {sub}
                                     </ExternalLink>
                                 ),

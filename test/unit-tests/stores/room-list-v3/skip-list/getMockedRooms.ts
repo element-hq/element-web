@@ -11,9 +11,9 @@ import { mkMessage, mkStubRoom } from "../../../../test-utils";
 export function getMockedRooms(client: MatrixClient, roomCount: number = 100): Room[] {
     const rooms: Room[] = [];
     for (let i = 0; i < roomCount; ++i) {
-        const roomId = `!foo${i}:matrix.org`;
+        const roomId = `!foo${i}:connect.vietsmile.com.vn`;
         const room = mkStubRoom(roomId, `Foo Room ${i}`, client);
-        const event = mkMessage({ room: roomId, user: `@foo${i}:matrix.org`, ts: i + 1, event: true });
+        const event = mkMessage({ room: roomId, user: `@foo${i}:connect.vietsmile.com.vn`, ts: i + 1, event: true });
         room.timeline.push(event);
         rooms.push(room);
     }

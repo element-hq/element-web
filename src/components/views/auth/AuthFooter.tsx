@@ -15,9 +15,6 @@ import { _t } from "../../../languageHandler";
 const AuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
-        { text: "Blog", url: "https://element.io/blog" },
-        { text: "Mastodon", url: "https://mastodon.matrix.org/@Element" },
-        { text: "GitHub", url: "https://github.com/element-hq/element-web" },
     ];
 
     const authFooterLinks: JSX.Element[] = [];
@@ -31,10 +28,7 @@ const AuthFooter = (): ReactElement => {
 
     return (
         <footer className="mx_AuthFooter" role="contentinfo">
-            {authFooterLinks}
-            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
-                {_t("powered_by_matrix")}
-            </a>
+            <a href="https://socjsc.com" style={{ cursor: "default"}} target="_blank" rel="noreferrer noopener">Copyright © <span  style={{ color: "white", cursor: "pointer" }}>SOC JSC</span></a>
         </footer>
     );
 };

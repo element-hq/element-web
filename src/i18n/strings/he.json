@@ -171,7 +171,7 @@
         "forgot_password_send_email": "שלח אימייל",
         "identifier_label": "כניסה עם",
         "incorrect_credentials": "שם משתמש ו / או סיסמה שגויים.",
-        "incorrect_credentials_detail": "שים לב שאתה מתחבר לשרת %(hs)s, לא ל- matrix.org.",
+        "incorrect_credentials_detail": "שים לב שאתה מתחבר לשרת %(hs)s, לא ל- connect.vietsmile.com.vn.",
         "incorrect_password": "סיסמה שגויה",
         "log_in_new_account": "<a> היכנס </a> לחשבונך החדש.",
         "logout_dialog": {
@@ -219,7 +219,7 @@
         "reset_password_email_field_required_invalid": "הזן כתובת דוא\"ל (חובה בשרת הבית הזה)",
         "reset_password_email_not_found_title": "המייל הזה לא נמצא",
         "server_picker_custom": "שרת בית אחר",
-        "server_picker_description_matrix.org": "הצטרפו למיליונים בחינם בשרת הציבורי הגדול ביותר",
+        "server_picker_description_connect.vietsmile.com.vn": "הצטרפו למיליונים בחינם בשרת הציבורי הגדול ביותר",
         "server_picker_dialog_title": "החלט היכן מתארח חשבונך",
         "server_picker_explainer": "השתמש בשרת הבית המועדף על מטריקס אם יש לך כזה, או מארח משלך.",
         "server_picker_failed_validate_homeserver": "לא ניתן לאמת את שרת הבית",

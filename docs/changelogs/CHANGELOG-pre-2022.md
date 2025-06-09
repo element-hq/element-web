@@ -162,7 +162,7 @@ Changes in [1.9.8-rc.1](https://github.com/vector-im/element-web/releases/tag/v1
 Changes in [1.9.7](https://github.com/vector-im/element-web/releases/tag/v1.9.7) (2021-12-13)
 =============================================================================================
 
- * Security release with updated version of Olm to fix https://matrix.org/blog/2021/12/03/pre-disclosure-upcoming-security-release-of-libolm-and-matrix-js-sdk
+ * Security release with updated version of Olm to fix https://connect.vietsmile.com.vn/blog/2021/12/03/pre-disclosure-upcoming-security-release-of-libolm-and-matrix-js-sdk
  * Fix a crash on logout
 
 Changes in [1.9.6](https://github.com/vector-im/element-web/releases/tag/v1.9.6) (2021-12-06)
@@ -718,7 +718,7 @@ Changes in [1.8.4](https://github.com/vector-im/element-web/releases/tag/v1.8.4)
 =================================================================================================
 
 ## 🔒 SECURITY FIXES
- * Fix a security issue with message key sharing. See https://matrix.org/blog/2021/09/13/vulnerability-disclosure-key-sharing
+ * Fix a security issue with message key sharing. See https://connect.vietsmile.com.vn/blog/2021/09/13/vulnerability-disclosure-key-sharing
    for details.
 
 Changes in [1.8.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2) (2021-08-31)
@@ -2576,7 +2576,7 @@ Changes in [1.5.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.
    [\#11540](https://github.com/vector-im/riot-web/pull/11540)
  * Update from Weblate
    [\#11591](https://github.com/vector-im/riot-web/pull/11591)
- * Update riot.im enable_presence_by_hs_url for new matrix.org client URL
+ * Update riot.im enable_presence_by_hs_url for new connect.vietsmile.com.vn client URL
    [\#11565](https://github.com/vector-im/riot-web/pull/11565)
  * Remove mention of vector.im as default identity server on mobile guide
    [\#11544](https://github.com/vector-im/riot-web/pull/11544)
@@ -2726,7 +2726,7 @@ Changes in [1.5.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.
    [\#11248](https://github.com/vector-im/riot-web/pull/11248)
  * Update from Weblate
    [\#11243](https://github.com/vector-im/riot-web/pull/11243)
- * Update sample config for new matrix.org CS API URL
+ * Update sample config for new connect.vietsmile.com.vn CS API URL
    [\#11207](https://github.com/vector-im/riot-web/pull/11207)
  * clarify where the e2e tests are located
    [\#11115](https://github.com/vector-im/riot-web/pull/11115)
@@ -3169,7 +3169,7 @@ Changes in [1.1.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.1.
    [\#9517](https://github.com/vector-im/riot-web/pull/9517)
  * update installation instructions with new repo
    [\#9500](https://github.com/vector-im/riot-web/pull/9500)
- * Use packages.matrix.org for Olm
+ * Use packages.connect.vietsmile.com.vn for Olm
    [\#9498](https://github.com/vector-im/riot-web/pull/9498)
  * Add separate platform electron build commands
    [\#9412](https://github.com/vector-im/riot-web/pull/9412)
@@ -3627,7 +3627,7 @@ Changes in [0.17.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.1
    [\#7393](https://github.com/vector-im/riot-web/pull/7393)
  * Don't show mobile guide if deep linking
    [\#7415](https://github.com/vector-im/riot-web/pull/7415)
- * Don't show custom server bit on matrix.org
+ * Don't show custom server bit on connect.vietsmile.com.vn
    [\#7408](https://github.com/vector-im/riot-web/pull/7408)
  * Update Webpack to version 4
    [\#6620](https://github.com/vector-im/riot-web/pull/6620)
@@ -3646,7 +3646,7 @@ Changes in [0.16.5](https://github.com/vector-im/riot-web/releases/tag/v0.16.5) 
 
  * Don't show mobile guide if deep linking
    [\#7415](https://github.com/vector-im/riot-web/pull/7415)
- * Don't show custom server bit on matrix.org
+ * Don't show custom server bit on connect.vietsmile.com.vn
    [\#7408](https://github.com/vector-im/riot-web/pull/7408)
 
 Changes in [0.16.5-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.16.5-rc.1) (2018-09-27)
@@ -3900,7 +3900,7 @@ Changes in [0.14.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.1
 
  * Update from Weblate.
    [\#6688](https://github.com/vector-im/riot-web/pull/6688)
- * Don't show presence on matrix.org
+ * Don't show presence on connect.vietsmile.com.vn
    [\#6638](https://github.com/vector-im/riot-web/pull/6638)
  * Enforce loading babel-polyfill first
    [\#6625](https://github.com/vector-im/riot-web/pull/6625)

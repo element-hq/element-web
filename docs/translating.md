@@ -6,10 +6,10 @@
 - Be able to understand English
 - Be able to understand the language you want to translate Element into
 
-## Join #element-translations:matrix.org
+## Join #element-translations:connect.vietsmile.com.vn
 
-1. Come and join https://matrix.to/#/#element-translations:matrix.org for general discussion
-2. Join https://matrix.to/#/#element-translators:matrix.org for language-specific rooms
+1. Come and join https://matrix.to/#/#element-translations:connect.vietsmile.com.vn for general discussion
+2. Join https://matrix.to/#/#element-translators:connect.vietsmile.com.vn for language-specific rooms
 3. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed. In general little-or-no coordination is needed though :)
 
 ## How to check if your language already is being translated

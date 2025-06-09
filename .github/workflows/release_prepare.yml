@@ -40,7 +40,7 @@ jobs:
             # The order is specified bottom-up to avoid any races for allchange
             REPOS: matrix-js-sdk element-web element-desktop
         steps:
-            - name: Checkout Element Desktop
+            - name: Checkout VietSmile Connect Desktop
               uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               if: inputs.element-desktop
               with:
@@ -50,7 +50,7 @@ jobs:
                   fetch-depth: 0
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - name: Checkout Element Web
+            - name: Checkout VietSmile Connect Web
               uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
               if: inputs.element-web
               with:
@@ -76,11 +76,11 @@ jobs:
                   git config --global user.email "releases@riot.im"
                   git config --global user.name "RiotRobot"
 
-            - name: Merge Element Desktop
+            - name: Merge VietSmile Connect Desktop
               if: inputs.element-desktop
               run: |
                   git -C "element-desktop" merge origin/develop
-            - name: Merge Element Web
+            - name: Merge VietSmile Connect Web
               if: inputs.element-web
               run: |
                   git -C "element-web" merge origin/develop

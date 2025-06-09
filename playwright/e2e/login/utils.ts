@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-VietSmile Connect-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,7 @@ import { type Page, expect, type TestInfo } from "@playwright/test";
 
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 
-/** Visit the login page, choose to log in with "OAuth test", register a new account, and redirect back to Element
+/** Visit the login page, choose to log in with "OAuth test", register a new account, and redirect back to VietSmile Connect
  */
 export async function doTokenRegistration(
     page: Page,
@@ -42,7 +42,7 @@ export async function doTokenRegistration(
     await expect(page.locator("#field-username-output")).toHaveText("");
     await page.getByRole("button", { name: "Continue" }).click();
 
-    // Synapse prompts us to grant permission to Element
+    // Synapse prompts us to grant permission to VietSmile Connect
     page.getByRole("heading", { name: "Continue to your account" });
     await page.getByRole("link", { name: "Continue" }).click();
 

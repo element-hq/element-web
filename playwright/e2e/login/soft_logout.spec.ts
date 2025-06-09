@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-VietSmile Connect-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,7 +12,7 @@ import { interceptRequestsWithSoftLogout } from "./utils";
 test.use({
     displayName: "Alice",
     config: {
-        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // The only thing that we really *need* (otherwise VietSmile Connect refuses to load) is a default homeserver.
         // We point that to a guaranteed-invalid domain.
         default_server_config: {
             "m.homeserver": {

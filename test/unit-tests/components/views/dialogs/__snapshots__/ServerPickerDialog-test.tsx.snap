@@ -54,7 +54,7 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
             class="mx_Login_underlinedServerName"
             tabindex="0"
           >
-            matrix.org
+            connect.vietsmile.com.vn
           </span>
         </div>
         <div
@@ -116,7 +116,7 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
       </h2>
       <a
         class="mx_ExternalLink"
-        href="https://matrix.org/docs/matrix-concepts/elements-of-matrix/#homeserver"
+        href="https://connect.vietsmile.com.vn/docs/matrix-concepts/elements-of-matrix/#homeserver"
         rel="noreferrer noopener"
         target="_blank"
       >

@@ -32,7 +32,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
   <p>
     Visit 
     <code>
-      https://matrix.org/
+      https://connect.vietsmile.com.vn/
     </code>
   </p>
   
@@ -54,7 +54,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
         style="display: contents;"
       >
         <code>
-          https://matrix.org/
+          https://connect.vietsmile.com.vn/
 
         </code>
       </div>
@@ -501,11 +501,11 @@ exports[`<TextualBody /> renders plain-text m.text correctly linkification get a
   Visit 
   <a
     class="linkified"
-    href="https://matrix.org/"
+    href="https://connect.vietsmile.com.vn/"
     rel="noreferrer noopener"
     target="_blank"
   >
-    https://matrix.org/
+    https://connect.vietsmile.com.vn/
   </a>
 </div>
 `;

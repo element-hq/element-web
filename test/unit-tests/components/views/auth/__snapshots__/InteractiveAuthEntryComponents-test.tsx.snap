@@ -66,7 +66,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
         Go to your account to reset your identity
       </h2>
       <span>
-        You're about to go to your matrix.org account to reset your identity. Once you have completed reset on your account, please return here and click Retry.
+        You're about to go to your connect.vietsmile.com.vn account to reset your identity. Once you have completed reset on your account, please return here and click Retry.
       </span>
     </div>
     <div

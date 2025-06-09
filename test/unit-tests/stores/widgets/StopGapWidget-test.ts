@@ -77,7 +77,7 @@ describe("StopGapWidget", () => {
             return originGetValue(setting);
         });
         expect(widget.embedUrl).toBe(
-            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&theme=my-theme-for-testing&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
+            "https://example.org/?user-id=%40userId%3Aconnect.vietsmile.com.vn&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.connect.vietsmile.com.vn&theme=my-theme-for-testing&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
         );
         spy.mockClear();
     });

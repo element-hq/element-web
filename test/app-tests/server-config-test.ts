@@ -22,13 +22,13 @@ describe("Loading server config", function () {
     beforeEach(async () => {
         SdkConfig.reset();
         PlatformPeg.set(new WebPlatform());
-        fetchMock.get("https://matrix-client.matrix.org/_matrix/client/versions", {
+        fetchMock.get("https://matrix-client.connect.vietsmile.com.vn/_matrix/client/versions", {
             unstable_features: {},
             versions: SERVER_SUPPORTED_MATRIX_VERSIONS,
         });
-        fetchMock.get("https://matrix.org/.well-known/matrix/client", {
+        fetchMock.get("https://connect.vietsmile.com.vn/.well-known/matrix/client", {
             "m.homeserver": {
-                base_url: "https://matrix-client.matrix.org",
+                base_url: "https://matrix-client.connect.vietsmile.com.vn",
             },
         });
         fetchMock.get("/version", "1.10.13");
@@ -38,37 +38,37 @@ describe("Loading server config", function () {
         SdkConfig.put({
             default_server_config: {
                 "m.homeserver": {
-                    base_url: "https://matrix-client.matrix.org",
+                    base_url: "https://matrix-client.connect.vietsmile.com.vn",
                 },
             },
         });
         await loadApp({}, null);
-        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
+        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.connect.vietsmile.com.vn");
     });
 
     it("should use the default_server_name when resolveable", async function () {
         SdkConfig.put({
-            default_server_name: "matrix.org",
+            default_server_name: "connect.vietsmile.com.vn",
         });
         await loadApp({}, null);
-        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
+        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.connect.vietsmile.com.vn");
     });
 
     it(
         "should not throw when both default_server_name and default_server_config is specified " +
             "and default_server_name isn't resolvable",
         async function () {
-            fetchMock.get("https://matrix.org/.well-known/matrix/client", 500);
+            fetchMock.get("https://connect.vietsmile.com.vn/.well-known/matrix/client", 500);
             SdkConfig.put({
-                default_server_name: "matrix.org",
+                default_server_name: "connect.vietsmile.com.vn",
                 default_server_config: {
                     "m.homeserver": {
-                        base_url: "https://matrix-client.matrix.org",
+                        base_url: "https://matrix-client.connect.vietsmile.com.vn",
                     },
                 },
             });
             await loadApp({}, null);
-            expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
+            expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.connect.vietsmile.com.vn");
         },
     );
 });

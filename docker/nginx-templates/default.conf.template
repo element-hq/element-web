@@ -7,7 +7,7 @@ server {
     index  index.html;
 
     # Set no-cache for the version, config and index.html
-    # so that browsers always check for a new copy of Element Web.
+    # so that browsers always check for a new copy of VietSmile Connect Web.
     # NB http://your-domain/ and http://your-domain/? are also covered by this
 
     location = /index.html {

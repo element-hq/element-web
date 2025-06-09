@@ -180,7 +180,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         Blog
       </a>
       <a
-        href="https://mastodon.matrix.org/@Element"
+        href="https://mastodon.connect.vietsmile.com.vn/@Element"
         rel="noreferrer noopener"
         target="_blank"
       >
@@ -194,7 +194,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         GitHub
       </a>
       <a
-        href="https://matrix.org"
+        href="https://connect.vietsmile.com.vn"
         rel="noreferrer noopener"
         target="_blank"
       >
@@ -356,7 +356,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         Blog
       </a>
       <a
-        href="https://mastodon.matrix.org/@Element"
+        href="https://mastodon.connect.vietsmile.com.vn/@Element"
         rel="noreferrer noopener"
         target="_blank"
       >
@@ -370,7 +370,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         GitHub
       </a>
       <a
-        href="https://matrix.org"
+        href="https://connect.vietsmile.com.vn"
         rel="noreferrer noopener"
         target="_blank"
       >

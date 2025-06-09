@@ -168,7 +168,7 @@
         "forgot_password_prompt": "گذرواژه‌ی خود را فراموش کردید؟",
         "identifier_label": "نحوه ورود",
         "incorrect_credentials": "نام کاربری و یا گذرواژه اشتباه است.",
-        "incorrect_credentials_detail": "لطفا توجه کنید شما به سرور %(hs)s وارد شده‌اید، و نه سرور matrix.org.",
+        "incorrect_credentials_detail": "لطفا توجه کنید شما به سرور %(hs)s وارد شده‌اید، و نه سرور connect.vietsmile.com.vn.",
         "incorrect_password": "گذرواژه صحیح نیست",
         "log_in_new_account": "به حساب کاربری جدید خود <a>وارد شوید</a>.",
         "logout_dialog": {
@@ -217,7 +217,7 @@
         "reset_password_email_not_associated": "به نظر نمی رسد آدرس ایمیل شما با شناسه Matrix در این سرور خانگی مرتبط باشد.",
         "reset_password_email_not_found_title": "این آدرس ایمیل یافت نشد",
         "server_picker_custom": "سرور دیگر",
-        "server_picker_description_matrix.org": "به بزرگترین سرور عمومی با میلیون ها نفر کاربر بپیوندید",
+        "server_picker_description_connect.vietsmile.com.vn": "به بزرگترین سرور عمومی با میلیون ها نفر کاربر بپیوندید",
         "server_picker_dialog_title": "حساب کاربری شما بر روی کجا ساخته شود",
         "server_picker_explainer": "از یک سرور مبتنی بر پروتکل ماتریکس که ترجیح می‌دهید استفاده کرده، و یا از سرور شخصی خودتان استفاده کنید.",
         "server_picker_failed_validate_homeserver": "تأیید اعتبار سرور امکان‌پذیر نیست",

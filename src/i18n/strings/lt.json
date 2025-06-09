@@ -155,7 +155,7 @@
         "forgot_password_prompt": "Pamiršote savo slaptažodį?",
         "identifier_label": "Prisijungti naudojant",
         "incorrect_credentials": "Neteisingas vartotojo vardas ir/arba slaptažodis.",
-        "incorrect_credentials_detail": "Atkreipkite dėmesį, kad jūs jungiatės prie %(hs)s serverio, o ne matrix.org.",
+        "incorrect_credentials_detail": "Atkreipkite dėmesį, kad jūs jungiatės prie %(hs)s serverio, o ne connect.vietsmile.com.vn.",
         "incorrect_password": "Neteisingas slaptažodis",
         "log_in_new_account": "<a>Prisijunkite</a> prie naujos paskyros.",
         "logout_dialog": {
@@ -195,7 +195,7 @@
         "reset_password_email_field_description": "Naudokite el. pašto adresą, kad prireikus galėtumėte atgauti paskyrą",
         "reset_password_email_not_found_title": "Šis el. pašto adresas buvo nerastas",
         "server_picker_custom": "Kitas namų serveris",
-        "server_picker_description_matrix.org": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
+        "server_picker_description_connect.vietsmile.com.vn": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
         "server_picker_explainer": "Naudokite pageidaujamą Matrix namų serverį, jei tokį turite, arba talpinkite savo.",
         "server_picker_failed_validate_homeserver": "Nepavyksta patvirtinti namų serverio",
         "server_picker_invalid_url": "Netinkamas URL",

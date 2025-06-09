@@ -17,7 +17,7 @@ describe("Test PhasedRolloutFeature", () => {
         for (let i = 0; i < idLength; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        return "@" + result + ":matrix.org";
+        return "@" + result + ":connect.vietsmile.com.vn";
     }
 
     function randomDeviceId() {

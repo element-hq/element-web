@@ -14,7 +14,7 @@ exports[`<AuthFooter /> should match snapshot 1`] = `
       Blog
     </a>
     <a
-      href="https://mastodon.matrix.org/@Element"
+      href="https://mastodon.connect.vietsmile.com.vn/@Element"
       rel="noreferrer noopener"
       target="_blank"
     >
@@ -28,7 +28,7 @@ exports[`<AuthFooter /> should match snapshot 1`] = `
       GitHub
     </a>
     <a
-      href="https://matrix.org"
+      href="https://connect.vietsmile.com.vn"
       rel="noreferrer noopener"
       target="_blank"
     >
