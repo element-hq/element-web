@@ -17,12 +17,7 @@ import { type DeepReadonly, type Defaultize } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: DeepReadonly<IConfigOptions> = {
-    brand: "Element",
-    help_url: "https://element.io/help",
-    help_encryption_url: "https://element.io/help#encryption",
-    integrations_ui_url: "https://scalar.vector.im/",
-    integrations_rest_url: "https://scalar.vector.im/api",
-    uisi_autorageshake_app: "element-auto-uisi",
+    brand: "VietSmile Connect",
     show_labs_settings: false,
     force_verification: false,
 
@@ -32,7 +27,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     element_call: {
         use_exclusively: false,
         participant_limit: 8,
-        brand: "Element Call",
+        brand: "VietSmile Connect Call",
     },
 
     // @ts-ignore - we deliberately use the camelCase version here so we trigger
@@ -44,12 +39,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://connect.vietsmile.com.vn/get-started",
-    },
-
-    feedback: {
-        existing_issues_url:
-            "https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc",
-        new_issue_url: "https://github.com/vector-im/element-web/issues/new/choose",
     },
 
     desktop_builds: {

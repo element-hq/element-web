@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 
-const IntegrationManager = "scalar.vector.im";
+const IntegrationManager = "";
 
 test.describe("Security user settings tab", () => {
     test.describe("with posthog enabled", () => {
@@ -106,7 +106,7 @@ test.describe("Security user settings tab", () => {
             await expect(toggleswitch).toBeVisible();
             await expect(toggleswitch).toBeChecked();
             await expect(setIntegrationManager.locator(".mx_SetIntegrationManager_heading_manager")).toHaveText(
-                "Manage integrations(scalar.vector.im)",
+                "Manage integrations",
             );
         });
     });

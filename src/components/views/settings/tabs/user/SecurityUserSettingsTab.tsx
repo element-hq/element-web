@@ -346,8 +346,8 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             if (invitesPanel) {
                 advancedSection = (
                     <SettingsSection heading={_t("common|advanced")}>
-                        {ignoreUsersPanel}
-                        {invitesPanel}
+                        {/* {ignoreUsersPanel} */}
+                        {/* {invitesPanel} */}
                     </SettingsSection>
                 );
             }
@@ -361,10 +361,10 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {secureBackup}
                     {eventIndex}
                 </SettingsSection>
-                <SettingsSection heading={_t("common|privacy")}>
-                    {/* <DiscoverySettings /> */}
+                {/* <SettingsSection heading={_t("common|privacy")}>
+                    <DiscoverySettings />
                     {posthogSection}
-                </SettingsSection>
+                </SettingsSection> */}
                 {advancedSection}
             </SettingsTab>
         );
