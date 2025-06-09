@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 
 import { UpdateCheckStatus } from "../../../../src/BasePlatform";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -19,6 +19,7 @@ import Modal from "../../../../src/Modal";
 import DesktopCapturerSourcePicker from "../../../../src/components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
+import { stubClient } from "../../../test-utils";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -39,7 +40,7 @@ describe("ElectronPlatform", () => {
         }),
         setSettingValue: jest.fn().mockResolvedValue(undefined),
         getSettingValue: jest.fn().mockResolvedValue(undefined),
-    };
+    } as unknown as MockedObject<Electron>;
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
     const dispatchFireSpy = jest.spyOn(dispatcher, "fire");
@@ -319,6 +320,44 @@ describe("ElectronPlatform", () => {
                     name: "breadcrumbs",
                 }),
             );
+        });
+    });
+
+    describe("authenticated media", () => {
+        beforeEach(() => {
+            mockElectron.on.mockClear();
+            mockElectron.send.mockClear();
+        });
+
+        it("should respond to relevant ipc requests", async () => {
+            const cli = stubClient();
+            mocked(cli.getAccessToken).mockReturnValue("access_token");
+            mocked(cli.getHomeserverUrl).mockReturnValue("homeserver_url");
+            mocked(cli.getVersions).mockResolvedValue({
+                versions: ["v1.1"],
+                unstable_features: {},
+            });
+
+            new ElectronPlatform();
+
+            const userAccessTokenCall = mockElectron.on.mock.calls.find((call) => call[0] === "userAccessToken");
+            userAccessTokenCall![1]({} as any);
+            const userAccessTokenResponse = mockElectron.send.mock.calls.find((call) => call[0] === "userAccessToken");
+            expect(userAccessTokenResponse![1]).toBe("access_token");
+
+            const homeserverUrlCall = mockElectron.on.mock.calls.find((call) => call[0] === "homeserverUrl");
+            homeserverUrlCall![1]({} as any);
+            const homeserverUrlResponse = mockElectron.send.mock.calls.find((call) => call[0] === "homeserverUrl");
+            expect(homeserverUrlResponse![1]).toBe("homeserver_url");
+
+            const serverSupportedVersionsCall = mockElectron.on.mock.calls.find(
+                (call) => call[0] === "serverSupportedVersions",
+            );
+            await (serverSupportedVersionsCall![1]({} as any) as unknown as Promise<unknown>);
+            const serverSupportedVersionsResponse = mockElectron.send.mock.calls.find(
+                (call) => call[0] === "serverSupportedVersions",
+            );
+            expect(serverSupportedVersionsResponse![1]).toEqual({ versions: ["v1.1"], unstable_features: {} });
         });
     });
 
