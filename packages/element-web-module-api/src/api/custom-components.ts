@@ -15,6 +15,7 @@ import type { MatrixEvent } from "matrix-js-sdk/lib/matrix";
 export type CustomMessageComponentProps = {
     /**
      * The Matrix event for this textual body.
+     * @alpha
      */
     mxEvent: MatrixEvent;
 };
@@ -32,8 +33,22 @@ export type OriginalComponentProps = {
 };
 
 /**
+ * Hints to specify to Element when rendering events.
+ * @alpha Subject to change.
+ */
+export type CustomMessageRenderHints = {
+    /**
+     * Should the event be allowed to be edited in the client. This should
+     * be set to false if you override the render function, as the module
+     * API has no way to display message editing at the moment.
+     * Default is true.
+     */
+    allowEditingEvent?: boolean;
+};
+
+/**
  * Function used to render a message component.
- * @beta Unlikely to change
+ * @alpha Unlikely to change
  */
 export type CustomMessageRenderFunction = (
     /**
@@ -44,7 +59,7 @@ export type CustomMessageRenderFunction = (
      * Render function for the original component. This may be omitted if the message would not normally be rendered.
      */
     originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
-) => JSX.Element | null;
+) => JSX.Element;
 
 /**
  * API for inserting custom components into Element.
@@ -54,29 +69,30 @@ export interface CustomComponentsApi {
     /**
      * Register a renderer for a message type in the timeline.
      *
-     * The render function should either return a rendered component, or `null` if the
-     * component should not be overidden (for instance, to passthrough to another module or allow
-     * the application complete control)
+     * The render function should return a rendered component.
      *
-     * Multiple render function may be registered for a single target, however the first
-     * non-null result will be used. If all results are null, or no registrations exist
-     * for a target then the original component is used.
+     * Multiple render function may be registered for a single event type, however the first matching
+     * result will be used. If no events match or are registered then the originalComponent is rendered.
      *
-     * @param eventType - The event type this renderer is for. Use a RegExp instance if you want to target multiple types.
+     * @param eventTypeOrFilter - The event type this renderer is for. Use a function for more complex filtering.
      * @param renderer - The render function.
+     * @param hints - Hints that alter the way the tile is handled.
      * @example
      * ```
      *  customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
      *       return <YourCustomComponent mxEvent={props.mxEvent} />;
      *  });
-     *  customComponents.registerMessageRenderer(/m\.room\.(topic|name)/, (props, originalComponent) => {
-     *       if (props.mxEvent.isState()) {
-     *           return <YourCustomStateRenderer mxEvent={props.mxEvent} />;
-     *       }
-     *       // Passthrough.
-     *       return null;
-     *  });
+     *  customComponents.registerMessageRenderer(
+     *      (mxEvent) => mxEvent.getType().matches(/m\.room\.(topic|name)/) && mxEvent.isState(),
+     *      (props, originalComponent) => {
+     *          return <YourCustomStateRenderer mxEvent={props.mxEvent} />;
+     *      }
+     * );
      * ```
      */
-    registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void;
+    registerMessageRenderer(
+        eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean),
+        renderer: CustomMessageRenderFunction,
+        hints?: CustomMessageRenderHints,
+    ): void;
 }

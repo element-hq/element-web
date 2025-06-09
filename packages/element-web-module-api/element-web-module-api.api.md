@@ -62,8 +62,9 @@ export interface ConfigApi {
 
 // @public
 export interface CustomComponentsApi {
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @beta
-    registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void;
+    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @alpha
+    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderHints" which is marked as @alpha
+    registerMessageRenderer(eventType: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
 }
 
 // @alpha
@@ -71,13 +72,15 @@ export type CustomMessageComponentProps = {
     mxEvent: MatrixEvent;
 };
 
-// Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "CustomMessageComponentProps" which is marked as @alpha
-// Warning: (ae-incompatible-release-tags) The symbol "CustomMessageRenderFunction" is marked as @beta, but its signature references "OriginalComponentProps" which is marked as @alpha
-//
-// @beta
+// @alpha
 export type CustomMessageRenderFunction = (
 props: CustomMessageComponentProps,
-originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element) => JSX.Element | null;
+originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element) => JSX.Element;
+
+// @alpha
+export type CustomMessageRenderHints = {
+    allowEditingEvent?: boolean;
+};
 
 // @alpha @deprecated (undocumented)
 export interface DirectoryCustomisations {
