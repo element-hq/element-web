@@ -83,7 +83,6 @@ export default class InviteRulesConfigController extends MatrixClientBackedContr
             // No changes required.
             return false;
         }
-        throw Error('Failed to run test');
         await this.client.setAccountData(INVITE_RULES_ACCOUNT_DATA_TYPE, newContent);
         return true;
     }

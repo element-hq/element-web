@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FC, useCallback, useState } from "react";
-import { ErrorMessage, Root } from "@vector-im/compound-web";
+import { Root } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
