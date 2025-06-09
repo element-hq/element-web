@@ -20,6 +20,7 @@ import DesktopCapturerSourcePicker from "../../../../src/components/views/elemen
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -324,11 +325,6 @@ describe("ElectronPlatform", () => {
     });
 
     describe("authenticated media", () => {
-        beforeEach(() => {
-            mockElectron.on.mockClear();
-            mockElectron.send.mockClear();
-        });
-
         it("should respond to relevant ipc requests", async () => {
             const cli = stubClient();
             mocked(cli.getAccessToken).mockReturnValue("access_token");
@@ -390,6 +386,24 @@ describe("ElectronPlatform", () => {
         it("should write setting value over ipc", async () => {
             await platform.setSettingValue("setting2", "newValue");
             expect(mockElectron.setSettingValue).toHaveBeenCalledWith("setting2", "newValue");
+        });
+    });
+
+    it("should forward call_state dispatcher events via ipc", async () => {
+        new ElectronPlatform();
+
+        defaultDispatcher.dispatch(
+            {
+                action: "call_state",
+                state: "connected",
+            },
+            true,
+        );
+
+        const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "app_onAction");
+        expect(ipcMessage![1]).toEqual({
+            action: "call_state",
+            state: "connected",
         });
     });
 });
