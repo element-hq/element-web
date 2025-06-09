@@ -909,8 +909,9 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "wrong_security_key": "Hibás helyreállítási kulcs"
+                "wrong_security_key": "A megadott helyreállítási kulcs helytelen."
             },
+            "privacy_warning": "Győződjön meg arról, hogy senki sem látja ezt a képernyőt!",
             "restoring": "Kulcsok helyreállítása mentésből",
             "security_key_title": "Helyreállítási kulcs"
         },
@@ -2076,7 +2077,6 @@
     "room_list": {
         "add_room_label": "Szoba hozzáadása",
         "add_space_label": "Tér hozzáadása",
-        "appearance": "Megjelenés",
         "breadcrumbs_empty": "Nincsenek nemrégiben meglátogatott szobák",
         "breadcrumbs_label": "Nemrég meglátogatott szobák",
         "empty": {
@@ -2132,7 +2132,6 @@
         },
         "room_options": "Szobabeállítások",
         "show_less": "Kevesebb megjelenítése",
-        "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
         },
@@ -3223,8 +3222,8 @@
         "start_group_chat_button": "Csoportos csevegés indítása"
     },
     "stickers": {
-        "empty": "Nincs engedélyezett matrica csomagod",
-        "empty_add_prompt": "Adj hozzá párat"
+        "empty": "Jelenleg nincsenek engedélyezve matricacsomagok",
+        "empty_add_prompt": "Adjon hozzá néhányat"
     },
     "terms": {
         "column_document": "Dokumentum",

@@ -91,48 +91,4 @@ describe("<RoomListOptionsMenu />", () => {
 
         expect(vm.sort).toHaveBeenCalledWith("Recency");
     });
-
-    it("should show message previews disabled", async () => {
-        const user = userEvent.setup();
-
-        const vm = {
-            shouldShowMessagePreview: false,
-        } as unknown as RoomListHeaderViewState;
-
-        render(<RoomListOptionsMenu vm={vm} />);
-
-        await user.click(screen.getByRole("button", { name: "Room Options" }));
-
-        expect(screen.getByRole("menuitemcheckbox", { name: "Show message previews" })).not.toBeChecked();
-    });
-
-    it("should show message previews enabled", async () => {
-        const user = userEvent.setup();
-
-        const vm = {
-            shouldShowMessagePreview: true,
-        } as unknown as RoomListHeaderViewState;
-
-        render(<RoomListOptionsMenu vm={vm} />);
-
-        await user.click(screen.getByRole("button", { name: "Room Options" }));
-
-        expect(screen.getByRole("menuitemcheckbox", { name: "Show message previews" })).toBeChecked();
-    });
-
-    it("should toggle message previews", async () => {
-        const user = userEvent.setup();
-
-        const vm = {
-            toggleMessagePreview: jest.fn(),
-        } as unknown as RoomListHeaderViewState;
-
-        render(<RoomListOptionsMenu vm={vm} />);
-
-        await user.click(screen.getByRole("button", { name: "Room Options" }));
-
-        await user.click(screen.getByRole("menuitemcheckbox", { name: "Show message previews" }));
-
-        expect(vm.toggleMessagePreview).toHaveBeenCalled();
-    });
 });

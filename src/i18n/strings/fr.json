@@ -911,9 +911,11 @@
     "empty_room_was_name": "Salon vide (précédemment %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Si vous avez une clé de récupération ou une phrase de sécurité, cela fonctionnera également.",
             "key_validation_text": {
-                "wrong_security_key": "Clé de récupération incorrecte"
+                "wrong_security_key": "La clé de récupération que vous avez saisie est incorrecte."
             },
+            "privacy_warning": "Assurez vous que personne d'autre ne regarde votre écran !",
             "restoring": "Restauration des clés depuis la sauvegarde",
             "security_key_title": "Clé de récupération"
         },
@@ -1954,6 +1956,7 @@
         },
         "face_pile_tooltip_shortcut": "Dont %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Dont vous, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Impossible de déterminer quel utilisateur à ignorer car l'événement des membres a changé.",
         "failed_reject_invite": "Échec du rejet de l’invitation",
         "forget_room": "Oublier ce salon",
         "forget_space": "Oublier cet espace",
@@ -2091,7 +2094,6 @@
     "room_list": {
         "add_room_label": "Ajouter un salon",
         "add_space_label": "Ajouter un espace",
-        "appearance": "Apparence",
         "breadcrumbs_empty": "Aucun salon visité récemment",
         "breadcrumbs_label": "Salons visités récemment",
         "empty": {
@@ -2116,6 +2118,7 @@
         "filters": {
             "favourite": "Favoris",
             "invites": "Invitations",
+            "low_priority": "Faible priorité",
             "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
@@ -2149,7 +2152,6 @@
         },
         "room_options": "Options du salon",
         "show_less": "En voir moins",
-        "show_message_previews": "Afficher les aperçus des messages",
         "show_n_more": {
             "other": "En afficher %(count)s de plus",
             "one": "En afficher %(count)s de plus"
@@ -2979,6 +2981,7 @@
         "show_chat_effects": "Afficher les animations de conversation (animations lors de la réception par ex. de confettis)",
         "show_displayname_changes": "Afficher les changements de nom d’affichage",
         "show_join_leave": "Afficher les messages d'arrivée et de départ (les invitations/expulsions/bannissements ne sont pas concernés)",
+        "show_message_previews": "Afficher les aperçus des messages",
         "show_nsfw_content": "Afficher le contenu sensible (NSFW)",
         "show_read_receipts": "Afficher les accusés de lecture envoyés par les autres utilisateurs",
         "show_redaction_placeholder": "Afficher les messages supprimés",

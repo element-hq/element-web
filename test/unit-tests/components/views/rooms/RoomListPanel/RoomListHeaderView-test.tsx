@@ -32,8 +32,6 @@ describe("<RoomListHeaderView />", () => {
         canAccessSpaceSettings: true,
         sort: jest.fn(),
         activeSortOption: SortOption.Activity,
-        shouldShowMessagePreview: false,
-        toggleMessagePreview: jest.fn(),
         createRoom: jest.fn(),
         createVideoRoom: jest.fn(),
         createChatRoom: jest.fn(),
