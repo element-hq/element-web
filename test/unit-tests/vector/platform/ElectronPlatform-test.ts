@@ -37,8 +37,8 @@ describe("ElectronPlatform", () => {
             config: { _config: true },
             supportedSettings: { setting1: false, setting2: true },
         }),
-        setSettingValue: jest.fn(),
-        getSettingValue: jest.fn(),
+        setSettingValue: jest.fn().mockResolvedValue(undefined),
+        getSettingValue: jest.fn().mockResolvedValue(undefined),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
@@ -340,6 +340,17 @@ describe("ElectronPlatform", () => {
 
         it("supportsSetting should return false for unavailable settings", () => {
             expect(platform.supportsSetting("setting1")).toBe(false);
+        });
+
+        it("should read setting value over ipc", async () => {
+            mockElectron.getSettingValue.mockResolvedValue("value");
+            await expect(platform.getSettingValue("setting2")).resolves.toEqual("value");
+            expect(mockElectron.getSettingValue).toHaveBeenCalledWith("setting2");
+        });
+
+        it("should write setting value over ipc", async () => {
+            await platform.setSettingValue("setting2", "newValue");
+            expect(mockElectron.setSettingValue).toHaveBeenCalledWith("setting2", "newValue");
         });
     });
 });
