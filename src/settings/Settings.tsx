@@ -47,6 +47,8 @@ import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
+import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
+import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -351,6 +353,7 @@ export interface Settings {
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
     "Electron.enableContentProtection": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
+    "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
@@ -433,6 +436,11 @@ export const SETTINGS: Settings = {
         controller: new MediaPreviewConfigController(),
         supportedLevels: LEVELS_ROOM_SETTINGS,
         default: MediaPreviewConfigController.default,
+    },
+    "inviteRules": {
+        controller: new InviteRulesConfigController(),
+        supportedLevels: [SettingLevel.ACCOUNT],
+        default: InviteRulesConfigController.default,
     },
     "feature_report_to_moderators": {
         isFeature: true,

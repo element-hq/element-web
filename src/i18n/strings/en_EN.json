@@ -2686,6 +2686,9 @@
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
+        "invite_controls": {
+            "default_label": "Allow users to invite you to rooms"
+        },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
@@ -2752,6 +2755,7 @@
             "show_in_private": "In private rooms",
             "show_media": "Always show"
         },
+        "not_supported": "Your server does not implement this feature.",
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
             "default_setting_section": "I want to be notified for (Default Setting)",
