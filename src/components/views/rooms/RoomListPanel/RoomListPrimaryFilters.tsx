@@ -171,16 +171,20 @@ function useAnimateFilter<T extends HTMLElement>(
     useEffect(() => {
         if (!ref.current) return;
 
+        // Round to 2 decimal places and convert to integer to avoid floating point precision issues
+        const floor = (a: number): number => Math.floor(a * 100) / 100 || 0;
         // For the animation to work, we need `grid-template-rows` to have the same unit at the beginning and the end
         // If px is used at the beginning, we need to use px at the end.
         // In our case, we use fr unit to fully grow when expanded (1fr) so we need to compute the value in fr when the filters are not expanded
-        ref.current?.style.setProperty("--row-height", `${filterHeight / ref?.current.scrollHeight}fr`);
+        const setRowHeight = (): void =>
+            ref.current?.style.setProperty("--row-height", `${floor(filterHeight / ref?.current.scrollHeight)}fr`);
+        setRowHeight();
 
         const observer = new ResizeObserver(() => {
             // Remove transition to avoid the animation to run when the new --row-height is not set yet
             // If the animation runs at this moment, the first row will jump
             ref.current?.style.setProperty("transition", "unset");
-            ref.current?.style.setProperty("--row-height", `${filterHeight / ref?.current.scrollHeight}fr`);
+            setRowHeight();
         });
         observer.observe(ref.current);
         return () => observer.disconnect();
@@ -230,9 +234,14 @@ function useFilterHeight<T extends HTMLElement>(): { filterHeight: number; filte
     useEffect(() => {
         if (!filterRef.current) return;
 
-        const observer = new ResizeObserver(() => {
+        const setHeight = () => {
             const height = filterRef.current?.offsetHeight;
             if (height) setFilterHeight(height);
+        };
+
+        setHeight();
+        const observer = new ResizeObserver(() => {
+            setHeight();
         });
         observer.observe(filterRef.current);
         return () => observer.disconnect();
