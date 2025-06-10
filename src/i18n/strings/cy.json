@@ -831,6 +831,14 @@
         "room_notifications_total": "Cyfanswm: ",
         "room_notifications_type": "Math: ",
         "room_status": "Statws ystafell",
+        "room_unread_status_count": {
+            "zero": "Statws heb eu darllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>",
+            "one": "Statws heb ei ddarllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>",
+            "two": "Statws heb eu darllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>",
+            "few": "Statws heb eu darllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>",
+            "many": "Statws heb eu darllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>",
+            "other": "Statws heb eu darllen yn yr ystafell:<strong>%(status)s</strong> , cyfrif:<strong>%(count)s</strong>"
+        },
         "save_setting_values": "Cadw gwerthoedd gosod",
         "see_history": "Gweld hanes",
         "send_custom_account_data_event": "Anfon digwyddiad data cyfrif personol",
@@ -849,6 +857,14 @@
         },
         "settings_explorer": "Archwiliwr gosodiadau",
         "show_hidden_events": "Dangos digwyddiadau cudd yn y llinell amser",
+        "spaces": {
+            "zero": "<%(count) s gofodau>",
+            "one": "<space>",
+            "two": "<%(count) s ofod>",
+            "few": "<%(count) s gofod>",
+            "many": "<%(count) s gofod>",
+            "other": "<%(count) s gofod>"
+        },
         "state_key": "Allwedd Cyflwr",
         "thread_root_id": "ID Gwraidd Edefyn: %(threadRootId)s",
         "threads_timeline": "Llinell amser edafedd",
@@ -1155,7 +1171,39 @@
         "error_fetching_file": "Gwall wrth nôl ffeil",
         "export_info": "Dyma ddechrau allforio o<roomName/>. Wedi'i allforio gan<exporterDetails/> yn %(exportDate)s.",
         "export_successful": "Allforio yn llwyddiannus!",
+        "exported_n_events_in_time": {
+            "zero": "Wedi nôl %(count)s digwyddiadau o fewn %(seconds)s e",
+            "one": "Wedi allforio %(count)s digwyddiad o fewn %(seconds)s e",
+            "two": "Wedi nôl %(count)s ddigwyddiad o fewn %(seconds)s e",
+            "few": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e",
+            "many": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e",
+            "other": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e"
+        },
         "exporting_your_data": "Allforio eich data",
+        "fetched_n_events": {
+            "zero": "Wedi nôl %(count)s digwyddiadau hyd yn hyn",
+            "one": "Wedi nôl %(count)s digwyddiad hyd yn hyn",
+            "two": "Wedi nôl %(count)s ddigwyddiad hyd yn hyn",
+            "few": "Wedi nôl %(count)s digwyddiad hyd yn hyn",
+            "many": "Wedi nôl %(count)s digwyddiad hyd yn hyn",
+            "other": "Wedi nôl %(count)s digwyddiad hyd yn hyn"
+        },
+        "fetched_n_events_in_time": {
+            "zero": "Wedi nôl %(count)s digwyddiadau o fewn %(seconds)s e",
+            "one": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e",
+            "two": "Wedi nôl %(count)s ddigwyddiad o fewn %(seconds)s e",
+            "few": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e",
+            "many": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e",
+            "other": "Wedi nôl %(count)s digwyddiad o fewn %(seconds)s e"
+        },
+        "fetched_n_events_with_total": {
+            "zero": "Wedi nôl %(count)s digwyddiadau allan o %(total)s",
+            "one": "Wedi nôl %(count)s digwyddiad allan o %(total)s",
+            "two": "Wedi nôl %(count)s ddigwyddiad allan o %(total)s",
+            "few": "Wedi nôl %(count)s digwyddiad allan o %(total)s",
+            "many": "Wedi nôl %(count)s digwyddiad allan o %(total)s",
+            "other": "Wedi nôl %(count)s digwyddiad allan o %(total)s"
+        },
         "fetching_events": "Wrthi'n nôl digwyddiadau…",
         "file_attached": "Ffeil wedi'i Atodi",
         "format": "Fformat",
@@ -1992,7 +2040,6 @@
     "room_list": {
         "add_room_label": "Ychwanegu ystafell",
         "add_space_label": "Ychwanegu gofod",
-        "appearance": "Gwedd",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
         "empty": {
@@ -2042,7 +2089,6 @@
         },
         "room_options": "Dewisiadau Ystafelloedd",
         "show_less": "Dangos llai",
-        "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",
         "sort": "Trefnu",
         "sort_by": "Trefnu yn ôl",
@@ -3432,10 +3478,106 @@
         "send_state_sending": "Wrthi'n anfon eich neges…",
         "send_state_sent": "Anfonwyd eich neges",
         "summary": {
-            "format": "%(matereList)s %(transitionList)s"
+            "format": "%(matereList)s %(transitionList)s",
+            "invite_withdrawn_multiple": {
+                "zero": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu",
+                "one": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu",
+                "two": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu %(count)s gwaith",
+                "few": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu %(count)s gwaith",
+                "many": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu %(count)s gwaith",
+                "other": "Cafodd %(severalUsers)s eu gwahoddiadau eu dileu %(count)s gwaith"
+            },
+            "joined": {
+                "zero": "Ymunodd %(oneUser)s %(count)s gwaith",
+                "one": "Ymunodd %(oneUser)s",
+                "two": "Ymunodd %(oneUser)s %(count)s gwaith",
+                "few": "Ymunodd %(oneUser)s %(count)s gwaith",
+                "many": "Ymunodd %(oneUser)s %(count)s gwaith",
+                "other": "Ymunodd %(oneUser)s %(count)s gwaith"
+            },
+            "joined_and_left": {
+                "zero": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "one": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "two": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "few": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "many": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "other": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith"
+            },
+            "joined_and_left_multiple": {
+                "zero": "Ymunodd a gadawodd %(severalUsers)s",
+                "one": "Ymunodd a gadawodd %(severalUsers)s",
+                "two": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "few": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "many": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "other": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith"
+            },
+            "joined_multiple": {
+                "zero": "Ymunodd %(severalUsers)s",
+                "one": "Ymunodd %(severalUsers)s %(count)s gwaith",
+                "two": "Ymunodd %(severalUsers)s %(count)s gwaith",
+                "few": "Ymunodd %(severalUsers)s %(count)s gwaith",
+                "many": "Ymunodd %(severalUsers)s %(count)s gwaith",
+                "other": "Ymunodd %(severalUsers)s %(count)s gwaith"
+            },
+            "left": {
+                "zero": "Gadawodd %(oneUser)s",
+                "one": "Gadawodd %(oneUser)s",
+                "two": "Gadawodd %(oneUser)s %(count)s gwaith",
+                "few": "Gadawodd %(oneUser)s %(count)s gwaith",
+                "many": "Gadawodd %(oneUser)s %(count)s gwaith",
+                "other": "Gadawodd %(oneUser)s %(count)s gwaith"
+            },
+            "left_multiple": {
+                "zero": "Gadawodd %(severalUsers)s",
+                "one": "Gadawodd %(severalUsers)s",
+                "two": "Gadawodd %(severalUsers)s %(count)s gwaith",
+                "few": "Gadawodd %(severalUsers)s %(count)s gwaith",
+                "many": "Gadawodd %(severalUsers)s %(count)s gwaith",
+                "other": "Gadawodd %(severalUsers)s %(count)s gwaith"
+            },
+            "rejected_invite": {
+                "zero": "Gwrthododd %(severalUsers)s eu gwahoddiadau",
+                "one": "Gwrthododd %(oneUser)s ei wahoddiad",
+                "two": "Gwrthododd %(oneUser)s eu gwahoddiadau %(count)s gwaith",
+                "few": "Gwrthododd %(oneUser)s eu gwahoddiadau %(count)s gwaith",
+                "many": "Gwrthododd %(oneUser)s eu gwahoddiadau %(count)s gwaith",
+                "other": "Gwrthododd %(oneUser)s eu gwahoddiadau %(count)s gwaith"
+            },
+            "rejected_invite_multiple": {
+                "zero": "Gwrthododd %(severalUsers)s eu gwahoddiadau",
+                "one": "Gwrthododd %(severalUsers)s eu gwahoddiadau",
+                "two": "Gwrthododd %(severalUsers)s eu gwahoddiadau %(count)s gwaith",
+                "few": "Gwrthododd %(severalUsers)s eu gwahoddiadau %(count)s gwaith",
+                "many": "Gwrthododd %(severalUsers)s eu gwahoddiadau %(count)s gwaith",
+                "other": "Gwrthododd %(severalUsers)s eu gwahoddiadau %(count)s gwaith"
+            },
+            "rejoined": {
+                "zero": "Ymunodd a gadawodd %(oneUser)s",
+                "one": "Ymunodd a gadawodd %(oneUser)s",
+                "two": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "few": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "many": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith",
+                "other": "Ymunodd a gadawodd %(oneUser)s %(count)s gwaith"
+            },
+            "rejoined_multiple": {
+                "zero": "Ymunodd a gadawodd %(severalUsers)s",
+                "one": "Ymunodd a gadawodd %(severalUsers)s",
+                "two": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "few": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "many": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith",
+                "other": "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith"
+            }
         },
         "thread_info_basic": "O edefyn",
         "typing_indicator": {
+            "more_users": {
+                "zero": "Mae %(names)s ac mae %(count)s eraill yn teipio...",
+                "one": "Mae %(names)s ac mae un arall yn teipio...",
+                "two": "Mae %(names)s ac mae %(count)s eraill yn teipio...",
+                "few": "Mae %(names)s ac mae %(count)s eraill yn teipio...",
+                "many": "Mae %(names)s ac mae %(count)s eraill yn teipio...",
+                "other": "Mae %(names)s ac mae %(count)s eraill yn teipio..."
+            },
             "one_user": "Mae %(displayName)s yn teipio…",
             "two_users": "Mae %(materes)s a %(lastPerson)s yn teipio…"
         },

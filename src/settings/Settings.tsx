@@ -1136,6 +1136,7 @@ export const SETTINGS: Settings = {
     "RoomList.showMessagePreview": {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
+        displayName: _td("settings|show_message_previews"),
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

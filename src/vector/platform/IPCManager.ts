@@ -11,7 +11,7 @@ import { type ElectronChannel } from "../../@types/global";
 
 interface IPCPayload {
     id?: number;
-    error?: string;
+    error?: string | { message: string };
     reply?: any;
 }
 
@@ -53,7 +53,12 @@ export class IPCManager {
         const callbacks = this.pendingIpcCalls[payload.id];
         delete this.pendingIpcCalls[payload.id];
         if (payload.error) {
-            callbacks.reject(payload.error);
+            // `seshat.ts` sends a JavaScript object with a `message` property. Turn it into a proper Error.
+            let error = payload.error;
+            if (typeof error === "object" && error.message) {
+                error = new Error(error.message);
+            }
+            callbacks.reject(error);
         } else {
             callbacks.resolve(payload.reply);
         }

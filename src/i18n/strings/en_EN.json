@@ -920,8 +920,6 @@
             "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
-        "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
-        "cancel_entering_passphrase_title": "Cancel entering passphrase?",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
@@ -1957,6 +1955,7 @@
         },
         "face_pile_tooltip_shortcut": "Including %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Including you, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Cannot determine which user to ignore since the member event has changed.",
         "failed_reject_invite": "Failed to reject invite",
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
@@ -2095,7 +2094,6 @@
     "room_list": {
         "add_room_label": "Add room",
         "add_space_label": "Add space",
-        "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
         "empty": {
@@ -2154,7 +2152,6 @@
         },
         "room_options": "Room Options",
         "show_less": "Show less",
-        "show_message_previews": "Show message previews",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
@@ -2984,6 +2981,7 @@
         "show_chat_effects": "Show chat effects (animations when receiving e.g. confetti)",
         "show_displayname_changes": "Show display name changes",
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
+        "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",

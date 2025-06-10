@@ -21,10 +21,12 @@ test.describe("Preferences user settings tab", () => {
             const locator = await app.settings.openUserSettings("Preferences");
             await use(locator);
         },
+        // display message preview settings
+        labsFlags: ["feature_new_room_list"],
     });
 
     test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
-        await page.setViewportSize({ width: 1024, height: 3300 });
+        await page.setViewportSize({ width: 1024, height: 4000 });
         const tab = await app.settings.openUserSettings("Preferences");
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
