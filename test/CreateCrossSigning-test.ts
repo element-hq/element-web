@@ -45,7 +45,7 @@ describe("CreateCrossSigning", () => {
 
         const makeRequest = jest.fn();
         await authUploadDeviceSigningKeys!(makeRequest);
-        expect(makeRequest).toHaveBeenCalledWith({});
+        expect(makeRequest).toHaveBeenCalledWith(null);
     });
 
     it("should prompt user if upload failed with UIA", async () => {
