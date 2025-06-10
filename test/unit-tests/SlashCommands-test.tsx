@@ -21,6 +21,7 @@ import { WidgetType } from "../../src/widgets/WidgetType";
 import { warnSelfDemote } from "../../src/components/views/right_panel/UserInfo";
 import dispatcher from "../../src/dispatcher/dispatcher";
 import { SettingLevel } from "../../src/settings/SettingLevel";
+import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
 
 jest.mock("../../src/components/views/right_panel/UserInfo");
 
@@ -250,6 +251,20 @@ describe("SlashCommands", () => {
             return expect(
                 command.run(client, roomId, null, "this is a test message").promise,
             ).resolves.toMatchSnapshot();
+        });
+    });
+
+    describe("/verify", () => {
+        it("should return usage if no args", () => {
+            const command = findCommand("verify")!;
+            expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
+        });
+
+        it("should show an error if device is not found", async () => {
+            const spy = jest.spyOn(Modal, "createDialog");
+            const command = findCommand("verify")!;
+            await command.run(client, roomId, null, "mydeviceid myfingerprint").promise;
+            expect(spy).toHaveBeenCalledWith(ErrorDialog, expect.objectContaining({ title: "Verification failed" }));
         });
     });
 
