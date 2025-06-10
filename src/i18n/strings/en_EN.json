@@ -1023,7 +1023,7 @@
                 "no_userid": "Unable to verify device - cannot find our User ID",
                 "success_description": "The device (%(deviceId)s) is now cross-signed",
                 "success_title": "Verification successful",
-                "text": "Supply the ID and fingerprint of one of your own devices to verify it.",
+                "text": "Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!",
                 "wrong_fingerprint": "Unable to verify device '%(deviceId)s' - the supplied fingerprint '%(fingerprint)s' does not match the device fingerprint, '%(fprint)s'"
             },
             "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
