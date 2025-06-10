@@ -3213,9 +3213,9 @@
     "@types/ssh2" "*"
 
 "@types/dockerode@^3.3.39":
-  version "3.3.39"
-  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-3.3.39.tgz#629adef5db9b3bb955423db1ccd586ee2b36e2e7"
-  integrity sha512-uMPmxehH6ofeYjaslASPtjvyH8FRJdM9fZ+hjhGzL4Jq3bGjr9D7TKmp9soSwgFncNk0HOwmyBxjqOb3ikjjsA==
+  version "3.3.40"
+  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-3.3.40.tgz#5b1055bf4fd5cf106c545b4478d611686fb1cc95"
+  integrity sha512-O1ckSFYbcYv/KcnAHMLCnKQYY8/5+6CRzpsOPcQIePHRX2jG4Gmz8uXPMCXIxTGN9OYkE5eox/L67l2sGY1UYg==
   dependencies:
     "@types/docker-modem" "*"
     "@types/node" "*"
@@ -3455,7 +3455,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*":
+"@types/node@*", "@types/node@>=13.7.0":
   version "24.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-24.0.0.tgz#14a278ce74dd33993f2c4e5dd614760728c0fba8"
   integrity sha512-yZQa2zm87aRVcqDyH5+4Hv9KYgSdgwX1rFnGvpbzMaC7YAljmhBET93TPiTd3ObwTL+gSpIzPKg5BqVxdCvxKg==
@@ -3468,13 +3468,6 @@
   integrity sha512-90sGdgA+QLJr1F9X79tQuEut0gEYIfkX9pydI4XGRgvFo9g2JWswefI+WUSUHPYVBHYSEfTEqBxA5hQvAZB3Mw==
   dependencies:
     undici-types "~5.26.4"
-
-"@types/node@>=13.7.0":
-  version "22.15.23"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.23.tgz#a0b7c03f951f1ffe381a6a345c68d80e48043dd0"
-  integrity sha512-7Ec1zaFPF4RJ0eXu1YT/xgiebqwqoJz8rYPDi/O2BcZ++Wpt0Kq9cl0eg6NN6bYbPnR67ZLo7St5Q3UK0SnARw==
-  dependencies:
-    undici-types "~6.21.0"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.4"
@@ -5941,10 +5934,10 @@ docker-modem@^5.0.6:
     split-ca "^1.0.1"
     ssh2 "^1.15.0"
 
-dockerode@^4.0.6:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-4.0.6.tgz#e53978605346afaaed940a72e24d4e8490d52437"
-  integrity sha512-FbVf3Z8fY/kALB9s+P9epCpWhfi/r0N2DgYYcYpsAUlaTxPjdsitsFobnltb+lyCgAIvf9C+4PSWlTnHlJMf1w==
+dockerode@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-4.0.7.tgz#8c68a80f4e057723a07a1e886416248945056621"
+  integrity sha512-R+rgrSRTRdU5mH14PZTCPZtW/zw3HDWNTS/1ZAQpL/5Upe/ye5K9WQkIysu4wBoiMwKynsz0a8qWuGsHgEvSAA==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@grpc/grpc-js" "^1.11.1"
@@ -10932,9 +10925,9 @@ properties-reader@^2.3.0:
     mkdirp "^1.0.4"
 
 protobufjs@^7.2.5, protobufjs@^7.3.2:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.4.0.tgz#7efe324ce9b3b61c82aae5de810d287bc08a248a"
-  integrity sha512-mRUWCc3KUU4w1jU8sGxICXH/gNS94DvI1gxqDvBzhj1JpcsimQkYiOJfwsPUykUI5ZaspFbSgmBLER8IrQ3tqw==
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.5.3.tgz#13f95a9e3c84669995ec3652db2ac2fb00b89363"
+  integrity sha512-sildjKwVqOI2kmFDiXQ6aEB0fjYTafpEvIBs8tOR8qI4spuL9OPROLVu2qZqi/xgCfsHIwVqlaF8JBjWFHnKbw==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -12140,9 +12133,9 @@ statuses@2.0.1, statuses@^2.0.1:
   integrity sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==
 
 streamx@^2.15.0, streamx@^2.21.0:
-  version "2.22.0"
-  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.22.0.tgz#cd7b5e57c95aaef0ff9b2aef7905afa62ec6e4a7"
-  integrity sha512-sLh1evHOzBy/iWRiR6d1zRcLao4gGZr3C1kzNz4fopCOKJb6xD9ub8Mpi9Mr1R6id5o43S+d93fI48UC5uM9aw==
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.22.1.tgz#c97cbb0ce18da4f4db5a971dc9ab68ff5dc7f5a5"
+  integrity sha512-znKXEBxfatz2GBNK02kRnCXjV+AA4kjZIUxeWSr3UGirZMJfTE9uiwKHobnbgxWyL/JWro8tTq+vOqAK1/qbSA==
   dependencies:
     fast-fifo "^1.3.2"
     text-decoder "^1.1.0"
@@ -12632,9 +12625,9 @@ test-exclude@^6.0.0:
     minimatch "^3.0.4"
 
 testcontainers@^11.0.0, testcontainers@^11.0.3:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-11.0.0.tgz#248d8e59b922c993da378e6ef8bb018c0fc29330"
-  integrity sha512-8zY2V+eovC6aylgMqMR3A7H+un2gqpqepbvBCnjo7QP2fpI0pJZhSus+A5TckHpF2CR2d1Zj/IQ5rNPW/HjS6g==
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-11.0.3.tgz#2d444996d0eebed27d2caed6cdd7321210d5353e"
+  integrity sha512-Xu6ZAaE1FaLyHzFSYdCsd+xMPxUegUjkum0r6zgO8SinnFDHRX/PllIHMt1D+DVUmJqBvPQI6vge/J5jgE5vng==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@types/dockerode" "^3.3.39"
@@ -12643,7 +12636,7 @@ testcontainers@^11.0.0, testcontainers@^11.0.3:
     byline "^5.0.0"
     debug "^4.4.1"
     docker-compose "^1.2.0"
-    dockerode "^4.0.6"
+    dockerode "^4.0.7"
     get-port "^7.1.0"
     proper-lockfile "^4.1.2"
     properties-reader "^2.3.0"
@@ -12962,11 +12955,6 @@ undici-types@~5.26.4:
   version "5.26.5"
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
-
-undici-types@~6.21.0:
-  version "6.21.0"
-  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
-  integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
 
 undici-types@~7.8.0:
   version "7.8.0"
