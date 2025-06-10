@@ -20,19 +20,17 @@ export const InviteRulesAccountSetting: FC = () => {
     const settingsDisabled = SettingsStore.disabledMessage("inviteRules");
     const [busy, setBusy] = useState(false);
 
-    const onChange = useCallback((checked: boolean) => {
-        (async () => {
-            try {
-                setBusy(true);
-                await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, {
-                    allBlocked: !checked,
-                });
-            } catch (ex) {
-                logger.error(`Unable to set invite rules`, ex);
-            } finally {
-                setBusy(false);
-            }
-        })();
+    const onChange = useCallback(async (checked: boolean) => {
+        try {
+            setBusy(true);
+            await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, {
+                allBlocked: !checked,
+            });
+        } catch (ex) {
+            logger.error(`Unable to set invite rules`, ex);
+        } finally {
+            setBusy(false);
+        }
     }, []);
     return (
         <Root className="mx_MediaPreviewAccountSetting_Form">

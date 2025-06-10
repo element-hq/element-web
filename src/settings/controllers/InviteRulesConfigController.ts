@@ -56,7 +56,6 @@ export default class InviteRulesConfigController extends MatrixClientBackedContr
     }
 
     public get settingDisabled(): true | string {
-        console.log("settingDisabled", this.featureSupported);
         return this.featureSupported ? true : _t("settings|not_supported");
     }
 
