@@ -679,12 +679,6 @@ module.exports = (env, argv) => {
                         context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
                         to: path.join(__dirname, "webapp", "widgets", "element-call"),
                     },
-                    // Mobile guide assets
-                    {
-                        from: "assets/**",
-                        context: path.resolve(__dirname, "src/vector/mobile_guide"),
-                        to: "mobile_guide",
-                    },
                 ],
             }),
 
