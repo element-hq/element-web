@@ -265,7 +265,7 @@ test.describe("Room list", () => {
             await publicRoom.hover();
             const roomItemMenu = publicRoom.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
-            await page.getByRole("menuitem", { name: "Low priority" }).click();
+            await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
             await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
