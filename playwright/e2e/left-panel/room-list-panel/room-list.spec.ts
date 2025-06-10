@@ -255,6 +255,28 @@ test.describe("Room list", () => {
             await expect(publicRoom).toMatchScreenshot("room-list-item-public.png");
         });
 
+        test("should be a low priority room", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            // @ts-ignore Visibility enum is not accessible
+            await app.client.createRoom({ name: "low priority room", visibility: "public" });
+            const roomListView = getRoomList(page);
+            const publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
+
+            // Make room low priority
+            await publicRoom.hover();
+            const roomItemMenu = publicRoom.getByRole("button", { name: "More Options" });
+            await roomItemMenu.click();
+            await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
+
+            // Should have low priority decoration
+            await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
+                "This is a low priority room",
+            );
+
+            // focus the user menu to avoid to have hover decoration
+            await page.getByRole("button", { name: "User menu" }).focus();
+            await expect(publicRoom).toMatchScreenshot("room-list-item-low-priority.png");
+        });
+
         test("should be a video room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await page.getByTestId("room-list-panel").getByRole("button", { name: "Add" }).click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
