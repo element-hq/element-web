@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<MImageBody/> should generate a thumbnail if one isn't included for animated media 1`] = `
 <div>
@@ -10,7 +10,7 @@ exports[`<MImageBody/> should generate a thumbnail if one isn't included for ani
     >
       <div
         class="mx_MImageBody_thumbnail_container"
-        style="max-height: 50px; max-width: 40px;"
+        style="max-height: 50px; max-width: 40px; aspect-ratio: 40/50;"
       >
         <div
           class="mx_MImageBody_placeholder"
@@ -54,7 +54,7 @@ exports[`<MImageBody/> should show a thumbnail while image is being downloaded 1
   >
     <div
       class="mx_MImageBody_thumbnail_container"
-      style="max-height: 50px; max-width: 40px;"
+      style="max-height: 50px; max-width: 40px; aspect-ratio: 40/50;"
     >
       <div
         class="mx_MImageBody_placeholder"

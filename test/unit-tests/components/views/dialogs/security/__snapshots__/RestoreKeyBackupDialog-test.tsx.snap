@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is invalid 1`] = `
 <DocumentFragment>
@@ -283,6 +283,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       </div>
     </div>
     <div
+      aria-describedby="«r2»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -478,6 +479,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
       </div>
     </div>
     <div
+      aria-describedby="«rk»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -543,6 +545,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
       </div>
     </div>
     <div
+      aria-describedby="«rq»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

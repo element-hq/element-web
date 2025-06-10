@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
 <div>
@@ -403,26 +403,26 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         <span
           aria-hidden="true"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="-1"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <span
           aria-owns="«r14»"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <button
@@ -1124,26 +1124,26 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         <span
           aria-hidden="true"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="-1"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <span
           aria-owns="«ra»"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <button
@@ -1882,26 +1882,26 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         <span
           aria-hidden="true"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="-1"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <span
           aria-owns="«rn»"
           data-floating-ui-inert=""
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
         />
         <span
           data-floating-ui-focus-guard=""
           data-type="outside"
           role="button"
-          style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+          style="border: 0px; height: 1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
           tabindex="0"
         />
         <button
