@@ -10,17 +10,27 @@ import type {
     CustomMessageRenderFunction,
     CustomMessageComponentProps,
     OriginalComponentProps,
+    CustomMessageRenderHints,
 } from "@element-hq/element-web-module-api";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type React from "react";
 
-export class CustomComponentsApi implements ICustomComponentsApi {
-    private readonly registeredMessageRenderers: {
-        eventType: string | RegExp;
-        renderer: CustomMessageRenderFunction;
-    }[] = [];
+type EventRenderer = {
+    eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean);
+    renderer: CustomMessageRenderFunction;
+    hints: CustomMessageRenderHints,
+}
 
-    public registerMessageRenderer(eventType: string | RegExp, renderer: CustomMessageRenderFunction): void {
-        this.registeredMessageRenderers.push({ eventType, renderer });
+export class CustomComponentsApi implements ICustomComponentsApi {
+    private readonly registeredMessageRenderers: EventRenderer[] = [];
+
+
+    public registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints: CustomMessageRenderHints = {}): void {
+        this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
+    }
+
+    private selectRenderer(mxEvent: MatrixEvent): EventRenderer|undefined {
+        return this.registeredMessageRenderers.find((rdr) => typeof rdr.eventTypeOrFilter === "string" ? mxEvent.getType().match(rdr.eventTypeOrFilter) : rdr.eventTypeOrFilter(mxEvent));
     }
 
     /**
@@ -33,14 +43,26 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         props: CustomMessageComponentProps,
         originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
-        for (const renderer of this.registeredMessageRenderers.filter((e) =>
-            props.mxEvent.getType().match(e.eventType),
-        ) ?? []) {
-            const component = renderer.renderer(props, originalComponent);
-            if (component) {
-                return component;
-            }
+        const renderer = this.selectRenderer(props.mxEvent);
+        if (renderer) {
+            return renderer.renderer(props, originalComponent);
         }
         return originalComponent?.() || null;
+    }
+
+    /**
+     * Get hints about a message before rendering it.
+     * @param props Props to be passed to the custom renderer.
+     * @param originalComponent Function that will be rendered if no custom renderers are present, or as a child of a custom component.
+     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     */
+    public getHintsForMessage(
+        mxEvent: MatrixEvent,
+    ): CustomMessageRenderHints {
+        const renderer = this.selectRenderer(mxEvent);
+        if (renderer) {
+            return renderer.hints;
+        }
+        return {};
     }
 }
