@@ -1800,14 +1800,14 @@
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
 "@fontsource/inconsolata@^5":
-  version "5.2.5"
-  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.2.5.tgz#8f220d83567dc27b7b54fd583044cb2ebbbd2759"
-  integrity sha512-OvzkZY5qYghv/jEV6cfGZzFhdFTvSnU+ExPC7WcZ7w8PdRhtiu/SpcBWOBt+3LXgS0n9qyepgq4zZmxlDTlGGQ==
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.2.6.tgz#441408df72dfe1a2408eb8bf676609043b869504"
+  integrity sha512-TRGh7bN+BN/oP8qD1IYe8REXM/0Uw3jbuERSncA/ZF6mqKFEOeTt6PR2T3xK7G+65N9pn2p0ablamdboee2nFQ==
 
 "@fontsource/inter@^5":
-  version "5.2.5"
-  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.2.5.tgz#69efffe6ccfae138cbe1806f41daa39cef986b59"
-  integrity sha512-kbsPKj0S4p44JdYRFiW78Td8Ge2sBVxi/PIBwmih+RpSXUdvS9nbs1HIiuUSPtRMi14CqLEZ/fbk7dj7vni1Sg==
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.2.6.tgz#2c705ea57d7af283a05bb1ca59fb0f06fc5de3be"
+  integrity sha512-CZs9S1CrjD0jPwsNy9W6j0BhsmRSQrgwlTNkgQXTsAeDRM42LBRLo3eo9gCzfH4GvV7zpyf78Ozfl773826csw==
 
 "@formatjs/ecma402-abstract@2.3.4":
   version "2.3.4"
@@ -3853,7 +3853,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.3":
   version "2.38.3"
