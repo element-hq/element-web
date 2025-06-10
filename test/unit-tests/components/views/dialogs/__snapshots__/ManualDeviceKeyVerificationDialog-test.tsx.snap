@@ -30,7 +30,7 @@ exports[`ManualDeviceKeyVerificationDialog should render correctly 1`] = `
     >
       <div>
         <p>
-          Supply the ID and fingerprint of one of your own devices to verify it.
+          Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!
         </p>
         <div
           class="mx_DeviceVerifyDialog_cryptoSection"
