@@ -349,6 +349,7 @@ export interface Settings {
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
+    "Electron.enableContentProtection": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
@@ -1382,6 +1383,11 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
+    },
+    "Electron.enableContentProtection": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("settings|preferences|enable_hardware_acceleration"),
+        default: false,
     },
     "Developer.elementCallUrl": {
         supportedLevels: [SettingLevel.DEVICE],
