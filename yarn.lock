@@ -28,11 +28,11 @@
     "@jridgewell/trace-mapping" "^0.3.24"
 
 "@axe-core/playwright@^4.10.1":
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.10.1.tgz#c811ba8bfa244833cce422c4131e0043828c42cc"
-  integrity sha512-EV5t39VV68kuAfMKqb/RL+YjYKhfuGim9rgIaQ6Vntb2HgaCaau0h98Y3WEUqW1+PbdzxDtDNjFAipbtZuBmEA==
+  version "4.10.2"
+  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.10.2.tgz#f2d364986ce2ce58ef845c5def62ae7444c1d3aa"
+  integrity sha512-6/b5BJjG6hDaRNtgzLIfKr5DfwyiLHO4+ByTLB0cJgWSM8Ll7KqtdblIS6bEkwSF642/Ex91vNqIl3GLXGlceg==
   dependencies:
-    axe-core "~4.10.2"
+    axe-core "~4.10.3"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.27.1":
   version "7.27.1"
@@ -1678,9 +1678,9 @@
   integrity sha512-FYId5tYgaKvpqAXRXqs0pY4+7/A09bEl1mCxFqlS9jlZOCjlMZVvZuv8spbY8ZN9HaMvuVmx9J00Fn2gCJd0TQ==
 
 "@element-hq/element-web-playwright-common@^1.1.5":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.2.0.tgz#63808520825899701d9359001430e91b0ca6d1e0"
-  integrity sha512-I+W+0PThZkwwfP03xT19q6C0jrMqSimD+6QjsKV+DdwJyoJrFfhHD10jil8dWelDMwrhyfk+qLiu6Go7UDgaog==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.3.0.tgz#5f57eb2ee25e9733c92185ef57431db808deb603"
+  integrity sha512-tq3lN77f0KnTYtPVkRrwvsWpq/JAC6JqDkC2f6dxuvX3a+OmyjGnuoZh83kB2WNObfrrx7gxmsZpS7ov2mrw4Q==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^11.0.0"
@@ -3034,11 +3034,11 @@
     "@svgr/plugin-svgo" "8.1.0"
 
 "@testcontainers/postgresql@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-11.0.0.tgz#6590f2398fae2d9ad78a748e92b89053d2380f56"
-  integrity sha512-cw2vIz5MS1AjXkxcPmOQh0NRdh7p6frSLOkjsBFuR5lUo3qnV3LmvCfanyRzgXs5aHGJLwc0mlQNfXnKedBF6Q==
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-11.0.3.tgz#53387b2706ef519afdbe9064c025f51a62b4471d"
+  integrity sha512-nMq0lBLguZecp9JDV4J8nlPWwxOQ4XiXUIGkV5Lvj1CMdVqbqQJe4eVrNHVC3rIM/w8nadNp5ecEoxnwkhG33w==
   dependencies:
-    testcontainers "^11.0.0"
+    testcontainers "^11.0.3"
 
 "@testing-library/dom@^10.4.0":
   version "10.4.0"
@@ -4532,7 +4532,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
 
-axe-core@~4.10.2:
+axe-core@~4.10.3:
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.3.tgz#04145965ac7894faddbac30861e5d8f11bfd14fc"
   integrity sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==
@@ -7078,13 +7078,14 @@ foreground-child@^3.1.0:
     signal-exit "^4.0.1"
 
 form-data@^4.0.0:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.2.tgz#35cabbdd30c3ce73deb2c42d3c8d3ed9ca51794c"
-  integrity sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.3.tgz#608b1b3f3e28be0fccf5901fc85fb3641e5cf0ae"
+  integrity sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
     es-set-tostringtag "^2.1.0"
+    hasown "^2.0.2"
     mime-types "^2.1.12"
 
 formatly@^0.2.4:
@@ -9208,9 +9209,9 @@ magic-string@0.30.8:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
 mailpit-api@^1.2.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.4.0.tgz#881b473434b86c13ff85c3d92e9474daf4376135"
-  integrity sha512-A7hMRDQGo0jf1HZM06tw8dSgT2cYEev7lh1ehUXDWIBWXuK+Rq6HHCCQz624uAFYWEngmt4RGG1kMGGUC7iY6A==
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.5.0.tgz#c7006c3650308f4eec1c36f51ac1a66c1e949e5e"
+  integrity sha512-csvr3se1TKHhiMJBrToVxX7W4O/9VZ74ivitHHOZezYVLp+nZthx7dWWXB8BwCJPmTLtfKHcJXWqMluK453ulA==
   dependencies:
     axios "^1.9.0"
 
@@ -12630,7 +12631,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@^11.0.0:
+testcontainers@^11.0.0, testcontainers@^11.0.3:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-11.0.0.tgz#248d8e59b922c993da378e6ef8bb018c0fc29330"
   integrity sha512-8zY2V+eovC6aylgMqMR3A7H+un2gqpqepbvBCnjo7QP2fpI0pJZhSus+A5TckHpF2CR2d1Zj/IQ5rNPW/HjS6g==
