@@ -10,7 +10,7 @@ exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
       class="mx_RoomListPrimaryFilters_container"
       data-expanded="false"
       data-testid="filter-container"
-      style="transition: 0.1s ease-in-out;"
+      style="--row-height: 30fr; transition: 0.1s ease-in-out;"
     >
       <div
         class="mx_Flex mx_RoomListPrimaryFilters_animated"

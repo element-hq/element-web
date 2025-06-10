@@ -22,6 +22,12 @@ jest.mock("../../../../../../src/hooks/useIsNodeVisible", () => ({
     })),
 }));
 
+jest.mock("../../../../../../src/hooks/left-panel/room-list/useFilterHeight", () => ({
+    useFilterHeight: jest.fn().mockImplementation(() => ({
+        filterHeight: 30,
+    })),
+}));
+
 describe("<RoomListPrimaryFilters />", () => {
     let vm: RoomListViewState;
     const filterToggleMocks = [jest.fn(), jest.fn(), jest.fn()];
