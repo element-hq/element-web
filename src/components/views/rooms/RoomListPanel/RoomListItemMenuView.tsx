@@ -38,18 +38,28 @@ interface RoomListItemMenuViewProps {
      * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
+    /**
+     * If set, the ID of a DOM element that describes the menu buttons in this view.
+     * Note that this will be the same for each menu button: it is suggested that it is the
+     * ID of the room list item that this menu is for, ie. containing the room name as text.
+     */
+    describedById?: string;
 }
 
 /**
  * A view for the room list item menu.
  */
-export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuViewProps): JSX.Element {
+export function RoomListItemMenuView({ room, setMenuOpen, describedById }: RoomListItemMenuViewProps): JSX.Element {
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
         <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
-            {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
-            {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
+            {vm.showMoreOptionsMenu && (
+                <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} describedById={describedById} />
+            )}
+            {vm.showNotificationMenu && (
+                <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} describedById={describedById} />
+            )}
         </Flex>
     );
 }
@@ -64,12 +74,18 @@ interface MoreOptionsMenuProps {
      * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
+    /**
+     * If set, the ID of a DOM element that describes the menu buttons in this view.
+     * Note that this will be the same for each menu button: it is suggested that it is the
+     * ID of the room list item that this menu is for, ie. containing the room name as text.
+     */
+    describedById?: string;
 }
 
 /**
  * The more options menu for the room list item.
  */
-function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element {
+function MoreOptionsMenu({ vm, setMenuOpen, describedById }: MoreOptionsMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
 
     return (
@@ -82,7 +98,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
             title={_t("room_list|room|more_options")}
             showTitle={false}
             align="start"
-            trigger={<MoreOptionsButton size="24px" />}
+            trigger={<MoreOptionsButton size="24px" aria-describedby={describedById} />}
         >
             {vm.canMarkAsRead && (
                 <MenuItem
@@ -174,9 +190,15 @@ interface NotificationMenuProps {
      * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
+    /**
+     * If set, the ID of a DOM element that describes the menu buttons in this view.
+     * Note that this will be the same for each menu button: it is suggested that it is the
+     * ID of the room list item that this menu is for, ie. containing the room name as text.
+     */
+    describedById?: string;
 }
 
-function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Element {
+function NotificationMenu({ vm, setMenuOpen, describedById }: NotificationMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
 
     const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
@@ -191,7 +213,9 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
             title={_t("room_list|notification_options")}
             showTitle={false}
             align="start"
-            trigger={<NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" />}
+            trigger={
+                <NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" aria-describedby={describedById} />
+            }
         >
             <MenuItem
                 aria-selected={vm.isNotificationAllMessage}

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useCallback, useRef, useState } from "react";
+import React, { type JSX, memo, useCallback, useId, useRef, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
@@ -46,6 +46,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
     const showHoverDecoration = isMenuOpen || isHover;
     const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
+    const roomNameId = useId();
 
     return (
         <button
@@ -84,7 +85,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                     <div className="mx_RoomListItemView_text">
-                        <div className="mx_RoomListItemView_roomName" title={vm.name}>
+                        <div className="mx_RoomListItemView_roomName" title={vm.name} id={roomNameId}>
                             {vm.name}
                         </div>
                         <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
@@ -92,6 +93,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                     {showHoverMenu ? (
                         <RoomListItemMenuView
                             room={room}
+                            describedById={roomNameId}
                             setMenuOpen={(isOpen) => {
                                 if (isOpen) {
                                     setIsMenuOpen(isOpen);
