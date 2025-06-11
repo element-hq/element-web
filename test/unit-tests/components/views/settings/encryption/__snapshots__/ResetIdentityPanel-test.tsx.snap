@@ -7,7 +7,8 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
   >
     <button
       aria-label="Back"
-      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      class="_icon-button_1pz9o_8"
+      data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
@@ -189,7 +190,8 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
   >
     <button
       aria-label="Back"
-      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      class="_icon-button_1pz9o_8"
+      data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
@@ -371,7 +373,8 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
   >
     <button
       aria-label="Back"
-      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      class="_icon-button_1pz9o_8"
+      data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
@@ -556,7 +559,8 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
   >
     <button
       aria-label="Back"
-      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      class="_icon-button_1pz9o_8"
+      data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"

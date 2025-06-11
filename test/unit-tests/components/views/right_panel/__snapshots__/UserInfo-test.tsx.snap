@@ -20,7 +20,8 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       </div>
       <button
         aria-labelledby="«r6i»"
-        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+        class="_icon-button_1pz9o_8"
+        data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -306,7 +307,8 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
       </div>
       <button
         aria-labelledby="«r6s»"
-        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+        class="_icon-button_1pz9o_8"
+        data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
