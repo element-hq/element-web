@@ -76,6 +76,14 @@ export function EmptyRoomList({ vm }: EmptyRoomListProps): JSX.Element | undefin
                     filter={vm.activePrimaryFilter}
                 />
             );
+        case FilterKey.LowPriorityFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_lowpriority")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
         default:
             return undefined;
     }
