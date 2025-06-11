@@ -33,6 +33,7 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
+import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -339,6 +340,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
+                        <InviteRulesAccountSetting />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
@@ -356,6 +358,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
                                 appName: SdkConfig.get().brand,
                             })}
+                        />
+                        <SettingsFlag
+                            name="Electron.enableContentProtection"
+                            level={SettingLevel.PLATFORM}
+                            hideIfCannotSet
+                            label={_t("settings|preferences|Electron.enableContentProtection")}
                         />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />

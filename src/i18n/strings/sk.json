@@ -929,8 +929,6 @@
             "security_key_title": "Kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
-        "cancel_entering_passphrase_description": "Naozaj chcete zrušiť zadávanie prístupovej frázy?",
-        "cancel_entering_passphrase_title": "Zrušiť zadanie prístupovej frázy?",
         "confirm_encryption_setup_body": "Kliknutím na tlačidlo nižšie potvrdíte nastavenie šifrovania.",
         "confirm_encryption_setup_title": "Potvrdiť nastavenie šifrovania",
         "cross_signing_room_normal": "Táto miestnosť je end-to-end šifrovaná",
@@ -3166,6 +3164,7 @@
         "upgraderoom": "Aktualizuje miestnosť na novšiu verziu",
         "upgraderoom_permission_error": "Na použitie tohoto príkazu nemáte dostatočné povolenia.",
         "usage": "Použitie",
+        "verify": "Overí používateľa, reláciu a verejné kľúče",
         "view": "Zobrazí miestnosti s danou adresou",
         "whois": "Zobrazuje informácie o používateľovi"
     },

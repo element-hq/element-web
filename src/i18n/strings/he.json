@@ -574,8 +574,6 @@
             "security_key_title": "מפתח אבטחה"
         },
         "bootstrap_title": "מגדיר מפתחות",
-        "cancel_entering_passphrase_description": "האם אתם בטוחים שהינכם רוצים לבטל?",
-        "cancel_entering_passphrase_title": "בטל הקלדת סיסמא?",
         "confirm_encryption_setup_body": "לחץ על הלחצן למטה כדי לאשר את הגדרת ההצפנה.",
         "confirm_encryption_setup_title": "אשר את הגדרת ההצפנה",
         "cross_signing_room_normal": "חדר זה מוצפן מקצה לקצה",
@@ -1874,6 +1872,7 @@
         "upgraderoom": "משדרג את החדר לגרסא חדשה",
         "upgraderoom_permission_error": "אין לכם הרשאות להשתמש בפקודה זו.",
         "usage": "שימוש",
+        "verify": "מוודא משתמש, התחברות וצמד מפתח ציבורי",
         "whois": "מציג מידע אודות משתמש"
     },
     "space": {

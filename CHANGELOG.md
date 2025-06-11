@@ -1,3 +1,10 @@
+Changes in [1.11.103](https://github.com/element-hq/element-web/releases/tag/v1.11.103) (2025-06-10)
+====================================================================================================
+## 🐛 Bug Fixes
+
++ Check the sender of an event matches owner of session, preventing sender spoofing by homeserver owners.
+[13c1d20](https://github.com/matrix-org/matrix-rust-sdk/commit/13c1d2048286bbabf5e7bc6b015aafee98f04d55) (High, [GHSA-x958-rvg6-956w](https://github.com/matrix-org/matrix-rust-sdk/security/advisories/GHSA-x958-rvg6-956w)).
+
 Changes in [1.11.102](https://github.com/element-hq/element-web/releases/tag/v1.11.102) (2025-06-03)
 ====================================================================================================
 ## ✨ Features

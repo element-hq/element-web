@@ -890,8 +890,6 @@
             "security_key_title": "Güvenlik anahtarı"
         },
         "bootstrap_title": "Anahtarları ayarla",
-        "cancel_entering_passphrase_description": "Parola girmeyi iptal etmek istediğinizden emin misiniz?",
-        "cancel_entering_passphrase_title": "Parola girişini iptal et?",
         "confirm_encryption_setup_body": "Şifreleme kurulumunu onaylamak için aşağıdaki düğmeye tıklayın.",
         "confirm_encryption_setup_title": "Şifreleme kurulumunu onayla",
         "cross_signing_room_normal": "Bu oda uçtan uça şifreli",
@@ -3030,6 +3028,7 @@
         "upgraderoom": "Bir odayı yeni bir versiyona yükseltir",
         "upgraderoom_permission_error": "Bu komutu kullanmak için gerekli izinlere sahip değilsin.",
         "usage": "Kullanım",
+        "verify": "Bir kullanıcı, oturum ve açık anahtar çiftini doğrular",
         "view": "Verilen adresli odayı görüntüle",
         "whois": "Bir kullanıcı hakkındaki bilgileri görüntüler"
     },

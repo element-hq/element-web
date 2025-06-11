@@ -127,7 +127,7 @@ describe("<MatrixChat />", () => {
         setGuest: jest.fn(),
         setNotifTimelineSet: jest.fn(),
         getAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn(),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
         getDevices: jest.fn().mockResolvedValue({ devices: [] }),
         getProfileInfo: jest.fn().mockResolvedValue({
             displayname: "Ernie",
