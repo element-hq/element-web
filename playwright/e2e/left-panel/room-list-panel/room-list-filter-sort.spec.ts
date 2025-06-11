@@ -339,6 +339,8 @@ test.describe("Room list filters and sort", () => {
                 { tag: "@screenshot" },
                 async ({ page, app, user }) => {
                     const primaryFilters = getPrimaryFilters(page);
+                    await getFilterExpandButton(page).click();
+
                     await primaryFilters.getByRole("option", { name: filter }).click();
 
                     const emptyRoomList = getEmptyRoomList(page);
@@ -356,6 +358,8 @@ test.describe("Room list filters and sort", () => {
                 { tag: "@screenshot" },
                 async ({ page, app, user }) => {
                     const primaryFilters = getPrimaryFilters(page);
+                    await getFilterExpandButton(page).click();
+
                     await primaryFilters.getByRole("option", { name: filter }).click();
 
                     const emptyRoomList = getEmptyRoomList(page);
