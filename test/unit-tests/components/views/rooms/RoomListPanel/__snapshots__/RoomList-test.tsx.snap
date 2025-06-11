@@ -63,6 +63,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r0»"
                     title="room0"
                   >
                     room0
@@ -115,6 +116,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r1»"
                     title="room1"
                   >
                     room1
@@ -167,6 +169,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r2»"
                     title="room2"
                   >
                     room2
@@ -219,6 +222,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r3»"
                     title="room3"
                   >
                     room3
@@ -271,6 +275,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r4»"
                     title="room4"
                   >
                     room4
@@ -323,6 +328,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r5»"
                     title="room5"
                   >
                     room5
@@ -375,6 +381,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r6»"
                     title="room6"
                   >
                     room6
@@ -427,6 +434,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r7»"
                     title="room7"
                   >
                     room7
@@ -479,6 +487,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r8»"
                     title="room8"
                   >
                     room8
@@ -531,6 +540,7 @@ exports[`<RoomList /> should render a room list 1`] = `
                 >
                   <div
                     class="mx_RoomListItemView_roomName"
+                    id="«r9»"
                     title="room9"
                   >
                     room9
