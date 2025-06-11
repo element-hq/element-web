@@ -144,6 +144,7 @@ test.describe("Room list filters and sort", () => {
             await tile.click();
 
             // Enable Favourite filter
+            await getFilterExpandButton(page).click();
             const primaryFilters = getPrimaryFilters(page);
             await primaryFilters.getByRole("option", { name: "Favourite" }).click();
             await expect(tile).not.toBeVisible();
