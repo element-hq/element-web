@@ -676,8 +676,6 @@
             "security_key_title": "Chave de Seguridade"
         },
         "bootstrap_title": "Configurando as chaves",
-        "cancel_entering_passphrase_description": "¿Estás seguro de que non queres escribir a frase de paso?",
-        "cancel_entering_passphrase_title": "Cancelar a escrita da frase de paso?",
         "confirm_encryption_setup_body": "Preme no botón inferior para confirmar os axustes do cifrado.",
         "confirm_encryption_setup_title": "Confirma os axustes de cifrado",
         "cross_signing_room_normal": "Esta sala está cifrada extremo-a-extremo",
@@ -2255,6 +2253,7 @@
         "upgraderoom": "Subir a sala de versión",
         "upgraderoom_permission_error": "Non tes os permisos suficientes para usar este comando.",
         "usage": "Uso",
+        "verify": "Verifica unha usuaria, sesión e chave pública",
         "whois": "Mostra información acerca da usuaria"
     },
     "space": {

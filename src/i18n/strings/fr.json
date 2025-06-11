@@ -920,8 +920,6 @@
             "security_key_title": "Clé de récupération"
         },
         "bootstrap_title": "Configuration des clés",
-        "cancel_entering_passphrase_description": "Souhaitez-vous vraiment annuler la saisie de la phrase de passe ?",
-        "cancel_entering_passphrase_title": "Annuler la saisie du mot de passe ?",
         "confirm_encryption_setup_body": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
         "confirm_encryption_setup_title": "Confirmer la configuration du chiffrement",
         "cross_signing_room_normal": "Ce salon est chiffré de bout en bout",
@@ -2809,6 +2807,7 @@
             "voip": "Appels audio et vidéo"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Empêcher le contenu de la fenêtre d'être capturé par d'autres applications",
             "Electron.enableHardwareAcceleration": "Activer l’accélération matérielle (redémarrez %(appName)s pour l'activer)",
             "always_show_menu_bar": "Toujours afficher la barre de menu de la fenêtre",
             "autocomplete_delay": "Délai pour l’autocomplétion (ms)",
@@ -3128,6 +3127,7 @@
         "upgraderoom": "Met à niveau un salon vers une nouvelle version",
         "upgraderoom_permission_error": "Vous n’avez pas les autorisations nécessaires pour utiliser cette commande.",
         "usage": "Utilisation",
+        "verify": "Vérifie un utilisateur, une session et une collection de clés publiques",
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },

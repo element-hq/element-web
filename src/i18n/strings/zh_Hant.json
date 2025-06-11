@@ -791,8 +791,6 @@
             "security_key_title": "安全金鑰"
         },
         "bootstrap_title": "正在產生金鑰",
-        "cancel_entering_passphrase_description": "您確定要取消輸入安全密語嗎？",
-        "cancel_entering_passphrase_title": "取消輸入安全密語？",
         "confirm_encryption_setup_body": "點擊下方按鈕以確認設定加密。",
         "confirm_encryption_setup_title": "確認加密設定",
         "cross_signing_room_normal": "此聊天室已端對端加密",
@@ -2645,6 +2643,7 @@
         "upgraderoom": "升級聊天室到新版本",
         "upgraderoom_permission_error": "您沒有使用此指令的必要權限。",
         "usage": "使用方法",
+        "verify": "驗證使用者、工作階段與公開金鑰組合",
         "view": "檢視指定聊天室的地址",
         "whois": "顯示關於使用者的資訊"
     },
