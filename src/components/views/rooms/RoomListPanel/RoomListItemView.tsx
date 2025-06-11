@@ -48,7 +48,8 @@ export const RoomListItemView = memo(function RoomListItemView({
     const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
 
     return (
-        <button
+        <Flex
+            as="button"
             ref={ref}
             className={classNames("mx_RoomListItemView", {
                 mx_RoomListItemView_hover: showHoverDecoration,
@@ -71,54 +72,53 @@ export const RoomListItemView = memo(function RoomListItemView({
             // We delay the blur event to give time to the focus to move to the menu
             onBlur={() => setIsHoverWithDelay(false, 10)}
             tabIndex={isActive ? 0 : -1}
+            gap="var(--cpd-space-3x)"
+            align="center"
             {...props}
         >
-            {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
-            <Flex className="mx_RoomListItemView_container" gap="var(--cpd-space-3x)" align="center">
-                <RoomAvatarView room={room} />
-                <Flex
-                    className="mx_RoomListItemView_content"
-                    gap="var(--cpd-space-2x)"
-                    align="center"
-                    justify="space-between"
-                >
-                    {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <div className="mx_RoomListItemView_text">
-                        <div className="mx_RoomListItemView_roomName" title={vm.name}>
-                            {vm.name}
-                        </div>
-                        <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
+            <RoomAvatarView room={room} />
+            <Flex
+                className="mx_RoomListItemView_content"
+                gap="var(--cpd-space-2x)"
+                align="center"
+                justify="space-between"
+            >
+                {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                <div className="mx_RoomListItemView_text">
+                    <div className="mx_RoomListItemView_roomName" title={vm.name}>
+                        {vm.name}
                     </div>
-                    {showHoverMenu ? (
-                        <RoomListItemMenuView
-                            room={room}
-                            setMenuOpen={(isOpen) => {
-                                if (isOpen) {
-                                    setIsMenuOpen(isOpen);
-                                } else {
-                                    // To avoid icon blinking when closing the menu, we delay the state update
-                                    setTimeout(() => setIsMenuOpen(isOpen), 0);
-                                    // After closing the menu, we need to set the focus back to the button
-                                    // 10ms because the focus moves to the body and we put back the focus on the button
-                                    setTimeout(() => buttonRef.current?.focus(), 10);
-                                }
-                            }}
-                        />
-                    ) : (
-                        <>
-                            {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                            {vm.showNotificationDecoration && (
-                                <NotificationDecoration
-                                    notificationState={vm.notificationState}
-                                    aria-hidden={true}
-                                    hasVideoCall={vm.hasParticipantInCall}
-                                />
-                            )}
-                        </>
-                    )}
-                </Flex>
+                    <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
+                </div>
+                {showHoverMenu ? (
+                    <RoomListItemMenuView
+                        room={room}
+                        setMenuOpen={(isOpen) => {
+                            if (isOpen) {
+                                setIsMenuOpen(isOpen);
+                            } else {
+                                // To avoid icon blinking when closing the menu, we delay the state update
+                                setTimeout(() => setIsMenuOpen(isOpen), 0);
+                                // After closing the menu, we need to set the focus back to the button
+                                // 10ms because the focus moves to the body and we put back the focus on the button
+                                setTimeout(() => buttonRef.current?.focus(), 10);
+                            }
+                        }}
+                    />
+                ) : (
+                    <>
+                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
+                        {vm.showNotificationDecoration && (
+                            <NotificationDecoration
+                                notificationState={vm.notificationState}
+                                aria-hidden={true}
+                                hasVideoCall={vm.hasParticipantInCall}
+                            />
+                        )}
+                    </>
+                )}
             </Flex>
-        </button>
+        </Flex>
     );
 });
 
