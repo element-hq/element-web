@@ -920,8 +920,6 @@
             "security_key_title": "Wiederherstellungsschlüssel"
         },
         "bootstrap_title": "Schlüssel werden eingerichtet",
-        "cancel_entering_passphrase_description": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest?",
-        "cancel_entering_passphrase_title": "Eingabe der Passphrase abbrechen?",
         "confirm_encryption_setup_body": "Klick die Schaltfläche unten um die Einstellungen der Verschlüsselung zu bestätigen.",
         "confirm_encryption_setup_title": "Bestätige die Einrichtung der Verschlüsselung",
         "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
@@ -3125,6 +3123,7 @@
         "upgraderoom": "Aktualisiert den Raum auf eine neue Version",
         "upgraderoom_permission_error": "Du hast nicht die erforderlichen Berechtigungen, diesen Befehl zu verwenden.",
         "usage": "Verwendung",
+        "verify": "Verifiziert Benutzer, Sitzung und öffentlichen Schlüsselpaare",
         "view": "Raum mit angegebener Adresse betrachten",
         "whois": "Zeigt Informationen über Benutzer"
     },

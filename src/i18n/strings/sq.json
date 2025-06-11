@@ -762,8 +762,6 @@
             "security_key_title": "Kyç Sigurie"
         },
         "bootstrap_title": "Ujdisje kyçesh",
-        "cancel_entering_passphrase_description": "Jeni i sigurt se doni të anulohet dhënie frazëkalimi?",
-        "cancel_entering_passphrase_title": "Të anulohet dhënue frazëkalimi?",
         "confirm_encryption_setup_body": "Klikoni mbi butonin më poshtë që të ripohoni ujdisjen e fshehtëzimit.",
         "confirm_encryption_setup_title": "Ripohoni ujdisje fshehtëzimi",
         "cross_signing_room_normal": "Kjo dhomë është e fshehtëzuar skaj-më-skaj",
@@ -2532,6 +2530,7 @@
         "upgraderoom": "E kalon një dhomë te një version i ri i përmirësuar",
         "upgraderoom_permission_error": "S’keni lejet e domosdoshme për përdorimin e këtij urdhri.",
         "usage": "Përdorim",
+        "verify": "Verifikon një përdorues, sesion dhe një set kyçesh publikë",
         "whois": "Shfaq të dhëna rreth një përdoruesi"
     },
     "space": {

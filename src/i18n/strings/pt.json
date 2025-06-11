@@ -892,8 +892,6 @@
             "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "A configurar chaves",
-        "cancel_entering_passphrase_description": "Tem a certeza que quer cancelar a introdução da frase-passe?",
-        "cancel_entering_passphrase_title": "Cancelar a introdução da frase-passe?",
         "confirm_encryption_setup_body": "Clica no botão abaixo para confirmar a configuração da encriptação.",
         "confirm_encryption_setup_title": "Confirma a configuração da encriptação",
         "cross_signing_room_normal": "Esta sala é encriptada de ponta a ponta",

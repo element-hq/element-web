@@ -840,8 +840,6 @@
             "security_key_title": "Drošības atslēga"
         },
         "bootstrap_title": "Atslēgu iestatīšana",
-        "cancel_entering_passphrase_description": "Vai tiešām atcelt paroles vārdkopas ievadīšanu?",
-        "cancel_entering_passphrase_title": "Atcelt frāzveida paroles ievadi?",
         "confirm_encryption_setup_body": "Noklikšķiniet uz tālāk esošās pogas, lai apstiprinātu šifrēšanas iestatīšanu.",
         "confirm_encryption_setup_title": "Apstiprināt šifrēšanas iestatīšanu",
         "cross_signing_room_normal": "Šajā istabā tiek veikta pilnīga šifrēšana",
@@ -2643,6 +2641,7 @@
         "upgraderoom": "Atjaunina istabu uz jaunu versiju",
         "upgraderoom_permission_error": "Nav šīs komandas izmantošanai nepieciešamo atļauju.",
         "usage": "Lietojums",
+        "verify": "Verificē lietotāju, sesiju un publiskās atslēgas",
         "view": "Skata istabu ar norādīto adresi",
         "whois": "Parāda lietotāja informāciju"
     },

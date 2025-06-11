@@ -797,8 +797,6 @@
             "security_key_title": "Kitendry fiarovana"
         },
         "bootstrap_title": "Fametrahana fanalahidy",
-        "cancel_entering_passphrase_description": "Tena te-hanafoana ny fampidirana fehezanteny ve ianao?",
-        "cancel_entering_passphrase_title": "Hanafoana ny fidirana amin'ny teny miafina ?",
         "confirm_encryption_setup_body": "Kitiho ny bokotra etsy ambany hanamafisana ny fametrahana encryption.",
         "confirm_encryption_setup_title": "Hamafiso ny fanamboarana fanafenana",
         "cross_signing_room_normal": "Ity efitrano ity dia misy encryption avy hatrany",

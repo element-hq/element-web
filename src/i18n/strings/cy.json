@@ -918,8 +918,6 @@
             "security_key_title": "Allwedd Adfer"
         },
         "bootstrap_title": "Gosod  allweddi",
-        "cancel_entering_passphrase_description": "Ydych chi'n siŵr eich bod am ddiddymu'r cyfrinymadrodd?",
-        "cancel_entering_passphrase_title": "Diddymu cyflwyno cyfrinymadrodd?",
         "confirm_encryption_setup_body": "Clicio'r botwm isod i gadarnhau gosod amgryptio.",
         "confirm_encryption_setup_title": "Cadarnhau gosodiad amgryptio",
         "cross_signing_room_normal": "Mae'r ystafell hon wedi'i hamgryptio o ben-i-ben",
@@ -3012,6 +3010,7 @@
         "upgraderoom": "Yn uwchraddio ystafell i fersiwn newydd",
         "upgraderoom_permission_error": "Nid oes gennych y caniatâd gofynnol i ddefnyddio'r gorchymyn hwn.",
         "usage": "Defnydd",
+        "verify": "Yn dilysu defnyddiwr, sesiwn, a pubkey tuple",
         "view": "Ystafell golygfeydd gyda chyfeiriad a roddwyd",
         "whois": "Yn arddangos gwybodaeth am ddefnyddiwr"
     },

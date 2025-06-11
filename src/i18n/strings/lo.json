@@ -668,8 +668,6 @@
             "security_key_title": "ກະແຈຄວາມປອດໄພ"
         },
         "bootstrap_title": "ການຕັ້ງຄ່າກະແຈ",
-        "cancel_entering_passphrase_description": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຍົກເລີກການໃສ່ປະໂຫຍກລະຫັດຜ່ານ?",
-        "cancel_entering_passphrase_title": "ຍົກເລີກການໃສ່ປະໂຫຍກລະຫັດຜ່ານບໍ?",
         "confirm_encryption_setup_body": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການຕັ້ງຄ່າການເຂົ້າລະຫັດ.",
         "confirm_encryption_setup_title": "ຢືນຢັນການຕັ້ງຄ່າການເຂົ້າລະຫັດ",
         "cross_signing_room_normal": "ຫ້ອງນີ້ຖືກເຂົ້າລະຫັດແບບຕົ້ນທາງ-ເຖິງປາຍທາງ",
@@ -2182,6 +2180,7 @@
         "upgraderoom": "ຍົກລະດັບຫ້ອງເປັນລຸ້ນໃໝ່",
         "upgraderoom_permission_error": "ທ່ານບໍ່ມີສິດໃຊ້ຄໍາສັ່ງນີ້.",
         "usage": "ການນໍາໃຊ້",
+        "verify": "ຢືນຢັນຜູ້ໃຊ້, ລະບົບ, ແລະ pubkey tuple",
         "whois": "ສະແດງຂໍ້ມູນກ່ຽວກັບຜູ້ໃຊ້"
     },
     "space": {

@@ -748,8 +748,6 @@
             "security_key_title": "Clave de seguridad"
         },
         "bootstrap_title": "Configurando claves",
-        "cancel_entering_passphrase_description": "¿Estas seguro que quieres cancelar el ingresar tu contraseña de recuperación?",
-        "cancel_entering_passphrase_title": "¿Cancelar el ingresar tu contraseña de recuperación?",
         "confirm_encryption_setup_body": "Haz clic en el botón de abajo para confirmar la configuración del cifrado.",
         "confirm_encryption_setup_title": "Confirmar la configuración de cifrado",
         "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo",
@@ -2485,6 +2483,7 @@
         "upgraderoom": "Actualiza una sala a una nueva versión",
         "upgraderoom_permission_error": "No tienes los permisos requeridos para usar este comando.",
         "usage": "Uso",
+        "verify": "Verifica a un usuario, sesión y tupla de clave pública",
         "whois": "Muestra información sobre un usuario"
     },
     "space": {

@@ -733,8 +733,6 @@
             "security_key_title": "安全密钥"
         },
         "bootstrap_title": "设置密钥",
-        "cancel_entering_passphrase_description": "你确定要取消输入口令词组吗？",
-        "cancel_entering_passphrase_title": "取消输入口令词组？",
         "confirm_encryption_setup_body": "点击下方按钮以确认设置加密。",
         "confirm_encryption_setup_title": "确认加密设置",
         "cross_signing_room_normal": "此房间是端到端加密的",
@@ -2400,6 +2398,7 @@
         "upgraderoom": "将房间升级到新版本",
         "upgraderoom_permission_error": "你没有权限使用此命令。",
         "usage": "用法",
+        "verify": "验证用户、会话和公钥元组",
         "whois": "显示关于用户的信息"
     },
     "space": {

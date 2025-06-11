@@ -3112,6 +3112,8 @@
         "jumptodate": "Jump to the given date in the timeline",
         "jumptodate_invalid_input": "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.",
         "lenny": "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message",
+        "manual_device_verification_confirm_description": "This will allow another device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED! Are you sure you want to verify this other device?",
+        "manual_device_verification_confirm_title": "Caution: manual device verification",
         "me": "Displays action",
         "msg": "Sends a message to the given user",
         "myavatar": "Changes your profile picture in all rooms",

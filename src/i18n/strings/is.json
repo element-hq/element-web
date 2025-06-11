@@ -679,8 +679,6 @@
             "security_key_title": "Öryggislykill"
         },
         "bootstrap_title": "Set upp dulritunarlykla",
-        "cancel_entering_passphrase_description": "Viltu örugglega hætta við að setja inn lykilfrasa?",
-        "cancel_entering_passphrase_title": "Hætta við að setja inn lykilfrasa?",
         "confirm_encryption_setup_body": "Smelltu á hnappinn hér að neðan til að staðfesta uppsetningu á dulritun.",
         "confirm_encryption_setup_title": "Staðfestu uppsetningu dulritunar",
         "cross_signing_room_normal": "Þessi spjallrás er enda-í-enda dulrituð",
@@ -2185,6 +2183,7 @@
         "upgraderoom": "Uppfærir spjallrás í nýja útgáfu",
         "upgraderoom_permission_error": "Þú hefur ekki nauðsynlegar heimildir til að nota þessa skipun.",
         "usage": "Notkun",
+        "verify": "Sannreynir auðkenni notanda, setu og dreifilykils",
         "whois": "Birtir upplýsingar um notanda"
     },
     "space": {

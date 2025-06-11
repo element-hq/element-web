@@ -801,8 +801,6 @@
             "security_key_title": "Chiave di sicurezza"
         },
         "bootstrap_title": "Configurazione chiavi",
-        "cancel_entering_passphrase_description": "Sei sicuro di volere annullare l'inserimento della frase?",
-        "cancel_entering_passphrase_title": "Annullare l'inserimento della password?",
         "confirm_encryption_setup_body": "Clicca il pulsante sotto per confermare l'impostazione della crittografia.",
         "confirm_encryption_setup_title": "Conferma impostazione crittografia",
         "cross_signing_room_normal": "Questa stanza è cifrata end-to-end",
@@ -2712,6 +2710,7 @@
         "upgraderoom": "Aggiorna una stanza ad una nuova versione",
         "upgraderoom_permission_error": "Non hai l'autorizzazione necessaria per usare questo comando.",
         "usage": "Utilizzo",
+        "verify": "Verifica un utente, una sessione e una tupla pubblica",
         "view": "Visualizza la stanza con l'indirizzo dato",
         "whois": "Mostra le informazioni di un utente"
     },

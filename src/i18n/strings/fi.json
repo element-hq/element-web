@@ -796,8 +796,6 @@
             "security_key_title": "Palautusavain"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
-        "cancel_entering_passphrase_description": "Haluatko varmasti peruuttaa salasanan syöttämisen?",
-        "cancel_entering_passphrase_title": "Peruuta salasanan syöttäminen?",
         "confirm_encryption_setup_body": "Napsauta alla olevaa painiketta vahvistaaksesi salauksen asettamisen.",
         "confirm_encryption_setup_title": "Vahvista salauksen asetukset",
         "cross_signing_room_normal": "Tämä huone käyttää päästä päähän -salausta",
@@ -2697,6 +2695,7 @@
         "upgraderoom": "Päivittää huoneen uuteen versioon",
         "upgraderoom_permission_error": "Sinulla ei ole vaadittavia oikeuksia tämän komennon käyttämiseksi.",
         "usage": "Käyttö",
+        "verify": "Varmentaa käyttäjän, istunnon ja julkiset avaimet",
         "whois": "Näyttää tietoa käyttäjästä"
     },
     "space": {

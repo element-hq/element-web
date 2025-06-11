@@ -674,7 +674,19 @@ export const Commands = [
                 if (matches) {
                     const deviceId = matches[1];
                     const fingerprint = matches[2];
-                    return success(manuallyVerifyDevice(cli, deviceId, fingerprint));
+
+                    const { finished } = Modal.createDialog(QuestionDialog, {
+                        title: _t("slash_command|manual_device_verification_confirm_title"),
+                        description: _t("slash_command|manual_device_verification_confirm_description"),
+                        button: _t("action|verify"),
+                        danger: true,
+                    });
+
+                    return success(
+                        finished.then(([confirmed]) => {
+                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                        }),
+                    );
                 }
             }
             return reject(this.getUsage());

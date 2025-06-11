@@ -786,6 +786,7 @@
             "cross_signing_status": "Risttunnustamise olek:",
             "cross_signing_untrusted": "Sinu kasutajakonto risttunnustamise identiteet on krüptitud andmehoidlas olemas, aga see sessioon teda veel ei usalda.",
             "crypto_not_available": "Krüptomoodul pole saadaval",
+            "device_id": "Seadme tunnus",
             "key_backup_active_version": "Varukoopia aktiivne versioon:",
             "key_backup_active_version_none": "Puudub",
             "key_backup_inactive_warning": "See sessioon ei varunda sinu krüptovõtmeid.",
@@ -798,6 +799,8 @@
             "secret_storage_ready": "on valmis",
             "secret_storage_status": "Krüptitud andmeruum:",
             "self_signing_private_key_cached_status": "Privaatvõti allkirjastamiseks sinu nimel:",
+            "session": "Sessioon",
+            "session_fingerprint": "Sõrmejälg (sessiooni võti)",
             "title": "Läbiv krüptimine",
             "user_signing_private_key_cached_status": "Kasutaja privaatvõti allkirjastamiseks:"
         },
@@ -823,6 +826,7 @@
         "low_bandwidth_mode": "Vähese ribalaiusega režiim",
         "low_bandwidth_mode_description": "Eeldab, et koduserver toetab sellist funktsionaalsust.",
         "main_timeline": "Peamine ajajoon",
+        "manual_device_verification": "Seadme käsitsi verifitseerimine",
         "no_receipt_found": "Lugemisteatist ei leidu",
         "notification_state": "Teavituste olek: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Teavituste silumine",
@@ -920,8 +924,6 @@
             "security_key_title": "Taastevõti"
         },
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
-        "cancel_entering_passphrase_description": "Kas oled kindel et sa soovid katkestada paroolifraasi sisestamise?",
-        "cancel_entering_passphrase_title": "Kas katkestame paroolifraasi sisestamise?",
         "confirm_encryption_setup_body": "Kinnitamaks, et soovid krüptimist seadistada, klõpsi järgnevat nuppu.",
         "confirm_encryption_setup_title": "Krüptimise seadistuse kinnitamine",
         "cross_signing_room_normal": "See jututuba on läbivalt krüptitud",
@@ -1009,6 +1011,21 @@
             "incoming_sas_dialog_waiting": "Ootan teise osapoole kinnitust…",
             "incoming_sas_user_dialog_text_1": "Selle kasutaja usaldamiseks peaksid ta verifitseerima. Kui sa pruugid läbivalt krüptitud sõnumeid, siis kasutajate verifitseerimine tagab sulle täiendava meelerahu.",
             "incoming_sas_user_dialog_text_2": "Selle kasutaja verifitseerimisel märgitakse tema sessioon usaldusväärseks ning samuti märgitakse sinu sessioon tema jaoks usaldusväärseks.",
+            "manual": {
+                "already_verified": "See seade on juba verifitseeritud",
+                "already_verified_and_wrong_fingerprint": "Viidatud sõrmejälg ei klapi, aga see seade on juba verifitseeritud!",
+                "device_id": "Seadme tunnus",
+                "failure_description": "„%(deviceId)s“ seadme verifitseerimine ei õnnestunud: %(error)s",
+                "failure_title": "Verifitseerimine ei õnnestunud",
+                "fingerprint": "Sõrmejälg (sessiooni võti)",
+                "no_crypto": "Seadme verifitseerimine ei õnnestunud - krüptoteenused pole kasutusel",
+                "no_device": "Seadme verifitseerimine ei õnnestunud - seadet tunnusega „%(deviceId)s“ polnud võimalik leida",
+                "no_userid": "Seadme verifitseerimine ei õnnestunud - meie kasutajatunnust ei õnnestu leida",
+                "success_description": "See seade (%(deviceId)s) on nüüd risttunnustatud",
+                "success_title": "Verifitseerimine õnnestus",
+                "text": "Verifitseerimiseks sisesta ühe oma seadme tunnus ja sõrmejälg. Palun arvesta, et see võimaldab muul seadmel saata ja vastu võtta sõnumeid esinedes sinuna. KUI KEEGI PALUS SUL SIIA MIDAGI KOPEERIDA, SIIS ON SEE KAHTLANE JA ILMSELT PROOVITAKSE SIND PETTA!",
+                "wrong_fingerprint": "„%(deviceId)s“ seadme verifitseerimine ei õnnestunud - lisatud sõrmejälg „%(fingerprint)s“ ja seadme sõrmejälg „%(fprint)s“ pole samad"
+            },
             "no_key_or_device": "Tundub, et sul ei ole ei taastevõtit ega muid seadmeid, mida saaksid verifitseerimiseks kasutada. Siin seadmes ei saa lugeda vanu krüptitud sõnumeid. Enda tuvastamiseks selles seadmes pead oma vanad verifitseerimisvõtmed kustutama.",
             "no_support_qr_emoji": "See seade, mida sa tahad verifitseerida ei toeta QR-koodi ega emoji-põhist verifitseerimist, aga just neid %(brand)s oskab kasutada. Proovi mõne muu Matrix'i kliendiga.",
             "other_party_cancelled": "Teine osapool tühistas verifitseerimise.",
@@ -2049,6 +2066,7 @@
         "read_topic": "Teema lugemiseks klõpsi",
         "rejecting": "Hülgan kutset…",
         "rejoin_button": "Liitu uuesti",
+        "room_is_low_priority": "See on vähetähtis jututuba",
         "search": {
             "all_rooms_button": "Otsi kõikidest jututubadest",
             "placeholder": "Otsi sõnumeid…",
@@ -2687,6 +2705,9 @@
         "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
         "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
+        "invite_controls": {
+            "default_label": "Luba kasutajatel sind kutsida jututubadesse"
+        },
         "jump_to_bottom_on_send": "Sõnumi saatmiseks hüppa ajajoone lõppu",
         "key_backup": {
             "backup_in_progress": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
@@ -2753,6 +2774,7 @@
             "show_in_private": "Privaatsetes jututubades",
             "show_media": "Alati"
         },
+        "not_supported": "See funktsionaalsus pole sinu serveris kasutusel.",
         "notifications": {
             "default_setting_description": "See seadistus kehtib vaikimisi kõikides sinu jututubades.",
             "default_setting_section": "Soovin teavitusi (vaikimisi seadistused)",
@@ -2810,6 +2832,7 @@
             "voip": "Kõned ja videokõned"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Blokeeri akna sisu salvestamine teiste rakenduste poolt",
             "Electron.enableHardwareAcceleration": "Kasuta riistvaralist kiirendust (jõustamiseks käivita %(appName)s uuesti)",
             "always_show_menu_bar": "Näita aknas alati menüüriba",
             "autocomplete_delay": "Viivitus automaatsel sõnalõpetusel (ms)",
@@ -2982,6 +3005,7 @@
         "show_chat_effects": "Näita vestluses edevat graafikat (näiteks kui keegi on saatnud serpentiine)",
         "show_displayname_changes": "Näita kuvatava nime muutusi",
         "show_join_leave": "Näita jututubade liitumise ja lahkumise teateid (ei käi kutsete, müksamiste ja keelamiste kohta)",
+        "show_message_previews": "Näita sõnumite eelvaateid",
         "show_nsfw_content": "Näita töökeskkonnas mittesobilikku sisu",
         "show_read_receipts": "Näita teiste kasutajate lugemisteatiseid",
         "show_redaction_placeholder": "Näita kustutatud sõnumite asemel kohatäidet",
@@ -3088,6 +3112,8 @@
         "jumptodate": "Vaata ajajoont alates sellest kuupäevast",
         "jumptodate_invalid_input": "Me ei suutnud sellist kuupäeva mõista (%(inputDate)s). Pigem kasuta aaaa-kk-pp vormingut.",
         "lenny": "Lisa ( ͡° ͜ʖ ͡°) smaili vormindamata sõnumi algusesse",
+        "manual_device_verification_confirm_description": "See võimaldab muul seadmel saata ja vastu võtta sõnumeid esinedes sinuna. KUI KEEGI PALUS SUL SIIA MIDAGI KOPEERIDA, SIIS ON SEE KAHTLANE JA ILMSELT PROOVITAKSE SIND PETTA. Kas sa oled kindel, et soovid seda teist seadet verifitseerida?",
+        "manual_device_verification_confirm_title": "Hoiatus: seadme käsitsi verifitseerimine",
         "me": "Näitab tegevusi",
         "msg": "Saadab sõnumi näidatud kasutajale",
         "myavatar": "Sellega muudad sinu tunnuspilti kõikides jututubades",
@@ -3128,6 +3154,7 @@
         "upgraderoom": "Uuendab jututoa uue versioonini",
         "upgraderoom_permission_error": "Sul ei ole piisavalt õigusi selle käsu käivitamiseks.",
         "usage": "Kasutus",
+        "verify": "Verifitseeri üks oma seadmetest käsitsi",
         "view": "Vaata sellise aadressiga jututuba",
         "whois": "Näitab teavet kasutaja kohta"
     },

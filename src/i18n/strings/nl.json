@@ -699,8 +699,6 @@
             "security_key_title": "Veiligheidssleutel"
         },
         "bootstrap_title": "Sleutelconfiguratie",
-        "cancel_entering_passphrase_description": "Weet je zeker, dat je het invoeren van je wachtwoord wilt afbreken?",
-        "cancel_entering_passphrase_title": "Wachtwoord annuleren?",
         "confirm_encryption_setup_body": "Klik op de knop hieronder om het instellen van de versleuting te bevestigen.",
         "confirm_encryption_setup_title": "Bevestig versleuting instelling",
         "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld",
@@ -2301,6 +2299,7 @@
         "upgraderoom": "Upgrade deze kamer naar een nieuwere versie",
         "upgraderoom_permission_error": "Je beschikt niet over de vereiste machtigingen om deze opdracht uit te voeren.",
         "usage": "Gebruik",
+        "verify": "Verifieert de combinatie van persoon, sessie en publieke sleutel",
         "whois": "Geeft informatie weer over een persoon"
     },
     "space": {

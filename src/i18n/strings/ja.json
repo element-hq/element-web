@@ -760,8 +760,6 @@
             "security_key_title": "セキュリティーキー"
         },
         "bootstrap_title": "鍵のセットアップ",
-        "cancel_entering_passphrase_description": "パスフレーズの入力をキャンセルしてよろしいですか？",
-        "cancel_entering_passphrase_title": "パスフレーズの入力をキャンセルしますか？",
         "confirm_encryption_setup_body": "以下のボタンをクリックして、暗号化の設定を承認してください。",
         "confirm_encryption_setup_title": "暗号化の設定を承認してください",
         "cross_signing_room_normal": "このルームはエンドツーエンドで暗号化されています",
@@ -2462,6 +2460,7 @@
         "upgraderoom": "ルームを新しいバージョンにアップグレード",
         "upgraderoom_permission_error": "このコマンドを実行するのに必要な権限がありません。",
         "usage": "用法",
+        "verify": "ユーザー、セッション、およびpubkeyタプルを認証",
         "whois": "ユーザーの情報を表示"
     },
     "space": {
