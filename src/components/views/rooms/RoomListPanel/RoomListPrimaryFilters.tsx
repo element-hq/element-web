@@ -31,7 +31,25 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
     const filters = useVisibleFilters(vm.primaryFilters, wrappingIndex);
 
     return (
-        <Flex className="mx_RoomListPrimaryFilters" data-testid="primary-filters" gap="var(--cpd-space-3x)">
+        <Flex
+            className="mx_RoomListPrimaryFilters"
+            data-testid="primary-filters"
+            gap="var(--cpd-space-3x)"
+            direction="row-reverse"
+        >
+            {displayChevron && (
+                <IconButton
+                    subtleBackground={true}
+                    aria-expanded={isExpanded}
+                    aria-controls={id}
+                    className="mx_RoomListPrimaryFilters_IconButton"
+                    aria-label={isExpanded ? _t("room_list|collapse_filters") : _t("room_list|expand_filters")}
+                    size="28px"
+                    onClick={() => setIsExpanded((_expanded) => !_expanded)}
+                >
+                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                </IconButton>
+            )}
             <Flex
                 id={id}
                 as="ul"
@@ -50,19 +68,6 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                     </li>
                 ))}
             </Flex>
-            {displayChevron && (
-                <IconButton
-                    subtleBackground={true}
-                    aria-expanded={isExpanded}
-                    aria-controls={id}
-                    className="mx_RoomListPrimaryFilters_IconButton"
-                    aria-label={isExpanded ? _t("room_list|collapse_filters") : _t("room_list|expand_filters")}
-                    size="28px"
-                    onClick={() => setIsExpanded((_expanded) => !_expanded)}
-                >
-                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
-                </IconButton>
-            )}
         </Flex>
     );
 }
