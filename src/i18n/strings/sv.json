@@ -916,8 +916,6 @@
             "security_key_title": "Säkerhetsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
-        "cancel_entering_passphrase_description": "Är du säker på att du vill avbryta inmatning av lösenfrasen?",
-        "cancel_entering_passphrase_title": "Avbryta inmatning av lösenfras?",
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
         "confirm_encryption_setup_title": "Bekräfta krypteringsinställning",
         "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
@@ -3100,6 +3098,7 @@
         "upgraderoom": "Uppgraderar ett rum till en ny version",
         "upgraderoom_permission_error": "Du har inte de behörigheter som krävs för att använda det här kommandot.",
         "usage": "Användande",
+        "verify": "Verifierar en användar-, sessions- och pubkey-tupel",
         "view": "Visar rum med den angivna adressen",
         "whois": "Visar information om en användare"
     },
