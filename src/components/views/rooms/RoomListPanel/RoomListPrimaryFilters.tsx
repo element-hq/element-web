@@ -39,7 +39,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
         >
             {displayChevron && (
                 <IconButton
-                    subtleBackground={true}
+                    kind="secondary"
                     aria-expanded={isExpanded}
                     aria-controls={id}
                     className="mx_RoomListPrimaryFilters_IconButton"
@@ -47,7 +47,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                     size="28px"
                     onClick={() => setIsExpanded((_expanded) => !_expanded)}
                 >
-                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                    <ChevronDownIcon />
                 </IconButton>
             )}
             <Flex
