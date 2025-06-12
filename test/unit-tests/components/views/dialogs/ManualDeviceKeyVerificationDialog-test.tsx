@@ -13,17 +13,12 @@ import { DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { stubClient } from "../../../../test-utils";
 import { ManualDeviceKeyVerificationDialog } from "../../../../../src/components/views/dialogs/ManualDeviceKeyVerificationDialog";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 describe("ManualDeviceKeyVerificationDialog", () => {
     let mockClient: MatrixClient;
 
     function renderDialog(onFinished: (confirm: boolean) => void) {
-        return render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ManualDeviceKeyVerificationDialog onFinished={onFinished} />
-            </MatrixClientContext.Provider>,
-        );
+        return render(<ManualDeviceKeyVerificationDialog onFinished={onFinished} />);
     }
 
     beforeEach(() => {

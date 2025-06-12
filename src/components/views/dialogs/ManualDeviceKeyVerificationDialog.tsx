@@ -20,7 +20,7 @@ import Modal from "../../../Modal";
 import InfoDialog from "./InfoDialog";
 import Field from "../elements/Field";
 import ErrorDialog from "./ErrorDialog";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface Props {
     onFinished(confirm?: boolean): void;
@@ -37,7 +37,7 @@ export function ManualDeviceKeyVerificationDialog({ onFinished }: Readonly<Props
     const [deviceId, setDeviceId] = useState("");
     const [fingerprint, setFingerprint] = useState("");
 
-    const client = useMatrixClientContext();
+    const client = MatrixClientPeg.safeGet();
 
     const onDialogFinished = useCallback(
         async (confirm: boolean) => {
