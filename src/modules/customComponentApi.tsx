@@ -33,7 +33,11 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     ): void {
         this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
     }
-
+    /**
+     * Select the correct renderer based on the event information.
+     * @param mxEvent The message event being rendered.
+     * @returns The registered renderer.
+     */
     private selectRenderer(mxEvent: MatrixEvent): EventRenderer | undefined {
         return this.registeredMessageRenderers.find((rdr) => {
             if (typeof rdr.eventTypeOrFilter === "string") {
@@ -72,9 +76,8 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     /**
-     * Get hints about a message before rendering it.
-     * @param props Props to be passed to the custom renderer.
-     * @param originalComponent Function that will be rendered if no custom renderers are present, or as a child of a custom component.
+     * Get hints about an message before rendering it.
+     * @param mxEvent The message event being rendered.
      * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
      */
     public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints {
