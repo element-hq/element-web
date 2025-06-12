@@ -66,9 +66,17 @@ describe("RoomListViewModel", () => {
             mockAndCreateRooms();
             const { result: vm } = renderHook(() => useRoomListViewModel());
             // should have 6 filters
-            expect(vm.current.primaryFilters).toHaveLength(6);
+            expect(vm.current.primaryFilters).toHaveLength(7);
             // check the order
-            for (const [i, name] of ["Unreads", "People", "Rooms", "Mentions", "Invites", "Favourites"].entries()) {
+            for (const [i, name] of [
+                "Unreads",
+                "People",
+                "Rooms",
+                "Mentions",
+                "Invites",
+                "Favourites",
+                "Low priority",
+            ].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
                 expect(vm.current.primaryFilters[i].active).toEqual(false);
             }

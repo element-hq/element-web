@@ -917,8 +917,6 @@
             "security_key_title": "Kunci pemulihan"
         },
         "bootstrap_title": "Menyiapkan kunci",
-        "cancel_entering_passphrase_description": "Apakah Anda yakin untuk membatalkan pemasukkan frasa sandi?",
-        "cancel_entering_passphrase_title": "Batalkan memasukkan frasa sandi?",
         "confirm_encryption_setup_body": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
         "confirm_encryption_setup_title": "Konfirmasi pengaturan enkripsi",
         "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung",
@@ -2086,7 +2084,6 @@
     "room_list": {
         "add_room_label": "Tambahkan ruangan",
         "add_space_label": "Tambahkan space",
-        "appearance": "Penampilan",
         "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
         "breadcrumbs_label": "Ruangan yang baru saja dilihat",
         "empty": {
@@ -2144,7 +2141,6 @@
         },
         "room_options": "Opsi Ruangan",
         "show_less": "Tampilkan lebih sedikit",
-        "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {
             "one": "Tampilkan %(count)s lagi",
             "other": "Tampilkan %(count)s lagi"
@@ -3120,6 +3116,7 @@
         "upgraderoom": "Meningkatkan ruangan ke versi yang baru",
         "upgraderoom_permission_error": "Anda tidak memiliki izin yang dibutuhkan untuk menggunakan perintah ini.",
         "usage": "Penggunaan",
+        "verify": "Memverifikasi sebuah pengguna, sesi, dan tupel pubkey",
         "view": "Menampilkan ruangan dengan alamat yang ditentukan",
         "whois": "Menampilkan informasi tentang sebuah pengguna"
     },

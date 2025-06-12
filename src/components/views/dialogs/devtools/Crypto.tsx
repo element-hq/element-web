@@ -12,6 +12,8 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import BaseTool from "./BaseTool";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { _t } from "../../../../languageHandler";
+import Modal from "../../../../Modal";
+import { ManualDeviceKeyVerificationDialog } from "../ManualDeviceKeyVerificationDialog";
 
 interface KeyBackupProps {
     /**
@@ -31,6 +33,16 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                 <>
                     <KeyStorage />
                     <CrossSigning />
+                    <Session />
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            Modal.createDialog(ManualDeviceKeyVerificationDialog);
+                        }}
+                    >
+                        {_t("devtools|manual_device_verification")}
+                    </button>
                 </>
             ) : (
                 <span>{_t("devtools|crypto|crypto_not_available")}</span>
@@ -253,4 +265,40 @@ function getCrossSigningStatus(crossSigningReady: boolean, crossSigningPrivateKe
     }
 
     return _t("devtools|crypto|cross_signing_not_ready");
+}
+
+/**
+ * A component that displays information about the current session.
+ */
+function Session(): JSX.Element {
+    const matrixClient = useMatrixClientContext();
+    const sessionData = useAsyncMemo(async () => {
+        const crypto = matrixClient.getCrypto()!;
+        const keys = await crypto.getOwnDeviceKeys();
+        return {
+            fingerprint: keys.ed25519,
+            deviceId: matrixClient.deviceId,
+        };
+    }, [matrixClient]);
+
+    // Show a spinner while loading
+    if (sessionData === undefined) {
+        return <InlineSpinner aria-label={_t("common|loading")} />;
+    }
+
+    return (
+        <table aria-label={_t("devtools|crypto|session")}>
+            <thead>{_t("devtools|crypto|session")}</thead>
+            <tbody>
+                <tr>
+                    <th scope="row">{_t("devtools|crypto|device_id")}</th>
+                    <td>{sessionData.deviceId}</td>
+                </tr>
+                <tr>
+                    <th scope="row">{_t("devtools|crypto|session_fingerprint")}</th>
+                    <td>{sessionData.fingerprint}</td>
+                </tr>
+            </tbody>
+        </table>
+    );
 }

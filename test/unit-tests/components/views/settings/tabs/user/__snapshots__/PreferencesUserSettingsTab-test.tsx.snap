@@ -1297,6 +1297,36 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
               </form>
+              <form
+                class="_root_19upo_16 mx_MediaPreviewAccountSetting_Form"
+              >
+                <div
+                  class="mx_SettingsFlag mx_MediaPreviewAccountSetting_ToggleSwitch"
+                >
+                  <span
+                    class="mx_SettingsFlag_label"
+                  >
+                    <div
+                      id="mx_LabelledToggleSwitch_«re»"
+                    >
+                      Allow users to invite you to rooms
+                    </div>
+                  </span>
+                  <div
+                    aria-checked="true"
+                    aria-disabled="true"
+                    aria-label="Your server does not implement this feature."
+                    aria-labelledby="mx_LabelledToggleSwitch_«re»"
+                    class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                    role="switch"
+                    tabindex="0"
+                  >
+                    <div
+                      class="mx_ToggleSwitch_ball"
+                    />
+                  </div>
+                </div>
+              </form>
             </div>
             <div
               class="_separator_7ckbw_8"

@@ -665,8 +665,6 @@
             "security_key_title": "უსაფრთხოების გასაღები"
         },
         "bootstrap_title": "გასაღებების დაყენება",
-        "cancel_entering_passphrase_description": "დარწმუნებული ხართ, რომ გსურთ გააუქმოთ პაროლის შეყვანა?",
-        "cancel_entering_passphrase_title": "გააუქმოს პაროლის შეყვანა?",
         "confirm_encryption_setup_body": "დააწკაპუნეთ ქვემოთ მოცემულ ღილაკზე დაშიფვრის დაყენების დასადასტურებლად.",
         "confirm_encryption_setup_title": "დაადასტურეთ დაშიფვრის დაყენება",
         "cross_signing_room_normal": "",

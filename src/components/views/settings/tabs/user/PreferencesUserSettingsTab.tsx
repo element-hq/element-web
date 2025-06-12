@@ -33,6 +33,7 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
+import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -242,11 +243,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     public render(): React.ReactNode {
-        const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS;
-
         const browserTimezoneLabel: string = _t("settings|preferences|default_timezone", {
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
+
+        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
 
         // Always Preprend the default option
         const timezones = this.state.timezones.map((tz) => {
@@ -263,11 +264,13 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SpellCheckSection />
                     </SettingsSubsection>
 
-                    {roomListSettings.length > 0 && (
-                        <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
-                            {this.renderGroup(roomListSettings)}
-                        </SettingsSubsection>
-                    )}
+                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                        {/* The settings is on device level where the other room list settings are on account level  */}
+                        {newRoomListEnabled && (
+                            <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                        )}
+                    </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
@@ -337,6 +340,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
+                        <InviteRulesAccountSetting />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
@@ -354,6 +358,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
                                 appName: SdkConfig.get().brand,
                             })}
+                        />
+                        <SettingsFlag
+                            name="Electron.enableContentProtection"
+                            level={SettingLevel.PLATFORM}
+                            hideIfCannotSet
+                            label={_t("settings|preferences|Electron.enableContentProtection")}
                         />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />

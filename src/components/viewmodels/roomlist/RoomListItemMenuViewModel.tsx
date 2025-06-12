@@ -38,6 +38,10 @@ export interface RoomListItemMenuViewState {
      */
     isFavourite: boolean;
     /**
+     * Whether the room is a low priority room.
+     */
+    isLowPriority: boolean;
+    /**
      * Can invite other user's in the room.
      */
     canInvite: boolean;
@@ -117,6 +121,7 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
 
     const isDm = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
     const isFavourite = Boolean(roomTags[DefaultTagID.Favourite]);
+    const isLowPriority = Boolean(roomTags[DefaultTagID.LowPriority]);
     const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
 
     const showMoreOptionsMenu = hasAccessToOptionsMenu(room);
@@ -200,6 +205,7 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
         showMoreOptionsMenu,
         showNotificationMenu,
         isFavourite,
+        isLowPriority,
         canInvite,
         canCopyRoomLink,
         canMarkAsRead,

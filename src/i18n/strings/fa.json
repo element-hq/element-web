@@ -564,8 +564,6 @@
             "security_key_title": "کلید امنیتی"
         },
         "bootstrap_title": "تنظیم کلیدها",
-        "cancel_entering_passphrase_description": "آیا مطمئن هستید که می خواهید وارد کردن عبارت امنیتی را لغو کنید؟",
-        "cancel_entering_passphrase_title": "وارد کردن عبارت امنیتی لغو شود؟",
         "confirm_encryption_setup_body": "برای تأیید و فعال‌سازی رمزگذاری ، روی دکمه زیر کلیک کنید.",
         "confirm_encryption_setup_title": "راه‌اندازی رمزگذاری را تأیید کنید",
         "cross_signing_room_normal": "این اتاق به صورت سرتاسر رمزشده است",
@@ -1716,6 +1714,7 @@
         "upgraderoom": "یک اتاق را به نسخه جدید ارتقا دهید",
         "upgraderoom_permission_error": "شما مجوزهای لازم را برای استفاده از این دستور ندارید.",
         "usage": "استفاده",
+        "verify": "یک کاربر، نشست و عبارت کلید عمومی را تائید می‌کند",
         "whois": "اطلاعات مربوط به کاربر را نمایش می دهد"
     },
     "space": {

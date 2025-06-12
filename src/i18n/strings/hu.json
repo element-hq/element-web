@@ -909,14 +909,13 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "wrong_security_key": "Hibás helyreállítási kulcs"
+                "wrong_security_key": "A megadott helyreállítási kulcs helytelen."
             },
+            "privacy_warning": "Győződjön meg arról, hogy senki sem látja ezt a képernyőt!",
             "restoring": "Kulcsok helyreállítása mentésből",
             "security_key_title": "Helyreállítási kulcs"
         },
         "bootstrap_title": "Kulcsok beállítása",
-        "cancel_entering_passphrase_description": "Biztos, hogy megszakítja a jelmondat bevitelét?",
-        "cancel_entering_passphrase_title": "Megszakítja a jelmondat bevitelét?",
         "confirm_encryption_setup_body": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
         "confirm_encryption_setup_title": "Erősítse meg a titkosítási beállításokat",
         "cross_signing_room_normal": "Ez a szoba végpontok közti titkosítást használ",
@@ -2076,7 +2075,6 @@
     "room_list": {
         "add_room_label": "Szoba hozzáadása",
         "add_space_label": "Tér hozzáadása",
-        "appearance": "Megjelenés",
         "breadcrumbs_empty": "Nincsenek nemrégiben meglátogatott szobák",
         "breadcrumbs_label": "Nemrég meglátogatott szobák",
         "empty": {
@@ -2132,7 +2130,6 @@
         },
         "room_options": "Szobabeállítások",
         "show_less": "Kevesebb megjelenítése",
-        "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
         },
@@ -3102,6 +3099,7 @@
         "upgraderoom": "Új verzióra fejleszti a szobát",
         "upgraderoom_permission_error": "A parancs használatához nincs meg a megfelelő jogosultsága.",
         "usage": "Használat",
+        "verify": "Felhasználó, munkamenet és nyilvános kulcs hármas ellenőrzése",
         "view": "Megadott címmel rendelkező szobák megjelenítése",
         "whois": "Információt jelenít meg a felhasználóról"
     },
@@ -3223,8 +3221,8 @@
         "start_group_chat_button": "Csoportos csevegés indítása"
     },
     "stickers": {
-        "empty": "Nincs engedélyezett matrica csomagod",
-        "empty_add_prompt": "Adj hozzá párat"
+        "empty": "Jelenleg nincsenek engedélyezve matricacsomagok",
+        "empty_add_prompt": "Adjon hozzá néhányat"
     },
     "terms": {
         "column_document": "Dokumentum",

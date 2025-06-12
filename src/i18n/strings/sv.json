@@ -916,8 +916,6 @@
             "security_key_title": "Säkerhetsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
-        "cancel_entering_passphrase_description": "Är du säker på att du vill avbryta inmatning av lösenfrasen?",
-        "cancel_entering_passphrase_title": "Avbryta inmatning av lösenfras?",
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
         "confirm_encryption_setup_title": "Bekräfta krypteringsinställning",
         "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
@@ -2087,7 +2085,6 @@
     "room_list": {
         "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
         "empty": {
@@ -2140,7 +2137,6 @@
         },
         "room_options": "Rumsalternativ",
         "show_less": "Visa mindre",
-        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
@@ -3102,6 +3098,7 @@
         "upgraderoom": "Uppgraderar ett rum till en ny version",
         "upgraderoom_permission_error": "Du har inte de behörigheter som krävs för att använda det här kommandot.",
         "usage": "Användande",
+        "verify": "Verifierar en användar-, sessions- och pubkey-tupel",
         "view": "Visar rum med den angivna adressen",
         "whois": "Visar information om en användare"
     },
@@ -3778,10 +3775,10 @@
         "unavailable": "Otillgänglig"
     },
     "update_room_access_modal": {
-        "description": "För att skapa en delningslänk måste du tillåta gäster att gå med i det här rummet. Detta kan göra rummet mindre säkert. När du är klar med samtalet kan du göra rummet privat igen.",
-        "dont_change_description": "Alternativt kan du hålla samtalet i ett separat rum.",
+        "description": "För att skapa en delningslänk, gör det här rummet <b>offentligt</b> eller aktivera alternativet för användare att <b>be om att få gå med</b>. Detta gör att gäster kan gå med utan att bli inbjudna.",
+        "dont_change_description": "Om du inte vill ändra åtkomst till det här rummet kan du skapa ett nytt rum för samtalslänken.",
         "no_change": "Jag vill inte ändra åtkomstnivån.",
-        "title": "Ändra åtkomstnivå för rummet"
+        "title": "Tillåt gästanvändare att gå med i det här rummet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunde inte laddas upp.",
     "upload_failed_size": "Filen '%(fileName)s' överstiger denna hemserverns storleksgräns för uppladdningar",
