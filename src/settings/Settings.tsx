@@ -47,6 +47,8 @@ import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
+import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
+import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -349,7 +351,9 @@ export interface Settings {
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
+    "Electron.enableContentProtection": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
+    "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
@@ -432,6 +436,11 @@ export const SETTINGS: Settings = {
         controller: new MediaPreviewConfigController(),
         supportedLevels: LEVELS_ROOM_SETTINGS,
         default: MediaPreviewConfigController.default,
+    },
+    "inviteRules": {
+        controller: new InviteRulesConfigController(),
+        supportedLevels: [SettingLevel.ACCOUNT],
+        default: InviteRulesConfigController.default,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -894,7 +903,7 @@ export const SETTINGS: Settings = {
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|voip|mirror_local_feed"),
-        default: false,
+        default: true,
     },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1136,6 +1145,7 @@ export const SETTINGS: Settings = {
     "RoomList.showMessagePreview": {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
+        displayName: _td("settings|show_message_previews"),
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -1381,6 +1391,11 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
+    },
+    "Electron.enableContentProtection": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("settings|preferences|enable_hardware_acceleration"),
+        default: false,
     },
     "Developer.elementCallUrl": {
         supportedLevels: [SettingLevel.DEVICE],

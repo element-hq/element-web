@@ -50,6 +50,7 @@ const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
     [FilterKey.MentionsFilter, _td("room_list|filters|mentions")],
     [FilterKey.InvitesFilter, _td("room_list|filters|invites")],
     [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
+    [FilterKey.LowPriorityFilter, _td("room_list|filters|low_priority")],
 ]);
 
 /**

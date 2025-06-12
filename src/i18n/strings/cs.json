@@ -922,8 +922,6 @@
             "security_key_title": "Klíč pro obnovení"
         },
         "bootstrap_title": "Příprava klíčů",
-        "cancel_entering_passphrase_description": "Chcete určitě zrušit zadávání přístupové fráze?",
-        "cancel_entering_passphrase_title": "Zrušit zadávání přístupové fráze?",
         "confirm_encryption_setup_body": "Kliknutím na tlačítko níže potvrďte nastavení šifrování.",
         "confirm_encryption_setup_title": "Potvrďte nastavení šifrování",
         "cross_signing_room_normal": "Místnost je koncově šifrovaná",
@@ -2100,7 +2098,6 @@
     "room_list": {
         "add_room_label": "Přidat místnost",
         "add_space_label": "Přidat prostor",
-        "appearance": "Vzhled",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
         "empty": {
@@ -2158,7 +2155,6 @@
         },
         "room_options": "Možnosti místnosti",
         "show_less": "Zobrazit méně",
-        "show_message_previews": "Zobrazit náhledy zpráv",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
             "one": "Zobrazit %(count)s další"
@@ -3135,6 +3131,7 @@
         "upgraderoom": "Aktualizuje místnost na novou verzi",
         "upgraderoom_permission_error": "Na provedení tohoto příkazu nemáte dostatečná oprávnění.",
         "usage": "Použití",
+        "verify": "Ověří uživatele, relaci a veřejné klíče",
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },

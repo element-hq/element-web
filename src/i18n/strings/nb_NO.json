@@ -786,6 +786,7 @@
             "cross_signing_status": "Status for krysssignering:",
             "cross_signing_untrusted": "Kontoen din har en krysssigneringsidentitet i hemmelig lagring, men den er ennå ikke klarert av denne sesjonen.",
             "crypto_not_available": "Kryptografisk modul er ikke tilgjengelig",
+            "device_id": "Enhets-ID",
             "key_backup_active_version": "Aktiv sikkerhetskopiversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Nøklene dine blir ikke sikkerhetskopiert fra denne sesjonen.",
@@ -798,6 +799,8 @@
             "secret_storage_ready": "klar",
             "secret_storage_status": "Hemmelig lagringsplass:",
             "self_signing_private_key_cached_status": "Selvsignert privat nøkkel:",
+            "session": "Sesjon",
+            "session_fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
             "title": "Ende-til-ende-kryptering",
             "user_signing_private_key_cached_status": "Brukersignert privat nøkkel:"
         },
@@ -823,6 +826,7 @@
         "low_bandwidth_mode": "Lav båndbreddemodus",
         "low_bandwidth_mode_description": "Krever kompatibel hjemmeserver.",
         "main_timeline": "Hovedtidslinje",
+        "manual_device_verification": "Manuell enhetsverifisering",
         "no_receipt_found": "Ingen kvittering funnet",
         "notification_state": "Varslingsstatus er <strong>%(notificationState)s</strong>",
         "notifications_debug": "Feilsøking av varsler",
@@ -920,8 +924,6 @@
             "security_key_title": "Gjenopprettingsnøkkel"
         },
         "bootstrap_title": "Setter opp nøkler",
-        "cancel_entering_passphrase_description": "Er du sikker på at du vil avbryte inntasting av passordfrase?",
-        "cancel_entering_passphrase_title": "Avbryte inntastingen av passordfrase?",
         "confirm_encryption_setup_body": "Klikk på knappen nedenfor for å bekrefte konfigureringen av kryptering.",
         "confirm_encryption_setup_title": "Bekreft krypteringsoppsett",
         "cross_signing_room_normal": "Dette rommet er ende-til-ende-kryptert",
@@ -1009,6 +1011,17 @@
             "incoming_sas_dialog_waiting": "Venter på at partneren skal bekrefte...",
             "incoming_sas_user_dialog_text_1": "Bekreft denne brukeren for å markere dem som klarerte. Tillit til brukere gir deg ekstra trygghet når du bruker ende-til-ende-krypterte meldinger.",
             "incoming_sas_user_dialog_text_2": "Bekreftelse av denne brukeren vil markere økten som klarert, og også merke økten din som klarert for dem.",
+            "manual": {
+                "already_verified": "Denne enheten er allerede verifisert",
+                "already_verified_and_wrong_fingerprint": "Det medfølgende fingeravtrykket stemmer ikke overens, men enheten er allerede verifisert!",
+                "device_id": "Enhets-ID",
+                "failure_description": "Kunne ikke verifisere '%(deviceId)s': %(error)s",
+                "failure_title": "Verifisering mislyktes",
+                "fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
+                "no_crypto": "Kan ikke verifisere enheten - krypto er ikke aktivert",
+                "no_device": "Kunne ikke verifisere enheten - enheten '%(deviceId)s' ble ikke funnet",
+                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID"
+            },
             "no_key_or_device": "Det ser ut til at du ikke har en gjenopprettingsnøkkel eller andre enheter du kan verifisere mot.  Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille verifiseringsnøklene dine.",
             "no_support_qr_emoji": "Enheten du prøver å bekrefte støtter ikke skanning av en QR-kode eller emoji-verifikasjon, som er det som %(brand)s støtter. Prøv med en annen klient.",
             "other_party_cancelled": "Den andre parten kansellerte verifiseringen.",
@@ -1957,6 +1970,7 @@
         },
         "face_pile_tooltip_shortcut": "Inkludert %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inkludert deg, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan ikke avgjøre hvilken bruker som skal ignoreres siden medlemshendelsen har endret seg.",
         "failed_reject_invite": "Kunne ikke avvise invitasjonen",
         "forget_room": "Glem dette rommet",
         "forget_space": "Glem dette området",
@@ -2048,6 +2062,7 @@
         "read_topic": "Klikk for å lese emnet",
         "rejecting": "Avviser invitasjon...",
         "rejoin_button": "Bli med igjen",
+        "room_is_low_priority": "Dette er et lavt prioritert rom",
         "search": {
             "all_rooms_button": "Søk i alle rom",
             "placeholder": "Søk i meldinger...",
@@ -2094,7 +2109,6 @@
     "room_list": {
         "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
         "empty": {
@@ -2119,6 +2133,7 @@
         "filters": {
             "favourite": "Favoritter",
             "invites": "Invitasjoner",
+            "low_priority": "Lav prioritet",
             "mentions": "Omtaler",
             "people": "Personer",
             "rooms": "Rom",
@@ -2152,7 +2167,6 @@
         },
         "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
-        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },
@@ -2686,6 +2700,9 @@
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
+        "invite_controls": {
+            "default_label": "Tillat brukere å invitere deg til rom"
+        },
         "jump_to_bottom_on_send": "Gå til bunnen av tidslinjen når du vil sende en melding",
         "key_backup": {
             "backup_in_progress": "Nøklene dine blir sikkerhetskopiert (den første sikkerhetskopieringen kan ta noen minutter).",
@@ -2752,6 +2769,7 @@
             "show_in_private": "I private rom",
             "show_media": "Vis alltid"
         },
+        "not_supported": "Serveren din implementerer ikke denne funksjonen.",
         "notifications": {
             "default_setting_description": "Denne innstillingen vil bli brukt som standard for alle rommene dine.",
             "default_setting_section": "Jeg ønsker å bli varslet for (standardinnstilling)",
@@ -2809,6 +2827,7 @@
             "voip": "Lyd- og videosamtaler"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Forhindre at innholdet i vinduet fanges opp av andre apper",
             "Electron.enableHardwareAcceleration": "Aktiver maskinvareakselerasjon (start %(appName)s på nytt for at det skal tre i kraft)",
             "always_show_menu_bar": "Vis alltid vinduets menylinje",
             "autocomplete_delay": "Autofullføringsforsinkelse (ms)",
@@ -2981,6 +3000,7 @@
         "show_chat_effects": "Vis chatteffekter (animasjoner når du mottar f.eks. konfetti)",
         "show_displayname_changes": "Vis visningsnavnendringer",
         "show_join_leave": "Vis bli med/forlat meldinger (invitasjoner/fjernede/utestengte upåvirket)",
+        "show_message_previews": "Vise forhåndsvisninger av meldinger",
         "show_nsfw_content": "Vis NSFW-innhold",
         "show_read_receipts": "Vis lesekvitteringer sendt av andre brukere",
         "show_redaction_placeholder": "Vis en stattholder for fjernede meldinger",
@@ -3127,6 +3147,7 @@
         "upgraderoom": "Oppgraderer et rom til en ny versjon",
         "upgraderoom_permission_error": "Du har ikke de rette tilgangene til å bruke denne kommandoen.",
         "usage": "Bruk",
+        "verify": "Verifiserer en bruker-, økt- og pubkey-tuple",
         "view": "Viser rom med oppgitt adresse",
         "whois": "Viser informasjon om en bruker"
     },

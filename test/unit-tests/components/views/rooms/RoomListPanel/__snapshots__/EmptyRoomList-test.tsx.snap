@@ -88,6 +88,31 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
 </DocumentFragment>
 `;
 
+exports[`<EmptyRoomList /> should display the empty state for the low priority filter 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    data-testid="empty-room-list"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="mx_EmptyRoomList_GenericPlaceholder_title"
+    >
+      You don't have any low priority rooms
+    </span>
+    <button
+      class="_button_vczzf_8"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      See all activity
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<EmptyRoomList /> should display the empty state for the mention filter 1`] = `
 <DocumentFragment>
   <div

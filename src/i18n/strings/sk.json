@@ -929,8 +929,6 @@
             "security_key_title": "Kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
-        "cancel_entering_passphrase_description": "Naozaj chcete zrušiť zadávanie prístupovej frázy?",
-        "cancel_entering_passphrase_title": "Zrušiť zadanie prístupovej frázy?",
         "confirm_encryption_setup_body": "Kliknutím na tlačidlo nižšie potvrdíte nastavenie šifrovania.",
         "confirm_encryption_setup_title": "Potvrdiť nastavenie šifrovania",
         "cross_signing_room_normal": "Táto miestnosť je end-to-end šifrovaná",
@@ -2124,7 +2122,6 @@
     "room_list": {
         "add_room_label": "Pridať miestnosť",
         "add_space_label": "Pridať priestor",
-        "appearance": "Vzhľad",
         "breadcrumbs_empty": "Žiadne nedávno navštívené miestnosti",
         "breadcrumbs_label": "Nedávno navštívené miestnosti",
         "empty": {
@@ -2149,6 +2146,7 @@
         "filters": {
             "favourite": "Obľúbené",
             "invites": "Pozvánky",
+            "low_priority": "Nízka priorita",
             "mentions": "Zmienky",
             "people": "Ľudia",
             "rooms": "Miestnosti",
@@ -2184,7 +2182,6 @@
         },
         "room_options": "Možnosti miestnosti",
         "show_less": "Zobraziť menej",
-        "show_message_previews": "Zobraziť náhľady správ",
         "show_n_more": {
             "one": "Zobraziť %(count)s ďalšiu",
             "few": "Zobraziť %(count)s ďalšie",
@@ -3167,6 +3164,7 @@
         "upgraderoom": "Aktualizuje miestnosť na novšiu verziu",
         "upgraderoom_permission_error": "Na použitie tohoto príkazu nemáte dostatočné povolenia.",
         "usage": "Použitie",
+        "verify": "Overí používateľa, reláciu a verejné kľúče",
         "view": "Zobrazí miestnosti s danou adresou",
         "whois": "Zobrazuje informácie o používateľovi"
     },
