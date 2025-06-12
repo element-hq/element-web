@@ -6,7 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
-test.describe("Custom Component Module", () => {
+
+test.describe("Custom Component API", () => {
     test.use({
         displayName: "Manny",
         config: {
@@ -23,31 +24,111 @@ test.describe("Custom Component Module", () => {
             await use({ roomId });
         },
     });
-    test("should replace the render method of a textual event", { tag: "@screenshot" }, async ({ page, room, app }) => {
-        await app.viewRoomById(room.roomId);
-        await app.client.sendMessage(room.roomId, "Simple message");
-        await expect(await page.getByText("Simple message")).toMatchScreenshot("custom-component-tile.png");
+    test.describe("basic functionality", () => {
+        test(
+            "should replace the render method of a textual event",
+            { tag: "@screenshot" },
+            async ({ page, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await app.client.sendMessage(room.roomId, "Simple message");
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot("custom-component-tile.png", {
+                    // Exclude timestamp and read marker from snapshot
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
+                });
+            },
+        );
+        test(
+            "should fall through if one module does not render a component",
+            { tag: "@screenshot" },
+            async ({ page, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await app.client.sendMessage(room.roomId, "Fall through here");
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                    "custom-component-tile-fall-through.png",
+                    {
+                        // Exclude timestamp and read marker from snapshot
+                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
+                    },
+                );
+            },
+        );
+        test(
+            "should render the original content of a textual event conditionally",
+            { tag: "@screenshot" },
+            async ({ page, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await app.client.sendMessage(room.roomId, "Do not replace me");
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                    "custom-component-tile-original.png",
+                    {
+                        // Exclude timestamp and read marker from snapshot
+                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
+                    },
+                );
+            },
+        );
+        test("should disallow editing when the allowEditingEvent hint is set to false", async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Do not show edits");
+            await page.getByText("Do not show edits").hover();
+            await expect(
+                await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }),
+            ).not.toBeVisible();
+        });
+        test(
+            "should render the next registered component if the filter function throws",
+            { tag: "@screenshot" },
+            async ({ page, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await app.client.sendMessage(room.roomId, "Crash the filter!");
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                    "custom-component-crash-handle-filter.png",
+                    {
+                        // Exclude timestamp and read marker from snapshot
+                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
+                    },
+                );
+            },
+        );
+        test(
+            "should render original component if the render function throws",
+            { tag: "@screenshot" },
+            async ({ page, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await app.client.sendMessage(room.roomId, "Crash the renderer!");
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                    "custom-component-crash-handle-renderer.png",
+                    {
+                        // Exclude timestamp and read marker from snapshot
+                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
+                    },
+                );
+            },
+        );
     });
-    test(
-        "should fall through if one module does not render a component",
-        { tag: "@screenshot" },
-        async ({ page, room, app }) => {
-            await app.viewRoomById(room.roomId);
-            await app.client.sendMessage(room.roomId, "Fall through here");
-            await expect(await page.getByText("Fall through here")).toMatchScreenshot(
-                "custom-component-tile-fall-through.png",
-            );
-        },
-    );
-    test(
-        "should render the original content of a textual event conditionally",
-        { tag: "@screenshot" },
-        async ({ page, room, app }) => {
-            await app.viewRoomById(room.roomId);
-            await app.client.sendMessage(room.roomId, "Do not replace me");
-            await expect(await page.getByText("Do not replace me")).toMatchScreenshot(
-                "custom-component-tile-original.png",
-            );
-        },
-    );
 });
