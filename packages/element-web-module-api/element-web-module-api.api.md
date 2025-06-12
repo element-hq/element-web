@@ -64,7 +64,7 @@ export interface ConfigApi {
 export interface CustomComponentsApi {
     // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @alpha
     // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderHints" which is marked as @alpha
-    registerMessageRenderer(eventType: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
+    registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
 }
 
 // @alpha
