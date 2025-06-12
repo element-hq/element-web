@@ -315,7 +315,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 <RoomHeader room={room} />
-                <main className="mx_RoomView_body" ref={props.roomView}>
+                <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
                     <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} />
                     <div className="mx_RoomView_timeline">
                         <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={props.resizeNotifier}>
