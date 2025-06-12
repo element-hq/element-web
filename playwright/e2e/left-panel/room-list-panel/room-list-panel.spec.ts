@@ -19,7 +19,7 @@ test.describe("Room list panel", () => {
      * @param page
      */
     function getRoomListView(page: Page) {
-        return page.getByTestId("room-list-panel");
+        return page.getByRole("navigation", { name: "Room list" });
     }
 
     test.beforeEach(async ({ page, app, user }) => {
