@@ -9,5 +9,6 @@ export { ModuleLoader, ModuleIncompatibleError } from "./loader";
 export type { Api, Module, ModuleFactory } from "./api";
 export type { Config, ConfigApi } from "./api/config";
 export type { I18nApi, Variables, Translations } from "./api/i18n";
+export type * from "./api/custom-components";
 export type * from "./api/legacy-modules";
 export type * from "./api/legacy-customisations";

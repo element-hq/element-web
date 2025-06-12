@@ -38,6 +38,7 @@
         "@types/react-dom": "^19.0.4",
         "@types/semver": "^7.5.8",
         "@vitest/coverage-v8": "^3.0.4",
+        "matrix-js-sdk": "^37.5.0",
         "matrix-web-i18n": "^3.3.0",
         "semver": "^7.6.3",
         "typescript": "^5.7.3",
@@ -50,6 +51,7 @@
         "@matrix-org/react-sdk-module-api": "*",
         "@types/react": "*",
         "@types/react-dom": "*",
+        "matrix-js-sdk": "*",
         "matrix-web-i18n": "*",
         "react": "^19"
     },
