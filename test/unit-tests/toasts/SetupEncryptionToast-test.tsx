@@ -36,14 +36,16 @@ describe("SetupEncryptionToast", () => {
             expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
         });
 
-        it("should dismiss the toast when 'not now' button clicked", async () => {
+        it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "recordRecoveryDisabled");
             jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
 
             showToast(Kind.SET_UP_RECOVERY);
 
             const user = userEvent.setup();
-            await user.click(await screen.findByRole("button", { name: "Not now" }));
+            await user.click(await screen.findByRole("button", { name: "Dismiss" }));
 
+            expect(DeviceListener.sharedInstance().recordRecoveryDisabled).toHaveBeenCalled();
             expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
         });
     });

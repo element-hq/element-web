@@ -29,6 +29,7 @@ export class Tab<T extends string> {
      * @param {string|JSX.Element} icon An SVG element to use for the tab icon. Can also be a string for legacy icons, in which case it is the class for the tab icon. This should be a simple mask.
      * @param {JSX.Element} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
+     * @param {string} labelClassName Additional class to add to the tab label.
      */
     public constructor(
         public readonly id: T,
@@ -36,6 +37,7 @@ export class Tab<T extends string> {
         public readonly icon: string | JSX.Element | null,
         public readonly body: JSX.Element,
         public readonly screenName?: ScreenName,
+        public readonly labelClassName?: string,
     ) {}
 }
 
@@ -85,7 +87,7 @@ interface ITabLabelProps<T extends string> {
 }
 
 function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITabLabelProps<T>): JSX.Element {
-    const classes = classNames("mx_TabbedView_tabLabel", {
+    const classes = classNames("mx_TabbedView_tabLabel", tab.labelClassName, {
         mx_TabbedView_tabLabel_active: isActive,
     });
 

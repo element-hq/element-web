@@ -88,7 +88,7 @@ const getPrimaryButtonIcon = (kind: Kind): ComponentType<React.SVGAttributes<SVG
 const getSecondaryButtonLabel = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_RECOVERY:
-            return _t("encryption|set_up_recovery_later");
+            return _t("action|dismiss");
         case Kind.SET_UP_ENCRYPTION:
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verification|unverified_sessions_toast_reject");
@@ -201,6 +201,11 @@ export const showToast = (kind: Kind): void => {
                 await deviceListener.recordKeyBackupDisabled();
                 deviceListener.dismissEncryptionSetup();
             }
+        } else if (kind === Kind.SET_UP_RECOVERY) {
+            // Record that the user doesn't want to set up recovery
+            const deviceListener = DeviceListener.sharedInstance();
+            await deviceListener.recordRecoveryDisabled();
+            deviceListener.dismissEncryptionSetup();
         } else {
             DeviceListener.sharedInstance().dismissEncryptionSetup();
         }

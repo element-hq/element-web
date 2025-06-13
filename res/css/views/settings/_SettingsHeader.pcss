@@ -16,4 +16,13 @@
         font: var(--cpd-font-body-sm-medium);
         color: var(--cpd-color-text-action-accent);
     }
+
+    &.mx_SettingsHeader_recommended::after {
+        display: inline-block;
+        content: "";
+        width: 8px;
+        height: 8px;
+        background-color: var(--cpd-color-icon-critical-primary);
+        clip-path: circle(4px);
+    }
 }

@@ -6,9 +6,8 @@
  */
 
 import React, { type JSX } from "react";
+import classNames from "classnames";
 import { Heading } from "@vector-im/compound-web";
-
-import { _t } from "../../../languageHandler";
 
 /**
  * The heading for a settings section.
@@ -25,9 +24,12 @@ interface SettingsHeaderProps {
 }
 
 export function SettingsHeader({ hasRecommendedTag = false, label }: SettingsHeaderProps): JSX.Element {
+    const classes = classNames("mx_SettingsHeader", {
+        mx_SettingsHeader_recommended: hasRecommendedTag,
+    });
     return (
-        <Heading className="mx_SettingsHeader" as="h2" size="sm" weight="semibold">
-            {label} {hasRecommendedTag && <span>{_t("common|recommended")}</span>}
+        <Heading className={classes} as="h2" size="sm" weight="semibold">
+            {label}
         </Heading>
     );
 }
