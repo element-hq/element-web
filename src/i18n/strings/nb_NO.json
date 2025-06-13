@@ -1020,7 +1020,10 @@
                 "fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
                 "no_crypto": "Kan ikke verifisere enheten - krypto er ikke aktivert",
                 "no_device": "Kunne ikke verifisere enheten - enheten '%(deviceId)s' ble ikke funnet",
-                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID"
+                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID",
+                "success_description": "Enheten (%(deviceId)s) er nå krysssignert",
+                "success_title": "Verifiseringen var vellykket",
+                "wrong_fingerprint": "Kan ikke verifisere enheten %(deviceId)s &#39;- det medfølgende fingeravtrykket&#39;%(fingerprint)s «samsvarer ikke med enhetens fingeravtrykk»%(fprint)s &#39;"
             },
             "no_key_or_device": "Det ser ut til at du ikke har en gjenopprettingsnøkkel eller andre enheter du kan verifisere mot.  Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille verifiseringsnøklene dine.",
             "no_support_qr_emoji": "Enheten du prøver å bekrefte støtter ikke skanning av en QR-kode eller emoji-verifikasjon, som er det som %(brand)s støtter. Prøv med en annen klient.",
@@ -2118,6 +2121,7 @@
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
             "no_invites": "Du har ingen uleste invitasjoner",
+            "no_lowpriority": "Du har ingen rom med lav prioritet",
             "no_mentions": "Du har ingen uleste omtaler",
             "no_people": "Du har ikke direkte chatter med noen ennå",
             "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
@@ -2127,6 +2131,7 @@
             "show_activity": "Se alle aktiviteter",
             "show_chats": "Vis alle chatter"
         },
+        "expand_filters": "Utvid filterlisten",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
@@ -3107,6 +3112,7 @@
         "jumptodate": "Gå til den gitte datoen i tidslinjen",
         "jumptodate_invalid_input": "Vi klarte ikke å forstå den gitte datoen (%(inputDate)s). Prøv å bruke formatet ÅÅÅÅ-MM-DD.",
         "lenny": "Legger til ( ͡° ͜ʖ ͡°) foran en ren tekstmelding",
+        "manual_device_verification_confirm_title": "Forsiktig: manuell enhetsverifisering",
         "me": "Viser handling",
         "msg": "Sender en melding til den angitte brukeren",
         "myavatar": "Endrer profilbildet ditt i alle rom",
@@ -3147,7 +3153,7 @@
         "upgraderoom": "Oppgraderer et rom til en ny versjon",
         "upgraderoom_permission_error": "Du har ikke de rette tilgangene til å bruke denne kommandoen.",
         "usage": "Bruk",
-        "verify": "Verifiserer en bruker-, økt- og pubkey-tuple",
+        "verify": "Verifiser en av dine egne enheter manuelt",
         "view": "Viser rom med oppgitt adresse",
         "whois": "Viser informasjon om en bruker"
     },

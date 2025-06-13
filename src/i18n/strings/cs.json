@@ -2122,6 +2122,7 @@
         "filters": {
             "favourite": "Oblíbené",
             "invites": "Pozvánky",
+            "low_priority": "Nízká priorita",
             "mentions": "Zmínky",
             "people": "Lidé",
             "rooms": "Místnosti",

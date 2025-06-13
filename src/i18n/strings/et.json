@@ -2115,6 +2115,7 @@
         "add_space_label": "Lisa kogukonnakeskus",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
+        "collapse_filters": "Ahenda filtriloendit",
         "empty": {
             "no_chats": "Vestlusi veel ei leidu",
             "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
@@ -2122,6 +2123,7 @@
             "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
             "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
             "no_invites": "Sul pole lugemata kutseid",
+            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
             "no_mentions": "Sul pole lugemata mainimisi",
             "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
             "no_people_description": "Kõikide muude vestluste nägemiseks eemalda otsingufiltrid",
@@ -2131,6 +2133,7 @@
             "show_activity": "Vaata kõiki tegevusi",
             "show_chats": "Näita kõiki vestlusi"
         },
+        "expand_filters": "Laienda filtriloendit",
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
