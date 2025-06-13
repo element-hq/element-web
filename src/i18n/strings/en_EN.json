@@ -1655,6 +1655,7 @@
         "filter_placeholder": "Search room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
+        "list_title": "Member list",
         "no_matches": "No matches",
         "power_label": "%(userName)s (power %(powerLevelNumber)s)"
     },
