@@ -89,6 +89,10 @@ describe("<RoomListItemView />", () => {
 
         await user.hover(listItem);
         await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
+
+        // also make another snapshot in the hover state (mostly to test the aria-describedBy on the buttons
+        // as there's no easy way to get the effective ARIA description in react testing library, surprisingly)
+        expect(listItem).toMatchSnapshot();
     });
 
     test("should hover decoration if focused", async () => {
