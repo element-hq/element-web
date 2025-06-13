@@ -18,7 +18,7 @@ exports[`<EncryptionUserSettingsTab /> should display a verify button when the e
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Device not verified 
+            Device not verified
           </h2>
           <div
             class="mx_SettingsSubheader"
@@ -100,7 +100,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Recovery 
+            Recovery
           </h2>
           <div
             class="mx_SettingsSubheader"
