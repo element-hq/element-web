@@ -164,7 +164,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 },
                 invalid: () => {
                     const min = 1;
-                    const max = 2000;
+                    const max = 32768;
                     return _t("export_chat|enter_number_between_min_max", {
                         min,
                         max,
@@ -175,11 +175,11 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 key: "number",
                 test: ({ value }) => {
                     const parsedSize = parseInt(value!, 10);
-                    return validateNumberInRange(1, 2000)(parsedSize);
+                    return validateNumberInRange(1, 32768)(parsedSize);
                 },
                 invalid: () => {
                     const min = 1;
-                    const max = 2000;
+                    const max = 32768;
                     return _t("export_chat|size_limit_min_max", { min, max });
                 },
             },
