@@ -480,6 +480,15 @@ describe("DeviceListener", () => {
             });
         });
 
+        it("sets recovery_disabled account data when we call recordRecoveryDisabled", async () => {
+            const instance = await createAndStart();
+            await instance.recordRecoveryDisabled();
+
+            expect(mockClient.setAccountData).toHaveBeenCalledWith("io.element.recovery_disabled", {
+                disabled: true,
+            });
+        });
+
         describe("when crypto is in use and set up", () => {
             beforeEach(() => {
                 // Encryption is in use
