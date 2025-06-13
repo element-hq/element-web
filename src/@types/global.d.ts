@@ -12,6 +12,7 @@ import "@types/modernizr";
 
 import type { ModuleLoader } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
+import type { CallState } from "matrix-js-sdk/src/webrtc/call";
 import type ContentMessages from "../ContentMessages";
 import { type IMatrixClientPeg } from "../MatrixClientPeg";
 import type ToastStore from "../stores/ToastStore";
@@ -51,7 +52,6 @@ import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV
 /* eslint-disable @typescript-eslint/naming-convention */
 
 type ElectronChannel =
-    | "app_onAction"
     | "before-quit"
     | "check_updates"
     | "install_update"
@@ -133,14 +133,18 @@ declare global {
         send(channel: ElectronChannel, ...args: any[]): void;
         // Initialisation
         initialise(): Promise<{
+            version: string;
             protocol: string;
             sessionId: string;
             config: IConfigOptions;
             supportedSettings: Record<string, boolean>;
+            canSelfUpdate: boolean;
         }>;
         // Settings
         setSettingValue(settingName: string, value: any): Promise<void>;
         getSettingValue(settingName: string): Promise<any>;
+        // Lifecycle
+        onCallState(callState: CallState): void;
     }
 
     interface DesktopCapturerSource {

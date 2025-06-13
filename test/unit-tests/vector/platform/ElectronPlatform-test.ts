@@ -40,6 +40,7 @@ describe("ElectronPlatform", () => {
         }),
         setSettingValue: jest.fn().mockResolvedValue(undefined),
         getSettingValue: jest.fn().mockResolvedValue(undefined),
+        onCallState: jest.fn(),
     } as unknown as MockedObject<Electron>;
 
     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
@@ -399,10 +400,7 @@ describe("ElectronPlatform", () => {
             true,
         );
 
-        const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "app_onAction");
-        expect(ipcMessage![1]).toEqual({
-            action: "call_state",
-            state: "connected",
-        });
+        const ipcMessage = mockElectron.onCallState.mock.calls[0];
+        expect(ipcMessage![0]).toEqual("connected");
     });
 });

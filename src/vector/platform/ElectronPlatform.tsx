@@ -89,10 +89,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     private readonly initialised: Promise<void>;
     private readonly electron: Electron;
-    private protocol!: string;
-    private sessionId!: string;
-    private config!: IConfigOptions;
-    private supportedSettings?: Record<string, boolean>;
+    private parameters?: Awaited<ReturnType<Electron["initialise"]>>;
 
     public constructor() {
         super();
@@ -189,21 +186,17 @@ export default class ElectronPlatform extends BasePlatform {
         super.onAction(payload);
         // Whitelist payload actions, no point sending most across
         if (["call_state"].includes(payload.action)) {
-            this.electron.send("app_onAction", payload);
+            this.electron.onCallState(payload.state);
         }
     }
 
     private async initialise(): Promise<void> {
-        const { protocol, sessionId, config, supportedSettings } = await this.electron.initialise();
-        this.protocol = protocol;
-        this.sessionId = sessionId;
-        this.config = config;
-        this.supportedSettings = supportedSettings;
+        this.parameters = await this.electron.initialise();
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
         await this.initialised;
-        return this.config;
+        return this.parameters?.config;
     }
 
     private onBreadcrumbsUpdate = (): void => {
@@ -298,12 +291,13 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async getAppVersion(): Promise<string> {
-        return this.ipc.call("getAppVersion");
+        await this.initialised;
+        return this.parameters!.version;
     }
 
     public supportsSetting(settingName?: string): boolean {
         if (settingName === undefined) return true;
-        return this.supportedSettings?.[settingName] === true;
+        return this.parameters?.supportedSettings[settingName] === true;
     }
 
     public getSettingValue(settingName: string): Promise<any> {
@@ -315,8 +309,8 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async canSelfUpdate(): Promise<boolean> {
-        const feedUrl = await this.ipc.call("getUpdateFeedUrl");
-        return Boolean(feedUrl);
+        await this.initialised;
+        return this.parameters!.canSelfUpdate;
     }
 
     public startUpdateCheck(): void {
@@ -352,7 +346,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async setLanguage(preferredLangs: string[]): Promise<any> {
-        return this.ipc.call("setLanguage", preferredLangs);
+        return this.electron.setSettingValue("locale", preferredLangs);
     }
 
     public setSpellCheckEnabled(enabled: boolean): void {
@@ -397,7 +391,7 @@ export default class ElectronPlatform extends BasePlatform {
     public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
-        url.searchParams.set(SSO_ID_KEY, this.sessionId);
+        url.searchParams.set(SSO_ID_KEY, this.parameters!.sessionId);
         return url;
     }
 
@@ -475,7 +469,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public getOidcClientState(): string {
-        return `:${SSO_ID_KEY}:${this.sessionId}`;
+        return `:${SSO_ID_KEY}:${this.parameters!.sessionId}`;
     }
 
     /**
@@ -483,7 +477,7 @@ export default class ElectronPlatform extends BasePlatform {
      */
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
-        url.protocol = this.protocol;
+        url.protocol = this.parameters!.protocol;
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
         if (url.href.startsWith(`${url.protocol}//`)) {
             url.href = url.href.replace("://", ":/");
