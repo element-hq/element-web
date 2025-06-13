@@ -27,6 +27,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
+import { UIComponent } from "../../../settings/UIFeature.ts";
 
 interface Props {
     room: Room;
@@ -191,9 +193,11 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
 
     return (
         <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
-            <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
-                {_t("right_panel|add_integrations")}
-            </Button>
+            {shouldShowComponent(UIComponent.AddIntegrations) && (
+                <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                    {_t("right_panel|add_integrations")}
+                </Button>
+            )}
             {body}
         </BaseCard>
     );
