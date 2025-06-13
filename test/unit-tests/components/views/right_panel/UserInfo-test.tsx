@@ -741,65 +741,6 @@ describe("<UserOptionsSection />", () => {
     );
 });
 
-describe("<PowerLevelEditor />", () => {
-    const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
-
-    let defaultProps: Parameters<typeof PowerLevelEditor>[0];
-    beforeEach(() => {
-        defaultProps = {
-            user: defaultMember,
-            room: mockRoom,
-            roomPermissions: {
-                modifyLevelMax: 100,
-                canEdit: false,
-                canInvite: false,
-            },
-        };
-    });
-
-    const renderComponent = (props = {}) => {
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
-
-        return render(<PowerLevelEditor {...defaultProps} {...props} />, {
-            wrapper: Wrapper,
-        });
-    };
-
-    it("renders a power level combobox", () => {
-        renderComponent();
-
-        expect(screen.getByRole("combobox", { name: "Power level" })).toBeInTheDocument();
-    });
-
-    it("renders a combobox and attempts to change power level on change of the combobox", async () => {
-        const startPowerLevel = 999;
-        const powerLevelEvent = new MatrixEvent({
-            type: EventType.RoomPowerLevels,
-            content: { users: { [defaultUserId]: startPowerLevel }, users_default: 1 },
-        });
-        mockRoom.currentState.getStateEvents.mockReturnValue(powerLevelEvent);
-        mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
-        mockClient.getUserId.mockReturnValueOnce(defaultUserId);
-        mockClient.setPowerLevel.mockResolvedValueOnce({ event_id: "123" });
-        renderComponent();
-
-        const changedPowerLevel = 100;
-
-        fireEvent.change(screen.getByRole("combobox", { name: "Power level" }), {
-            target: { value: changedPowerLevel },
-        });
-
-        await screen.findByText("Demote", { exact: true });
-
-        // firing the event will raise a dialog warning about self demotion, wait for this to appear then click on it
-        await userEvent.click(await screen.findByText("Demote", { exact: true }));
-        expect(mockClient.setPowerLevel).toHaveBeenCalledTimes(1);
-        expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, changedPowerLevel);
-    });
-});
-
 describe("<RoomKickButton />", () => {
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
     const memberWithInviteMembership = { ...defaultMember, membership: KnownMembership.Invite };
