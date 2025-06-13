@@ -83,7 +83,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             nextProps.editState !== this.props.editState ||
             nextState.links !== this.state.links ||
             nextState.widgetHidden !== this.state.widgetHidden ||
-            nextProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration
+            nextProps.isSeeingThroughMessageHiddenForModeration !==
+                this.props.isSeeingThroughMessageHiddenForModeration ||
+            nextProps.isScrolling !== this.props.isScrolling
         );
     }
 
@@ -378,6 +380,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     links={this.state.links}
                     mxEvent={this.props.mxEvent}
                     onCancelClick={this.onCancelClick}
+                    isScrolling={this.props.isScrolling}
                 />
             );
         }

@@ -308,6 +308,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             getRelationsForEvent: this.props.getRelationsForEvent,
             isSeeingThroughMessageHiddenForModeration: this.props.isSeeingThroughMessageHiddenForModeration,
             inhibitInteraction: this.props.inhibitInteraction,
+            isScrolling: this.props.isScrolling,
         };
         if (hasCaption) {
             return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;
@@ -320,9 +321,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
 const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React.ComponentType<IBodyProps> }> = ({
     WrappedBodyType,
     ...props
-}) => (
-    <div className="mx_EventTile_content">
-        <WrappedBodyType {...props} />
-        <TextualBody {...{ ...props, ref: undefined }} />
-    </div>
-);
+}) => {
+    console.log(`CaptionBody isScrolling${props.isScrolling}`);
+    return (
+        <div className="mx_EventTile_content">
+            <WrappedBodyType {...props} />
+            <TextualBody {...{ ...props, ref: undefined }} />
+        </div>
+    );
+};
