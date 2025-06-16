@@ -122,22 +122,22 @@ export type AsyncStateCallbackResult<T> = Promise<T | NoChange>;
  * @param initialValue The initial value of the state, before the callback finishes its initial run.
  * @returns State
  */
-export function useEventEmitterAsyncState<T>(
-    emitter: EventEmitter | undefined,
+export function useEventEmitterAsyncState<T, Events extends string, Arguments extends ListenerMap<Events>>(
+    emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: string | symbol,
     fn: Mapper<AsyncStateCallbackResult<T>>,
     deps: DependencyList,
     initialValue: T,
 ): T;
-export function useEventEmitterAsyncState<T>(
-    emitter: EventEmitter | undefined,
+export function useEventEmitterAsyncState<T, Events extends string, Arguments extends ListenerMap<Events>>(
+    emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: string | symbol,
     fn: Mapper<AsyncStateCallbackResult<T>>,
     deps: DependencyList,
     initialValue?: T,
 ): T | undefined;
-export function useEventEmitterAsyncState<T>(
-    emitter: EventEmitter | undefined,
+export function useEventEmitterAsyncState<T, Events extends string, Arguments extends ListenerMap<Events>>(
+    emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: string | symbol,
     fn: Mapper<AsyncStateCallbackResult<T>>,
     deps: DependencyList,

@@ -104,7 +104,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
 
     // If the user doesn't have Recovery set up (no default Secret Storage key),
     // we show an indicator on the Encryption tab.
-    const showSetupRecoveryIndicator = useEventEmitterAsyncState<boolean>(
+    const showSetupRecoveryIndicator = useEventEmitterAsyncState(
         props.sdkContext.client,
         ClientEvent.AccountData,
         async (event?: MatrixEvent): AsyncStateCallbackResult<boolean> => {
