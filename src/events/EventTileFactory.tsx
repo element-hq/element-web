@@ -262,8 +262,6 @@ export function renderTile(
         return ModuleApi.customComponents.renderMessage(
             {
                 mxEvent: props.mxEvent,
-                forExport: props.forExport,
-                highlights: props.highlights,
             },
             undefined,
         );
@@ -297,8 +295,6 @@ export function renderTile(
             return ModuleApi.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
-                    forExport: props.forExport,
-                    highlights: props.highlights,
                 },
                 (origProps) =>
                     factory(props.ref, {
@@ -318,8 +314,6 @@ export function renderTile(
             return ModuleApi.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
-                    forExport: props.forExport,
-                    highlights: props.highlights,
                 },
                 (origProps) =>
                     factory(ref, {
@@ -361,8 +355,6 @@ export function renderReplyTile(
         return ModuleApi.customComponents.renderMessage(
             {
                 mxEvent: props.mxEvent,
-                forExport: props.forExport,
-                highlights: props.highlights,
             },
             undefined,
         );
@@ -386,8 +378,6 @@ export function renderReplyTile(
     return ModuleApi.customComponents.renderMessage(
         {
             mxEvent: props.mxEvent,
-            forExport: props.forExport,
-            highlights: props.highlights,
         },
         (origProps) =>
             factory(ref, {
