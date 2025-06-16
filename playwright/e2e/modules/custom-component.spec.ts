@@ -5,8 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 
+const screenshotOptions = (page: Page) => ({
+    mask: [page.locator(".mx_MessageTimestamp")],
+    // Hide the jump to bottom button in the timeline to avoid flakiness
+    // Exclude timestamp and read marker from snapshot
+    css: `
+        .mx_JumpToBottomButton {
+            display: none !important;
+        }
+        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+            display: none !important;
+        }
+    `,
+});
 test.describe("Custom Component API", () => {
     test.use({
         displayName: "Manny",
@@ -31,15 +45,10 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Simple message");
-                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot("custom-component-tile.png", {
-                    // Exclude timestamp and read marker from snapshot
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                    css: `
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                            display: none !important;
-                        }
-                    `,
-                });
+                await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                    "custom-component-tile.png",
+                    screenshotOptions(page),
+                );
             },
         );
         test(
@@ -50,15 +59,7 @@ test.describe("Custom Component API", () => {
                 await app.client.sendMessage(room.roomId, "Fall through here");
                 await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
                     "custom-component-tile-fall-through.png",
-                    {
-                        // Exclude timestamp and read marker from snapshot
-                        mask: [page.locator(".mx_MessageTimestamp")],
-                        css: `
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                            display: none !important;
-                        }
-                    `,
-                    },
+                    screenshotOptions(page),
                 );
             },
         );
@@ -70,15 +71,7 @@ test.describe("Custom Component API", () => {
                 await app.client.sendMessage(room.roomId, "Do not replace me");
                 await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
                     "custom-component-tile-original.png",
-                    {
-                        // Exclude timestamp and read marker from snapshot
-                        mask: [page.locator(".mx_MessageTimestamp")],
-                        css: `
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                            display: none !important;
-                        }
-                    `,
-                    },
+                    screenshotOptions(page),
                 );
             },
         );
@@ -98,15 +91,7 @@ test.describe("Custom Component API", () => {
                 await app.client.sendMessage(room.roomId, "Crash the filter!");
                 await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
                     "custom-component-crash-handle-filter.png",
-                    {
-                        // Exclude timestamp and read marker from snapshot
-                        mask: [page.locator(".mx_MessageTimestamp")],
-                        css: `
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                            display: none !important;
-                        }
-                    `,
-                    },
+                    screenshotOptions(page),
                 );
             },
         );
@@ -118,15 +103,7 @@ test.describe("Custom Component API", () => {
                 await app.client.sendMessage(room.roomId, "Crash the renderer!");
                 await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
                     "custom-component-crash-handle-renderer.png",
-                    {
-                        // Exclude timestamp and read marker from snapshot
-                        mask: [page.locator(".mx_MessageTimestamp")],
-                        css: `
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                            display: none !important;
-                        }
-                    `,
-                    },
+                    screenshotOptions(page),
                 );
             },
         );
