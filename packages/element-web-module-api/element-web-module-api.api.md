@@ -4,8 +4,10 @@
 
 ```ts
 
+import { EventStatus } from 'matrix-js-sdk';
+import { IEventRelation } from 'matrix-js-sdk';
 import { JSX } from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/lib/matrix';
+import { Membership } from 'matrix-js-sdk';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
@@ -62,6 +64,7 @@ export interface ConfigApi {
 
 // @public
 export interface CustomComponentsApi {
+    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "MatrixEvent" which is marked as @beta
     // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @alpha
     // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderHints" which is marked as @alpha
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
@@ -132,6 +135,36 @@ export interface LegacyModuleApiExtension {
 export interface LifecycleCustomisations {
     // (undocumented)
     onLoggedOutAndStorageCleared?(): void;
+}
+
+// @beta
+export interface MatrixEvent {
+    // (undocumented)
+    age?: number;
+    // (undocumented)
+    content: Record<string, unknown>;
+    // (undocumented)
+    eventId: string;
+    // (undocumented)
+    membership?: Membership;
+    // (undocumented)
+    originServerTs: number;
+    // (undocumented)
+    redacts?: string;
+    // (undocumented)
+    relation?: IEventRelation | null;
+    // (undocumented)
+    roomId?: string;
+    // (undocumented)
+    sender: string;
+    // (undocumented)
+    stateKey?: string;
+    // (undocumented)
+    status: EventStatus;
+    // (undocumented)
+    type: string;
+    // (undocumented)
+    unsigned: Record<string, unknown>;
 }
 
 // @alpha @deprecated (undocumented)
