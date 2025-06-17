@@ -11,23 +11,35 @@ import { logger } from "matrix-js-sdk/src/logger";
 import type {
     CustomComponentsApi as ICustomComponentsApi,
     CustomMessageRenderFunction,
-    CustomMessageComponentProps,
+    CustomMessageComponentProps as ModuleCustomMessageComponentProps,
     OriginalComponentProps,
     CustomMessageRenderHints,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
+// element-modules uses the compiled MatrixEvent interface from matrix-js-sdk
+// whereas element-web uses MatrixEvent from the source. Due to the private
+// fields conflicting, this type is used to stip MatrixEvent down to the public
+// fields only which should match.
+type MatrixEventPublic = Pick<MatrixEvent, keyof MatrixEvent>;
+
 type EventRenderer = {
-    eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean);
+    eventTypeOrFilter: string | ((mxEvent: MatrixEventPublic) => boolean);
     renderer: CustomMessageRenderFunction;
     hints: CustomMessageRenderHints;
 };
+
+// As per MatrixEventPublic, this type overrides `ModuleCustomMessageComponentProps` to use
+// our stripped type.
+interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentProps, "mxEvent"> {
+    mxEvent: MatrixEventPublic;
+}
 
 export class CustomComponentsApi implements ICustomComponentsApi {
     private readonly registeredMessageRenderers: EventRenderer[] = [];
 
     public registerMessageRenderer(
-        eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean),
+        eventTypeOrFilter: string | ((mxEvent: MatrixEventPublic) => boolean),
         renderer: CustomMessageRenderFunction,
         hints: CustomMessageRenderHints = {},
     ): void {
@@ -38,7 +50,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @param mxEvent The message event being rendered.
      * @returns The registered renderer.
      */
-    private selectRenderer(mxEvent: MatrixEvent): EventRenderer | undefined {
+    private selectRenderer(mxEvent: MatrixEventPublic): EventRenderer | undefined {
         return this.registeredMessageRenderers.find((rdr) => {
             if (typeof rdr.eventTypeOrFilter === "string") {
                 return rdr.eventTypeOrFilter === mxEvent.getType();
@@ -66,7 +78,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         const renderer = this.selectRenderer(props.mxEvent);
         if (renderer) {
             try {
-                return renderer.renderer(props, originalComponent);
+                return renderer.renderer(props as ModuleCustomMessageComponentProps, originalComponent);
             } catch (ex) {
                 logger.warn("Message renderer failed to render", ex);
                 // Fall through to original component. If the module encounters an error we still want to display messages to the user!
@@ -80,7 +92,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @param mxEvent The message event being rendered.
      * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
      */
-    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints {
+    public getHintsForMessage(mxEvent: MatrixEventPublic): CustomMessageRenderHints {
         const renderer = this.selectRenderer(mxEvent);
         if (renderer) {
             return renderer.hints;
