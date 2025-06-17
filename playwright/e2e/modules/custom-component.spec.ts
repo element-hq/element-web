@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+
 import { test, expect } from "../../element-web-test";
 
 const screenshotOptions = (page: Page) => ({
