@@ -17,7 +17,8 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
       />
       <button
         aria-labelledby="«rq»"
-        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+        class="_icon-button_1pz9o_8"
+        data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -126,7 +127,8 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_m2erp_8 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_1pz9o_8 mx_RoomSummaryCard_topic_chevron"
+              data-kind="primary"
               role="button"
               style="--cpd-icon-button-size: 24px;"
               tabindex="0"
@@ -775,7 +777,8 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       />
       <button
         aria-labelledby="«r0»"
-        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+        class="_icon-button_1pz9o_8"
+        data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -1496,7 +1499,8 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       />
       <button
         aria-labelledby="«rd»"
-        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+        class="_icon-button_1pz9o_8"
+        data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -1605,7 +1609,8 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_m2erp_8 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_1pz9o_8 mx_RoomSummaryCard_topic_chevron"
+              data-kind="primary"
               role="button"
               style="--cpd-icon-button-size: 24px;"
               tabindex="0"

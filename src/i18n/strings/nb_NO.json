@@ -1020,7 +1020,11 @@
                 "fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
                 "no_crypto": "Kan ikke verifisere enheten - krypto er ikke aktivert",
                 "no_device": "Kunne ikke verifisere enheten - enheten '%(deviceId)s' ble ikke funnet",
-                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID"
+                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID",
+                "success_description": "Enheten (%(deviceId)s) er nå krysssignert",
+                "success_title": "Verifiseringen var vellykket",
+                "text": "Oppgi ID-en og fingeravtrykket til en av dine egne enheter for å verifisere det. MERK at dette lar den andre enheten sende og motta meldinger som deg. HVIS NOEN HAR FORTALT DEG BARE Å LIME INN NOE HER, ER DET SANNSYNLIGVIS AT DU BLIR SVINDLET!",
+                "wrong_fingerprint": "Kan ikke verifisere enheten %(deviceId)s &#39;- det medfølgende fingeravtrykket&#39;%(fingerprint)s «samsvarer ikke med enhetens fingeravtrykk»%(fprint)s &#39;"
             },
             "no_key_or_device": "Det ser ut til at du ikke har en gjenopprettingsnøkkel eller andre enheter du kan verifisere mot.  Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille verifiseringsnøklene dine.",
             "no_support_qr_emoji": "Enheten du prøver å bekrefte støtter ikke skanning av en QR-kode eller emoji-verifikasjon, som er det som %(brand)s støtter. Prøv med en annen klient.",
@@ -2062,6 +2066,7 @@
         "read_topic": "Klikk for å lese emnet",
         "rejecting": "Avviser invitasjon...",
         "rejoin_button": "Bli med igjen",
+        "room_content": "Rominnhold",
         "room_is_low_priority": "Dette er et lavt prioritert rom",
         "search": {
             "all_rooms_button": "Søk i alle rom",
@@ -2111,6 +2116,7 @@
         "add_space_label": "Legg til område",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
+        "collapse_filters": "Skjul filterlisten",
         "empty": {
             "no_chats": "Ingen chatter ennå",
             "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
@@ -2118,6 +2124,7 @@
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
             "no_invites": "Du har ingen uleste invitasjoner",
+            "no_lowpriority": "Du har ingen rom med lav prioritet",
             "no_mentions": "Du har ingen uleste omtaler",
             "no_people": "Du har ikke direkte chatter med noen ennå",
             "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
@@ -2127,6 +2134,7 @@
             "show_activity": "Se alle aktiviteter",
             "show_chats": "Vis alle chatter"
         },
+        "expand_filters": "Utvid filterlisten",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
@@ -3107,6 +3115,8 @@
         "jumptodate": "Gå til den gitte datoen i tidslinjen",
         "jumptodate_invalid_input": "Vi klarte ikke å forstå den gitte datoen (%(inputDate)s). Prøv å bruke formatet ÅÅÅÅ-MM-DD.",
         "lenny": "Legger til ( ͡° ͜ʖ ͡°) foran en ren tekstmelding",
+        "manual_device_verification_confirm_description": "Dette vil tillate en annen enhet å sende og motta meldinger som deg. HVIS NOEN BA DEG LIME INN NOE HER, ER DET SANNSYNLIG AT DU BLIR LURT! Er du sikker på at du vil bekrefte denne andre enheten?",
+        "manual_device_verification_confirm_title": "Forsiktig: manuell enhetsverifisering",
         "me": "Viser handling",
         "msg": "Sender en melding til den angitte brukeren",
         "myavatar": "Endrer profilbildet ditt i alle rom",
@@ -3147,7 +3157,7 @@
         "upgraderoom": "Oppgraderer et rom til en ny versjon",
         "upgraderoom_permission_error": "Du har ikke de rette tilgangene til å bruke denne kommandoen.",
         "usage": "Bruk",
-        "verify": "Verifiserer en bruker-, økt- og pubkey-tuple",
+        "verify": "Verifiser en av dine egne enheter manuelt",
         "view": "Viser rom med oppgitt adresse",
         "whois": "Viser informasjon om en bruker"
     },

@@ -326,7 +326,9 @@ test.describe("Room list filters and sort", () => {
             async ({ page, app, user }) => {
                 const emptyRoomList = getEmptyRoomList(page);
                 await expect(emptyRoomList).toMatchScreenshot("default-empty-room-list.png");
-                await expect(page.getByTestId("room-list-panel")).toMatchScreenshot("room-panel-empty-room-list.png");
+                await expect(page.getByRole("navigation", { name: "Room list" })).toMatchScreenshot(
+                    "room-panel-empty-room-list.png",
+                );
             },
         );
 

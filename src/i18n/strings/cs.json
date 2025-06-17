@@ -788,6 +788,7 @@
             "cross_signing_status": "Stav křížového podepisování:",
             "cross_signing_untrusted": "Váš účet má v bezpečném úložišti identitu pro křížový podpis, ale v této relaci jí zatím nevěříte.",
             "crypto_not_available": "Kryptografický modul není k dispozici",
+            "device_id": "ID zařízení",
             "key_backup_active_version": "Verze aktivní zálohy:",
             "key_backup_active_version_none": "Žádné",
             "key_backup_inactive_warning": "Vaše klíče nejsou z této relace zálohovány.",
@@ -1958,6 +1959,7 @@
         },
         "face_pile_tooltip_shortcut": "Včetně %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Včetně vás, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Nelze určit, kterého uživatele ignorovat, protože se změnila událost člena.",
         "failed_reject_invite": "Nepodařilo se odmítnout pozvánku",
         "forget_room": "Zapomenout na tuto místnost",
         "forget_space": "Zapomenout tento prostor",
@@ -2050,6 +2052,7 @@
         "read_topic": "Klikněte pro přečtení tématu",
         "rejecting": "Odmítání pozvánky…",
         "rejoin_button": "Znovu vstoupit",
+        "room_is_low_priority": "Toto je místnost s nízkou prioritou",
         "search": {
             "all_rooms_button": "Vyhledávat ve všech místnostech",
             "placeholder": "Hledat zprávy…",
@@ -2122,6 +2125,7 @@
         "filters": {
             "favourite": "Oblíbené",
             "invites": "Pozvánky",
+            "low_priority": "Nízká priorita",
             "mentions": "Zmínky",
             "people": "Lidé",
             "rooms": "Místnosti",
@@ -2689,6 +2693,9 @@
         "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
         "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
+        "invite_controls": {
+            "default_label": "Povolit uživatelům pozvat vás do místností"
+        },
         "jump_to_bottom_on_send": "Po odeslání zprávy přejít na konec časové osy",
         "key_backup": {
             "backup_in_progress": "Klíče se zálohují (první záloha může trvat pár minut).",
@@ -2755,6 +2762,7 @@
             "show_in_private": "V soukromých místnostech",
             "show_media": "Vždy zobrazit"
         },
+        "not_supported": "Váš server tuto funkci neimplementuje.",
         "notifications": {
             "default_setting_description": "Toto nastavení se ve výchozím stavu použije pro všechny vaše místnosti.",
             "default_setting_section": "Chci být upozorňován na (Výchozí nastavení)",
@@ -2812,6 +2820,7 @@
             "voip": "Hlasové a video hovory"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Zabraňte zachycení obsahu okna jinými aplikacemi",
             "Electron.enableHardwareAcceleration": "Povolit hardwarovou akceleraci (restaurtujte %(appName)s, aby se změna projevila)",
             "always_show_menu_bar": "Vždy zobrazovat horní lištu okna",
             "autocomplete_delay": "Zpožnění našeptávače (ms)",
@@ -2985,6 +2994,7 @@
         "show_chat_effects": "Zobrazit efekty chatu (animace např. při přijetí konfet)",
         "show_displayname_changes": "Zobrazovat změny zobrazovaného jména",
         "show_join_leave": "Zobrazit zprávy o vstupu/odchodu (pozvánky/odebrání/vykázání nejsou ovlivněny)",
+        "show_message_previews": "Zobrazit náhledy zpráv",
         "show_nsfw_content": "Zobrazit NSFW obsah",
         "show_read_receipts": "Zobrazovat potvrzení o přečtení",
         "show_redaction_placeholder": "Zobrazovat smazané zprávy",
@@ -3131,7 +3141,7 @@
         "upgraderoom": "Aktualizuje místnost na novou verzi",
         "upgraderoom_permission_error": "Na provedení tohoto příkazu nemáte dostatečná oprávnění.",
         "usage": "Použití",
-        "verify": "Ověří uživatele, relaci a veřejné klíče",
+        "verify": "Ruční ověření jednoho ze svých vlastních zařízení",
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },

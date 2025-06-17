@@ -2255,11 +2255,6 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-14.2.0.tgz#1d6bddb2f777ac1674546467aab6f8584a7f2e71"
   integrity sha512-xYbH1Yg8YwfXxGsCVDypiRvSVYPnCybsoRqlBDuAvIOs9tOfmdeeJqN+3VxvLWH28g3CtJs+9Afw8dYSHViTFg==
 
-"@matrix-org/olm@3.2.15":
-  version "3.2.15"
-  resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
-  integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
-
 "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.5.0.tgz#df774d0ae0c327fbd40f8994bbb13ed35e26c337"
@@ -3836,10 +3831,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.2.tgz#27363d26446eaa21880ab126fa51fec112e6fd86"
   integrity sha512-y13bhPyJ5OzbGRl21F6+Y2adrjyK+mu67yKTx+o8MfmIpJzMSn4KkHZtcujMquWSh0e5ZAufsnk4VYvxbSpr1A==
 
-"@vector-im/compound-web@^7.11.0":
-  version "7.11.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.11.0.tgz#b7c466e64089320b41f8eaf6f2b30950e9692ca2"
-  integrity sha512-lRxXUOQJHdBswhykpNs/J/cBW4fPY1qbwyDexlWxX5zCVAYiuMCWo2tI+Y7/SK4tNbDr7nwoTDRh4H9CO1L5LQ==
+"@vector-im/compound-web@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.0.0.tgz#1eeaf54c253730752393d0e5e7c8cd81030b80af"
+  integrity sha512-VAwCGl0KMjN+qEKflnQOB1LidSsxSDiczEWka1IGKj52EzrNOfY0wlfCs73v+H84zUanYKlgOwnQgWU5at9Q/w==
   dependencies:
     "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.1"
@@ -9226,12 +9221,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "37.7.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c387f30e5c23c897877dd418545a306e6b8cf0c9"
+  version "37.9.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4efb27354f466d4e50f09e95f5853780326a2b6c"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^14.2.0"
-    "@matrix-org/olm" "3.2.15"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"
