@@ -20,7 +20,7 @@ export default class AuthHeader extends React.Component<IProps> {
         return (
             <div className="mx_AuthHeader">
                 <AuthHeaderLogo />
-                <LanguageSelector disabled={this.props.disableLanguageSelector} />
+                {/* <LanguageSelector disabled={this.props.disableLanguageSelector} /> */}
             </div>
         );
     }

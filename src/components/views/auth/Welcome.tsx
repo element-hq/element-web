@@ -49,7 +49,6 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
                     data-testid="mx_welcome_screen"
                 >
                     <EmbeddedPage className="mx_WelcomePage" url={pageUrl} replaceMap={replaceMap} />
-                    <LanguageSelector />
                 </div>
             </AuthPage>
         );

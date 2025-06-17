@@ -70,7 +70,7 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
                         {this.props.children}
                     </div>
                 </div>
-                <AuthFooter />
+                {/* <AuthFooter /> */}
             </div>
         );
     }
