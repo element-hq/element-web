@@ -29,7 +29,7 @@ import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydra
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
-import { RECOVERY_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
+import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 
 /**
  * The possible states of the component.
@@ -133,9 +133,8 @@ export function ChangeRecoveryKey({
                                 await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                             });
 
-                            // We mark recovery as not disabled, in case it was
-                            // marked as disabled before.
-                            await matrixClient.setAccountData(RECOVERY_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
+                            // We mark recovery as not enabled.
+                            await matrixClient.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: true });
 
                             onFinish();
                         } catch (e) {

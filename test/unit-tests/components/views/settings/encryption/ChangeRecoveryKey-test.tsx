@@ -111,7 +111,7 @@ describe("<ChangeRecoveryKey />", () => {
             await waitFor(() => expect(finishButton).not.toHaveAttribute("aria-disabled", "true"));
 
             await user.click(finishButton);
-            expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery_disabled", { disabled: false });
+            expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery", { enabled: true });
             expect(onFinish).toHaveBeenCalledWith();
         });
 

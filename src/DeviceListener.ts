@@ -58,9 +58,9 @@ const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
 
 /**
- * Account data key to indicate that the user has chosen to disable recovery.
+ * Account data key to indicate whether the user has chosen to enable or disable recovery.
  */
-export const RECOVERY_DISABLED_ACCOUNT_DATA_KEY = "io.element.recovery_disabled";
+export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
@@ -174,7 +174,7 @@ export default class DeviceListener {
      * Set the account data to indicate that recovery is disabled
      */
     public async recordRecoveryDisabled(): Promise<void> {
-        await this.client?.setAccountData(RECOVERY_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
+        await this.client?.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: false });
     }
 
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
@@ -233,7 +233,7 @@ export default class DeviceListener {
             ev.getType().startsWith("m.cross_signing.") ||
             ev.getType() === "m.megolm_backup.v1" ||
             ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY ||
-            ev.getType() === RECOVERY_DISABLED_ACCOUNT_DATA_KEY
+            ev.getType() === RECOVERY_ACCOUNT_DATA_KEY
         ) {
             this.recheck();
         }
@@ -501,13 +501,17 @@ export default class DeviceListener {
     }
 
     /**
-     * Fetch the account data for `recovery_disabled`. If this is the first time,
+     * Check whether the user has disabled recovery. If this is the first time,
      * fetch it from the server (in case the initial sync has not finished).
      * Otherwise, fetch it from the store as normal.
      */
     private async recheckRecoveryDisabled(cli: MatrixClient): Promise<boolean> {
-        const recoveryDisabled = await cli.getAccountDataFromServer(RECOVERY_DISABLED_ACCOUNT_DATA_KEY);
-        return !!recoveryDisabled?.disabled;
+        const recoveryStatus = await cli.getAccountDataFromServer(RECOVERY_ACCOUNT_DATA_KEY);
+        // Recovery is disabled only if the `enabled` flag is set to `false`.
+        // If it is missing, or set to any other value, we consider it as
+        // not-disabled, and will prompt the user to create recovery (if
+        // missing).
+        return recoveryStatus?.enabled === false;
     }
 
     /**
