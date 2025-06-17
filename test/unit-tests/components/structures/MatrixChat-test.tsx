@@ -1040,7 +1040,7 @@ describe("<MatrixChat />", () => {
                 localStorage.removeItem("must_verify_device");
             });
 
-            it("should show the complete security screen if unskippable verification is enabled", async () => {
+            it("should show the Complete Security screen if unskippable verification is enabled", async () => {
                 // Given we have force verification on, and an existing logged-in session
                 // that is not verified (see beforeEach())
 
@@ -1053,7 +1053,6 @@ describe("<MatrixChat />", () => {
                 // Sanity: we are not racing with another screen update, so this heading stays visible
                 await screen.findByRole("heading", { name: "Verify this device", level: 1 });
             });
-
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
                 // We used to allow bypassing force verification by choosing "Verify with
@@ -1079,6 +1078,50 @@ describe("<MatrixChat />", () => {
 
                 // Then we are not allowed in - we are still being asked to verify
                 await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+            });
+
+            describe("when query params have a loginToken", () => {
+                const loginToken = "test-login-token";
+                const realQueryParams = {
+                    loginToken,
+                };
+
+                let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
+                const deviceId = "test-device-id";
+                const accessToken = "test-access-token";
+                const clientLoginResponse = {
+                    user_id: userId,
+                    device_id: deviceId,
+                    access_token: accessToken,
+                };
+
+                beforeEach(() => {
+                    localStorage.setItem("mx_sso_hs_url", serverConfig.hsUrl);
+                    localStorage.setItem("mx_sso_is_url", serverConfig.isUrl);
+                    loginClient = getMockClientWithEventEmitter(getMockClientMethods());
+                    // this is used to create a temporary client during login
+                    jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+
+                    loginClient.login.mockClear().mockResolvedValue(clientLoginResponse);
+                });
+
+                it("should show the Complete Security screen after OIDC login if unskippable ver. is on", async () => {
+                    // Given force_verification is on (outer describe)
+                    // And we just logged in via OIDC (inner describe)
+
+                    // When we load the page
+                    getComponent({ realQueryParams });
+
+                    defaultDispatcher.dispatch({
+                        action: "will_start_client",
+                    });
+                    await waitFor(() =>
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                    );
+
+                    // Then we are not allowed in - we are being asked to verify
+                    await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                });
             });
 
             function createMockCrypto(): CryptoApi {
