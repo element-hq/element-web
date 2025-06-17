@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 import React, { type HTMLAttributes } from "react";
 import classNames from "classnames";
+import { Form } from "@vector-im/compound-web";
 
 export interface SettingsTabProps extends HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
@@ -36,7 +37,9 @@ export interface SettingsTabProps extends HTMLAttributes<HTMLDivElement> {
  */
 const SettingsTab: React.FC<SettingsTabProps> = ({ children, className, ...rest }) => (
     <div {...rest} className={classNames("mx_SettingsTab", className)}>
-        <div className="mx_SettingsTab_sections">{children}</div>
+        <Form.Root>
+            <div className="mx_SettingsTab_sections">{children}</div>
+        </Form.Root>
     </div>
 );
 

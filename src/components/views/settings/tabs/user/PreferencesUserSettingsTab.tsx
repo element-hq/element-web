@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -29,11 +29,11 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
+import { SettingsToggleControl } from "@vector-im/compound-web";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -91,9 +91,9 @@ const SpellCheckSection: React.FC = () => {
         })();
     }, []);
 
-    const onSpellCheckEnabledChange = useCallback((enabled: boolean) => {
-        setSpellCheckEnabled(enabled);
-        PlatformPeg.get()?.setSpellCheckEnabled(enabled);
+    const onSpellCheckEnabledChange = useCallback<ChangeEventHandler<HTMLInputElement>>((evt) => {
+        setSpellCheckEnabled(evt.target.checked);
+        PlatformPeg.get()?.setSpellCheckEnabled(evt.target.checked);
     }, []);
 
     const onSpellCheckLanguagesChange = useCallback((languages: string[]): void => {
@@ -105,9 +105,10 @@ const SpellCheckSection: React.FC = () => {
 
     return (
         <>
-            <LabelledToggleSwitch
+            <SettingsToggleControl
                 label={_t("settings|general|allow_spellcheck")}
-                value={Boolean(spellCheckEnabled)}
+                name="spell_check"
+                checked={Boolean(spellCheckEnabled)}
                 onChange={onSpellCheckEnabledChange}
             />
             {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (

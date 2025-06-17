@@ -7,14 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import ToggleSwitch from "./ToggleSwitch";
 import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 interface IProps {
     // The setting must be a boolean
@@ -71,10 +71,10 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         });
     };
 
-    private onChange = async (checked: boolean): Promise<void> => {
-        await this.save(checked);
-        this.setState({ value: checked });
-        this.props.onChange?.(checked);
+    private onChange = async (evt: ChangeEvent<HTMLInputElement>): Promise<void> => {
+        await this.save(evt.target.checked);
+        this.setState({ value: evt.target.checked });
+        this.props.onChange?.(evt.target.checked);
     };
 
     private save = async (val?: boolean): Promise<void> => {
@@ -94,14 +94,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         const label = this.props.label ?? SettingsStore.getDisplayName(this.props.name, this.props.level);
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
-        return (
-            <div className="mx_SettingsFlag">
-                <label className="mx_SettingsFlag_label" htmlFor={this.id}>
-                    <span className="mx_SettingsFlag_labelText">{label}</span>
-                    {description && (
-                        <div className="mx_SettingsFlag_microcopy">
-                            {shouldWarn
-                                ? _t(
+        const helpMessage = shouldWarn ? _t(
                                       "settings|warning",
                                       {},
                                       {
@@ -109,19 +102,14 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                                           description,
                                       },
                                   )
-                                : description}
-                        </div>
-                    )}
-                </label>
-                <ToggleSwitch
-                    id={this.id}
-                    checked={this.state.value}
-                    onChange={this.onChange}
-                    disabled={disabled}
-                    tooltip={disabled ? SettingsStore.disabledMessage(this.props.name) : undefined}
-                    title={label ?? undefined}
-                />
-            </div>
-        );
+                                : description;
+        return <SettingsToggleInput
+            id={this.id}
+            onChange={this.onChange}
+            name={this.props.name}
+            label={label ?? this.props.name} 
+            helpMessage={helpMessage as string}
+            disabledMessage={SettingsStore.disabledMessage(this.props.name)}
+        />;
     }
 }

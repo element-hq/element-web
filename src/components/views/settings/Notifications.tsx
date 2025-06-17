@@ -52,6 +52,7 @@ import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
+import { Form } from "@vector-im/compound-web";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -194,10 +195,10 @@ const maximumVectorState = (
 
 const NotificationActivitySettings = (): JSX.Element => {
     return (
-        <div>
+        <Form.Root>
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
-        </div>
+        </Form.Root>
     );
 };
 
