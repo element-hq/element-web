@@ -28,16 +28,13 @@ describe("<RoomListPanel />", () => {
     });
 
     it("should render the RoomListSearch component when UIComponent.FilterContainer is at true", () => {
-        const { asFragment } = renderComponent();
+        renderComponent();
         expect(screen.getByRole("button", { name: "Search Ctrl K" })).toBeInTheDocument();
-        expect(asFragment()).toMatchSnapshot();
     });
 
     it("should not render the RoomListSearch component when UIComponent.FilterContainer is at false", () => {
         mocked(shouldShowComponent).mockReturnValue(false);
-        const { asFragment } = renderComponent();
-
+        renderComponent();
         expect(screen.queryByRole("button", { name: "Search Ctrl K" })).toBeNull();
-        expect(asFragment()).toMatchSnapshot();
     });
 });

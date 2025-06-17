@@ -157,6 +157,7 @@
         "view_message": "View message",
         "view_source": "View Source",
         "yes": "Yes",
+        "yes_dismiss": "Yes, dismiss",
         "zoom_in": "Zoom in",
         "zoom_out": "Zoom out"
     },
@@ -785,6 +786,7 @@
             "cross_signing_status": "Cross-signing status:",
             "cross_signing_untrusted": "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
             "crypto_not_available": "Cryptographic module is not available",
+            "device_id": "Device ID",
             "key_backup_active_version": "Active backup version:",
             "key_backup_active_version_none": "None",
             "key_backup_inactive_warning": "Your keys are not being backed up from this session.",
@@ -797,6 +799,8 @@
             "secret_storage_ready": "ready",
             "secret_storage_status": "Secret storage:",
             "self_signing_private_key_cached_status": "Self signing private key:",
+            "session": "Session",
+            "session_fingerprint": "Fingerprint (session key)",
             "title": "End-to-end encryption",
             "user_signing_private_key_cached_status": "User signing private key:"
         },
@@ -822,6 +826,7 @@
         "low_bandwidth_mode": "Low bandwidth mode",
         "low_bandwidth_mode_description": "Requires compatible homeserver.",
         "main_timeline": "Main timeline",
+        "manual_device_verification": "Manual device verification",
         "no_receipt_found": "No receipt found",
         "notification_state": "Notification state is <strong>%(notificationState)s</strong>",
         "notifications_debug": "Notifications debug",
@@ -910,26 +915,15 @@
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Enter your Security Phrase or <button>use your Recovery Key</button> to continue.",
+            "alternatives": "If you have a security key or security phrase, this will work too.",
             "key_validation_text": {
-                "invalid_security_key": "Invalid Recovery Key",
-                "recovery_key_is_correct": "Looks good!",
-                "wrong_file_type": "Wrong file type",
-                "wrong_security_key": "Wrong Recovery Key"
+                "wrong_security_key": "The recovery key you entered is not correct."
             },
-            "reset_title": "Reset everything",
-            "reset_warning_1": "Only do this if you have no other device to complete verification with.",
-            "reset_warning_2": "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.",
+            "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Recovery Key",
-            "security_phrase_incorrect_error": "Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
-            "security_phrase_title": "Security Phrase",
-            "separator": "%(securityKey)s or %(recoveryFile)s",
-            "use_security_key_prompt": "Use your Recovery Key to continue."
+            "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
-        "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
-        "cancel_entering_passphrase_title": "Cancel entering passphrase?",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
@@ -981,6 +975,8 @@
         "setup_secure_backup": {
             "explainer": "Back up your keys before signing out to avoid losing them."
         },
+        "turn_on_key_storage": "Turn on key storage",
+        "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
@@ -1015,6 +1011,21 @@
             "incoming_sas_dialog_waiting": "Waiting for partner to confirm…",
             "incoming_sas_user_dialog_text_1": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
             "incoming_sas_user_dialog_text_2": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
+            "manual": {
+                "already_verified": "This device is already verified",
+                "already_verified_and_wrong_fingerprint": "The supplied fingerprint does not match, but the device is already verified!",
+                "device_id": "Device ID",
+                "failure_description": "Failed to verify '%(deviceId)s': %(error)s",
+                "failure_title": "Verification failed",
+                "fingerprint": "Fingerprint (session key)",
+                "no_crypto": "Unable to verify device - crypto is not enabled",
+                "no_device": "Unable to verify device - device '%(deviceId)s' was not found",
+                "no_userid": "Unable to verify device - cannot find our User ID",
+                "success_description": "The device (%(deviceId)s) is now cross-signed",
+                "success_title": "Verification successful",
+                "text": "Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!",
+                "wrong_fingerprint": "Unable to verify device '%(deviceId)s' - the supplied fingerprint '%(fingerprint)s' does not match the device fingerprint, '%(fprint)s'"
+            },
             "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
@@ -1963,6 +1974,7 @@
         },
         "face_pile_tooltip_shortcut": "Including %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Including you, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Cannot determine which user to ignore since the member event has changed.",
         "failed_reject_invite": "Failed to reject invite",
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
@@ -2054,6 +2066,8 @@
         "read_topic": "Click to read topic",
         "rejecting": "Rejecting invite…",
         "rejoin_button": "Re-join",
+        "room_content": "Room content",
+        "room_is_low_priority": "This is a low priority room",
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
@@ -2100,28 +2114,35 @@
     "room_list": {
         "add_room_label": "Add room",
         "add_space_label": "Add space",
-        "appearance": "Appearance",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
+        "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
             "no_favourites": "You don't have favourite chat yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_lowpriority": "You don't have any low priority rooms",
+            "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
             "no_rooms": "You’re not in any room yet",
             "no_rooms_description": "You can deselect filters in order to see your other chats",
             "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_filters": "Expand filter list",
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
-        "filter": "Filter",
         "filters": {
             "favourite": "Favourites",
+            "invites": "Invites",
+            "low_priority": "Low priority",
+            "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
             "unread": "Unreads"
@@ -2153,23 +2174,20 @@
             "open_room": "Open room %(roomName)s"
         },
         "room_options": "Room Options",
-        "secondary_filter": {
-            "all_activity": "All activity",
-            "invites_only": "Invites only",
-            "low_priority": "Low priority",
-            "mentions_only": "Mentions only"
-        },
-        "secondary_filters": "Secondary filters",
         "show_less": "Show less",
-        "show_message_previews": "Show message previews",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
+        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
+        "sort_type": {
+            "activity": "Activity",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Show rooms with unread messages first",
         "space_menu": {
             "home": "Space home",
@@ -2554,6 +2572,8 @@
                 "session_key": "Session key:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
+            "confirm_key_storage_off_description": "If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
@@ -2689,6 +2709,9 @@
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
+        "invite_controls": {
+            "default_label": "Allow users to invite you to rooms"
+        },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
@@ -2755,6 +2778,7 @@
             "show_in_private": "In private rooms",
             "show_media": "Always show"
         },
+        "not_supported": "Your server does not implement this feature.",
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
             "default_setting_section": "I want to be notified for (Default Setting)",
@@ -2812,6 +2836,7 @@
             "voip": "Audio and Video calls"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Prevent the window contents from being captured by other apps",
             "Electron.enableHardwareAcceleration": "Enable hardware acceleration (restart %(appName)s to take effect)",
             "always_show_menu_bar": "Always show the window menu bar",
             "autocomplete_delay": "Autocomplete delay (ms)",
@@ -2984,6 +3009,7 @@
         "show_chat_effects": "Show chat effects (animations when receiving e.g. confetti)",
         "show_displayname_changes": "Show display name changes",
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
+        "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",
@@ -3090,6 +3116,8 @@
         "jumptodate": "Jump to the given date in the timeline",
         "jumptodate_invalid_input": "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.",
         "lenny": "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message",
+        "manual_device_verification_confirm_description": "This will allow another device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED! Are you sure you want to verify this other device?",
+        "manual_device_verification_confirm_title": "Caution: manual device verification",
         "me": "Displays action",
         "msg": "Sends a message to the given user",
         "myavatar": "Changes your profile picture in all rooms",
@@ -3130,6 +3158,7 @@
         "upgraderoom": "Upgrades a room to a new version",
         "upgraderoom_permission_error": "You do not have the required permissions to use this command.",
         "usage": "Usage",
+        "verify": "Manually verify one of your own devices",
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },

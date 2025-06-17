@@ -568,20 +568,12 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "מפתח אבטחה לא חוקי",
-                "recovery_key_is_correct": "נראה טוב!",
-                "wrong_file_type": "סוג קובץ שגוי",
                 "wrong_security_key": "מפתח אבטחה שגוי"
             },
             "restoring": "שחזור מפתחות מגיבוי",
-            "security_key_title": "מפתח אבטחה",
-            "security_phrase_incorrect_error": "אין אפשרות לגשת לאחסון הסודי. אנא אשר שהזנת את ביטוי האבטחה הנכון.",
-            "security_phrase_title": "ביטוי אבטחה",
-            "use_security_key_prompt": "השתמש במפתח האבטחה שלך כדי להמשיך."
+            "security_key_title": "מפתח אבטחה"
         },
         "bootstrap_title": "מגדיר מפתחות",
-        "cancel_entering_passphrase_description": "האם אתם בטוחים שהינכם רוצים לבטל?",
-        "cancel_entering_passphrase_title": "בטל הקלדת סיסמא?",
         "confirm_encryption_setup_body": "לחץ על הלחצן למטה כדי לאשר את הגדרת ההצפנה.",
         "confirm_encryption_setup_title": "אשר את הגדרת ההצפנה",
         "cross_signing_room_normal": "חדר זה מוצפן מקצה לקצה",
@@ -1880,6 +1872,7 @@
         "upgraderoom": "משדרג את החדר לגרסא חדשה",
         "upgraderoom_permission_error": "אין לכם הרשאות להשתמש בפקודה זו.",
         "usage": "שימוש",
+        "verify": "מוודא משתמש, התחברות וצמד מפתח ציבורי",
         "whois": "מציג מידע אודות משתמש"
     },
     "space": {

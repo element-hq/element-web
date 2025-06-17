@@ -1302,11 +1302,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                         const newValue = SettingsStore.getValue("Spaces.allRoomsInHome");
                         if (this.allRoomsInHome !== newValue) {
                             this._allRoomsInHome = newValue;
-                            this.emit(UPDATE_HOME_BEHAVIOUR, this.allRoomsInHome);
                             if (this.enabledMetaSpaces.includes(MetaSpace.Home)) {
                                 this.rebuildHomeSpace();
                             }
                             this.sendUserProperties();
+                            this.emit(UPDATE_HOME_BEHAVIOUR, this.allRoomsInHome);
                         }
                         break;
                     }

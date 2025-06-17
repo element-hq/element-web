@@ -776,27 +776,27 @@
             "cross_signing_cached": "cachad lokalt",
             "cross_signing_not_ready": "Korssignering är inte konfigurerad.",
             "cross_signing_private_keys_in_storage": "i hemlig lagring",
-            "cross_signing_private_keys_in_storage_status": "Korssignering av privata nycklar:",
+            "cross_signing_private_keys_in_storage_status": "Privata nycklar för korssignering:",
             "cross_signing_private_keys_not_in_storage": "hittades inte i lagring",
             "cross_signing_public_keys_on_device": "i minnet",
             "cross_signing_public_keys_on_device_status": "Korssignerade publika nycklar:",
             "cross_signing_ready": "Korssignering är klar för användning.",
             "cross_signing_status": "Korssigneringsstatus:",
-            "cross_signing_untrusted": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men det är ännu inte betrodd av den här sessionen.",
+            "cross_signing_untrusted": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men den är ännu inte betrodd av den här sessionen.",
             "crypto_not_available": "Kryptografisk modul är inte tillgänglig",
-            "key_backup_active_version": "Aktiv backupversion:",
+            "key_backup_active_version": "Aktiv säkerhetskopiaversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Dina nycklar säkerhetskopieras inte från den här sessionen.",
-            "key_backup_latest_version": "Senaste backupversionen på servern:",
+            "key_backup_latest_version": "Senast version av säkerhetskopia på servern:",
             "key_storage": "Nyckellagring",
             "master_private_key_cached_status": "Privat huvudnyckel:",
-            "not_found": "Hittades inte",
+            "not_found": "hittades inte",
             "not_found_locally": "hittades inte lokalt",
-            "secret_storage_not_ready": "Inte redo",
-            "secret_storage_ready": "Klar",
+            "secret_storage_not_ready": "inte klar",
+            "secret_storage_ready": "klar",
             "secret_storage_status": "Hemlig lagring:",
             "self_signing_private_key_cached_status": "Självsignerande privat nyckel:",
-            "title": "End-to-end-kryptering",
+            "title": "Totalsträckskryptering",
             "user_signing_private_key_cached_status": "Privat nyckel för användarsignering:"
         },
         "developer_mode": "Utvecklarläge",
@@ -909,26 +909,13 @@
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ange din säkerhetsfras eller <button>använd din säkerhetsnyckel</button> för att fortsätta.",
             "key_validation_text": {
-                "invalid_security_key": "Ogiltig säkerhetsnyckel",
-                "recovery_key_is_correct": "Ser bra ut!",
-                "wrong_file_type": "Fel filtyp",
                 "wrong_security_key": "Fel säkerhetsnyckel"
             },
-            "reset_title": "Återställ allt",
-            "reset_warning_1": "Gör detta endast om du inte har någon annan enhet att slutföra verifikationen med.",
-            "reset_warning_2": "Om du återställer allt så kommer du att börja om utan betrodda sessioner eller betrodda användare, och kommer kanske inte kunna se gamla meddelanden.",
             "restoring": "Återställer nycklar från säkerhetskopia",
-            "security_key_title": "Säkerhetsnyckel",
-            "security_phrase_incorrect_error": "Kan inte komma åt hemlig lagring. Vänligen verifiera att du angav rätt säkerhetsfras.",
-            "security_phrase_title": "Säkerhetsfras",
-            "separator": "%(securityKey)s eller %(recoveryFile)s",
-            "use_security_key_prompt": "Använd din säkerhetsnyckel för att fortsätta."
+            "security_key_title": "Säkerhetsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
-        "cancel_entering_passphrase_description": "Är du säker på att du vill avbryta inmatning av lösenfrasen?",
-        "cancel_entering_passphrase_title": "Avbryta inmatning av lösenfras?",
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
         "confirm_encryption_setup_title": "Bekräfta krypteringsinställning",
         "cross_signing_room_normal": "Det här rummet är totalsträckskrypterat",
@@ -2098,7 +2085,6 @@
     "room_list": {
         "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
         "empty": {
@@ -2150,9 +2136,7 @@
             "open_room": "Öppet rummet %(roomName)s"
         },
         "room_options": "Rumsalternativ",
-        "secondary_filters": "Sekundära filter",
         "show_less": "Visa mindre",
-        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
@@ -2597,7 +2581,7 @@
             "add_msisdn_instructions": "Ett SMS har skickats till +%(msisdn)s. Ange verifieringskoden som det innehåller.",
             "add_msisdn_misconfigured": "Flöde för tilläggning/bindning med MSISDN är felkonfigurerat",
             "allow_spellcheck": "Tillåt stavningskontroll",
-            "application_language": "Språk för ansökan",
+            "application_language": "Applikationsspråk",
             "application_language_reload_hint": "Appen laddas om efter att ha valt ett annat språk",
             "avatar_remove_progress": "Tar bort bild...",
             "avatar_save_progress": "Laddar upp bild...",
@@ -3114,6 +3098,7 @@
         "upgraderoom": "Uppgraderar ett rum till en ny version",
         "upgraderoom_permission_error": "Du har inte de behörigheter som krävs för att använda det här kommandot.",
         "usage": "Användande",
+        "verify": "Verifiera en av dina egna enheter manuellt",
         "view": "Visar rum med den angivna adressen",
         "whois": "Visar information om en användare"
     },
@@ -3222,6 +3207,7 @@
         "heading_without_query": "Sök efter",
         "join_button_text": "Gå med i %(roomAddress)s",
         "keyboard_scroll_hint": "Använd <arrows/> för att skrolla",
+        "messages_label": "Meddelanden",
         "other_rooms_in_space": "Andra rum i %(spaceName)s",
         "public_rooms_label": "Offentliga rum",
         "public_spaces_label": "Offentliga utrymmen",
@@ -3790,10 +3776,10 @@
         "unavailable": "Otillgänglig"
     },
     "update_room_access_modal": {
-        "description": "För att skapa en delningslänk måste du tillåta gäster att gå med i det här rummet. Detta kan göra rummet mindre säkert. När du är klar med samtalet kan du göra rummet privat igen.",
-        "dont_change_description": "Alternativt kan du hålla samtalet i ett separat rum.",
+        "description": "För att skapa en delningslänk, gör det här rummet <b>offentligt</b> eller aktivera alternativet för användare att <b>be om att få gå med</b>. Detta gör att gäster kan gå med utan att bli inbjudna.",
+        "dont_change_description": "Om du inte vill ändra åtkomst till det här rummet kan du skapa ett nytt rum för samtalslänken.",
         "no_change": "Jag vill inte ändra åtkomstnivån.",
-        "title": "Ändra åtkomstnivå för rummet"
+        "title": "Tillåt gästanvändare att gå med i det här rummet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunde inte laddas upp.",
     "upload_failed_size": "Filen '%(fileName)s' överstiger denna hemserverns storleksgräns för uppladdningar",

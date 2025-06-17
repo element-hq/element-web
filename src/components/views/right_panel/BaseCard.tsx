@@ -76,7 +76,7 @@ const BaseCard: React.FC<IProps> = ({
                 data-testid="base-card-back-button"
                 onClick={onBackClick}
                 tooltip={label}
-                subtleBackground
+                kind="secondary"
             >
                 <ChevronLeftIcon />
             </IconButton>
@@ -92,7 +92,7 @@ const BaseCard: React.FC<IProps> = ({
                 onClick={onClose ?? closeRightPanel}
                 ref={closeButtonRef}
                 tooltip={closeLabel ?? _t("action|close")}
-                subtleBackground
+                kind="secondary"
             >
                 <CloseIcon />
             </IconButton>

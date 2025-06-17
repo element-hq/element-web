@@ -24,6 +24,7 @@ import { type OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
+import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
 
 const TOAST_KEY = "setupencryption";
 
@@ -37,6 +38,8 @@ const getTitle = (kind: Kind): string => {
             return _t("encryption|verify_toast_title");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|key_storage_out_of_sync");
+        case Kind.TURN_ON_KEY_STORAGE:
+            return _t("encryption|turn_on_key_storage");
     }
 };
 
@@ -49,6 +52,8 @@ const getIcon = (kind: Kind): string | undefined => {
         case Kind.VERIFY_THIS_SESSION:
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return "verification_warning";
+        case Kind.TURN_ON_KEY_STORAGE:
+            return "key_storage";
     }
 };
 
@@ -62,6 +67,8 @@ const getSetupCaption = (kind: Kind): string => {
             return _t("action|verify");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|enter_recovery_key");
+        case Kind.TURN_ON_KEY_STORAGE:
+            return _t("action|continue");
     }
 };
 
@@ -87,6 +94,8 @@ const getSecondaryButtonLabel = (kind: Kind): string => {
             return _t("encryption|verification|unverified_sessions_toast_reject");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|forgot_recovery_key");
+        case Kind.TURN_ON_KEY_STORAGE:
+            return _t("action|dismiss");
     }
 };
 
@@ -100,6 +109,8 @@ const getDescription = (kind: Kind): string => {
             return _t("encryption|verify_toast_description");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|key_storage_out_of_sync_description");
+        case Kind.TURN_ON_KEY_STORAGE:
+            return _t("encryption|turn_on_key_storage_description");
     }
 };
 
@@ -123,6 +134,10 @@ export enum Kind {
      * Prompt the user to enter their recovery key
      */
     KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
+    /**
+     * Prompt the user to turn on key storage
+     */
+    TURN_ON_KEY_STORAGE = "turn_on_key_storage",
 }
 
 /**
@@ -143,6 +158,13 @@ export const showToast = (kind: Kind): void => {
     const onPrimaryClick = async (): Promise<void> => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
             Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
+        } else if (kind == Kind.TURN_ON_KEY_STORAGE) {
+            // Open the user settings dialog to the encryption tab
+            const payload: OpenToTabPayload = {
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+            };
+            defaultDispatcher.dispatch(payload);
         } else {
             const modal = Modal.createDialog(
                 Spinner,
@@ -161,7 +183,7 @@ export const showToast = (kind: Kind): void => {
         }
     };
 
-    const onSecondaryClick = (): void => {
+    const onSecondaryClick = async (): Promise<void> => {
         if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC) {
             // Open the user settings dialog to the encryption tab and start the flow to reset encryption
             const payload: OpenToTabPayload = {
@@ -170,6 +192,15 @@ export const showToast = (kind: Kind): void => {
                 props: { initialEncryptionState: "reset_identity_forgot" },
             };
             defaultDispatcher.dispatch(payload);
+        } else if (kind === Kind.TURN_ON_KEY_STORAGE) {
+            // The user clicked "Dismiss": offer them "Are you sure?"
+            const modal = Modal.createDialog(ConfirmKeyStorageOffDialog, undefined, "mx_ConfirmKeyStorageOffDialog");
+            const [dismissed] = await modal.finished;
+            if (dismissed) {
+                const deviceListener = DeviceListener.sharedInstance();
+                await deviceListener.recordKeyBackupDisabled();
+                deviceListener.dismissEncryptionSetup();
+            }
         } else {
             DeviceListener.sharedInstance().dismissEncryptionSetup();
         }

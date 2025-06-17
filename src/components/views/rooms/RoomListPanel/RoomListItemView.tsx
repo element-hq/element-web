@@ -48,9 +48,6 @@ export const RoomListItemView = memo(function RoomListItemView({
     const showHoverDecoration = isMenuOpen || isHover;
     const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
 
-    const isInvitation = vm.notificationState.invited;
-    const isNotificationDecorationVisible = isInvitation || (!showHoverDecoration && vm.showNotificationDecoration);
-
     const setIsMenuOpenMemoized = useCallback((isOpen: boolean) => {
         if (isOpen) {
             setIsMenuOpen(isOpen);
@@ -67,8 +64,6 @@ export const RoomListItemView = memo(function RoomListItemView({
         <button
             ref={ref}
             className={classNames("mx_RoomListItemView", {
-                mx_RoomListItemView_empty: !isNotificationDecorationVisible && !showHoverDecoration,
-                mx_RoomListItemView_notification_decoration: isNotificationDecorationVisible,
                 mx_RoomListItemView_hover: showHoverDecoration,
                 mx_RoomListItemView_menu_open: showHoverMenu,
                 mx_RoomListItemView_selected: isSelected,
@@ -96,7 +91,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 <RoomAvatarView room={room} />
                 <Flex
                     className="mx_RoomListItemView_content"
-                    gap="var(--cpd-space-3x)"
+                    gap="var(--cpd-space-2x)"
                     align="center"
                     justify="space-between"
                 >

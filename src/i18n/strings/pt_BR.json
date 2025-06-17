@@ -157,6 +157,7 @@
         "view_message": "Ver mensagem",
         "view_source": "Ver código-fonte",
         "yes": "Sim",
+        "yes_dismiss": "Sim, dispensar",
         "zoom_in": "Aumentar zoom",
         "zoom_out": "Diminuir zoom"
     },
@@ -785,6 +786,7 @@
             "cross_signing_status": "Status de assinatura cruzada:",
             "cross_signing_untrusted": "Sua conta tem uma identidade de assinatura cruzada no armazenamento secreto, mas ela ainda não é confiável para esta sessão.",
             "crypto_not_available": "O módulo criptográfico não está disponível",
+            "device_id": "ID do dispositivo",
             "key_backup_active_version": "Versão de backup ativo:",
             "key_backup_active_version_none": "Nenhuma",
             "key_backup_inactive_warning": "Suas chaves não estão sendo copiadas nesta sessão.",
@@ -797,6 +799,8 @@
             "secret_storage_ready": "pronto",
             "secret_storage_status": "Armazenamento secreto:",
             "self_signing_private_key_cached_status": "Chave privada auto-assinada:",
+            "session": "Sessão",
+            "session_fingerprint": "Impressão digital (chave de sessão)",
             "title": "Criptografia de ponta a ponta",
             "user_signing_private_key_cached_status": "Chave privada de assinatura do usuário:"
         },
@@ -822,6 +826,7 @@
         "low_bandwidth_mode": "Modo de baixa largura de banda",
         "low_bandwidth_mode_description": "Requer servidor doméstico compatível.",
         "main_timeline": "Linha do tempo principal",
+        "manual_device_verification": "Verificação manual do dispositivo",
         "no_receipt_found": "Nenhum recibo encontrado",
         "notification_state": "O estado da notificação é<strong>%(notificationState)s</strong>",
         "notifications_debug": "Depuração de notificações",
@@ -910,26 +915,15 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduza a sua Frase de Segurança ou <button>use a sua Chave de Recuperação</button> para continuar.",
+            "alternatives": "Se você tiver uma chave de segurança ou frase de segurança, isso também funcionará.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de recuperação inválida",
-                "recovery_key_is_correct": "Muito bem!",
-                "wrong_file_type": "Tipo errado de arquivo",
-                "wrong_security_key": "Chave de recuperação incorreta"
+                "wrong_security_key": "A chave de recuperação que você inseriu não está correta."
             },
-            "reset_title": "Redefinir tudo",
-            "reset_warning_1": "Faça isso somente se você não tiver outro dispositivo para concluir a verificação.",
-            "reset_warning_2": "Se você redefinir tudo, reiniciará sem sessões confiáveis, sem usuários confiáveis e talvez não consiga ver as mensagens anteriores.",
+            "privacy_warning": "Certifique-se de que ninguém possa ver essa tela!",
             "restoring": "Restaurando chaves do backup",
-            "security_key_title": "Chave de recuperação",
-            "security_phrase_incorrect_error": "Não foi possível acessar o armazenamento secreto. Verifique se você digitou a Frase de Segurança correta.",
-            "security_phrase_title": "Frase de segurança",
-            "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Use sua chave de recuperação para continuar."
+            "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "Configurar chaves",
-        "cancel_entering_passphrase_description": "Tem certeza que quer cancelar a introdução da frase de senha?",
-        "cancel_entering_passphrase_title": "Cancelar a introdução da frase de senha?",
         "confirm_encryption_setup_body": "Clique no botão abaixo para confirmar a configuração da criptografia.",
         "confirm_encryption_setup_title": "Confirmar a configuração de criptografia",
         "cross_signing_room_normal": "Esta sala é criptografada de ponta a ponta",
@@ -981,6 +975,8 @@
         "setup_secure_backup": {
             "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
         },
+        "turn_on_key_storage": "Ativar o armazenamento de chaves",
+        "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
         "udd": {
             "interactive_verification_button": "Verificar interativamente por emoji",
             "other_ask_verify_text": "Peça a este usuário para confirmar a sessão dele, ou confirme-a manualmente abaixo.",
@@ -1015,6 +1011,21 @@
             "incoming_sas_dialog_waiting": "Aguardando a confirmação do parceiro…",
             "incoming_sas_user_dialog_text_1": "Confirme este usuário para torná-lo confiável. Confiar nos usuários fornece segurança adicional ao trocar mensagens criptografadas de ponta a ponta.",
             "incoming_sas_user_dialog_text_2": "Se você confirmar esse usuário, a sessão será marcada como confiável para você e para ele.",
+            "manual": {
+                "already_verified": "Este dispositivo já está verificado",
+                "already_verified_and_wrong_fingerprint": "A impressão digital fornecida não corresponde, mas o dispositivo já foi verificado!",
+                "device_id": "ID do dispositivo",
+                "failure_description": "Falha ao verificar '%(deviceId)s': %(error)s",
+                "failure_title": "A verificação falhou",
+                "fingerprint": "Impressão digital (chave de sessão)",
+                "no_crypto": "Não é possível verificar o dispositivo - a criptografia não está ativada",
+                "no_device": "Não foi possível verificar o dispositivo - o dispositivo '%(deviceId)s' não foi encontrado",
+                "no_userid": "Não foi possível verificar o dispositivo - não foi possível encontrar nossa ID de usuário",
+                "success_description": "O dispositivo (%(deviceId)s) agora tem assinatura cruzada",
+                "success_title": "Verificação bem-sucedida",
+                "text": "Forneça o ID e a impressão digital de um de seus próprios dispositivos para verificá-lo. OBSERVE que isso permite que o outro dispositivo envie e receba mensagens como você. SE ALGUÉM LHE DISSE PARA COLAR ALGO AQUI, É PROVÁVEL QUE VOCÊ ESTEJA SENDO ENGANADO!",
+                "wrong_fingerprint": "Não é possível verificar o dispositivo '%(deviceId)s' - a impressão digital fornecida '%(fingerprint)s' não corresponde à impressão digital do dispositivo, '%(fprint)s'"
+            },
             "no_key_or_device": "Parece que você não tem uma chave de segurança ou qualquer outro dispositivo que possa ser verificado. Este dispositivo não poderá acessar mensagens criptografadas antigas. Para verificar sua identidade neste dispositivo, você precisará redefinir suas chaves de verificação.",
             "no_support_qr_emoji": "O dispositivo que você está tentando verificar não suporta a leitura de um código QR ou verificação de emoji, que é o que %(brand)s suporta. Tente com um cliente diferente.",
             "other_party_cancelled": "Seu contato cancelou a confirmação.",
@@ -1595,7 +1606,7 @@
         "MapStyleUrlNotConfigured": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​para​•​exibir​•​mapas.",
         "MapStyleUrlNotReachable": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​corretamente​•​para​•​exibir​•​mapas,​•​ou​•​o​•​servidor​•​de​•​mapas​•​configurado​•​pode​•​estar​•​inacessível.",
         "WebGLNotEnabled": "O​•​WebGL​•​é​•​necessário​•​para​•​exibir​•​mapas,​•​ative-o​•​nas​•​configurações​•​do​•​seu​•​navegador.",
-        "click_drop_pin": "Clique​•​para​•​soltar​•​um​•​alfinete",
+        "click_drop_pin": "Clique para soltar um alfinete",
         "click_move_pin": "Clique​•​para​•​mover​•​o​•​alfinete",
         "close_sidebar": "Fechar​•​barra​•​lateral",
         "error_fetch_location": "Não​•​foi​•​possível​•​obter​•​a​•​localização",
@@ -1962,6 +1973,7 @@
         },
         "face_pile_tooltip_shortcut": "Incluindo %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Incluindo você, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Não é possível determinar qual usuário ignorar, pois o evento do membro foi alterado.",
         "failed_reject_invite": "Não foi possível recusar o convite",
         "forget_room": "Esquecer esta sala",
         "forget_space": "Esqueça este espaço",
@@ -2053,6 +2065,7 @@
         "read_topic": "Clique para ler o tópico",
         "rejecting": "Rejeitando o convite...",
         "rejoin_button": "Entrar novamente",
+        "room_is_low_priority": "Esta é uma sala de baixa prioridade",
         "search": {
             "all_rooms_button": "Pesquisar todos as salas",
             "placeholder": "Pesquisar mensagens...",
@@ -2099,7 +2112,6 @@
     "room_list": {
         "add_room_label": "Adicionar sala",
         "add_space_label": "Adicionar espaço",
-        "appearance": "Aparência",
         "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
         "empty": {
@@ -2108,19 +2120,24 @@
             "no_chats_description_no_room_rights": "Comece enviando uma mensagem para alguém",
             "no_favourites": "Você ainda não tem o bate-papo favorito",
             "no_favourites_description": "Você pode adicionar um bate-papo aos seus favoritos nas configurações de bate-papo",
+            "no_invites": "Você não tem nenhum convite não lido",
+            "no_mentions": "Você não tem nenhuma menção não lida",
             "no_people": "Você ainda não tem conversas diretas com ninguém",
             "no_people_description": "Você pode desmarcar os filtros para ver suas outras conversas",
             "no_rooms": "Você não está em nenhuma sala ainda",
             "no_rooms_description": "Você pode desmarcar os filtros para ver suas outras conversas.",
             "no_unread": "Parabéns! Você não tem nenhuma mensagem não lida",
+            "show_activity": "Ver todas as atividades",
             "show_chats": "Mostrar todas as conversas"
         },
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
-        "filter": "Filtro",
         "filters": {
             "favourite": "Favoritos",
+            "invites": "Convites",
+            "low_priority": "Baixa prioridade",
+            "mentions": "Menções",
             "people": "Pessoas",
             "rooms": "Salas",
             "unread": "Não lido"
@@ -2152,23 +2169,20 @@
             "open_room": "Abrir sala %(roomName)s"
         },
         "room_options": "Opções da Sala",
-        "secondary_filter": {
-            "all_activity": "Toda a atividade",
-            "invites_only": "Somente para convidados",
-            "low_priority": "Baixa prioridade",
-            "mentions_only": "Apenas menções"
-        },
-        "secondary_filters": "Filtros secundários",
         "show_less": "Mostrar menos",
-        "show_message_previews": "Mostrar prévias de mensagens",
         "show_n_more": {
             "other": "Mostrar %(count)s a mais",
             "one": "Mostrar %(count)s a mais"
         },
         "show_previews": "Mostrar pré-visualizações de mensagens",
+        "sort": "Ordenar",
         "sort_by": "Classificar por",
         "sort_by_activity": "Atividade recente",
         "sort_by_alphabet": "De A a Z",
+        "sort_type": {
+            "activity": "Atividade",
+            "atoz": "A-Z"
+        },
         "sort_unread_first": "Mostrar salas não lidas em primeiro",
         "space_menu": {
             "home": "Espaço",
@@ -2553,6 +2567,8 @@
                 "session_key": "Chave da sessão:",
                 "title": "Avançado"
             },
+            "confirm_key_storage_off": "Tem certeza de que deseja manter o armazenamento de chaves desativado?",
+            "confirm_key_storage_off_description": "Se você sair de todos os seus dispositivos, perderá o histórico de mensagens e precisará verificar todos os seus contatos existentes novamente. <a>Saiba mais</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Excluir armazenamento de chaves",
                 "confirm": "Excluir armazenamento de chaves",
@@ -2688,6 +2704,9 @@
         "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
         "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
         "insert_trailing_colon_mentions": "Insira dois pontos à direita após o usuário mencionar no início de uma mensagem",
+        "invite_controls": {
+            "default_label": "Permitir que usuários convidem você para salas"
+        },
         "jump_to_bottom_on_send": "Vá para o final da linha do tempo ao enviar uma mensagem",
         "key_backup": {
             "backup_in_progress": "O backup de suas chaves está sendo feito (o primeiro backup pode demorar alguns minutos).",
@@ -2754,6 +2773,7 @@
             "show_in_private": "Em salas privadas",
             "show_media": "Mostrar sempre"
         },
+        "not_supported": "Seu servidor não implementa esse recurso.",
         "notifications": {
             "default_setting_description": "Essa configuração será aplicada por padrão a todas as suas salas.",
             "default_setting_section": "Quero ser notificado sobre (configuração padrão)",
@@ -2811,6 +2831,7 @@
             "voip": "Chamadas de áudio e vídeo"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Impedir que o conteúdo da janela seja capturado por outros aplicativos",
             "Electron.enableHardwareAcceleration": "Ativar a aceleração de hardware (reinicie %(appName)s para fazer efeito)",
             "always_show_menu_bar": "Mostrar a barra de menu na janela",
             "autocomplete_delay": "Atraso no preenchimento automático (ms)",
@@ -2983,6 +3004,7 @@
         "show_chat_effects": "Mostrar efeitos na conversa (por exemplo: animações ao receber confetes)",
         "show_displayname_changes": "Mostrar alterações de nome e sobrenome",
         "show_join_leave": "Mostrar mensagens de entrada/saída (convites/remoções/bans não são afetados)",
+        "show_message_previews": "Mostrar prévias de mensagens",
         "show_nsfw_content": "Mostrar conteúdo NSFW (\"Não seguro para o trabalho\")",
         "show_read_receipts": "Mostrar confirmações de leitura dos outros usuários",
         "show_redaction_placeholder": "Mostrar um marcador para as mensagens removidas",
@@ -3129,6 +3151,7 @@
         "upgraderoom": "Atualiza a sala para uma nova versão",
         "upgraderoom_permission_error": "Você não tem as permissões necessárias para usar este comando.",
         "usage": "Uso",
+        "verify": "Verifique manualmente um de seus próprios dispositivos",
         "view": "Visualizações da sala com o endereço fornecido",
         "whois": "Exibe informação sobre um usuário"
     },

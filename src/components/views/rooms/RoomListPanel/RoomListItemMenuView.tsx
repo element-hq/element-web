@@ -47,7 +47,7 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-0-5x)">
+        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
             {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>
@@ -124,12 +124,12 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                 onSelect={vm.toggleFavorite}
                 onClick={(evt) => evt.stopPropagation()}
             />
-            <MenuItem
+            <ToggleMenuItem
+                checked={vm.isLowPriority}
                 Icon={ArrowDownIcon}
                 label={_t("room_list|more_options|low_priority")}
                 onSelect={vm.toggleLowPriority}
                 onClick={(evt) => evt.stopPropagation()}
-                hideChevron={true}
             />
             {vm.canInvite && (
                 <MenuItem

@@ -68,7 +68,9 @@ import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
+import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
+import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -125,7 +127,7 @@ describe("<MatrixChat />", () => {
         setGuest: jest.fn(),
         setNotifTimelineSet: jest.fn(),
         getAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn(),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
         getDevices: jest.fn().mockResolvedValue({ devices: [] }),
         getProfileInfo: jest.fn().mockResolvedValue({
             displayname: "Ernie",
@@ -155,6 +157,7 @@ describe("<MatrixChat />", () => {
         whoami: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
+        forget: () => Promise.resolve(),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -675,6 +678,34 @@ describe("<MatrixChat />", () => {
                     jest.restoreAllMocks();
                 });
 
+                describe("forget_room", () => {
+                    it("should dispatch after_forget_room action on successful forget", async () => {
+                        await clearAllModals();
+                        await getComponentAndWaitForReady();
+
+                        // Mock out the old room list store
+                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
+
+                        // Register a mock function to the dispatcher
+                        const fn = jest.fn();
+                        defaultDispatcher.register(fn);
+
+                        // Forge the room
+                        defaultDispatcher.dispatch({
+                            action: "forget_room",
+                            room_id: roomId,
+                        });
+
+                        // On success, we expect the following action to have been dispatched.
+                        await waitFor(() => {
+                            expect(fn).toHaveBeenCalledWith({
+                                action: Action.AfterForgetRoom,
+                                room: room,
+                            });
+                        });
+                    });
+                });
+
                 describe("leave_room", () => {
                     beforeEach(async () => {
                         await clearAllModals();
@@ -781,6 +812,108 @@ describe("<MatrixChat />", () => {
                                 ),
                             ).toBeInTheDocument();
                         });
+                    });
+                });
+
+                it("should open forward dialog when text message shared", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({ action: Action.Share, format: ShareFormat.Text, msg: "Hello world" });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        body: "Hello world",
+                    });
+                });
+
+                it("should open forward dialog when html message shared", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({ action: Action.Share, format: ShareFormat.Html, msg: "Hello world" });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: expect.stringContaining("Hello world"),
+                        formatted_body: expect.stringContaining("Hello world"),
+                    });
+                });
+
+                it("should open forward dialog when markdown message shared", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({
+                        action: Action.Share,
+                        format: ShareFormat.Markdown,
+                        msg: "Hello *world*",
+                    });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: "Hello *world*",
+                        formatted_body: "Hello <em>world</em>",
+                    });
+                });
+
+                it("should strip malicious tags from shared html message", async () => {
+                    await getComponentAndWaitForReady();
+                    defaultDispatcher.dispatch({
+                        action: Action.Share,
+                        format: ShareFormat.Html,
+                        msg: `evil<script src="http://evil.dummy/bad.js" />`,
+                    });
+                    await waitFor(() => {
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                            action: Action.OpenForwardDialog,
+                            event: expect.any(MatrixEvent),
+                            permalinkCreator: null,
+                        });
+                    });
+                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
+                        ([call]) => call.action === Action.OpenForwardDialog,
+                    );
+
+                    const payload = forwardCall?.[0];
+
+                    expect(payload!.event.getContent()).toEqual({
+                        msgtype: MatrixJs.MsgType.Text,
+                        format: "org.matrix.custom.html",
+                        body: "evil",
+                        formatted_body: "evil",
                     });
                 });
             });
@@ -973,6 +1106,22 @@ describe("<MatrixChat />", () => {
                     requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn() }),
                 } as any;
             }
+        });
+
+        describe("showScreen", () => {
+            it("should show the 'share' screen", async () => {
+                await getComponent({
+                    initialScreenAfterLogin: { screen: "share", params: { msg: "Hello", format: ShareFormat.Text } },
+                });
+
+                await waitFor(() => {
+                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                        action: "share",
+                        msg: "Hello",
+                        format: ShareFormat.Text,
+                    });
+                });
+            });
         });
     });
 

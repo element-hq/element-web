@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IconButton, Menu, MenuTitle, CheckboxMenuItem, Tooltip } from "@vector-im/compound-web";
-import React, { type Ref, type JSX, useState } from "react";
+import { IconButton, Menu, MenuTitle, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
+import React, { type Ref, type JSX, useState, useCallback } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { _t } from "../../../../languageHandler";
-import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
+import { SortOption } from "../../../viewmodels/roomlist/useSorter";
+import { type RoomListHeaderViewState } from "../../../viewmodels/roomlist/RoomListHeaderViewModel";
 
 interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
     ref?: Ref<HTMLButtonElement>;
@@ -18,13 +19,8 @@ interface MenuTriggerProps extends React.ComponentProps<typeof IconButton> {
 
 const MenuTrigger = ({ ref, ...props }: MenuTriggerProps): JSX.Element => (
     <Tooltip label={_t("room_list|room_options")}>
-        <IconButton
-            className="mx_RoomListSecondaryFilters_roomOptionsButton"
-            aria-label={_t("room_list|room_options")}
-            {...props}
-            ref={ref}
-        >
-            <OverflowHorizontalIcon />
+        <IconButton aria-label={_t("room_list|room_options")} {...props} ref={ref}>
+            <OverflowHorizontalIcon color="var(--cpd-color-icon-secondary)" />
         </IconButton>
     </Tooltip>
 );
@@ -33,11 +29,19 @@ interface Props {
     /**
      * The view model for the room list view
      */
-    vm: RoomListViewState;
+    vm: RoomListHeaderViewState;
 }
 
 export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
     const [open, setOpen] = useState(false);
+
+    const onActivitySelected = useCallback(() => {
+        vm.sort(SortOption.Activity);
+    }, [vm]);
+
+    const onAtoZSelected = useCallback(() => {
+        vm.sort(SortOption.AToZ);
+    }, [vm]);
 
     return (
         <Menu
@@ -48,11 +52,16 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
             align="start"
             trigger={<MenuTrigger />}
         >
-            <MenuTitle title={_t("room_list|appearance")} />
-            <CheckboxMenuItem
-                label={_t("room_list|show_message_previews")}
-                onSelect={vm.toggleMessagePreview}
-                checked={vm.shouldShowMessagePreview}
+            <MenuTitle title={_t("room_list|sort")} />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|activity")}
+                checked={vm.activeSortOption === SortOption.Activity}
+                onSelect={onActivitySelected}
+            />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|atoz")}
+                checked={vm.activeSortOption === SortOption.AToZ}
+                onSelect={onAtoZSelected}
             />
         </Menu>
     );
