@@ -30,14 +30,14 @@ interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentP
 
 export class CustomComponentsApi implements ICustomComponentsApi {
     /**
-     * Convert a matrix-js-sdk event into a SDK-neutral ModuleMatrixEvent.
-     * @param sdkEvent
+     * Convert a matrix-js-sdk event into a ModuleMatrixEvent.
+     * @param mxEvent
      * @returns An event object, or `null` if the event was not a message event.
      */
-    private static getModuleMatrixEvent(sdkEvent: MatrixEvent): ModuleMatrixEvent | null {
-        const eventId = sdkEvent.getId();
-        const roomId = sdkEvent.getRoomId();
-        const sender = sdkEvent.sender;
+    private static getModuleMatrixEvent(mxEvent: MatrixEvent): ModuleMatrixEvent | null {
+        const eventId = mxEvent.getId();
+        const roomId = mxEvent.getRoomId();
+        const sender = mxEvent.sender;
         // Typically we wouldn't expect messages without these keys to be rendered
         // by the timeline, but for the sake of type safety.
         if (!eventId || !roomId || !sender) {
@@ -45,15 +45,14 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             return null;
         }
         return {
-            content: sdkEvent.getContent(),
+            content: mxEvent.getContent(),
             eventId,
-            originServerTs: sdkEvent.getTs(),
-            redacts: sdkEvent.event.redacts,
+            originServerTs: mxEvent.getTs(),
             roomId,
             sender: sender.userId,
-            stateKey: sdkEvent.getStateKey(),
-            type: sdkEvent.getType(),
-            unsigned: sdkEvent.getUnsigned(),
+            stateKey: mxEvent.getStateKey(),
+            type: mxEvent.getType(),
+            unsigned: mxEvent.getUnsigned(),
         };
     }
 

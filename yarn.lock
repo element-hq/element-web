@@ -1672,10 +1672,10 @@
   resolved "https://registry.yarnpkg.com/@element-hq/element-call-embedded/-/element-call-embedded-0.12.2.tgz#b6b6b7df69369b3088960b79591ce1bfd2b84a1a"
   integrity sha512-2u5/bOARcjc5TFq4929x1R0tvsNbeVA58FBtiW05GlIJCapxzPSOeeGhbqEcJ1TW3/hLGpiKMcw0QwRBQVNzQA==
 
-"@element-hq/element-web-module-api@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.1.0.tgz#ba45fbf7c3491437935b7bbcfc5677d4e1e66591"
-  integrity sha512-+DB+8MPFjslYwK/V4wIDUHib+0B/BB6d524zltWJVSjg4l3CVGL7PbXMi1m5pcbuuhOK6tpbxUmcfS7RgkpPrg==
+"@element-hq/element-web-module-api@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.2.0.tgz#4d91c890a74f808a82759dcb00a8e47dcf131236"
+  integrity sha512-+2fjShcuFLWVWzhRVlveg4MHevcT7XiXie6JB2SIS89FoJWAnsr41eiSbUORAIHndBCrznU8a/lYz9Pf8BXYVA==
 
 "@element-hq/element-web-playwright-common@^1.1.5":
   version "1.3.0"
