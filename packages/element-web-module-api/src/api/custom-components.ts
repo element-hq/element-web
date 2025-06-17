@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { JSX } from "react";
-import type { MatrixEvent } from "matrix-js-sdk/lib/matrix";
+import type { MatrixEvent } from "../models/event";
 
 /**
  * Properties for all message components.
@@ -48,7 +48,7 @@ export type CustomMessageRenderHints = {
 
 /**
  * Function used to render a message component.
- * @alpha Unlikely to change
+ * @alpha Subject to change.
  */
 export type CustomMessageRenderFunction = (
     /**
@@ -63,7 +63,7 @@ export type CustomMessageRenderFunction = (
 
 /**
  * API for inserting custom components into Element.
- * @public
+ * @alpha Subject to change.
  */
 export interface CustomComponentsApi {
     /**

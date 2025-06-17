@@ -5,7 +5,6 @@
 ```ts
 
 import { JSX } from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/lib/matrix';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
@@ -23,6 +22,7 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
+    // @alpha
     readonly customComponents: CustomComponentsApi;
     readonly i18n: I18nApi;
     readonly rootNode: HTMLElement;
@@ -60,10 +60,8 @@ export interface ConfigApi {
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
 
-// @public
+// @alpha
 export interface CustomComponentsApi {
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @alpha
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderHints" which is marked as @alpha
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
 }
 
@@ -132,6 +130,18 @@ export interface LegacyModuleApiExtension {
 export interface LifecycleCustomisations {
     // (undocumented)
     onLoggedOutAndStorageCleared?(): void;
+}
+
+// @alpha
+export interface MatrixEvent {
+    content: Record<string, unknown>;
+    eventId: string;
+    originServerTs: number;
+    roomId: string;
+    sender: string;
+    stateKey?: string;
+    type: string;
+    unsigned: Record<string, unknown>;
 }
 
 // @alpha @deprecated (undocumented)
