@@ -6,26 +6,26 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export default class CustomComponentModule {
-    static moduleApiVersion = "^1.0.0";
+    static moduleApiVersion = "^1.2.0";
     constructor(api) {
         this.api = api;
         this.api.customComponents.registerMessageRenderer(
-            (evt) => evt.getContent().body === "Do not show edits",
+            (evt) => evt.content.body === "Do not show edits",
             (_props, originalComponent) => {
                 return originalComponent();
             },
             { allowEditingEvent: false },
         );
         this.api.customComponents.registerMessageRenderer(
-            (evt) => evt.getContent().body === "Fall through here",
+            (evt) => evt.content.body === "Fall through here",
             (props) => {
-                const body = props.mxEvent.getContent().body;
+                const body = props.mxEvent.content.body;
                 return `Fallthrough text for ${body}`;
             },
         );
         this.api.customComponents.registerMessageRenderer(
             (evt) => {
-                if (evt.getContent().body === "Crash the filter!") {
+                if (evt.content.body === "Crash the filter!") {
                     throw new Error("Fail test!");
                 }
                 return false;
@@ -35,14 +35,14 @@ export default class CustomComponentModule {
             },
         );
         this.api.customComponents.registerMessageRenderer(
-            (evt) => evt.getContent().body === "Crash the renderer!",
+            (evt) => evt.content.body === "Crash the renderer!",
             () => {
                 throw new Error("Fail test!");
             },
         );
         // Order is specific here to avoid this overriding the other renderers
         this.api.customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
-            const body = props.mxEvent.getContent().body;
+            const body = props.mxEvent.content.body;
             if (body === "Do not replace me") {
                 return originalComponent();
             } else if (body === "Fall through here") {
