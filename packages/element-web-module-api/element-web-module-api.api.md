@@ -4,10 +4,7 @@
 
 ```ts
 
-import { EventStatus } from 'matrix-js-sdk';
-import { IEventRelation } from 'matrix-js-sdk';
 import { JSX } from 'react';
-import { Membership } from 'matrix-js-sdk';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
@@ -146,21 +143,15 @@ export interface MatrixEvent {
     // (undocumented)
     eventId: string;
     // (undocumented)
-    membership?: Membership;
-    // (undocumented)
     originServerTs: number;
     // (undocumented)
     redacts?: string;
-    // (undocumented)
-    relation?: IEventRelation | null;
     // (undocumented)
     roomId?: string;
     // (undocumented)
     sender: string;
     // (undocumented)
     stateKey?: string;
-    // (undocumented)
-    status: EventStatus;
     // (undocumented)
     type: string;
     // (undocumented)

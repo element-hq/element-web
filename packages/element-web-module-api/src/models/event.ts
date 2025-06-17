@@ -1,5 +1,3 @@
-import type { EventStatus, IEventRelation, Membership } from "matrix-js-sdk";
-
 /**
  * Representation of a Matrix event.
  * @beta
@@ -14,8 +12,5 @@ export interface MatrixEvent {
     stateKey?: string;
     originServerTs: number;
     redacts?: string;
-    membership?: Membership;
-    status: EventStatus;
-    relation?: IEventRelation | null;
     age?: number;
 }
