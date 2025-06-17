@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -28,13 +28,13 @@ import {
     getMarkedUnreadState,
     setMarkedUnreadState,
 } from "../../../src/utils/notifications";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { getMockClientWithEventEmitter } from "../../test-utils/client";
+import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../test-utils/client";
 import { mkMessage, stubClient } from "../../test-utils/test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
-
-jest.mock("../../../src/settings/SettingsStore");
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("notifications", () => {
     let accountDataStore: Record<string, MatrixEvent> = {};
@@ -44,6 +44,7 @@ describe("notifications", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsServer(),
             isGuest: jest.fn().mockReturnValue(false),
             getAccountData: jest.fn().mockImplementation((eventType) => accountDataStore[eventType]),
             setAccountData: jest.fn().mockImplementation((eventType, content) => {
@@ -52,10 +53,20 @@ describe("notifications", () => {
                     content,
                 });
             }),
+            isVersionSupported: jest.fn().mockImplementation(async (v) => v === "v1.4"),
         });
+
+        // Ensure unstable settings are supported, otherwise it will use the default value.
+        MatrixClientBackedController.matrixClient = mockClient;
         accountDataStore = {};
         accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
-        mocked(SettingsStore).getValue.mockReturnValue(false);
+        // Disable all notifications
+        deviceNotificationSettingsKeys.forEach((k) => SettingsStore.setValue(k, null, SettingLevel.DEVICE, false));
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+        SettingsStore.reset();
     });
 
     describe("createLocalNotification", () => {
@@ -75,10 +86,15 @@ describe("notifications", () => {
         it.each(deviceNotificationSettingsKeys)(
             "unsilenced for existing sessions when %s setting is truthy",
             async (settingKey) => {
-                mocked(SettingsStore).getValue.mockImplementation((key): any => {
-                    return key === settingKey;
+                // We need to spy `getValue` because setting these keys requires mocking
+                // the platform to support notifications, which is out of scope for this test.
+                const origFn = SettingsStore.getValue;
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name, ...args) => {
+                    if (name === settingKey) {
+                        return true;
+                    }
+                    return origFn(name, ...args);
                 });
-
                 await createLocalNotificationSettingsIfNeeded(mockClient);
                 const event = mockClient.getAccountData(accountDataEventKey);
                 expect(event?.getContent().is_silenced).toBe(false);
@@ -116,7 +132,6 @@ describe("notifications", () => {
         const ROOM_ID = "123";
         const USER_ID = "@bob:example.org";
         let message: MatrixEvent;
-        let sendReceiptsSetting = true;
 
         beforeEach(() => {
             stubClient();
@@ -131,9 +146,7 @@ describe("notifications", () => {
             room.addLiveEvents([message], { addToState: true });
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                return name === "sendReadReceipts" && sendReceiptsSetting;
-            });
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
         it("sends a request even if everything has been read", async () => {
@@ -152,11 +165,8 @@ describe("notifications", () => {
         });
 
         describe("when sendReadReceipts setting is disabled", () => {
-            beforeEach(() => {
-                sendReceiptsSetting = false;
-            });
-
             it("should send a private read receipt", async () => {
+                SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
                 await clearRoomNotification(room, client);
                 expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.ReadPrivate, true);
             });
@@ -177,9 +187,7 @@ describe("notifications", () => {
             room = new Room(ROOM_ID, client, USER_ID);
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                return name === "sendReadReceipts";
-            });
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, true);
         });
 
         it("does not send any requests if everything has been read", () => {
@@ -212,7 +220,7 @@ describe("notifications", () => {
             room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
-            jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
+            SettingsStore.setValue("sendReadReceipts", null, SettingLevel.DEVICE, false);
 
             await clearAllNotifications(client);
 

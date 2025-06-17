@@ -6,14 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { createRoot } from "react-dom/client";
 import { type Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -302,7 +301,7 @@ export default class HTMLExporter extends Exporter {
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
         // We have to wait for the component to be rendered before we can get the markup
         // so pass a deferred as a ref to the component.
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const EventTile = this.getEventTile(mxEv, continuation, deferred.resolve);
         let eventTileMarkup: string;
 

@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex mx_RoomListPrimaryFilters"
+    data-testid="primary-filters"
+    style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex"
+      id="«r0»"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-hidden="false"
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-hidden="false"
+        aria-selected="true"
+        role="option"
+      >
+        <button
+          aria-selected="true"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+      <li
+        aria-hidden="false"
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;

@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -32,6 +32,8 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
+import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
+import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -146,7 +148,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "urlPreviewsEnabled",
         "autoplayGifs",
         "autoplayVideo",
-        "showImages",
     ];
 
     private static TIMELINE_SETTINGS: BooleanSettingKey[] = [
@@ -224,8 +225,14 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
-        return settingIds.map((i) => <SettingsFlag key={i} name={i} level={level} />);
+    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): JSX.Element {
+        return (
+            <>
+                {settingIds.map((i) => (
+                    <SettingsFlag key={i} name={i} level={level} />
+                ))}
+            </>
+        );
     }
 
     private onKeyboardShortcutsClicked = (): void => {
@@ -236,11 +243,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     public render(): React.ReactNode {
-        const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS;
-
         const browserTimezoneLabel: string = _t("settings|preferences|default_timezone", {
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
+
+        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
 
         // Always Preprend the default option
         const timezones = this.state.timezones.map((tz) => {
@@ -257,11 +264,13 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SpellCheckSection />
                     </SettingsSubsection>
 
-                    {roomListSettings.length > 0 && (
-                        <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
-                            {this.renderGroup(roomListSettings)}
-                        </SettingsSubsection>
-                    )}
+                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                        {/* The settings is on device level where the other room list settings are on account level  */}
+                        {newRoomListEnabled && (
+                            <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
+                        )}
+                    </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
@@ -329,6 +338,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
+                        <MediaPreviewAccountSettings />
+                        <InviteRulesAccountSetting />
+                    </SettingsSubsection>
+
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
@@ -344,6 +358,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
                                 appName: SdkConfig.get().brand,
                             })}
+                        />
+                        <SettingsFlag
+                            name="Electron.enableContentProtection"
+                            level={SettingLevel.PLATFORM}
+                            hideIfCannotSet
+                            label={_t("settings|preferences|Electron.enableContentProtection")}
                         />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />

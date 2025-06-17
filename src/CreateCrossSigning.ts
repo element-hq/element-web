@@ -38,10 +38,10 @@ export async function createCrossSigning(cli: MatrixClient): Promise<void> {
 
 export async function uiAuthCallback(
     matrixClient: MatrixClient,
-    makeRequest: (authData: AuthDict) => Promise<void>,
+    makeRequest: (authData: AuthDict | null) => Promise<void>,
 ): Promise<void> {
     try {
-        await makeRequest({});
+        await makeRequest(null);
     } catch (error) {
         if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
             // Not a UIA response
@@ -64,7 +64,7 @@ export async function uiAuthCallback(
         };
 
         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-            title: _t("encryption|bootstrap_title"),
+            title: "",
             matrixClient,
             makeRequest,
             aestheticsForStagePhases: {

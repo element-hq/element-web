@@ -27,6 +27,11 @@ export enum Action {
     ViewUser = "view_user",
 
     /**
+     * Share a text message by forwarding it to a room selected by the user
+     */
+    Share = "share",
+
+    /**
      * Open the user settings. No additional payload information required.
      * Optionally can include an OpenToTabPayload.
      */
@@ -236,6 +241,12 @@ export enum Action {
     AfterLeaveRoom = "after_leave_room",
 
     /**
+     * Dispatched after a room has been successfully forgotten
+     * Should be used with AfterForgetRoomPayload.
+     */
+    AfterForgetRoom = "after_forget_room",
+
+    /**
      * Used to defer actions until after sync is complete
      * LifecycleStore will emit deferredAction payload after 'MatrixActions.sync'
      */
@@ -362,7 +373,7 @@ export enum Action {
     View3pidInvite = "view_3pid_invite",
 
     /**
-     * Opens right panel room summary and focuses the search input
+     * Opens right panel room summary and focuses the search input. Use with a FocusMessageSearchPayload.
      */
     FocusMessageSearch = "focus_search",
 

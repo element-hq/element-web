@@ -221,12 +221,15 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
 
         const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
+        // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
+        // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
+        // for a recovery key straight away. We click the button if it's there so this works in both cases.
         if (await useSecurityKey.isVisible()) {
             await useSecurityKey.click();
         }
         // Fill in the recovery key
-        await page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
-        await page.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
+        await page.locator(".mx_Dialog").locator("textarea").fill(securityKey);
+        await page.getByRole("button", { name: "Continue", disabled: false }).click();
         await page.getByRole("button", { name: "Done" }).click();
     }
 }
@@ -260,7 +263,7 @@ export async function verifySession(app: ElementAppPage, securityKey: string) {
     const settings = await app.settings.openUserSettings("Encryption");
     await settings.getByRole("button", { name: "Verify this device" }).click();
     await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
-    await app.page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
+    await app.page.locator(".mx_Dialog").locator("textarea").fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
     await app.settings.closeDialog();
@@ -289,17 +292,47 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 }
 
 /**
- * Open the security settings and enable secure key backup.
- *
- * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
+ * Open the encryption settings and enable key storage and recovery
+ * Assumes that the current device has been verified
  *
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    await app.settings.openUserSettings("Security & Privacy");
-    await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    return await completeCreateSecretStorageDialog(app.page);
+    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    if (!(await keyStorageToggle.isChecked())) {
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+    }
+
+    await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+
+    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+    await encryptionTab.getByRole("textbox").fill(recoveryKey);
+    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+    await app.settings.closeDialog();
+    return recoveryKey;
+}
+
+/**
+ * Open the encryption settings and disable key storage (and recovery)
+ * Assumes that the current device has been verified
+ */
+export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
+
+    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    if (await keyStorageToggle.isChecked()) {
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+        await encryptionTab.getByRole("button", { name: "Delete key storage" }).click();
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).isVisible();
+
+        // Wait for the update to account data to stick
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+    await app.settings.closeDialog();
 }
 
 /**

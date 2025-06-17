@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { type JSX, useEffect, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
@@ -27,6 +27,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
+import { UIComponent } from "../../../settings/UIFeature.ts";
 
 interface Props {
     room: Room;
@@ -191,9 +193,11 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
 
     return (
         <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
-            <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
-                {_t("right_panel|add_integrations")}
-            </Button>
+            {shouldShowComponent(UIComponent.AddIntegrations) && (
+                <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                    {_t("right_panel|add_integrations")}
+                </Button>
+            )}
             {body}
         </BaseCard>
     );

@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type AccountDataEvents, ClientEvent, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 import { isEqual } from "lodash";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
@@ -68,6 +68,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE) {
             const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
+        } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+            this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };
 
@@ -159,7 +161,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         // Attach a deferred *before* setting the account data to ensure we catch any requests
         // which race between different lines.
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent): void => {
             if (event.getType() !== eventType || !isEqual(event.getContent<AccountDataEvents[K]>()[field], value))
                 return;
@@ -173,7 +175,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         await deferred.promise;
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         switch (settingName) {
             // Special case URL previews
             case "urlPreviewsEnabled":
@@ -199,7 +201,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             // Special case analytics
             case "pseudonymousAnalyticsOptIn":
                 return this.setAccountData(ANALYTICS_EVENT_TYPE, "pseudonymousAnalyticsOptIn", newValue);
-
+            case "mediaPreviewConfig":
+                // Handled in MediaPreviewConfigController.
+                return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
+                return;
             default:
                 return this.setAccountData(DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }

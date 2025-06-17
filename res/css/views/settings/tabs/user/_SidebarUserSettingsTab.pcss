@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -14,17 +14,12 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_SidebarUserSettingsTab_checkbox {
-    margin-bottom: $spacing-8;
-    /* override checkbox styles */
-    label {
-        align-items: flex-start !important;
-    }
+.mx_SidebarUserSettingsTab_icon {
+    margin-right: var(--cpd-space-2x);
+    margin-top: auto;
+    margin-bottom: auto;
+}
 
-    svg {
-        height: 16px;
-        width: 16px;
-        margin-right: $spacing-8;
-        margin-bottom: -1px;
-    }
+.mx_SidebarUserSettingsTab_checkbox label {
+    display: flex;
 }

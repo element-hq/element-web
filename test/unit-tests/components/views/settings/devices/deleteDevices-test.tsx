@@ -35,7 +35,7 @@ describe("deleteDevices()", () => {
         await deleteDevicesWithInteractiveAuth(mockClient, deviceIds, onFinished);
 
         expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(deviceIds, undefined);
-        expect(onFinished).toHaveBeenCalledWith(true, undefined);
+        expect(onFinished).toHaveBeenCalledWith(true);
 
         // didnt open modal
         expect(modalSpy).not.toHaveBeenCalled();

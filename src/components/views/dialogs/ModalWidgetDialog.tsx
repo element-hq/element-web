@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React from "react";
 import {
     ClientWidgetApi,
     type IModalWidgetCloseRequest,
@@ -53,7 +53,7 @@ const MAX_BUTTONS = 3;
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
     private readonly widget: Widget;
     private readonly possibleButtons: ModalButtonID[];
-    private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
+    private appFrame = React.createRef<HTMLIFrameElement>();
     private readonly themeWatcher = new ThemeWatcher();
 
     public state: IState = {

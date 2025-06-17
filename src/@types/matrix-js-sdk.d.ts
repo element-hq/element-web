@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -14,6 +14,8 @@ import type { EncryptedFile } from "matrix-js-sdk/src/types";
 import type { EmptyObject } from "matrix-js-sdk/src/matrix";
 import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
+import { type MediaPreviewConfig } from "./media_preview.ts";
+import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "./invite-rules.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
@@ -59,7 +61,6 @@ declare module "matrix-js-sdk/src/types" {
             };
         };
     }
-
     export interface AccountDataEvents {
         // Analytics account data event
         "im.vector.analytics": {
@@ -87,6 +88,10 @@ declare module "matrix-js-sdk/src/types" {
         "m.accepted_terms": {
             accepted: string[];
         };
+
+        // MSC4155: Invite filtering
+        [INVITE_RULES_ACCOUNT_DATA_TYPE]: InviteConfigAccountData;
+        "io.element.msc4278.media_preview_config": MediaPreviewConfig;
     }
 
     export interface AudioContent {

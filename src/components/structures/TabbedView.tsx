@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { _t, type TranslationKey } from "../../languageHandler";
@@ -27,14 +27,14 @@ export class Tab<T extends string> {
      * @param {string} id The tab's ID.
      * @param {string} label The untranslated tab label.
      * @param {string|JSX.Element} icon An SVG element to use for the tab icon. Can also be a string for legacy icons, in which case it is the class for the tab icon. This should be a simple mask.
-     * @param {React.ReactNode} body The JSX for the tab container.
+     * @param {JSX.Element} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
      */
     public constructor(
         public readonly id: T,
         public readonly label: TranslationKey,
         public readonly icon: string | JSX.Element | null,
-        public readonly body: React.ReactNode,
+        public readonly body: JSX.Element,
         public readonly screenName?: ScreenName,
     ) {}
 }

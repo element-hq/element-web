@@ -339,34 +339,6 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders join and reject action buttons with correct labels 1`] = `
-<div
-  class="mx_RoomPreviewBar_actions"
->
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-    role="button"
-    tabindex="0"
-  >
-    Start chatting
-  </div>
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-    role="button"
-    tabindex="0"
-  >
-    Reject & Ignore user
-  </div>
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-    role="button"
-    tabindex="0"
-  >
-    Reject
-  </div>
-</div>
-`;
-
 exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders invite message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
@@ -421,7 +393,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
     role="button"
     tabindex="0"
   >
-    Reject
+    Decline
   </div>
 </div>
 `;
@@ -435,7 +407,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
     role="button"
     tabindex="0"
   >
-    Reject
+    Decline
   </div>
   <div
     class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
@@ -443,34 +415,6 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
     tabindex="0"
   >
     Accept
-  </div>
-</div>
-`;
-
-exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders reject and ignore action buttons when handler is provided 1`] = `
-<div
-  class="mx_RoomPreviewBar_actions"
->
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-    role="button"
-    tabindex="0"
-  >
-    Accept
-  </div>
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-    role="button"
-    tabindex="0"
-  >
-    Reject & Ignore user
-  </div>
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-    role="button"
-    tabindex="0"
-  >
-    Reject
   </div>
 </div>
 `;

@@ -29,7 +29,6 @@ import type LegacyCallHandler from "../LegacyCallHandler";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import type VoipUserMapper from "../VoipUserMapper";
 import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
@@ -47,6 +46,7 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
+import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -82,23 +82,15 @@ declare global {
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
-        // Needed for Safari, unknown to TypeScript
-        webkitAudioContext: typeof AudioContext;
-
         // https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
         // we only ever check for its existence, so we can ignore its actual type
         MSStream?: unknown;
-
-        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-869224737
-        // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
-        OffscreenCanvas?: {
-            new (width: number, height: number): OffscreenCanvas;
-        };
 
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
+        mxRoomListStoreV3: RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
@@ -111,7 +103,6 @@ declare global {
         mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
@@ -137,8 +128,19 @@ declare global {
     }
 
     interface Electron {
+        // Legacy
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
+        // Initialisation
+        initialise(): Promise<{
+            protocol: string;
+            sessionId: string;
+            config: IConfigOptions;
+            supportedSettings: Record<string, boolean>;
+        }>;
+        // Settings
+        setSettingValue(settingName: string, value: any): Promise<void>;
+        getSettingValue(settingName: string): Promise<any>;
     }
 
     interface DesktopCapturerSource {
@@ -156,29 +158,8 @@ declare global {
         fetchWindowIcons?: boolean;
     }
 
-    interface Document {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitExitFullscreen(): Promise<void>;
-        msExitFullscreen(): Promise<void>;
-        readonly webkitFullscreenElement: Element | null;
-        readonly msFullscreenElement: Element | null;
-    }
-
-    interface Navigator {
-        userLanguage?: string;
-    }
-
     interface StorageEstimate {
         usageDetails?: { [key: string]: number };
-    }
-
-    interface Element {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
-        msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
-        // scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
@@ -237,13 +218,6 @@ declare global {
     var mx_rage_initStoragePromise: Promise<void>;
     // eslint-disable-next-line no-var, camelcase
     var mx_rage_store: IndexedDBLogStore;
-}
-
-// add method which is missing from the node typing
-declare module "url" {
-    interface Url {
-        format(): string;
-    }
 }
 
 /* eslint-enable @typescript-eslint/naming-convention */

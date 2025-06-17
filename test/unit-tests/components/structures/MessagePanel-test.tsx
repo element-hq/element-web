@@ -26,6 +26,7 @@ import {
     mockClientMethodsCrypto,
     mockClientMethodsEvents,
     mockClientMethodsUser,
+    mockClientPushProcessor,
 } from "../../../test-utils";
 import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { type IRoomState } from "../../../../src/components/structures/RoomView";
@@ -45,6 +46,7 @@ describe("MessagePanel", function () {
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsEvents(),
         ...mockClientMethodsCrypto(),
+        ...mockClientPushProcessor(),
         getAccountData: jest.fn(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),

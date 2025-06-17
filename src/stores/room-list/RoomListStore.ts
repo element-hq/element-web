@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type Room, type RoomState, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -33,7 +32,6 @@ import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
-import { SlidingRoomListStoreClass } from "./SlidingRoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
@@ -350,15 +348,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
-        if (cause === RoomUpdateCause.NewRoom && room.getMyMembership() === KnownMembership.Invite) {
-            // Let the visibility provider know that there is a new invited room. It would be nice
-            // if this could just be an event that things listen for but the point of this is that
-            // we delay doing anything about this room until the VoipUserMapper had had a chance
-            // to do the things it needs to do to decide if we should show this room or not, so
-            // an even wouldn't et us do that.
-            await VisibilityProvider.instance.onNewInvitedRoom(room);
-        }
-
         if (!VisibilityProvider.instance.isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }
@@ -406,6 +395,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
 
     public setTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         this.setAndPersistTagSorting(tagId, sort);
+        // We'll always need an update after changing the sort order, so mark for update and trigger
+        // immediately.
+        this.updateFn.mark();
         this.updateFn.trigger();
     }
 
@@ -642,16 +634,9 @@ export default class RoomListStore {
 
     public static get instance(): Interface {
         if (!RoomListStore.internalInstance) {
-            if (SettingsStore.getValue("feature_sliding_sync")) {
-                logger.info("using SlidingRoomListStoreClass");
-                const instance = new SlidingRoomListStoreClass(defaultDispatcher, SdkContextClass.instance);
-                instance.start();
-                RoomListStore.internalInstance = instance;
-            } else {
-                const instance = new RoomListStoreClass(defaultDispatcher);
-                instance.start();
-                RoomListStore.internalInstance = instance;
-            }
+            const instance = new RoomListStoreClass(defaultDispatcher);
+            instance.start();
+            RoomListStore.internalInstance = instance;
         }
 
         return this.internalInstance;

@@ -585,9 +585,9 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     },
     [KeyBindingAction.ToggleHiddenEventVisibility]: {
         default: {
-            ctrlOrCmdKey: true,
+            ctrlKey: true,
             shiftKey: true,
-            key: Key.H,
+            key: Key.J,
         },
         displayName: _td("keyboard|toggle_hidden_events"),
     },

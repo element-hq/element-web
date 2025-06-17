@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
@@ -56,6 +56,8 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             }
         } else if (event.getType() === ALLOWED_WIDGETS_EVENT_TYPE) {
             this.watchers.notifyUpdate("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
+        } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+            this.watchers.notifyUpdate("mediaPreviewConfig", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };
 
@@ -96,7 +98,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
         await this.client.setRoomAccountData(roomId, eventType, content);
 
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent, room: Room): void => {
             if (room.roomId !== roomId || event.getType() !== eventType) return;
             if (field !== null && event.getContent()[field] !== value) return;
@@ -108,7 +110,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         await deferred.promise;
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         switch (settingName) {
             // Special case URL previews
             case "urlPreviewsEnabled":
@@ -117,7 +119,12 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             // Special case allowed widgets
             case "allowedWidgets":
                 return this.setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, null, newValue);
-
+            case "mediaPreviewConfig":
+                // Handled in MediaPreviewConfigController.
+                return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
+                return;
             default:
                 return this.setRoomAccountData(roomId, DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
         }

@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -23,12 +23,24 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
-    // Whether the dialog should have a 'close' button that will
-    // cause the dialog to be cancelled. This should only be set
-    // to false if there is nothing the app can sensibly do if the
-    // dialog is cancelled, eg. "We can't restore your session and
-    // the app cannot work". Default: true.
+    /**
+     * Whether the dialog should have a 'close' button and a keyDown handler which
+     * will intercept 'Escape'.
+     *
+     * This should only be set to `false` if there is nothing the app can sensibly do if the
+     * dialog is cancelled, eg. "We can't restore your session and
+     * the app cannot work".
+     *
+     * Default: `true`.
+     */
     "hasCancel"?: boolean;
+
+    /**
+     * Callback that will be called when the 'close' button is clicked or 'Escape' is pressed.
+     *
+     * Not used if `hasCancel` is false.
+     */
+    "onFinished"?: () => void;
 
     // called when a key is pressed
     "onKeyDown"?: (e: KeyboardEvent | React.KeyboardEvent) => void;
@@ -66,7 +78,6 @@ interface IProps {
 
     // optional Posthog ScreenName to supply during the lifetime of this dialog
     "screenName"?: ScreenName;
-    onFinished(): void;
 }
 
 /*
@@ -103,13 +114,13 @@ export default class BaseDialog extends React.Component<IProps> {
 
                 e.stopPropagation();
                 e.preventDefault();
-                this.props.onFinished();
+                this.props.onFinished?.();
                 break;
         }
     };
 
     private onCancelClick = (): void => {
-        this.props.onFinished();
+        this.props.onFinished?.();
     };
 
     public render(): React.ReactNode {

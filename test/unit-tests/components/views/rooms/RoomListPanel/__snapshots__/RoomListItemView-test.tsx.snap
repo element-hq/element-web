@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Open room room1"
+    aria-selected="true"
+    class="mx_RoomListItemView mx_RoomListItemView_selected"
+    tabindex="-1"
+    type="button"
+  >
+    <div
+      class="mx_Flex mx_RoomListItemView_container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        aria-label="Avatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 32px;"
+      >
+        <img
+          alt=""
+          class="_image_1qbcf_41"
+          data-type="round"
+          height="32px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="http://this.is.a.url/avatar.url/room.png"
+          width="32px"
+        />
+      </span>
+      <div
+        class="mx_Flex mx_RoomListItemView_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="mx_RoomListItemView_text"
+        >
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
+      </div>
+    </div>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`<RoomListItemView /> should display notification decoration 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Open room room1"
+    aria-selected="false"
+    class="mx_RoomListItemView"
+    tabindex="-1"
+    type="button"
+  >
+    <div
+      class="mx_Flex mx_RoomListItemView_container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        aria-label="Avatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 32px;"
+      >
+        <img
+          alt=""
+          class="_image_1qbcf_41"
+          data-type="round"
+          height="32px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="http://this.is.a.url/avatar.url/room.png"
+          width="32px"
+        />
+      </span>
+      <div
+        class="mx_Flex mx_RoomListItemView_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="mx_RoomListItemView_text"
+        >
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          class="mx_Flex"
+          data-testid="notification-decoration"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+        >
+          <span
+            class="_unread-counter_9mg0k_8"
+          >
+            1
+          </span>
+        </div>
+      </div>
+    </div>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`<RoomListItemView /> should render a room item 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Open room room1"
+    aria-selected="false"
+    class="mx_RoomListItemView"
+    tabindex="-1"
+    type="button"
+  >
+    <div
+      class="mx_Flex mx_RoomListItemView_container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        aria-label="Avatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 32px;"
+      >
+        <img
+          alt=""
+          class="_image_1qbcf_41"
+          data-type="round"
+          height="32px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="http://this.is.a.url/avatar.url/room.png"
+          width="32px"
+        />
+      </span>
+      <div
+        class="mx_Flex mx_RoomListItemView_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="mx_RoomListItemView_text"
+        >
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          />
+        </div>
+      </div>
+    </div>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`<RoomListItemView /> should render a room item with a message preview 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Open room room1"
+    aria-selected="false"
+    class="mx_RoomListItemView"
+    tabindex="-1"
+    type="button"
+  >
+    <div
+      class="mx_Flex mx_RoomListItemView_container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <span
+        aria-label="Avatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 32px;"
+      >
+        <img
+          alt=""
+          class="_image_1qbcf_41"
+          data-type="round"
+          height="32px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="http://this.is.a.url/avatar.url/room.png"
+          width="32px"
+        />
+      </span>
+      <div
+        class="mx_Flex mx_RoomListItemView_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="mx_RoomListItemView_text"
+        >
+          <div
+            class="mx_RoomListItemView_roomName"
+            title="room1"
+          >
+            room1
+          </div>
+          <div
+            class="mx_RoomListItemView_messagePreview"
+          >
+            The message looks list this
+          </div>
+        </div>
+      </div>
+    </div>
+  </button>
+</DocumentFragment>
+`;

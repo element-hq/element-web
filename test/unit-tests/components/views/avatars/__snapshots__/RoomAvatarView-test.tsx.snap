@@ -1,0 +1,375 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomAvatarView /> should not render a decoration 1`] = `
+<DocumentFragment>
+  <span
+    aria-label="Avatar"
+    class="_avatar_1qbcf_8 mx_BaseAvatar"
+    data-color="1"
+    data-testid="avatar-img"
+    data-type="round"
+    style="--cpd-avatar-size: 32px;"
+  >
+    <img
+      alt=""
+      class="_image_1qbcf_41"
+      data-type="round"
+      height="32px"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+      src="http://this.is.a.url/avatar.url/room.png"
+      width="32px"
+    />
+  </span>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="This is a low priority room"
+      class="mx_RoomAvatarView_icon"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="16px"
+      viewBox="0 0 24 24"
+      width="16px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4.5a1 1 0 0 1 1 1v10.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-6 6a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414L11 16.086V5.5a1 1 0 0 1 1-1"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="This room is public"
+      class="mx_RoomAvatarView_icon"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="16px"
+      viewBox="0 0 24 24"
+      width="16px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m-1-2.05V18q-.825 0-1.412-.587A1.93 1.93 0 0 1 9 16v-1l-4.8-4.8q-.075.45-.138.9Q4 11.55 4 12q0 3.025 1.987 5.3T11 19.95m6.9-2.55q.5-.55.9-1.187.4-.638.662-1.326.263-.687.4-1.412Q20 12.75 20 12a7.85 7.85 0 0 0-1.363-4.475A7.7 7.7 0 0 0 15 4.6V5q0 .824-.588 1.412A1.93 1.93 0 0 1 13 7h-2v2q0 .424-.287.713A.97.97 0 0 1 10 10H8v2h6q.424 0 .713.287.287.288.287.713v3h1q.65 0 1.175.387.525.388.725 1.013"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="This room is a video room"
+      class="mx_RoomAvatarView_icon"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="16px"
+      viewBox="0 0 24 24"
+      width="16px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="Away"
+      class="mx_RoomAvatarView_PresenceDecoration"
+      color="var(--cpd-color-icon-quaternary)"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="Busy"
+      class="mx_RoomAvatarView_PresenceDecoration"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0M5.435 6.048A2.5 2.5 0 0 1 1.687 3.05zm.914-1.19L2.648 1.897a2.5 2.5 0 0 1 3.701 2.961"
+          fill-rule="evenodd"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="Offline"
+      class="mx_RoomAvatarView_PresenceDecoration"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M4 6.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5M4 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8"
+          fill-rule="evenodd"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="Online"
+      class="mx_RoomAvatarView_PresenceDecoration"
+      color="var(--cpd-color-icon-accent-primary)"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</DocumentFragment>
+`;

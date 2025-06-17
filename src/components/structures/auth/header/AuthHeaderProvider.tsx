@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { isEqual } from "lodash";
-import React, { type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
+import React, { type JSX, type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
 import { type AuthHeaderModifier } from "./AuthHeaderModifier";
@@ -25,7 +25,7 @@ interface AuthHeaderAction {
 export type AuthHeaderReducer = Reducer<ComponentProps<typeof AuthHeaderModifier>[], AuthHeaderAction>;
 
 export function AuthHeaderProvider({ children }: PropsWithChildren): JSX.Element {
-    const [state, dispatch] = useReducer<AuthHeaderReducer>(
+    const [state, dispatch] = useReducer<ComponentProps<typeof AuthHeaderModifier>[], [AuthHeaderAction]>(
         (state: ComponentProps<typeof AuthHeaderModifier>[], action: AuthHeaderAction) => {
             switch (action.type) {
                 case AuthHeaderActionType.Add:

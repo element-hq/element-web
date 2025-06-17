@@ -32,27 +32,27 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
     let acceptLabel = _t("update|see_changes_button");
     if (releaseNotes) {
         onAccept = () => {
-            Modal.createDialog(QuestionDialog, {
+            const { finished } = Modal.createDialog(QuestionDialog, {
                 title: _t("update|release_notes_toast_title"),
                 description: <pre>{releaseNotes}</pre>,
                 button: _t("action|update"),
-                onFinished: (update) => {
-                    if (update && PlatformPeg.get()) {
-                        PlatformPeg.get()!.installUpdate();
-                    }
-                },
+            });
+            finished.then(([update]) => {
+                if (update && PlatformPeg.get()) {
+                    PlatformPeg.get()!.installUpdate();
+                }
             });
         };
     } else if (checkVersion(version) && checkVersion(newVersion)) {
         onAccept = () => {
-            Modal.createDialog(ChangelogDialog, {
+            const { finished } = Modal.createDialog(ChangelogDialog, {
                 version,
                 newVersion,
-                onFinished: (update) => {
-                    if (update && PlatformPeg.get()) {
-                        PlatformPeg.get()!.installUpdate();
-                    }
-                },
+            });
+            finished.then(([update]) => {
+                if (update && PlatformPeg.get()) {
+                    PlatformPeg.get()!.installUpdate();
+                }
             });
         };
     } else {

@@ -25,8 +25,17 @@ type BlobFile = {
     blob: Blob;
 };
 
+type FileDetails = {
+    directory: string;
+    name: string;
+    date: string;
+    extension: string;
+    count?: number;
+};
+
 export default abstract class Exporter {
     protected files: BlobFile[] = [];
+    protected fileNames: Map<string, number> = new Map();
     protected cancelled = false;
 
     protected constructor(
@@ -241,6 +250,19 @@ export default abstract class Exporter {
         return [fileName, "." + ext];
     }
 
+    protected makeUniqueFilePath(details: FileDetails): string {
+        const makePath = ({ directory, name, date, extension, count = 0 }: FileDetails): string =>
+            `${directory}/${name}-${date}${count > 0 ? ` (${count})` : ""}${extension}`;
+        const defaultPath = makePath(details);
+        const count = this.fileNames.get(defaultPath) || 0;
+        this.fileNames.set(defaultPath, count + 1);
+        if (count > 0) {
+            return makePath({ ...details, count });
+        }
+
+        return defaultPath;
+    }
+
     public getFilePath(event: MatrixEvent): string {
         const mediaType = event.getContent().msgtype;
         let fileDirectory: string;
@@ -263,7 +285,12 @@ export default abstract class Exporter {
         if (event.getType() === "m.sticker") fileExt = ".png";
         if (isVoiceMessage(event)) fileExt = ".ogg";
 
-        return fileDirectory + "/" + fileName + "-" + fileDate + fileExt;
+        return this.makeUniqueFilePath({
+            directory: fileDirectory,
+            name: fileName,
+            date: fileDate,
+            extension: fileExt,
+        });
     }
 
     protected isReply(event: MatrixEvent): boolean {

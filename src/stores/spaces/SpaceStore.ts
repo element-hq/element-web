@@ -152,6 +152,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     private _enabledMetaSpaces: MetaSpace[] = [];
     /** Whether the feature flag is set for MSC3946 */
     private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
+    private _storeReadyDeferred = Promise.withResolvers<void>();
 
     public constructor() {
         super(defaultDispatcher, {});
@@ -160,6 +161,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         SettingsStore.monitorSetting("Spaces.enabledMetaSpaces", null);
         SettingsStore.monitorSetting("Spaces.showPeopleInSpace", null);
         SettingsStore.monitorSetting("feature_dynamic_room_predecessors", null);
+    }
+
+    /**
+     * A promise that resolves when the space store is ready.
+     * This happens after an initial hierarchy of spaces and rooms has been computed.
+     */
+    public get storeReadyPromise(): Promise<void> {
+        return this._storeReadyDeferred.promise;
     }
 
     /**
@@ -260,7 +269,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
         if (contextSwitch) {
             // view last selected room from space
-            const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+            const roomId = this.getLastSelectedRoomIdForSpace(space);
 
             // if the space being selected is an invite then always view that invite
             // else if the last viewed room in this space is joined then view that
@@ -308,6 +317,17 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 false,
             );
         }
+    }
+
+    /**
+     * Returns the room-id of the last active room in a given space.
+     * This is the room that would be opened when you switch to a given space.
+     * @param space The space you're interested in.
+     * @returns room-id of the room or null if there's no last active room.
+     */
+    public getLastSelectedRoomIdForSpace(space: SpaceKey): string | null {
+        const roomId = window.localStorage.getItem(getSpaceContextKey(space));
+        return roomId;
     }
 
     private async loadSuggestedRooms(space: Room): Promise<void> {
@@ -1201,6 +1221,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         } else {
             this.switchSpaceIfNeeded();
         }
+        this._storeReadyDeferred.resolve();
     }
 
     private sendUserProperties(): void {
@@ -1281,11 +1302,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                         const newValue = SettingsStore.getValue("Spaces.allRoomsInHome");
                         if (this.allRoomsInHome !== newValue) {
                             this._allRoomsInHome = newValue;
-                            this.emit(UPDATE_HOME_BEHAVIOUR, this.allRoomsInHome);
                             if (this.enabledMetaSpaces.includes(MetaSpace.Home)) {
                                 this.rebuildHomeSpace();
                             }
                             this.sendUserProperties();
+                            this.emit(UPDATE_HOME_BEHAVIOUR, this.allRoomsInHome);
                         }
                         break;
                     }

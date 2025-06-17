@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React from "react";
 import {
     ContentHelpers,
     Direction,
@@ -52,7 +52,6 @@ import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpD
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from "./contexts/RoomContext";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import VoipUserMapper from "./VoipUserMapper";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -61,6 +60,7 @@ import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
+import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 
 export { CommandCategories, Command };
 
@@ -665,6 +665,36 @@ export const Commands = [
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({
+        command: "verify",
+        args: "<device-id> <device-fingerprint>",
+        description: _td("slash_command|verify"),
+        runFn: function (cli, _roomId, _threadId, args) {
+            if (args) {
+                const matches = args.match(/^(\S+) +(\S+)$/);
+                if (matches) {
+                    const deviceId = matches[1];
+                    const fingerprint = matches[2];
+
+                    const { finished } = Modal.createDialog(QuestionDialog, {
+                        title: _t("slash_command|manual_device_verification_confirm_title"),
+                        description: _t("slash_command|manual_device_verification_confirm_description"),
+                        button: _t("action|verify"),
+                        danger: true,
+                    });
+
+                    return success(
+                        finished.then(([confirmed]) => {
+                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                        }),
+                    );
+                }
+            }
+            return reject(this.getUsage());
+        },
+        category: CommandCategories.advanced,
+        renderingTypes: [TimelineRenderingType.Room],
+    }),
+    new Command({
         command: "discardsession",
         description: _td("slash_command|discardsession"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
@@ -742,28 +772,6 @@ export const Commands = [
             );
         },
         category: CommandCategories.advanced,
-    }),
-    new Command({
-        command: "tovirtual",
-        description: _td("slash_command|tovirtual"),
-        category: CommandCategories.advanced,
-        isEnabled(cli): boolean {
-            return !!LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom(cli);
-        },
-        runFn: (cli, roomId) => {
-            return success(
-                (async (): Promise<void> => {
-                    const room = await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(roomId);
-                    if (!room) throw new UserFriendlyError("slash_command|tovirtual_not_found");
-                    dis.dispatch<ViewRoomPayload>({
-                        action: Action.ViewRoom,
-                        room_id: room.roomId,
-                        metricsTrigger: "SlashCommand",
-                        metricsViaKeyboard: true,
-                    });
-                })(),
-            );
-        },
     }),
     new Command({
         command: "query",

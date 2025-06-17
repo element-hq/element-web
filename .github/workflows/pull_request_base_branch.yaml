@@ -8,7 +8,7 @@ jobs:
         name: Check PR base branch
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/github-script@v7
+            - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
               with:
                   script: |
                       const baseBranch = context.payload.pull_request.base.ref;
