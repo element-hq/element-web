@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { JSX } from "react";
-import type { MatrixEvent } from "matrix-js-sdk/lib/matrix";
+import type { MatrixEvent } from "../models/event";
 
 /**
  * Properties for all message components.
