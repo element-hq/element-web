@@ -5,7 +5,6 @@ import type { EventStatus, IEventRelation, Membership } from "matrix-js-sdk";
  * @beta
  */
 export interface MatrixEvent {
-    // Properties provided by the spec
     eventId: string;
     roomId?: string;
     sender: string;
@@ -15,8 +14,6 @@ export interface MatrixEvent {
     stateKey?: string;
     originServerTs: number;
     redacts?: string;
-
-    // Properties provided by the SDK
     membership?: Membership;
     status: EventStatus;
     relation?: IEventRelation | null;
