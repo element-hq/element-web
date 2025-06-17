@@ -48,7 +48,7 @@ export type CustomMessageRenderHints = {
 
 /**
  * Function used to render a message component.
- * @alpha Unlikely to change
+ * @alpha Subject to change.
  */
 export type CustomMessageRenderFunction = (
     /**
@@ -63,7 +63,7 @@ export type CustomMessageRenderFunction = (
 
 /**
  * API for inserting custom components into Element.
- * @public
+ * @alpha Subject to change.
  */
 export interface CustomComponentsApi {
     /**

@@ -22,6 +22,7 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
+    // @alpha
     readonly customComponents: CustomComponentsApi;
     readonly i18n: I18nApi;
     readonly rootNode: HTMLElement;
@@ -59,11 +60,8 @@ export interface ConfigApi {
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
 
-// @public
+// @alpha
 export interface CustomComponentsApi {
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "MatrixEvent" which is marked as @beta
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderFunction" which is marked as @alpha
-    // Warning: (ae-incompatible-release-tags) The symbol "registerMessageRenderer" is marked as @public, but its signature references "CustomMessageRenderHints" which is marked as @alpha
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
 }
 
@@ -134,27 +132,15 @@ export interface LifecycleCustomisations {
     onLoggedOutAndStorageCleared?(): void;
 }
 
-// @beta
+// @alpha
 export interface MatrixEvent {
-    // (undocumented)
-    age?: number;
-    // (undocumented)
     content: Record<string, unknown>;
-    // (undocumented)
     eventId: string;
-    // (undocumented)
     originServerTs: number;
-    // (undocumented)
-    redacts?: string;
-    // (undocumented)
-    roomId?: string;
-    // (undocumented)
+    roomId: string;
     sender: string;
-    // (undocumented)
     stateKey?: string;
-    // (undocumented)
     type: string;
-    // (undocumented)
     unsigned: Record<string, unknown>;
 }
 

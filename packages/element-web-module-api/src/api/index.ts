@@ -90,7 +90,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
 
     /**
      * The custom message component API.
-     * @public
+     * @alpha
      */
     readonly customComponents: CustomComponentsApi;
     /**
