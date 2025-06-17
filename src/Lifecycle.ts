@@ -657,7 +657,7 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
                 freshLogin: freshLogin,
             },
             false,
-            false,
+            freshLogin,
         );
         return true;
     } else {
