@@ -133,7 +133,7 @@ export function ChangeRecoveryKey({
                                 await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                             });
 
-                            // We mark recovery as not enabled.
+                            // Record the fact that the user explicitly enabled recovery.
                             await matrixClient.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: true });
 
                             onFinish();
