@@ -178,8 +178,6 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
 export interface AccessSecretStorageOpts {
     /** Reset secret storage even if it's already set up. */
     forceReset?: boolean;
-    /** Create new cross-signing keys. Only applicable if `forceReset` is `true`. */
-    resetCrossSigning?: boolean;
 }
 
 /**
