@@ -57,6 +57,11 @@ const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
  */
 export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
 
+/**
+ * Account data key to indicate whether the user has chosen to enable or disable recovery.
+ */
+export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
+
 const logger = baseLogger.getChild("DeviceListener:");
 
 export default class DeviceListener {
@@ -165,6 +170,13 @@ export default class DeviceListener {
         await this.client?.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
     }
 
+    /**
+     * Set the account data to indicate that recovery is disabled
+     */
+    public async recordRecoveryDisabled(): Promise<void> {
+        await this.client?.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: false });
+    }
+
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
         if (this.ourDeviceIdsAtStart === null) {
             this.ourDeviceIdsAtStart = await this.getDeviceIds();
@@ -220,7 +232,8 @@ export default class DeviceListener {
             ev.getType().startsWith("m.secret_storage.") ||
             ev.getType().startsWith("m.cross_signing.") ||
             ev.getType() === "m.megolm_backup.v1" ||
-            ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY
+            ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY ||
+            ev.getType() === RECOVERY_ACCOUNT_DATA_KEY
         ) {
             this.recheck();
         }
@@ -332,6 +345,9 @@ export default class DeviceListener {
             crossSigningStatus.privateKeysCachedLocally.userSigningKey;
 
         const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
+        const recoveryDisabled = await this.recheckRecoveryDisabled(cli);
+
+        const recoveryIsOk = secretStorageReady || recoveryDisabled;
 
         const isCurrentDeviceTrusted =
             crossSigningReady &&
@@ -346,8 +362,7 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady =
-            crossSigningReady && keyBackupIsOk && secretStorageReady && allCrossSigningSecretsCached;
+        const allSystemsReady = crossSigningReady && keyBackupIsOk && recoveryIsOk && allCrossSigningSecretsCached;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
@@ -384,7 +399,10 @@ export default class DeviceListener {
                 // The user just hasn't set up 4S yet: if they have key
                 // backup, prompt them to turn on recovery too. (If not, they
                 // have explicitly opted out, so don't hassle them.)
-                if (keyBackupUploadActive) {
+                if (recoveryDisabled) {
+                    logSpan.info("Recovery disabled: no toast needed");
+                    hideSetupEncryptionToast();
+                } else if (keyBackupUploadActive) {
                     logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
                     showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
                 } else {
@@ -480,6 +498,20 @@ export default class DeviceListener {
     private async recheckBackupDisabled(cli: MatrixClient): Promise<boolean> {
         const backupDisabled = await cli.getAccountDataFromServer(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
         return !!backupDisabled?.disabled;
+    }
+
+    /**
+     * Check whether the user has disabled recovery. If this is the first time,
+     * fetch it from the server (in case the initial sync has not finished).
+     * Otherwise, fetch it from the store as normal.
+     */
+    private async recheckRecoveryDisabled(cli: MatrixClient): Promise<boolean> {
+        const recoveryStatus = await cli.getAccountDataFromServer(RECOVERY_ACCOUNT_DATA_KEY);
+        // Recovery is disabled only if the `enabled` flag is set to `false`.
+        // If it is missing, or set to any other value, we consider it as
+        // not-disabled, and will prompt the user to create recovery (if
+        // missing).
+        return recoveryStatus?.enabled === false;
     }
 
     /**
