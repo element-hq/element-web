@@ -679,12 +679,6 @@ module.exports = (env, argv) => {
                         context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
                         to: path.join(__dirname, "webapp", "widgets", "element-call"),
                     },
-                    // Mobile guide assets
-                    {
-                        from: "assets/**",
-                        context: path.resolve(__dirname, "src/vector/mobile_guide"),
-                        to: "mobile_guide",
-                    },
                 ],
             }),
 
@@ -777,6 +771,8 @@ module.exports = (env, argv) => {
 function getAssetOutputPath(url, resourcePath) {
     const isKaTeX = resourcePath.includes("KaTeX");
     const isFontSource = resourcePath.includes("@fontsource");
+    const mobileGuideAssetsPath = path.join("mobile_guide", "assets");
+    const isMobileGuide = resourcePath.includes(mobileGuideAssetsPath);
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
     // `files` is the parent dir for @fontsource assets
@@ -808,6 +804,11 @@ function getAssetOutputPath(url, resourcePath) {
 
     if (isFontSource) {
         outputDir = "fonts";
+    }
+
+    if (isMobileGuide) {
+        // Specific handling for the mobile guide assets, as they live alongside the page sources.
+        outputDir = mobileGuideAssetsPath;
     }
 
     if (isKaTeX) {

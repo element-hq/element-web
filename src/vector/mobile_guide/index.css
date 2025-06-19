@@ -152,7 +152,7 @@ p {
     right: 0;
     width: 100vw;
     height: 178px; /* Match the height of assets/bottom-gradient.svg so the gradient only stretches horizontally */
-    background-image: url("assets/bottom-gradient.svg");
+    background-image: url("./assets/bottom-gradient.svg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: -1;

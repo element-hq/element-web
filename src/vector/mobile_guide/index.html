@@ -19,7 +19,12 @@
             <header>
                 <div class="mx_HomePage_header">
                     <div>
-                        <img src="./assets/element-logo.svg" alt="Element Logo" width="148px" height="32px" />
+                        <img
+                            src="<%= require('./assets/element-logo.svg').default %>"
+                            alt="Element Logo"
+                            width="148px"
+                            height="32px"
+                        />
                     </div>
                     <div>
                         <p id="header_title">Join Element.</p>
@@ -50,7 +55,7 @@
                                     id="app_store_link"
                                 >
                                     <img
-                                        src="./assets/app-store-badge.svg"
+                                        src="<%= require('./assets/app-store-badge.svg').default %>"
                                         alt="Download on the App Store."
                                         width="120px"
                                         height="40px"
@@ -63,7 +68,7 @@
                                     id="play_store_link"
                                 >
                                     <img
-                                        src="./assets/google-play-badge.svg"
+                                        src="<%= require('./assets/google-play-badge.svg').default %>"
                                         alt="Get it on Google Play."
                                         width="135px"
                                         height="40px"
