@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 import { JoinRule, Visibility } from "matrix-js-sdk/src/matrix";
 
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 interface IProps {
     roomId: string;
@@ -24,6 +24,7 @@ interface IProps {
 
 interface IState {
     isRoomPublished: boolean;
+    busy: boolean;
 }
 
 export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
@@ -32,6 +33,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         this.state = {
             isRoomPublished: false,
+            busy: false,
         };
     }
 
@@ -42,19 +44,20 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         });
     }
 
-    private onRoomPublishChange = (): void => {
-        const valueBefore = this.state.isRoomPublished;
-        const newValue = !valueBefore;
-        this.setState({ isRoomPublished: newValue });
+    private onRoomPublishChange: ChangeEventHandler<HTMLInputElement> = async (evt): Promise<void> => {
+        const newValue = evt.target.checked;
+        this.setState({ busy: true });
         const client = MatrixClientPeg.safeGet();
 
-        client
-            .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private)
-            .catch(() => {
-                this.showError();
-                // Roll back the local echo on the change
-                this.setState({ isRoomPublished: valueBefore });
-            });
+        try {
+            await client
+            .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private) 
+            this.setState({ isRoomPublished: newValue });
+        } catch (ex) {
+            this.showError();
+        } finally {
+            this.setState({ busy: false });
+        }
     };
 
     public componentDidMount(): void {
@@ -69,17 +72,24 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         const room = client.getRoom(this.props.roomId);
         const isRoomPublishable = room && room.getJoinRule() !== JoinRule.Invite;
+        const canSetCanonicalAlias = (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false || this.props.canSetCanonicalAlias);
 
-        const enabled =
-            (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
-                this.props.canSetCanonicalAlias) &&
-            (isRoomPublishable || this.state.isRoomPublished);
+        let disabledMessage;
+        if (!isRoomPublishable) {
+            disabledMessage = _t("room_settings|general|publish_warn_invite_only");
+        } else if (!canSetCanonicalAlias) {
+            disabledMessage = _t("room_settings|general|publish_warn_cannot_set_canonical");
+        }
+
+        const enabled =canSetCanonicalAlias && (isRoomPublishable || this.state.isRoomPublished);
 
         return (
-            <LabelledToggleSwitch
-                value={this.state.isRoomPublished}
+            <SettingsToggleInput
+                name="room-publish"
+                checked={this.state.isRoomPublished}
                 onChange={this.onRoomPublishChange}
-                disabled={!enabled}
+                disabled={!enabled || this.state.busy}
+                disabledMessage={disabledMessage}
                 label={_t("room_settings|general|publish_toggle", {
                     domain: client.getDomain(),
                 })}
