@@ -105,7 +105,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
                 // Fall through to original component. If the module encounters an error we still want to display messages to the user!
             }
         }
-        return originalComponent?.() || null;
+        return originalComponent?.() ?? null;
     }
 
     /**

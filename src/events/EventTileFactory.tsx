@@ -262,8 +262,7 @@ export function renderTile(
         return ModuleApi.customComponents.renderMessage(
             {
                 mxEvent: props.mxEvent,
-            },
-            undefined,
+            }
         );
 
     // Note that we split off the ones we actually care about here just to be sure that we're
@@ -355,8 +354,7 @@ export function renderReplyTile(
         return ModuleApi.customComponents.renderMessage(
             {
                 mxEvent: props.mxEvent,
-            },
-            undefined,
+            }
         );
 
     // See renderTile() for why we split off so much
