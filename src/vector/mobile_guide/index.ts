@@ -53,7 +53,7 @@ async function initPage(): Promise<void> {
     const defaultHsUrl = config?.["default_hs_url"];
     const defaultIsUrl = config?.["default_is_url"];
 
-    const appVariant = (config?.["mobile_guide_app_variant"] ?? "classic") as MobileAppVariant;
+    const appVariant = (config?.["mobile_guide_app_variant"] ?? "x") as MobileAppVariant;
     const metadata = mobileApps[appVariant];
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);

@@ -131,7 +131,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
 7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
    download the app instead.
 8. `mobile_guide_app_variant`: Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted
-   the mobile guide will be configured with the Classic apps. Allowed values are as follows:
+   the mobile guide will be configured for the new Element X apps. Allowed values are as follows:
     1. `classic`: Element Android/iOS.
     2. `x`: Element X Android/iOS.
     3. `pro`: Element Pro Android/iOS.
