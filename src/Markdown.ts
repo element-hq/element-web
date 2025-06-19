@@ -7,7 +7,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import "./@types/commonmark"; // import better types than @types/commonmark
 import * as commonmark from "commonmark";
 import { escape } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
