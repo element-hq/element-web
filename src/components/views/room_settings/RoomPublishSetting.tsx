@@ -6,15 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEventHandler } from "react";
+import React, { type ChangeEventHandler } from "react";
 import { JoinRule, Visibility } from "matrix-js-sdk/src/matrix";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     roomId: string;
@@ -50,10 +51,13 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const client = MatrixClientPeg.safeGet();
 
         try {
-            await client
-            .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private) 
+            await client.setRoomDirectoryVisibility(
+                this.props.roomId,
+                newValue ? Visibility.Public : Visibility.Private,
+            );
             this.setState({ isRoomPublished: newValue });
         } catch (ex) {
+            logger.error("Error while setting room directory visibility", ex);
             this.showError();
         } finally {
             this.setState({ busy: false });
@@ -72,16 +76,18 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         const room = client.getRoom(this.props.roomId);
         const isRoomPublishable = room && room.getJoinRule() !== JoinRule.Invite;
-        const canSetCanonicalAlias = (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false || this.props.canSetCanonicalAlias);
+        const canSetCanonicalAlias =
+            DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
+            this.props.canSetCanonicalAlias;
 
         let disabledMessage;
         if (!isRoomPublishable) {
             disabledMessage = _t("room_settings|general|publish_warn_invite_only");
         } else if (!canSetCanonicalAlias) {
-            disabledMessage = _t("room_settings|general|publish_warn_cannot_set_canonical");
+            disabledMessage = _t("room_settings|general|publish_warn_no_canonical_permission");
         }
 
-        const enabled =canSetCanonicalAlias && (isRoomPublishable || this.state.isRoomPublished);
+        const enabled = canSetCanonicalAlias && (isRoomPublishable || this.state.isRoomPublished);
 
         return (
             <SettingsToggleInput
