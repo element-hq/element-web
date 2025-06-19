@@ -259,11 +259,9 @@ export function renderTile(
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
     if (!factory)
-        return ModuleApi.customComponents.renderMessage(
-            {
-                mxEvent: props.mxEvent,
-            }
-        );
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
 
     // Note that we split off the ones we actually care about here just to be sure that we're
     // not going to accidentally send things we shouldn't from lazy callers. Eg: EventTile's
@@ -351,11 +349,9 @@ export function renderReplyTile(
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
     if (!factory)
-        return ModuleApi.customComponents.renderMessage(
-            {
-                mxEvent: props.mxEvent,
-            }
-        );
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
 
     // See renderTile() for why we split off so much
     const {
