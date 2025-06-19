@@ -15,6 +15,7 @@ import { _t } from "../../../languageHandler";
 import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 import { SettingsToggleInput } from "@vector-im/compound-web";
+import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     // The setting must be a boolean
@@ -72,9 +73,15 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     };
 
     private onChange = async (evt: ChangeEvent<HTMLInputElement>): Promise<void> => {
-        await this.save(evt.target.checked);
-        this.setState({ value: evt.target.checked });
-        this.props.onChange?.(evt.target.checked);
+        const newValue = evt.target.checked;
+        try {
+            await this.save(newValue);
+        } catch (ex) {
+            logger.info(`Failed to save setting ${this.props.name}`, ex);
+            return;
+        }
+        this.setState({ value: newValue });
+        this.props.onChange?.(newValue);
     };
 
     private save = async (val?: boolean): Promise<void> => {
@@ -94,22 +101,26 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         const label = this.props.label ?? SettingsStore.getDisplayName(this.props.name, this.props.level);
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
-        const helpMessage = shouldWarn ? _t(
-                                      "settings|warning",
-                                      {},
-                                      {
-                                          w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
-                                          description,
-                                      },
-                                  )
-                                : description;
-        return <SettingsToggleInput
-            id={this.id}
-            onChange={this.onChange}
-            name={this.props.name}
-            label={label ?? this.props.name} 
-            helpMessage={helpMessage as string}
-            disabledMessage={SettingsStore.disabledMessage(this.props.name)}
-        />;
+        const helpMessage = shouldWarn
+            ? _t(
+                  "settings|warning",
+                  {},
+                  {
+                      w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
+                      description,
+                  },
+              )
+            : description;
+        return (
+            <SettingsToggleInput
+                id={this.id}
+                checked={this.state.value}
+                onChange={this.onChange}
+                name={this.props.name}
+                label={label ?? this.props.name}
+                helpMessage={helpMessage as string}
+                disabledMessage={SettingsStore.disabledMessage(this.props.name)}
+            />
+        );
     }
 }
