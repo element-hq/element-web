@@ -7,15 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
+import React, { type ChangeEvent } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { SettingsToggleInput } from "@vector-im/compound-web";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
-import { SettingsToggleInput } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     // The setting must be a boolean

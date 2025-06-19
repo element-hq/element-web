@@ -82,7 +82,12 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
     return (
         <Root className="mx_MediaPreviewAccountSetting_Form">
             {!roomId && (
-                <SettingsToggleInput name="hide_avatars" label={_t("settings|media_preview|hide_avatars")} checked={currentMediaPreview.invite_avatars === MediaPreviewValue.Off} onChange={avatarOnChange} />
+                <SettingsToggleInput
+                    name="hide_avatars"
+                    label={_t("settings|media_preview|hide_avatars")}
+                    checked={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
+                    onChange={avatarOnChange}
+                />
             )}
             {/* Explict label here because htmlFor is not supported for linking to radiogroups */}
             <Field

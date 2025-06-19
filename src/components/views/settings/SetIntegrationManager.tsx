@@ -76,7 +76,12 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
                 <SettingsSubsectionText>{bodyText}</SettingsSubsectionText>
                 <SettingsSubsectionText>{_t("integration_manager|explainer")}</SettingsSubsectionText>
                 <Root>
-                    <SettingsToggleInput name="enable_im" label={_t("integration_manager|toggle_label")} checked={this.state.provisioningEnabled} onChange={this.onProvisioningToggled} />
+                    <SettingsToggleInput
+                        name="enable_im"
+                        label={_t("integration_manager|toggle_label")}
+                        checked={this.state.provisioningEnabled}
+                        onChange={this.onProvisioningToggled}
+                    />
                 </Root>
             </div>
         );

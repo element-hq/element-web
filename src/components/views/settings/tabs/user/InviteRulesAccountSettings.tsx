@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEventHandler, type FC, useCallback, useState } from "react";
+import React, { type ChangeEventHandler, type FC, useCallback, useState } from "react";
 import { Root, SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -13,7 +13,6 @@ import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-
 
 export const InviteRulesAccountSetting: FC = () => {
     const rules = useSettingValue("inviteRules");

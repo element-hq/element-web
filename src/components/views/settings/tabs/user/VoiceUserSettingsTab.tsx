@@ -7,10 +7,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -18,7 +19,6 @@ import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
@@ -140,6 +140,24 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         );
     }
 
+    private onAutoGainChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioAutoGainControl(enable);
+        this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
+    };
+
+    private onNoiseSuppressionChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioNoiseSuppression(enable);
+        this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
+    };
+
+    private onEchoCancellationChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioEchoCancellation(enable);
+        this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
+    };
+
     public render(): ReactNode {
         let requestButton: ReactNode | undefined;
         let speakerDropdown: ReactNode | undefined;
@@ -174,14 +192,11 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                     <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
                         {speakerDropdown}
                         {microphoneDropdown}
-                        <LabelledToggleSwitch
-                            value={this.state.audioAutoGainControl}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioAutoGainControl(v);
-                                this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
-                            }}
+                        <SettingsToggleInput
+                            name="voice-auto-gain"
                             label={_t("settings|voip|voice_agc")}
-                            data-testid="voice-auto-gain"
+                            checked={this.state.audioAutoGainControl}
+                            onChange={this.onAutoGainChanged}
                         />
                     </SettingsSubsection>
                     <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
@@ -192,23 +207,17 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
 
                 <SettingsSection heading={_t("common|advanced")}>
                     <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
-                        <LabelledToggleSwitch
-                            value={this.state.audioNoiseSuppression}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioNoiseSuppression(v);
-                                this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
-                            }}
+                        <SettingsToggleInput
+                            name="voice-noise-suppression"
                             label={_t("settings|voip|noise_suppression")}
-                            data-testid="voice-noise-suppression"
+                            checked={this.state.audioNoiseSuppression}
+                            onChange={this.onNoiseSuppressionChanged}
                         />
-                        <LabelledToggleSwitch
-                            value={this.state.audioEchoCancellation}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioEchoCancellation(v);
-                                this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
-                            }}
+                        <SettingsToggleInput
+                            name="voice-echo-cancellation"
                             label={_t("settings|voip|echo_cancellation")}
-                            data-testid="voice-echo-cancellation"
+                            checked={this.state.audioEchoCancellation}
+                            onChange={this.onEchoCancellationChanged}
                         />
                     </SettingsSubsection>
                     <SettingsSubsection heading={_t("settings|voip|connection_section")}>

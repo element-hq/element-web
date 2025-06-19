@@ -13,9 +13,10 @@ import React, {
     createRef,
     type KeyboardEvent,
     type SyntheticEvent,
-    ChangeEventHandler,
+    type ChangeEventHandler,
 } from "react";
 import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
@@ -31,7 +32,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 interface IProps {
     type?: RoomType;

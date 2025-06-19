@@ -7,7 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import { SettingsToggleControl } from "@vector-im/compound-web";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -33,7 +34,6 @@ import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
-import { SettingsToggleControl } from "@vector-im/compound-web";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
