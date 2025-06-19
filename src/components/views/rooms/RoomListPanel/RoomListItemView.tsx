@@ -48,16 +48,12 @@ export const RoomListItemView = memo(function RoomListItemView({
     const showHoverDecoration = isMenuOpen || isHover;
     const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
 
-    const setIsMenuOpenMemoized = useCallback((isOpen: boolean) => {
-        if (isOpen) {
-            setIsMenuOpen(isOpen);
-        } else {
-            // To avoid icon blinking when closing the menu, we delay the state update
-            setTimeout(() => setIsMenuOpen(isOpen), 0);
-            // After closing the menu, we need to set the focus back to the button
-            // 10ms because the focus moves to the body and we put back the focus on the button
-            setTimeout(() => buttonRef.current?.focus(), 10);
-        }
+    const closeMenu = useCallback(() => {
+        // To avoid icon blinking when closing the menu, we delay the state update
+        setTimeout(() => setIsMenuOpen(false), 0);
+        // After closing the menu, we need to set the focus back to the button
+        // 10ms because the focus moves to the body and we put back the focus on the button
+        setTimeout(() => buttonRef.current?.focus(), 10);
     }, []);
 
     const content = (
@@ -103,7 +99,10 @@ export const RoomListItemView = memo(function RoomListItemView({
                         <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
                     </div>
                     {showHoverMenu ? (
-                        <RoomListItemMenuView room={room} setMenuOpen={setIsMenuOpenMemoized} />
+                        <RoomListItemMenuView
+                            room={room}
+                            setMenuOpen={(isOpen) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
+                        />
                     ) : (
                         <>
                             {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
@@ -124,7 +123,17 @@ export const RoomListItemView = memo(function RoomListItemView({
     if (!vm.showContextMenu) return content;
 
     return (
-        <RoomListItemContextMenuView room={room} setMenuOpen={setIsMenuOpenMemoized}>
+        <RoomListItemContextMenuView
+            room={room}
+            setMenuOpen={(isOpen) => {
+                if (isOpen) {
+                    // To avoid icon blinking when the context menu is re-opened
+                    setTimeout(() => setIsMenuOpen(true), 0);
+                } else {
+                    closeMenu();
+                }
+            }}
+        >
             {content}
         </RoomListItemContextMenuView>
     );
