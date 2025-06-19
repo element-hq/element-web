@@ -1082,10 +1082,12 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new NotificationsEnabledController(),
+        displayName: "settings|notifications|enable_desktop_notifications_session",
     },
     "deviceNotificationsEnabled": {
         supportedLevels: [SettingLevel.DEVICE],
         default: true,
+        displayName: "settings|notifications|enable_notifications_device",
     },
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
@@ -1095,10 +1097,12 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         controller: new NotificationBodyEnabledController(),
+        displayName: "settings|notifications|desktop_notification_message_preview",
     },
     "audioNotificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
+        displayName: "settings|notifications|enable_audible_notifications_session",
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
