@@ -10,34 +10,32 @@ import os from "node:os";
 import path from "node:path";
 import * as fsp from "node:fs/promises";
 import * as fs from "node:fs";
-import JSZip from "jszip";
+import { Uint8ArrayReader, Uint8ArrayWriter, ZipReader } from "@zip.js/zip.js";
 
 import { test, expect } from "../../element-web-test";
 
 // Based on https://github.com/Stuk/jszip/issues/466#issuecomment-2097061912
-async function extractZipFileToPath(file: string, outputPath: string): Promise<JSZip> {
+async function extractZipFileToPath(file: string, outputPath: string): Promise<ZipReader<unknown>> {
     if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true });
     }
 
     const data = await fsp.readFile(file);
-    const zip = await JSZip.loadAsync(data, { createFolders: true });
+    const dataReader = new Uint8ArrayReader(new Uint8Array(data));
+    const zip = new ZipReader(dataReader);
+    const entries = await zip.getEntries();
 
     await new Promise<void>((resolve, reject) => {
-        let entryCount = 0;
+        let entryCount = entries.length;
         let errorOut = false;
 
-        zip.forEach(() => {
-            entryCount++;
-        }); // there is no other way to count the number of entries within the zip file.
-
-        zip.forEach((relativePath, zipEntry) => {
+        entries.forEach((entry) => {
             if (errorOut) {
                 return;
             }
 
-            const outputEntryPath = path.join(outputPath, relativePath);
-            if (zipEntry.dir) {
+            const outputEntryPath = path.join(outputPath, entry.filename);
+            if (entry.directory) {
                 if (!fs.existsSync(outputEntryPath)) {
                     fs.mkdirSync(outputEntryPath, { recursive: true });
                 }
@@ -48,25 +46,33 @@ async function extractZipFileToPath(file: string, outputPath: string): Promise<J
                     resolve();
                 }
             } else {
-                void zipEntry
-                    .async("blob")
-                    .then(async (content) => Buffer.from(await content.arrayBuffer()))
-                    .then((buffer) => {
-                        const stream = fs.createWriteStream(outputEntryPath);
-                        stream.write(buffer, (error) => {
-                            if (error) {
-                                reject(error);
-                                errorOut = true;
-                            }
-                        });
-                        stream.on("finish", () => {
-                            entryCount--;
+                const arrayWriter = new Uint8ArrayWriter();
+                entry
+                    .getData(arrayWriter)
+                    .then(() => {
+                        arrayWriter
+                            .getData()
+                            .then((buffer) => {
+                                const stream = fs.createWriteStream(outputEntryPath);
+                                stream.write(buffer, (error) => {
+                                    if (error) {
+                                        reject(error);
+                                        errorOut = true;
+                                    }
+                                });
+                                stream.on("finish", () => {
+                                    entryCount--;
 
-                            if (entryCount === 0) {
-                                resolve();
-                            }
-                        });
-                        stream.end(); // extremely important on Windows. On Mac / Linux, not so much since those platforms allow multiple apps to read from the same file. Windows doesn't allow that.
+                                    if (entryCount === 0) {
+                                        resolve();
+                                    }
+                                });
+                                stream.end();
+                            })
+                            .catch((e) => {
+                                errorOut = true;
+                                reject(e);
+                            });
                     })
                     .catch((e) => {
                         errorOut = true;
@@ -99,9 +105,9 @@ test.describe("HTML Export", () => {
 
             // Send a bunch of messages to populate the room
             for (let i = 1; i < 10; i++) {
-                const respone = await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
+                const response = await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
                 if (i == 1) {
-                    await app.client.reactToMessage(room.roomId, null, respone.event_id, "🙃");
+                    await app.client.reactToMessage(room.roomId, null, response.event_id, "🙃");
                 }
             }
 
@@ -122,7 +128,10 @@ test.describe("HTML Export", () => {
             await download.saveAs(zipPath);
 
             const zip = await extractZipFileToPath(zipPath, dirPath);
-            await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
+            const zipEntries = await zip.getEntries();
+            const messagesHtmlPath = zipEntries.find((entry) => entry.filename.endsWith("/messages.html"))?.filename;
+            expect(messagesHtmlPath).toBeDefined();
+            await page.goto(`file://${dirPath}/${messagesHtmlPath}`);
             await expect(page).toMatchScreenshot("html-export.png", {
                 mask: [
                     // We need to mask the whole thing because the width of the time part changes
