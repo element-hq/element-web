@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Direction, type MatrixEvent, type Relations, type Room } from "matrix-js-sdk/src/matrix";
-import { type EventType, type MediaEventContent, type RelationType } from "matrix-js-sdk/src/types";
+import { EventType, type MediaEventContent, type RelationType, MsgType } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
@@ -222,7 +222,7 @@ export default abstract class Exporter {
         try {
             const isEncrypted = event.isEncrypted();
             const content = event.getContent<MediaEventContent>();
-            const shouldDecrypt = isEncrypted && content.hasOwnProperty("file") && event.getType() !== "m.sticker";
+            const shouldDecrypt = isEncrypted && content.hasOwnProperty("file") && event.getType() !== EventType.Sticker;
             if (shouldDecrypt) {
                 blob = await decryptFile(content.file);
             } else {
@@ -267,22 +267,22 @@ export default abstract class Exporter {
         const mediaType = event.getContent().msgtype;
         let fileDirectory: string;
         switch (mediaType) {
-            case "m.image":
+            case MsgType.Image:
                 fileDirectory = "images";
                 break;
-            case "m.video":
+            case MsgType.Video:
                 fileDirectory = "videos";
                 break;
-            case "m.audio":
+            case MsgType.Audio:
                 fileDirectory = "audio";
                 break;
             default:
-                fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
+                fileDirectory = event.getType() === EventType.Sticker ? "stickers" : "files";
         }
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         let [fileName, fileExt] = this.splitFileName(event.getContent().body);
 
-        if (event.getType() === "m.sticker") fileExt = ".png";
+        if (event.getType() === EventType.Sticker) fileExt = ".png";
         if (isVoiceMessage(event)) fileExt = ".ogg";
 
         return this.makeUniqueFilePath({
@@ -302,7 +302,7 @@ export default abstract class Exporter {
     }
 
     protected isAttachment(mxEv: MatrixEvent): boolean {
-        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
+        const attachmentTypes = ["m.sticker", MsgType.Image, MsgType.File, MsgType.Video, MsgType.Audio];
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype!);
     }
 
