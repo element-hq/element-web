@@ -35,7 +35,6 @@ interface RoomListItemMenuViewProps {
     room: Room;
     /**
      * Set the menu open state.
-     * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
 }
