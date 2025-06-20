@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "license": "SEE LICENSE IN README.md",
     "repository": {
         "type": "git",
@@ -30,6 +30,7 @@
     "dependencies": {
         "@axe-core/playwright": "^4.10.1",
         "@testcontainers/postgresql": "^11.0.0",
+        "glob": "^11.0.3",
         "lodash-es": "^4.17.21",
         "mailpit-api": "^1.2.0",
         "strip-ansi": "^7.1.0",
