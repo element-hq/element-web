@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type AbstractStartedContainer, type TestContainer } from "testcontainers";
+import { type AbstractStartedContainer, type GenericContainer } from "testcontainers";
 import { type APIRequestContext, type TestInfo } from "@playwright/test";
 
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas";
@@ -41,7 +41,7 @@ export interface HomeserverInstance {
     setThreepid(userId: string, medium: string, address: string): Promise<void>;
 }
 
-export interface HomeserverContainer<Config> extends TestContainer {
+export interface HomeserverContainer<Config> extends GenericContainer {
     /**
      * Set a configuration field in the config
      * @param key - the key to set
