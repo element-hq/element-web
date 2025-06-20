@@ -35,7 +35,6 @@ interface RoomListItemMenuViewProps {
     room: Room;
     /**
      * Set the menu open state.
-     * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
 }
@@ -84,6 +83,21 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
             align="start"
             trigger={<MoreOptionsButton size="24px" />}
         >
+            <MoreOptionContent vm={vm} />
+        </Menu>
+    );
+}
+
+interface MoreOptionContentProps {
+    /**
+     * The view model state for the menu.
+     */
+    vm: RoomListItemMenuViewState;
+}
+
+export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
+    return (
+        <>
             {vm.canMarkAsRead && (
                 <MenuItem
                     Icon={MarkAsReadIcon}
@@ -143,7 +157,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 onClick={(evt) => evt.stopPropagation()}
                 hideChevron={true}
             />
-        </Menu>
+        </>
     );
 }
 
@@ -154,7 +168,7 @@ interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the more options menu.
  */
-export const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
+const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
     return (
         <Tooltip label={_t("room_list|room|more_options")}>
             <IconButton aria-label={_t("room_list|room|more_options")} {...props}>
@@ -244,7 +258,7 @@ interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the notification menu.
  */
-export const NotificationButton = function MoreOptionsButton({
+const NotificationButton = function MoreOptionsButton({
     isRoomMuted,
     ref,
     ...props

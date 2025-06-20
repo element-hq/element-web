@@ -73,6 +73,15 @@ describe("RoomListItemViewModel", () => {
         );
     });
 
+    it("should show context menu if user has access to options menu", async () => {
+        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
+        expect(vm.current.showContextMenu).toBe(true);
+    });
+
     it("should show hover menu if user has access to options menu", async () => {
         mocked(hasAccessToOptionsMenu).mockReturnValue(true);
         const { result: vm } = renderHook(
