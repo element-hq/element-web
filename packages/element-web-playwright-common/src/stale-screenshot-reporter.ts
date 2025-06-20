@@ -16,6 +16,12 @@ import path from "node:path";
 import { type Reporter, type TestCase } from "@playwright/test/reporter";
 import { type FullConfig } from "@playwright/test";
 
+/**
+ * The annotation type used to mark screenshots in tests.
+ * `_` prefix hides it from the HTML reporter
+ */
+export const ANNOTATION = "_screenshot";
+
 class StaleScreenshotReporter implements Reporter {
     private readonly snapshotRoots = new Set<string>();
     private readonly screenshots = new Set<string>();
@@ -34,7 +40,7 @@ class StaleScreenshotReporter implements Reporter {
             this.failing = true;
         }
         for (const annotation of test.annotations) {
-            if (annotation.type === "_screenshot" && annotation.description) {
+            if (annotation.type === ANNOTATION && annotation.description) {
                 this.screenshots.add(annotation.description);
             }
         }

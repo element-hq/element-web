@@ -19,6 +19,8 @@ import {
 import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import { extname } from "node:path";
 
+import { ANNOTATION } from "../stale-screenshot-reporter.js";
+
 // Based on https://github.com/microsoft/playwright/blob/2b77ed4d7aafa85a600caa0b0d101b72c8437eeb/packages/playwright/src/util.ts#L206C8-L210C2
 function sanitizeFilePathBeforeExtension(filePath: string): string {
     const ext = extname(filePath);
@@ -68,8 +70,7 @@ export const expect = baseExpect.extend<Expectations>({
         await style?.evaluate((tag) => tag.remove());
 
         testInfo.annotations.push({
-            // `_` prefix hides it from the HTML reporter
-            type: "_screenshot",
+            type: ANNOTATION,
             description: testInfo.snapshotPath(screenshotName),
         });
 
