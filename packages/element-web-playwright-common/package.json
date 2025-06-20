@@ -15,11 +15,13 @@
     "exports": {
         ".": {
             "import": "./lib/index.js",
+            "require": "./lib/index.js",
             "types": "./lib/index.d.ts"
         },
-        "./stale-screenshots-reporter": {
-            "import": "./lib/stale-screenshots-reporter.js",
-            "types": "./lib/stale-screenshots-reporter.d.ts"
+        "./stale-screenshot-reporter": {
+            "import": "./lib/stale-screenshot-reporter.js",
+            "require": "./lib/stale-screenshot-reporter.js",
+            "types": "./lib/stale-screenshot-reporter.d.ts"
         }
     },
     "bin": {
