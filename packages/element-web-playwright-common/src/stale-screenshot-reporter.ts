@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import { glob } from "glob";
+import path from "node:path";
 import { type Reporter, type TestCase } from "@playwright/test/reporter";
 import { type FullConfig } from "@playwright/test";
 
@@ -58,7 +59,7 @@ class StaleScreenshotReporter implements Reporter {
         for (const snapshotRoot of this.snapshotRoots) {
             const files = await glob(`**/*.png`, { cwd: snapshotRoot });
             for (const file of files) {
-                screenshotFiles.add(file);
+                screenshotFiles.add(path.join(snapshotRoot, file));
             }
         }
 

@@ -70,8 +70,7 @@ export const expect = baseExpect.extend<Expectations>({
         testInfo.annotations.push({
             // `_` prefix hides it from the HTML reporter
             type: "_screenshot",
-            // include a path relative to `playwright/snapshots/`
-            description: testInfo.snapshotPath(screenshotName).split("/playwright/snapshots/", 2)[1],
+            description: testInfo.snapshotPath(screenshotName),
         });
 
         return { pass: true, message: (): string => "", name: "toMatchScreenshot" };
