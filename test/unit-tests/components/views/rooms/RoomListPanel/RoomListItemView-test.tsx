@@ -150,5 +150,8 @@ describe("<RoomListItemView />", () => {
         const button = screen.getByRole("button", { name: `Open room ${room.name}` });
         await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
         await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
+        // Menu should close
+        await user.keyboard("{Escape}");
+        expect(screen.queryByRole("menu")).toBeNull();
     });
 });
