@@ -188,8 +188,8 @@ export type SynapseConfig = typeof DEFAULT_CONFIG;
  * Waits for HTTP /health 8008 to 200.
  */
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<SynapseConfig> {
-    private config: SynapseConfig;
-    private mas?: StartedMatrixAuthenticationServiceContainer;
+    protected config: SynapseConfig;
+    protected mas?: StartedMatrixAuthenticationServiceContainer;
 
     public constructor(image = "ghcr.io/element-hq/synapse:develop") {
         super(image);
