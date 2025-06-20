@@ -30,7 +30,6 @@ class StaleScreenshotReporter implements Reporter {
 
     public onBegin(config: FullConfig): void {
         for (const project of config.projects) {
-            console.log("@@ found snapshotDir", project.snapshotDir);
             this.snapshotRoots.add(project.snapshotDir);
         }
     }
