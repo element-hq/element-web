@@ -26,7 +26,8 @@
         "./src/**/*.tsx",
         "./test/**/*.ts",
         "./test/**/*.tsx",
-        "./scripts/*.ts"
+        "./scripts/*.ts",
+        "./declaration.d.ts",
     ],
     "ts-node": {
         "files": true,
