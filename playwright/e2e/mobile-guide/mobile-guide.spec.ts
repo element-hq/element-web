@@ -12,22 +12,25 @@ const variants = [MobileAppVariant.Classic, MobileAppVariant.X, MobileAppVariant
 
 test.describe("Mobile Guide Screenshots", { tag: "@screenshot" }, () => {
     for (const variant of variants) {
-        test.use({
-            config: {
-                default_server_config: {
-                    "m.homeserver": {
-                        base_url: "https://matrix.server.invalid",
-                        server_name: "server.invalid",
+        test.describe(`for variant ${variant}`, () => {
+            test.use({
+                config: {
+                    default_server_config: {
+                        "m.homeserver": {
+                            base_url: "https://matrix.server.invalid",
+                            server_name: "server.invalid",
+                        },
                     },
+                    mobile_guide_app_variant: variant,
                 },
-                mobile_guide_app_variant: variant,
-            },
-            viewport: { width: 390, height: 844 }, // iPhone 16e
-        });
-        test(`should match the homepage screenshot for variant: ${variant}`, async ({ page, axe }) => {
-            await page.goto("/mobile_guide/");
-            await expect(page).toMatchScreenshot(`mobile-guide-${variant}.png`);
-            await expect(axe).toHaveNoViolations();
+                viewport: { width: 390, height: 844 }, // iPhone 16e
+            });
+
+            test("should match the mobile_guide screenshot", async ({ page, axe }) => {
+                await page.goto("/mobile_guide/");
+                await expect(page).toMatchScreenshot(`mobile-guide-${variant}.png`);
+                await expect(axe).toHaveNoViolations();
+            });
         });
     }
 });
