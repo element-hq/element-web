@@ -12,7 +12,16 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "main": "lib/index.js",
+    "exports": {
+        ".": {
+            "import": "./lib/index.js",
+            "types": "./lib/index.d.ts"
+        },
+        "./stale-screenshots-reporter": {
+            "import": "./lib/stale-screenshots-reporter.js",
+            "types": "./lib/stale-screenshots-reporter.d.ts"
+        }
+    },
     "bin": {
         "playwright-screenshots": "playwright-screenshots.sh"
     },
