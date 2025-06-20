@@ -1677,10 +1677,10 @@
   resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.0.0.tgz#df09108b0346a44ad2898c603d1a6cda5f50d80b"
   integrity sha512-FYId5tYgaKvpqAXRXqs0pY4+7/A09bEl1mCxFqlS9jlZOCjlMZVvZuv8spbY8ZN9HaMvuVmx9J00Fn2gCJd0TQ==
 
-"@element-hq/element-web-playwright-common@^1.1.5":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.3.0.tgz#5f57eb2ee25e9733c92185ef57431db808deb603"
-  integrity sha512-tq3lN77f0KnTYtPVkRrwvsWpq/JAC6JqDkC2f6dxuvX3a+OmyjGnuoZh83kB2WNObfrrx7gxmsZpS7ov2mrw4Q==
+"@element-hq/element-web-playwright-common@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-1.4.0.tgz#8689778ed98dd08c7aa49bbefbd6f542f6900a7e"
+  integrity sha512-deHv8KjzcAg+/797AEhqaQSUvvBKAwTJnbLDgKF7ez0IBAlDprinK0bToJpXEXV6qQld+5bLmhU4kM+PrwYsYA==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^11.0.0"
@@ -3855,7 +3855,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.3.tgz#cc54d8b3e9472bcd8e622126ba364ee31952cd8a"
   integrity sha512-fqo8P55Vc/t0vxpFar9RDJN5gKEjJmzrLo+O4piDbFda6VrRoqrWAtiu0Au0g6B4hRDPKIuFupk8v9Ja7q8Hvg==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
