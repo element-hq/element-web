@@ -973,7 +973,6 @@
         },
         "reset_all_button": "Zabudli ste alebo ste stratili všetky metódy obnovy? <a>Resetovať všetko</a>",
         "set_up_recovery": "Nastaviť obnovenie",
-        "set_up_recovery_later": "Teraz nie",
         "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
         "set_up_toast_description": "Zabezpečte sa proti strate šifrovaných správ a údajov",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
