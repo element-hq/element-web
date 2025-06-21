@@ -17,9 +17,21 @@ import { warnSelfDemote } from "../../views/right_panel/UserInfo";
 
 
 
+/**
+ * 
+ */
 export interface UserInfoPowerLevelState {
+    /**
+     * default power level value of the selected user
+     */
     powerLevelUsersDefault: number;
+    /**
+     * The new power level to apply
+     */
     selectedPowerLevel: number;
+    /**
+     * Method to call When power level selection change
+     */
     onPowerChange: (powerLevel: number) => void;
 }
 
@@ -38,8 +50,6 @@ export const useUserInfoPowerlevelViewModel = (user: RoomMember, room: Room): Us
             const applyPowerChange = (roomId: string, target: string, powerLevel: number): Promise<unknown> => {
                 return cli.setPowerLevel(roomId, target, powerLevel).then(
                     function () {
-                        // NO-OP; rely on the m.room.member event coming down else we could
-                        // get out of sync if we force setState here!
                         logger.info("Power change success");
                     },
                     function (err) {
