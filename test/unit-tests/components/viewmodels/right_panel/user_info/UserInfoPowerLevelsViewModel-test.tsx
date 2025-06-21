@@ -15,11 +15,11 @@ import { type IRoomPermissions } from "../../../../../../src/components/views/ri
 import Modal from "../../../../../../src/Modal";
 import { warnSelfDemote } from "../../../../../../src/components/views/right_panel/UserInfo";
 
-jest.mock("../../../../../../../src/Modal", () => ({
+jest.mock("../../../../../../src/Modal", () => ({
     createDialog: jest.fn(),
 }));
 
-jest.mock("../../../../../../../src/components/views/right_panel/UserInfo", () => ({
+jest.mock("../../../../../../src/components/views/right_panel/UserInfo", () => ({
     warnSelfDemote: jest.fn(),
 }));
 
