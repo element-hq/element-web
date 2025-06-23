@@ -347,7 +347,7 @@ describe("<Notifications />", () => {
         it("renders switches correctly", async () => {
             await getComponentAndWait();
 
-            expect(screen.getByTestId("notif-master-switch")).toBeInTheDocument();
+            expect(screen.getByLabelText("Enable notifications for this account")).toBeInTheDocument();
             expect(screen.getByTestId("notif-device-switch")).toBeInTheDocument();
             expect(screen.getByTestId("notif-setting-notificationsEnabled")).toBeInTheDocument();
             expect(screen.getByTestId("notif-setting-notificationBodyEnabled")).toBeInTheDocument();
