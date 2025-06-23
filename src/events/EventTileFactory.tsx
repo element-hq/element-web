@@ -419,7 +419,8 @@ export function haveRendererForEvent(
         return false;
     }
 
-    // Check to see if a renderer is registered for this event
+    // Check to see if we have any hints for this message, which indicates
+    // there is a custom renderer for the event.
     if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
         return true;
     }
