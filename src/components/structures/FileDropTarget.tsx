@@ -7,11 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useState } from "react";
+import { type Room, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../languageHandler";
 import UploadBigSvg from "../../../res/img/upload-big.svg";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter.ts";
 
 interface IProps {
+    room: Room;
     parent: HTMLElement | null;
     onFileDrop(dataTransfer: DataTransfer): void;
 }
@@ -21,14 +24,17 @@ interface IState {
     counter: number;
 }
 
-const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
+const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
     const [state, setState] = useState<IState>({
         dragging: false,
         counter: 0,
     });
+    const hasPermission = useTypedEventEmitterState(room.currentState, RoomStateEvent.Update, (state: RoomState) =>
+        state.maySendMessage(room.getMyMembership()),
+    );
 
     useEffect(() => {
-        if (!parent || parent.ondrop) return;
+        if (!hasPermission || !parent || parent.ondrop) return;
 
         const onDragEnter = (ev: DragEvent): void => {
             ev.stopPropagation();
@@ -102,9 +108,9 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             parent?.removeEventListener("dragenter", onDragEnter);
             parent?.removeEventListener("dragleave", onDragLeave);
         };
-    }, [parent, onFileDrop]);
+    }, [parent, onFileDrop, hasPermission]);
 
-    if (state.dragging) {
+    if (hasPermission && state.dragging) {
         return (
             <div className="mx_FileDropTarget">
                 <img src={UploadBigSvg} className="mx_FileDropTarget_image" alt="" />
