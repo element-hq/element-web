@@ -29,7 +29,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
         dragging: false,
         counter: 0,
     });
-    const hasPermission = useRoomState(room, (state) => state.maySendMessage(room.getMyMembership()));
+    const hasPermission = useRoomState(room, (state) => state.maySendMessage(room.client.getUserId()!));
 
     useEffect(() => {
         if (!hasPermission || !parent || parent.ondrop) return;
