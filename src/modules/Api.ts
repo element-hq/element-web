@@ -21,7 +21,7 @@ import { WidgetPermissionCustomisations } from "../customisations/WidgetPermissi
 import { WidgetVariableCustomisations } from "../customisations/WidgetVariables.ts";
 import { ConfigApi } from "./ConfigApi.ts";
 import { I18nApi } from "./I18nApi.ts";
-import { CustomComponentsApi } from "./customComponentApi.tsx";
+import { CustomComponentsApi } from "./customComponentApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
