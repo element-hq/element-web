@@ -316,7 +316,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
             <ErrorBoundary>
                 <RoomHeader room={room} />
                 <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
-                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} />
+                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} room={room} />
                     <div className="mx_RoomView_timeline">
                         <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={props.resizeNotifier}>
                             {encryptionTile}
@@ -2564,7 +2564,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses}>
-                            <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
+                            <FileDropTarget
+                                parent={this.roomView.current}
+                                onFileDrop={this.onFileDrop}
+                                room={this.state.room}
+                            />
                             {topUnreadMessagesBar}
                             {jumpToBottom}
                             {messagePanel}
