@@ -28,6 +28,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import sanitizeHtml from "sanitize-html";
+import { type TitleRenderOptions } from "@element-hq/element-web-module-api";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -141,8 +142,7 @@ import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenFor
 import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
-import moduleApi from "../../modules/Api"
-import { TitleRenderOptions } from "@element-hq/element-web-module-api";
+import moduleApi from "../../modules/Api";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1993,23 +1993,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({ action: "message_sent" });
         });
     }
-    
 
     private setPageSubtitle(): void {
-        let roomName: string|undefined;
+        let roomName: string | undefined;
         if (this.state.currentRoomId) {
             const client = MatrixClientPeg.get();
             roomName = client?.getRoom(this.state.currentRoomId)?.name;
         }
 
-        let title = moduleApi.brandApi.renderTitle({...this.subTitleState, roomName, roomId: this.state.currentRoomId ?? undefined});
+        let title = moduleApi.brand.renderTitle({
+            ...this.subTitleState,
+            roomName,
+            roomId: this.state.currentRoomId ?? undefined,
+        });
 
         if (title === undefined) {
-            // No module API implemented, fallback 
+            // No module API implemented, fallback
             let subTitleStatus = "";
 
             if (this.subTitleState.errorDidOccur) {
-                subTitleStatus += `[${_t("common|offline")}] `
+                subTitleStatus += `[${_t("common|offline")}] `;
             }
 
             if ((this.subTitleState.notificationCount ?? 0) > 0) {
@@ -2021,15 +2024,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             let subtitle;
             if (this.state.currentRoomId) {
                 if (roomName) {
-                    subtitle = `${subTitleStatus} | ${roomName} ${subtitle}`;
+                    subtitle = `${subTitleStatus} | ${roomName}`;
                 }
             } else {
-                subtitle = `${subTitleStatus} ${subtitle}`;
+                subtitle = `${subTitleStatus}`;
             }
 
             title = `${SdkConfig.get().brand} ${subtitle}`;
         }
-
 
         if (document.title !== title) {
             document.title = title;
@@ -2037,11 +2039,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private onUpdateStatusIndicator = (notificationState: SummarizedNotificationState, state: SyncState): void => {
+        console.log("onUpdateStatusIndicator");
         const notificationCount = notificationState.numUnreadStates; // we know that states === rooms here
+        const platform = PlatformPeg.get();
 
-        if (PlatformPeg.get()) {
-            PlatformPeg.get()!.setErrorStatus(state === SyncState.Error);
-            PlatformPeg.get()!.setNotificationCount(notificationCount);
+        if (platform) {
+            platform.setErrorStatus(state === SyncState.Error);
+            platform.setNotificationCount(notificationCount);
         }
 
         this.subTitleState = {

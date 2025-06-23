@@ -41,6 +41,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
             // pass SyncState.Error.
             this.emitUpdateIfStateChanged(SyncState.Syncing, false);
         });
+        this.emitUpdateIfStateChanged(SyncState.Syncing, true);
     }
 
     /**
@@ -107,6 +108,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
      * @internal public for test
      */
     public emitUpdateIfStateChanged = (state: SyncState, forceEmit: boolean): void => {
+        console.log("emitUpdateIfStateChanged", this.matrixClient!);
         if (!this.matrixClient) return;
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
@@ -134,6 +136,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         ) {
             this._globalState = globalState;
             this.emit(UPDATE_STATUS_INDICATOR, globalState, state);
+        } else {
+            console.log("skipping emit");
         }
     };
 

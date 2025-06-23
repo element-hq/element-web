@@ -16,6 +16,7 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
 import "./modernizr";
+import moduleApi from "../modules/Api";
 
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
@@ -221,6 +222,12 @@ async function start(): Promise<void> {
         await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
+
+        // Render the title as early as we can so that the true brand pops up.
+        const moduleTitle = moduleApi.brand.renderTitle({});
+        if (moduleTitle) {
+            document.title = moduleTitle;
+        }
 
         // We don't care if the log persistence made it through successfully, but we do want to
         // make sure it had a chance to load before we move on. It's prepared much higher up in

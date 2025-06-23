@@ -17,8 +17,6 @@ interface IParams {
     isUp: boolean;
     isLeft: boolean;
 }
-import { FaviconRenderFunction, FaviconRenderOptions } from "@element-hq/element-web-module-api";
-import moduleApi from "./modules/Api.ts"
 
 const defaults: IParams = {
     bgColor: "#d00",
@@ -186,9 +184,9 @@ export default class Favicon {
         this.readyCb?.();
     }
 
-    private setIcon(src: string): void {
+    private setIcon(canvas: HTMLCanvasElement): void {
         setTimeout(() => {
-            this.setIconSrc(src);
+            this.setIconSrc(canvas.toDataURL("image/png"));
         }, 0);
     }
 
@@ -211,39 +209,21 @@ export default class Favicon {
         }
     }
 
-    /**
-     * Default badge renderer, may be overridden by a module.
-     * @param opts Notification rendering options.
-     * @returns A data URL for the favicon.
-     */
-    private renderBadge: FaviconRenderFunction = ({notificationCount, errorDidOccur}) => {
-        let bgColor = "#d00";
-        let notif: string | number = notificationCount;
-
-        if (errorDidOccur) {
-            notif = notif || "×";
-            bgColor = "#f00";
-        }
-
-        if (errorDidOccur || notificationCount > 0) {
-            this.circle(notif, {...this.params, bgColor });
-        } else {
-            this.reset();
-        }
-
-        return this.canvas.toDataURL("image/png");
-    }
-
-    public badge(opts: FaviconRenderOptions): void {
+    public badge(content: number | string, opts?: Partial<IParams>): void {
         if (!this.isReady) {
             this.readyCb = (): void => {
-                this.badge(opts);
+                this.badge(content, opts);
             };
             return;
         }
 
-        const badgeUrl = moduleApi.brandApi.renderFavicon(opts) || this.renderBadge(opts);
-        this.setIcon(badgeUrl);
+        if (typeof content === "string" || content > 0) {
+            this.circle(content, opts);
+        } else {
+            this.reset();
+        }
+
+        this.setIcon(this.canvas);
     }
 
     private static getLinks(): HTMLLinkElement[] {
@@ -257,7 +237,7 @@ export default class Favicon {
         return icons;
     }
 
-    public static getIcons(): HTMLLinkElement[] {
+    private static getIcons(): HTMLLinkElement[] {
         // get favicon link elements
         let elms = Favicon.getLinks();
         if (elms.length === 0) {

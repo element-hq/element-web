@@ -62,7 +62,7 @@ class ModuleApi implements Api {
     public readonly i18n = new I18nApi();
     public readonly customComponents = new CustomComponentsApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
-    public readonly brandApi = new BrandApi();
+    public readonly brand = new BrandApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
