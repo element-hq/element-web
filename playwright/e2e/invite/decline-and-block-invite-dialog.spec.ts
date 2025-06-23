@@ -1,0 +1,31 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 Suguru Hirahara
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { test, expect } from "../../element-web-test";
+
+test.describe("Decline and block invite dialog", function () {
+    test.use({
+        displayName: "Hanako",
+        botCreateOpts: {
+            displayName: "BotAlice",
+        },
+    });
+
+    const botName = "BotAlice";
+
+    test("should support rejecting a user invite", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
+        // Create and view a room
+        await bot.createRoom({ name: "Test Room", invite: [user.userId] });
+        await app.viewRoomByName("Test Room");
+        await page.getByRole("button", { name: "Decline and block" }).click();
+
+        // Take a snapshot of the invite dialog with a user pill
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("decline-and-block-invite-empty.png");
+    });
+});

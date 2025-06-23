@@ -11,7 +11,7 @@ import { test, expect } from "../../element-web-test";
 test.describe("Create Room", () => {
     test.use({ displayName: "Jim" });
 
-    test("should allow us to create a public room with name, topic & address set", async ({ page, user, app }) => {
+    test("should allow us to create a public room with name, topic & address set", { tag: "@screenshot" }, async ({ page, user, app }) => {
         const name = "Test room 1";
         const topic = "This room is dedicated to this test and this test only!";
 
@@ -26,6 +26,8 @@ test.describe("Create Room", () => {
         await dialog.getByRole("textbox", { name: "Room address" }).fill("test-room-1");
         // Submit
         await dialog.getByRole("button", { name: "Create room" }).click();
+        
+        await expect(dialog).toMatchScreenshot("create-room.png");
 
         await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
