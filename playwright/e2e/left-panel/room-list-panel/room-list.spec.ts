@@ -229,17 +229,17 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
 
                 // Open the menu
-                await notificationButton.click();
+                await page.keyboard.press("Enter");
                 // Wait for the menu to be open
                 await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
                     "aria-selected",
                     "true",
                 );
 
-                // Close the menu
+                await page.keyboard.press("ArrowDown");
                 await page.keyboard.press("Escape");
-                // Focus should be back on the room list item
-                await expect(room29).toBeFocused();
+                // Focus should be back on the notification button
+                await expect(notificationButton).toBeFocused();
             });
         });
     });
