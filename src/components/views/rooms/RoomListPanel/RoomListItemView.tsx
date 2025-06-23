@@ -50,10 +50,8 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     const closeMenu = useCallback(() => {
         // To avoid icon blinking when closing the menu, we delay the state update
-        setTimeout(() => setIsMenuOpen(false), 0);
-        // After closing the menu, we need to set the focus back to the button
-        // 10ms because the focus moves to the body and we put back the focus on the button
-        setTimeout(() => buttonRef.current?.focus(), 10);
+        // Also, let the focus move to the menu trigger before closing the menu
+        setTimeout(() => setIsMenuOpen(false), 10);
     }, []);
 
     const content = (
