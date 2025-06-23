@@ -141,6 +141,8 @@ import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenFor
 import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
+import moduleApi from "../../modules/Api"
+import { TitleRenderOptions } from "@element-hq/element-web-module-api";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -227,7 +229,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private tokenLogin?: boolean;
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
-    private subTitleStatus: string;
+    private subTitleState: TitleRenderOptions;
     private prevWindowWidth: number;
 
     private readonly loggedInView = createRef<LoggedInViewType>();
@@ -283,7 +285,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // object field used for tracking the status info appended to the title tag.
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
-        this.subTitleStatus = "";
+        this.subTitleState = {};
     }
 
     /**
@@ -1505,7 +1507,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subTitleState = {};
         this.setPageSubtitle();
         this.stores.onLoggedOut();
     }
@@ -1521,7 +1523,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subTitleState = {};
         this.setPageSubtitle();
     }
 
@@ -1991,19 +1993,43 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({ action: "message_sent" });
         });
     }
+    
 
-    private setPageSubtitle(subtitle = ""): void {
+    private setPageSubtitle(): void {
+        let roomName: string|undefined;
         if (this.state.currentRoomId) {
             const client = MatrixClientPeg.get();
-            const room = client?.getRoom(this.state.currentRoomId);
-            if (room) {
-                subtitle = `${this.subTitleStatus} | ${room.name} ${subtitle}`;
-            }
-        } else {
-            subtitle = `${this.subTitleStatus} ${subtitle}`;
+            roomName = client?.getRoom(this.state.currentRoomId)?.name;
         }
 
-        const title = `${SdkConfig.get().brand} ${subtitle}`;
+        let title = moduleApi.brandApi.renderTitle({...this.subTitleState, roomName, roomId: this.state.currentRoomId ?? undefined});
+
+        if (title === undefined) {
+            // No module API implemented, fallback 
+            let subTitleStatus = "";
+
+            if (this.subTitleState.errorDidOccur) {
+                subTitleStatus += `[${_t("common|offline")}] `
+            }
+
+            if ((this.subTitleState.notificationCount ?? 0) > 0) {
+                subTitleStatus += `[${this.subTitleState.notificationCount}]`;
+            } else if (this.subTitleState.notificationsEnabled) {
+                subTitleStatus += `*`;
+            }
+
+            let subtitle;
+            if (this.state.currentRoomId) {
+                if (roomName) {
+                    subtitle = `${subTitleStatus} | ${roomName} ${subtitle}`;
+                }
+            } else {
+                subtitle = `${subTitleStatus} ${subtitle}`;
+            }
+
+            title = `${SdkConfig.get().brand} ${subtitle}`;
+        }
+
 
         if (document.title !== title) {
             document.title = title;
@@ -2011,22 +2037,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private onUpdateStatusIndicator = (notificationState: SummarizedNotificationState, state: SyncState): void => {
-        const numUnreadRooms = notificationState.numUnreadStates; // we know that states === rooms here
+        const notificationCount = notificationState.numUnreadStates; // we know that states === rooms here
 
         if (PlatformPeg.get()) {
             PlatformPeg.get()!.setErrorStatus(state === SyncState.Error);
-            PlatformPeg.get()!.setNotificationCount(numUnreadRooms);
+            PlatformPeg.get()!.setNotificationCount(notificationCount);
         }
 
-        this.subTitleStatus = "";
-        if (state === SyncState.Error) {
-            this.subTitleStatus += `[${_t("common|offline")}] `;
-        }
-        if (numUnreadRooms > 0) {
-            this.subTitleStatus += `[${numUnreadRooms}]`;
-        } else if (notificationState.level >= NotificationLevel.Activity) {
-            this.subTitleStatus += `*`;
-        }
+        this.subTitleState = {
+            errorDidOccur: state === SyncState.Error,
+            notificationCount,
+            notificationsEnabled: notificationState.level >= NotificationLevel.Activity,
+        };
 
         this.setPageSubtitle();
     };

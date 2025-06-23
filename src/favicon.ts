@@ -242,7 +242,7 @@ export default class Favicon {
             return;
         }
 
-        const badgeUrl = moduleApi.faviconApi.renderFavicon(opts) || this.renderBadge(opts);
+        const badgeUrl = moduleApi.brandApi.renderFavicon(opts) || this.renderBadge(opts);
         this.setIcon(badgeUrl);
     }
 

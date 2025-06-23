@@ -22,7 +22,7 @@ import { WidgetVariableCustomisations } from "../customisations/WidgetVariables.
 import { ConfigApi } from "./ConfigApi.ts";
 import { I18nApi } from "./I18nApi.ts";
 import { CustomComponentsApi } from "./customComponentApi.ts";
-import { FaviconApi } from "./faviconApi.ts";
+import { BrandApi } from "./brandApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -62,7 +62,7 @@ class ModuleApi implements Api {
     public readonly i18n = new I18nApi();
     public readonly customComponents = new CustomComponentsApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
-    public readonly faviconApi = new FaviconApi();
+    public readonly brandApi = new BrandApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
