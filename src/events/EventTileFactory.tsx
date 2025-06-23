@@ -258,10 +258,14 @@ export function renderTile(
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory)
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
         return ModuleApi.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
+    }
 
     // Note that we split off the ones we actually care about here just to be sure that we're
     // not going to accidentally send things we shouldn't from lazy callers. Eg: EventTile's
@@ -288,13 +292,13 @@ export function renderTile(
         case TimelineRenderingType.File:
         case TimelineRenderingType.Notification:
         case TimelineRenderingType.Thread:
-            // We only want a subset of props, so we don't end up causing issues for downstream components.
             return ModuleApi.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
                 },
                 (origProps) =>
                     factory(props.ref, {
+                        // We only want a subset of props, so we don't end up causing issues for downstream components.
                         mxEvent,
                         highlights,
                         highlightLink,
@@ -348,10 +352,14 @@ export function renderReplyTile(
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory)
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
         return ModuleApi.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
+    }
 
     // See renderTile() for why we split off so much
     const {
@@ -409,6 +417,11 @@ export function haveRendererForEvent(
     // and state events as they'll likely still contain enough keys to be relevant.
     if (mxEvent.isRedacted() && !mxEvent.isEncrypted() && !isMessageEvent(mxEvent) && !mxEvent.isState()) {
         return false;
+    }
+
+    // Check to see if a renderer is registered for this event
+    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
+        return true;
     }
 
     // No tile for replacement events since they update the original tile

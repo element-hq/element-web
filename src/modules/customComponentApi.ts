@@ -18,8 +18,10 @@ import type {
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
+type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRenderer"]>[0];
+
 type EventRenderer = {
-    eventTypeOrFilter: string | ((mxEvent: ModuleMatrixEvent) => boolean);
+    eventTypeOrFilter: EventTypeOrFilter;
     renderer: CustomMessageRenderFunction;
     hints: CustomMessageRenderHints;
 };
@@ -59,7 +61,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     private readonly registeredMessageRenderers: EventRenderer[] = [];
 
     public registerMessageRenderer(
-        eventTypeOrFilter: string | ((mxEvent: ModuleMatrixEvent) => boolean),
+        eventTypeOrFilter: EventTypeOrFilter,
         renderer: CustomMessageRenderFunction,
         hints: CustomMessageRenderHints = {},
     ): void {
@@ -71,12 +73,12 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @returns The registered renderer.
      */
     private selectRenderer(mxEvent: ModuleMatrixEvent): EventRenderer | undefined {
-        return this.registeredMessageRenderers.find((rdr) => {
-            if (typeof rdr.eventTypeOrFilter === "string") {
-                return rdr.eventTypeOrFilter === mxEvent.type;
+        return this.registeredMessageRenderers.find((renderer) => {
+            if (typeof renderer.eventTypeOrFilter === "string") {
+                return renderer.eventTypeOrFilter === mxEvent.type;
             } else {
                 try {
-                    return rdr.eventTypeOrFilter(mxEvent);
+                    return renderer.eventTypeOrFilter(mxEvent);
                 } catch (ex) {
                     logger.warn("Message renderer failed to process filter", ex);
                     return false; // Skip erroring renderers.
@@ -113,12 +115,12 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @param mxEvent The message event being rendered.
      * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
      */
-    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints {
+    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
         if (renderer) {
             return renderer.hints;
         }
-        return {};
+        return null;
     }
 }

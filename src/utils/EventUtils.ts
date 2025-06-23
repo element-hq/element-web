@@ -78,7 +78,7 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
         return false;
     }
 
-    if (ModuleApi.customComponents.getHintsForMessage(mxEvent).allowEditingEvent === false) {
+    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)?.allowEditingEvent === false) {
         return false;
     }
 
