@@ -32,6 +32,7 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
+import { Form } from "@vector-im/compound-web";
 
 interface IIgnoredUserProps {
     userId: string;
@@ -355,17 +356,19 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                {warning}
-                <SetIntegrationManager />
-                <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {secureBackup}
-                    {eventIndex}
-                </SettingsSection>
-                <SettingsSection heading={_t("common|privacy")}>
-                    <DiscoverySettings />
-                    {posthogSection}
-                </SettingsSection>
-                {advancedSection}
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                    {warning}
+                    <SetIntegrationManager />
+                    <SettingsSection heading={_t("settings|security|encryption_section")}>
+                        {secureBackup}
+                        {eventIndex}
+                    </SettingsSection>
+                    <SettingsSection heading={_t("common|privacy")}>
+                        <DiscoverySettings />
+                        {posthogSection}
+                    </SettingsSection>
+                    {advancedSection}
+                </Form.Root>
             </SettingsTab>
         );
     }

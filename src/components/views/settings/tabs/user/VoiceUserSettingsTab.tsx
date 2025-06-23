@@ -11,7 +11,7 @@ import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react"
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -187,55 +187,57 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
 
         return (
             <SettingsTab>
-                <SettingsSection>
-                    {requestButton}
-                    <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
-                        {speakerDropdown}
-                        {microphoneDropdown}
-                        <SettingsToggleInput
-                            name="voice-auto-gain"
-                            label={_t("settings|voip|voice_agc")}
-                            checked={this.state.audioAutoGainControl}
-                            onChange={this.onAutoGainChanged}
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
-                        {webcamDropdown}
-                        <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
-                    </SettingsSubsection>
-                </SettingsSection>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                    <SettingsSection>
+                        {requestButton}
+                        <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
+                            {speakerDropdown}
+                            {microphoneDropdown}
+                            <SettingsToggleInput
+                                name="voice-auto-gain"
+                                label={_t("settings|voip|voice_agc")}
+                                checked={this.state.audioAutoGainControl}
+                                onChange={this.onAutoGainChanged}
+                            />
+                        </SettingsSubsection>
+                        <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
+                            {webcamDropdown}
+                            <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                        </SettingsSubsection>
+                    </SettingsSection>
 
-                <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
-                        <SettingsToggleInput
-                            name="voice-noise-suppression"
-                            label={_t("settings|voip|noise_suppression")}
-                            checked={this.state.audioNoiseSuppression}
-                            onChange={this.onNoiseSuppressionChanged}
-                        />
-                        <SettingsToggleInput
-                            name="voice-echo-cancellation"
-                            label={_t("settings|voip|echo_cancellation")}
-                            checked={this.state.audioEchoCancellation}
-                            onChange={this.onEchoCancellationChanged}
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|voip|connection_section")}>
-                        <SettingsFlag
-                            name="webRtcAllowPeerToPeer"
-                            level={SettingLevel.DEVICE}
-                            onChange={this.changeWebRtcMethod}
-                        />
-                        <SettingsFlag
-                            name="fallbackICEServerAllowed"
-                            label={_t("settings|voip|enable_fallback_ice_server", {
-                                server: new URL(FALLBACK_ICE_SERVER).pathname,
-                            })}
-                            level={SettingLevel.DEVICE}
-                            hideIfCannotSet
-                        />
-                    </SettingsSubsection>
-                </SettingsSection>
+                    <SettingsSection heading={_t("common|advanced")}>
+                        <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
+                            <SettingsToggleInput
+                                name="voice-noise-suppression"
+                                label={_t("settings|voip|noise_suppression")}
+                                checked={this.state.audioNoiseSuppression}
+                                onChange={this.onNoiseSuppressionChanged}
+                            />
+                            <SettingsToggleInput
+                                name="voice-echo-cancellation"
+                                label={_t("settings|voip|echo_cancellation")}
+                                checked={this.state.audioEchoCancellation}
+                                onChange={this.onEchoCancellationChanged}
+                            />
+                        </SettingsSubsection>
+                        <SettingsSubsection heading={_t("settings|voip|connection_section")}>
+                            <SettingsFlag
+                                name="webRtcAllowPeerToPeer"
+                                level={SettingLevel.DEVICE}
+                                onChange={this.changeWebRtcMethod}
+                            />
+                            <SettingsFlag
+                                name="fallbackICEServerAllowed"
+                                label={_t("settings|voip|enable_fallback_ice_server", {
+                                    server: new URL(FALLBACK_ICE_SERVER).pathname,
+                                })}
+                                level={SettingLevel.DEVICE}
+                                hideIfCannotSet
+                            />
+                        </SettingsSubsection>
+                    </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }

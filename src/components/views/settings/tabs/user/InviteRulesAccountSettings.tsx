@@ -32,7 +32,7 @@ export const InviteRulesAccountSetting: FC = () => {
         }
     }, []);
     return (
-        <Root className="mx_MediaPreviewAccountSetting_Form">
+        <Root className="mx_MediaPreviewAccountSetting_Form" onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
             <SettingsToggleInput
                 className="mx_MediaPreviewAccountSetting_ToggleSwitch"
                 name="invite_control_blocked"

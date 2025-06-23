@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEventHandler, useCallback, useMemo, useState } from "react";
 import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk/src/matrix";
 import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
@@ -96,9 +96,11 @@ export const VoipRoomSettingsTab: React.FC<Props> = ({ room }) => {
     return (
         <SettingsTab>
             <SettingsSection heading={_t("settings|voip|title")}>
-                <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
-                    <ElementCallSwitch room={room} />
-                </SettingsSubsection>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                    <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
+                        <ElementCallSwitch room={room} />
+                    </SettingsSubsection>
+                </Form.Root>
             </SettingsSection>
         </SettingsTab>
     );

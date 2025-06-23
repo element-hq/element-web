@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { Root, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
@@ -75,14 +75,12 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
                 </div>
                 <SettingsSubsectionText>{bodyText}</SettingsSubsectionText>
                 <SettingsSubsectionText>{_t("integration_manager|explainer")}</SettingsSubsectionText>
-                <Root>
-                    <SettingsToggleInput
-                        name="enable_im"
-                        label={_t("integration_manager|toggle_label")}
-                        checked={this.state.provisioningEnabled}
-                        onChange={this.onProvisioningToggled}
-                    />
-                </Root>
+                <SettingsToggleInput
+                    name="enable_im"
+                    label={_t("integration_manager|toggle_label")}
+                    checked={this.state.provisioningEnabled}
+                    onChange={this.onProvisioningToggled}
+                />
             </div>
         );
     }

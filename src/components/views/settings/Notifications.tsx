@@ -191,7 +191,7 @@ const maximumVectorState = (
 
 const NotificationActivitySettings = (): JSX.Element => {
     return (
-        <Form.Root>
+        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
         </Form.Root>
@@ -815,7 +815,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         }
 
         return (
-            <>
+            <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                 {this.renderTopSection()}
                 {this.renderCategory(RuleClass.VectorGlobal)}
                 {this.renderCategory(RuleClass.VectorMentions)}
@@ -823,7 +823,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                 {this.renderTargets()}
                 <NotificationActivitySettings />
                 {clearNotifsButton}
-            </>
+            </Form.Root>
         );
     }
 }

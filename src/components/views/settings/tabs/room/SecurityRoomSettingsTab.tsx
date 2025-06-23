@@ -17,7 +17,7 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { Icon as WarningIcon } from "../../../../../../res/img/warning.svg";
 import { _t } from "../../../../../languageHandler";
@@ -446,6 +446,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return (
             <SettingsTab>
                 <SettingsSection heading={_t("room_settings|security|title")}>
+                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                     <SettingsFieldset
                         legend={_t("settings|security|encryption_section")}
                         description={
@@ -474,6 +475,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     </SettingsFieldset>
                     {this.renderJoinRule()}
                     {historySection}
+                    </Form.Root>
                 </SettingsSection>
             </SettingsTab>
         );

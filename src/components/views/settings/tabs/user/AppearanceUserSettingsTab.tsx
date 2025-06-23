@@ -24,6 +24,7 @@ import ImageSizePanel from "../../ImageSizePanel";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
+import { Form } from "@vector-im/compound-web";
 
 interface IState {
     useBundledEmojiFont: boolean;
@@ -102,11 +103,13 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
-                    <ThemeChoicePanel />
-                    <LayoutSwitcher />
-                    <FontScalingPanel />
-                    {this.renderAdvancedSection()}
-                    <ImageSizePanel />
+                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                        <ThemeChoicePanel />
+                        <LayoutSwitcher />
+                        <FontScalingPanel />
+                        {this.renderAdvancedSection()}
+                        <ImageSizePanel />
+                    </Form.Root>
                 </SettingsSection>
             </SettingsTab>
         );

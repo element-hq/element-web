@@ -20,6 +20,7 @@ import { EnhancedMap } from "../../../../../utils/maps";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
+import { Form } from "@vector-im/compound-web";
 
 export const showLabsFlags = (): boolean => {
     return SdkConfig.get("show_labs_settings") || SettingsStore.getValue("developerMode");
@@ -106,6 +107,7 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
 
         return (
             <SettingsTab>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                 <SettingsSection heading={_t("labs|beta_section")}>
                     <SettingsSubsectionText>
                         {_t("labs|beta_description", { brand: SdkConfig.get("brand") })}
@@ -137,6 +139,7 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
                         {labsSections}
                     </SettingsSection>
                 )}
+                </Form.Root>
             </SettingsTab>
         );
     }

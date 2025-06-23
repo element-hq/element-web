@@ -37,9 +37,8 @@ export interface SettingsTabProps extends HTMLAttributes<HTMLDivElement> {
  */
 const SettingsTab: React.FC<SettingsTabProps> = ({ children, className, ...rest }) => (
     <div {...rest} className={classNames("mx_SettingsTab", className)}>
-        <Form.Root>
-            <div className="mx_SettingsTab_sections">{children}</div>
-        </Form.Root>
+        {/* Prevent settings from doing any accidental submits. */}
+        <div className="mx_SettingsTab_sections">{children}</div>
     </div>
 );
 

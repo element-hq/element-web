@@ -104,7 +104,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         let inviteToggle: JSX.Element | undefined;
         if (this.isInviteOrKnockRoom) {
             inviteToggle = (
-                <Form.Root>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                     <SettingsToggleInput
                         name="room-upgrade-warning"
                         checked={this.state.inviteUsersToNewRoom}

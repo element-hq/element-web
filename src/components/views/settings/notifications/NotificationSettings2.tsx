@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
@@ -93,6 +93,7 @@ export default function NotificationSettings2(): JSX.Element {
 
     return (
         <div className="mx_NotificationSettings2">
+            
             {hasPendingChanges && model !== null && (
                 <SettingsBanner
                     icon={<img src={NewAndImprovedIcon} alt="" width={12} />}
@@ -110,6 +111,7 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsBanner>
             )}
             <SettingsSection>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                 <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
                     <SettingsToggleInput
                         name="enable_notifications_account"
@@ -354,6 +356,7 @@ export default function NotificationSettings2(): JSX.Element {
                         {_t("settings|notifications|quick_actions_reset")}
                     </AccessibleButton>
                 </SettingsSubsection>
+                </Form.Root>
             </SettingsSection>
         </div>
     );

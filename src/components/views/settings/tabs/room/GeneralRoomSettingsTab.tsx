@@ -23,6 +23,7 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
 import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
+import { Form } from "@vector-im/compound-web";
 
 interface IProps {
     room: Room;
@@ -78,26 +79,28 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
         return (
             <SettingsTab data-testid="General">
-                <SettingsSection heading={_t("common|general")}>
-                    <RoomProfileSettings roomId={room.roomId} />
-                </SettingsSection>
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                    <SettingsSection heading={_t("common|general")}>
+                        <RoomProfileSettings roomId={room.roomId} />
+                    </SettingsSection>
 
-                <SettingsSection heading={_t("room_settings|general|aliases_section")}>
-                    <AliasSettings
-                        roomId={room.roomId}
-                        canSetCanonicalAlias={canSetCanonical}
-                        canSetAliases={canSetAliases}
-                        canonicalAliasEvent={canonicalAliasEv}
-                    />
-                </SettingsSection>
+                    <SettingsSection heading={_t("room_settings|general|aliases_section")}>
+                        <AliasSettings
+                            roomId={room.roomId}
+                            canSetCanonicalAlias={canSetCanonical}
+                            canSetAliases={canSetAliases}
+                            canonicalAliasEvent={canonicalAliasEv}
+                        />
+                    </SettingsSection>
 
-                <SettingsSection heading={_t("room_settings|general|other_section")}>
-                    {urlPreviewSettings}
-                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
-                        <MediaPreviewAccountSettings roomId={room.roomId} />
-                    </SettingsSubsection>
-                    {leaveSection}
-                </SettingsSection>
+                    <SettingsSection heading={_t("room_settings|general|other_section")}>
+                        {urlPreviewSettings}
+                        <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
+                            <MediaPreviewAccountSettings roomId={room.roomId} />
+                        </SettingsSubsection>
+                        {leaveSection}
+                    </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }

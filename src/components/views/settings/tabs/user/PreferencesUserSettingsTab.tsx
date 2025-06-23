@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
-import { SettingsToggleControl } from "@vector-im/compound-web";
+import { Form, SettingsToggleControl } from "@vector-im/compound-web";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -258,6 +258,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
         return (
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
+                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                 <SettingsSection>
                     {/* The heading string is still 'general' from where it was moved, but this section should become 'general' */}
                     <SettingsSubsection heading={_t("settings|general|language_section")}>
@@ -390,6 +391,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         />
                     </SettingsSubsection>
                 </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }

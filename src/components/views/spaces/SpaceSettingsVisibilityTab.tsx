@@ -15,7 +15,7 @@ import {
     JoinRule,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -160,24 +160,26 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                     />
                     {advancedSection}
                     <div className="mx_SettingsTab_toggleWithDescription">
-                        <SettingsToggleInput
-                            name="space-history-visibility"
-                            checked={historyVisibility === HistoryVisibility.WorldReadable}
-                            onChange={(evt): void => {
-                                setHistoryVisibility(
-                                    evt.target.checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
-                                );
-                            }}
-                            helpMessage={_t("room_settings|visibility|history_visibility_anyone_space_description")}
-                            disabled={!canSetHistoryVisibility}
-                            disabledMessage={_t("room_settings|visibility|history_visibility_anyone_space_disabled")}
-                            label={_t("room_settings|visibility|history_visibility_anyone_space")}
-                        />
-                        <p>
-                            <strong>
-                                {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
-                            </strong>
-                        </p>
+                        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                            <SettingsToggleInput
+                                name="space-history-visibility"
+                                checked={historyVisibility === HistoryVisibility.WorldReadable}
+                                onChange={(evt): void => {
+                                    setHistoryVisibility(
+                                        evt.target.checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
+                                    );
+                                }}
+                                helpMessage={_t("room_settings|visibility|history_visibility_anyone_space_description")}
+                                disabled={!canSetHistoryVisibility}
+                                disabledMessage={_t("room_settings|visibility|history_visibility_anyone_space_disabled")}
+                                label={_t("room_settings|visibility|history_visibility_anyone_space")}
+                            />
+                            <p>
+                                <strong>
+                                    {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
+                                </strong>
+                            </p>
+                        </Form.Root>
                     </div>
                 </SettingsFieldset>
 
