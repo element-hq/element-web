@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useState } from "react";
-import { EventTimeline, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../languageHandler";
 import UploadBigSvg from "../../../res/img/upload-big.svg";
-import { useTypedEventEmitterState } from "../../hooks/useEventEmitter.ts";
+import { useRoomState } from "../../hooks/useRoomState.ts";
 
 interface IProps {
     room: Room;
@@ -29,12 +29,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
         dragging: false,
         counter: 0,
     });
-    const roomState = room.getLiveTimeline().getState(EventTimeline.FORWARDS);
-    const hasPermission = useTypedEventEmitterState(
-        roomState,
-        RoomStateEvent.Update,
-        () => !!roomState?.maySendMessage(room.getMyMembership()),
-    );
+    const hasPermission = useRoomState(room, (state) => state.maySendMessage(room.getMyMembership()));
 
     useEffect(() => {
         if (!hasPermission || !parent || parent.ondrop) return;
