@@ -11,6 +11,10 @@ import { LegacyCustomisationsApiExtension } from "./legacy-customisations";
 import { ConfigApi } from "./config";
 import { I18nApi } from "./i18n";
 import { CustomComponentsApi } from "./custom-components";
+import { NavigationApi } from "./navigation.ts";
+import { DialogApiExtension } from "./dialog.ts";
+import { AccountAuthApiExtension } from "./auth.ts";
+import { ProfileApiExtension } from "./profile.ts";
 
 /**
  * Module interface for modules to implement.
@@ -69,7 +73,12 @@ export function isModule(module: unknown): module is ModuleExport {
  * The API for modules to interact with the application.
  * @public
  */
-export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
+export interface Api
+    extends LegacyModuleApiExtension,
+        LegacyCustomisationsApiExtension,
+        DialogApiExtension,
+        AccountAuthApiExtension,
+        ProfileApiExtension {
     /**
      * The API to read config.json values.
      * Keys should be scoped to the module in reverse domain name notation.
@@ -93,6 +102,13 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
      * @alpha
      */
     readonly customComponents: CustomComponentsApi;
+
+    /**
+     * API to navigate the application.
+     * @public
+     */
+    readonly navigation: NavigationApi;
+
     /**
      * Create a ReactDOM root for rendering React components.
      * Exposed to allow modules to avoid needing to bundle their own ReactDOM.

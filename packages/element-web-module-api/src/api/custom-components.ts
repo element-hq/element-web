@@ -24,7 +24,7 @@ export type CustomMessageComponentProps = {
  * Properties to alter the render function of the original component.
  * @alpha Subject to change.
  */
-export type OriginalComponentProps = {
+export type OriginalMessageComponentProps = {
     /**
      * Should previews be shown for this event.
      * This may be overriden by user preferences.
@@ -58,7 +58,31 @@ export type CustomMessageRenderFunction = (
     /**
      * Render function for the original component. This may be omitted if the message would not normally be rendered.
      */
-    originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
+    originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
+) => JSX.Element;
+
+/**
+ * Properties for all message components.
+ * @alpha Subject to change.
+ */
+export type CustomRoomPreviewBarComponentProps = {
+    roomId?: string;
+    roomAlias?: string;
+};
+
+/**
+ * Function used to render a room preview bar component.
+ * @alpha Unlikely to change
+ */
+export type CustomRoomPreviewBarRenderFunction = (
+    /**
+     * Properties for the room preview bar to be rendered.
+     */
+    props: CustomRoomPreviewBarComponentProps,
+    /**
+     * Render function for the original component.
+     */
+    originalComponent: (props: CustomRoomPreviewBarComponentProps) => JSX.Element,
 ) => JSX.Element;
 
 /**
@@ -95,4 +119,22 @@ export interface CustomComponentsApi {
         renderer: CustomMessageRenderFunction,
         hints?: CustomMessageRenderHints,
     ): void;
+
+    /**
+     * Register a renderer for the room preview bar.
+     *
+     * The render function should return a rendered component.
+     *
+     * @param renderer - The render function for the room preview bar.
+     * @example
+     * ```
+     *  customComponents.registerRoomPreviewBar((props, OriginalComponent) => {
+     *      if (props.roomId === "!some_special_room_id:server") {
+     *          return <YourCustomRoomPreviewBarComponent {...props} />;
+     *      }
+     *      return <YourCustomComponent mxEvent={props.mxEvent} />;
+     *  });
+     * ```
+     */
+    registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }

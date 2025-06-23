@@ -13,3 +13,7 @@ export type * from "./models/event";
 export type * from "./api/custom-components";
 export type * from "./api/legacy-modules";
 export type * from "./api/legacy-customisations";
+export type * from "./api/auth";
+export type * from "./api/dialog";
+export type * from "./api/profile";
+export type * from "./api/navigation";
