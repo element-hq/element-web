@@ -110,14 +110,14 @@ originalComponent: (props: CustomRoomPreviewBarComponentProps) => JSX.Element) =
 
 // @public
 export interface DialogApiExtension {
-    openDialog<M, P>(initialOptions: DialogOptions, dialog: ComponentType<P & DialogProps<M>>, props?: P): DialogHandle<M>;
+    openDialog<M, P extends object>(initialOptions: DialogOptions, dialog: ComponentType<P & DialogProps<M>>, props: P): DialogHandle<M>;
 }
 
 // @public
 export type DialogHandle<M> = {
     finished: Promise<{
         ok: boolean;
-        model: M;
+        model: M | null;
     }>;
     close(): void;
 };
@@ -130,7 +130,7 @@ export interface DialogOptions {
 // @public
 export type DialogProps<M> = {
     onSubmit(model: M): void;
-    cancel(): void;
+    onCancel(): void;
 };
 
 // @alpha @deprecated (undocumented)
@@ -287,7 +287,6 @@ export interface Profile {
 
 // @public
 export interface ProfileApiExtension {
-    // Warning: (ae-forgotten-export) The symbol "Watchable" needs to be exported by the entry point index.d.ts
     readonly profile: Watchable<Profile>;
 }
 
@@ -317,6 +316,18 @@ export type Variables = {
     count?: number;
     [key: string]: number | string | undefined;
 };
+
+// @public
+export class Watchable<T> {
+    constructor(currentValue: T);
+    // (undocumented)
+    unwatch(listener: (value: T) => void): void;
+    // (undocumented)
+    get value(): T;
+    set value(value: T);
+    // (undocumented)
+    watch(listener: (value: T) => void): void;
+}
 
 // @alpha @deprecated (undocumented)
 export interface WidgetPermissionsCustomisations<Widget, Capability> {

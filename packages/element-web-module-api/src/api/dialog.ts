@@ -26,7 +26,7 @@ export type DialogHandle<M> = {
     /**
      * Promise that resolves when the dialog is finished.
      */
-    finished: Promise<{ ok: boolean; model: M }>;
+    finished: Promise<{ ok: boolean; model: M | null }>;
     /**
      * Method to close the dialog.
      */
@@ -46,7 +46,7 @@ export type DialogProps<M> = {
     /**
      * Cancel the dialog programmatically.
      */
-    cancel(): void;
+    onCancel(): void;
 };
 
 /**
@@ -60,9 +60,9 @@ export interface DialogApiExtension {
      * @param dialog - The body component to render in the dialog. This component should accept props of type `P`.
      * @param props - Additional props to pass to the body
      */
-    openDialog<M, P>(
+    openDialog<M, P extends object>(
         initialOptions: DialogOptions,
         dialog: ComponentType<P & DialogProps<M>>,
-        props?: P,
+        props: P,
     ): DialogHandle<M>;
 }

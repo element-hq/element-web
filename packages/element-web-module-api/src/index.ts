@@ -17,3 +17,4 @@ export type * from "./api/auth";
 export type * from "./api/dialog";
 export type * from "./api/profile";
 export type * from "./api/navigation";
+export * from "./api/watchable";
