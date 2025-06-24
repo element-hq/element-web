@@ -3840,9 +3840,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vector-im/compound-design-tokens@^4.0.0":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.2.tgz#27363d26446eaa21880ab126fa51fec112e6fd86"
-  integrity sha512-y13bhPyJ5OzbGRl21F6+Y2adrjyK+mu67yKTx+o8MfmIpJzMSn4KkHZtcujMquWSh0e5ZAufsnk4VYvxbSpr1A==
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.4.tgz#0bd9aa33cfe7fe29e3a6431b9f5874ccb694f6be"
+  integrity sha512-nn62mF6Js/h75zpHcmDccrT3qtCwxcDm6gWqBZpOoSD0lBcMCinBnpAZnFVpDw2geBBpQ4xtBvnQCJ7KQE7UtQ==
 
 "@vector-im/compound-web@^8.1.2":
   version "8.1.2"
@@ -3859,16 +3859,15 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
-"@vector-im/matrix-wysiwyg@2.38.3":
-  version "2.38.3"
-  resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.3.tgz#cc54d8b3e9472bcd8e622126ba364ee31952cd8a"
-  integrity sha512-fqo8P55Vc/t0vxpFar9RDJN5gKEjJmzrLo+O4piDbFda6VrRoqrWAtiu0Au0g6B4hRDPKIuFupk8v9Ja7q8Hvg==
+"@vector-im/matrix-wysiwyg@2.38.4":
+  version "2.38.4"
+  resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.4.tgz#fb0001dea01010a1e3ffc7042596e2d001ce9389"
+  integrity sha512-X6ky+1cf33SPdEVd6iTmOKfZZ2mDJv9cz3sHtDhuclS6uitK3QE8td/pmGqBj4ek2Ia4y0mnU61LfxvMry1SMA==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.3-cc54d8b3e9472bcd8e622126ba364ee31952cd8a-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
