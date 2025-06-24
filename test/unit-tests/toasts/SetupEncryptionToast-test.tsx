@@ -50,7 +50,7 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Key storage out of sync", () => {
+    describe("Key storage out of sync (retrieve secrets)", () => {
         it("should render the toast", async () => {
             showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
 
@@ -84,6 +84,44 @@ describe("SetupEncryptionToast", () => {
                 action: "view_user_settings",
                 initialTabId: "USER_ENCRYPTION_TAB",
                 props: { initialEncryptionState: "reset_identity_sync_failed" },
+            });
+        });
+    });
+
+    describe("Key storage out of sync (store secrets)", () => {
+        it("should render the toast", async () => {
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+
+            await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
+        });
+
+        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Forgot recovery key?"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "change_recovery_key" },
+            });
+        });
+
+        it("should open settings to the reset flow when recovering fails", async () => {
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
+                throw new Error("Something went wrong while recovering!");
+            });
+
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "change_recovery_key" },
             });
         });
     });
