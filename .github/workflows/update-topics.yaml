@@ -81,6 +81,11 @@ jobs:
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
+                          if (data["m.topic"]) {
+                              data["m.topic"].forEach(d => {
+                                  d.body = d.body.replace(regex, releaseTopic);
+                              });
+                          }
 
                           res = await fetch(apiUrl, {
                               method: "PUT",
