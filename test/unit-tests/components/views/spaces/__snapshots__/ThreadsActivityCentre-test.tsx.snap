@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
@@ -225,7 +225,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
   <div
     data-radix-popper-content-wrapper=""
     dir="ltr"
-    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-transform-origin: 0% 0px; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px;"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px; --radix-popper-transform-origin: 0% 0px;"
   >
     <div
       aria-labelledby="radix-«ro»"

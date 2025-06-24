@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomList /> should render a room list 1`] = `
 <DocumentFragment>
@@ -14,7 +14,7 @@ exports[`<RoomList /> should render a room list 1`] = `
         aria-readonly="true"
         class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
         role="grid"
-        style="box-sizing: border-box; direction: ltr; height: 1500px; position: relative; width: 1500px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
+        style="box-sizing: border-box; direction: ltr; height: 1500px; position: relative; width: 1500px; -webkit-overflow-scrolling: touch; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
         tabindex="-1"
       >
         <div
