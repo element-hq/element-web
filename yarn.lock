@@ -3844,10 +3844,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.2.tgz#27363d26446eaa21880ab126fa51fec112e6fd86"
   integrity sha512-y13bhPyJ5OzbGRl21F6+Y2adrjyK+mu67yKTx+o8MfmIpJzMSn4KkHZtcujMquWSh0e5ZAufsnk4VYvxbSpr1A==
 
-"@vector-im/compound-web@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.0.0.tgz#1eeaf54c253730752393d0e5e7c8cd81030b80af"
-  integrity sha512-VAwCGl0KMjN+qEKflnQOB1LidSsxSDiczEWka1IGKj52EzrNOfY0wlfCs73v+H84zUanYKlgOwnQgWU5at9Q/w==
+"@vector-im/compound-web@^8.1.2":
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.1.2.tgz#a8af8681b442e63e07b8f25204528b1b022c1db2"
+  integrity sha512-F9UyQBwRThwju+STz84iJy6JGWQ7UIxaprstfsGpiyS/3ror4E6m/mfwbrNjT0l3fhrhk6sRiTAMlcBRzYgdMQ==
   dependencies:
     "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.1"

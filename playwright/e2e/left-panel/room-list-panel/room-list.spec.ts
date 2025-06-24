@@ -60,6 +60,12 @@ test.describe("Room list", () => {
             await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
         });
 
+        test("should open the context menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomListView = getRoomList(page);
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click({ button: "right" });
+            await expect(page.getByRole("menu", { name: "More Options" })).toBeVisible();
+        });
+
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
             const roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
@@ -223,17 +229,17 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
 
                 // Open the menu
-                await notificationButton.click();
+                await page.keyboard.press("Enter");
                 // Wait for the menu to be open
                 await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
                     "aria-selected",
                     "true",
                 );
 
-                // Close the menu
+                await page.keyboard.press("ArrowDown");
                 await page.keyboard.press("Escape");
-                // Focus should be back on the room list item
-                await expect(room29).toBeFocused();
+                // Focus should be back on the notification button
+                await expect(notificationButton).toBeFocused();
             });
         });
     });
