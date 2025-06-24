@@ -793,6 +793,7 @@
             "cross_signing_status": "Stav krížového podpisovania:",
             "cross_signing_untrusted": "Váš účet má identitu s krížovým podpisom v tajnom úložisku, ale táto relácia mu zatiaľ nedôveruje.",
             "crypto_not_available": "Kryptografický modul nie je k dispozícii",
+            "device_id": "ID zariadenia",
             "key_backup_active_version": "Aktívna verzia zálohy:",
             "key_backup_active_version_none": "Žiadna",
             "key_backup_inactive_warning": "Vaše kľúče nie sú zálohované z tejto relácie.",
@@ -805,6 +806,8 @@
             "secret_storage_ready": "pripravený",
             "secret_storage_status": "Tajné úložisko:",
             "self_signing_private_key_cached_status": "Súkromný kľúč s vlastným podpisom:",
+            "session": "Relácia",
+            "session_fingerprint": "Odtlačok prsta (kľúč relácie)",
             "title": "Šifrovanie typu end-to-end",
             "user_signing_private_key_cached_status": "Súkromný kľúč podpisovania používateľa:"
         },
@@ -830,6 +833,7 @@
         "low_bandwidth_mode": "Režim nízkej šírky pásma",
         "low_bandwidth_mode_description": "Vyžaduje kompatibilný domovský server.",
         "main_timeline": "Hlavná časová os",
+        "manual_device_verification": "Manuálne overenie zariadenia",
         "no_receipt_found": "Nenašlo sa žiadne potvrdenie",
         "notification_state": "Stav oznámenia je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Ladenie oznámení",
@@ -973,7 +977,6 @@
         },
         "reset_all_button": "Zabudli ste alebo ste stratili všetky metódy obnovy? <a>Resetovať všetko</a>",
         "set_up_recovery": "Nastaviť obnovenie",
-        "set_up_recovery_later": "Teraz nie",
         "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
         "set_up_toast_description": "Zabezpečte sa proti strate šifrovaných správ a údajov",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
@@ -1016,6 +1019,21 @@
             "incoming_sas_dialog_waiting": "Čakanie na potvrdenie od partnera…",
             "incoming_sas_user_dialog_text_1": "Overte tohto používateľa a označte ho ako dôveryhodného. Dôveryhodní používatelia vám poskytujú dodatočný pokoj na duši pri používaní end-to-end šifrovaných správ.",
             "incoming_sas_user_dialog_text_2": "Overenie tohto používateľa označí jeho reláciu ako dôveryhodnú a zároveň označí vašu reláciu ako dôveryhodnú pre neho.",
+            "manual": {
+                "already_verified": "Toto zariadenie je už overené",
+                "already_verified_and_wrong_fingerprint": "Zadaný odtlačok prsta sa nezhoduje, ale zariadenie je už overené!",
+                "device_id": "ID zariadenia",
+                "failure_description": "Nepodarilo sa overiť '%(deviceId)s': %(error)s",
+                "failure_title": "Overenie zlyhalo",
+                "fingerprint": "Odtlačok prsta (kľúč relácie)",
+                "no_crypto": "Nie je možné overiť zariadenie - kryptografia nie je povolená",
+                "no_device": "Zariadenie sa nepodarilo overiť - zariadenie '%(deviceId)s' nebolo nájdené",
+                "no_userid": "Nie je možné overiť zariadenie - nepodarilo sa nájsť naše ID používateľa",
+                "success_description": "Zariadenie (%(deviceId)s ) je teraz krížovo podpísané",
+                "success_title": "Overenie úspešné",
+                "text": "Na overenie zadajte ID a odtlačok jedného z vašich vlastných zariadení. POZNÁMKA: toto umožňuje druhému zariadeniu odosielať a prijímať správy ako vy. AK VÁM NIEKTO POVEDAL, ABY STE SEM NIEČO VLOŽILI, JE PRAVDEPODOBNÉ, ŽE IDE O PODVOD!",
+                "wrong_fingerprint": "Nie je možné overiť zariadenie '%(deviceId)s' - dodaný odtlačok prsta '%(fingerprint)s' sa nezhoduje s odtlačkom prsta zariadenia, '%(fprint)s'"
+            },
             "no_key_or_device": "Vyzerá to, že nemáte kľúč na obnovenie ani žiadne iné zariadenie, pomocou ktorého by ste to mohli overiť.  Toto zariadenie nebude mať prístup k starým zašifrovaným správam. Ak chcete overiť svoju totožnosť na tomto zariadení, budete musieť obnoviť svoje overovacie kľúče.",
             "no_support_qr_emoji": "Zariadenie, ktoré sa snažíte overiť, nepodporuje overenie skenovaním QR kódu ani overenie pomocou emotikonov, ktoré podporuje aplikácia %(brand)s. Skúste použiť iného klienta.",
             "other_party_cancelled": "Proti strana zrušila overovanie.",
@@ -1981,6 +1999,7 @@
         },
         "face_pile_tooltip_shortcut": "Vrátane %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Vrátane vás, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Nie je možné určiť, ktorého používateľa ignorovať, pretože sa zmenila udalosť člena.",
         "failed_reject_invite": "Nepodarilo sa odmietnuť pozvanie",
         "forget_room": "Zabudnúť túto miestnosť",
         "forget_space": "Zabudnúť tento priestor",
@@ -2073,6 +2092,8 @@
         "read_topic": "Kliknutím si prečítate tému",
         "rejecting": "Odmietnutie pozvania …",
         "rejoin_button": "Znovu sa pripojiť",
+        "room_content": "Obsah miestnosti",
+        "room_is_low_priority": "Toto je miestnosť s nízkou prioritou",
         "search": {
             "all_rooms_button": "Vyhľadávať vo všetkých miestnostiach",
             "placeholder": "Hľadať správy…",
@@ -2124,6 +2145,7 @@
         "add_space_label": "Pridať priestor",
         "breadcrumbs_empty": "Žiadne nedávno navštívené miestnosti",
         "breadcrumbs_label": "Nedávno navštívené miestnosti",
+        "collapse_filters": "Zbaliť zoznam filtrov",
         "empty": {
             "no_chats": "Zatiaľ žiadne konverzácie",
             "no_chats_description": "Začnite tým, že niekomu napíšete správu alebo vytvoríte miestnosť",
@@ -2131,6 +2153,7 @@
             "no_favourites": "Zatiaľ nemáte obľúbenú konverzáciu",
             "no_favourites_description": "V nastaveniach konverzácií môžete pridať konverzáciu medzi obľúbené",
             "no_invites": "Nemáte žiadne neprečítané pozvánky",
+            "no_lowpriority": "Nemáte žiadne miestnosti s nízkou prioritou",
             "no_mentions": "Nemáte žiadne neprečítané zmienky",
             "no_people": "Zatiaľ s nikým nemáte priame konverzácie",
             "no_people_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
@@ -2140,6 +2163,7 @@
             "show_activity": "Zobraziť všetku aktivitu",
             "show_chats": "Zobraziť všetky konverzácie"
         },
+        "expand_filters": "Rozbaliť zoznam filtrov",
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
         "failed_remove_tag": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
@@ -2720,6 +2744,9 @@
         "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
         "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
+        "invite_controls": {
+            "default_label": "Povoliť používateľom pozývať vás do miestností"
+        },
         "jump_to_bottom_on_send": "Skok na koniec časovej osi pri odosielaní správy",
         "key_backup": {
             "backup_in_progress": "Zálohovanie kľúčov máte aktívne (prvé zálohovanie môže trvať niekoľko minút).",
@@ -2786,6 +2813,7 @@
             "show_in_private": "V súkromných miestnostiach",
             "show_media": "Vždy zobraziť"
         },
+        "not_supported": "Váš server túto funkciu nepodporuje.",
         "notifications": {
             "default_setting_description": "Toto nastavenie sa predvolene použije pre všetky vaše miestnosti.",
             "default_setting_section": "Chcem byť upozornený na (predvolené nastavenie)",
@@ -2843,6 +2871,7 @@
             "voip": "Zvukové a video hovory"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Zabrániť zachytávaniu obsahu okna inými aplikáciami",
             "Electron.enableHardwareAcceleration": "Povoliť hardvérovú akceleráciu (reštartujte aplikáciu %(appName)s, aby sa prejavila)",
             "always_show_menu_bar": "Vždy zobraziť hornú lištu okna",
             "autocomplete_delay": "Oneskorenie automatického dokončovania (ms)",
@@ -3018,6 +3047,7 @@
         "show_chat_effects": "Zobraziť efekty konverzácie (animácie pri prijímaní napr. konfety)",
         "show_displayname_changes": "Zobrazovať zmeny zobrazovaného mena",
         "show_join_leave": "Zobraziť správy o pripojení/odchode (pozvania/odstránenia/zákazy nie sú ovplyvnené)",
+        "show_message_previews": "Zobraziť náhľady správ",
         "show_nsfw_content": "Zobraziť obsah NSFW",
         "show_read_receipts": "Zobrazovať potvrdenia o prečítaní od ostatných používateľov",
         "show_redaction_placeholder": "Zobrazovať náhrady za odstránené správy",
@@ -3124,6 +3154,8 @@
         "jumptodate": "Prejsť na zadaný dátum na časovej osi",
         "jumptodate_invalid_input": "Nepodarilo sa nám rozpoznať zadaný dátum (%(inputDate)s). Skúste použiť formát RRRR-MM-DD.",
         "lenny": "Pridá znaky ( ͡° ͜ʖ ͡°) pred správy vo formáte obyčajného textu",
+        "manual_device_verification_confirm_description": "Toto umožní inému zariadeniu odosielať a prijímať správy ako keby ste to boli vy. AK VÁM NIEKTO POVEDAL, ABY STE SEM NIEČO VLOŽILI, JE PRAVDEPODOBNÉ, ŽE IDE PO PODVOD! Ste si istí, že chcete overiť toto iné zariadenie?",
+        "manual_device_verification_confirm_title": "Upozornenie: ručné overenie zariadenia",
         "me": "Zobrazí akciu",
         "msg": "Pošle správu danému používateľovi",
         "myavatar": "Zmení váš profilový obrázok vo všetkých miestnostiach",
@@ -3164,7 +3196,7 @@
         "upgraderoom": "Aktualizuje miestnosť na novšiu verziu",
         "upgraderoom_permission_error": "Na použitie tohoto príkazu nemáte dostatočné povolenia.",
         "usage": "Použitie",
-        "verify": "Overí používateľa, reláciu a verejné kľúče",
+        "verify": "Manuálne overte jedno z vašich vlastných zariadení",
         "view": "Zobrazí miestnosti s danou adresou",
         "whois": "Zobrazuje informácie o používateľovi"
     },

@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { ClientEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Toast } from "@vector-im/compound-web";
 import React, { type JSX, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
@@ -44,6 +45,7 @@ import { UserTab } from "./UserTab";
 import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
@@ -99,6 +101,26 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
     // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
     const [initialEncryptionState, setInitialEncryptionState] = useState(props.initialEncryptionState);
+
+    // If the user doesn't have Recovery set up (no default Secret Storage key),
+    // we show an indicator on the Encryption tab.
+    const showSetupRecoveryIndicator = useEventEmitterAsyncState(
+        props.sdkContext.client,
+        ClientEvent.AccountData,
+        async (event?: MatrixEvent): AsyncStateCallbackResult<boolean> => {
+            if (event === undefined || event.getType() === "m.secret_storage.default_key") {
+                const client = props.sdkContext.client;
+                if (!client) {
+                    return false;
+                }
+
+                return !(await client.secretStorage.getDefaultKeyId());
+            }
+            return new NoChange();
+        },
+        [],
+        false,
+    );
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -196,6 +218,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 <KeyIcon />,
                 <EncryptionUserSettingsTab initialState={initialEncryptionState} />,
                 "UserSettingsEncryption",
+                showSetupRecoveryIndicator ? "mx_SettingsDialog_tabLabelsAlert" : undefined,
             ),
         );
 

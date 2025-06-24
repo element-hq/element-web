@@ -12,7 +12,7 @@ exports[`<RecoveryPanel /> should allow to change the recovery key when everythi
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
       >
-        Recovery 
+        Recovery
       </h2>
       Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
     </div>
@@ -51,12 +51,9 @@ exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no 
       class="mx_SettingsSection_header"
     >
       <h2
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader mx_SettingsHeader_recommended"
       >
-        Recovery 
-        <span>
-          Recommended
-        </span>
+        Recovery
       </h2>
       Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
     </div>
@@ -97,7 +94,7 @@ exports[`<RecoveryPanel /> should be in loading state when checking the recovery
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
       >
-        Recovery 
+        Recovery
       </h2>
       Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
     </div>

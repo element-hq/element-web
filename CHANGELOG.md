@@ -1,3 +1,32 @@
+Changes in [1.11.104](https://github.com/element-hq/element-web/releases/tag/v1.11.104) (2025-06-17)
+====================================================================================================
+## ✨ Features
+
+* Update the mobile\_guide page to the new design. ([#30006](https://github.com/element-hq/element-web/pull/30006)). Contributed by @pixlwave.
+* Provide a devtool for manually verifying other devices ([#30094](https://github.com/element-hq/element-web/pull/30094)). Contributed by @andybalaam.
+* Implement MSC4155: Invite filtering ([#29603](https://github.com/element-hq/element-web/pull/29603)). Contributed by @Half-Shot.
+* Add low priority avatar decoration to room tile ([#30065](https://github.com/element-hq/element-web/pull/30065)). Contributed by @MidhunSureshR.
+* Add ability to prevent window content being captured by other apps (Desktop) ([#30098](https://github.com/element-hq/element-web/pull/30098)). Contributed by @t3chguy.
+* New room list: move message preview in user settings ([#30023](https://github.com/element-hq/element-web/pull/30023)). Contributed by @florianduros.
+* New room list: change room options icon ([#30029](https://github.com/element-hq/element-web/pull/30029)). Contributed by @florianduros.
+* RoomListStore: Sort low priority rooms to the bottom of the list ([#30070](https://github.com/element-hq/element-web/pull/30070)). Contributed by @MidhunSureshR.
+* Add low priority filter pill to the room list UI ([#30060](https://github.com/element-hq/element-web/pull/30060)). Contributed by @MidhunSureshR.
+* New room list: remove color gradient in space panel ([#29721](https://github.com/element-hq/element-web/pull/29721)). Contributed by @florianduros.
+* /share?msg=foo endpoint using forward message dialog ([#29874](https://github.com/element-hq/element-web/pull/29874)). Contributed by @ara4n.
+
+## 🐛 Bug Fixes
+
+* Do not send empty auth when setting up cross-signing keys ([#29914](https://github.com/element-hq/element-web/pull/29914)). Contributed by @gnieto.
+* Settings: flip local video feed by default ([#29501](https://github.com/element-hq/element-web/pull/29501)). Contributed by @jbtrystram.
+* AccessSecretStorageDialog: various fixes ([#30093](https://github.com/element-hq/element-web/pull/30093)). Contributed by @richvdh.
+* AccessSecretStorageDialog: fix inability to enter recovery key ([#30090](https://github.com/element-hq/element-web/pull/30090)). Contributed by @richvdh.
+* Fix failure to upload thumbnail causing image to send as file ([#30086](https://github.com/element-hq/element-web/pull/30086)). Contributed by @t3chguy.
+* Low priority menu item should be a toggle ([#30071](https://github.com/element-hq/element-web/pull/30071)). Contributed by @MidhunSureshR.
+* Add sanity checks to prevent users from ignoring themselves ([#30079](https://github.com/element-hq/element-web/pull/30079)). Contributed by @MidhunSureshR.
+* Fix issue with duplicate images ([#30073](https://github.com/element-hq/element-web/pull/30073)). Contributed by @fatlewis.
+* Handle errors returned from Seshat ([#30083](https://github.com/element-hq/element-web/pull/30083)). Contributed by @richvdh.
+
+
 Changes in [1.11.103](https://github.com/element-hq/element-web/releases/tag/v1.11.103) (2025-06-10)
 ====================================================================================================
 ## 🐛 Bug Fixes

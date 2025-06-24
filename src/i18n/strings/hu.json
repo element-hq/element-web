@@ -960,7 +960,6 @@
         },
         "reset_all_button": "Elfelejtette vagy elveszett minden helyreállítási lehetőség? <a>Minden alaphelyzetbe állítása</a>",
         "set_up_recovery": "Helyreállítás beállítása",
-        "set_up_recovery_later": "Most nem",
         "set_up_recovery_toast_description": "Létrehozhat egy helyreállítási kulcsot, amellyel helyreállíthatja a titkosított üzenetelőzményeit, ha elveszíti a hozzáférést az eszközeihez.",
         "set_up_toast_description": "Biztosíték a titkosított üzenetekhez és adatokhoz való hozzáférés elvesztése ellen",
         "set_up_toast_title": "Biztonsági mentés beállítása",
