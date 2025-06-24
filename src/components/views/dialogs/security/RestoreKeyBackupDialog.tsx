@@ -59,7 +59,7 @@ interface IState {
 }
 
 /*
- * Dialog for restoring e2e keys from a backup and the user's recovery key
+ * Dialog for restoring e2e keys from a backup and the user's recovery key.
  */
 export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
