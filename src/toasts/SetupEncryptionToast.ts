@@ -221,7 +221,11 @@ export const showToast = (kind: Kind): void => {
             }
             case Kind.TURN_ON_KEY_STORAGE: {
                 // The user clicked "Dismiss": offer them "Are you sure?"
-                const modal = Modal.createDialog(ConfirmKeyStorageOffDialog, undefined, "mx_ConfirmKeyStorageOffDialog");
+                const modal = Modal.createDialog(
+                    ConfirmKeyStorageOffDialog,
+                    undefined,
+                    "mx_ConfirmKeyStorageOffDialog",
+                );
                 const [dismissed] = await modal.finished;
                 if (dismissed) {
                     const deviceListener = DeviceListener.sharedInstance();
@@ -245,7 +249,10 @@ export const showToast = (kind: Kind): void => {
      * secrets in 4S, we tell them to change their recovery key, to create a new
      * 4S that we can store the secrets in.
      */
-    const onAccessSecretStorageFailed = (kind: Kind.KEY_STORAGE_OUT_OF_SYNC | Kind.KEY_STORAGE_OUT_OF_SYNC_STORE, error: Error): void => {
+    const onAccessSecretStorageFailed = (
+        kind: Kind.KEY_STORAGE_OUT_OF_SYNC | Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+        error: Error,
+    ): void => {
         if (error instanceof AccessCancelledError) {
             // The user cancelled the dialog - just allow it to close
         } else {
