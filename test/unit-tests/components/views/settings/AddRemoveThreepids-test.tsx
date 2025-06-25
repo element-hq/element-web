@@ -45,9 +45,9 @@ describe("AddRemoveThreepids", () => {
         client = stubClient();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         jest.restoreAllMocks();
-        clearAllModals();
+        await clearAllModals();
         cleanup();
     });
 
