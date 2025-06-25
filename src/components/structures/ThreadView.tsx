@@ -388,7 +388,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
             timeline = (
                 <>
-                    <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} />
+                    <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} room={this.props.room} />
                     <TimelinePanel
                         key={this.state.thread.id}
                         ref={this.timelinePanel}

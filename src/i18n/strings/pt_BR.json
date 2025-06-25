@@ -968,7 +968,6 @@
         },
         "reset_all_button": "Esqueceu ou perdeu todos os métodos de recuperação? <a>Redefinir tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
-        "set_up_recovery_later": "Agora não",
         "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_description": "Proteja-se contra a perda de acesso a mensagens e dados criptografados",
         "set_up_toast_title": "Configurar o backup online",
@@ -2065,6 +2064,7 @@
         "read_topic": "Clique para ler o tópico",
         "rejecting": "Rejeitando o convite...",
         "rejoin_button": "Entrar novamente",
+        "room_content": "Conteúdo da sala",
         "room_is_low_priority": "Esta é uma sala de baixa prioridade",
         "search": {
             "all_rooms_button": "Pesquisar todos as salas",
@@ -2114,6 +2114,7 @@
         "add_space_label": "Adicionar espaço",
         "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
+        "collapse_filters": "Recolher lista de filtros",
         "empty": {
             "no_chats": "Ainda não há conversas.",
             "no_chats_description": "Comece enviando uma mensagem para alguém ou criando uma sala",
@@ -2121,6 +2122,7 @@
             "no_favourites": "Você ainda não tem o bate-papo favorito",
             "no_favourites_description": "Você pode adicionar um bate-papo aos seus favoritos nas configurações de bate-papo",
             "no_invites": "Você não tem nenhum convite não lido",
+            "no_lowpriority": "Você não tem nenhuma sala de baixa prioridade",
             "no_mentions": "Você não tem nenhuma menção não lida",
             "no_people": "Você ainda não tem conversas diretas com ninguém",
             "no_people_description": "Você pode desmarcar os filtros para ver suas outras conversas",
@@ -2130,6 +2132,7 @@
             "show_activity": "Ver todas as atividades",
             "show_chats": "Mostrar todas as conversas"
         },
+        "expand_filters": "Expandir lista de filtros",
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
@@ -3111,6 +3114,8 @@
         "jumptodate": "Ir para a data especificada na linha do tempo",
         "jumptodate_invalid_input": "Não foi possível entender a data fornecida (%(inputDate)s). Tente usando o formato AAAA-MM-DD.",
         "lenny": "Adiciona ( ͡° ͜ʖ ͡°) a uma mensagem de texto",
+        "manual_device_verification_confirm_description": "Isso permitirá que outro dispositivo envie e receba mensagens como você. SE ALGUÉM LHE DISSE PARA COLAR ALGO AQUI, É PROVÁVEL QUE VOCÊ ESTEJA SENDO ENGANADO! Tem certeza de que deseja verificar esse outro dispositivo?",
+        "manual_device_verification_confirm_title": "Cuidado: verificação manual do dispositivo",
         "me": "Visualizar atividades",
         "msg": "Envia uma mensagem para determinada pessoa",
         "myavatar": "Altera a foto do seu perfil em todas as salas",

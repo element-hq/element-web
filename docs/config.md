@@ -445,8 +445,7 @@ If you would like to use Scalar, the integration manager maintained by Element, 
         "https://scalar.vector.im/_matrix/integrations/v1",
         "https://scalar.vector.im/api",
         "https://scalar-staging.vector.im/_matrix/integrations/v1",
-        "https://scalar-staging.vector.im/api",
-        "https://scalar-staging.riot.im/scalar/api"
+        "https://scalar-staging.vector.im/api"
     ]
 }
 ```

@@ -967,7 +967,6 @@
         },
         "reset_all_button": "Zapomniałeś lub straciłeś wszystkie opcje odzyskiwania? <a>Resetuj wszystko</a>",
         "set_up_recovery": "Skonfiguruj przywracanie",
-        "set_up_recovery_later": "Nie teraz",
         "set_up_recovery_toast_description": "Wygeneruj klucz przywracania, którego można użyć do przywrócenia zaszyfrowanej historii wiadomości w przypadku utraty dostępu do swoich urządzeń.",
         "set_up_toast_description": "Zabezpiecz się przed utratą dostępu do szyfrowanych wiadomości i danych",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",

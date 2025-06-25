@@ -26,7 +26,7 @@ jobs:
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
                   LOBBY_ROOM_ID: ${{ secrets.ROOM_ID }}
-                  PUBLIC_ROOM_ID: "!YTvKGNlinIzlkMTVRl:matrix.org"
+                  PUBLIC_ROOM_ID: "!IemiTbwVankHTFiEoh:matrix.org"
                   ANNOUNCEMENT_ROOM_ID: "!bijaLdadorKgNGtHdA:matrix.org"
                   TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
                   RELEASE_STATUS: "Release status: ${{ inputs.expected_status }} expected ${{ inputs.expected_date }}"
@@ -78,6 +78,11 @@ jobs:
                           }
                           if (data["org.matrix.msc3765.topic"]) {
                               data["org.matrix.msc3765.topic"].forEach(d => {
+                                  d.body = d.body.replace(regex, releaseTopic);
+                              });
+                          }
+                          if (data["m.topic"]) {
+                              data["m.topic"].forEach(d => {
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }

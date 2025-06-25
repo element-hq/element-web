@@ -968,7 +968,6 @@
         },
         "reset_all_button": "Glemt eller mistet alle gjenopprettingsmetoder?<a> Tilbakestill alt</a>",
         "set_up_recovery": "Sett opp gjenoppretting",
-        "set_up_recovery_later": "Ikke nå",
         "set_up_recovery_toast_description": "Generer en gjenopprettingsnøkkel som kan brukes til å gjenopprette den krypterte meldingshistorikken i tilfelle du mister tilgangen til enhetene dine.",
         "set_up_toast_description": "Sikre deg mot å miste tilgang til krypterte meldinger og data",
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
