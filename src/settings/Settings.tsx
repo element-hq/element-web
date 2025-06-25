@@ -1394,7 +1394,7 @@ export const SETTINGS: Settings = {
     },
     "Electron.enableContentProtection": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("settings|preferences|enable_hardware_acceleration"),
+        displayName: _td("settings|preferences|enable_content_protection"),
         default: false,
     },
     "Developer.elementCallUrl": {
