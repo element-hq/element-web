@@ -713,11 +713,7 @@ const BasicUserInfo: React.FC<{
         // hide the Roles section for DMs as it doesn't make sense there
         if (!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId)) {
             memberDetails = (
-                <PowerLevelSection
-                    user={member as RoomMember}
-                    room={room}
-                    roomPermissions={roomPermissions}
-                />
+                <PowerLevelSection user={member as RoomMember} room={room} roomPermissions={roomPermissions} />
             );
         }
 

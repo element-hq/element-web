@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect, useState , useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { logger } from "@sentry/browser";
 import { type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -15,10 +15,8 @@ import ErrorDialog from "../../views/dialogs/ErrorDialog";
 import QuestionDialog from "../../views/dialogs/QuestionDialog";
 import { warnSelfDemote } from "../../views/right_panel/UserInfo";
 
-
-
 /**
- * 
+ *
  */
 export interface UserInfoPowerLevelState {
     /**
