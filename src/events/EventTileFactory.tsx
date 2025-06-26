@@ -26,7 +26,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
-import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
@@ -44,6 +43,8 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import ModuleApi from "../modules/Api";
+import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
+import { TextualEvent } from "../shared-components/event-tiles/TextualEvent";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -77,7 +78,10 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
+export const TextualEventFactory: Factory = (ref, props) => {
+    const vm = new TextualEventViewModel(props);
+    return <TextualEvent vm={vm} />;
+};
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
 
