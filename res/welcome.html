@@ -31,7 +31,6 @@
     }
 
     .mx_Logo {
-        height: 54px;
         margin-top: 2px;
     }
 
@@ -111,18 +110,31 @@
     }
 
     .mx_ButtonSignIn {
-        background-color: #368bd6;
+        background-color: #2c2c2c;
         color: white !important;
     }
 
+    .mx_ButtonSignIn:hover {
+        background-color: #404040;
+    }
+
     .mx_ButtonCreateAccount {
-        background-color: #0dbd8b;
+        background-color: #2c2c2c;
         color: white !important;
+    }
+
+    .mx_ButtonCreateAccount:hover {
+        background-color: #404040;
     }
 
     .mx_SecondaryButton {
         background-color: #ffffff;
         color: #2e2f32;
+        border: 1px solid #2c2c2c;
+    }
+
+    .mx_SecondaryButton:hover {
+        background-color: #f5f5f5;
     }
 
     .mx_Button_iconSignIn {
@@ -166,12 +178,12 @@ we don't have an account and should hide them. No account == no guest account ei
 </style>
 
 <div class="mx_Parent">
-    <a href="https://element.io" target="_blank" rel="noopener">
-        <img src="$logoUrl" alt="" class="mx_Logo" />
+    <a href="https://clovrlabs.com" target="_blank" rel="noopener">
+        <img src="$logoUrl" alt="CloverLabs" class="mx_Logo" />
     </a>
-    <h1 class="mx_Header_title">_t("welcome_to_element")</h1>
+    <h1 class="mx_Header_title">Welcome to Josepifyer</h1>
     <!-- XXX: Our translations system isn't smart enough to recognize variables in the HTML, so we manually do it -->
-    <h4 class="mx_Header_subtitle">_t("powered_by_matrix_with_logo")</h4>
+    <h4 class="mx_Header_subtitle">Secure communication platform for your Clovr Labs</h4>
     <div class="mx_ButtonGroup">
         <div class="mx_ButtonRow">
             <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
