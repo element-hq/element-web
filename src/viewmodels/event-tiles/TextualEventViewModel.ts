@@ -50,7 +50,7 @@ export class TextualEventViewModel {
             this.eventTileProps.mxEvent,
             MatrixClientPeg.safeGet(),
             true,
-            /*this.context?.showHiddenEvents*/ true,
+            this.eventTileProps.showHiddenEvents,
         );
         return text;
     };
