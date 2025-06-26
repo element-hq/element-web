@@ -88,11 +88,11 @@ body {
     font: var(--cpd-font-body-md-regular);
     letter-spacing: var(--cpd-font-letter-spacing-body-md);
     /**
-     * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
+     * We want to apply font feature settings for optimal text rendering
      * We need to tweak the `letter-spacing` property and doing so, disables by
      * default the optional ligatures
      * `font-feature-settings` allows us to override this behaviour and have the
-     * correct ligatures and the proper dynamic metric spacing.
+     * correct ligatures and proper metric spacing.
      */
     font-feature-settings:
         "kern" 1,

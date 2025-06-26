@@ -20,7 +20,7 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         if (AuthPage.welcomeBackgroundUrl) return AuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.getObject("branding");
-        AuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
+        AuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/clovr-hero-bg.webp";
 
         const configuredUrl = brandingConfig?.get("welcome_background_url");
         if (configuredUrl) {
@@ -37,7 +37,11 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
 
     public render(): React.ReactElement {
         const pageStyle = {
-            background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
+            backgroundImage: `linear-gradient(#dcdcdc, #00000040), url(${AuthPage.getWelcomeBackgroundUrl()})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
         };
 
         const modalStyle: React.CSSProperties = {
@@ -52,7 +56,11 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             bottom: 0,
             left: 0,
             filter: "blur(40px)",
-            background: pageStyle.background,
+            backgroundImage: pageStyle.backgroundImage,
+            backgroundRepeat: pageStyle.backgroundRepeat,
+            backgroundSize: pageStyle.backgroundSize,
+            backgroundPosition: pageStyle.backgroundPosition,
+            backgroundAttachment: pageStyle.backgroundAttachment,
         };
 
         const modalContentStyle: React.CSSProperties = {

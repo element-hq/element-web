@@ -1,6 +1,6 @@
 {
-    "name": "Element",
-    "short_name": "Element",
+    "name": "CloverLabs",
+    "short_name": "CloverLabs",
     "display": "standalone",
     "theme_color": "#76CFA6",
     "start_url": "index.html",

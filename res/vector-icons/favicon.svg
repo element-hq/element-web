@@ -1,0 +1,12 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#000000"/>
+  
+  <!-- Diamond symbol inspired by CLOVR LABS logo -->
+  <g transform="translate(16, 16)">
+    <!-- Main diamond -->
+    <rect x="-4" y="-4" width="8" height="8" transform="rotate(45)" fill="#ffffff"/>
+    <!-- Inner diamond -->
+    <rect x="-2" y="-2" width="4" height="4" transform="rotate(45)" fill="#000000"/>
+  </g>
+</svg>
