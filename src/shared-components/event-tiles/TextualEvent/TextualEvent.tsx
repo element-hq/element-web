@@ -5,17 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useSyncExternalStore } from "react";
-import { type JSX } from "react";
+import React, { type ReactNode, useSyncExternalStore, type JSX } from "react";
 
-import { type TextualEventViewModel } from "../../../viewmodels/event-tiles/TextualEventViewModel";
+import { type ViewModel } from "../../../viewmodels/ViewModel";
+
+export type TextualEventViewSnapshot = string | ReactNode;
 
 interface Props {
-    vm: TextualEventViewModel;
+    vm: ViewModel<TextualEventViewSnapshot>;
 }
 
 export function TextualEvent({ vm }: Props): JSX.Element {
-    const text = useSyncExternalStore(vm.subscribe, vm.getSnapshot);
+    const contents = useSyncExternalStore(vm.subscribe, vm.getSnapshot);
 
-    return <div className="mx_TextualEvent">{text}</div>;
+    return <div className="mx_TextualEvent">{contents}</div>;
 }

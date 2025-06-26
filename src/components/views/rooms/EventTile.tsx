@@ -1250,6 +1250,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
                                     permalinkCreator: this.props.permalinkCreator!,
+                                    showHiddenEvents: this.context.showHiddenEvents,
                                 },
                                 this.context.showHiddenEvents,
                             )}
@@ -1396,6 +1397,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
                                     permalinkCreator: this.props.permalinkCreator,
+                                    showHiddenEvents: this.context.showHiddenEvents,
                                 },
                                 this.context.showHiddenEvents,
                             )}
@@ -1447,6 +1449,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     highlights: this.props.highlights,
                                     highlightLink: this.props.highlightLink,
                                     permalinkCreator: this.props.permalinkCreator,
+                                    showHiddenEvents: this.context.showHiddenEvents,
                                 },
                                 this.context.showHiddenEvents,
                             )}
