@@ -257,12 +257,11 @@ export function pickFactory(
 export function renderTile(
     renderType: TimelineRenderingType,
     props: EventTileTypeProps,
-    showHiddenEvents: boolean,
     cli?: MatrixClient,
 ): Optional<JSX.Element> {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
-    const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
+    const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents);
     if (!factory) {
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
@@ -291,6 +290,7 @@ export function renderTile(
         isSeeingThroughMessageHiddenForModeration,
         timestamp,
         inhibitInteraction,
+        showHiddenEvents,
     } = props;
 
     switch (renderType) {
