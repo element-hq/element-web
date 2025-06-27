@@ -115,10 +115,15 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
+            await expect(roomItem.getByTestId("notification-decoration")).not.toBeVisible();
+
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
-            // Scroll to the end of the room list
-            await page.mouse.wheel(0, 1000);
+
+            while (!(await roomItem.isVisible())) {
+                // Scroll to the end of the room list
+                await page.mouse.wheel(0, 1000);
+            }
 
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
