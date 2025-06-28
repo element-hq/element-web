@@ -7,6 +7,8 @@ module.exports = {
                 targets: [
                     "last 2 Chrome versions",
                     "last 2 Firefox versions",
+                    "Firefox ESR", // latest extended support release
+                    "Firefox 115", // required for icecat
                     "last 2 Safari versions",
                     "last 2 Edge versions",
                 ],
