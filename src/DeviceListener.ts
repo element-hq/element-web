@@ -362,7 +362,7 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady = isCurrentDeviceTrusted && keyBackupIsOk && recoveryIsOk && allCrossSigningSecretsCached;
+        const allSystemsReady = isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
