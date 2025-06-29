@@ -153,66 +153,87 @@ export const showToast = (kind: Kind): void => {
     }
 
     const onPrimaryClick = async (): Promise<void> => {
-        if (kind === Kind.VERIFY_THIS_SESSION) {
-            Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
-        } else if (kind === Kind.TURN_ON_KEY_STORAGE) {
-            // Open the user settings dialog to the encryption tab
-            const payload: OpenToTabPayload = {
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-            };
-            defaultDispatcher.dispatch(payload);
-        } else {
-            const modal = Modal.createDialog(
-                Spinner,
-                undefined,
-                "mx_Dialog_spinner",
-                /* priority */ false,
-                /* static */ true,
-            );
-            try {
-                await accessSecretStorage();
-            } catch (error) {
-                onAccessSecretStorageFailed(kind, error as Error);
-            } finally {
-                modal.close();
+        switch (kind) {
+            case Kind.TURN_ON_KEY_STORAGE: {
+                // Open the user settings dialog to the encryption tab
+                const payload: OpenToTabPayload = {
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Encryption,
+                };
+                defaultDispatcher.dispatch(payload);
+                break;
+            }
+            case Kind.VERIFY_THIS_SESSION:
+                Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
+                break;
+            case Kind.SET_UP_RECOVERY:
+            case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
+                const modal = Modal.createDialog(
+                    Spinner,
+                    undefined,
+                    "mx_Dialog_spinner",
+                    /* priority */ false,
+                    /* static */ true,
+                );
+                try {
+                    await accessSecretStorage();
+                } catch (error) {
+                    onAccessSecretStorageFailed(kind, error as Error);
+                } finally {
+                    modal.close();
+                }
+                break;
             }
         }
     };
 
     const onSecondaryClick = async (): Promise<void> => {
-        if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC) {
-            // Open the user settings dialog to the encryption tab and start the flow to reset encryption
-            const payload: OpenToTabPayload = {
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: { initialEncryptionState: "reset_identity_forgot" },
-            };
-            defaultDispatcher.dispatch(payload);
-        } else if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC_STORE) {
-            // Open the user settings dialog to the encryption tab and start the flow to reset 4S
-            const payload: OpenToTabPayload = {
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Encryption,
-                props: { initialEncryptionState: "change_recovery_key" },
-            };
-            defaultDispatcher.dispatch(payload);
-        } else if (kind === Kind.TURN_ON_KEY_STORAGE) {
-            // The user clicked "Dismiss": offer them "Are you sure?"
-            const modal = Modal.createDialog(ConfirmKeyStorageOffDialog, undefined, "mx_ConfirmKeyStorageOffDialog");
-            const [dismissed] = await modal.finished;
-            if (dismissed) {
+        switch (kind) {
+            case Kind.SET_UP_RECOVERY: {
+                // Record that the user doesn't want to set up recovery
                 const deviceListener = DeviceListener.sharedInstance();
-                await deviceListener.recordKeyBackupDisabled();
+                await deviceListener.recordRecoveryDisabled();
                 deviceListener.dismissEncryptionSetup();
+                break;
             }
-        } else if (kind === Kind.SET_UP_RECOVERY) {
-            // Record that the user doesn't want to set up recovery
-            const deviceListener = DeviceListener.sharedInstance();
-            await deviceListener.recordRecoveryDisabled();
-            deviceListener.dismissEncryptionSetup();
-        } else {
-            DeviceListener.sharedInstance().dismissEncryptionSetup();
+            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
+                // Open the user settings dialog to the encryption tab and start the flow to reset encryption
+                const payload: OpenToTabPayload = {
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Encryption,
+                    props: { initialEncryptionState: "reset_identity_forgot" },
+                };
+                defaultDispatcher.dispatch(payload);
+                break;
+            }
+            case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
+                // Open the user settings dialog to the encryption tab and start the flow to reset 4S
+                const payload: OpenToTabPayload = {
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Encryption,
+                    props: { initialEncryptionState: "change_recovery_key" },
+                };
+                defaultDispatcher.dispatch(payload);
+                break;
+            }
+            case Kind.TURN_ON_KEY_STORAGE: {
+                // The user clicked "Dismiss": offer them "Are you sure?"
+                const modal = Modal.createDialog(
+                    ConfirmKeyStorageOffDialog,
+                    undefined,
+                    "mx_ConfirmKeyStorageOffDialog",
+                );
+                const [dismissed] = await modal.finished;
+                if (dismissed) {
+                    const deviceListener = DeviceListener.sharedInstance();
+                    await deviceListener.recordKeyBackupDisabled();
+                    deviceListener.dismissEncryptionSetup();
+                }
+                break;
+            }
+            default:
+                DeviceListener.sharedInstance().dismissEncryptionSetup();
         }
     };
 
