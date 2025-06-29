@@ -362,7 +362,7 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady = crossSigningReady && keyBackupIsOk && recoveryIsOk && allCrossSigningSecretsCached;
+        const allSystemsReady = isCurrentDeviceTrusted && keyBackupIsOk && recoveryIsOk && allCrossSigningSecretsCached;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
@@ -375,13 +375,8 @@ export default class DeviceListener {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
-            if (!crossSigningReady) {
-                // This account is legacy and doesn't have cross-signing set up at all.
-                // Prompt the user to set it up.
-                logSpan.info("Cross-signing not ready: showing SET_UP_ENCRYPTION toast");
-                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
-            } else if (!isCurrentDeviceTrusted) {
-                // cross signing is ready but the current device is not trusted: prompt the user to verify
+            if (!isCurrentDeviceTrusted) {
+                // the current device is not trusted: prompt the user to verify
                 logSpan.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
