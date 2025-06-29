@@ -405,16 +405,11 @@ export default class DeviceListener {
                     hideSetupEncryptionToast();
                 }
             } else {
-                // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
-                // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
-                logSpan.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
-                    crossSigningReady,
-                    secretStorageReady,
-                    allCrossSigningSecretsCached,
-                    isCurrentDeviceTrusted,
-                    defaultKeyId,
-                });
-                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                // If we get here, then we are verified, have key backup, and
+                // 4S, but crypto.isCrossSigningReady returned false, which
+                // means that 4S doesn't have all the secrets.
+                logSpan.warn("4S is missing secrets");
+                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
             }
         } else {
             logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
