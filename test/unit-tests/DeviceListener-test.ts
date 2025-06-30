@@ -307,15 +307,6 @@ describe("DeviceListener", () => {
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
 
-            it("hides setup encryption toast when cross signing and secret storage are ready", async () => {
-                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
-                mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
-
-                await createAndStart();
-                expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
-            });
-
             it("hides setup encryption toast when it is dismissed", async () => {
                 const instance = await createAndStart();
                 instance.dismissEncryptionSetup();
@@ -360,7 +351,15 @@ describe("DeviceListener", () => {
                     );
                 });
 
-                it("shows an out-of-sync toast when one of the secrets is missing", async () => {
+                it("hides setup encryption toast when cross signing and secret storage are ready", async () => {
+                    mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+                    mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+
+                    await createAndStart();
+                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
+                });
+
+                it("shows an out-of-sync toast when one of the secrets is missing locally", async () => {
                     mockCrypto!.getCrossSigningStatus.mockResolvedValue({
                         publicKeysOnDevice: true,
                         privateKeysInSecretStorage: true,
@@ -378,7 +377,7 @@ describe("DeviceListener", () => {
                     );
                 });
 
-                it("hides the out-of-sync toast when one of the secrets is missing", async () => {
+                it("hides the out-of-sync toast after we receive the missing secrets", async () => {
                     mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
                     mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
 
@@ -427,6 +426,18 @@ describe("DeviceListener", () => {
                         SetupEncryptionToast.Kind.SET_UP_RECOVERY,
                     );
                 });
+
+                it("shows an out-of-sync toast when one of the secrets is missing from 4S", async () => {
+                    mockCrypto.getKeyBackupInfo.mockResolvedValue({} as unknown as KeyBackupInfo);
+                    mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("foo");
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+                    );
+                });
             });
         });
 
@@ -448,6 +459,16 @@ describe("DeviceListener", () => {
             });
 
             it("dispatches keybackup event when key backup is not enabled", async () => {
+                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+
+                // current device is verified
+                mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                    new DeviceVerificationStatus({
+                        trustCrossSignedDevices: true,
+                        crossSigningVerified: true,
+                    }),
+                );
+
                 mockCrypto.getActiveSessionBackupVersion.mockResolvedValue(null);
                 mockClient.getAccountDataFromServer.mockImplementation((eventType) =>
                     eventType === BACKUP_DISABLED_ACCOUNT_DATA_KEY ? ({ disabled: true } as any) : null,
