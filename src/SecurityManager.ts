@@ -176,7 +176,10 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
 }
 
 export interface AccessSecretStorageOpts {
-    /** Reset secret storage even if it's already set up. */
+    /**
+     * Reset secret storage even if it's already set up.
+     * @deprecated send the user to the Encryption settings tab to reset secret storage
+     */
     forceReset?: boolean;
 }
 

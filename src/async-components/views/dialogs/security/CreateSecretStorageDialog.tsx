@@ -79,6 +79,8 @@ interface IState {
  * If the user already has a key backup, follows a "migration" flow (aka "Upgrade your encryption") which
  * prompts the user to enter their backup decryption password (a Curve25519 private key, possibly derived
  * from a passphrase), and uses that as the (AES) 4S encryption key.
+ *
+ * @deprecated send the user to EncryptionUserSettingsTab instead
  */
 export default class CreateSecretStorageDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
