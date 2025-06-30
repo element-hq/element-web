@@ -56,17 +56,17 @@ describe("LogoutDialog", () => {
         await rendered.findByText("You'll lose access to your encrypted messages");
     });
 
-    it("Prompts user to connect backup if there is a backup on the server", async () => {
+    it("Prompts user to go to settings if there is a backup on the server", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue({} as KeyBackupInfo);
         const rendered = renderComponent();
-        await rendered.findByText("Connect this session to Key Backup");
+        await rendered.findByText("Go to Settings");
         expect(rendered.container).toMatchSnapshot();
     });
 
-    it("Prompts user to set up backup if there is no backup on the server", async () => {
+    it("Prompts user to go to settings if there is no backup on the server", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
         const rendered = renderComponent();
-        await rendered.findByText("Start using Key Backup");
+        await rendered.findByText("Go to Settings");
         expect(rendered.container).toMatchSnapshot();
 
         fireEvent.click(await screen.findByRole("button", { name: "Manually export keys" }));
@@ -75,12 +75,12 @@ describe("LogoutDialog", () => {
 
     describe("when there is an error fetching backups", () => {
         filterConsole("Unable to fetch key backup status");
-        it("prompts user to set up backup", async () => {
+        it("prompts user to go to settings", async () => {
             mockCrypto.getKeyBackupInfo.mockImplementation(async () => {
                 throw new Error("beep");
             });
             const rendered = renderComponent();
-            await rendered.findByText("Start using Key Backup");
+            await rendered.findByText("Go to Settings");
         });
     });
 });
