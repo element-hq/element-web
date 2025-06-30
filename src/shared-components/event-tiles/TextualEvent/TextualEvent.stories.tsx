@@ -9,12 +9,15 @@ import React from "react";
 import { type Meta, type StoryFn } from "@storybook/react";
 
 import { TextualEvent as TextualEventComponent } from "./TextualEvent";
+import { MockViewModel } from "../../MockViewModel";
 
 export default {
-    title: "Icon/BigIcon",
+    title: "Event/TextualEvent",
     component: TextualEventComponent,
     tags: ["autodocs"],
-    args: {},
+    args: {
+        vm: new MockViewModel("Dummy textual event text"),
+    },
 } as Meta<typeof TextualEventComponent>;
 
 const Template: StoryFn<typeof TextualEventComponent> = (args) => <TextualEventComponent {...args} />;

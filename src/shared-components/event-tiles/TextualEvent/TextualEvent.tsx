@@ -12,7 +12,7 @@ import { useViewModel } from "../../useViewModel";
 
 export type TextualEventViewSnapshot = string | ReactNode;
 
-interface Props {
+export interface Props {
     vm: ViewModel<TextualEventViewSnapshot>;
 }
 
