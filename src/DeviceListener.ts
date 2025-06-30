@@ -406,9 +406,15 @@ export default class DeviceListener {
                 }
             } else {
                 // If we get here, then we are verified, have key backup, and
-                // 4S, but crypto.isCrossSigningReady returned false, which
+                // 4S, but crypto.isSecretStorageReady returned false, which
                 // means that 4S doesn't have all the secrets.
-                logSpan.warn("4S is missing secrets");
+                logSpan.warn("4S is missing secrets", {
+                    crossSigningReady,
+                    secretStorageReady,
+                    allCrossSigningSecretsCached,
+                    isCurrentDeviceTrusted,
+                    defaultKeyId,
+                });
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
             }
         } else {
