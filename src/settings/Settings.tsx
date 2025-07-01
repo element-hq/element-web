@@ -1006,11 +1006,15 @@ export const SETTINGS: Settings = {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
+        // For privacy
+        shouldExportToRageshake: false,
     },
     "showMediaEventIds": {
         // not really a setting
         supportedLevels: [SettingLevel.DEVICE],
         default: {}, // List of events => is visible
+        // Exports event IDs
+        shouldExportToRageshake: false,
     },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
