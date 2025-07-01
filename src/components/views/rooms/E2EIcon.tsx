@@ -76,7 +76,11 @@ const E2EIcon: React.FC<Props> = ({
     if (onClick) {
         content = <AccessibleButton onClick={onClick} className={classes} style={style} />;
     } else {
-        content = <div className={classes} style={style} />;
+        if (status === E2EStatus.Verified) {
+            content = <div className={classes} style={style}><div className="mx_E2EIcon_normal" /></div>;
+        } else {
+            content = <div className={classes} style={style} />;
+        }
     }
 
     if (!e2eTitle || hideTooltip) {
