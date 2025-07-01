@@ -508,13 +508,13 @@ export const SETTINGS: Settings = {
     "mjolnirRooms": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
-        // Leaks room IDs
+        // Contains room IDs
         shouldExportToRageshake: false,
     },
     "mjolnirPersonalRoom": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: null,
-        // Leaks room ID
+        // Contains room ID
         shouldExportToRageshake: false,
     },
     "feature_html_topic": {
@@ -992,7 +992,7 @@ export const SETTINGS: Settings = {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
-        // Leaks joined rooms
+        // Contains joined rooms
         shouldExportToRageshake: false,
     },
     "recent_emoji": {
@@ -1024,7 +1024,7 @@ export const SETTINGS: Settings = {
     "room_directory_servers": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
-        // Leaks connected servers for user
+        // Contains connected servers for user
         shouldExportToRageshake: false,
     },
     "integrationProvisioning": {
@@ -1110,7 +1110,7 @@ export const SETTINGS: Settings = {
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,
-        // Leaks personal information in file name
+        // Contains personal information in file name
         shouldExportToRageshake: false,
     },
     "notificationBodyEnabled": {
@@ -1138,6 +1138,8 @@ export const SETTINGS: Settings = {
             allow: [],
             deny: [],
         },
+        // Expses widget information
+        shouldExportToRageshake: false,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1303,7 +1305,7 @@ export const SETTINGS: Settings = {
     "activeCallRoomIds": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: [],
-        // Leaks room IDs
+        // Contains room IDs
         shouldExportToRageshake: false,
     },
     /**
