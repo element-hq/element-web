@@ -257,7 +257,7 @@ export function collectSettings(body: FormData): void {
         body.append("lowBandwidth", "enabled");
     }
 
-    body.append("mx_local_settings", localStorage.getItem("mx_local_settings")!);
+    body.append("mx_local_settings", SettingsStore.exportForRageshake());
 }
 
 /**
