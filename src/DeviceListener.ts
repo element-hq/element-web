@@ -362,7 +362,7 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady = crossSigningReady && keyBackupIsOk && recoveryIsOk && allCrossSigningSecretsCached;
+        const allSystemsReady = isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
@@ -375,13 +375,8 @@ export default class DeviceListener {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
-            if (!crossSigningReady) {
-                // This account is legacy and doesn't have cross-signing set up at all.
-                // Prompt the user to set it up.
-                logSpan.info("Cross-signing not ready: showing SET_UP_ENCRYPTION toast");
-                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
-            } else if (!isCurrentDeviceTrusted) {
-                // cross signing is ready but the current device is not trusted: prompt the user to verify
+            if (!isCurrentDeviceTrusted) {
+                // the current device is not trusted: prompt the user to verify
                 logSpan.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
@@ -410,16 +405,17 @@ export default class DeviceListener {
                     hideSetupEncryptionToast();
                 }
             } else {
-                // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
-                // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
-                logSpan.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
+                // If we get here, then we are verified, have key backup, and
+                // 4S, but crypto.isSecretStorageReady returned false, which
+                // means that 4S doesn't have all the secrets.
+                logSpan.warn("4S is missing secrets", {
                     crossSigningReady,
                     secretStorageReady,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
                     defaultKeyId,
                 });
-                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
             }
         } else {
             logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
