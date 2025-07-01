@@ -446,6 +446,8 @@ export const SETTINGS: Settings = {
         controller: new InviteRulesConfigController(),
         supportedLevels: [SettingLevel.ACCOUNT],
         default: InviteRulesConfigController.default,
+        // Contains server names
+        shouldExportToRageshake: false,
     },
     "feature_report_to_moderators": {
         isFeature: true,
