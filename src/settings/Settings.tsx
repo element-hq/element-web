@@ -806,6 +806,8 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
+        // Location leak
+        shouldExportToRageshake: false,
     },
     "userTimezonePublish": {
         // This is per-device so you can avoid having devices overwrite each other.
