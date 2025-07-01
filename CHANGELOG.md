@@ -1,3 +1,24 @@
+Changes in [1.11.105](https://github.com/element-hq/element-web/releases/tag/v1.11.105) (2025-07-01)
+====================================================================================================
+## ✨ Features
+
+* New room list: add context menu to room list item ([#29952](https://github.com/element-hq/element-web/pull/29952)). Contributed by @florianduros.
+* Support for custom message components via Module API ([#30074](https://github.com/element-hq/element-web/pull/30074)). Contributed by @Half-Shot.
+* Prompt users to set up recovery ([#30075](https://github.com/element-hq/element-web/pull/30075)). Contributed by @uhoreg.
+* Update `IconButton` colors ([#30124](https://github.com/element-hq/element-web/pull/30124)). Contributed by @florianduros.
+* New room list: filter list can be collapsed  ([#29992](https://github.com/element-hq/element-web/pull/29992)). Contributed by @florianduros.
+* Show `EmptyRoomListView` when low priority filter matches zero rooms ([#30122](https://github.com/element-hq/element-web/pull/30122)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* Fix untranslatable string "People" in notifications beta ([#30165](https://github.com/element-hq/element-web/pull/30165)). Contributed by @t3chguy.
+* Force verification even after logging in via delegate ([#30141](https://github.com/element-hq/element-web/pull/30141)). Contributed by @andybalaam.
+* Hide add integrations button based on UIComponent.AddIntegrations ([#30140](https://github.com/element-hq/element-web/pull/30140)). Contributed by @t3chguy.
+* Use nav for new room list and label sections ([#30134](https://github.com/element-hq/element-web/pull/30134)). Contributed by @dbkr.
+* Spacestore should emit event after rebuilding home space ([#30132](https://github.com/element-hq/element-web/pull/30132)). Contributed by @MidhunSureshR.
+* Handle m.room.pinned\_events being invalid ([#30129](https://github.com/element-hq/element-web/pull/30129)). Contributed by @t3chguy.
+
+
 Changes in [1.11.104](https://github.com/element-hq/element-web/releases/tag/v1.11.104) (2025-06-17)
 ====================================================================================================
 ## ✨ Features
