@@ -124,15 +124,6 @@ type HandlerMap = Partial<{
  * be enabled).
  */
 export default class SettingsStore {
-    static exportForRageshake(): string {
-        const settingMap: Record<string, unknown> = {};
-        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
-            (s) => SETTINGS[s].shouldExportToRageshake !== false,
-        )) {
-            settingMap[settingKey] = SettingsStore.getValue(settingKey);
-        }
-        return JSON.stringify(settingMap);
-    }
     // We support watching settings for changes, and do this by tracking which callbacks have
     // been given to us. We end up returning the callbackRef to the caller so they can unsubscribe
     // at a later point.
@@ -890,6 +881,21 @@ export default class SettingsStore {
         }
 
         logger.log(`--- END DEBUG`);
+    }
+
+    /**
+     * Export all settings as a JSON object, except for settings
+     * blocked from being exported by `shouldExportToRageshake`.
+     * @returns Settings as a JSON object string.
+     */
+    public static exportForRageshake(): string {
+        const settingMap: Record<string, unknown> = {};
+        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
+            (s) => SETTINGS[s].shouldExportToRageshake !== false,
+        )) {
+            settingMap[settingKey] = SettingsStore.getValue(settingKey);
+        }
+        return JSON.stringify(settingMap);
     }
 
     private static getHandler(settingName: SettingKey, level: SettingLevel): SettingsHandler | null {

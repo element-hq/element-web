@@ -13,7 +13,6 @@ import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { type IConfigOptions } from "./IConfigOptions";
-import SettingsTab from "./components/views/settings/tabs/SettingsTab";
 
 /* eslint-disable camelcase */
 
