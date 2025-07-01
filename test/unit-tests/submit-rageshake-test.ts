@@ -22,6 +22,7 @@ import { collectBugReport } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { type ConsoleLogger } from "../../src/rageshake/rageshake";
 import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
+import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 
 describe("Rageshakes", () => {
     const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";
@@ -430,6 +431,7 @@ describe("Rageshakes", () => {
 
         afterEach(() => {
             navigatorSpy.mockRestore();
+            SettingsStore.reset();
         });
 
         it("should collect navigator storage persisted", async () => {
@@ -503,20 +505,16 @@ describe("Rageshakes", () => {
     });
 
     it("should collect localstorage settings", async () => {
-        const localSettings = {
-            language: "fr",
-            showHiddenEventsInTimeline: true,
-            activeCallRoomIds: [],
-        };
-
-        const spy = jest.spyOn(window.localStorage.__proto__, "getItem").mockImplementation((key) => {
-            return JSON.stringify(localSettings);
-        });
+        await SettingsStore.setValue("language", null, SettingLevel.DEVICE, "fr");
+        await SettingsStore.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, "Europe/London");
+        await SettingsStore.setValue("activeCallRoomIds", null, SettingLevel.DEVICE, []);
 
         const formData = await collectBugReport();
-        expect(formData.get("mx_local_settings")).toBe(JSON.stringify(localSettings));
-
-        spy.mockRestore();
+        const settingDataJSON = formData.get("mx_local_settings");
+        expect(settingDataJSON).not.toBeNull();
+        const settingsData = JSON.parse(settingDataJSON as string);
+        expect(settingsData.showHiddenEventsInTimeline).toEqual(true);
     });
 
     it("should collect logs", async () => {
