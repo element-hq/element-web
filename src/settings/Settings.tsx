@@ -987,6 +987,8 @@ export const SETTINGS: Settings = {
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
+        // For privacy
+        shouldExportToRageshake: false,
     },
     "breadcrumb_rooms": {
         // not really a setting
