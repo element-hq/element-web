@@ -126,7 +126,9 @@ type HandlerMap = Partial<{
 export default class SettingsStore {
     static exportForRageshake(): string {
         const settingMap: Record<string, unknown> = {};
-        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(s => SETTINGS[s].shouldExportToRageshake !== false)) {
+        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
+            (s) => SETTINGS[s].shouldExportToRageshake !== false,
+        )) {
             settingMap[settingKey] = SettingsStore.getValue(settingKey);
         }
         return JSON.stringify(settingMap);
