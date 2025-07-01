@@ -36,6 +36,8 @@ describe("Rageshakes", () => {
             onlyData: true,
         },
     );
+    let windowSpy: jest.SpyInstance;
+    let mockWindow: Mocked<Window>;
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
@@ -51,30 +53,24 @@ describe("Rageshakes", () => {
             ed25519: "",
             curve25519: "",
         });
+        mockWindow = {
+            matchMedia: jest.fn().mockReturnValue({ matches: false }),
+            navigator: {
+                userAgent: "",
+            },
+        } as unknown as Mocked<Window>;
+        // @ts-ignore - We just need partial mock
+        windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
 
         fetchMock.restore();
         fetchMock.catch(404);
     });
 
+    afterEach(() => {
+        windowSpy.mockRestore();
+    });
+
     describe("Basic Information", () => {
-        let mockWindow: Mocked<Window>;
-        let windowSpy: jest.SpyInstance;
-
-        beforeEach(() => {
-            mockWindow = {
-                matchMedia: jest.fn().mockReturnValue({ matches: false }),
-                navigator: {
-                    userAgent: "",
-                },
-            } as unknown as Mocked<Window>;
-            // @ts-ignore - We just need partial mock
-            windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
-        });
-
-        afterEach(() => {
-            windowSpy.mockRestore();
-        });
-
         it("should include app version", async () => {
             mockPlatformPeg({ getAppVersion: jest.fn().mockReturnValue("1.11.58") });
 
@@ -377,6 +373,10 @@ describe("Rageshakes", () => {
     describe("Settings Store", () => {
         const mockSettingsStore = mocked(SettingsStore);
 
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
         it("should collect labs from settings store", async () => {
             const someFeatures = [
                 "feature_video_rooms",
@@ -490,6 +490,7 @@ describe("Rageshakes", () => {
         };
         const disabledFeatures = ["cssanimations", "d0", "d1"];
         const mockWindow = {
+            matchMedia: jest.fn().mockReturnValue({ matches: false }),
             Modernizr: {
                 ...allFeatures,
             },
