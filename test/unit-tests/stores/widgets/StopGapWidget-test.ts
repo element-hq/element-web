@@ -83,16 +83,42 @@ describe("StopGapWidget", () => {
     });
 
     it("feeds incoming to-device messages to the widget", async () => {
-        const event = mkEvent({
-            event: true,
-            type: "org.example.foo",
-            user: "@alice:example.org",
-            content: { hello: "world" },
-        });
+        const receivedToDevice = {
+            message: {
+                type: "org.example.foo",
+                sender: "@alice:example.org",
+                content: {
+                    hello: "world",
+                },
+            },
+            encryptionInfo: null,
+        };
 
-        client.emit(ClientEvent.ToDeviceEvent, event);
+        client.emit(ClientEvent.ReceivedToDeviceMessage, receivedToDevice);
         await Promise.resolve(); // flush promises
-        expect(messaging.feedToDevice).toHaveBeenCalledWith(event.getEffectiveEvent(), false);
+        expect(messaging.feedToDevice).toHaveBeenCalledWith(receivedToDevice.message, false);
+    });
+
+    it("feeds incoming encrypted to-device messages to the widget", async () => {
+        const receivedToDevice = {
+            message: {
+                type: "org.example.foo",
+                sender: "@alice:example.org",
+                content: {
+                    hello: "world",
+                },
+            },
+            encryptionInfo: {
+                senderVerified: false,
+                sender: "@alice:example.org",
+                senderCurve25519KeyBase64: "",
+                senderDevice: "ABCDEFGHI",
+            },
+        };
+
+        client.emit(ClientEvent.ReceivedToDeviceMessage, receivedToDevice);
+        await Promise.resolve(); // flush promises
+        expect(messaging.feedToDevice).toHaveBeenCalledWith(receivedToDevice.message, true);
     });
 
     it("feeds incoming state updates to the widget", () => {
