@@ -143,6 +143,7 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
+            await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
 
