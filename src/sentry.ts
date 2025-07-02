@@ -141,7 +141,7 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
 function getDeviceContext(client: MatrixClient): DeviceContext {
     const result: DeviceContext = {
         device_id: client?.deviceId ?? undefined,
-        mx_local_settings: localStorage.getItem("mx_local_settings"),
+        mx_local_settings: SettingsStore.exportForRageshake(),
     };
 
     if (window.Modernizr) {

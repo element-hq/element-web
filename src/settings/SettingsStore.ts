@@ -883,6 +883,21 @@ export default class SettingsStore {
         logger.log(`--- END DEBUG`);
     }
 
+    /**
+     * Export all settings as a JSON object, except for settings
+     * blocked from being exported by `shouldExportToRageshake`.
+     * @returns Settings as a JSON object string.
+     */
+    public static exportForRageshake(): string {
+        const settingMap: Record<string, unknown> = {};
+        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
+            (s) => SETTINGS[s].shouldExportToRageshake !== false,
+        )) {
+            settingMap[settingKey] = SettingsStore.getValue(settingKey);
+        }
+        return JSON.stringify(settingMap);
+    }
+
     private static getHandler(settingName: SettingKey, level: SettingLevel): SettingsHandler | null {
         const handlers = SettingsStore.getHandlers(settingName);
         if (!handlers[level]) return null;
