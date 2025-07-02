@@ -424,8 +424,22 @@ export class StopGapWidgetDriver extends WidgetDriver {
     ): Promise<void> {
         const client = MatrixClientPeg.safeGet();
 
-        if (encrypted) {
-            const crypto = client.getCrypto();
+        const crypto = client.getCrypto();
+
+        let forceEncryptedTraffic: boolean;
+        if (crypto) {
+            if (this.inRoomId) {
+                forceEncryptedTraffic = await client.getCrypto()!.isEncryptionEnabledInRoom(this.inRoomId);
+            } else {
+                // If the widget is not in a room, we default to only encrypted traffic
+                forceEncryptedTraffic = true;
+            }
+        } else {
+            // If the client does not have crypto we default to not allowing encrypted traffic?
+            forceEncryptedTraffic = false;
+        }
+
+        if (forceEncryptedTraffic || encrypted) {
             if (!crypto) throw new Error("E2EE not enabled");
 
             // attempt to re-batch these up into a single request

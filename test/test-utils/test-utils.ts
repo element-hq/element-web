@@ -158,6 +158,7 @@ export function createTestClient(): MatrixClient {
             isSecretStorageReady: jest.fn().mockResolvedValue(false),
             deleteKeyBackupVersion: jest.fn(),
             crossSignDevice: jest.fn(),
+            encryptToDeviceMessages: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
