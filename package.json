@@ -149,7 +149,7 @@
         "react-string-replace": "^1.1.1",
         "react-transition-group": "^4.4.1",
         "react-virtualized": "^9.22.5",
-        "react-virtuoso": "https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?54e51f1728bfebaa2eca99fd2a1989030214f8df&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build",
+        "react-virtuoso": "https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?36f7b675163853fc08ddc2704de90e59baa6f3fa&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.17.0",
