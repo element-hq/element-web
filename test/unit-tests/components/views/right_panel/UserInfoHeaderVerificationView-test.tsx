@@ -15,7 +15,7 @@ import React from "react";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { UserInfoHeaderVerificationView } from "../../../../../src/components/views/right_panel/user_info/UserInfoHeaderVerificationView";
-
+import { createTestClient } from "../../../../test-utils";
 
 describe("<UserInfoHeaderVerificationView />", () => {
     const defaultRoomId = "!fkfk";
@@ -23,47 +23,31 @@ describe("<UserInfoHeaderVerificationView />", () => {
 
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
 
-    let mockClient: Mocked<MatrixClient>;
+    let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
 
     beforeEach(() => {
         mockCrypto = mocked({
-            getDeviceVerificationStatus: jest.fn(),
+            bootstrapSecretStorage: jest.fn(),
+            bootstrapCrossSigning: jest.fn(),
+            getCrossSigningKeyId: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             getUserDeviceInfo: jest.fn(),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+            getDeviceVerificationStatus: jest.fn(),
             getUserVerificationStatus: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
+            isDehydrationSupported: jest.fn().mockResolvedValue(false),
+            startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
         } as unknown as CryptoApi);
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn(),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn(),
-            removeListener: jest.fn(),
-            currentState: {
-                on: jest.fn(),
-            },
-            getRoom: jest.fn(),
-            credentials: {},
-            setPowerLevel: jest.fn(),
-            getCrypto: jest.fn().mockReturnValue(mockCrypto),
-            baseUrl: "homeserver.url",
-        } as unknown as MatrixClient);
-
+        mockClient = createTestClient();
+        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
+        jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+        
     });
 
     const renderComponent = () => {
@@ -74,12 +58,11 @@ describe("<UserInfoHeaderVerificationView />", () => {
             algorithms: [],
             keys: new Map(),
         });
-
         const devicesMap = new Map<string, Device>([[device1.deviceId, device1]]);
         const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
 
         mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
+        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         const Wrapper = (wrapperProps = {}) => {
             return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
@@ -88,11 +71,6 @@ describe("<UserInfoHeaderVerificationView />", () => {
             wrapper: Wrapper,
         });
     };
-
-    it("renders custom user identifiers in the header", () => {
-        renderComponent();
-        expect(screen.getByText("customUserIdentifier")).toBeInTheDocument();
-    });
 
     it("renders verified badge when user is verified", async () => {
         mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, false));

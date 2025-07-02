@@ -9,9 +9,7 @@ import React, { type JSX } from "react";
 import { type User, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Heading, Tooltip, Text } from "@vector-im/compound-web";
 
-import {
-    useUserfoHeaderViewModel
-} from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { useUserfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 import MemberAvatar from "../../avatars/MemberAvatar";
 import { Container, type Member, type IDevice } from "../UserInfo";
 import { Flex } from "../../../utils/Flex";
@@ -22,8 +20,8 @@ import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView
 export interface UserInfoHeaderViewProps {
     member: Member;
     roomId?: string;
-    devices: IDevice[],
-    hideVerificationSection: boolean;   
+    devices: IDevice[];
+    hideVerificationSection: boolean;
 }
 
 export const UserInfoHeaderView: React.FC<UserInfoHeaderViewProps> = ({

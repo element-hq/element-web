@@ -6,66 +6,68 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/client";
-import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
-import { render, waitFor, screen } from "jest-matrix-react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 import React from "react";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { UserInfoHeaderView } from "../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
+import { createTestClient } from "../../../../test-utils";
+import { useUserfoHeaderViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 
+// Mock the viewmodel hooks
+jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
+    useUserfoHeaderViewModel: jest.fn().mockReturnValue({
+        onMemberAvatarClick: jest.fn(),
+        precenseInfo: {
+            lastActiveAgo: undefined,
+            currentlyActive: undefined,
+            state: undefined,
+        },
+        showPresence: false,
+        timezoneInfo: null,
+        userIdentifier: "customUserIdentifier",
+    }),
+}));
 
-describe("<UserInfoHeader />", () => {
+describe("<UserInfoHeaderView />", () => {
     const defaultRoomId = "!fkfk";
     const defaultUserId = "@user:example.com";
-    
+
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
     const defaultProps = {
         member: defaultMember,
         roomId: defaultRoomId,
     };
 
-    let mockClient: Mocked<MatrixClient>;
+    let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
-    
+
     beforeEach(() => {
         mockCrypto = mocked({
-            getDeviceVerificationStatus: jest.fn(),
+            bootstrapSecretStorage: jest.fn(),
+            bootstrapCrossSigning: jest.fn(),
+            getCrossSigningKeyId: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             getUserDeviceInfo: jest.fn(),
-            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+            getDeviceVerificationStatus: jest.fn(),
             getUserVerificationStatus: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
+            isDehydrationSupported: jest.fn().mockResolvedValue(false),
+            startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+            userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
         } as unknown as CryptoApi);
 
-        mockClient = mocked({
-            getUser: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            isUserIgnored: jest.fn(),
-            getIgnoredUsers: jest.fn(),
-            setIgnoredUsers: jest.fn(),
-            getUserId: jest.fn(),
-            getSafeUserId: jest.fn(),
-            getDomain: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-            isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-            doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-            doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-            getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-            mxcUrlToHttp: jest.fn(),
-            removeListener: jest.fn(),
-            currentState: {
-                on: jest.fn(),
-            },
-            getRoom: jest.fn(),
-            credentials: {},
-            setPowerLevel: jest.fn(),
-            getCrypto: jest.fn().mockReturnValue(mockCrypto),
-            baseUrl: "homeserver.url",
-        } as unknown as MatrixClient);
+        mockClient = createTestClient();
+        mockClient.doesServerSupportExtendedProfiles = () => Promise.resolve(false);
 
+        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
+        jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
+        jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
+        jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
@@ -87,7 +89,7 @@ describe("<UserInfoHeader />", () => {
         const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
 
         mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
+
         const Wrapper = (wrapperProps = {}) => {
             return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
@@ -106,30 +108,88 @@ describe("<UserInfoHeader />", () => {
     };
 
     it("renders custom user identifiers in the header", () => {
-        renderComponent();
+        const { container } = renderComponent();
         expect(screen.getByText("customUserIdentifier")).toBeInTheDocument();
-    });
-
-    it("renders verified badge when user is verified", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, false));
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("Verified")).toBeInTheDocument());
         expect(container).toMatchSnapshot();
     });
 
-    it("renders verify button", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
-        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(true);
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("Verify User")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
+    it("should not render verification view if hideVerificationSection is true", () => {
+        mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: jest.fn(),
+            precenseInfo: {
+                lastActiveAgo: undefined,
+                currentlyActive: undefined,
+                state: undefined,
+            },
+            showPresence: false,
+            timezoneInfo: null,
+            userIdentifier: "null",
+        });
+
+        const { container } = renderComponent({ hideVerificationSection: true });
+        const verificationClass = container.getElementsByClassName("mx_UserInfo_verification").length;
+
+        expect(verificationClass).toEqual(0);
     });
 
-    it("renders verification unavailable message", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
-        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(false);
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
+    it("should render timezone if it exist", () => {
+        mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: jest.fn(),
+            precenseInfo: {
+                lastActiveAgo: undefined,
+                currentlyActive: undefined,
+                state: undefined,
+            },
+            showPresence: false,
+            timezoneInfo: {
+                timezone: "FR",
+                friendly: "paris",
+            },
+            userIdentifier: null,
+        });
+
+        renderComponent({ hideVerificationSection: false });
+        expect(screen.getByText("paris")).toBeInTheDocument();
+    });
+
+    it("should render correct presence label", () => {
+        mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick: jest.fn(),
+            precenseInfo: {
+                lastActiveAgo: 0,
+                currentlyActive: true,
+                state: "online",
+            },
+            showPresence: true,
+            timezoneInfo: null,
+            userIdentifier: null,
+        });
+
+        renderComponent({ hideVerificationSection: false });
+        expect(screen.getByText("Online")).toBeInTheDocument();
+    });
+
+    it("should be able to click on member avatar", () => {
+        const onMemberAvatarClick = jest.fn();
+        mocked(useUserfoHeaderViewModel).mockReturnValue({
+            onMemberAvatarClick,
+            precenseInfo: {
+                lastActiveAgo: undefined,
+                currentlyActive: undefined,
+                state: undefined,
+            },
+            showPresence: false,
+            timezoneInfo: {
+                timezone: "FR",
+                friendly: "paris",
+            },
+            userIdentifier: null,
+        });
+        renderComponent();
+        const avatar = screen.getByRole("button", { name: "Profile picture" });
+
+        fireEvent.click(avatar);
+
+        expect(onMemberAvatarClick).toHaveBeenCalled();
     });
 });
