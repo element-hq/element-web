@@ -416,7 +416,7 @@ const useIsSynapseAdmin = (cli?: MatrixClient): boolean => {
     return useAsyncMemo(async () => (cli ? cli.isSynapseAdministrator().catch(() => false) : false), [cli], false);
 };
 
-interface IRoomPermissions {
+export interface IRoomPermissions {
     modifyLevelMax: number;
     canEdit: boolean;
     canInvite: boolean;

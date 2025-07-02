@@ -10,20 +10,17 @@ import { type User, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Text, Button, InlineSpinner, Badge } from "@vector-im/compound-web";
 import { VerifiedIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import {
-    useUserInfoVerificationSection,
-} from "../../../viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
+import { useUserInfoVerificationViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
 import { type IDevice } from "../UserInfo";
 import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
-
 
 export const UserInfoHeaderVerificationView: React.FC<{
     member: User | RoomMember;
     devices: IDevice[];
 }> = ({ member, devices }) => {
     let content;
-    const vm = useUserInfoVerificationSection(member, devices);
+    const vm = useUserInfoVerificationViewModel(member, devices);
 
     if (vm.isUserVerified) {
         content = (
@@ -44,7 +41,7 @@ export const UserInfoHeaderVerificationView: React.FC<{
                     className="mx_UserInfo_verify_button"
                     kind="tertiary"
                     size="sm"
-                    onClick={() => vm.verifySelectedUser}
+                    onClick={() => vm.verifySelectedUser()}
                 >
                     {_t("user_info|verify_button")}
                 </Button>

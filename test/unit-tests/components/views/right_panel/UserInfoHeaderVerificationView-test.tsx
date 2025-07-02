@@ -47,7 +47,6 @@ describe("<UserInfoHeaderVerificationView />", () => {
         jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        
     });
 
     const renderComponent = () => {

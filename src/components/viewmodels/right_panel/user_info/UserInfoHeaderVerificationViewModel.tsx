@@ -12,8 +12,22 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type IDevice } from "../../../views/right_panel/UserInfo";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { verifyUser } from "../../../../verification";
-import { type UserInfoVerificationSectionState } from "./UserInfoHeaderViewModel";
 
+export interface UserInfoVerificationSectionState {
+    /**
+     * variables used to check if we can verify the user and display the verify button
+     */
+    canVerify: boolean;
+    hasCrossSigningKeys: boolean | undefined;
+    /**
+     * used to display correct badge value
+     */
+    isUserVerified: boolean;
+    /**
+     * callback function when verifyUser button is clicked
+     */
+    verifySelectedUser: () => Promise<void>;
+}
 
 const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
     return useAsyncMemo<boolean>(
@@ -28,11 +42,15 @@ const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
 const useHasCrossSigningKeys = (cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined => {
     return useAsyncMemo(async () => {
         if (!canVerify) return undefined;
-        return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
+        return cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
     }, [cli, member, canVerify]);
 };
 
-export const useUserInfoVerificationSection = (
+/**
+ * View model for the userInfoVerificationHeaderView
+ * @see {@link UserInfoVerificationSectionState} for more information about what this view model returns.
+ */
+export const useUserInfoVerificationViewModel = (
     member: User | RoomMember,
     devices: IDevice[],
 ): UserInfoVerificationSectionState => {
@@ -58,7 +76,7 @@ export const useUserInfoVerificationSection = (
         devices.length > 0;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
-    const verifySelectedUser = verifyUser(cli, member as User);
+    const verifySelectedUser = (): Promise<void> => verifyUser(cli, member as User);
 
     return {
         canVerify,

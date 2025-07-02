@@ -28,25 +28,37 @@ export interface TimezoneInfo {
 }
 
 export interface UserInfoHeaderState {
+    /**
+     * callback function when selected user avatar is clicked in user info
+     */
     onMemberAvatarClick: () => void;
+    /**
+     * Object containing information about the precense of the selected user
+     */
     precenseInfo: PresenceInfo;
+    /**
+     * Boolean that show or hide the precense information
+     */
     showPresence: boolean;
+    /**
+     *  Timezone object
+     */
     timezoneInfo: TimezoneInfo | null;
+    /**
+     * Displayed identifier for the selected user
+     */
     userIdentifier: string | null;
 }
-
-export interface UserInfoVerificationSectionState {
-    canVerify: boolean;
-    hasCrossSigningKeys: boolean | undefined;
-    isUserVerified: boolean;
-    verifySelectedUser: Promise<void>;
-}
-
 interface UserInfoHeaderViewModelProps {
     member: Member;
     roomId?: string;
 }
 
+/**
+ * View model for the userInfoHeaderView
+ * props
+ * @see {@link UserInfoHeaderState} for more information about what this view model returns.
+ */
 export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewModelProps): UserInfoHeaderState {
     const cli = useContext(MatrixClientContext);
 

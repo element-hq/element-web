@@ -12,8 +12,7 @@ import { renderHook, waitFor } from "jest-matrix-react";
 
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { useUserInfoVerificationSection } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
-
+import { useUserInfoVerificationViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
 
 describe("useUserInfoVerificationHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
@@ -57,7 +56,7 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
 
     const renderUserInfoHeaderVerificationHook = (props = defaultProps) => {
         return renderHook(
-            () => useUserInfoVerificationSection(props.member, props.devices),
+            () => useUserInfoVerificationViewModel(props.member, props.devices),
             withClientContextRenderOptions(mockClient),
         );
     };
