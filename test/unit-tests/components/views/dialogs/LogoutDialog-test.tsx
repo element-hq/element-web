@@ -10,10 +10,13 @@ import React from "react";
 import { mocked, type MockedObject } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { fireEvent, render, type RenderResult, screen } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../../test-utils";
 import LogoutDialog from "../../../../../src/components/views/dialogs/LogoutDialog";
+import dispatch from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import { UserTab } from "../../../../../src/components/views/dialogs/UserTab";
 
 describe("LogoutDialog", () => {
     let mockClient: MockedObject<MatrixClient>;
@@ -61,6 +64,15 @@ describe("LogoutDialog", () => {
         const rendered = renderComponent();
         await rendered.findByText("Go to Settings");
         expect(rendered.container).toMatchSnapshot();
+
+        jest.spyOn(dispatch, "dispatch");
+        fireEvent.click(await screen.findByRole("button", { name: "Go to Settings" }));
+        await waitFor(() =>
+            expect(dispatch.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+            }),
+        );
     });
 
     it("Prompts user to go to settings if there is no backup on the server", async () => {
