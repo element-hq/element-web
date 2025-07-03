@@ -1155,9 +1155,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     }
 
                     const idx = nodes.indexOf(rovingContext.state.activeNode);
-
-                    // When the first result is active, we want to make it possible to navigate to the search field
-                    // to make it reade out by the screen reader.
+                    // When the first element in the result list is selected, we actively set the focus on the search
+                    // field, so that the screen reader can read it out.
                     if (idx === 0 && accessibilityAction === KeyBindingAction.ArrowUp) {
                         const inputFieldNode = inputRef.current;
                         if (inputFieldNode) {
