@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type Meta, type StoryFn } from "@storybook/react-webpack5";
+import { type Meta, type StoryFn } from "@storybook/react-vite";
 
 import { TextualEvent as TextualEventComponent } from "./TextualEvent";
 import { MockViewModel } from "../../MockViewModel";

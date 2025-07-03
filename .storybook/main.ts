@@ -1,9 +1,8 @@
-import type { StorybookConfig } from "@storybook/react-webpack5";
+import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
     stories: ["../src/shared-components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
     addons: [
-        "@storybook/addon-webpack5-compiler-swc",
         "@storybook/addon-docs",
         "@storybook/addon-designs",
         {
@@ -35,7 +34,7 @@ const config: StorybookConfig = {
             },
         },
     ],
-    framework: "@storybook/react-webpack5",
+    framework: "@storybook/react-vite",
     core: {
         disableTelemetry: true,
     },
