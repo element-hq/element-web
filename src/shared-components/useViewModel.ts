@@ -10,5 +10,7 @@ import { useSyncExternalStore } from "react";
 import { type ViewModel } from "./ViewModel";
 
 export function useViewModel<T>(vm: ViewModel<T>): T {
-    return useSyncExternalStore(vm.subscribe, vm.getSnapshot);
+    // We need to pass the same getSnapshot function as getServerSnapshot as this
+    // is used when making the HTML chat export.
+    return useSyncExternalStore(vm.subscribe, vm.getSnapshot, vm.getSnapshot);
 }
