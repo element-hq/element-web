@@ -107,6 +107,7 @@ interface ExtendedToMatchScreenshotOptions extends ToMatchScreenshotOptions {
     includeDialogBackground?: boolean;
     showTooltips?: boolean;
     timeout?: number;
+    hideJumpToBottomButton?: boolean;
 }
 
 type Expectations = {
@@ -161,6 +162,14 @@ export const expect = baseExpect.extend<Expectations>({
                 /* Make the dialog backdrop solid so any dialog screenshots don't show any components behind them */
                 .mx_Dialog_background {
                     background-color: #030c1b !important;
+                }
+            `;
+        }
+
+        if (options?.hideJumpToBottomButton) {
+            css += `
+                .mx_JumpToBottomButton {
+                    display: none !important;
                 }
             `;
         }
