@@ -7,14 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy } from "react";
+import React from "react";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
-import Modal from "../../../../Modal";
 import { Action } from "../../../../dispatcher/actions";
+import { UserTab } from "../../../../components/views/dialogs/UserTab";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
+import { type OpenToTabPayload } from "../../../../dispatcher/payloads/OpenToTabPayload";
 
 interface IProps {
     onFinished(): void;
@@ -28,13 +29,12 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
 
     private onSetupClick = (): void => {
         this.props.onFinished();
-        Modal.createDialog(
-            lazy(() => import("./CreateKeyBackupDialog")),
-            undefined,
-            undefined,
-            /* priority = */ false,
-            /* static = */ true,
-        );
+        // Open the user settings dialog to the encryption tab and start the flow to reset encryption
+        const payload: OpenToTabPayload = {
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Encryption,
+        };
+        dis.dispatch(payload);
     };
 
     public render(): React.ReactNode {
