@@ -602,10 +602,14 @@ function DownloadButton({
 
     useEffect(() => {
         if (!mxEvent) {
+            // If we have no event, we assume this is safe to download.
+            setCanDownload(true);
             return;
         }
         const hints = ModuleApi.customComponents.getHintsForMessage(mxEvent);
         if (hints?.allowDownloadingMedia) {
+            // Disable downloading as soon as we know there is a hint.
+            setCanDownload(false);
             hints
                 .allowDownloadingMedia()
                 .then((downloadable) => {
@@ -613,6 +617,7 @@ function DownloadButton({
                 })
                 .catch((ex) => {
                     logger.error(`Failed to check if media from ${mxEvent.getId()} could be downloaded`, ex);
+                    // Err on the side of safety.
                     setCanDownload(false);
                 });
         }
