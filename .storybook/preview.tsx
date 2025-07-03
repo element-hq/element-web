@@ -1,4 +1,4 @@
-import type { ArgTypes, Preview, Decorator } from "@storybook/react-webpack5";
+import type { ArgTypes, Preview, Decorator } from "@storybook/react-vite";
 
 import "../res/css/shared.pcss";
 import "./preview.css";
