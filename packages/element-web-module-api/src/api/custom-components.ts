@@ -47,7 +47,7 @@ export type CustomMessageRenderHints = {
     /**
      * If an event contains media, this function will be called to check
      * if the media can be prompted to be downloaded as a file.
-     * Default is true.
+     * If this function is not supplied, media downloads are allowed.
      */
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
 };
