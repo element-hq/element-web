@@ -5,11 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// Note: eslint-plugin-jsdoc doesn't like import types as parameters, so we
+// get around it with @typedef
+/**
+ * @typedef {import("@element-hq/element-web-module-api").Api} Api
+ */
+
 export default class CustomComponentModule {
     static moduleApiVersion = "^1.2.0";
     /**
-     *
-     * @param {import("@element-hq/element-web-module-api").Api} api
+     * Basic module for testing.
+     * @param {Api} api API object
      */
     constructor(api) {
         this.api = api;
