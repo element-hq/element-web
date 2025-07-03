@@ -1155,7 +1155,20 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     }
 
                     const idx = nodes.indexOf(rovingContext.state.activeNode);
-                    node = findSiblingElement(nodes, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
+
+                    // When the first result is active, we want to make it possible to navigate to the search field
+                    // to make it reade out by the screen reader.
+                    if (idx === 0 && accessibilityAction === KeyBindingAction.ArrowUp) {
+                        const inputFieldNode = inputRef.current;
+                        if (inputFieldNode) {
+                            rovingContext.dispatch({
+                                type: Type.SetFocus,
+                                payload: { node: inputFieldNode },
+                            });
+                        }
+                    } else {
+                        node = findSiblingElement(nodes, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
+                    }
                 }
                 break;
 
