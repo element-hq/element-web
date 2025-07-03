@@ -78,6 +78,7 @@ originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element) => JS
 // @alpha
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
+    allowDownloadingMedia?: boolean | Promise<boolean>;
 };
 
 // @alpha @deprecated (undocumented)
