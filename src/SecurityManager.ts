@@ -190,7 +190,7 @@ export interface AccessSecretStorageOpts {
  * provided function.
  *
  * Bootstrapping secret storage may take one of these paths:
- * 1. (only if `opts.forceReset` is set) Create secret storage from a passphrase
+ * 1. (Only if `opts.forceReset` is set) create secret storage from a passphrase
  *    and store cross-signing keys in secret storage.
  * 2. Access existing secret storage by requesting passphrase and accessing
  *    cross-signing keys as needed.
