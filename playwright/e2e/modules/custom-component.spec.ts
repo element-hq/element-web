@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import fs from "node:fs";
 
 import { test, expect } from "../../element-web-test";
 
@@ -22,6 +23,9 @@ const screenshotOptions = (page: Page) => ({
         }
     `,
 });
+
+const IMAGE_FILE = fs.readFileSync("playwright/sample-files/element.png");
+
 test.describe("Custom Component API", () => {
     test.use({
         displayName: "Manny",
@@ -83,6 +87,50 @@ test.describe("Custom Component API", () => {
             await expect(
                 await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }),
             ).not.toBeVisible();
+        });
+        test("should disallow downloading media when the allowDownloading hint is set to false", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            const upload = await app.client.uploadContent(IMAGE_FILE, { name: "bad.png", type: "image/png" });
+            await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                msgtype: "m.image",
+                body: "bad.png",
+                url: upload.content_uri,
+            });
+
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await expect(page.getByRole("button", { name: "Download" })).not.toBeVisible();
+            await imgTile.click();
+            await expect(page.getByLabel("Image view").getByLabel("Download")).not.toBeVisible();
+        });
+        test("should allow downloading media when the allowDownloading hint is set to true", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            const upload = await app.client.uploadContent(IMAGE_FILE, { name: "good.png", type: "image/png" });
+            await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                msgtype: "m.image",
+                body: "good.png",
+                url: upload.content_uri,
+            });
+
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await expect(page.getByRole("button", { name: "Download" })).toBeVisible();
+            await imgTile.click();
+            await expect(page.getByLabel("Image view").getByLabel("Download")).toBeVisible();
         });
         test(
             "should render the next registered component if the filter function throws",

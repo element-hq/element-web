@@ -7,6 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 export default class CustomComponentModule {
     static moduleApiVersion = "^1.2.0";
+    /**
+     *
+     * @param {import("@element-hq/element-web-module-api").Api} api
+     */
     constructor(api) {
         this.api = api;
         this.api.customComponents.registerMessageRenderer(
@@ -40,6 +44,15 @@ export default class CustomComponentModule {
                 throw new Error("Fail test!");
             },
         );
+
+        this.api.customComponents.registerMessageRenderer(
+            (mxEvent) => mxEvent.type === "m.room.message" && mxEvent.content.msgtype === "m.image",
+            (_props, originalComponent) => {
+                return originalComponent();
+            },
+            { allowDownloadingMedia: async (mxEvent) => mxEvent.content.body !== "bad.png" },
+        );
+
         // Order is specific here to avoid this overriding the other renderers
         this.api.customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
             const body = props.mxEvent.content.body;
