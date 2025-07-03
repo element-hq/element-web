@@ -14,7 +14,7 @@ import SdkConfig from "../../../src/SdkConfig";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
-import { type SettingKey } from "../../../src/settings/Settings.tsx";
+import { SETTINGS, type SettingKey } from "../../../src/settings/Settings.tsx";
 import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController.ts";
 
 const TEST_DATA = [
@@ -55,6 +55,7 @@ describe("SettingsStore", () => {
 
     beforeEach(() => {
         SdkConfig.reset();
+        SettingsStore.reset();
     });
 
     describe("getValueAt", () => {
@@ -79,6 +80,16 @@ describe("SettingsStore", () => {
         it(`supportedLevelsAreOrdered doesn't incorrectly override setting`, async () => {
             await SettingsStore.setValue(SETTING_NAME_WITH_CONFIG_OVERRIDE, null, SettingLevel.DEVICE, true);
             expect(SettingsStore.getValueAt(SettingLevel.DEVICE, SETTING_NAME_WITH_CONFIG_OVERRIDE)).toBe(true);
+        });
+    });
+
+    describe("exportForRageshake", () => {
+        it("should not export settings marked as non-exportable", async () => {
+            await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, "Europe/London");
+            const values = JSON.parse(SettingsStore.exportForRageshake()) as Record<SettingKey, unknown>;
+            for (const exportedKey of Object.keys(values) as SettingKey[]) {
+                expect(SETTINGS[exportedKey].shouldExportToRageshake).not.toEqual(false);
+            }
         });
     });
 
