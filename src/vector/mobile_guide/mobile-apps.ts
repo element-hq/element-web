@@ -10,9 +10,9 @@ Please see LICENSE files in the repository root for full details.
  */
 
 export enum MobileAppVariant {
-    Classic = "classic",
-    X = "x",
-    Pro = "pro",
+    Classic = "element-classic",
+    X = "element",
+    Pro = "element-pro",
 }
 
 export interface MobileAppMetadata {

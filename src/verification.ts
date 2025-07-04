@@ -7,33 +7,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type User, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { CrossSigningKey, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
-import { accessSecretStorage } from "./SecurityManager";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { type IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 
-async function enable4SIfNeeded(matrixClient: MatrixClient): Promise<boolean> {
-    const crypto = matrixClient.getCrypto();
-    if (!crypto) return false;
-    const usk = await crypto.getCrossSigningKeyId(CrossSigningKey.UserSigning);
-    if (!usk) {
-        await accessSecretStorage();
-        return false;
-    }
-
-    return true;
-}
-
+/**
+ * Verify another user.
+ *
+ * Note: cross-signing must be set up before calling this function.
+ */
 export async function verifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
     if (matrixClient.isGuest()) {
         dis.dispatch({ action: "require_registration" });
-        return;
-    }
-    if (!(await enable4SIfNeeded(matrixClient))) {
         return;
     }
     const existingRequest = pendingVerificationRequestForUser(matrixClient, user);

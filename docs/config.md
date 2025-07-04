@@ -132,9 +132,9 @@ complete re-branding/private labeling, a more personalised experience can be ach
    download the app instead.
 8. `mobile_guide_app_variant`: Optional. The mobile app that the user is prompted to download from the `/mobile_guide` page. When omitted
    the mobile guide will be configured for the new Element X apps. Allowed values are as follows:
-    1. `classic`: Element Android/iOS.
-    2. `x`: Element X Android/iOS.
-    3. `pro`: Element Pro Android/iOS.
+    1. `element`: Element X Android/iOS.
+    2. `element-classic`: Element Classic Android/iOS.
+    3. `element-pro`: Element Pro Android/iOS.
 9. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
    containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
    in production.
