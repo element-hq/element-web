@@ -111,7 +111,13 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
                     className="mx_LegacyCallViewForRoom_ResizeWrapper"
                     handleClasses={{ bottom: "mx_LegacyCallViewForRoom_ResizeHandle" }}
                 >
-                    <LegacyCallView call={this.state.call} pipMode={false} showApps={this.props.showApps} sidebarShown={this.state.sidebarShown} setSidebarShown={this.setSidebarShown}/>
+                    <LegacyCallView
+                        call={this.state.call}
+                        pipMode={false}
+                        showApps={this.props.showApps}
+                        sidebarShown={this.state.sidebarShown}
+                        setSidebarShown={this.setSidebarShown}
+                    />
                 </Resizable>
             </div>
         );

@@ -250,7 +250,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     public isCallSidebarShown(callId?: string): boolean {
-        return (!!callId && (this.shownSidebars.get(callId) ?? true));
+        return !!callId && (this.shownSidebars.get(callId) ?? true);
     }
 
     private async checkProtocols(maxTries: number): Promise<void> {

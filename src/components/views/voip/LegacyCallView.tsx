@@ -340,7 +340,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             (call.opponentSupportsSDPStreamMetadata() || call.hasLocalUserMediaVideoTrack) &&
             call.state === CallState.Connected;
         // Show the sidebar button only if there is something to hide/show
-        const sidebarButtonShown = (secondaryFeed && !secondaryFeed.isVideoMuted()) || sidebarFeeds.length > 0;
+        const sidebarButtonShown =
+            !pipMode && ((secondaryFeed && !secondaryFeed.isVideoMuted()) || sidebarFeeds.length > 0);
         // The dial pad & 'more' button actions are only relevant in a connected call
         const contextMenuButtonShown = callState === CallState.Connected;
         const dialpadButtonShown = callState === CallState.Connected && call.opponentSupportsDTMF();
