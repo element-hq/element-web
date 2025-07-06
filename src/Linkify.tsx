@@ -11,7 +11,7 @@ import sanitizeHtml, { type IOptions } from "sanitize-html";
 import { merge } from "lodash";
 import _Linkify from "linkify-react";
 
-import { _linkifyString, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
+import { _linkifyString, _linkifyHtml, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
@@ -213,6 +213,16 @@ export function linkifyString(str: string, options = linkifyMatrixOptions): stri
     return _linkifyString(str, options);
 }
 
+/**
+ * Linkifies the given HTML-formatted string. This is a wrapper around 'linkifyjs/html'.
+ *
+ * @param {string} str HTML string to linkify
+ * @param {object} [options] Options for linkifyHtml. Default: linkifyMatrixOptions
+ * @returns {string} Linkified string
+ */
+export function linkifyHtml(str: string, options = linkifyMatrixOptions): string {
+    return _linkifyHtml(str, options);
+}
 /**
  * Linkify the given string and sanitize the HTML afterwards.
  *

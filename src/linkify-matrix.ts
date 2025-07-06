@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import * as linkifyjs from "linkifyjs";
 import { type EventListeners, type Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
 import linkifyString from "linkify-string";
+import linkifyHtml from "linkify-html";
 import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
 import {
@@ -189,7 +190,11 @@ export const options: Opts = {
             case Type.RoomAlias:
             case Type.UserId:
             default: {
-                return tryTransformEntityToPermalink(MatrixClientPeg.safeGet(), href) ?? "";
+                if (MatrixClientPeg.get()) {
+                    return tryTransformEntityToPermalink(MatrixClientPeg.get()!, href) ?? "";
+                } else {
+                    return href;
+                }
             }
         }
     },
@@ -274,3 +279,4 @@ registerCustomProtocol("mxc", false);
 
 export const linkify = linkifyjs;
 export const _linkifyString = linkifyString;
+export const _linkifyHtml = linkifyHtml;
