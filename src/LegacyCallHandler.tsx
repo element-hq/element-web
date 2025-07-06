@@ -112,6 +112,7 @@ export enum LegacyCallHandlerEvent {
     CallsChanged = "calls_changed",
     CallChangeRoom = "call_change_room",
     SilencedCallsChanged = "silenced_calls_changed",
+    ShownSidebarsChanged = "shown_sidebars_changed",
     CallState = "call_state",
     ProtocolSupport = "protocol_support",
 }
@@ -120,6 +121,7 @@ type EventEmitterMap = {
     [LegacyCallHandlerEvent.CallsChanged]: (calls: Map<string, MatrixCall>) => void;
     [LegacyCallHandlerEvent.CallChangeRoom]: (call: MatrixCall) => void;
     [LegacyCallHandlerEvent.SilencedCallsChanged]: (calls: Set<string>) => void;
+    [LegacyCallHandlerEvent.ShownSidebarsChanged]: (sidebarsShown: Map<string, boolean>) => void;
     [LegacyCallHandlerEvent.CallState]: (mappedRoomId: string | null, status: CallState) => void;
     [LegacyCallHandlerEvent.ProtocolSupport]: () => void;
 };
@@ -143,6 +145,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private assertedIdentityNativeUsers = new Map<string, string>();
 
     private silencedCalls = new Set<string>(); // callIds
+
+    private shownSidebars = new Map<string, boolean>(); // callId (call) -> sidebar show
 
     private backgroundAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
@@ -238,6 +242,15 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
         }
         return false;
+    }
+
+    public setCallSidebarShown(callId: string, sidebarShown: boolean): void {
+        this.shownSidebars.set(callId, sidebarShown);
+        this.emit(LegacyCallHandlerEvent.ShownSidebarsChanged, this.shownSidebars);
+    }
+
+    public isCallSidebarShown(callId?: string): boolean {
+        return (!!callId && (this.shownSidebars.get(callId) ?? true));
     }
 
     private async checkProtocols(maxTries: number): Promise<void> {

@@ -32,7 +32,7 @@ describe("LegacyCallView", () => {
             isScreensharing: jest.fn().mockReturnValue(false),
         } as unknown as MatrixCall;
 
-        const { unmount } = render(<LegacyCallView call={call} />);
+        const { unmount } = render(<LegacyCallView call={call} sidebarShown={false} />);
         expect(document.exitFullscreen).not.toHaveBeenCalled();
         unmount();
         expect(document.exitFullscreen).toHaveBeenCalled();
