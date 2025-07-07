@@ -60,7 +60,9 @@ Please see LICENSE files in the repository root for full details.
     background-color: $e2e-verified-color;
 }
 
-.mx_E2EIcon_verified .mx_E2EIcon_normal::after {
+// When using the "normal" icon as a background for verified or warning icon, 
+// it should be slightly smaller than the foreground icon
+.mx_E2EIcon_verified, .mx_E2EIcon_warning .mx_E2EIcon_normal::after {
     mask-size: 90%;
     background-color: white;
 }
