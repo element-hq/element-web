@@ -12,20 +12,12 @@ import { test, expect } from "../../element-web-test";
 test.describe("Decline and block invite dialog", function () {
     test.use({
         displayName: "Hanako",
-        botCreateOpts: {
-            displayName: "BotAlice",
-        },
     });
 
-    const botName = "BotAlice";
-
-    test("should support rejecting a user invite", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
-        // Create and view a room
+    test("should show decline and block dialog for a room", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
         await bot.createRoom({ name: "Test Room", invite: [user.userId] });
         await app.viewRoomByName("Test Room");
         await page.getByRole("button", { name: "Decline and block" }).click();
-
-        // Take a snapshot of the invite dialog with a user pill
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("decline-and-block-invite-empty.png");
     });
 });
