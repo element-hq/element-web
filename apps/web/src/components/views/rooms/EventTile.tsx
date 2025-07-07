@@ -116,6 +116,8 @@ import {
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { EventTileNew } from "./EventTileNew";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1547,9 +1549,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
 const SafeEventTile = (props: EventTileProps): JSX.Element => {
+    const cli = useMatrixClientContext();
+    const context = useScopedRoomContext("timelineRenderingType", "showHiddenEvents");
     return (
         <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
-            <UnwrappedEventTile {...props} />
+            {/* <UnwrappedEventTile {...props} /> */}
+            <EventTileNew
+                {...props}
+                cli={cli}
+                timelineRenderingType={context.timelineRenderingType}
+                showHiddenEvents={context.showHiddenEvents}
+            />
         </TileErrorBoundary>
     );
 };
@@ -1567,7 +1577,7 @@ interface ISentReceiptProps {
     messageState: EventStatus | undefined;
 }
 
-function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
+export function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
 
