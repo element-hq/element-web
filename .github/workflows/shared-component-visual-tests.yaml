@@ -41,8 +41,7 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Run Visual tests
-              run: |
-                  concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6006 && yarn test-storybook  --ci --maxWorkers=2\"
+              run: "yarn test-storybook-ci"
 
             - name: Upload received images
               if: always()

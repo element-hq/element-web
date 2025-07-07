@@ -68,7 +68,8 @@
         "postinstall": "patch-package",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
-        "test-storybook": "test-storybook --url http://localhost:52411/"
+        "test:storybook": "test-storybook --url http://localhost:6007/",
+        "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6007 && yarn test-storybook --ci --maxWorkers=2\""
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.1.0",
