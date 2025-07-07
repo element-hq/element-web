@@ -24,10 +24,12 @@ test.describe("Create Room", () => {
         await dialog.getByRole("option", { name: "Public room" }).click();
         // Fill room address
         await dialog.getByRole("textbox", { name: "Room address" }).fill("test-room-1");
+        // Snapshot it
+        await expect(dialog).toMatchScreenshot("create-room.png");
+
         // Submit
         await dialog.getByRole("button", { name: "Create room" }).click();
         
-        await expect(dialog).toMatchScreenshot("create-room.png");
 
         await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
