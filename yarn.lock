@@ -3226,11 +3226,6 @@
     react-dom "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-styling-webpack@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-styling-webpack/-/addon-styling-webpack-2.0.0.tgz#3e854c82a835a6df439a69e307f337b39b4a4cab"
-  integrity sha512-N8jWhWnk3/nbL4P9zl0OEV/47P0Cxn/kPzSHjdAClyDYnqj9jI6upeLsraZgIV9Ro3QSeqeIloeXb1zMasWpOw==
-
 "@storybook/builder-vite@9.0.15":
   version "9.0.15"
   resolved "https://registry.yarnpkg.com/@storybook/builder-vite/-/builder-vite-9.0.15.tgz#be8f25e5e2e9224a0379c58acc2f52298283c383"

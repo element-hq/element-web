@@ -191,7 +191,6 @@
         "@sentry/webpack-plugin": "^3.0.0",
         "@storybook/addon-designs": "^10.0.1",
         "@storybook/addon-docs": "^9.0.12",
-        "@storybook/addon-styling-webpack": "^2.0.0",
         "@storybook/react-vite": "^9.0.15",
         "@stylistic/eslint-plugin": "^4.0.0",
         "@svgr/webpack": "^8.0.0",

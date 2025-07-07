@@ -5,34 +5,6 @@ const config: StorybookConfig = {
     addons: [
         "@storybook/addon-docs",
         "@storybook/addon-designs",
-        {
-            name: "@storybook/addon-styling-webpack",
-            options: {
-                rules: [
-                    {
-                        test: /\.module.css$/,
-                        use: [
-                            "style-loader",
-                            {
-                                loader: "css-loader",
-                                options: {
-                                    importLoaders: 1,
-                                    modules: {
-                                        namedExport: false,
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    // Replaces existing CSS rules with given rule
-                    {
-                        test: /\.p?css$/,
-                        exclude: /\.module.css$/,
-                        use: ["style-loader", "css-loader"],
-                    },
-                ],
-            },
-        },
     ],
     framework: "@storybook/react-vite",
     core: {
