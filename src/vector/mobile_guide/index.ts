@@ -12,7 +12,7 @@ import "@fontsource/inter/600.css";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getVectorConfig } from "../getconfig";
-import { type MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
+import { MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
 
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
@@ -53,8 +53,8 @@ async function initPage(): Promise<void> {
     const defaultHsUrl = config?.["default_hs_url"];
     const defaultIsUrl = config?.["default_is_url"];
 
-    const appVariant = (config?.["mobile_guide_app_variant"] ?? "x") as MobileAppVariant;
-    const metadata = mobileApps[appVariant];
+    const appVariant = (config?.["mobile_guide_app_variant"] as MobileAppVariant) ?? MobileAppVariant.X;
+    const metadata = mobileApps[appVariant] ?? mobileApps[MobileAppVariant.X]; // Additional fallback in case mobile_guide_app_variant has an unexpected value.
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
     if (defaultHsUrl && (wkConfig || serverName)) {
