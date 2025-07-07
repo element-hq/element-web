@@ -41,7 +41,7 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Run Visual tests
-              run: "yarn test-storybook-ci"
+              run: "yarn test:storybook:ci"
 
             - name: Upload received images
               if: always()
