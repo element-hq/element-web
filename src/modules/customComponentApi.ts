@@ -15,6 +15,7 @@ import type {
     OriginalMessageComponentProps,
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
+    CustomRoomPreviewBarRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
