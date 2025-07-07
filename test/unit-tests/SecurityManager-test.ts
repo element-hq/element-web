@@ -67,6 +67,17 @@ describe("SecurityManager", () => {
                     await accessSecretStorage(jest.fn());
                 }).rejects.toThrow("End-to-end encryption is disabled - unable to access secret storage");
             });
+
+            it("throws if there is no 4S", async () => {
+                // Given a client with no default 4S key ID
+                stubClient();
+
+                // When I run accessSecretStorage
+                // Then we throw an error
+                await expect(async () => {
+                    await accessSecretStorage(jest.fn());
+                }).rejects.toThrow("Secret storage has not been created yet");
+            });
         });
 
         it("should show CreateSecretStorageDialog if forceReset=true", async () => {

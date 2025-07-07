@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement } from "react";
-import { render, screen } from "jest-matrix-react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../src/SdkConfig";
@@ -249,5 +249,29 @@ describe("<UserSettingsDialog />", () => {
 
         // unwatches settings on unmount
         expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
+    });
+
+    it("displays an indicator when user needs to set up recovery", async () => {
+        // Initially, the user doesn't have secret storage, so it should display
+        // an indicator.
+        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+
+        const { container } = render(getComponent());
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).toBeInTheDocument();
+        });
+
+        // Test that the handler ignores unknown account data
+        mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "bar" }));
+
+        // The user now has secret storage.  Trigger an update and check that
+        // the indicator disappears.
+        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("foo");
+        mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "m.secret_storage.default_key" }));
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).not.toBeInTheDocument();
+        });
     });
 });

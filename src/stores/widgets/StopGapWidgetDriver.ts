@@ -124,6 +124,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomName).raw,
+            );
+            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(

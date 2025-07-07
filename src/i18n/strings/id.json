@@ -965,7 +965,6 @@
         },
         "reset_all_button": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
         "set_up_recovery": "Siapkan pemulihan",
-        "set_up_recovery_later": "Tidak sekarang",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_description": "Lindungi dari kehilangan akses ke pesan & data terenkripsi",
         "set_up_toast_title": "Siapkan Cadangan Aman",
@@ -2059,6 +2058,7 @@
         "read_topic": "Klik untuk membaca topik",
         "rejecting": "Menolak undangan…",
         "rejoin_button": "Bergabung Ulang",
+        "room_content": "Isi ruangan",
         "room_is_low_priority": "Ini adalah ruangan dengan prioritas rendah",
         "search": {
             "all_rooms_button": "Cari semua ruangan",

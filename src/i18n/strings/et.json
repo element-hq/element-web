@@ -968,7 +968,6 @@
         },
         "reset_all_button": "Unustasid või oled kaotanud kõik võimalused ligipääsu taastamiseks? <a>Lähtesta kõik ühe korraga</a>",
         "set_up_recovery": "Seadista krüptovõtmete taastamine",
-        "set_up_recovery_later": "Mitte praegu",
         "set_up_recovery_toast_description": "Kui peaksid kaotama ligipääsu oma seadmetele, siis siinloodava taastevõtmega saad taastada ligipääsu oma krüptitud sõnumitele.",
         "set_up_toast_description": "Hoia ära, et kaotad ligipääsu krüptitud sõnumitele ja andmetele",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
@@ -2066,6 +2065,7 @@
         "read_topic": "Teema lugemiseks klõpsi",
         "rejecting": "Hülgan kutset…",
         "rejoin_button": "Liitu uuesti",
+        "room_content": "Jututoa sisu",
         "room_is_low_priority": "See on vähetähtis jututuba",
         "search": {
             "all_rooms_button": "Otsi kõikidest jututubadest",

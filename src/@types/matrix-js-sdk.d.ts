@@ -92,6 +92,9 @@ declare module "matrix-js-sdk/src/types" {
         // MSC4155: Invite filtering
         [INVITE_RULES_ACCOUNT_DATA_TYPE]: InviteConfigAccountData;
         "io.element.msc4278.media_preview_config": MediaPreviewConfig;
+
+        // Indicate whether recovery is enabled or disabled
+        "io.element.recovery": { enabled: boolean };
     }
 
     export interface AudioContent {

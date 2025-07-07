@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileDropTarget should not render drop file prompt on mouse over with file if permissions do not allow 1`] = `<DocumentFragment />`;
+
+exports[`FileDropTarget should render drop file prompt on mouse over with file if permissions allow 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_FileDropTarget"
+  >
+    <img
+      alt=""
+      class="mx_FileDropTarget_image"
+      src="image-file-stub"
+    />
+    Drop file here to upload
+  </div>
+</DocumentFragment>
+`;
+
+exports[`FileDropTarget should render nothing when idle 1`] = `<DocumentFragment />`;
