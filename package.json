@@ -67,7 +67,8 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
         "postinstall": "patch-package",
         "storybook": "storybook dev -p 6007",
-        "build-storybook": "storybook build"
+        "build-storybook": "storybook build",
+        "test-storybook": "test-storybook --url http://localhost:52411/"
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.1.0",
@@ -192,6 +193,7 @@
         "@storybook/addon-designs": "^10.0.1",
         "@storybook/addon-docs": "^9.0.12",
         "@storybook/react-vite": "^9.0.15",
+        "@storybook/test-runner": "^0.23.0",
         "@stylistic/eslint-plugin": "^4.0.0",
         "@svgr/webpack": "^8.0.0",
         "@testing-library/dom": "^10.4.0",
@@ -263,6 +265,7 @@
         "jest": "^29.6.2",
         "jest-canvas-mock": "^2.5.2",
         "jest-environment-jsdom": "^29.7.0",
+        "jest-image-snapshot": "^6.5.1",
         "jest-mock": "^29.6.2",
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",

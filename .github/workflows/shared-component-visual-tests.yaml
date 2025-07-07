@@ -1,0 +1,47 @@
+name: Shared Component Visual Tests
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+    # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
+    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
+
+permissions: {} # No permissions required
+
+jobs:
+    testStorybook:
+        name: "Run Visual Tests"
+        runs-on: ubuntu-24.04
+        permissions:
+            actions: read
+            issues: read
+            pull-requests: read
+        steps:
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+              with:
+                  persist-credentials: false
+                  repository: element-hq/element-web
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Run Visual tests
+              run: |
+                  concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6006 && yarn test-storybook  --ci --maxWorkers=2\""
+
+            - name: Upload received images
+              if: always()
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              with:
+                  name: received-images
+                  path: playwright/shared-component-received
