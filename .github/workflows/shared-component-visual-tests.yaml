@@ -42,7 +42,7 @@ jobs:
 
             - name: Run Visual tests
               run: |
-                  concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6006 && yarn test-storybook  --ci --maxWorkers=2\""
+                  concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6006 && yarn test-storybook  --ci --maxWorkers=2\"
 
             - name: Upload received images
               if: always()
