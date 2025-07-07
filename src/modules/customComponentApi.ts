@@ -13,7 +13,7 @@ import type {
     CustomMessageRenderFunction,
     CustomMessageComponentProps as ModuleCustomMessageComponentProps,
     OriginalComponentProps,
-    CustomMessageRenderHints,
+    CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
@@ -23,11 +23,16 @@ type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRendere
 type EventRenderer = {
     eventTypeOrFilter: EventTypeOrFilter;
     renderer: CustomMessageRenderFunction;
-    hints: CustomMessageRenderHints;
+    hints: ModuleCustomCustomMessageRenderHints;
 };
 
 interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentProps, "mxEvent"> {
     mxEvent: MatrixEvent;
+}
+
+interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderHints, "allowDownloadingMedia"> {
+    // Note. This just makes it easier to use this API on Element Web as we already have the moduleized event stored.
+    allowDownloadingMedia?: () => Promise<boolean>;
 }
 
 export class CustomComponentsApi implements ICustomComponentsApi {
@@ -63,7 +68,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     public registerMessageRenderer(
         eventTypeOrFilter: EventTypeOrFilter,
         renderer: CustomMessageRenderFunction,
-        hints: CustomMessageRenderHints = {},
+        hints: ModuleCustomCustomMessageRenderHints = {},
     ): void {
         this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
     }
@@ -119,7 +124,13 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
         if (renderer) {
-            return renderer.hints;
+            return {
+                ...renderer.hints,
+                // Convert from js-sdk style events to module events automatically.
+                allowDownloadingMedia: renderer.hints.allowDownloadingMedia
+                    ? () => renderer.hints.allowDownloadingMedia!(moduleEv)
+                    : undefined,
+            };
         }
         return null;
     }
