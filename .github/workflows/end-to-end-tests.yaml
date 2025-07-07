@@ -227,7 +227,7 @@ jobs:
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
+              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}

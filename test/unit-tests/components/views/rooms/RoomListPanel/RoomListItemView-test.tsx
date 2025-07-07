@@ -42,6 +42,7 @@ describe("<RoomListItemView />", () => {
 
         defaultValue = {
             openRoom: jest.fn(),
+            showContextMenu: false,
             showHoverMenu: false,
             notificationState,
             a11yLabel: "Open room room1",
@@ -135,5 +136,22 @@ describe("<RoomListItemView />", () => {
         await user.hover(listItem);
 
         expect(screen.queryByRole("notification-decoration")).toBeNull();
+    });
+
+    test("should render the context menu", async () => {
+        const user = userEvent.setup();
+
+        mocked(useRoomListItemViewModel).mockReturnValue({
+            ...defaultValue,
+            showContextMenu: true,
+        });
+
+        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
+        const button = screen.getByRole("button", { name: `Open room ${room.name}` });
+        await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
+        await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
+        // Menu should close
+        await user.keyboard("{Escape}");
+        expect(screen.queryByRole("menu")).toBeNull();
     });
 });

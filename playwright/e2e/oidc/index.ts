@@ -11,6 +11,9 @@ import { type Page } from "@playwright/test";
 
 import { expect } from "../../element-web-test";
 
+/**
+ * Click through registering a new user in the MAS UI.
+ */
 export async function registerAccountMas(
     page: Page,
     mailpit: MailpitClient,
@@ -39,6 +42,20 @@ export async function registerAccountMas(
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByRole("textbox", { name: "Display Name" }).fill(username);
     await page.getByRole("button", { name: "Continue" }).click();
+    await expect(page.getByText("Allow access to your account?")).toBeVisible();
+    await page.getByRole("button", { name: "Continue" }).click();
+}
+
+/**
+ * Click through entering username and password into the MAS login prompt.
+ */
+export async function logInAccountMas(page: Page, username: string, password: string): Promise<void> {
+    await expect(page.getByText("Please sign in to continue:")).toBeVisible();
+
+    await page.getByRole("textbox", { name: "Username" }).fill(username);
+    await page.getByRole("textbox", { name: "Password", exact: true }).fill(password);
+    await page.getByRole("button", { name: "Continue" }).click();
+
     await expect(page.getByText("Allow access to your account?")).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
 }

@@ -16,6 +16,7 @@ import BugReportDialog, {
 } from "../../../../../src/components/views/dialogs/BugReportDialog";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { type ConsoleLogger } from "../../../../../src/rageshake/rageshake";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 const BUG_REPORT_URL = "https://example.org/submit";
 
@@ -30,6 +31,16 @@ describe("BugReportDialog", () => {
         jest.resetAllMocks();
         SdkConfig.put({
             bug_report_endpoint_url: BUG_REPORT_URL,
+        });
+
+        const originalGetValue = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, ...args) => {
+            // These settings rely on a controller that creates an AudioContext in
+            // order to test whether the setting can be enabled. For the sake of this test, disable that.
+            if (settingName === "notificationsEnabled" || settingName === "notificationBodyEnabled") {
+                return true;
+            }
+            return originalGetValue(settingName, ...args);
         });
 
         const mockConsoleLogger = {
@@ -55,6 +66,7 @@ describe("BugReportDialog", () => {
     });
 
     afterEach(() => {
+        jest.restoreAllMocks();
         SdkConfig.reset();
         fetchMock.restore();
     });

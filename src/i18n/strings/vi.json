@@ -723,8 +723,6 @@
             "security_key_title": "Chìa khóa bảo mật"
         },
         "bootstrap_title": "Đang thiết lập khóa bảo mật",
-        "cancel_entering_passphrase_description": "Bạn có chắc chắn muốn hủy nhập cụm mật khẩu không?",
-        "cancel_entering_passphrase_title": "Hủy nhập cụm mật khẩu?",
         "confirm_encryption_setup_body": "Nhấp vào nút bên dưới để xác nhận thiết lập mã hóa.",
         "confirm_encryption_setup_title": "Xác nhận thiết lập mã hóa",
         "cross_signing_room_normal": "Phòng này được mã hóa end-to-end",
@@ -2449,6 +2447,7 @@
         "upgraderoom": "Nâng cấp phòng lên phiên bản mới",
         "upgraderoom_permission_error": "Bạn không có quyền để dùng lệnh này.",
         "usage": "Cách sử dụng",
+        "verify": "Xác thực người dùng, thiết bị và tuple pubkey",
         "view": "Phòng truyền hình với địa chỉ đã cho",
         "whois": "Hiển thị thông tin về người dùng"
     },

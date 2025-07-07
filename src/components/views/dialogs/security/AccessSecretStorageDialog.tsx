@@ -14,9 +14,11 @@ import React, { type ChangeEvent, type FormEvent } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import Field from "../../elements/Field";
+import { Flex } from "../../../utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
+import BaseDialog from "../BaseDialog";
 
 // Don't shout at the user that their key is invalid every time they type a key: wait a short time
 const VALIDATION_THROTTLE_MS = 200;
@@ -83,6 +85,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             this.setState({
                 recoveryKeyCorrect: null,
             });
+            return;
         }
 
         const hasPassphrase = this.props.keyInfo?.passphrase?.salt && this.props.keyInfo?.passphrase?.iterations;
@@ -139,30 +142,30 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private getKeyValidationClasses(): string {
-        return classNames({
-            "mx_AccessSecretStorageDialog_recoveryKeyFeedback": this.state.recoveryKeyCorrect !== null,
-            "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid": this.state.recoveryKeyCorrect === false,
-        });
-    }
-
-    private getKeyValidationText(): string | null {
-        if (this.state.recoveryKeyCorrect) {
-            return null;
-        } else if (this.state.recoveryKeyCorrect === null) {
-            return _t("encryption|access_secret_storage_dialog|alternatives");
-        } else {
-            return _t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key");
-        }
-    }
-
     private getRecoveryKeyFeedback(): React.ReactNode | null {
-        const validationText = this.getKeyValidationText();
-        if (validationText === null) {
-            return null;
+        let validationText: string;
+        let classes: string | undefined;
+
+        if (this.state.recoveryKeyCorrect) {
+            // The recovery key is good. Empty feedback.
+            validationText = "\xA0"; // &nbsp;
+        } else if (this.state.recoveryKeyCorrect === null) {
+            // The input element is empty. Tell the user they can also use a passphrase.
+            validationText = _t("encryption|access_secret_storage_dialog|alternatives");
         } else {
-            return <div className={this.getKeyValidationClasses()}>{validationText}</div>;
+            // The entered key is not (yet) correct. Tell them so.
+            validationText = _t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key");
+            classes = classNames({
+                "mx_AccessSecretStorageDialog_recoveryKeyFeedback": true,
+                "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid": true,
+            });
         }
+
+        return (
+            <Flex align="center" className={classes}>
+                {validationText}
+            </Flex>
+        );
     }
 
     public render(): React.ReactNode {
@@ -205,15 +208,19 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             </div>
         );
 
+        // We wrap the content in `BaseDialog` mostly so that we get a `FocusLock` container; otherwise, if the
+        // SettingsDialog is open, then the `FocusLock` in *that* stops us getting the focus.
         return (
-            <EncryptionCard
-                Icon={LockSolidIcon}
-                className="mx_AccessSecretStorageDialog"
-                title={title}
-                description={_t("encryption|access_secret_storage_dialog|privacy_warning")}
-            >
-                {content}
-            </EncryptionCard>
+            <BaseDialog fixedWidth={false} hasCancel={false}>
+                <EncryptionCard
+                    Icon={LockSolidIcon}
+                    className="mx_AccessSecretStorageDialog"
+                    title={title}
+                    description={_t("encryption|access_secret_storage_dialog|privacy_warning")}
+                >
+                    {content}
+                </EncryptionCard>
+            </BaseDialog>
         );
     }
 }

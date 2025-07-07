@@ -920,8 +920,6 @@
             "security_key_title": "Wiederherstellungsschlüssel"
         },
         "bootstrap_title": "Schlüssel werden eingerichtet",
-        "cancel_entering_passphrase_description": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest?",
-        "cancel_entering_passphrase_title": "Eingabe der Passphrase abbrechen?",
         "confirm_encryption_setup_body": "Klick die Schaltfläche unten um die Einstellungen der Verschlüsselung zu bestätigen.",
         "confirm_encryption_setup_title": "Bestätige die Einrichtung der Verschlüsselung",
         "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
@@ -966,7 +964,6 @@
         },
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
         "set_up_recovery": "Wiederherstellung einrichten",
-        "set_up_recovery_later": "Nicht jetzt",
         "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
         "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
@@ -2093,7 +2090,6 @@
     "room_list": {
         "add_room_label": "Raum hinzufügen",
         "add_space_label": "Space hinzufügen",
-        "appearance": "Erscheinungsbild",
         "breadcrumbs_empty": "Keine kürzlich besuchten Räume",
         "breadcrumbs_label": "Kürzlich besuchte Räume",
         "empty": {
@@ -2151,7 +2147,6 @@
         },
         "room_options": "Chatroomoptionen",
         "show_less": "Weniger anzeigen",
-        "show_message_previews": "Nachrichtenvorschau anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"
@@ -3127,6 +3122,7 @@
         "upgraderoom": "Aktualisiert den Raum auf eine neue Version",
         "upgraderoom_permission_error": "Du hast nicht die erforderlichen Berechtigungen, diesen Befehl zu verwenden.",
         "usage": "Verwendung",
+        "verify": "Verifiziert Benutzer, Sitzung und öffentlichen Schlüsselpaare",
         "view": "Raum mit angegebener Adresse betrachten",
         "whois": "Zeigt Informationen über Benutzer"
     },

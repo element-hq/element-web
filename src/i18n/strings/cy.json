@@ -918,8 +918,6 @@
             "security_key_title": "Allwedd Adfer"
         },
         "bootstrap_title": "Gosod  allweddi",
-        "cancel_entering_passphrase_description": "Ydych chi'n siŵr eich bod am ddiddymu'r cyfrinymadrodd?",
-        "cancel_entering_passphrase_title": "Diddymu cyflwyno cyfrinymadrodd?",
         "confirm_encryption_setup_body": "Clicio'r botwm isod i gadarnhau gosod amgryptio.",
         "confirm_encryption_setup_title": "Cadarnhau gosodiad amgryptio",
         "cross_signing_room_normal": "Mae'r ystafell hon wedi'i hamgryptio o ben-i-ben",
@@ -964,7 +962,6 @@
         },
         "reset_all_button": "Wedi anghofio neu golli pob dull adfer? <a>Ailosod y cyfan</a>",
         "set_up_recovery": "Gosod  adfer",
-        "set_up_recovery_later": "Nid nawr",
         "set_up_recovery_toast_description": "Cynhyrchwch allwedd adfer y mae modd ei defnyddio i adfer hanes eich neges wedi'i hamgryptio rhag ofn i chi golli mynediad i'ch dyfeisiau.",
         "set_up_toast_description": "Diogelu rhag colli mynediad i negeseuon a data wedi'u hamgryptio",
         "set_up_toast_title": "Gosod Copi Wrth Gefn Diogel",
@@ -2040,7 +2037,6 @@
     "room_list": {
         "add_room_label": "Ychwanegu ystafell",
         "add_space_label": "Ychwanegu gofod",
-        "appearance": "Gwedd",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
         "empty": {
@@ -2090,7 +2086,6 @@
         },
         "room_options": "Dewisiadau Ystafelloedd",
         "show_less": "Dangos llai",
-        "show_message_previews": "Dangos rhagolygon negeseuon",
         "show_previews": "Dangos rhagolwg o negeseuon",
         "sort": "Trefnu",
         "sort_by": "Trefnu yn ôl",
@@ -3014,6 +3009,7 @@
         "upgraderoom": "Yn uwchraddio ystafell i fersiwn newydd",
         "upgraderoom_permission_error": "Nid oes gennych y caniatâd gofynnol i ddefnyddio'r gorchymyn hwn.",
         "usage": "Defnydd",
+        "verify": "Yn dilysu defnyddiwr, sesiwn, a pubkey tuple",
         "view": "Ystafell golygfeydd gyda chyfeiriad a roddwyd",
         "whois": "Yn arddangos gwybodaeth am ddefnyddiwr"
     },

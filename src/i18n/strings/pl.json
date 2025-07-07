@@ -356,7 +356,7 @@
         "set_email_prompt": "Czy chcesz ustawić adres e-mail?",
         "sign_in_description": "Użyj swojego konta, aby kontynuować.",
         "sign_in_instead": "Zamiast tego zaloguj się",
-        "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj</a>",
+        "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj </a>",
         "sign_in_or_register": "Zaloguj się lub utwórz konto",
         "sign_in_or_register_description": "Użyj konta lub utwórz nowe, aby kontynuować.",
         "sign_in_prompt": "Posiadasz już konto? <a>Zaloguj się</a>",
@@ -917,14 +917,12 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "wrong_security_key": "Błędny klucz przywracania"
+                "wrong_security_key": "Wprowadzony klucz przywracania nie jest poprawny."
             },
             "restoring": "Przywracanie kluczy z kopii zapasowej",
             "security_key_title": "Klucz przywracania"
         },
         "bootstrap_title": "Konfigurowanie kluczy",
-        "cancel_entering_passphrase_description": "Czy na pewno chcesz anulować wpisywanie hasła?",
-        "cancel_entering_passphrase_title": "Anulować wpisywanie hasła?",
         "confirm_encryption_setup_body": "Kliknij przycisk poniżej, aby potwierdzić ustawienie szyfrowania.",
         "confirm_encryption_setup_title": "Potwierdź ustawienie szyfrowania",
         "cross_signing_room_normal": "Ten pokój jest szyfrowany end-to-end",
@@ -969,7 +967,6 @@
         },
         "reset_all_button": "Zapomniałeś lub straciłeś wszystkie opcje odzyskiwania? <a>Resetuj wszystko</a>",
         "set_up_recovery": "Skonfiguruj przywracanie",
-        "set_up_recovery_later": "Nie teraz",
         "set_up_recovery_toast_description": "Wygeneruj klucz przywracania, którego można użyć do przywrócenia zaszyfrowanej historii wiadomości w przypadku utraty dostępu do swoich urządzeń.",
         "set_up_toast_description": "Zabezpiecz się przed utratą dostępu do szyfrowanych wiadomości i danych",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
@@ -1652,7 +1649,7 @@
     },
     "member_list_back_action_label": "Członkowie pokoju",
     "message_edit_dialog_title": "Edycje wiadomości",
-    "migrating_crypto": "Trzymaj się mocno. Aktualizujemy %(brand)s, aby szyfrowanie było szybsze i bardziej niezawodne.",
+    "migrating_crypto": "Spokojnie. Aktualizujemy %(brand)s, aby szyfrowanie było szybsze i bardziej niezawodne.",
     "mobile_guide": {
         "toast_accept": "Użyj aplikacji",
         "toast_description": "%(brand)s jest eksperymentalne na przeglądarce mobilnej. Dla lepszego doświadczenia i najnowszych funkcji użyj naszej darmowej natywnej aplikacji.",
@@ -2105,7 +2102,6 @@
     "room_list": {
         "add_room_label": "Dodaj pokój",
         "add_space_label": "Dodaj przestrzeń",
-        "appearance": "Wygląd",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
         "empty": {
@@ -2158,7 +2154,6 @@
         },
         "room_options": "Opcje pokoju",
         "show_less": "Pokaż mniej",
-        "show_message_previews": "Pokaż podglądy wiadomości",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
             "few": "Pokaż %(count)s więcej",
@@ -3133,6 +3128,7 @@
         "upgraderoom": "Ulepsza pokój do nowej wersji",
         "upgraderoom_permission_error": "Nie posiadasz wymaganych uprawnień do użycia tego polecenia.",
         "usage": "Użycie",
+        "verify": "Weryfikuje użytkownika, sesję oraz klucz publiczny",
         "view": "Przegląda pokój z podanym adresem",
         "whois": "Pokazuje informacje na temat użytkownika"
     },
@@ -4115,7 +4111,7 @@
         "error_need_to_be_logged_in": "Musisz być zalogowany.",
         "error_unable_start_audio_stream_description": "Nie można rozpocząć przesyłania strumienia audio.",
         "error_unable_start_audio_stream_title": "Nie udało się rozpocząć transmisji na żywo",
-        "modal_data_warning": "Poniższe dane są współdzielone z %(widgetDomain)s",
+        "modal_data_warning": "Poniższe dane są udostępniane z %(widgetDomain)s",
         "modal_title_default": "Widżet modalny",
         "no_name": "Nieznana aplikacja",
         "open_id_permissions_dialog": {

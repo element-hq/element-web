@@ -604,8 +604,6 @@
             "security_key_title": "Sekureca ŝlosilo"
         },
         "bootstrap_title": "Agordo de klavoj",
-        "cancel_entering_passphrase_description": "Ĉu vi certe volas nuligi enigon de pasfrazo?",
-        "cancel_entering_passphrase_title": "Ĉu nuligi enigon de pasfrazo?",
         "confirm_encryption_setup_body": "Klaku sube la butonon por konfirmi agordon de ĉifrado.",
         "confirm_encryption_setup_title": "Konfirmi agordon de ĉifrado",
         "cross_signing_room_normal": "Ĉi tiu ĉambro uzas tutvojan ĉifradon",
@@ -1957,6 +1955,7 @@
         "upgraderoom": "Gradaltigas ĉambron al nova versio",
         "upgraderoom_permission_error": "Vi ne havas sufiĉajn permesojn por uzi ĉi tiun komandon.",
         "usage": "Uzo",
+        "verify": "Kontrolas opon de uzanto, salutaĵo, kaj publika ŝlosilo",
         "whois": "Montras informojn pri uzanto"
     },
     "space": {

@@ -784,6 +784,7 @@
             "cross_signing_status": "Eszközök közti hitelesítés állapota:",
             "cross_signing_untrusted": "A fiókjához tartozik egy eszközök közti hitelesítési személyazonosság, de ez a munkamenet még nem jelölte megbízhatónak.",
             "crypto_not_available": "A kriptográfiai modul nem érhető el",
+            "device_id": "Eszközazonosító",
             "key_backup_active_version": "Aktív biztonsági mentés verziója:",
             "key_backup_active_version_none": "Nincs",
             "key_backup_inactive_warning": "A kulcsokról nem készül biztonsági mentés ebből a munkamenetből.",
@@ -796,6 +797,8 @@
             "secret_storage_ready": "kész",
             "secret_storage_status": "Titkos tároló:",
             "self_signing_private_key_cached_status": "Önaláíró titkos kulcs:",
+            "session": "Munkamenet",
+            "session_fingerprint": "Ujjlenyomat (munkamenetkulcs)",
             "title": "Végpontok közti titkosítás",
             "user_signing_private_key_cached_status": "Felhasználó aláírási titkos kulcsa:"
         },
@@ -821,6 +824,7 @@
         "low_bandwidth_mode": "Alacsony sávszélességű mód",
         "low_bandwidth_mode_description": "Kompatibilis Matrix-kiszolgálóra van szükség.",
         "main_timeline": "Fő idővonal",
+        "manual_device_verification": "Kézi eszközellenőrzés",
         "no_receipt_found": "Nincs visszajelzés",
         "notification_state": "Értesítés állapota: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Értesítések hibakeresése",
@@ -908,15 +912,15 @@
     "empty_room_was_name": "Üres szoba (%(oldName)s volt)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Ha van biztonsági kulcsa vagy biztonsági jelmondata, akkor ez is fog működni.",
             "key_validation_text": {
-                "wrong_security_key": "Hibás helyreállítási kulcs"
+                "wrong_security_key": "A megadott helyreállítási kulcs helytelen."
             },
+            "privacy_warning": "Győződjön meg arról, hogy senki sem látja ezt a képernyőt!",
             "restoring": "Kulcsok helyreállítása mentésből",
             "security_key_title": "Helyreállítási kulcs"
         },
         "bootstrap_title": "Kulcsok beállítása",
-        "cancel_entering_passphrase_description": "Biztos, hogy megszakítja a jelmondat bevitelét?",
-        "cancel_entering_passphrase_title": "Megszakítja a jelmondat bevitelét?",
         "confirm_encryption_setup_body": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
         "confirm_encryption_setup_title": "Erősítse meg a titkosítási beállításokat",
         "cross_signing_room_normal": "Ez a szoba végpontok közti titkosítást használ",
@@ -961,7 +965,6 @@
         },
         "reset_all_button": "Elfelejtette vagy elveszett minden helyreállítási lehetőség? <a>Minden alaphelyzetbe állítása</a>",
         "set_up_recovery": "Helyreállítás beállítása",
-        "set_up_recovery_later": "Most nem",
         "set_up_recovery_toast_description": "Létrehozhat egy helyreállítási kulcsot, amellyel helyreállíthatja a titkosított üzenetelőzményeit, ha elveszíti a hozzáférést az eszközeihez.",
         "set_up_toast_description": "Biztosíték a titkosított üzenetekhez és adatokhoz való hozzáférés elvesztése ellen",
         "set_up_toast_title": "Biztonsági mentés beállítása",
@@ -1004,6 +1007,21 @@
             "incoming_sas_dialog_waiting": "Várakozás a partner megerősítésére…",
             "incoming_sas_user_dialog_text_1": "Ellenőrizze ezt a felhasználót, hogy megbízhatónak jelölje. A felhasználók megbízhatóságának megerősítése további biztonságot nyújt a végpontok közti titkosítással rendelkező üzenetek használatakor.",
             "incoming_sas_user_dialog_text_2": "A felhasználó ellenőrzése által az ő munkamenete megbízhatónak lesz jelölve, és a te munkameneted is megbízhatónak lesz jelölve nála.",
+            "manual": {
+                "already_verified": "Ez az eszköz már ellenőrzött",
+                "already_verified_and_wrong_fingerprint": "A megadott ujjlenyomat nem egyezik, de az eszköz már ellenőrizve van!",
+                "device_id": "Eszközazonosító",
+                "failure_description": "Nem sikerült ellenőrizni ezt: %(deviceId)s: %(error)s",
+                "failure_title": "Az ellenőrzés sikertelen",
+                "fingerprint": "Ujjlenyomat (munkamenetkulcs)",
+                "no_crypto": "Nem lehet ellenőrizni az eszközt – a titkosítás nincs engedélyezve",
+                "no_device": "Nem sikerült ellenőrizni az eszközt – a(z) „%(deviceId)s” eszköz nem található",
+                "no_userid": "Nem sikerült ellenőrizni az eszközt – nem található a felhasználói azonosító",
+                "success_description": "Az eszköz (%(deviceId)s) mostantól keresztaláírással rendelkezik.",
+                "success_title": "Az ellenőrzés sikeres",
+                "text": "Adja meg valamelyik saját eszköze azonosítóját és ujjlenyomatát annak ellenőrzéséhez. MEGJEGYZÉS: ez lehetővé teszi a másik eszköz számára, hogy az Ön nevében küldjön és fogadjon üzeneteket. HA VALAKI AZT MONDTA, HOGY ILLESSZEN BE IDE VALAMIT, VALÓSZÍNŰLEG ÁTVERIK!",
+                "wrong_fingerprint": "Nem sikerült ellenőrizni a(z) „%(deviceId)s” eszközt – a mellékelt „%(fingerprint)s” ujjlenyomat nem egyezik az eszköz ujjlenyomatával: „%(fprint)s”"
+            },
             "no_key_or_device": "Úgy tűnik, hogy nem rendelkezik helyreállítási kulccsal, vagy másik eszközzel, amellyel ellenőrizhetné. Ezzel az eszközzel nem fér majd hozzá a régi titkosított üzenetekhez. Ahhoz, hogy a személyazonosságát ezen az eszközön ellenőrizni lehessen, az ellenőrzési kulcsokat alaphelyzetbe kell állítania.",
             "no_support_qr_emoji": "Az ellenőrizni kívánt eszköz nem támogatja sem a QR-kód leolvasását, sem az emodzsis ellenőrzést, amelyeket az %(brand)s támogat. Próbálja meg egy másik klienssel.",
             "other_party_cancelled": "A másik fél megszakította az ellenőrzést.",
@@ -1941,6 +1959,7 @@
         },
         "face_pile_tooltip_shortcut": "Beleértve: %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Önt is beleértve, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Nem lehet meghatározni, hogy melyik felhasználót kell figyelmen kívül hagyni, mivel az esemény megváltozott.",
         "failed_reject_invite": "A meghívót nem sikerült elutasítani",
         "forget_room": "Szoba elfelejtése",
         "forget_space": "Ennek a térnek az elfelejtése",
@@ -2032,6 +2051,8 @@
         "read_topic": "Kattintson a téma elolvasásához",
         "rejecting": "Meghívó elutasítása…",
         "rejoin_button": "Újra-csatlakozás",
+        "room_content": "Szoba tartalma",
+        "room_is_low_priority": "Ez egy alacsony prioritású szoba",
         "search": {
             "all_rooms_button": "Keresés az összes szobában",
             "placeholder": "Üzenetek keresése...",
@@ -2076,9 +2097,9 @@
     "room_list": {
         "add_room_label": "Szoba hozzáadása",
         "add_space_label": "Tér hozzáadása",
-        "appearance": "Megjelenés",
         "breadcrumbs_empty": "Nincsenek nemrégiben meglátogatott szobák",
         "breadcrumbs_label": "Nemrég meglátogatott szobák",
+        "collapse_filters": "Szűrőlista összecsukása",
         "empty": {
             "no_chats": "Még nincsenek csevegések",
             "no_chats_description": "Kezdje azzal, hogy üzenetet küld valakinek, vagy létrehoz egy szobát",
@@ -2086,6 +2107,7 @@
             "no_favourites": "Még nincs kedvenc csevegése",
             "no_favourites_description": "A csevegési beállításokban adhat hozzá csevegést a kedvencekhez",
             "no_invites": "Nincs olvasatlan meghívója",
+            "no_lowpriority": "Nincs alacsony prioritású szobája",
             "no_mentions": "Nincs olvasatlan említése",
             "no_people": "Még nincs közvetlen csevegése senkivel",
             "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
@@ -2095,12 +2117,14 @@
             "show_activity": "Összes tevékenység megtekintése",
             "show_chats": "Összes csevegés megjelenítése"
         },
+        "expand_filters": "Szűrőlista kibontása",
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
         "failed_remove_tag": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
         "filters": {
             "favourite": "Kedvencek",
             "invites": "Meghívók",
+            "low_priority": "Alacsony prioritás",
             "mentions": "Említések",
             "people": "Emberek",
             "rooms": "Szobák",
@@ -2132,7 +2156,6 @@
         },
         "room_options": "Szobabeállítások",
         "show_less": "Kevesebb megjelenítése",
-        "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
         },
@@ -2665,6 +2688,9 @@
         "inline_url_previews_room": "Webcím-előnézetek alapértelmezett engedélyezése a szobatagok számára",
         "inline_url_previews_room_account": "Webcím-előnézetek engedélyezése ebben a szobában (csak Önt érinti)",
         "insert_trailing_colon_mentions": "Záró kettőspont beszúrása egy felhasználó üzenet elején való megemlítésekor",
+        "invite_controls": {
+            "default_label": "Felhasználók meghívhatják szobákba"
+        },
         "jump_to_bottom_on_send": "Üzenetküldés után az idővonal aljára ugrás",
         "key_backup": {
             "backup_in_progress": "A kulcsaid mentése folyamatban van (az első mentés több percig is eltarthat).",
@@ -2731,6 +2757,7 @@
             "show_in_private": "Privát szobákban",
             "show_media": "Megjelenítés mindig"
         },
+        "not_supported": "A kiszolgálója nem valósítja meg ezt a funkciót.",
         "notifications": {
             "default_setting_description": "Ez a beállítás alapértelmezés szerint az összes szobájára érvényes lesz.",
             "default_setting_section": "Szeretnék értesítést kapni az alábbiakról (Alapértelmezett beállítás)",
@@ -2788,6 +2815,7 @@
             "voip": "Hang- és videóhívások"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Ablak tartalmának más alkalmazások általi rögzítésének megakadályozása",
             "Electron.enableHardwareAcceleration": "Hardveres gyorsítás engedélyezése (a(z) %(appName)s újraindítása szükséges az érvénybe lépéshez)",
             "always_show_menu_bar": "Ablak menüsávjának megjelenítése mindig",
             "autocomplete_delay": "Automatikus kiegészítés késleltetése (ms)",
@@ -2956,6 +2984,7 @@
         "show_chat_effects": "Csevegési effektek (például a konfetti animáció) megjelenítése",
         "show_displayname_changes": "Megjelenítendő nevek változásának megjelenítése",
         "show_join_leave": "Be- és kilépési üzenetek megjelenítése (a meghívók/kirúgások/kitiltások üzeneteit nem érinti)",
+        "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "show_nsfw_content": "Felnőtt tartalmak megjelenítése",
         "show_read_receipts": "Mások által küldött olvasási visszajelzések megjelenítése",
         "show_redaction_placeholder": "Helykitöltő megjelenítése a törölt szövegek helyett",
@@ -3062,6 +3091,8 @@
         "jumptodate": "Az idővonalon megadott dátumra ugrás",
         "jumptodate_invalid_input": "A megadott dátum (%(inputDate)s) nem értelmezhető. Próbálja meg az ÉÉÉÉ-HH-NN formátum használatát.",
         "lenny": "Az egyszerű szöveges üzenet elé teszi ezt: ( ͡° ͜ʖ ͡°)",
+        "manual_device_verification_confirm_description": "Ez lehetővé teszi egy másik eszköz számára, hogy az Ön nevében üzeneteket küldjön és fogadjon. HA VALAKI AZT MONDTA, HOGY ILLESSZEN BE IDE VALAMIT, VALÓSZÍNŰLEG ÁTVERIK! Biztosan ellenőrizni szeretné ezt a másik eszközt?",
+        "manual_device_verification_confirm_title": "Vigyázat: kézi eszközellenőrzés",
         "me": "Megjeleníti a tevékenységet",
         "msg": "Üzenet küldése a megadott felhasználónak",
         "myavatar": "Az összes szobában módosítja a profilképét",
@@ -3102,6 +3133,7 @@
         "upgraderoom": "Új verzióra fejleszti a szobát",
         "upgraderoom_permission_error": "A parancs használatához nincs meg a megfelelő jogosultsága.",
         "usage": "Használat",
+        "verify": "Az egyik saját eszköz kézi ellenőrzése",
         "view": "Megadott címmel rendelkező szobák megjelenítése",
         "whois": "Információt jelenít meg a felhasználóról"
     },
@@ -3223,8 +3255,8 @@
         "start_group_chat_button": "Csoportos csevegés indítása"
     },
     "stickers": {
-        "empty": "Nincs engedélyezett matrica csomagod",
-        "empty_add_prompt": "Adj hozzá párat"
+        "empty": "Jelenleg nincsenek engedélyezve matricacsomagok",
+        "empty_add_prompt": "Adjon hozzá néhányat"
     },
     "terms": {
         "column_document": "Dokumentum",

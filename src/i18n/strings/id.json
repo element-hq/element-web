@@ -784,6 +784,7 @@
             "cross_signing_status": "Status penandatanganan silang:",
             "cross_signing_untrusted": "Akun Anda memiliki identitas penandatanganan silang dalam penyimpanan rahasia, tetapi belum dipercaya oleh sesi ini.",
             "crypto_not_available": "Modul kriptografi tidak tersedia",
+            "device_id": "ID Perangkat",
             "key_backup_active_version": "Versi cadangan aktif:",
             "key_backup_active_version_none": "Tidak ada",
             "key_backup_inactive_warning": "Kunci Anda tidak dicadangkan dari sesi ini.",
@@ -796,6 +797,8 @@
             "secret_storage_ready": "siap",
             "secret_storage_status": "Penyimpanan rahasia:",
             "self_signing_private_key_cached_status": "Kunci pribadi penandatanganan sendiri:",
+            "session": "Sesi",
+            "session_fingerprint": "Sidik jari (kunci sesi)",
             "title": "Enkripsi ujung ke ujung",
             "user_signing_private_key_cached_status": "Kunci pribadi penandatanganan pengguna:"
         },
@@ -821,6 +824,7 @@
         "low_bandwidth_mode": "Mode bandwidth rendah",
         "low_bandwidth_mode_description": "Membutuhkan homeserver yang kompatibel.",
         "main_timeline": "Lini masa utama",
+        "manual_device_verification": "Verifikasi perangkat manual",
         "no_receipt_found": "Tidak ada laporan yang ditemukan",
         "notification_state": "Keadaan notifikasi adalah <strong>%(notificationState)s</strong>",
         "notifications_debug": "Pengawakutuan notifikasi",
@@ -917,8 +921,6 @@
             "security_key_title": "Kunci pemulihan"
         },
         "bootstrap_title": "Menyiapkan kunci",
-        "cancel_entering_passphrase_description": "Apakah Anda yakin untuk membatalkan pemasukkan frasa sandi?",
-        "cancel_entering_passphrase_title": "Batalkan memasukkan frasa sandi?",
         "confirm_encryption_setup_body": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
         "confirm_encryption_setup_title": "Konfirmasi pengaturan enkripsi",
         "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung",
@@ -963,7 +965,6 @@
         },
         "reset_all_button": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
         "set_up_recovery": "Siapkan pemulihan",
-        "set_up_recovery_later": "Tidak sekarang",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_description": "Lindungi dari kehilangan akses ke pesan & data terenkripsi",
         "set_up_toast_title": "Siapkan Cadangan Aman",
@@ -1006,6 +1007,21 @@
             "incoming_sas_dialog_waiting": "Menunggu pengguna untuk konfirmasi…",
             "incoming_sas_user_dialog_text_1": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
             "incoming_sas_user_dialog_text_2": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
+            "manual": {
+                "already_verified": "Perangkat ini sudah diverifikasi",
+                "already_verified_and_wrong_fingerprint": "Sidik jari yang disediakan tidak cocok, tetapi perangkat sudah diverifikasi!",
+                "device_id": "ID Perangkat",
+                "failure_description": "Gagal memverifikasi '%(deviceId)s': %(error)s",
+                "failure_title": "Verifikasi gagal",
+                "fingerprint": "Sidik jari (kunci sesi)",
+                "no_crypto": "Tidak dapat memverifikasi perangkat - kripto tidak diaktifkan",
+                "no_device": "Tidak dapat memverifikasi perangkat - perangkat %(deviceId)s '' tidak ditemukan",
+                "no_userid": "Tidak dapat memverifikasi perangkat - tidak dapat menemukan ID Pengguna kami",
+                "success_description": "Perangkat (%(deviceId)s) sekarang ditandatangani silang",
+                "success_title": "Verifikasi berhasil",
+                "text": "Berikan ID dan sidik jari salah satu perangkat Anda untuk memverifikasinya. PERHATIKAN bahwa ini memungkinkan perangkat lain untuk mengirim dan menerima pesan seperti Anda. JIKA SESEORANG MEMINTA ANDA UNTUK MENEMPELKAN SESUATU DI SINI, KEMUNGKINAN ANDA SEDANG DITIPU!",
+                "wrong_fingerprint": "Tidak dapat memverifikasi perangkat '%(deviceId)s' - sidik jari yang disediakan '%(fingerprint)s' tidak cocok dengan sidik jari perangkat, '%(fprint)s'"
+            },
             "no_key_or_device": "Sepertinya Anda tidak memiliki Kunci Pemulihan atau perangkat lain yang dapat Anda verifikasi. Perangkat ini tidak akan dapat mengakses pesan terenkripsi lama. Untuk memverifikasi identitas Anda di perangkat ini, Anda harus mengatur ulang kunci verifikasi Anda.",
             "no_support_qr_emoji": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
             "other_party_cancelled": "Pengguna yang lain membatalkan proses verifikasi ini.",
@@ -1951,6 +1967,7 @@
         },
         "face_pile_tooltip_shortcut": "Termasuk %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Termasuk Anda, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Tidak dapat menentukan pengguna mana yang akan diabaikan karena peristiwa anggota telah berubah.",
         "failed_reject_invite": "Gagal untuk menolak undangan",
         "forget_room": "Lupakan ruangan ini",
         "forget_space": "Lupakan space ini",
@@ -2041,6 +2058,8 @@
         "read_topic": "Klik untuk membaca topik",
         "rejecting": "Menolak undangan…",
         "rejoin_button": "Bergabung Ulang",
+        "room_content": "Isi ruangan",
+        "room_is_low_priority": "Ini adalah ruangan dengan prioritas rendah",
         "search": {
             "all_rooms_button": "Cari semua ruangan",
             "placeholder": "Cari pesan...",
@@ -2086,9 +2105,9 @@
     "room_list": {
         "add_room_label": "Tambahkan ruangan",
         "add_space_label": "Tambahkan space",
-        "appearance": "Penampilan",
         "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
         "breadcrumbs_label": "Ruangan yang baru saja dilihat",
+        "collapse_filters": "Tutup daftar filter",
         "empty": {
             "no_chats": "Belum ada obrolan",
             "no_chats_description": "Mulailah dengan mengirim pesan kepada seseorang atau dengan membuat ruangan",
@@ -2096,6 +2115,7 @@
             "no_favourites": "Anda belum memiliki obrolan favorit",
             "no_favourites_description": "Anda dapat menambahkan obrolan ke favorit Anda di pengaturan obrolan",
             "no_invites": "Anda tidak memiliki undangan yang belum dibaca",
+            "no_lowpriority": "Anda tidak memiliki ruangan dengan prioritas rendah",
             "no_mentions": "Anda tidak memiliki sebutan yang belum dibaca",
             "no_people": "Anda belum memiliki obrolan langsung dengan siapa pun",
             "no_people_description": "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain",
@@ -2105,12 +2125,14 @@
             "show_activity": "Lihat semua aktivitas",
             "show_chats": "Tampilkan semua obrolan"
         },
+        "expand_filters": "Buka daftar filter",
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
         "filters": {
             "favourite": "Favorit",
             "invites": "Undangan",
+            "low_priority": "Prioritas rendah",
             "mentions": "Sebutan",
             "people": "Orang",
             "rooms": "Ruangan",
@@ -2144,7 +2166,6 @@
         },
         "room_options": "Opsi Ruangan",
         "show_less": "Tampilkan lebih sedikit",
-        "show_message_previews": "Tampilkan pratinjau pesan",
         "show_n_more": {
             "one": "Tampilkan %(count)s lagi",
             "other": "Tampilkan %(count)s lagi"
@@ -2679,6 +2700,9 @@
         "inline_url_previews_room": "Aktifkan tampilan URL secara bawaan untuk anggota di ruangan ini",
         "inline_url_previews_room_account": "Aktifkan tampilan URL secara bawaan (hanya memengaruhi Anda)",
         "insert_trailing_colon_mentions": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
+        "invite_controls": {
+            "default_label": "Izinkan pengguna mengundang Anda ke ruangan"
+        },
         "jump_to_bottom_on_send": "Pergi ke bawah lini masa ketika Anda mengirim pesan",
         "key_backup": {
             "backup_in_progress": "Kunci Anda sedang dicadangkan (cadangan pertama mungkin membutuhkan beberapa menit).",
@@ -2745,6 +2769,7 @@
             "show_in_private": "Di ruangan privat",
             "show_media": "Selalu tampilkan"
         },
+        "not_supported": "Server Anda tidak menerapkan fitur ini.",
         "notifications": {
             "default_setting_description": "Pengaturan ini akan diterapkan secara bawaan ke semua ruangan Anda.",
             "default_setting_section": "Saya ingin diberi tahu (Pengaturan Bawaan)",
@@ -2802,6 +2827,7 @@
             "voip": "Panggilan Audio dan Video"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Mencegah konten jendela agar tidak ditangkap oleh aplikasi lain",
             "Electron.enableHardwareAcceleration": "Aktifkan akselerasi perangkat keras (mulai ulang %(appName)s untuk menerapkan)",
             "always_show_menu_bar": "Selalu tampilkan bilah menu window",
             "autocomplete_delay": "Delay penyelesaian otomatis (md)",
@@ -2974,6 +3000,7 @@
         "show_chat_effects": "Tampilkan efek (animasi ketika menerima konfeti, misalnya)",
         "show_displayname_changes": "Tampilkan perubahan nama tampilan",
         "show_join_leave": "Tampilkan pesan-pesan gabung/keluar (undangan/pengeluaran/cekalan tidak terpengaruh)",
+        "show_message_previews": "Tampilkan pratinjau pesan",
         "show_nsfw_content": "Tampilkan konten NSFW",
         "show_read_receipts": "Tampilkan laporan dibaca terkirim oleh pengguna lain",
         "show_redaction_placeholder": "Tampilkan sebuah penampung untuk pesan terhapus",
@@ -3080,6 +3107,8 @@
         "jumptodate": "Pergi ke tanggal yang diberikan di lini masa",
         "jumptodate_invalid_input": "Kami tidak dapat mengerti tanggal yang dicantumkan (%(inputDate)s). Coba menggunakan format TTTT-BB-HH.",
         "lenny": "Menambahkan ( ͡° ͜ʖ ͡°) ke pesan teks biasa",
+        "manual_device_verification_confirm_description": "Ini akan memungkinkan perangkat lain untuk mengirim dan menerima pesan seperti Anda. JIKA SESEORANG MENYURUH ANDA MENEMPELKAN SESUATU DI SINI, KEMUNGKINAN ANDA SEDANG DITIPU! Apakah Anda yakin ingin memverifikasi perangkat lain ini?",
+        "manual_device_verification_confirm_title": "Perhatian: verifikasi perangkat manual",
         "me": "Menampilkan aksi",
         "msg": "Mengirim sebuah pesan ke pengguna yang dicantumkan",
         "myavatar": "Ubah foto profil Anda dalam semua ruangan",
@@ -3120,6 +3149,7 @@
         "upgraderoom": "Meningkatkan ruangan ke versi yang baru",
         "upgraderoom_permission_error": "Anda tidak memiliki izin yang dibutuhkan untuk menggunakan perintah ini.",
         "usage": "Penggunaan",
+        "verify": "Verifikasi salah satu perangkat Anda secara manual",
         "view": "Menampilkan ruangan dengan alamat yang ditentukan",
         "whois": "Menampilkan informasi tentang sebuah pengguna"
     },

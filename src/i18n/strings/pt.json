@@ -892,8 +892,6 @@
             "security_key_title": "Chave de recuperação"
         },
         "bootstrap_title": "A configurar chaves",
-        "cancel_entering_passphrase_description": "Tem a certeza que quer cancelar a introdução da frase-passe?",
-        "cancel_entering_passphrase_title": "Cancelar a introdução da frase-passe?",
         "confirm_encryption_setup_body": "Clica no botão abaixo para confirmar a configuração da encriptação.",
         "confirm_encryption_setup_title": "Confirma a configuração da encriptação",
         "cross_signing_room_normal": "Esta sala é encriptada de ponta a ponta",
@@ -938,7 +936,6 @@
         },
         "reset_all_button": "Esqueceste-te ou perdeste todos os métodos de recuperação? <a>Repor tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
-        "set_up_recovery_later": "Agora não",
         "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_description": "Protege-te contra a perda de acesso a mensagens e dados encriptados",
         "set_up_toast_title": "Configura uma cópia de segurança segura",

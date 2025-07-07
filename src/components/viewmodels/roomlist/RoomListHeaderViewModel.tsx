@@ -32,7 +32,6 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { createRoom, hasCreateRoomRights } from "./utils";
 import { type SortOption, useSorter } from "./useSorter";
-import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 /**
  * Hook to get the active space and its title.
@@ -127,14 +126,6 @@ export interface RoomListHeaderViewState {
      * The currently active sort option.
      */
     activeSortOption: SortOption;
-    /**
-     * Whether message previews must be shown or not.
-     */
-    shouldShowMessagePreview: boolean;
-    /**
-     * A function to turn on/off message previews.
-     */
-    toggleMessagePreview: () => void;
 }
 
 /**
@@ -157,7 +148,6 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     /* Actions */
 
     const { activeSortOption, sort } = useSorter();
-    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
     const createChatRoom = useCallback((e: Event) => {
         defaultDispatcher.fire(Action.CreateChat);
@@ -230,7 +220,5 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         openSpaceSettings,
         activeSortOption,
         sort,
-        shouldShowMessagePreview,
-        toggleMessagePreview,
     };
 }

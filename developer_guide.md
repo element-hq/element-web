@@ -109,7 +109,7 @@ yarn test
 
 ### End-to-End tests
 
-See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
+See [`docs/playwright.md`](./docs/playwright.md) for how to run the end-to-end tests.
 
 ## General github guidelines
 

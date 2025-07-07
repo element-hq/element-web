@@ -505,8 +505,6 @@
             "security_key_title": "Saugumo Raktas"
         },
         "bootstrap_title": "Raktų nustatymas",
-        "cancel_entering_passphrase_description": "Ar tikrai norite atšaukti slaptafrazės įvedimą?",
-        "cancel_entering_passphrase_title": "Atšaukti slaptafrazės įvedimą?",
         "confirm_encryption_setup_body": "Paspauskite mygtuką žemiau, kad patvirtintumėte šifravimo nustatymą.",
         "confirm_encryption_setup_title": "Patvirtinti šifravimo sąranką",
         "cross_signing_room_normal": "Šis kambarys visapusiškai užšifruotas",
@@ -1739,6 +1737,7 @@
         "upgraderoom": "Atnaujina kambarį į naują versiją",
         "upgraderoom_permission_error": "Jūs neturite reikalingų leidimų naudoti šią komandą.",
         "usage": "Naudojimas",
+        "verify": "Patvirtina vartotojo, seanso ir pubkey daugiadalę duomenų struktūrą",
         "whois": "Parodo informaciją apie vartotoją"
     },
     "space": {

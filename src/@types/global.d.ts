@@ -128,13 +128,19 @@ declare global {
     }
 
     interface Electron {
+        // Legacy
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
+        // Initialisation
         initialise(): Promise<{
             protocol: string;
             sessionId: string;
             config: IConfigOptions;
+            supportedSettings: Record<string, boolean>;
         }>;
+        // Settings
+        setSettingValue(settingName: string, value: any): Promise<void>;
+        getSettingValue(settingName: string): Promise<any>;
     }
 
     interface DesktopCapturerSource {

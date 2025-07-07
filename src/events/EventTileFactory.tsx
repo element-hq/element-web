@@ -43,6 +43,7 @@ import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
+import ModuleApi from "../modules/Api";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -257,7 +258,14 @@ export function renderTile(
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory) return undefined;
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
+    }
 
     // Note that we split off the ones we actually care about here just to be sure that we're
     // not going to accidentally send things we shouldn't from lazy callers. Eg: EventTile's
@@ -284,36 +292,48 @@ export function renderTile(
         case TimelineRenderingType.File:
         case TimelineRenderingType.Notification:
         case TimelineRenderingType.Thread:
-            // We only want a subset of props, so we don't end up causing issues for downstream components.
-            return factory(props.ref, {
-                mxEvent,
-                highlights,
-                highlightLink,
-                showUrlPreview,
-                editState,
-                replacingEventId,
-                getRelationsForEvent,
-                isSeeingThroughMessageHiddenForModeration,
-                permalinkCreator,
-                inhibitInteraction,
-            });
+            return ModuleApi.customComponents.renderMessage(
+                {
+                    mxEvent: props.mxEvent,
+                },
+                (origProps) =>
+                    factory(props.ref, {
+                        // We only want a subset of props, so we don't end up causing issues for downstream components.
+                        mxEvent,
+                        highlights,
+                        highlightLink,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                        editState,
+                        replacingEventId,
+                        getRelationsForEvent,
+                        isSeeingThroughMessageHiddenForModeration,
+                        permalinkCreator,
+                        inhibitInteraction,
+                    }),
+            );
         default:
-            // NEARLY ALL THE OPTIONS!
-            return factory(ref, {
-                mxEvent,
-                forExport,
-                replacingEventId,
-                editState,
-                highlights,
-                highlightLink,
-                showUrlPreview,
-                permalinkCreator,
-                callEventGrouper,
-                getRelationsForEvent,
-                isSeeingThroughMessageHiddenForModeration,
-                timestamp,
-                inhibitInteraction,
-            });
+            return ModuleApi.customComponents.renderMessage(
+                {
+                    mxEvent: props.mxEvent,
+                },
+                (origProps) =>
+                    factory(ref, {
+                        // NEARLY ALL THE OPTIONS!
+                        mxEvent,
+                        forExport,
+                        replacingEventId,
+                        editState,
+                        highlights,
+                        highlightLink,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                        permalinkCreator,
+                        callEventGrouper,
+                        getRelationsForEvent,
+                        isSeeingThroughMessageHiddenForModeration,
+                        timestamp,
+                        inhibitInteraction,
+                    }),
+            );
     }
 }
 
@@ -332,7 +352,14 @@ export function renderReplyTile(
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory) return undefined;
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
+    }
 
     // See renderTile() for why we split off so much
     const {
@@ -350,19 +377,25 @@ export function renderReplyTile(
         permalinkCreator,
     } = props;
 
-    return factory(ref, {
-        mxEvent,
-        highlights,
-        highlightLink,
-        showUrlPreview,
-        overrideBodyTypes,
-        overrideEventTypes,
-        replacingEventId,
-        maxImageHeight,
-        getRelationsForEvent,
-        isSeeingThroughMessageHiddenForModeration,
-        permalinkCreator,
-    });
+    return ModuleApi.customComponents.renderMessage(
+        {
+            mxEvent: props.mxEvent,
+        },
+        (origProps) =>
+            factory(ref, {
+                mxEvent,
+                highlights,
+                highlightLink,
+                showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                overrideBodyTypes,
+                overrideEventTypes,
+                replacingEventId,
+                maxImageHeight,
+                getRelationsForEvent,
+                isSeeingThroughMessageHiddenForModeration,
+                permalinkCreator,
+            }),
+    );
 }
 
 // XXX: this'll eventually be dynamic based on the fields once we have extensible event types
@@ -384,6 +417,12 @@ export function haveRendererForEvent(
     // and state events as they'll likely still contain enough keys to be relevant.
     if (mxEvent.isRedacted() && !mxEvent.isEncrypted() && !isMessageEvent(mxEvent) && !mxEvent.isState()) {
         return false;
+    }
+
+    // Check to see if we have any hints for this message, which indicates
+    // there is a custom renderer for the event.
+    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
+        return true;
     }
 
     // No tile for replacement events since they update the original tile

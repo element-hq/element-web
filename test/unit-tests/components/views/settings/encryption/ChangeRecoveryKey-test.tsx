@@ -104,12 +104,14 @@ describe("<ChangeRecoveryKey />", () => {
             expect(screen.getByText("The recovery key you entered is not correct.")).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
 
+            const setAccountDataSpy = jest.spyOn(matrixClient, "setAccountData");
             await userEvent.clear(input);
             // If the user enters the correct recovery key, the finish button should be enabled
             await userEvent.type(input, "encoded private key");
             await waitFor(() => expect(finishButton).not.toHaveAttribute("aria-disabled", "true"));
 
             await user.click(finishButton);
+            expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery", { enabled: true });
             expect(onFinish).toHaveBeenCalledWith();
         });
 

@@ -34,10 +34,6 @@ import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/ment
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
-import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
-import VisibilityOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-off";
-import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -47,7 +43,6 @@ import { type ButtonEvent } from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import MultiInviter from "../../../utils/MultiInviter";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
-import { textualPowerLevel } from "../../../Roles";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
@@ -58,18 +53,13 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
-import PowerSelector from "../elements/PowerSelector";
 import MemberAvatar from "../avatars/MemberAvatar";
 import PresenceLabel from "../rooms/PresenceLabel";
-import BulkRedactDialog from "../dialogs/BulkRedactDialog";
 import { ShareDialog } from "../dialogs/ShareDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
-import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
-import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -83,6 +73,8 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { Flex } from "../../utils/Flex";
 import CopyableText from "../elements/CopyableText";
 import { useUserTimezone } from "../../../hooks/useUserTimezone";
+import { UserInfoAdminToolsContainer } from "./user_info/UserInfoAdminToolsContainer";
+import { PowerLevelSection } from "./user_info/UserInfoPowerLevels";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -314,7 +306,7 @@ const Container: React.FC<{
     return <div className={classes}>{children}</div>;
 };
 
-interface IPowerLevelsContent {
+export interface IPowerLevelsContent {
     events?: Record<string, number>;
     // eslint-disable-next-line camelcase
     users_default?: number;
@@ -366,362 +358,6 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room): IPowerLevelsC
         };
     }, [update]);
     return powerLevels;
-};
-
-interface IBaseProps {
-    member: RoomMember;
-    isUpdating: boolean;
-    startUpdating(): void;
-    stopUpdating(): void;
-}
-
-export const RoomKickButton = ({
-    room,
-    member,
-    isUpdating,
-    startUpdating,
-    stopUpdating,
-}: Omit<IBaseRoomProps, "powerLevels">): JSX.Element | null => {
-    const cli = useContext(MatrixClientContext);
-
-    // check if user can be kicked/disinvited
-    if (member.membership !== KnownMembership.Invite && member.membership !== KnownMembership.Join) return <></>;
-
-    const onKick = async (): Promise<void> => {
-        if (isUpdating) return; // only allow one operation at a time
-        startUpdating();
-
-        const commonProps = {
-            member,
-            action: room.isSpaceRoom()
-                ? member.membership === KnownMembership.Invite
-                    ? _t("user_info|disinvite_button_space")
-                    : _t("user_info|kick_button_space")
-                : member.membership === KnownMembership.Invite
-                  ? _t("user_info|disinvite_button_room")
-                  : _t("user_info|kick_button_room"),
-            title:
-                member.membership === KnownMembership.Invite
-                    ? _t("user_info|disinvite_button_room_name", { roomName: room.name })
-                    : _t("user_info|kick_button_room_name", { roomName: room.name }),
-            askReason: member.membership === KnownMembership.Join,
-            danger: true,
-        };
-
-        let finished: Promise<[success?: boolean, reason?: string, rooms?: Room[]]>;
-
-        if (room.isSpaceRoom()) {
-            ({ finished } = Modal.createDialog(
-                ConfirmSpaceUserActionDialog,
-                {
-                    ...commonProps,
-                    space: room,
-                    spaceChildFilter: (child: Room) => {
-                        // Return true if the target member is not banned and we have sufficient PL to ban them
-                        const myMember = child.getMember(cli.credentials.userId || "");
-                        const theirMember = child.getMember(member.userId);
-                        return (
-                            !!myMember &&
-                            !!theirMember &&
-                            theirMember.membership === member.membership &&
-                            myMember.powerLevel > theirMember.powerLevel &&
-                            child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel)
-                        );
-                    },
-                    allLabel: _t("user_info|kick_button_space_everything"),
-                    specificLabel: _t("user_info|kick_space_specific"),
-                    warningMessage: _t("user_info|kick_space_warning"),
-                },
-                "mx_ConfirmSpaceUserActionDialog_wrapper",
-            ));
-        } else {
-            ({ finished } = Modal.createDialog(ConfirmUserActionDialog, commonProps));
-        }
-
-        const [proceed, reason, rooms = []] = await finished;
-        if (!proceed) {
-            stopUpdating();
-            return;
-        }
-
-        bulkSpaceBehaviour(room, rooms, (room) => cli.kick(room.roomId, member.userId, reason || undefined))
-            .then(
-                () => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
-                    logger.log("Kick success");
-                },
-                function (err) {
-                    logger.error("Kick error: " + err);
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t("user_info|error_kicking_user"),
-                        description: err?.message ?? "Operation failed",
-                    });
-                },
-            )
-            .finally(() => {
-                stopUpdating();
-            });
-    };
-
-    const kickLabel = room.isSpaceRoom()
-        ? member.membership === KnownMembership.Invite
-            ? _t("user_info|disinvite_button_space")
-            : _t("user_info|kick_button_space")
-        : member.membership === KnownMembership.Invite
-          ? _t("user_info|disinvite_button_room")
-          : _t("user_info|kick_button_room");
-
-    return (
-        <MenuItem
-            role="button"
-            onSelect={async (ev) => {
-                ev.preventDefault();
-                onKick();
-            }}
-            disabled={isUpdating}
-            label={kickLabel}
-            kind="critical"
-            Icon={LeaveIcon}
-        />
-    );
-};
-
-const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
-    const cli = useContext(MatrixClientContext);
-
-    const onRedactAllMessages = (): void => {
-        const room = cli.getRoom(member.roomId);
-        if (!room) return;
-
-        Modal.createDialog(BulkRedactDialog, {
-            matrixClient: cli,
-            room,
-            member,
-        });
-    };
-
-    return (
-        <MenuItem
-            role="button"
-            onSelect={async (ev) => {
-                ev.preventDefault();
-                onRedactAllMessages();
-            }}
-            label={_t("user_info|redact_button")}
-            kind="critical"
-            Icon={CloseIcon}
-        />
-    );
-};
-
-export const BanToggleButton = ({
-    room,
-    member,
-    isUpdating,
-    startUpdating,
-    stopUpdating,
-}: Omit<IBaseRoomProps, "powerLevels">): JSX.Element => {
-    const cli = useContext(MatrixClientContext);
-
-    const isBanned = member.membership === KnownMembership.Ban;
-    const onBanOrUnban = async (): Promise<void> => {
-        if (isUpdating) return; // only allow one operation at a time
-        startUpdating();
-
-        const commonProps = {
-            member,
-            action: room.isSpaceRoom()
-                ? isBanned
-                    ? _t("user_info|unban_button_space")
-                    : _t("user_info|ban_button_space")
-                : isBanned
-                  ? _t("user_info|unban_button_room")
-                  : _t("user_info|ban_button_room"),
-            title: isBanned
-                ? _t("user_info|unban_room_confirm_title", { roomName: room.name })
-                : _t("user_info|ban_room_confirm_title", { roomName: room.name }),
-            askReason: !isBanned,
-            danger: !isBanned,
-        };
-
-        let finished: Promise<[success?: boolean, reason?: string, rooms?: Room[]]>;
-
-        if (room.isSpaceRoom()) {
-            ({ finished } = Modal.createDialog(
-                ConfirmSpaceUserActionDialog,
-                {
-                    ...commonProps,
-                    space: room,
-                    spaceChildFilter: isBanned
-                        ? (child: Room) => {
-                              // Return true if the target member is banned and we have sufficient PL to unban
-                              const myMember = child.getMember(cli.credentials.userId || "");
-                              const theirMember = child.getMember(member.userId);
-                              return (
-                                  !!myMember &&
-                                  !!theirMember &&
-                                  theirMember.membership === KnownMembership.Ban &&
-                                  myMember.powerLevel > theirMember.powerLevel &&
-                                  child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
-                              );
-                          }
-                        : (child: Room) => {
-                              // Return true if the target member isn't banned and we have sufficient PL to ban
-                              const myMember = child.getMember(cli.credentials.userId || "");
-                              const theirMember = child.getMember(member.userId);
-                              return (
-                                  !!myMember &&
-                                  !!theirMember &&
-                                  theirMember.membership !== KnownMembership.Ban &&
-                                  myMember.powerLevel > theirMember.powerLevel &&
-                                  child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
-                              );
-                          },
-                    allLabel: isBanned ? _t("user_info|unban_space_everything") : _t("user_info|ban_space_everything"),
-                    specificLabel: isBanned ? _t("user_info|unban_space_specific") : _t("user_info|ban_space_specific"),
-                    warningMessage: isBanned ? _t("user_info|unban_space_warning") : _t("user_info|kick_space_warning"),
-                },
-                "mx_ConfirmSpaceUserActionDialog_wrapper",
-            ));
-        } else {
-            ({ finished } = Modal.createDialog(ConfirmUserActionDialog, commonProps));
-        }
-
-        const [proceed, reason, rooms = []] = await finished;
-        if (!proceed) {
-            stopUpdating();
-            return;
-        }
-
-        const fn = (roomId: string): Promise<unknown> => {
-            if (isBanned) {
-                return cli.unban(roomId, member.userId);
-            } else {
-                return cli.ban(roomId, member.userId, reason || undefined);
-            }
-        };
-
-        bulkSpaceBehaviour(room, rooms, (room) => fn(room.roomId))
-            .then(
-                () => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
-                    logger.log("Ban success");
-                },
-                function (err) {
-                    logger.error("Ban error: " + err);
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t("common|error"),
-                        description: _t("user_info|error_ban_user"),
-                    });
-                },
-            )
-            .finally(() => {
-                stopUpdating();
-            });
-    };
-
-    let label = room.isSpaceRoom() ? _t("user_info|ban_button_space") : _t("user_info|ban_button_room");
-    if (isBanned) {
-        label = room.isSpaceRoom() ? _t("user_info|unban_button_space") : _t("user_info|unban_button_room");
-    }
-
-    return (
-        <MenuItem
-            role="button"
-            onSelect={async (ev) => {
-                ev.preventDefault();
-                onBanOrUnban();
-            }}
-            disabled={isUpdating}
-            label={label}
-            kind="critical"
-            Icon={ChatProblemIcon}
-        />
-    );
-};
-
-interface IBaseRoomProps extends IBaseProps {
-    room: Room;
-    powerLevels: IPowerLevelsContent;
-    children?: ReactNode;
-}
-
-// We do not show a Mute button for ourselves so it doesn't need to handle warning self demotion
-const MuteToggleButton: React.FC<IBaseRoomProps> = ({
-    member,
-    room,
-    powerLevels,
-    isUpdating,
-    startUpdating,
-    stopUpdating,
-}) => {
-    const cli = useContext(MatrixClientContext);
-
-    // Don't show the mute/unmute option if the user is not in the room
-    if (member.membership !== KnownMembership.Join) return null;
-
-    const muted = isMuted(member, powerLevels);
-    const onMuteToggle = async (): Promise<void> => {
-        if (isUpdating) return; // only allow one operation at a time
-        startUpdating();
-
-        const roomId = member.roomId;
-        const target = member.userId;
-
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        const powerLevels = powerLevelEvent?.getContent();
-        const levelToSend = powerLevels?.events?.["m.room.message"] ?? powerLevels?.events_default;
-        let level;
-        if (muted) {
-            // unmute
-            level = levelToSend;
-        } else {
-            // mute
-            level = levelToSend - 1;
-        }
-        level = parseInt(level);
-
-        if (isNaN(level)) {
-            stopUpdating();
-            return;
-        }
-
-        cli.setPowerLevel(roomId, target, level)
-            .then(
-                () => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
-                    logger.log("Mute toggle success");
-                },
-                function (err) {
-                    logger.error("Mute error: " + err);
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t("common|error"),
-                        description: _t("user_info|error_mute_user"),
-                    });
-                },
-            )
-            .finally(() => {
-                stopUpdating();
-            });
-    };
-
-    const muteLabel = muted ? _t("common|unmute") : _t("common|mute");
-    return (
-        <MenuItem
-            role="button"
-            onSelect={async (ev) => {
-                ev.preventDefault();
-                onMuteToggle();
-            }}
-            disabled={isUpdating}
-            label={muteLabel}
-            kind="critical"
-            Icon={VisibilityOffIcon}
-        />
-    );
 };
 
 const IgnoreToggleButton: React.FC<{
@@ -786,96 +422,6 @@ const IgnoreToggleButton: React.FC<{
     );
 };
 
-export const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
-    room,
-    children,
-    member,
-    isUpdating,
-    startUpdating,
-    stopUpdating,
-    powerLevels,
-}) => {
-    const cli = useContext(MatrixClientContext);
-    let kickButton;
-    let banButton;
-    let muteButton;
-    let redactButton;
-
-    const editPowerLevel =
-        (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) || powerLevels.state_default;
-
-    // if these do not exist in the event then they should default to 50 as per the spec
-    const { ban: banPowerLevel = 50, kick: kickPowerLevel = 50, redact: redactPowerLevel = 50 } = powerLevels;
-
-    const me = room.getMember(cli.getUserId() || "");
-    if (!me) {
-        // we aren't in the room, so return no admin tooling
-        return <div />;
-    }
-
-    const isMe = me.userId === member.userId;
-    const canAffectUser = member.powerLevel < me.powerLevel || isMe;
-
-    if (!isMe && canAffectUser && me.powerLevel >= kickPowerLevel) {
-        kickButton = (
-            <RoomKickButton
-                room={room}
-                member={member}
-                isUpdating={isUpdating}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}
-            />
-        );
-    }
-    if (me.powerLevel >= redactPowerLevel && !room.isSpaceRoom()) {
-        redactButton = (
-            <RedactMessagesButton
-                member={member}
-                isUpdating={isUpdating}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}
-            />
-        );
-    }
-    if (!isMe && canAffectUser && me.powerLevel >= banPowerLevel) {
-        banButton = (
-            <BanToggleButton
-                room={room}
-                member={member}
-                isUpdating={isUpdating}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}
-            />
-        );
-    }
-    if (!isMe && canAffectUser && me.powerLevel >= Number(editPowerLevel) && !room.isSpaceRoom()) {
-        muteButton = (
-            <MuteToggleButton
-                member={member}
-                room={room}
-                powerLevels={powerLevels}
-                isUpdating={isUpdating}
-                startUpdating={startUpdating}
-                stopUpdating={stopUpdating}
-            />
-        );
-    }
-
-    if (kickButton || banButton || muteButton || redactButton || children) {
-        return (
-            <Container>
-                {muteButton}
-                {redactButton}
-                {kickButton}
-                {banButton}
-                {children}
-            </Container>
-        );
-    }
-
-    return <div />;
-};
-
 const useIsSynapseAdmin = (cli?: MatrixClient): boolean => {
     return useAsyncMemo(async () => (cli ? cli.isSynapseAdministrator().catch(() => false) : false), [cli], false);
 };
@@ -890,7 +436,7 @@ const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
     );
 };
 
-interface IRoomPermissions {
+export interface IRoomPermissions {
     modifyLevelMax: number;
     canEdit: boolean;
     canInvite: boolean;
@@ -944,112 +490,6 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
 
     return roomPermissions;
 }
-
-const PowerLevelSection: React.FC<{
-    user: RoomMember;
-    room: Room;
-    roomPermissions: IRoomPermissions;
-    powerLevels: IPowerLevelsContent;
-}> = ({ user, room, roomPermissions, powerLevels }) => {
-    if (roomPermissions.canEdit) {
-        return <PowerLevelEditor user={user} room={room} roomPermissions={roomPermissions} />;
-    } else {
-        const powerLevelUsersDefault = powerLevels.users_default || 0;
-        const powerLevel = user.powerLevel;
-        const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
-        return (
-            <div className="mx_UserInfo_profileField">
-                <div className="mx_UserInfo_roleDescription">{role}</div>
-            </div>
-        );
-    }
-};
-
-export const PowerLevelEditor: React.FC<{
-    user: RoomMember;
-    room: Room;
-    roomPermissions: IRoomPermissions;
-}> = ({ user, room, roomPermissions }) => {
-    const cli = useContext(MatrixClientContext);
-
-    const [selectedPowerLevel, setSelectedPowerLevel] = useState(user.powerLevel);
-    useEffect(() => {
-        setSelectedPowerLevel(user.powerLevel);
-    }, [user]);
-
-    const onPowerChange = useCallback(
-        async (powerLevel: number) => {
-            setSelectedPowerLevel(powerLevel);
-
-            const applyPowerChange = (roomId: string, target: string, powerLevel: number): Promise<unknown> => {
-                return cli.setPowerLevel(roomId, target, powerLevel).then(
-                    function () {
-                        // NO-OP; rely on the m.room.member event coming down else we could
-                        // get out of sync if we force setState here!
-                        logger.log("Power change success");
-                    },
-                    function (err) {
-                        logger.error("Failed to change power level " + err);
-                        Modal.createDialog(ErrorDialog, {
-                            title: _t("common|error"),
-                            description: _t("error|update_power_level"),
-                        });
-                    },
-                );
-            };
-
-            const roomId = user.roomId;
-            const target = user.userId;
-
-            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-            if (!powerLevelEvent) return;
-
-            const myUserId = cli.getUserId();
-            const myPower = powerLevelEvent.getContent().users[myUserId || ""];
-            if (myPower && parseInt(myPower) <= powerLevel && myUserId !== target) {
-                const { finished } = Modal.createDialog(QuestionDialog, {
-                    title: _t("common|warning"),
-                    description: (
-                        <div>
-                            {_t("user_info|promote_warning")}
-                            <br />
-                            {_t("common|are_you_sure")}
-                        </div>
-                    ),
-                    button: _t("action|continue"),
-                });
-
-                const [confirmed] = await finished;
-                if (!confirmed) return;
-            } else if (myUserId === target && myPower && parseInt(myPower) > powerLevel) {
-                // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
-                try {
-                    if (!(await warnSelfDemote(room?.isSpaceRoom()))) return;
-                } catch (e) {
-                    logger.error("Failed to warn about self demotion: ", e);
-                }
-            }
-
-            await applyPowerChange(roomId, target, powerLevel);
-        },
-        [user.roomId, user.userId, cli, room],
-    );
-
-    const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-    const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
-
-    return (
-        <div className="mx_UserInfo_profileField">
-            <PowerSelector
-                label={undefined}
-                value={selectedPowerLevel}
-                maxValue={roomPermissions.modifyLevelMax}
-                usersDefault={powerLevelUsersDefault}
-                onChange={onPowerChange}
-            />
-        </div>
-    );
-};
 
 async function getUserDeviceInfo(
     userId: string,
@@ -1273,17 +713,12 @@ const BasicUserInfo: React.FC<{
         // hide the Roles section for DMs as it doesn't make sense there
         if (!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId)) {
             memberDetails = (
-                <PowerLevelSection
-                    powerLevels={powerLevels}
-                    user={member as RoomMember}
-                    room={room}
-                    roomPermissions={roomPermissions}
-                />
+                <PowerLevelSection user={member as RoomMember} room={room} roomPermissions={roomPermissions} />
             );
         }
 
         adminToolsContainer = (
-            <RoomAdminToolsContainer
+            <UserInfoAdminToolsContainer
                 powerLevels={powerLevels}
                 member={member as RoomMember}
                 room={room}
@@ -1292,7 +727,7 @@ const BasicUserInfo: React.FC<{
                 stopUpdating={stopUpdating}
             >
                 {synapseDeactivateButton}
-            </RoomAdminToolsContainer>
+            </UserInfoAdminToolsContainer>
         );
     } else if (synapseDeactivateButton) {
         adminToolsContainer = <Container>{synapseDeactivateButton}</Container>;
