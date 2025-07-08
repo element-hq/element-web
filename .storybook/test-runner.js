@@ -20,7 +20,9 @@ const config = {
     expect(image).toMatchImageSnapshot({
       customSnapshotsDir,
       customSnapshotIdentifier: context.id,
+      storeReceivedOnFailure: true,
       customReceivedDir,
+      customDiffDir: customReceivedDir,
     });
   },
 };
