@@ -41,7 +41,7 @@ test.describe("Security user settings tab", () => {
             });
         });
 
-        test.only("should render the security tab", { tag: "@screenshot"}, async ({ app, page, user }) => {
+        test("should render the security tab", { tag: "@screenshot"}, async ({ app, page, user }) => {
             await page.setViewportSize({ width: 1024, height: 1400 });
             const tab = await app.settings.openUserSettings("Security");
             await expect(tab).toMatchScreenshot("security-settings-tab.png", { mask: [
