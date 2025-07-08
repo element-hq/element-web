@@ -356,19 +356,21 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
                     {warning}
                     <SetIntegrationManager />
-                    <SettingsSection heading={_t("settings|security|encryption_section")}>
-                        {secureBackup}
-                        {eventIndex}
-                    </SettingsSection>
+                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                        <SettingsSection heading={_t("settings|security|encryption_section")}>
+                            {secureBackup}
+                            {eventIndex}
+                        </SettingsSection>
+                    </Form.Root>
                     <SettingsSection heading={_t("common|privacy")}>
                         <DiscoverySettings />
-                        {posthogSection}
+                        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                            {posthogSection}
+                        </Form.Root>
                     </SettingsSection>
                     {advancedSection}
-                </Form.Root>
             </SettingsTab>
         );
     }
