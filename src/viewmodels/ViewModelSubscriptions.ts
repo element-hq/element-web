@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export class ViewModelSubscriptions {
-    private listeners = new Set<() => void>();
+    public listeners = new Set<() => void>();
 
     public constructor(private updateSubscription: () => void) {}
 
