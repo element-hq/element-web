@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 // We need to import directly from the shared i18n instead of the language handler due to a webpack loading error
 import { _td, type TranslationKey } from "../shared-components/i18n";
-import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
+import { IS_MAC, IS_ELECTRON, Key } from "../shared-components/Keyboard";
 import { type IBaseSetting } from "../settings/Settings";
 import { type KeyCombo } from "../KeyBindingsManager";
 

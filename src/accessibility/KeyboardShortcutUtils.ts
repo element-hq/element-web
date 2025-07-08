@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type KeyCombo } from "../KeyBindingsManager";
-import { IS_MAC, Key } from "../Keyboard";
+import { IS_MAC, Key } from "../shared-components/Keyboard";
 import { _t, _td } from "../languageHandler";
 import PlatformPeg from "../PlatformPeg";
 import SettingsStore from "../settings/SettingsStore";

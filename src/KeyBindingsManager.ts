@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type KeyBindingAction } from "./accessibility/KeyboardShortcuts";
 import { defaultBindingsProvider } from "./KeyBindingsDefaults";
-import { IS_MAC } from "./Keyboard";
+import { IS_MAC } from "./shared-components/Keyboard";
 
 /**
  * Represent a key combination.

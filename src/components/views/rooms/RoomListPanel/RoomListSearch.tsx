@@ -11,7 +11,7 @@ import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/expl
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
 
-import { IS_MAC, Key } from "../../../../Keyboard";
+import { IS_MAC, Key } from "../../../../shared-components/Keyboard";
 import { _t } from "../../../../languageHandler";
 import { ALTERNATE_KEY_NAME } from "../../../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";

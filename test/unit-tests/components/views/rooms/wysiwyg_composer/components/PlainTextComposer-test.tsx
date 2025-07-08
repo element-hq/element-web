@@ -13,7 +13,7 @@ import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { PlainTextComposer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 import * as mockUseSettingsHook from "../../../../../../../src/hooks/useSettings";
-import * as mockKeyboard from "../../../../../../../src/Keyboard";
+import * as mockKeyboard from "../../../../../../../src/shared-components/Keyboard";
 import { createMocks } from "../utils";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
 

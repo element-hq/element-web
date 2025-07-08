@@ -24,7 +24,7 @@ import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
 import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
-import { IS_MAC } from "../Keyboard";
+import { IS_MAC } from "../shared-components/Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";

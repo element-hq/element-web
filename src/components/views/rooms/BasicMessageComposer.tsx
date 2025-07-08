@@ -28,7 +28,7 @@ import { getAutoCompleteCreator, type Part, type SerializedPart, Type } from "..
 import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
 import SettingsStore from "../../../settings/SettingsStore";
-import { IS_MAC, Key } from "../../../Keyboard";
+import { IS_MAC, Key } from "../../../shared-components/Keyboard";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar";

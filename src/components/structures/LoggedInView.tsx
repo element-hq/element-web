@@ -21,7 +21,7 @@ import {
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
-import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
+import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../shared-components/Keyboard";
 import PageTypes from "../../PageTypes";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
 import dis from "../../dispatcher/dispatcher";

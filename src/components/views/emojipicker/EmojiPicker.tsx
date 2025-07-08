@@ -25,7 +25,7 @@ import {
     RovingTabIndexProvider,
     Type,
 } from "../../../accessibility/RovingTabIndex";
-import { Key } from "../../../Keyboard";
+import { Key } from "../../../shared-components/Keyboard";
 import { clamp } from "../../../utils/numbers";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 
