@@ -15,24 +15,24 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
         <div
           class="mx_SettingsSection_subSections"
         >
-          <div
-            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
-            data-testid="themePanel"
+          <form
+            class="_root_19upo_16"
           >
             <div
-              class="mx_SettingsSubsectionHeading"
+              class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+              data-testid="themePanel"
             >
-              <h3
-                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              <div
+                class="mx_SettingsSubsectionHeading"
               >
-                Theme
-              </h3>
-            </div>
-            <div
-              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
-            >
-              <form
-                class="_root_19upo_16 mx_ThemeChoicePanel_ThemeSelectors"
+                <h3
+                  class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+                >
+                  Theme
+                </h3>
+              </div>
+              <div
+                class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
               >
                 <div
                   class="_inline-field_19upo_32 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
@@ -136,15 +136,15 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </label>
                   </div>
                 </div>
-              </form>
+              </div>
+              <div
+                class="_separator_7ckbw_8"
+                data-kind="primary"
+                data-orientation="horizontal"
+                role="separator"
+              />
             </div>
-            <div
-              class="_separator_7ckbw_8"
-              data-kind="primary"
-              data-orientation="horizontal"
-              role="separator"
-            />
-          </div>
+          </form>
           <div
             class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
             data-testid="layoutPanel"
@@ -561,6 +561,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         class="_input_19o42_24"
                         id="radix-«ru»"
                         name="compactLayout"
+                        role="switch"
                         title=""
                         type="checkbox"
                       />
