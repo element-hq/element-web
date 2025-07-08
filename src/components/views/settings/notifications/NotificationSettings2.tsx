@@ -281,6 +281,7 @@ export default function NotificationSettings2(): JSX.Element {
                         label={_t("settings|notifications|notify_mention", {
                             mxid: cli.getUserId()!,
                         })}
+                        id="mx_NotificationSettings2_MentionCheckbox"
                         value={settings.mentions.user}
                         disabled={disabled}
                         onChange={(value) => {

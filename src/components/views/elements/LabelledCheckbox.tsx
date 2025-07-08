@@ -24,11 +24,13 @@ interface IProps {
     onChange(checked: boolean): void;
     // Optional additional CSS class to apply to the label
     className?: string;
+    // The id for the checkbox
+    id?: string;
 }
 
-const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange, className }) => {
+const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange, className, id }) => {
     return (
-        <div className={classnames("mx_LabelledCheckbox", className)}>
+        <div id={id} className={classnames("mx_LabelledCheckbox", className)}>
             <StyledCheckbox
                 description={byline}
                 disabled={disabled}
