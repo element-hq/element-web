@@ -11,7 +11,7 @@ import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/Flex";
 import { _t } from "../../../../languageHandler";
 import { FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";
