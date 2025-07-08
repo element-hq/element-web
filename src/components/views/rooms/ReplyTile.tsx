@@ -163,6 +163,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                             highlights: this.props.highlights,
                             highlightLink: this.props.highlightLink,
                             permalinkCreator: this.props.permalinkCreator,
+                            showHiddenEvents: false,
                         },
                         false /* showHiddenEvents shouldn't be relevant */,
                     )}

@@ -10,7 +10,7 @@ import { fireEvent, getByText, render } from "jest-matrix-react";
 import React from "react";
 
 import AccessibleButton from "../../../../../src/components/views/elements/AccessibleButton";
-import { Key } from "../../../../../src/Keyboard";
+import { Key } from "../../../../../src/shared-components/Keyboard";
 import { mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 
 describe("<AccessibleButton />", () => {

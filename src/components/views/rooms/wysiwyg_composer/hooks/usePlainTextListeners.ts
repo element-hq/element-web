@@ -11,7 +11,7 @@ import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im
 import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
-import { IS_MAC, Key } from "../../../../../Keyboard";
+import { IS_MAC, Key } from "../../../../../shared-components/Keyboard";
 import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";

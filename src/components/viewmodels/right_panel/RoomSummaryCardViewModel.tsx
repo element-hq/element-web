@@ -30,7 +30,7 @@ import ExportDialog from "../../views/dialogs/ExportDialog";
 import { ShareDialog } from "../../views/dialogs/ShareDialog";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
-import { Key } from "../../../Keyboard";
+import { Key } from "../../../shared-components/Keyboard";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";

@@ -10,7 +10,7 @@ import React from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/Flex";
 import { type MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { _t } from "../../../../languageHandler";
 

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 
-import { Key } from "../../../../../src/Keyboard";
+import { Key } from "../../../../../src/shared-components/Keyboard";
 import { mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils/platform";
 import { KeyboardKey, KeyboardShortcut } from "../../../../../src/components/views/settings/KeyboardShortcut";
 

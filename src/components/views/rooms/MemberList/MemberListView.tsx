@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/Flex";
 import {
     type MemberWithSeparator,
     SEPARATOR,

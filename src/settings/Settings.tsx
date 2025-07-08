@@ -11,7 +11,8 @@ import React, { type ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
-import { _t, _td, type TranslationKey } from "../languageHandler";
+// We need to import directly from the shared i18n instead of the language handler due to a webpack loading error
+import { _t, _td, type TranslationKey } from "../shared-components/i18n";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -23,7 +24,7 @@ import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
 import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
-import { IS_MAC } from "../Keyboard";
+import { IS_MAC } from "../shared-components/Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";

@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 
 import { ALTERNATE_KEY_NAME, KEY_ICON } from "../../../accessibility/KeyboardShortcuts";
 import { type KeyCombo } from "../../../KeyBindingsManager";
-import { IS_MAC, Key } from "../../../Keyboard";
+import { IS_MAC, Key } from "../../../shared-components/Keyboard";
 import { _t } from "../../../languageHandler";
 
 interface IKeyboardKeyProps {

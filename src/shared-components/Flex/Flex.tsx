@@ -1,13 +1,14 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2023 The Matrix.org Foundation C.I.C.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import classNames from "classnames";
 import React, { type JSX, type ComponentProps, type JSXElementConstructor, useMemo } from "react";
+
+import styles from "./Flex.module.css";
 
 type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
@@ -82,5 +83,5 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
         [align, direction, display, gap, justify, wrap],
     );
 
-    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), style }, children);
+    return React.createElement(as, { ...props, className: classNames(styles.flex, className), style }, children);
 }

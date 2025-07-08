@@ -10,7 +10,7 @@ import { render } from "jest-matrix-react";
 import React from "react";
 
 import KeyboardUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/KeyboardUserSettingsTab";
-import { Key } from "../../../../../../../src/Keyboard";
+import { Key } from "../../../../../../../src/shared-components/Keyboard";
 import { mockPlatformPeg } from "../../../../../../test-utils/platform";
 
 const PATH_TO_KEYBOARD_SHORTCUTS = "../../../../../../../src/accessibility/KeyboardShortcuts";

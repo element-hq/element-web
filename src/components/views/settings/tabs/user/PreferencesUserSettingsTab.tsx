@@ -27,7 +27,7 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
 import PlatformPeg from "../../../../../PlatformPeg";
-import { IS_MAC } from "../../../../../Keyboard";
+import { IS_MAC } from "../../../../../shared-components/Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";

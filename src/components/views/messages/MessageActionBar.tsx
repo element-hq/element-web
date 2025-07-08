@@ -53,7 +53,7 @@ import type ReplyChain from "../elements/ReplyChain";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { CardContext } from "../right_panel/context";
 import { shouldDisplayReply } from "../../../utils/Reply";
-import { Key } from "../../../Keyboard";
+import { Key } from "../../../shared-components/Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";

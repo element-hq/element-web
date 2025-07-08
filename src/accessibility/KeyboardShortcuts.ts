@@ -8,10 +8,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td, type TranslationKey } from "../languageHandler";
-import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
+// We need to import directly from the shared i18n instead of the language handler due to a webpack loading error
+import { _td, type TranslationKey } from "../shared-components/i18n";
+import { IS_MAC, IS_ELECTRON, Key } from "../shared-components/Keyboard";
 import { type IBaseSetting } from "../settings/Settings";
 import { type KeyCombo } from "../KeyBindingsManager";
+import { DIGITS } from "../shared-components/KeyboardShortcuts";
+
+export { DIGITS, ALTERNATE_KEY_NAME } from "../shared-components/KeyboardShortcuts";
 
 export enum KeyBindingAction {
     /** Send a message */
@@ -174,22 +178,6 @@ export enum CategoryName {
     LABS = "Labs",
 }
 
-// Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
-export const DIGITS = "digits";
-
-export const ALTERNATE_KEY_NAME: Record<string, TranslationKey> = {
-    [Key.PAGE_UP]: _td("keyboard|page_up"),
-    [Key.PAGE_DOWN]: _td("keyboard|page_down"),
-    [Key.ESCAPE]: _td("keyboard|escape"),
-    [Key.ENTER]: _td("keyboard|enter"),
-    [Key.SPACE]: _td("keyboard|space"),
-    [Key.HOME]: _td("keyboard|home"),
-    [Key.END]: _td("keyboard|end"),
-    [Key.ALT]: _td("keyboard|alt"),
-    [Key.CONTROL]: _td("keyboard|control"),
-    [Key.SHIFT]: _td("keyboard|shift"),
-    [DIGITS]: _td("keyboard|number"),
-};
 export const KEY_ICON: Record<string, string> = {
     [Key.ARROW_UP]: "↑",
     [Key.ARROW_DOWN]: "↓",

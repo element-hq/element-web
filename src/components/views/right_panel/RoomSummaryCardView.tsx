@@ -46,7 +46,7 @@ import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import RoomName from "../elements/RoomName.tsx";
-import { Flex } from "../../utils/Flex.tsx";
+import { Flex } from "../../../shared-components/Flex";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
 import { Box } from "../../utils/Box.tsx";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";

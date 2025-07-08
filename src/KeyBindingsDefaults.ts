@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IS_MAC, Key } from "./Keyboard";
+import { IS_MAC, Key } from "./shared-components/Keyboard";
 import SettingsStore from "./settings/SettingsStore";
 import SdkConfig from "./SdkConfig";
 import { type IKeyBindingsProvider, type KeyBinding } from "./KeyBindingsManager";

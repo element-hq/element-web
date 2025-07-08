@@ -70,7 +70,7 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../../shared-components/Flex";
 import CopyableText from "../elements/CopyableText";
 import { useUserTimezone } from "../../../hooks/useUserTimezone";
 import { UserInfoAdminToolsContainer } from "./user_info/UserInfoAdminToolsContainer";
