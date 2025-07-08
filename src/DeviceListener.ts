@@ -15,7 +15,7 @@ import {
     type SyncState,
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
-import { logger as baseLogger, BaseLogger, LogSpan } from "matrix-js-sdk/src/logger";
+import { logger as baseLogger, type BaseLogger, LogSpan } from "matrix-js-sdk/src/logger";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
