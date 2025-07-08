@@ -15,18 +15,10 @@ import { RoomListView } from "./RoomListView";
 import { Flex } from "../../../../shared-components/Flex";
 import { _t } from "../../../../languageHandler";
 
-type RoomListPanelProps = {
-    /**
-     * Current active space
-     * See {@link RoomListSearch}
-     */
-    activeSpace: string;
-};
-
 /**
  * The panel of the room list
  */
-export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => {
+export const RoomListPanel: React.FC = () => {
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
 
     return (
@@ -37,7 +29,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
             align="stretch"
             aria-label={_t("room_list|list_title")}
         >
-            {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
+            {displayRoomSearch && <RoomListSearch />}
             <RoomListHeaderView />
             <RoomListView />
         </Flex>
