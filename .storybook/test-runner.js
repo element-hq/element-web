@@ -1,8 +1,8 @@
 import { waitForPageReady } from '@storybook/test-runner';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
-const customSnapshotsDir = `${process.cwd()}/playwright/shared-component-snapshots`;
-const customReceivedDir = `${process.cwd()}/playwright/shared-component-received`;
+const customSnapshotsDir = `${process.cwd()}/playwright/shared-component-snapshots/${process.platform}/`;
+const customReceivedDir = `${process.cwd()}/playwright/shared-component-received/${process.platform}/`;
 
 /**
  * @type {import('@storybook/test-runner').TestRunnerConfig}
