@@ -391,7 +391,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             return (
                 <div className={containerClasses}>
                     <div className="mx_LeftPanel_roomListContainer">
-                        <RoomListPanel activeSpace={this.state.activeSpace} />
+                        <RoomListPanel />
                     </div>
                 </div>
             );
