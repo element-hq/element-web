@@ -10,12 +10,6 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
     cancel-in-progress: true
 
-env:
-    # fetchdep.sh needs to know our PR number
-    PR_NUMBER: ${{ github.event.pull_request.number }}
-    # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
-    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
-
 permissions: {} # No permissions required
 
 jobs:
@@ -54,7 +48,7 @@ jobs:
             - name: Run Visual tests
               run: "yarn test:storybook:ci"
 
-            - name: Upload received images
+            - name: Upload received images & diffs
               if: always()
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
