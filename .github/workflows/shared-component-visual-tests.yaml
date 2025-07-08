@@ -48,7 +48,8 @@ jobs:
                   key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
 
             - name: Install Playwright browsers
-              run: yarn playwright install --with-deps --no-shell
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: "yarn playwright install --with-deps --only-shell"
 
             - name: Run Visual tests
               run: "yarn test:storybook:ci"
