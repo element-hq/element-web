@@ -43,7 +43,7 @@ jobs:
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
+                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
