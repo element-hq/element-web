@@ -3854,10 +3854,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^4.0.0":
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.5.tgz#5a26437b6e28cd905e493941c2dfb6af1d439d5f"
-  integrity sha512-tZqcQhdp854SuBduP+A11xQ2FXk2vT7RXoklDF9jA3p5fLl83OJ66fjsqRdb5UUmfkfs2tM6fFWQiuymT9kx4Q==
+"@vector-im/compound-design-tokens@^5.0.0":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-5.0.1.tgz#341edcc860a7200ad38ba1f4a0a8f5f43ff5174f"
+  integrity sha512-PbxhjfHsVGBmrioM7iZ1wgcG8KIZRcnHIJhhEpWascWQwJ9lRm1K7ixV7sjwPWYQlmweSUB8jz4qmp7VTrxWng==
 
 "@vector-im/compound-web@^8.1.2":
   version "8.1.2"
