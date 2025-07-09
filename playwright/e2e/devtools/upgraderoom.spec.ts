@@ -10,7 +10,7 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Room upgrade dialog", () => {
     test.use({
-        displayName: "Alice"
+        displayName: "Alice",
     });
 
     test("should render the room upgrade dialog", { tag: "@screenshot" }, async ({ page, homeserver, user, app }) => {

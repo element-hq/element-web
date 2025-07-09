@@ -27,10 +27,14 @@ test.describe("Voice & Video room settings tab", () => {
         settings = await app.settings.openRoomSettings("Voice & Video");
     });
 
-    test("should be able to toggle on Element Call in the room", { tag: "@screenshot"}, async ({ page, app, user }) => {
-        await page.setViewportSize({ width: 1024, height: 1400 });
-        const callToggle = settings.getByLabel("Enable Element Call as an additional calling option in this room");
-        await callToggle.check();
-        await expect(settings).toMatchScreenshot("room-video-settings.png");
-    });
+    test(
+        "should be able to toggle on Element Call in the room",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            await page.setViewportSize({ width: 1024, height: 1400 });
+            const callToggle = settings.getByLabel("Enable Element Call as an additional calling option in this room");
+            await callToggle.check();
+            await expect(settings).toMatchScreenshot("room-video-settings.png");
+        },
+    );
 });

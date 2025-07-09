@@ -46,48 +46,50 @@ test.describe("Widger permissions dialog", () => {
         demoWidgetUrl = webserver.start(DEMO_WIDGET_HTML);
     });
 
-    test("should be updated if user is re-invited into the room with updated state event", { tag: "@screenshot" }, async ({
-        page,
-        app,
-        user,
-    }) => {
-        const roomId = await app.client.createRoom({
-            name: ROOM_NAME,
-        });
+    test(
+        "should be updated if user is re-invited into the room with updated state event",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            const roomId = await app.client.createRoom({
+                name: ROOM_NAME,
+            });
 
-        // setup widget via state event
-        await app.client.sendStateEvent(
-            roomId,
-            "im.vector.modular.widgets",
-            {
-                id: DEMO_WIDGET_ID,
-                creatorUserId: "somebody",
-                type: DEMO_WIDGET_TYPE,
-                name: DEMO_WIDGET_NAME,
-                url: demoWidgetUrl,
-            },
-            DEMO_WIDGET_ID,
-        );
+            // setup widget via state event
+            await app.client.sendStateEvent(
+                roomId,
+                "im.vector.modular.widgets",
+                {
+                    id: DEMO_WIDGET_ID,
+                    creatorUserId: "somebody",
+                    type: DEMO_WIDGET_TYPE,
+                    name: DEMO_WIDGET_NAME,
+                    url: demoWidgetUrl,
+                },
+                DEMO_WIDGET_ID,
+            );
 
-        // set initial layout
-        await app.client.sendStateEvent(
-            roomId,
-            "io.element.widgets.layout",
-            {
-                widgets: {
-                    [DEMO_WIDGET_ID]: {
-                        container: "top",
-                        index: 1,
-                        width: 100,
-                        height: 0,
+            // set initial layout
+            await app.client.sendStateEvent(
+                roomId,
+                "io.element.widgets.layout",
+                {
+                    widgets: {
+                        [DEMO_WIDGET_ID]: {
+                            container: "top",
+                            index: 1,
+                            width: 100,
+                            height: 0,
+                        },
                     },
                 },
-            },
-            "",
-        );
+                "",
+            );
 
-        // open the room
-        await app.viewRoomByName(ROOM_NAME);
-        await expect(page.locator(".mx_WidgetCapabilitiesPromptDialog")).toMatchScreenshot("widget-capabilites-prompt.png");
-    });
+            // open the room
+            await app.viewRoomByName(ROOM_NAME);
+            await expect(page.locator(".mx_WidgetCapabilitiesPromptDialog")).toMatchScreenshot(
+                "widget-capabilites-prompt.png",
+            );
+        },
+    );
 });

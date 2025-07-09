@@ -12,7 +12,7 @@ test.describe("Notifications tab", () => {
         displayName: "Alice",
     });
 
-    test("should display notification settings", {tag: "@screenshot"}, async ({ page, app, user }) => {
+    test("should display notification settings", { tag: "@screenshot" }, async ({ page, app, user }) => {
         await page.setViewportSize({ width: 1024, height: 1400 });
         const settings = await app.settings.openUserSettings("Notifications");
         await settings.getByLabel("Enable notifications for this account").check();

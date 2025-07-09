@@ -9,7 +9,7 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Devtools", () => {
     test.use({
-        displayName: "Alice"
+        displayName: "Alice",
     });
 
     test("should render the devtools", { tag: "@screenshot" }, async ({ page, homeserver, user, app }) => {

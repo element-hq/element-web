@@ -24,13 +24,13 @@ test.describe("Roles & Permissions room settings tab", () => {
         settings = await app.settings.openRoomSettings("Security & Privacy");
     });
 
-    test("should be able to toggle on encryption in a room", { tag: "@screenshot"}, async ({ page, app, user }) => {
+    test("should be able to toggle on encryption in a room", { tag: "@screenshot" }, async ({ page, app, user }) => {
         await page.setViewportSize({ width: 1024, height: 1400 });
         const encryptedToggle = settings.getByLabel("Encrypted");
         await encryptedToggle.click();
 
         // Accept the dialog.
-        await page.getByRole("button", { name: "Ok "}).click();
+        await page.getByRole("button", { name: "Ok " }).click();
 
         await expect(encryptedToggle).toBeChecked();
         await expect(encryptedToggle).toBeDisabled();

@@ -12,10 +12,14 @@ test.describe("Decline and block invite dialog", function () {
         displayName: "Hanako",
     });
 
-    test("should show decline and block dialog for a room", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
-        await bot.createRoom({ name: "Test Room", invite: [user.userId] });
-        await app.viewRoomByName("Test Room");
-        await page.getByRole("button", { name: "Decline and block" }).click();
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("decline-and-block-invite-empty.png");
-    });
+    test(
+        "should show decline and block dialog for a room",
+        { tag: "@screenshot" },
+        async ({ page, app, user, bot }) => {
+            await bot.createRoom({ name: "Test Room", invite: [user.userId] });
+            await app.viewRoomByName("Test Room");
+            await page.getByRole("button", { name: "Decline and block" }).click();
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("decline-and-block-invite-empty.png");
+        },
+    );
 });
