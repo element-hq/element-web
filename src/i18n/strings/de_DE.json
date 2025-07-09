@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Du wirst den Zugang zu deinen verschlüsselten Nachrichten verlieren",
             "setup_secure_backup_description_1": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
             "setup_secure_backup_description_2": "Wenn du dich abmeldest, werden die Schlüssel auf diesem Gerät gelöscht. Das bedeutet, dass du keine verschlüsselten Nachrichten mehr lesen kannst, wenn du die Schlüssel nicht auf einem anderen Gerät oder eine Sicherung auf dem Server hast.",
-            "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht",
-            "use_key_backup": "Beginne Schlüsselsicherung zu nutzen"
+            "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht"
         },
         "misconfigured_body": "Wende dich an deinen %(brand)s-Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
         "misconfigured_title": "Dein %(brand)s ist falsch konfiguriert",
@@ -965,7 +964,6 @@
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
         "set_up_recovery": "Wiederherstellung einrichten",
         "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
-        "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
             "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
@@ -2683,11 +2681,6 @@
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
-            "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",
-            "backup_starting": "Beginne Sicherung …",
-            "backup_success": "Erfolgreich!",
-            "cannot_create_backup": "Konnte Schlüsselsicherung nicht erstellen",
-            "create_title": "Schlüsselsicherung erstellen",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Deine Schlüssel werden nun von dieser Sitzung gesichert.",
                 "backup_setup_success_title": "Verschlüsselte Sicherung erfolgreich",
@@ -2845,7 +2838,6 @@
             "ignore_users_empty": "Sie haben keinen Benutzer blockiert.",
             "ignore_users_section": "Blockierte Benutzer",
             "key_backup_algorithm": "Algorithmus:",
-            "key_backup_connect": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
             "message_search_enabled": {

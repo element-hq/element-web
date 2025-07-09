@@ -244,8 +244,7 @@
             "setup_key_backup_title": "Stratíte prístup ku zašifrovaným správam",
             "setup_secure_backup_description_1": "Šifrované správy sú zabezpečené end-to-end šifrovaním. Kľúče na čítanie týchto správ máte len vy a príjemca (príjemcovia).",
             "setup_secure_backup_description_2": "Po odhlásení sa tieto kľúče z tohto zariadenia vymažú, čo znamená, že nebudete môcť čítať zašifrované správy, pokiaľ k nim nemáte kľúče v iných zariadeniach alebo ich nemáte zálohované na serveri.",
-            "skip_key_backup": "Nezáleží mi na zašifrovaných správach",
-            "use_key_backup": "Začnite používať zálohovanie kľúčov"
+            "skip_key_backup": "Nezáleží mi na zašifrovaných správach"
         },
         "misconfigured_body": "Požiadajte správcu vášho %(brand)su, aby skontroloval <a>vašu konfiguráciu</a>. Pravdepodobne obsahuje chyby alebo duplikáty.",
         "misconfigured_title": "Váš %(brand)s nie je nastavený správne",
@@ -978,7 +977,6 @@
         "reset_all_button": "Zabudli ste alebo ste stratili všetky metódy obnovy? <a>Resetovať všetko</a>",
         "set_up_recovery": "Nastaviť obnovenie",
         "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
-        "set_up_toast_description": "Zabezpečte sa proti strate šifrovaných správ a údajov",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
         "setup_secure_backup": {
             "explainer": "Zálohujte si šifrovacie kľúče pred odhlásením, aby ste zabránili ich strate."
@@ -2749,11 +2747,6 @@
         },
         "jump_to_bottom_on_send": "Skok na koniec časovej osi pri odosielaní správy",
         "key_backup": {
-            "backup_in_progress": "Zálohovanie kľúčov máte aktívne (prvé zálohovanie môže trvať niekoľko minút).",
-            "backup_starting": "Začína sa zálohovanie…",
-            "backup_success": "Úspech!",
-            "cannot_create_backup": "Nie je možné vytvoriť zálohu šifrovacích kľúčov",
-            "create_title": "Vytvoriť zálohu kľúča",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Kľúče sa teraz zálohujú z tohto zariadenia.",
                 "backup_setup_success_title": "Bezpečné zálohovanie bolo úspešné",
@@ -2880,6 +2873,7 @@
             "composer_heading": "Písanie správ",
             "default_timezone": "Predvolená (%(timezone)s) prehliadača",
             "dialog_title": "<strong>Nastavenia:</strong> Predvoľby",
+            "enable_content_protection": "Povoliť ochranu obsahu",
             "enable_hardware_acceleration": "Povoliť hardvérovú akceleráciu",
             "enable_tray_icon": "Zobraziť ikonu na lište a pri zatvorení minimalizovať okno na ňu",
             "keyboard_heading": "Klávesové skratky",
@@ -2913,7 +2907,6 @@
             "ignore_users_empty": "Nemáte žiadnych ignorovaných používateľov.",
             "ignore_users_section": "Ignorovaní používatelia",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_connect": "Pripojiť túto reláciu k Zálohe kľúčov",
             "message_search_disable_warning": "Ak nie je povolené, správy zo zašifrovaných miestností sa nezobrazia vo výsledkoch vyhľadávania.",
             "message_search_disabled": "Bezpečne lokálne ukladať zašifrované správy do vyrovnávacej pamäte, aby sa zobrazovali vo výsledkoch vyhľadávania.",
             "message_search_enabled": {

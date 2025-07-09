@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Você perderá acesso às suas mensagens criptografadas",
             "setup_secure_backup_description_1": "As mensagens estão protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.",
             "setup_secure_backup_description_2": "Quando você se desconectar, essas chaves serão excluídas desse dispositivo, o que significa que você não poderá ler mensagens criptografadas, a menos que tenha as chaves delas em seus outros dispositivos ou tenha feito backup delas no servidor.",
-            "skip_key_backup": "Não quero minhas mensagens criptografadas",
-            "use_key_backup": "Comece a usar backup de chave"
+            "skip_key_backup": "Não quero minhas mensagens criptografadas"
         },
         "misconfigured_body": "Entre em contato com o administrador do %(brand)s para verificar se há entradas inválidas ou duplicadas nas <a>suas configurações</a>.",
         "misconfigured_title": "O %(brand)s está mal configurado",
@@ -969,7 +968,6 @@
         "reset_all_button": "Esqueceu ou perdeu todos os métodos de recuperação? <a>Redefinir tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
-        "set_up_toast_description": "Proteja-se contra a perda de acesso a mensagens e dados criptografados",
         "set_up_toast_title": "Configurar o backup online",
         "setup_secure_backup": {
             "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
@@ -1605,7 +1603,7 @@
         "MapStyleUrlNotConfigured": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​para​•​exibir​•​mapas.",
         "MapStyleUrlNotReachable": "Esse​•​servidor​•​doméstico​•​não​•​está​•​configurado​•​corretamente​•​para​•​exibir​•​mapas,​•​ou​•​o​•​servidor​•​de​•​mapas​•​configurado​•​pode​•​estar​•​inacessível.",
         "WebGLNotEnabled": "O​•​WebGL​•​é​•​necessário​•​para​•​exibir​•​mapas,​•​ative-o​•​nas​•​configurações​•​do​•​seu​•​navegador.",
-        "click_drop_pin": "Clique para soltar um alfinete",
+        "click_drop_pin": "Clique ​para​ ​soltar​ um​ ​alfinete",
         "click_move_pin": "Clique​•​para​•​mover​•​o​•​alfinete",
         "close_sidebar": "Fechar​•​barra​•​lateral",
         "error_fetch_location": "Não​•​foi​•​possível​•​obter​•​a​•​localização",
@@ -2712,11 +2710,6 @@
         },
         "jump_to_bottom_on_send": "Vá para o final da linha do tempo ao enviar uma mensagem",
         "key_backup": {
-            "backup_in_progress": "O backup de suas chaves está sendo feito (o primeiro backup pode demorar alguns minutos).",
-            "backup_starting": "Iniciando o backup...",
-            "backup_success": "Pronto!",
-            "cannot_create_backup": "Não foi possível criar backup da chave",
-            "create_title": "Criar backup de chave",
             "setup_secure_backup": {
                 "backup_setup_success_description": "As suas chaves estão agora a ser copiadas a partir deste dispositivo.",
                 "backup_setup_success_title": "Backup seguro bem-sucedido",
@@ -2843,6 +2836,7 @@
             "composer_heading": "Campo de texto",
             "default_timezone": "Navegador padrão (%(timezone)s)",
             "dialog_title": "<strong>Configurações:</strong> Preferências",
+            "enable_content_protection": "Habilitar a proteção de conteúdo",
             "enable_hardware_acceleration": "Habilitar aceleração de hardware",
             "enable_tray_icon": "Mostrar o ícone da bandeja e minimizar a janela ao fechar",
             "keyboard_heading": "Teclas de atalho do teclado",
@@ -2876,7 +2870,6 @@
             "ignore_users_empty": "Você não tem usuários ignorados.",
             "ignore_users_section": "Usuários bloqueados",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Autorize esta sessão a fazer o backup de chaves",
             "message_search_disable_warning": "Se desativado, as mensagens de salas criptografadas não aparecerão em resultados de buscas.",
             "message_search_disabled": "Armazene mensagens criptografadas de forma segura localmente para que possam aparecer nos resultados das buscas.",
             "message_search_enabled": {
