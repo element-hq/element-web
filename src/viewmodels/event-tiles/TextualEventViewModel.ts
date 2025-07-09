@@ -30,7 +30,7 @@ export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot
     };
 
     public subscribe = (listener: () => void): (() => void) => {
-        return this.subs.subscribe(listener);
+        return this.subs.add(listener);
     };
 
     public getSnapshot = (): TextualEventViewSnapshot => {
