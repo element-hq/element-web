@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 /**
  * A mock view model that returns a static snapshot passed in the constructor, with no updates.
  */
-export class MockViewModel<T> {
+export class MockViewModel<T> implements ViewModel<T> {
     public constructor(private snapshot: T) {}
 
     public getSnapshot = (): T => {
