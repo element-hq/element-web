@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
             "setup_secure_backup_description_1": "Les messages chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) ont les clés pour lire ces messages.",
             "setup_secure_backup_description_2": "Quand vous vous déconnectez, ces clés seront supprimées de cet appareil, et vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
-            "skip_key_backup": "Je ne veux pas de mes messages chiffrés",
-            "use_key_backup": "Commencer à utiliser la sauvegarde de clés"
+            "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
         "misconfigured_title": "Votre %(brand)s est mal configuré",
@@ -969,7 +968,6 @@
         "reset_all_button": "Vous avez perdu ou oublié tous vos moyens de récupération ? <a>Tout réinitialiser</a>",
         "set_up_recovery": "Configurer la récupération",
         "set_up_recovery_toast_description": "Générez une clé de récupération qui peut être utilisée pour restaurer l'historique de vos messages chiffrés au cas où vous perdriez l'accès à vos appareils.",
-        "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
             "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
@@ -2712,11 +2710,6 @@
         },
         "jump_to_bottom_on_send": "Sauter en bas du fil de discussion lorsque vous envoyez un message",
         "key_backup": {
-            "backup_in_progress": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
-            "backup_starting": "Début de la sauvegarde…",
-            "backup_success": "Terminé !",
-            "cannot_create_backup": "Impossible de créer la sauvegarde des clés",
-            "create_title": "Créer une sauvegarde de clé",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Vos clés sont maintenant sauvegardées depuis cet appareil.",
                 "backup_setup_success_title": "Sauvegarde sécurisée réalisée avec succès",
@@ -2843,6 +2836,7 @@
             "composer_heading": "Compositeur",
             "default_timezone": "Navigateur par défaut (%(timezone)s)",
             "dialog_title": "<strong>Paramètres : </strong> Préférences",
+            "enable_content_protection": "Activer la protection du contenu",
             "enable_hardware_acceleration": "Activer l’accélération matérielle",
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
@@ -2876,7 +2870,6 @@
             "ignore_users_empty": "Vous n’avez ignoré personne.",
             "ignore_users_section": "Utilisateurs ignorés",
             "key_backup_algorithm": "Algorithme :",
-            "key_backup_connect": "Connecter cette session à la sauvegarde de clés",
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
             "message_search_enabled": {

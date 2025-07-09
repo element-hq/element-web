@@ -242,8 +242,7 @@
             "setup_key_backup_title": "Přijdete o přístup k šifrovaným zprávám",
             "setup_secure_backup_description_1": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
             "setup_secure_backup_description_2": "Po odhlášení budou tyto klíče z tohoto zařízení odstraněny, což znamená, že nebudete moci číst zašifrované zprávy, pokud k nim nemáte klíče v jiných zařízeních nebo je nemáte zálohované na serveru.",
-            "skip_key_backup": "Už své zašifrované zprávy nechci",
-            "use_key_backup": "Začít používat zálohu klíčů"
+            "skip_key_backup": "Už své zašifrované zprávy nechci"
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
         "misconfigured_title": "%(brand)s je špatně nakonfigurován",
@@ -971,7 +970,6 @@
         "reset_all_button": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Resetovat vše</a>",
         "set_up_recovery": "Nastavení obnovení",
         "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
-        "set_up_toast_description": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
             "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
@@ -2719,11 +2717,6 @@
         },
         "jump_to_bottom_on_send": "Po odeslání zprávy přejít na konec časové osy",
         "key_backup": {
-            "backup_in_progress": "Klíče se zálohují (první záloha může trvat pár minut).",
-            "backup_starting": "Zahájení zálohování…",
-            "backup_success": "Úspěch!",
-            "cannot_create_backup": "Nepovedlo se vyrobit zálohů klíčů",
-            "create_title": "Vytvořit zálohu klíčů",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Vaše klíče jsou nyní zálohovány z tohoto zařízení.",
                 "backup_setup_success_title": "Bezpečné zálohování bylo úspěšné",
@@ -2883,7 +2876,6 @@
             "ignore_users_empty": "Nemáte žádné ignorované uživatele.",
             "ignore_users_section": "Ignorovaní uživatelé",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_connect": "Připojit k zálohování klíčů",
             "message_search_disable_warning": "Když je to zakázané, zprávy v šifrovaných místnostech se nebudou objevovat ve výsledcích vyhledávání.",
             "message_search_disabled": "Bezpečně uchovávat zprávy na tomto zařízení aby se v nich dalo vyhledávat.",
             "message_search_enabled": {
