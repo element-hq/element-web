@@ -80,7 +80,7 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
 export const TextualEventFactory: Factory = (ref, props) => {
-    const vm = new TextualEventViewModel(props);
+    const vm = useMemo(() => new TextualEventViewModel(props), [props]);
     return <TextualEvent vm={vm} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
