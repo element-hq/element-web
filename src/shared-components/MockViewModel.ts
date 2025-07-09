@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type ViewModel } from "./ViewModel";
+
 /**
  * A mock view model that returns a static snapshot passed in the constructor, with no updates.
  */
