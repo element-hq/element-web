@@ -34,6 +34,10 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile
 
+            - name: Get installed Playwright version
+              id: playwright
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+
             - name: Cache playwright binaries
               uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
               id: playwright-cache

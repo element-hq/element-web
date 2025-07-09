@@ -169,8 +169,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
 
     useEffect(() => {
         const room = mxClient.getRoom(roomId);
-        room
-            ?.createThreadsTimelineSets()
+        room?.createThreadsTimelineSets()
             .then(() => room.fetchRoomThreads())
             .then(() => {
                 setFilterOption(ThreadFilterType.All);

@@ -19,7 +19,7 @@ export abstract class SubscriptionViewModel<T> implements ViewModel<T> {
     }
 
     public subscribe = (listener: () => void): (() => void) => {
-        return this.subs.subscribe(listener);
+        return this.subs.add(listener);
     };
 
     /**

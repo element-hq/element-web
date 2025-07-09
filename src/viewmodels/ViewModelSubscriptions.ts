@@ -25,7 +25,7 @@ export class ViewModelSubscriptions {
      * @param listener Will be called whenever the snapshot changes.
      * @returns A function to unsubscribe from the view model updates.
      */
-    public subscribe = (listener: () => void) => {
+    public add = (listener: () => void): (() => void) => {
         this.listeners.add(listener);
         if (this.listeners.size === 1) {
             this.subscribeCallback();
