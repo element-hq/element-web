@@ -18,15 +18,15 @@ export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot
     private subs: ViewModelSubscriptions;
 
     public constructor(private eventTileProps: EventTileTypeProps) {
-        this.subs = new ViewModelSubscriptions(this.updateSubscription);
+        this.subs = new ViewModelSubscriptions(this.addSubscription, this.removeSubscription);
     }
 
-    private updateSubscription = (): void => {
-        if (this.subs.listenerCount() > 0) {
-            this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
-        } else {
-            this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
-        }
+    private addSubscription = (): void => {
+        this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+    };
+
+    private removeSubscription = (): void => {
+        this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
     };
 
     public subscribe = (listener: () => void): (() => void) => {
