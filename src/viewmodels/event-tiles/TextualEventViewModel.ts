@@ -12,8 +12,9 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
 import { ViewModelSubscriptions } from "../ViewModelSubscriptions";
 import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
+import { type ViewModel } from "../../shared-components/ViewModel";
 
-export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot>  {
+export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot> {
     private subs: ViewModelSubscriptions;
 
     public constructor(private eventTileProps: EventTileTypeProps) {
