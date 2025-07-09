@@ -226,8 +226,7 @@
             "setup_key_backup_title": "Perderás o acesso às tuas mensagens encriptadas",
             "setup_secure_backup_description_1": "As mensagens encriptadas são protegidas com encriptação de ponta a ponta. Só tu e o(s) destinatário(s) têm as chaves para ler estas mensagens.",
             "setup_secure_backup_description_2": "Quando terminares a sessão, estas chaves serão eliminadas deste dispositivo, o que significa que não poderás ler mensagens encriptadas, a menos que tenhas as chaves para elas nos teus outros dispositivos ou tenhas feito uma cópia de segurança das mesmas no servidor.",
-            "skip_key_backup": "Não quero as minhas mensagens encriptadas",
-            "use_key_backup": "Começa a utilizar a Cópia de Segurança das Chaves"
+            "skip_key_backup": "Não quero as minhas mensagens encriptadas"
         },
         "misconfigured_body": "Pede ao teu administrador %(brand)s para verificar <a>a tua configuração</a> para ver se há entradas incorretas ou duplicadas.",
         "misconfigured_title": "O teu %(brand)s está mal configurado",
@@ -937,7 +936,6 @@
         "reset_all_button": "Esqueceste-te ou perdeste todos os métodos de recuperação? <a>Repor tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
-        "set_up_toast_description": "Protege-te contra a perda de acesso a mensagens e dados encriptados",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
         "setup_secure_backup": {
             "explainer": "Guarda as tuas chaves antes de saíres para evitar perdê-las."
@@ -2626,11 +2624,6 @@
         "insert_trailing_colon_mentions": "Insere dois pontos após as menções do utilizador no início de uma mensagem",
         "jump_to_bottom_on_send": "Salta para o fundo da linha de tempo quando enviar uma mensagem",
         "key_backup": {
-            "backup_in_progress": "Está a ser feita uma cópia de segurança das tuas chaves (a primeira cópia de segurança pode demorar alguns minutos).",
-            "backup_starting": "Iniciar cópia de segurança...",
-            "backup_success": "Sucesso!",
-            "cannot_create_backup": "Não é possível criar uma cópia de segurança da chave",
-            "create_title": "Cria uma cópia de segurança da chave",
             "setup_secure_backup": {
                 "backup_setup_success_description": "As tuas chaves estão agora a ser copiadas a partir deste dispositivo.",
                 "backup_setup_success_title": "Backup seguro bem-sucedido",
@@ -2780,7 +2773,6 @@
             "ignore_users_empty": "Não tens utilizadores ignorados.",
             "ignore_users_section": "Utilizadores ignorados",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Liga esta sessão à cópia de segurança das chaves",
             "message_search_disable_warning": "Se estiver desactivada, as mensagens de salas encriptadas não aparecerão nos resultados da pesquisa.",
             "message_search_disabled": "Armazena em cache de forma segura as mensagens encriptadas localmente para que apareçam nos resultados de pesquisa.",
             "message_search_enabled": {

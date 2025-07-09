@@ -224,8 +224,7 @@
             "megolm_export": "Vie avaimet käsin",
             "setup_key_backup_title": "Menetät pääsyn salattuihin viesteihisi",
             "setup_secure_backup_description_1": "Salatut viestit turvataan päästä päähän -salauksella. Vain sinä ja viestien vastaanottaja(t) omaavat avaimet näiden viestien lukemiseen.",
-            "skip_key_backup": "En halua salattuja viestejäni",
-            "use_key_backup": "Aloita avainvarmuuskopion käyttö"
+            "skip_key_backup": "En halua salattuja viestejäni"
         },
         "misconfigured_body": "Pyydä %(brand)s-ylläpitäjääsi tarkistamaan, onko <a>asetuksissasi</a>virheellisiä tai toistettuja merkintöjä.",
         "misconfigured_title": "%(brand)sin asetukset ovat pielessä",
@@ -830,7 +829,6 @@
         "reset_all_button": "Unohtanut tai kadottanut kaikki palautustavat? <a>Nollaa kaikki</a>",
         "set_up_recovery": "Määritä palautus",
         "set_up_recovery_toast_description": "Luo palautusavain, jota voit käyttää salatun viestihistorian palauttamiseen, jos menetät pääsyn laitteisiisi.",
-        "set_up_toast_description": "Suojaudu salattuihin viesteihin ja tietoihin pääsyn menettämiseltä",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
         "setup_secure_backup": {
             "explainer": "Varmuuskopioi avaimesi ennen kuin kirjaudut ulos välttääksesi avainten menetyksen."
@@ -2303,11 +2301,6 @@
         "insert_trailing_colon_mentions": "Lisää kaksoispiste käyttäjän maininnan perään viestin alussa",
         "jump_to_bottom_on_send": "Siirry aikajanan pohjalle, kun lähetät viestin",
         "key_backup": {
-            "backup_in_progress": "Avaimiasi varmuuskopioidaan (ensimmäinen varmuuskopio voi viedä muutaman minuutin).",
-            "backup_starting": "Aloitetaan varmuuskopiointia…",
-            "backup_success": "Onnistui!",
-            "cannot_create_backup": "Avaimen varmuuskopiota ei voi luoda",
-            "create_title": "Luo avaimen varmuuskopio",
             "setup_secure_backup": {
                 "cancel_warning": "Jos peruutat nyt, voit menettää salattuja viestejä ja tietoja, jos menetät pääsyn kirjautumistietoihisi.",
                 "confirm_security_phrase": "Vahvista turvalause",
@@ -2435,7 +2428,6 @@
             "ignore_users_empty": "Et ole sivuuttanut käyttäjiä.",
             "ignore_users_section": "Sivuutetut käyttäjät",
             "key_backup_algorithm": "Algoritmi:",
-            "key_backup_connect": "Yhdistä tämä istunto avainten varmuuskopiointiin",
             "message_search_disable_warning": "Jos ei ole käytössä, salattujen huoneiden viestejä ei näytetä hakutuloksissa.",
             "message_search_disabled": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa.",
             "message_search_enabled": {
