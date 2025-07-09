@@ -111,15 +111,26 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                   },
               )
             : description;
+        if (this.props.name === "sendReadReceipts") {
+            console.log(
+                "Fully disabled",
+                this.props.name,
+                SettingsStore.disabledMessage(this.props.name),
+                description,
+                helpMessage,
+            );
+        }
+        const disabledMessage = SettingsStore.disabledMessage(this.props.name);
         return (
             <SettingsToggleInput
                 id={this.id}
                 checked={this.state.value}
-                onChange={this.onChange}
+                onChange={disabledMessage ? undefined : this.onChange}
                 name={this.props.name}
+                disabled={disabled}
                 label={label ?? this.props.name}
                 helpMessage={helpMessage as string}
-                disabledMessage={SettingsStore.disabledMessage(this.props.name)}
+                disabledMessage={disabledMessage}
             />
         );
     }

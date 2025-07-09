@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type ReactNode } from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -24,7 +25,6 @@ import ImageSizePanel from "../../ImageSizePanel";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
-import { Form } from "@vector-im/compound-web";
 
 interface IState {
     useBundledEmojiFont: boolean;
@@ -103,7 +103,12 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
-                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
                         <ThemeChoicePanel />
                         <LayoutSwitcher />
                         <FontScalingPanel />

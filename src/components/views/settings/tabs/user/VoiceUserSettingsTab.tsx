@@ -187,7 +187,12 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
 
         return (
             <SettingsTab>
-                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
                     <SettingsSection>
                         {requestButton}
                         <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>

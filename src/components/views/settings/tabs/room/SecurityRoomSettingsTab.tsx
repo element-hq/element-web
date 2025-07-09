@@ -446,35 +446,40 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return (
             <SettingsTab>
                 <SettingsSection heading={_t("room_settings|security|title")}>
-                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
-                    <SettingsFieldset
-                        legend={_t("settings|security|encryption_section")}
-                        description={
-                            isEncryptionForceDisabled && !isEncrypted
-                                ? undefined
-                                : _t("room_settings|security|encryption_permanent")
-                        }
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
                     >
-                        {isEncryptionLoading ? (
-                            <InlineSpinner />
-                        ) : (
-                            <>
-                                <SettingsToggleInput
-                                    name="enable-encryption"
-                                    checked={isEncrypted}
-                                    onChange={this.onEncryptionChange}
-                                    label={_t("common|encrypted")}
-                                    disabled={!canEnableEncryption}
-                                />
-                                {isEncryptionForceDisabled && !isEncrypted && (
-                                    <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
-                                )}
-                                {encryptionSettings}
-                            </>
-                        )}
-                    </SettingsFieldset>
-                    {this.renderJoinRule()}
-                    {historySection}
+                        <SettingsFieldset
+                            legend={_t("settings|security|encryption_section")}
+                            description={
+                                isEncryptionForceDisabled && !isEncrypted
+                                    ? undefined
+                                    : _t("room_settings|security|encryption_permanent")
+                            }
+                        >
+                            {isEncryptionLoading ? (
+                                <InlineSpinner />
+                            ) : (
+                                <>
+                                    <SettingsToggleInput
+                                        name="enable-encryption"
+                                        checked={isEncrypted}
+                                        onChange={this.onEncryptionChange}
+                                        label={_t("common|encrypted")}
+                                        disabled={!canEnableEncryption}
+                                    />
+                                    {isEncryptionForceDisabled && !isEncrypted && (
+                                        <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
+                                    )}
+                                    {encryptionSettings}
+                                </>
+                            )}
+                        </SettingsFieldset>
+                        {this.renderJoinRule()}
+                        {historySection}
                     </Form.Root>
                 </SettingsSection>
             </SettingsTab>

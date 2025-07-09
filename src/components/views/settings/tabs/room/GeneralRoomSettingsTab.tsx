@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ContextType } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
@@ -23,7 +24,6 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
 import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
-import { Form } from "@vector-im/compound-web";
 
 interface IProps {
     room: Room;
@@ -79,7 +79,12 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
         return (
             <SettingsTab data-testid="General">
-                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
                     <SettingsSection heading={_t("common|general")}>
                         <RoomProfileSettings roomId={room.roomId} />
                     </SettingsSection>

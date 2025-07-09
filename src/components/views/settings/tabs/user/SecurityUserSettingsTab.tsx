@@ -11,6 +11,7 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -32,7 +33,6 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
-import { Form } from "@vector-im/compound-web";
 
 interface IIgnoredUserProps {
     userId: string;
@@ -356,21 +356,31 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                    {warning}
-                    <SetIntegrationManager />
-                    <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
-                        <SettingsSection heading={_t("settings|security|encryption_section")}>
-                            {secureBackup}
-                            {eventIndex}
-                        </SettingsSection>
-                    </Form.Root>
-                    <SettingsSection heading={_t("common|privacy")}>
-                        <DiscoverySettings />
-                        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
-                            {posthogSection}
-                        </Form.Root>
+                {warning}
+                <SetIntegrationManager />
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection heading={_t("settings|security|encryption_section")}>
+                        {secureBackup}
+                        {eventIndex}
                     </SettingsSection>
-                    {advancedSection}
+                </Form.Root>
+                <SettingsSection heading={_t("common|privacy")}>
+                    <DiscoverySettings />
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
+                        {posthogSection}
+                    </Form.Root>
+                </SettingsSection>
+                {advancedSection}
             </SettingsTab>
         );
     }

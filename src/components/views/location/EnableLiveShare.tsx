@@ -36,6 +36,8 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
         [isEnabled, onSubmit],
     );
 
+    console.log("EnableLiveShare", isEnabled);
+
     return (
         <div data-testid="location-picker-enable-live-share" className="mx_EnableLiveShare">
             <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />
@@ -50,12 +52,7 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
                     onChange={onEnabledChanged}
                     label={_t("location_sharing|live_toggle_label")}
                 />
-                <Button
-                    data-testid="enable-live-share-submit"
-                    className="mx_EnableLiveShare_button"
-                    kind="primary"
-                    disabled={!isEnabled}
-                >
+                <Button className="mx_EnableLiveShare_button" kind="primary" disabled={!isEnabled}>
                     {_t("action|ok")}
                 </Button>
             </Form.Root>

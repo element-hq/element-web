@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEventHandler } from "react";
 import { JoinRule, Visibility } from "matrix-js-sdk/src/matrix";
 import { SettingsToggleInput } from "@vector-im/compound-web";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     roomId: string;

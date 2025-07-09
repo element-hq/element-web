@@ -66,11 +66,20 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
         return (
-            <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}} className="mx_SetIntegrationManager" data-testid="mx_SetIntegrationManager">
+            <Form.Root
+                onSubmit={(evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                }}
+                className="mx_SetIntegrationManager"
+                data-testid="mx_SetIntegrationManager"
+            >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
                         <Heading size="3">{_t("integration_manager|manage_title")}</Heading>
-                        <Heading id="mx_SetIntegrationManager_ManagerName" size="4">{managerName}</Heading>
+                        <Heading id="mx_SetIntegrationManager_ManagerName" size="4">
+                            {managerName}
+                        </Heading>
                     </div>
                 </div>
                 <SettingsSubsectionText id="mx_SetIntegrationManager_BodyText">{bodyText}</SettingsSubsectionText>

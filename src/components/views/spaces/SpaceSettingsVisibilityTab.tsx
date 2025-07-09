@@ -108,17 +108,15 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                 </AccessibleButton>
 
                 {showAdvancedSection && (
-                    <div className="mx_SettingsTab_toggleWithDescription">
-                        <SettingsToggleInput
-                            name="guest-access-enabled"
-                            checked={guestAccessEnabled}
-                            onChange={onGuestAccessEnabledChanged}
-                            disabled={!canSetGuestAccess}
-                            disabledMessage={_t("room_settings|visibility|guest_access_disabled")}
-                            helpMessage={_t("room_settings|visibility|guest_access_explainer")}
-                            label={_t("room_settings|visibility|guest_access_label")}
-                        />
-                    </div>
+                    <SettingsToggleInput
+                        name="guest-access-enabled"
+                        checked={guestAccessEnabled}
+                        onChange={onGuestAccessEnabledChanged}
+                        disabled={!canSetGuestAccess}
+                        disabledMessage={_t("room_settings|visibility|guest_access_disabled")}
+                        helpMessage={_t("room_settings|visibility|guest_access_explainer")}
+                        label={_t("room_settings|visibility|guest_access_label")}
+                    />
                 )}
             </div>
         );
@@ -158,29 +156,32 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                         onError={(): void => setError(_t("room_settings|visibility|error_failed_save"))}
                         closeSettingsFn={closeSettingsFn}
                     />
-                    {advancedSection}
-                    <div className="mx_SettingsTab_toggleWithDescription">
-                        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
-                            <SettingsToggleInput
-                                name="space-history-visibility"
-                                checked={historyVisibility === HistoryVisibility.WorldReadable}
-                                onChange={(evt): void => {
-                                    setHistoryVisibility(
-                                        evt.target.checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
-                                    );
-                                }}
-                                helpMessage={_t("room_settings|visibility|history_visibility_anyone_space_description")}
-                                disabled={!canSetHistoryVisibility}
-                                disabledMessage={_t("room_settings|visibility|history_visibility_anyone_space_disabled")}
-                                label={_t("room_settings|visibility|history_visibility_anyone_space")}
-                            />
-                            <p>
-                                <strong>
-                                    {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
-                                </strong>
-                            </p>
-                        </Form.Root>
-                    </div>
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
+                        {advancedSection}
+                        <SettingsToggleInput
+                            name="space-history-visibility"
+                            checked={historyVisibility === HistoryVisibility.WorldReadable}
+                            onChange={(evt): void => {
+                                setHistoryVisibility(
+                                    evt.target.checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
+                                );
+                            }}
+                            helpMessage={_t("room_settings|visibility|history_visibility_anyone_space_description")}
+                            disabled={!canSetHistoryVisibility}
+                            disabledMessage={_t("room_settings|visibility|history_visibility_anyone_space_disabled")}
+                            label={_t("room_settings|visibility|history_visibility_anyone_space")}
+                        />
+                        <p>
+                            <strong>
+                                {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
+                            </strong>
+                        </p>
+                    </Form.Root>
                 </SettingsFieldset>
 
                 {addressesSection}

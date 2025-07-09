@@ -76,6 +76,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     return (
         <SettingsToggleInput
             name="element-call-switch"
+            data-test-id="element-call-switch"
             label={_t("room_settings|voip|enable_element_call_label", { brand })}
             helpMessage={_t("room_settings|voip|enable_element_call_caption", {
                 brand,
@@ -96,7 +97,12 @@ export const VoipRoomSettingsTab: React.FC<Props> = ({ room }) => {
     return (
         <SettingsTab>
             <SettingsSection heading={_t("settings|voip|title")}>
-                <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
                     <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
                         <ElementCallSwitch room={room} />
                     </SettingsSubsection>

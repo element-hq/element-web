@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { type HTMLAttributes } from "react";
-import { Separator } from "@vector-im/compound-web";
+import { Form, Separator } from "@vector-im/compound-web";
 
 import { SettingsSubsectionHeading } from "./SettingsSubsectionHeading";
 
@@ -23,6 +23,11 @@ export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> 
      * @default true
      */
     legacy?: boolean;
+
+    /**
+     * Wrap in a Form Root component, for compatibility with compound components.
+     */
+    formWrap?: boolean;
 }
 
 export const SettingsSubsectionText: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
@@ -37,31 +42,48 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
     children,
     stretchContent,
     legacy = true,
+    formWrap,
     ...rest
-}) => (
-    <div
-        {...rest}
-        className={classNames("mx_SettingsSubsection", {
-            mx_SettingsSubsection_newUi: !legacy,
-        })}
-    >
-        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
-        {!!description && (
-            <div className="mx_SettingsSubsection_description">
-                <SettingsSubsectionText>{description}</SettingsSubsectionText>
-            </div>
-        )}
-        {!!children && (
-            <div
-                className={classNames("mx_SettingsSubsection_content", {
-                    mx_SettingsSubsection_contentStretch: !!stretchContent,
-                    mx_SettingsSubsection_noHeading: !heading && !description,
-                    mx_SettingsSubsection_content_newUi: !legacy,
-                })}
+}) => {
+    const content = (
+        <div
+            {...rest}
+            className={classNames("mx_SettingsSubsection", {
+                mx_SettingsSubsection_newUi: !legacy,
+            })}
+        >
+            {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
+            {!!description && (
+                <div className="mx_SettingsSubsection_description">
+                    <SettingsSubsectionText>{description}</SettingsSubsectionText>
+                </div>
+            )}
+            {!!children && (
+                <div
+                    className={classNames("mx_SettingsSubsection_content", {
+                        mx_SettingsSubsection_contentStretch: !!stretchContent,
+                        mx_SettingsSubsection_noHeading: !heading && !description,
+                        mx_SettingsSubsection_content_newUi: !legacy,
+                    })}
+                >
+                    {children}
+                </div>
+            )}
+            {!legacy && <Separator />}
+        </div>
+    );
+
+    if (formWrap) {
+        return (
+            <Form.Root
+                onSubmit={(evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                }}
             >
-                {children}
-            </div>
-        )}
-        {!legacy && <Separator />}
-    </div>
-);
+                {content}
+            </Form.Root>
+        );
+    }
+    return content;
+};

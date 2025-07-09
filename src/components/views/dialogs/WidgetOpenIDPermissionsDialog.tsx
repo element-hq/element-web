@@ -85,7 +85,12 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
                     onPrimaryButtonClick={this.onAllow}
                     onCancel={this.onDeny}
                     additive={
-                        <Form.Root onSubmit={(evt) => {evt.preventDefault(); evt.stopPropagation();}}>
+                        <Form.Root
+                            onSubmit={(evt) => {
+                                evt.preventDefault();
+                                evt.stopPropagation();
+                            }}
+                        >
                             <SettingsToggleInput
                                 name="remember-selection"
                                 checked={this.state.rememberSelection}
