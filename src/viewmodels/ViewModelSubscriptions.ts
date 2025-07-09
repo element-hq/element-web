@@ -12,9 +12,13 @@ export class ViewModelSubscriptions {
     private listeners = new Set<() => void>();
 
     /**
-     * @param updateSubscription A function called whenever a listener is added or removed.
+     * @param subscribeCallback Called when the first listener subscribes.
+     * @param unsubscribeCallback Called when the last listener unsubscribes.
      */
-    public constructor(private updateSubscription: () => void) {}
+    public constructor(
+        private subscribeCallback: () => void,
+        private unsubscribeCallback: () => void,
+    ) {}
 
     /**
      * Subscribe to changes in the view model.
@@ -23,11 +27,15 @@ export class ViewModelSubscriptions {
      */
     public subscribe = (listener: () => void) => {
         this.listeners.add(listener);
-        this.updateSubscription();
+        if (this.listeners.size === 1) {
+            this.subscribeCallback();
+        }
 
         return () => {
             this.listeners.delete(listener);
-            this.updateSubscription();
+            if (this.listeners.size === 0) {
+                this.unsubscribeCallback();
+            }
         };
     };
 
@@ -38,13 +46,5 @@ export class ViewModelSubscriptions {
         for (const listener of this.listeners) {
             listener();
         }
-    }
-
-    /**
-     * Get the number of listeners currently subscribed to updates.
-     * @returns The number of listeners.
-     */
-    public listenerCount(): number {
-        return this.listeners.size;
     }
 }
