@@ -13,7 +13,7 @@ import { textForEvent } from "../../TextForEvent";
 import { ViewModelSubscriptions } from "../ViewModelSubscriptions";
 import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
 
-export class TextualEventViewModel {
+export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot>  {
     private subs: ViewModelSubscriptions;
 
     public constructor(private eventTileProps: EventTileTypeProps) {
