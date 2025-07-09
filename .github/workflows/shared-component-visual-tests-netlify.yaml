@@ -33,7 +33,7 @@ jobs:
                   name: received-images
                   path: received-images
 
-			- name: Generate Index
+            - name: Generate Index
               run: "tree -L 1 --noreport -H '-.' -o received-images/index.html received-images"
 
             - name: 📤 Deploy to Netlify
