@@ -16,14 +16,12 @@ import { type TextualEventViewSnapshot } from "../../shared-components/event-til
 export class TextualEventViewModel {
     private subs: ViewModelSubscriptions;
 
-    private listeners = new Set<CallableFunction>();
-
     public constructor(private eventTileProps: EventTileTypeProps) {
         this.subs = new ViewModelSubscriptions(this.updateSubscription);
     }
 
     private updateSubscription = (): void => {
-        if (this.listeners.size > 0) {
+        if (this.subs.listenerCount() > 0) {
             this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
         } else {
             this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);

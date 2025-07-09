@@ -39,4 +39,12 @@ export class ViewModelSubscriptions {
             listener();
         }
     }
+
+    /**
+     * Get the number of listeners currently subscribed to updates.
+     * @returns The number of listeners.
+     */
+    public listenerCount(): number {
+        return this.listeners.size;
+    }
 }
