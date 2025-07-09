@@ -238,8 +238,7 @@
             "setup_key_backup_title": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
             "setup_secure_backup_description_1": "Pesan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima punya kuncinya untuk membaca pesan ini.",
             "setup_secure_backup_description_2": "Ketika Anda keluar, kunci-kunci ini akan dihapus dari perangkat ini, yang berarti Anda tidak dapat membaca pesan-pesan terenkripsi kecuali jika Anda mempunyai kuncinya di perangkat Anda yang lain, atau telah mencadangkannya ke server.",
-            "skip_key_backup": "Saya tidak ingin pesan-pesan terenkripsi saya",
-            "use_key_backup": "Mulai menggunakan Cadangan Kunci"
+            "skip_key_backup": "Saya tidak ingin pesan-pesan terenkripsi saya"
         },
         "misconfigured_body": "Tanyakan admin %(brand)s Anda untuk memeriksa <a>konfigurasi Anda</a> untuk entri yang tidak benar atau entri duplikat.",
         "misconfigured_title": "%(brand)s Anda telah diatur dengan salah",
@@ -966,7 +965,6 @@
         "reset_all_button": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
         "set_up_recovery": "Siapkan pemulihan",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
-        "set_up_toast_description": "Lindungi dari kehilangan akses ke pesan & data terenkripsi",
         "set_up_toast_title": "Siapkan Cadangan Aman",
         "setup_secure_backup": {
             "explainer": "Cadangkan kunci Anda sebelum keluar untuk menghindari kehilangannya."
@@ -2705,11 +2703,6 @@
         },
         "jump_to_bottom_on_send": "Pergi ke bawah lini masa ketika Anda mengirim pesan",
         "key_backup": {
-            "backup_in_progress": "Kunci Anda sedang dicadangkan (cadangan pertama mungkin membutuhkan beberapa menit).",
-            "backup_starting": "Memulai pencadangan…",
-            "backup_success": "Berhasil!",
-            "cannot_create_backup": "Tidak dapat membuat cadangan kunci",
-            "create_title": "Buat cadangan kunci",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Kunci Anda sekarang dicadangkan dari perangkat ini.",
                 "backup_setup_success_title": "Pencadangan Aman berhasil",
@@ -2836,6 +2829,7 @@
             "composer_heading": "Komposer",
             "default_timezone": "Bawaan peramban (%(timezone)s)",
             "dialog_title": "<strong>Pengaturan:</strong> Preferensi",
+            "enable_content_protection": "Aktifkan perlindungan konten",
             "enable_hardware_acceleration": "Aktifkan akselerasi perangkat keras",
             "enable_tray_icon": "Tampilkan ikon baki dan minimalkan window ke ikonnya jika ditutup",
             "keyboard_heading": "Pintasan keyboard",
@@ -2869,7 +2863,6 @@
             "ignore_users_empty": "Anda tidak memiliki pengguna yang diabaikan.",
             "ignore_users_section": "Pengguna yang diabaikan",
             "key_backup_algorithm": "Algoritma:",
-            "key_backup_connect": "Hubungkan sesi ini ke Pencadangan Kunci",
             "message_search_disable_warning": "Jika dinonaktifkan, pesan dari ruangan terenkripsi tidak akan muncul di hasil pencarian.",
             "message_search_disabled": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian.",
             "message_search_enabled": {

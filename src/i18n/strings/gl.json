@@ -197,8 +197,7 @@
             "setup_key_backup_title": "Perderás o acceso as túas mensaxes cifradas",
             "setup_secure_backup_description_1": "As mensaxes cifradas están seguras con cifrado de extremo-a-extremo. Só ti e o correpondente(s) tedes as chaves para ler as mensaxes.",
             "setup_secure_backup_description_2": "Ao saír, estas chaves serán eliminadas deste dispositivo, o que significa que non poderás ler as mensaxes cifradas a menos que teñas as chaves noutro dos teus dispositivos, ou unha copia de apoio no servidor.",
-            "skip_key_backup": "Non quero as miñas mensaxes cifradas",
-            "use_key_backup": "Fai unha Copia de apoio das chaves"
+            "skip_key_backup": "Non quero as miñas mensaxes cifradas"
         },
         "misconfigured_body": "Pídelle a administración do teu %(brand)s que comprobe a <a>configuración</a> para entradas duplicadas ou incorrectas.",
         "misconfigured_title": "O teu %(brand)s está mal configurado",
@@ -710,7 +709,6 @@
             "warning": "Se non eliminaches o método de recuperación, un atacante podería estar a intentar acceder á túa conta. Cambia inmediatamente o contrasinal da conta e establece un novo método de recuperación nos Axustes."
         },
         "reset_all_button": "Perdidos ou esquecidos tódolos métodos de recuperación? <a>Restabléceos</a>",
-        "set_up_toast_description": "Protéxete de perder o acceso a mensaxes e datos cifrados",
         "set_up_toast_title": "Configurar Copia de apoio Segura",
         "setup_secure_backup": {
             "explainer": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas."
@@ -1962,10 +1960,6 @@
         "insert_trailing_colon_mentions": "Inserir dous puntos tras mencionar a outra usuaria no inicio da mensaxe",
         "jump_to_bottom_on_send": "Ir ao final da cronoloxía cando envías unha mensaxe",
         "key_backup": {
-            "backup_in_progress": "As chaves estanse a copiar (a primeira copia podería tardar un anaco).",
-            "backup_success": "Feito!",
-            "cannot_create_backup": "Non se creou a copia da chave",
-            "create_title": "Crear copia da chave",
             "setup_secure_backup": {
                 "cancel_warning": "Se cancelas agora, poderías perder mensaxes e datos cifrados se perdes o acceso ás sesións iniciadas.",
                 "confirm_security_phrase": "Confirma a Frase de Seguridade",
@@ -2062,7 +2056,6 @@
             "ignore_users_empty": "Non tes usuarias ignoradas.",
             "ignore_users_section": "Usuarias ignoradas",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Conecta esta sesión a Copia de Apoio de chaves",
             "message_search_disable_warning": "Se está desactivado, as mensaxes das salas cifradas non aparecerán nos resultados das buscas.",
             "message_search_disabled": "Gardar de xeito seguro mensaxes cifradas na caché local para que aparezan nos resultados de buscas.",
             "message_search_enabled": {

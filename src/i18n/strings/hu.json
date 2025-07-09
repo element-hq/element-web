@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Elveszíti a hozzáférést a titkosított üzeneteihez",
             "setup_secure_backup_description_1": "A titkosított üzenetek végpontok közti titkosítással védettek. Csak Önnek és a címzetteknek lehet meg a kulcsuk az üzenet visszafejtéséhez.",
             "setup_secure_backup_description_2": "A kijelentkezéssel a kulcsok az eszközről törlődnek, ami azt jelenti, hogy ha nincsenek meg máshol a kulcsok, vagy nincsenek mentve a kiszolgálón, akkor a titkosított üzenetek olvashatatlanná válnak.",
-            "skip_key_backup": "Nincs szükségem a titkosított üzeneteimre",
-            "use_key_backup": "Kulcsmentés használatának megkezdése"
+            "skip_key_backup": "Nincs szükségem a titkosított üzeneteimre"
         },
         "misconfigured_body": "Kérje meg a(z) %(brand)s adminisztrátorát, hogy ellenőrizze a <a>beállításait</a>, hibás vagy duplikált bejegyzéseket keresve.",
         "misconfigured_title": "Az %(brand)s hibásan van beállítva",
@@ -966,7 +965,6 @@
         "reset_all_button": "Elfelejtette vagy elveszett minden helyreállítási lehetőség? <a>Minden alaphelyzetbe állítása</a>",
         "set_up_recovery": "Helyreállítás beállítása",
         "set_up_recovery_toast_description": "Létrehozhat egy helyreállítási kulcsot, amellyel helyreállíthatja a titkosított üzenetelőzményeit, ha elveszíti a hozzáférést az eszközeihez.",
-        "set_up_toast_description": "Biztosíték a titkosított üzenetekhez és adatokhoz való hozzáférés elvesztése ellen",
         "set_up_toast_title": "Biztonsági mentés beállítása",
         "setup_secure_backup": {
             "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat."
@@ -2693,11 +2691,6 @@
         },
         "jump_to_bottom_on_send": "Üzenetküldés után az idővonal aljára ugrás",
         "key_backup": {
-            "backup_in_progress": "A kulcsaid mentése folyamatban van (az első mentés több percig is eltarthat).",
-            "backup_starting": "Mentés indul…",
-            "backup_success": "Sikeres!",
-            "cannot_create_backup": "Kulcsmentés sikertelen",
-            "create_title": "Kulcsmentés készítése",
             "setup_secure_backup": {
                 "backup_setup_success_description": "A kulcsai nem kerülnek elmentésre erről az eszközről.",
                 "backup_setup_success_title": "Biztonsági mentés sikeres",
@@ -2824,6 +2817,7 @@
             "composer_heading": "Szerkesztő",
             "default_timezone": "Böngésző alapértelmezése (%(timezone)s)",
             "dialog_title": "<strong>Beállítások:</strong> Beállítások",
+            "enable_content_protection": "Tartalomvédelem engedélyezése",
             "enable_hardware_acceleration": "Hardveres gyorsítás engedélyezése",
             "enable_tray_icon": "Tálcaikon megjelenítése és az ablak minimalizálása bezáráskor",
             "keyboard_heading": "Gyorsbillentyűk",
@@ -2857,7 +2851,6 @@
             "ignore_users_empty": "Nincsenek mellőzött felhasználók.",
             "ignore_users_section": "Mellőzött felhasználók",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_connect": "Munkamenet csatlakoztatása a kulcsmentéshez",
             "message_search_disable_warning": "Ha nincs engedélyezve akkor a titkosított szobák üzenetei nem jelennek meg a keresések között.",
             "message_search_disabled": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között.",
             "message_search_enabled": {

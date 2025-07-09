@@ -157,6 +157,7 @@
         "view_message": "Visa meddelande",
         "view_source": "Visa källa",
         "yes": "Ja",
+        "yes_dismiss": "Ja, avvisa",
         "zoom_in": "Zooma in",
         "zoom_out": "Zooma ut"
     },
@@ -239,8 +240,7 @@
             "setup_key_backup_title": "Du kommer att förlora åtkomst till dina krypterade meddelanden",
             "setup_secure_backup_description_1": "Krypterade meddelanden är säkrade med totalsträckskryptering. Bara du och mottagaren/na har nycklarna för att läsa dessa meddelanden.",
             "setup_secure_backup_description_2": "När du loggar ut kommer nycklarna att raderas från den här enheten, vilket betyder att du inte kommer kunna läsa krypterade meddelanden om du inte har nycklarna för dem på dina andra enheter, eller säkerhetskopierade dem till servern.",
-            "skip_key_backup": "Jag vill inte ha mina krypterade meddelanden",
-            "use_key_backup": "Börja använda nyckelsäkerhetskopiering"
+            "skip_key_backup": "Jag vill inte ha mina krypterade meddelanden"
         },
         "misconfigured_body": "Be din %(brand)s-administratör att kolla <a>din konfiguration</a> efter felaktiga eller duplicerade poster.",
         "misconfigured_title": "Din %(brand)s är felkonfigurerad",
@@ -910,9 +910,11 @@
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också.",
             "key_validation_text": {
                 "wrong_security_key": "Fel säkerhetsnyckel"
             },
+            "privacy_warning": "Se till att ingen kan se den här skärmen",
             "restoring": "Återställer nycklar från säkerhetskopia",
             "security_key_title": "Säkerhetsnyckel"
         },
@@ -962,11 +964,12 @@
         "reset_all_button": "Glömt eller förlorat alla återställningsalternativ? <a>Återställ allt</a>",
         "set_up_recovery": "Ställ in återställning",
         "set_up_recovery_toast_description": "Generera en återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.",
-        "set_up_toast_description": "Skydda mot att förlora åtkomst till krypterade meddelanden och data",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
         "setup_secure_backup": {
             "explainer": "Säkerhetskopiera dina nycklar innan du loggar ut för att undvika att du blir av med dem."
         },
+        "turn_on_key_storage": "Slå på nyckellagring",
+        "turn_on_key_storage_description": "Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter.",
         "udd": {
             "interactive_verification_button": "Verifiera interaktivt med emoji",
             "other_ask_verify_text": "Be den här användaren att verifiera sin session, eller verifiera den manuellt nedan.",
@@ -1948,6 +1951,7 @@
         },
         "face_pile_tooltip_shortcut": "Inklusive %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inklusive dig, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan inte avgöra vilken användare som ska ignoreras eftersom medlemshändelsen har ändrats.",
         "failed_reject_invite": "Misslyckades att avböja inbjudan",
         "forget_room": "Glöm det här rummet",
         "forget_space": "Glöm det här utrymmet",
@@ -2039,6 +2043,7 @@
         "read_topic": "Klicka för att läsa ämne",
         "rejecting": "Nekar inbjudan …",
         "rejoin_button": "Gå med igen",
+        "room_is_low_priority": "Detta är ett lågprioriterat room",
         "search": {
             "all_rooms_button": "Sök i alla rum",
             "placeholder": "Sök meddelanden...",
@@ -2093,11 +2098,14 @@
             "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon",
             "no_favourites": "Du har ingen favoritchatt än",
             "no_favourites_description": "Du kan lägga till en chatt till dina favoriter i chattinställningarna",
+            "no_invites": "Du har inga olästa inbjudningar",
+            "no_mentions": "Du har inga olästa omnämnanden",
             "no_people": "Du har inte direktchattar med någon ännu",
             "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
             "no_rooms": "Du är inte i något rum än",
             "no_rooms_description": "Du kan avmarkera filter för att se dina andra chattar",
             "no_unread": "Grattis! Du har inga olästa meddelanden",
+            "show_activity": "Visa all aktivitet",
             "show_chats": "Visa alla chattar"
         },
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
@@ -2105,6 +2113,9 @@
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
         "filters": {
             "favourite": "Favoriter",
+            "invites": "Inbjudningar",
+            "low_priority": "Låg prioritet",
+            "mentions": "Omnämnanden",
             "people": "Personer",
             "rooms": "Rum",
             "unread": "Olästa"
@@ -2142,9 +2153,14 @@
             "one": "Visa %(count)s till"
         },
         "show_previews": "Visa förhandsgranskningar av meddelanden",
+        "sort": "Sortera",
         "sort_by": "Sortera efter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Ö",
+        "sort_type": {
+            "activity": "Aktivitet",
+            "atoz": "A-Ö"
+        },
         "sort_unread_first": "Visa rum med olästa meddelanden först",
         "space_menu": {
             "home": "Utrymmeshem",
@@ -2432,6 +2448,10 @@
         "recent_changes_heading": "Nyliga ändringar har inte mottagits än",
         "title": "Servern svarar inte"
     },
+    "service_worker_error": {
+        "description": "%(brand)s kräver en service worker för att läsa in autentiserade media från Matrix-innehållsförråd. Detta stöds inte av din webbläsare, så du kan uppleva att media misslyckas att laddas.",
+        "title": "Misslyckades att ladda service worker"
+    },
     "seshat": {
         "error_initialising": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information",
         "reset_button": "Återställ händelselagring",
@@ -2525,6 +2545,8 @@
                 "session_key": "Sessionsnyckel:",
                 "title": "Avancerad"
             },
+            "confirm_key_storage_off": "Är du säker på att du vill hålla nyckellagring avstängd?",
+            "confirm_key_storage_off_description": "Om du loggar ut från alla dina enheter kommer du att förlora din meddelandehistorik och måste verifiera alla dina befintliga kontakter igen. <a>Läs mer</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Radera nyckellagring",
                 "confirm": "Radera nyckellagring",
@@ -2662,11 +2684,6 @@
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
         "jump_to_bottom_on_send": "Hoppa till botten av tidslinjen när du skickar ett meddelande",
         "key_backup": {
-            "backup_in_progress": "Dina nycklar säkerhetskopieras (den första säkerhetskopieringen kan ta några minuter).",
-            "backup_starting": "Startar säkerhetskopiering …",
-            "backup_success": "Framgång!",
-            "cannot_create_backup": "Kunde inte skapa nyckelsäkerhetskopia",
-            "create_title": "Skapa nyckelsäkerhetskopia",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Dina nycklar säkerhetskopieras nu från denna enhet.",
                 "backup_setup_success_title": "Säkerhetskopiering lyckades",
@@ -2783,6 +2800,7 @@
             "voip": "Ljud- och videosamtal"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Förhindra att fönsterinnehållet spelas in av andra appar",
             "Electron.enableHardwareAcceleration": "Aktivera hårdvaruacceleration (starta om%(appName)s att träda i kraft)",
             "always_show_menu_bar": "Visa alltid fönstermenyn",
             "autocomplete_delay": "Autokompletteringsfördröjning (ms)",
@@ -2824,7 +2842,6 @@
             "ignore_users_empty": "Du har inga ignorerade användare.",
             "ignore_users_section": "Ignorerade användare",
             "key_backup_algorithm": "Algoritm:",
-            "key_backup_connect": "Anslut den här sessionen till nyckelsäkerhetskopiering",
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
             "message_search_enabled": {
@@ -2955,6 +2972,7 @@
         "show_chat_effects": "Visa chatteffekter (animeringar när du tar emot t.ex. konfetti)",
         "show_displayname_changes": "Visa visningsnamnsändringar",
         "show_join_leave": "Visa gå med/lämna-meddelanden (inbjudningar/borttagningar/banningar påverkas inte)",
+        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_nsfw_content": "Visa NSFW-innehåll",
         "show_read_receipts": "Visa läskvitton som skickats av andra användare",
         "show_redaction_placeholder": "Visa en platshållare för borttagna meddelanden",

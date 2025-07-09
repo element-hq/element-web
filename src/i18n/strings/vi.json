@@ -210,8 +210,7 @@
             "setup_key_backup_title": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hóa của mình",
             "setup_secure_backup_description_1": "Các tin nhắn được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ bạn và (những) người nhận mới có chìa khóa để đọc những tin nhắn này.",
             "setup_secure_backup_description_2": "Khi bạn đăng xuất, các khóa sẽ được xóa khỏi thiết bị này, tức là bạn không thể đọc các tin nhắn được mã hóa trừ khi bạn có khóa cho chúng trong thiết bị khác, hoặc sao lưu chúng lên máy chủ.",
-            "skip_key_backup": "Tôi không muốn tin nhắn được mã hóa của mình",
-            "use_key_backup": "Bắt đầu sao lưu các khóa"
+            "skip_key_backup": "Tôi không muốn tin nhắn được mã hóa của mình"
         },
         "misconfigured_body": "Yêu cầu quản trị viên %(brand)s của bạn kiểm tra <a>your config</a> để tìm các mục nhập sai hoặc trùng lặp.",
         "misconfigured_title": "Hệ thống %(brand)s của bạn bị thiết lập sai",
@@ -757,7 +756,6 @@
             "warning": "Nếu bạn không xóa phương pháp khôi phục, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
         "reset_all_button": "Quên hoặc mất tất cả các phương pháp khôi phục? Đặt lại tất cả <a>Reset all</a>",
-        "set_up_toast_description": "Bảo vệ chống mất quyền truy cập vào tin nhắn và dữ liệu được mã hóa",
         "set_up_toast_title": "Thiết lập Sao lưu Bảo mật",
         "setup_secure_backup": {
             "explainer": "Sao lưu chìa khóa của bạn trước khi đăng xuất để tránh mất chúng."
@@ -2077,10 +2075,6 @@
         "insert_trailing_colon_mentions": "Chèn dấu hai chấm phía sau các đề cập người dùng ở đầu một tin nhắn",
         "jump_to_bottom_on_send": "Chuyển đến cuối dòng thời gian khi bạn gửi tin nhắn",
         "key_backup": {
-            "backup_in_progress": "Các khóa của bạn đang được sao lưu (bản sao lưu đầu tiên có thể mất vài phút).",
-            "backup_success": "Thành công!",
-            "cannot_create_backup": "Không thể tạo bản sao lưu khóa",
-            "create_title": "Tạo bản sao lưu chính",
             "setup_secure_backup": {
                 "backup_setup_success_title": "Sao lưu bảo mật thành công",
                 "cancel_warning": "Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.",
@@ -2191,7 +2185,6 @@
             "ignore_users_empty": "Bạn không có người dùng bị bỏ qua.",
             "ignore_users_section": "Người dùng bị bỏ qua",
             "key_backup_algorithm": "Thuật toán:",
-            "key_backup_connect": "Kết nối phiên này với Khóa Sao lưu",
             "message_search_disable_warning": "Nếu bị tắt, tin nhắn từ các phòng được mã hóa sẽ không xuất hiện trong kết quả tìm kiếm.",
             "message_search_disabled": "Bộ nhớ cache an toàn các tin nhắn được mã hóa cục bộ để chúng xuất hiện trong kết quả tìm kiếm.",
             "message_search_enabled": {

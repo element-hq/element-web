@@ -221,8 +221,7 @@
             "setup_key_backup_title": "Perderai l'accesso ai tuoi messaggi cifrati",
             "setup_secure_backup_description_1": "I messaggi cifrati sono resi sicuri con una crittografia end-to-end. Solo tu e il/i destinatario/i avete le chiavi per leggere questi messaggi.",
             "setup_secure_backup_description_2": "Quando ti disconnetti queste chiavi verranno eliminate dal dispositivo, quindi non potrai leggere i messaggi cifrati a meno che tu non abbia le chiavi su altri dispositivi, o salvate in backup sul server.",
-            "skip_key_backup": "Non voglio i miei messaggi cifrati",
-            "use_key_backup": "Inizia ad usare il backup chiavi"
+            "skip_key_backup": "Non voglio i miei messaggi cifrati"
         },
         "misconfigured_body": "Chiedi al tuo amministratore di %(brand)s di controllare <a>la tua configurazione</a> per voci non valide o doppie.",
         "misconfigured_title": "Il tuo %(brand)s è configurato male",
@@ -838,7 +837,6 @@
             "warning": "Se non hai rimosso il metodo di ripristino, è possibile che un aggressore stia cercando di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "reset_all_button": "Hai dimenticato o perso tutti i metodi di recupero? <a>Reimposta tutto</a>",
-        "set_up_toast_description": "Proteggiti dalla perdita dei messaggi e dati crittografati",
         "set_up_toast_title": "Imposta il Backup Sicuro",
         "setup_secure_backup": {
             "explainer": "Fai una copia delle tue chiavi prima di disconnetterti per evitare di perderle."
@@ -2308,11 +2306,6 @@
         "insert_trailing_colon_mentions": "Inserisci dei due punti dopo le citazioni degli utenti all'inizio di un messaggio",
         "jump_to_bottom_on_send": "Salta in fondo alla linea temporale quando invii un messaggio",
         "key_backup": {
-            "backup_in_progress": "Il backup delle chiavi è in corso (il primo backup potrebbe richiedere qualche minuto).",
-            "backup_starting": "Avvio del backup…",
-            "backup_success": "Completato!",
-            "cannot_create_backup": "Impossibile creare backup della chiave",
-            "create_title": "Crea backup chiavi",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Viene ora fatto il backup delle tue chiavi da questo dispositivo.",
                 "backup_setup_success_title": "Backup Sicuro completato",
@@ -2447,7 +2440,6 @@
             "ignore_users_empty": "Non hai utenti ignorati.",
             "ignore_users_section": "Utenti ignorati",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Connetti questa sessione al backup chiavi",
             "message_search_disable_warning": "Se disattivato, i messaggi delle stanze cifrate non appariranno nei risultati di ricerca.",
             "message_search_disabled": "Tieni in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca.",
             "message_search_enabled": {

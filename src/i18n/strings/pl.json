@@ -241,8 +241,7 @@
             "setup_key_backup_title": "Utracisz dostęp do swoich wiadomości szyfrowanych",
             "setup_secure_backup_description_1": "Wiadomości szyfrowane są zabezpieczone szyfrowaniem end-to-end. Tylko Ty i Twój odbiorca mają klucze, aby je wyświetlić.",
             "setup_secure_backup_description_2": "Po wylogowaniu, te klucze zostaną usunięte z urządzenia, co oznacza, że nie będziesz w stanie czytać wiadomości szyfrowanych, chyba że posiadasz je na swoich innych urządzeniach lub zapisałeś je na serwerze.",
-            "skip_key_backup": "Nie chcę moich zaszyfrowanych wiadomości",
-            "use_key_backup": "Rozpocznij z użyciem klucza kopii zapasowej"
+            "skip_key_backup": "Nie chcę moich zaszyfrowanych wiadomości"
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
         "misconfigured_title": "Twój %(brand)s jest źle skonfigurowany",
@@ -968,7 +967,6 @@
         "reset_all_button": "Zapomniałeś lub straciłeś wszystkie opcje odzyskiwania? <a>Resetuj wszystko</a>",
         "set_up_recovery": "Skonfiguruj przywracanie",
         "set_up_recovery_toast_description": "Wygeneruj klucz przywracania, którego można użyć do przywrócenia zaszyfrowanej historii wiadomości w przypadku utraty dostępu do swoich urządzeń.",
-        "set_up_toast_description": "Zabezpiecz się przed utratą dostępu do szyfrowanych wiadomości i danych",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "setup_secure_backup": {
             "explainer": "Utwórz kopię zapasową kluczy przed wylogowaniem, aby ich nie utracić."
@@ -2689,11 +2687,6 @@
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
         "jump_to_bottom_on_send": "Przejdź na dół osi czasu po wysłaniu wiadomości",
         "key_backup": {
-            "backup_in_progress": "Tworzy się kopia zapasowa Twoich kluczy (pierwsza kopia może potrwać kilka minut).",
-            "backup_starting": "Rozpoczynanie kopii zapasowej…",
-            "backup_success": "Sukces!",
-            "cannot_create_backup": "Nie można utworzyć kopii zapasowej klucza",
-            "create_title": "Utwórz kopię zapasową klucza",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Twoje klucze są właśnie przywracane z tego urządzenia.",
                 "backup_setup_success_title": "Wykonanie bezpiecznej kopii zapasowej powiodło się",
@@ -2851,7 +2844,6 @@
             "ignore_users_empty": "Nie posiadasz ignorowanych użytkowników.",
             "ignore_users_section": "Ignorowani użytkownicy",
             "key_backup_algorithm": "Algorytm:",
-            "key_backup_connect": "Połącz tę sesję z kopią zapasową kluczy",
             "message_search_disable_warning": "Jeśli wyłączone, wiadomości z szyfrowanych pokojów nie pojawią się w wynikach wyszukiwania.",
             "message_search_disabled": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania.",
             "message_search_enabled": {

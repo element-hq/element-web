@@ -224,8 +224,7 @@
             "setup_key_backup_title": "Tu zaudēsi piekļuvi savām šifrētajām ziņām",
             "setup_secure_backup_description_1": "Šifrētas ziņas tiek nodrošinātas ar pilnīgu šifrēšanu. Tikai Tev un saņēmējam(iem) ir atslēgas šo ziņojumu lasīšanai.",
             "setup_secure_backup_description_2": "Kad Tu atteiksies, šīs atslēgas tiks izdzēstas no šīs ierīces, kas nozīmē, ka Tu nevarēsi lasīt šifrētas ziņas, līdz Tev būs to atslēgas citās ierīcēs vai serverī izveidosi to rezerves kopiju.",
-            "skip_key_backup": "Es nevēlos savas šifrētās ziņas",
-            "use_key_backup": "Sākt izmantot atslēgu rezerves kopiju veidošanu"
+            "skip_key_backup": "Es nevēlos savas šifrētās ziņas"
         },
         "misconfigured_body": "Jāvaicā savam %(brand)s pārvaldniekam pārbaudīt, vai <a>konfigurācijā</a> ir nepareizu vai atkārtojošos ierakstu",
         "misconfigured_title": "%(brand)s ir nepareizi konfigurēts",
@@ -877,7 +876,6 @@
             "warning": "Ja nenoņēmi atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
         "reset_all_button": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
-        "set_up_toast_description": "Pasargājieties pret piekļuves zaudēšanu šifrētām ziņām un datiem",
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
         "setup_secure_backup": {
             "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas."
@@ -2225,11 +2223,6 @@
         "insert_trailing_colon_mentions": "Jāievieto beigu kols pēc lietotāja pieminēšanas ziņas sākumā",
         "jump_to_bottom_on_send": "Nosūtot ziņu, pāriet uz laika skalas beigām",
         "key_backup": {
-            "backup_in_progress": "Jūsu atslēgas tiek dublētas (pirmā dublēšana var ilgt dažas minūtes).",
-            "backup_starting": "Sāk dublējumu...",
-            "backup_success": "Veiksmīgi!",
-            "cannot_create_backup": "Nevar izveidot atslēgu rezerves kopiju",
-            "create_title": "Izveidot atslēgu rezerves kopiju",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Tagad jūsu atslēgas tiek dublētas no šīs ierīces.",
                 "backup_setup_success_title": "Droša dublējuma izveide ir veiksmīga",
@@ -2364,7 +2357,6 @@
             "ignore_users_empty": "Nav vērā neņemtu lietotāju.",
             "ignore_users_section": "Vērā neņemtie lietotāji",
             "key_backup_algorithm": "Algoritms:",
-            "key_backup_connect": "Savienojiet šo sesiju ar atslēgu dublēšanu",
             "message_search_disable_warning": "Ja šī opcija ir atspējota, ziņas no šifrētām istabām neparādīsies meklēšanas rezultātos.",
             "message_search_disabled": "Drošā veidā saglabājiet lokālajā kešatmiņā šifrētās ziņas, lai tās parādītos meklēšanas rezultātos.",
             "message_search_enabled": {

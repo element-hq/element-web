@@ -127,7 +127,6 @@ Unless otherwise specified, the following applies to all code:
     2. "Conflicted" typically refers to a getter which wants the same name as the underlying variable.
 20. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
 21. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
-
     1. Note that an explicit type is optional if not expected to be used outside of the function call,
        unlike in this example:
 
@@ -161,7 +160,6 @@ Unless otherwise specified, the following applies to all code:
 28. Export only what can be reused.
 29. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
     of truly optional parameters.
-
     1. A notable exception is when the likelihood of a bug is minimal, such as when a function
        takes an argument that is more often not required than required. An example where the
        `?` operator is inappropriate is when taking a room ID: typically the caller should
@@ -260,7 +258,6 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 12. Interdependence between stores should be kept to a minimum. Break functions and constants out to utilities
     if at all possible.
 13. A component should only use CSS class names in line with the component name.
-
     1. When knowingly using a class name from another component, document it with a [comment](#comments).
 
 14. Curly braces within JSX should be padded with a space, however properties on those components should not.
@@ -388,7 +385,6 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
    properties should be clearly documented.
 
 4. Inside a function, there is no need to comment every line, but consider:
-
     - before a particular multiline section of code within the function, give an overview of what it does,
       to make it easier for a reader to follow the flow through the function as a whole.
     - if it is anything less than obvious, explain _why_ we are doing a particular operation, with particular emphasis

@@ -219,8 +219,7 @@
             "setup_key_backup_title": "Ho very ny fidirana amin'ny hafatrao voasakana",
             "setup_secure_backup_description_1": "Ny hafatra voarakitra dia arovana aminy fanafenana farany mankany amin'ny farany. Ianao sy ny mpandray (ireo) ihany no manana ny fanalahidy hamakiana ireo hafatra ireo.",
             "setup_secure_backup_description_2": "Rehefa mivoaka ianao dia ho voafafa amin'ity fitaovana ity ireo fanalahidy ireo, izay midika fa tsy ho afaka hamaky hafatra voafono ianao raha tsy manana ny fanalahidin'izy ireo amin'ny fitaovanao hafa, na averinao any aminy mpizara.",
-            "skip_key_backup": "Tsy tiako ny hafatra voarakotra",
-            "use_key_backup": "Manomboka mampiasa fanalahidin'ny fitahirizana"
+            "skip_key_backup": "Tsy tiako ny hafatra voarakotra"
         },
         "misconfigured_body": "Anontanio ny anao%(brand)s admin hanamarina<a> ny config</a> hoany fidirana diso na dika mitovy.",
         "misconfigured_title": "ny%(brand)s dia diso fanitsiana",
@@ -834,7 +833,6 @@
             "warning": "Raha tsy nesorinao ny fomba fanarenana, dia mety hanandrana hiditra aminy kaontinao ny mpanafika. Hanova ny tenimiafiny kaontinao ary mametraha fomba fanarenana vaovao avy hatrany ao amin'ny fanitsiana."
         },
         "reset_all_button": "Adino na very ny fomba fanarenana rehetra?<a> Avereno daholo</a>",
-        "set_up_toast_description": "Arovy aminy fahaverezany fidirana amin'ny hafatra sy angon-drakitra voatahiry",
         "set_up_toast_title": "Hanitsy angona voaharo",
         "setup_secure_backup": {
             "explainer": "Amboary ny fanalahidinao alohany hivoahana mba tsy ho very."
@@ -2292,11 +2290,6 @@
         "insert_trailing_colon_mentions": "Ampidiro tsangambato aoriana aorian'ny fiteny mpampiasa eo am-piandohany hafatra",
         "jump_to_bottom_on_send": "Mankanesa any amin'ny farany fandaharam-potoana rehefa mandefa hafatra ianao",
         "key_backup": {
-            "backup_in_progress": "Averina averina ny fanalahidinao (mety haharitra minitra vitsivitsy ny vakorakitra voalohany).",
-            "backup_starting": "Manomboka vakorakitra…",
-            "backup_success": "Fahombiazana!",
-            "cannot_create_backup": "Tsy afaka mamorona fanalahidin'ny vakorakitra",
-            "create_title": "Mamorona fanalahidin'ny Vakorakitra ",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Averina averina amin'ity fitaovana ity izao ny fanalahidinao.",
                 "backup_setup_success_title": "Nahomby ny fiarovana vakorakitra",
@@ -2431,7 +2424,6 @@
             "ignore_users_empty": "Tsy manana mpampiasa tsy noraharahiana ianao.",
             "ignore_users_section": "Ireo mpampiasa tsy noraharahiana",
             "key_backup_algorithm": "Algorithm:",
-            "key_backup_connect": "Ampifandraiso amin'ny fanalahidin'ny vakorakitra ity fivoriana ity",
             "message_search_disable_warning": "Raha kilemaina, dia tsy hiseho aminy valiny fikarohana ny hafatra avy aminy efitrano misy miafina.",
             "message_search_disabled": "Ampidiro ao an-toerana ny hafatra miafina mba hiseho aminy valiny fikarohana.",
             "message_search_enabled": {

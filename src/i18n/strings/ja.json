@@ -208,8 +208,7 @@
             "setup_key_backup_title": "暗号化されたメッセージにアクセスできなくなります",
             "setup_secure_backup_description_1": "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。",
             "setup_secure_backup_description_2": "サインアウトすると、これらの鍵はこの端末から削除されます。使用できる鍵が他の端末にあったり、サーバーにバックアップされたりしているのでない限り、暗号化されたメッセージは読むことができなくなります。",
-            "skip_key_backup": "暗号化されたメッセージは不要です",
-            "use_key_backup": "鍵のバックアップを使用開始"
+            "skip_key_backup": "暗号化されたメッセージは不要です"
         },
         "misconfigured_body": "<a>設定</a>が間違っているか重複しているか確認するよう、%(brand)sの管理者に問い合わせてください。",
         "misconfigured_title": "あなたの%(brand)sは正しく設定されていません",
@@ -794,7 +793,6 @@
             "warning": "復元方法を削除しなかった場合、攻撃者があなたのアカウントにアクセスしようとしている可能性があります。設定画面でアカウントのパスワードを至急変更し、新しい復元方法を設定してください。"
         },
         "reset_all_button": "復元方法を全て失ってしまいましたか？<a>リセットできます</a>",
-        "set_up_toast_description": "暗号化されたメッセージとデータへのアクセスが失われるのを防ぎましょう",
         "set_up_toast_title": "セキュアバックアップを設定",
         "setup_secure_backup": {
             "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。"
@@ -2103,11 +2101,6 @@
         "insert_trailing_colon_mentions": "ユーザーをメンションする際にコロンを挿入",
         "jump_to_bottom_on_send": "メッセージを送信する際にタイムラインの最下部に移動",
         "key_backup": {
-            "backup_in_progress": "鍵をバックアップしています（最初のバックアップは数分かかる可能性があります）。",
-            "backup_starting": "バックアップを開始しています…",
-            "backup_success": "成功しました！",
-            "cannot_create_backup": "鍵のバックアップを作成できません",
-            "create_title": "鍵のバックアップを作成",
             "setup_secure_backup": {
                 "backup_setup_success_description": "鍵はこの端末からバックアップされています。",
                 "backup_setup_success_title": "セキュアバックアップに成功しました",
@@ -2211,7 +2204,6 @@
             "ignore_users_empty": "無視しているユーザーはいません。",
             "ignore_users_section": "無視しているユーザー",
             "key_backup_algorithm": "アルゴリズム：",
-            "key_backup_connect": "このセッションを鍵のバックアップに接続",
             "message_search_disable_warning": "無効にすると、暗号化されたルームのメッセージは検索結果に表示されません。",
             "message_search_disabled": "検索結果の表示用に、暗号化されたメッセージをローカルに安全にキャッシュしています。",
             "message_search_enabled": {

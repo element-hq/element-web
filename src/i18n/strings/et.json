@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Sa kaotad ligipääsu oma krüptitud sõnumitele",
             "setup_secure_backup_description_1": "Krüptitud sõnumid kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.",
             "setup_secure_backup_description_2": "Kui sa logid välja, siis krüptovõtmed kustutatakse sellest seadmest. Seega, kui sul pole krüptovõtmeid varundatud teistes seadmetes või kasutusel serveripoolset varundust, siis sa krüptitud sõnumeid hiljem lugeda ei saa.",
-            "skip_key_backup": "Ma ei soovi oma krüptitud sõnumeid",
-            "use_key_backup": "Võta kasutusele krüptovõtmete varundamine"
+            "skip_key_backup": "Ma ei soovi oma krüptitud sõnumeid"
         },
         "misconfigured_body": "Palu, et sinu %(brand)s'u haldur kontrolliks <a>sinu seadistusi</a> võimalike vigaste või topeltkirjete osas.",
         "misconfigured_title": "Sinu %(brand)s'i seadistused on paigast ära",
@@ -969,7 +968,6 @@
         "reset_all_button": "Unustasid või oled kaotanud kõik võimalused ligipääsu taastamiseks? <a>Lähtesta kõik ühe korraga</a>",
         "set_up_recovery": "Seadista krüptovõtmete taastamine",
         "set_up_recovery_toast_description": "Kui peaksid kaotama ligipääsu oma seadmetele, siis siinloodava taastevõtmega saad taastada ligipääsu oma krüptitud sõnumitele.",
-        "set_up_toast_description": "Hoia ära, et kaotad ligipääsu krüptitud sõnumitele ja andmetele",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
         "setup_secure_backup": {
             "explainer": "Vältimaks nende kaotamist, varunda krüptovõtmed enne väljalogimist."
@@ -2713,11 +2711,6 @@
         },
         "jump_to_bottom_on_send": "Sõnumi saatmiseks hüppa ajajoone lõppu",
         "key_backup": {
-            "backup_in_progress": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
-            "backup_starting": "Alustame varundamist…",
-            "backup_success": "Õnnestus!",
-            "cannot_create_backup": "Ei õnnestu teha võtmetest varukoopiat",
-            "create_title": "Tee võtmetest varukoopia",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel.",
                 "backup_setup_success_title": "Krüptovõtmete varundus õnnestus",
@@ -2844,6 +2837,7 @@
             "composer_heading": "Sõnumite kirjutamine",
             "default_timezone": "Brauseri vaikimisi ajavöönd (%(timezone)s)",
             "dialog_title": "<strong>Seadistused:</strong> Eelistused",
+            "enable_content_protection": "Kasuta sisu kaitset",
             "enable_hardware_acceleration": "Kasuta riistvaralist kiirendust",
             "enable_tray_icon": "Näita süsteemisalve ikooni ja Element'i akna sulgemisel minimeeri ta salve",
             "keyboard_heading": "Kiirklahvid",
@@ -2877,7 +2871,6 @@
             "ignore_users_empty": "Sa ei ole veel kedagi eiranud.",
             "ignore_users_section": "Eiratud kasutajad",
             "key_backup_algorithm": "Algoritm:",
-            "key_backup_connect": "Seo see sessioon krüptovõtmete varundusega",
             "message_search_disable_warning": "Kui see seadistus pole kasutusel, siis krüptitud jututubade sõnumeid otsing ei vaata.",
             "message_search_disabled": "Turvaliselt puhverda krüptitud sõnumid kohalikku arvutisse ja võimalda kasutada neid otsingus.",
             "message_search_enabled": {

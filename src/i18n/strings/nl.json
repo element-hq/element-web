@@ -209,8 +209,7 @@
             "setup_key_backup_title": "Je zal de toegang tot je versleutelde berichten verliezen",
             "setup_secure_backup_description_1": "Versleutelde berichten zijn beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en jij hebben de sleutels om deze berichten te lezen.",
             "setup_secure_backup_description_2": "Wanneer je jezelf afmeldt, worden deze sleutels van dit apparaat verwijderd, wat betekent dat je geen versleutelde berichten kunt lezen, tenzij je de sleutels ervoor op je andere apparaten hebt of er een back-up van hebt gemaakt op de server.",
-            "skip_key_backup": "Ik wil mijn versleutelde berichten niet",
-            "use_key_backup": "Begin sleutelback-up te gebruiken"
+            "skip_key_backup": "Ik wil mijn versleutelde berichten niet"
         },
         "misconfigured_body": "Vraag jouw %(brand)s-beheerder <a>je configuratie</a> na te kijken op onjuiste of dubbele items.",
         "misconfigured_title": "Je %(brand)s is onjuist geconfigureerd",
@@ -733,7 +732,6 @@
             "warning": "Als je de herstelmethode niet hebt verwijderd, is het mogelijk dat er een aanvaller toegang tot jouw account probeert te verkrijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
         "reset_all_button": "Alles vergeten en alle herstelmethoden verloren? <a>Alles opnieuw instellen</a>",
-        "set_up_toast_description": "Beveiliging tegen verlies van toegang tot versleutelde berichten en gegevens",
         "set_up_toast_title": "Beveiligde back-up instellen",
         "setup_secure_backup": {
             "explainer": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen."
@@ -1979,10 +1977,6 @@
         "insert_trailing_colon_mentions": "Voeg een dubbele punt in nadat de persoon het aan het begin van een bericht heeft vermeld",
         "jump_to_bottom_on_send": "Naar de onderkant van de tijdlijn springen wanneer je een bericht verstuurd",
         "key_backup": {
-            "backup_in_progress": "Er wordt een back-up van je sleutels gemaakt (de eerste back-up kan enkele minuten duren).",
-            "backup_success": "Klaar!",
-            "cannot_create_backup": "Kan sleutelback-up niet aanmaken",
-            "create_title": "Sleutelback-up aanmaken",
             "setup_secure_backup": {
                 "cancel_warning": "Als je nu annuleert, kan je versleutelde berichten en gegevens verliezen als je geen toegang meer hebt tot je login.",
                 "confirm_security_phrase": "Bevestig je veiligheidswachtwoord",
@@ -2082,7 +2076,6 @@
             "ignore_users_empty": "Je hebt geen persoon genegeerd.",
             "ignore_users_section": "Genegeerde personen",
             "key_backup_algorithm": "Algoritme:",
-            "key_backup_connect": "Verbind deze sessie met de sleutelback-up",
             "message_search_disable_warning": "Dit moet aan staan om te kunnen zoeken in versleutelde kamers.",
             "message_search_disabled": "Sla versleutelde berichten veilig lokaal op om ze doorzoekbaar te maken.",
             "message_search_enabled": {

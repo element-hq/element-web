@@ -209,8 +209,7 @@
             "setup_key_backup_title": "Do të humbni hyrje te mesazhet tuaj të fshehtëzuar",
             "setup_secure_backup_description_1": "Mesazhet e fshehtëzuar sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) kanë kyçet për të lexuar këto mesazhe.",
             "setup_secure_backup_description_2": "Kur dilni nga llogaria, këto kyçe do të fshihen te kjo pajisje, që do të thotë se s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar, veç në paçi kyçet për ta në pajisjet tuaja të tjera, ose të kopjeruajtur te shërbyesi.",
-            "skip_key_backup": "Nuk i dua mesazhet e mia të fshehtëzuar",
-            "use_key_backup": "Fillo të përdorësh Kopjeruajtje Kyçesh"
+            "skip_key_backup": "Nuk i dua mesazhet e mia të fshehtëzuar"
         },
         "misconfigured_body": "Kërkojini përgjegjësit të %(brand)s-it tuaj të kontrollojë <a>formësimin tuaj</a> për zëra të pasaktë ose të përsëdytur.",
         "misconfigured_title": "%(brand)s-i juaj është i keqformësuar",
@@ -796,7 +795,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "reset_all_button": "Harruat, ose humbët krejt metodat e rimarrjes? <a>Riujdisini të gjitha</a>",
-        "set_up_toast_description": "Mbrohuni nga humbja e hyrjes te mesazhe & të dhëna të fshehtëzuara",
         "set_up_toast_title": "Ujdisni Kopjeruajtje të Sigurt",
         "setup_secure_backup": {
             "explainer": "Kopjeruajini kyçet tuaj, përpara se të dilni, që të shmangni humbjen e tyre."
@@ -2167,11 +2165,6 @@
         "insert_trailing_colon_mentions": "Fut dy pika pas përmendjesh përdoruesi, në fillim të një mesazhi",
         "jump_to_bottom_on_send": "Kalo te fundi i rrjedhës kohore, kur dërgoni një mesazh",
         "key_backup": {
-            "backup_in_progress": "Kyçet tuaj po kopjeruhen (kopjeruajtja e parë mund të hajë disa minuta).",
-            "backup_starting": "Po fillohet kopjeruajtje…",
-            "backup_success": "Sukses!",
-            "cannot_create_backup": "S’arrihet të krijohet kopjeruajtje kyçesh",
-            "create_title": "Krijo kopjeruajtje kyçesh",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Kyçet tuaj tani po kopjeruhen nga kjo pajisje.",
                 "backup_setup_success_title": "Kopjeruajtje e Sigurt e susksesshme",
@@ -2277,7 +2270,6 @@
             "ignore_users_empty": "S’keni përdorues të shpërfillur.",
             "ignore_users_section": "Përdorues të shpërfillur",
             "key_backup_algorithm": "Algoritëm:",
-            "key_backup_connect": "Lidhe këtë sesion me Kopjeruajtje Kyçesh",
             "message_search_disable_warning": "Në u çaktivizoftë, mesazhet prej dhomash të fshehtëzuara s’do të duken në përfundime kërkimi.",
             "message_search_disabled": "Ruaj lokalisht në mënyrë të sigurt në fshehtinë mesazhet që të shfaqen në përfundime kërkimi.",
             "message_search_enabled": {
