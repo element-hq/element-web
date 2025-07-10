@@ -1463,7 +1463,8 @@
         "toggle_space_panel": "Toggle space panel",
         "toggle_top_left_menu": "Toggle the top left menu",
         "toggle_webcam_mute": "Toggle webcam on/off",
-        "upload_file": "Upload a file"
+        "upload_file": "Upload a file",
+        "media_save": "Save media"
     },
     "labs": {
         "allow_screen_share_only_mode": "Allow screen share only mode",

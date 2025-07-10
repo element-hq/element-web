@@ -117,6 +117,12 @@ export default class ImageView extends React.Component<IProps, IState> {
         };
     }
 
+    // XXX: Downloading image helpers
+    private downloader = new FileDownloader();
+    private mediaEventHelper?: MediaEventHelper = this.props.mxEvent
+        ? new MediaEventHelper(this.props.mxEvent)
+        : undefined;
+
     // XXX: Refs to functional components
     private contextMenuButton = createRef<any>();
     private focusLock = createRef<any>();
@@ -294,6 +300,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.zoomDelta(-ZOOM_STEP);
     };
 
+    //
     private onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
@@ -302,8 +309,27 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 this.props.onFinished();
                 break;
+            case KeyBindingAction.MediaSave:
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.downloadImage();
+                break;
         }
     };
+
+    private async downloadImage(): Promise<void> {
+        const res = await fetch(this.props.src);
+        if (!res.ok) {
+            throw parseErrorResponse(res, await res.text());
+        }
+
+        const blob = await res.blob();
+
+        await this.downloader.download({
+            blob,
+            name: this.mediaEventHelper?.fileName ?? this.props.name ?? _t("common|image"),
+        });
+    }
 
     private onRotateCounterClockwiseClick = (): void => {
         const cur = this.state.rotation;
