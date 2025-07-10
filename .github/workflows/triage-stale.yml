@@ -15,12 +15,14 @@ jobs:
             - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9
               with:
                   operations-per-run: 100
+
                   # Flaky test issue closing
-                  only-issue-labels: "Z-Flaky-Test"
+                  any-of-issue-labels: "Z-Flaky-Test-Chrome,Z-Flaky-Test-Firefox,Z-Flaky-Test-Webkit"
                   days-before-issue-stale: 14
                   days-before-issue-close: 0
                   close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."
                   exempt-issue-labels: "Z-Flaky-Test-Disabled"
+
                   # Stale PR closing
                   days-before-pr-stale: 180
                   days-before-pr-close: 0
