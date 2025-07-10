@@ -1,0 +1,124 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { useContext } from "react";
+import { RoomMember, type Room, type User, KnownMembership } from "matrix-js-sdk/src/matrix";
+
+import Modal from "../../../../Modal";
+import ErrorDialog from "../../../views/dialogs/ErrorDialog";
+import { _t, UserFriendlyError } from "../../../../languageHandler";
+import MatrixClientContext from "../../../../contexts/MatrixClientContext";
+import dis from "../../../../dispatcher/dispatcher";
+import PosthogTrackers from "../../../../PosthogTrackers";
+import { ShareDialog } from "../../../views/dialogs/ShareDialog";
+import { type ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from "../../../../dispatcher/actions";
+import { SdkContextClass } from "../../../../contexts/SDKContext";
+import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import MultiInviter from "../../../../utils/MultiInviter";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import { useRoomPermissions } from "./UserInfoBasicViewModel";
+
+export interface UserInfoBasicOptionsState {
+    showInviteButton: boolean;
+    showInsertPillButton: boolean | "";
+    readReceiptButtonDisabled: boolean;
+    onInsertPillButton: () => void;
+    onReadReceiptButton: () => void;
+    onShareUserClick: () => void;
+    onInviteUserButton: (evt: Event) => void;
+}
+
+export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMember): UserInfoBasicOptionsState => {
+    const cli = useContext(MatrixClientContext);
+
+    const roomId =
+        member instanceof RoomMember && member.roomId
+            ? member.roomId
+            : SdkContextClass.instance.roomViewStore.getRoomId();
+
+    const roomPermissions = useRoomPermissions(cli, room, member as RoomMember);
+
+    const isSpace = room?.isSpaceRoom();
+
+    const readReceiptButtonDisabled = isSpace || !room?.getEventReadUpTo(member.userId);
+
+    const showInsertPillButton = member instanceof RoomMember && member.roomId && !isSpace;
+
+    const showInviteButton =
+        member instanceof RoomMember &&
+        roomPermissions.canInvite &&
+        (member?.membership ?? KnownMembership.Leave) === KnownMembership.Leave;
+
+    const onReadReceiptButton = function (): void {
+        const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : null;
+        if (!room || readReceiptButtonDisabled) return;
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            highlighted: true,
+            // this could return null, the default prevents a type error
+            event_id: room.getEventReadUpTo(member.userId) || undefined,
+            room_id: room.roomId,
+            metricsTrigger: undefined, // room doesn't change
+        });
+    };
+
+    const onInsertPillButton = function (): void {
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            userId: member.userId,
+            timelineRenderingType: TimelineRenderingType.Room,
+        });
+    };
+
+    const onInviteUserButton = async (ev: Event): Promise<void> => {
+        try {
+            // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.
+            const inviter = new MultiInviter(cli, roomId || "");
+            await inviter.invite([member.userId]).then(() => {
+                if (inviter.getCompletionState(member.userId) !== "invited") {
+                    const errorStringFromInviterUtility = inviter.getErrorText(member.userId);
+                    if (errorStringFromInviterUtility) {
+                        throw new Error(errorStringFromInviterUtility);
+                    } else {
+                        throw new UserFriendlyError("slash_command|invite_failed", {
+                            user: member.userId,
+                            roomId,
+                            cause: undefined,
+                        });
+                    }
+                }
+            });
+        } catch (err) {
+            const description = err instanceof Error ? err.message : _t("invite|failed_generic");
+
+            Modal.createDialog(ErrorDialog, {
+                title: _t("invite|failed_title"),
+                description,
+            });
+        }
+
+        PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoInviteButton", ev);
+    };
+
+    const onShareUserClick = (): void => {
+        Modal.createDialog(ShareDialog, {
+            target: member,
+        });
+    };
+
+    return {
+        showInviteButton,
+        showInsertPillButton,
+        readReceiptButtonDisabled,
+        onReadReceiptButton,
+        onInsertPillButton,
+        onInviteUserButton,
+        onShareUserClick,
+    };
+};
