@@ -146,6 +146,7 @@ test.describe("Room list", () => {
             // Scroll to the end of the room list
             await page.mouse.wheel(0, 1000);
 
+            await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
             await roomListView.getByRole("gridcell", { name: "Open room room0" }).click();
 
             const filters = page.getByRole("listbox", { name: "Room list filters" });

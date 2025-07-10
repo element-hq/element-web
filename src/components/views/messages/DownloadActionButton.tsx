@@ -10,6 +10,7 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React, { type JSX } from "react";
 import classNames from "classnames";
 import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
@@ -18,6 +19,7 @@ import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import ModuleApi from "../../../modules/Api";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -29,6 +31,7 @@ interface IProps {
 }
 
 interface IState {
+    canDownload: null | boolean;
     loading: boolean;
     blob?: Blob;
     tooltip: TranslationKey;
@@ -40,9 +43,29 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
     public constructor(props: IProps) {
         super(props);
 
+        const moduleHints = ModuleApi.customComponents.getHintsForMessage(props.mxEvent);
+        const downloadState: Pick<IState, "canDownload"> = { canDownload: true };
+        if (moduleHints?.allowDownloadingMedia) {
+            downloadState.canDownload = null;
+            moduleHints
+                .allowDownloadingMedia()
+                .then((canDownload) => {
+                    this.setState({
+                        canDownload: canDownload,
+                    });
+                })
+                .catch((ex) => {
+                    logger.error(`Failed to check if media from ${props.mxEvent.getId()} could be downloaded`, ex);
+                    this.setState({
+                        canDownload: false,
+                    });
+                });
+        }
+
         this.state = {
             loading: false,
             tooltip: _td("timeline|download_action_downloading"),
+            ...downloadState,
         };
     }
 
@@ -95,6 +118,14 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         let spinner: JSX.Element | undefined;
         if (this.state.loading) {
             spinner = <Spinner w={18} h={18} />;
+        }
+
+        if (this.state.canDownload === null) {
+            spinner = <Spinner w={18} h={18} />;
+        }
+
+        if (this.state.canDownload === false) {
+            return null;
         }
 
         const classes = classNames({

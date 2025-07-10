@@ -212,8 +212,7 @@
             "setup_key_backup_title": "Perderás acceso a tus mensajes cifrados",
             "setup_secure_backup_description_1": "Los mensajes cifrados son seguros con el cifrado punto a punto. Solo tú y el/los destinatario/s tiene/n las claves para leer estos mensajes.",
             "setup_secure_backup_description_2": "Al cerrar sesión, estas claves serán eliminadas del dispositivo. Esto significa que no podrás leer mensajes cifrados salvo que tengas sus claves en otros dispositivos, o hayas hecho una copia de seguridad usando el servidor.",
-            "skip_key_backup": "No quiero mis mensajes cifrados",
-            "use_key_backup": "Comenzar a usar la copia de claves"
+            "skip_key_backup": "No quiero mis mensajes cifrados"
         },
         "misconfigured_body": "Solicita al administrador de %(brand)s que compruebe si hay entradas duplicadas o erróneas en <a>tu configuración</a>.",
         "misconfigured_title": "Tu %(brand)s tiene un error de configuración",
@@ -782,7 +781,6 @@
             "warning": "Si no eliminó el método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
         "reset_all_button": "¿Has olvidado o perdido todos los métodos de recuperación? <a>Restablecer todo</a>",
-        "set_up_toast_description": "Evita perder acceso a datos y mensajes cifrados",
         "set_up_toast_title": "Configurar copia de seguridad segura",
         "setup_secure_backup": {
             "explainer": "Haz copia de seguridad de tus claves antes de cerrar sesión para evitar perderlas."
@@ -2138,10 +2136,6 @@
         "insert_trailing_colon_mentions": "Inserta automáticamente dos puntos después de las menciones que hagas al principio de los mensajes",
         "jump_to_bottom_on_send": "Saltar abajo del todo al enviar un mensaje",
         "key_backup": {
-            "backup_in_progress": "Se está realizando una copia de seguridad de sus claves (la primera copia de seguridad puede tardar unos minutos).",
-            "backup_success": "¡Éxito!",
-            "cannot_create_backup": "No se puede crear una copia de seguridad de la clave",
-            "create_title": "Crear copia de seguridad de claves",
             "setup_secure_backup": {
                 "cancel_warning": "Si cancela ahora, puede perder mensajes y datos cifrados si pierde el acceso a sus inicios de sesión.",
                 "confirm_security_phrase": "Confirma tu frase de seguridad",
@@ -2243,7 +2237,6 @@
             "ignore_users_empty": "No has ignorado a nadie.",
             "ignore_users_section": "Usuarios ignorados",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Conecta esta sesión a la copia de respaldo de tu clave",
             "message_search_disable_warning": "Si está desactivado, los mensajes de las salas cifradas no aparecerán en los resultados de búsqueda.",
             "message_search_disabled": "Almacenar localmente, de manera segura, a los mensajes cifrados localmente para que aparezcan en los resultados de búsqueda.",
             "message_search_enabled": {

@@ -163,8 +163,7 @@
             "megolm_export": "Eksportuoti raktus rankiniu būdu",
             "setup_key_backup_title": "Jūs prarasite prieigą prie savo užšifruotų žinučių",
             "setup_secure_backup_description_1": "Užšifruotos žinutės yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turi raktus šioms žinutėms perskaityti.",
-            "skip_key_backup": "Man nereikalingos užšifruotos žinutės",
-            "use_key_backup": "Pradėti naudoti atsarginę raktų kopiją"
+            "skip_key_backup": "Man nereikalingos užšifruotos žinutės"
         },
         "misconfigured_body": "Paprašykite savo %(brand)s administratoriaus patikrinti ar <a>jūsų konfigūracijoje</a> nėra neteisingų arba pasikartojančių įrašų.",
         "misconfigured_title": "Jūsų %(brand)s yra neteisingai sukonfigūruotas",
@@ -537,7 +536,6 @@
             "warning": "Jei jūs nepašalinote paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "reset_all_button": "Pamiršote arba praradote visus atkūrimo metodus? <a>Iš naujo nustatyti viską</a>",
-        "set_up_toast_description": "Apsisaugokite nuo prieigos prie šifruotų žinučių ir duomenų praradimo",
         "set_up_toast_title": "Nustatyti Saugią Atsarginę Kopiją",
         "setup_secure_backup": {
             "explainer": "Prieš atsijungdami sukurkite atsarginę savo raktų kopiją, kad išvengtumėte jų praradimo."
@@ -1479,9 +1477,6 @@
         "insert_trailing_colon_mentions": "Įterpti dvitaškį po naudotojo paminėjimų žinutės pradžioje",
         "jump_to_bottom_on_send": "Peršokti į laiko juostos apačią, kai siunčiate žinutę",
         "key_backup": {
-            "backup_in_progress": "Kuriama jūsų raktų atsarginė kopija (pirmas atsarginės kopijos sukūrimas gali užtrukti kelias minutes).",
-            "cannot_create_backup": "Nepavyko sukurti atsarginės raktų kopijos",
-            "create_title": "Sukurti atsarginę raktų kopiją",
             "setup_secure_backup": {
                 "confirm_security_phrase": "Patvirtinkite savo Saugumo Frazę",
                 "enter_phrase_title": "Įveskite Slaptafrazę",
@@ -1571,7 +1566,6 @@
             "ignore_users_empty": "Nėra ignoruojamų naudotojų.",
             "ignore_users_section": "Ignoruojami vartotojai",
             "key_backup_algorithm": "Algoritmas:",
-            "key_backup_connect": "Prijungti šį seansą prie Atsarginės Raktų Kopijos",
             "message_search_disabled": "Šifruotas žinutes saugiai talpinkite lokaliai, kad jos būtų rodomos paieškos rezultatuose.",
             "message_search_enabled": {
                 "one": "Saugiai talpinkite užšifruotas žinutes vietoje, kad jos būtų rodomos paieškos rezultatuose, naudojant %(size)s žinutėms iš %(rooms)s kambario saugoti.",

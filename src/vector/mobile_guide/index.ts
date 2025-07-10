@@ -5,9 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import "./index.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/600.css";
+
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getVectorConfig } from "../getconfig";
+import { MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
 
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
@@ -38,17 +43,18 @@ function renderConfigError(message: string): void {
 }
 
 async function initPage(): Promise<void> {
-    document.getElementById("back_to_element_button")!.onclick = onBackToElementClick;
-
     const config = await getVectorConfig("..");
 
     // We manually parse the config similar to how validateServerConfig works because
     // calling that function pulls in roughly 4mb of JS we don't use.
 
     const wkConfig = config?.["default_server_config"]; // overwritten later under some conditions
-    const serverName = config?.["default_server_name"];
+    let serverName = config?.["default_server_name"];
     const defaultHsUrl = config?.["default_hs_url"];
     const defaultIsUrl = config?.["default_is_url"];
+
+    const appVariant = (config?.["mobile_guide_app_variant"] as MobileAppVariant) ?? MobileAppVariant.X;
+    const metadata = mobileApps[appVariant] ?? mobileApps[MobileAppVariant.X]; // Additional fallback in case mobile_guide_app_variant has an unexpected value.
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
     if (defaultHsUrl && (wkConfig || serverName)) {
@@ -66,6 +72,7 @@ async function initPage(): Promise<void> {
 
     if (!serverName && typeof wkConfig?.["m.homeserver"]?.["base_url"] === "string") {
         hsUrl = wkConfig["m.homeserver"]["base_url"];
+        serverName = wkConfig["m.homeserver"]["server_name"];
 
         if (typeof wkConfig["m.identity_server"]?.["base_url"] === "string") {
             isUrl = wkConfig["m.identity_server"]["base_url"];
@@ -110,21 +117,21 @@ async function initPage(): Promise<void> {
     if (hsUrl && !hsUrl.endsWith("/")) hsUrl += "/";
     if (isUrl && !isUrl.endsWith("/")) isUrl += "/";
 
-    if (hsUrl !== "https://matrix.org/") {
-        let url = "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl);
+    let deepLinkUrl = `https://mobile.element.io${metadata.deepLinkPath}`;
 
+    if (metadata.usesLegacyDeepLink) {
+        deepLinkUrl += `?hs_url=${encodeURIComponent(hsUrl)}`;
         if (isUrl) {
-            document.getElementById("custom_is")!.style.display = "block";
-            document.getElementById("is_url")!.style.display = "block";
-            document.getElementById("is_url")!.innerText = isUrl;
-            url += "&is_url=" + encodeURIComponent(isUrl ?? "");
+            deepLinkUrl += `&is_url=${encodeURIComponent(isUrl)}`;
         }
-
-        (document.getElementById("configure_element_button") as HTMLAnchorElement).href = url;
-        document.getElementById("step1_heading")!.innerHTML = "1: Install the app";
-        document.getElementById("step2_container")!.style.display = "block";
-        document.getElementById("hs_url")!.innerText = hsUrl;
+    } else if (serverName) {
+        deepLinkUrl += `?account_provider=${serverName}`;
     }
+
+    // Not part of updateMobilePage as the link is only shown on mobile_guide and not on mobile.element.io
+    document.getElementById("back_to_element_button")!.onclick = onBackToElementClick;
+
+    updateMobilePage(metadata, deepLinkUrl, serverName ?? hsUrl);
 }
 
 void initPage();
