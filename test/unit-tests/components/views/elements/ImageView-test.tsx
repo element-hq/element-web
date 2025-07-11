@@ -36,7 +36,7 @@ describe("<ImageView />", () => {
         );
         fireEvent.click(getByRole("button", { name: "Download" }));
         await waitFor(() =>
-            expect(mocked(FileDownloader).mock.instances[0].download).toHaveBeenCalledWith({
+            expect(mocked(FileDownloader).mock.instances[1].download).toHaveBeenCalledWith({
                 blob: expect.anything(),
                 name: "filename.png",
             }),
