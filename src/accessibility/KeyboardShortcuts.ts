@@ -145,9 +145,7 @@ export enum KeyBindingAction {
     ArrowDown = "KeyBinding.arrowDown",
     Tab = "KeyBinding.tab",
     Comma = "KeyBinding.comma",
-
-    /** Media accessibility **/
-    MediaSave = "KeyBinding.media.save",
+    Save = "KeyBinding.save",
 
     /** Toggle visibility of hidden events */
     ToggleHiddenEventVisibility = "KeyBinding.toggleHiddenEventVisibility",
@@ -271,7 +269,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ArrowRight,
             KeyBindingAction.ArrowDown,
             KeyBindingAction.Comma,
-            KeyBindingAction.MediaSave,
+            KeyBindingAction.Save,
         ],
     },
     [CategoryName.NAVIGATION]: {
@@ -624,12 +622,12 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         },
         displayName: _td("keyboard|composer_redo"),
     },
-    [KeyBindingAction.MediaSave]: {
+    [KeyBindingAction.Save]: {
         default: {
             key: Key.S,
             ctrlOrCmdKey: true,
         },
-        displayName: _td("keyboard|media_save"),
+        displayName: _td("keyboard|save"),
     },
     [KeyBindingAction.PreviousVisitedRoomOrSpace]: {
         default: {

@@ -117,7 +117,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         };
     }
 
-    // XXX: Downloading image helpers
     private downloader = new FileDownloader();
     private mediaEventHelper?: MediaEventHelper = this.props.mxEvent
         ? new MediaEventHelper(this.props.mxEvent)
@@ -300,7 +299,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.zoomDelta(-ZOOM_STEP);
     };
 
-    //
     private onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
@@ -309,7 +307,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 this.props.onFinished();
                 break;
-            case KeyBindingAction.MediaSave:
+            case KeyBindingAction.Save:
                 ev.preventDefault();
                 ev.stopPropagation();
                 this.downloadImage();
