@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td, type TranslationKey } from "../languageHandler";
+import { _td, type TranslationKey } from "../shared-components/i18n";
 import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
 import { type IBaseSetting } from "../settings/Settings";
 import { type KeyCombo } from "../KeyBindingsManager";
