@@ -183,7 +183,10 @@ export default class MultiInviter {
                 }
             }
 
-            return this.matrixClient.invite(roomId, addr, this.reason);
+            return this.matrixClient.invite(roomId, addr, {
+                reason: this.reason,
+                shareEncryptedHistory: SettingsStore.getValue("feature_share_history_on_invite"),
+            });
         } else {
             throw new Error("Unsupported address");
         }
