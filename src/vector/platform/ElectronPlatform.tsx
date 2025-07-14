@@ -85,13 +85,6 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     }
 }
 
-function conditionalNotifDescription(count: number): ReturnType<typeof _t> {
-    if (count === 1) {
-        return _t("notifications|icon_overlay_notifications|one", { count });
-    }
-    return _t("notifications|icon_overlay_notifications|other", { count });
-}
-
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
@@ -266,7 +259,7 @@ export default class ElectronPlatform extends BasePlatform {
             this.badgeOverlayRenderer
                 .render(count)
                 .then((buffer) => {
-                    this.electron.send("setBadgeCount", count, buffer, conditionalNotifDescription(count));
+                    this.electron.send("setBadgeCount", count, buffer, _t("notifications|icon_overlay_notifications", { count }));
                 })
                 .catch((ex) => {
                     logger.warn("Unable to generate badge overlay", ex);
@@ -296,7 +289,7 @@ export default class ElectronPlatform extends BasePlatform {
                         "setBadgeCount",
                         this.notificationCount,
                         buffer,
-                        errorDidOccur ? _t("common|error") : conditionalNotifDescription(this.notificationCount),
+                        errorDidOccur ? _t("common|error") : _t("notifications|icon_overlay_notifications", { count: this.notificationCount }),
                     );
                 })
                 .catch((ex) => {

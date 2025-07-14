@@ -489,7 +489,7 @@ describe("ElectronPlatform", () => {
                 expect(ipcMessage?.[3]).toEqual(`Error`);
             });
         });
-        it.only("should restore after error is resolved", async () => {
+        it("should restore after error is resolved", async () => {
             const platform = new ElectronPlatform();
             await platform.initialised;
             platform.setErrorStatus(true);
