@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2018-2021 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
