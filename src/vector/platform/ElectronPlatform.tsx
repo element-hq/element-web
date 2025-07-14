@@ -42,6 +42,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
+import { BadgeOverlayRenderer } from "../../favicon";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -91,6 +92,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly electron: Electron;
     private protocol!: string;
     private sessionId!: string;
+    private badgeOverlayRenderer?: BadgeOverlayRenderer;
     private config!: IConfigOptions;
     private supportedSettings?: Record<string, boolean>;
 
@@ -194,11 +196,15 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     private async initialise(): Promise<void> {
-        const { protocol, sessionId, config, supportedSettings } = await this.electron.initialise();
+        const { protocol, sessionId, config, supportedSettings, supportsBadgeOverlay } =
+            await this.electron.initialise();
         this.protocol = protocol;
         this.sessionId = sessionId;
         this.config = config;
         this.supportedSettings = supportedSettings;
+        if (supportsBadgeOverlay) {
+            this.badgeOverlayRenderer = new BadgeOverlayRenderer();
+        }
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -249,8 +255,39 @@ export default class ElectronPlatform extends BasePlatform {
     public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
+        if (this.badgeOverlayRenderer) {
+            this.badgeOverlayRenderer
+                .render(count)
+                .then((buffer) => {
+                    this.electron.send("setBadgeCount", count, buffer, `${count} notifications`);
+                })
+                .catch((ex) => {
+                    logger.warn("Unable to generate badge overlay", ex);
+                });
+        }
+    }
 
-        this.electron.send("setBadgeCount", count);
+    public setErrorStatus(errorDidOccur: boolean): void {
+        if (!this.badgeOverlayRenderer) {
+            super.setErrorStatus(errorDidOccur);
+            return;
+        }
+        if (this.errorDidOccur !== errorDidOccur) {
+            super.setErrorStatus(errorDidOccur);
+            this.badgeOverlayRenderer
+                .render(this.notificationCount || "×", this.errorDidOccur ? "#f00" : undefined)
+                .then((buffer) => {
+                    this.electron.send(
+                        "setBadgeCount",
+                        this.notificationCount,
+                        buffer,
+                        this.errorDidOccur ? `Client error` : `${this.notificationCount} notifications`,
+                    );
+                })
+                .catch((ex) => {
+                    logger.warn("Unable to generate badge overlay", ex);
+                });
+        }
     }
 
     public supportsNotifications(): boolean {
