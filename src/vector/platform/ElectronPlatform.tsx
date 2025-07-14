@@ -259,7 +259,12 @@ export default class ElectronPlatform extends BasePlatform {
             this.badgeOverlayRenderer
                 .render(count)
                 .then((buffer) => {
-                    this.electron.send("setBadgeCount", count, buffer, `${count} notifications`);
+                    this.electron.send(
+                        "setBadgeCount",
+                        count,
+                        buffer,
+                        _t("notifications|icon_overlay_notifications", { count }),
+                    );
                 })
                 .catch((ex) => {
                     logger.warn("Unable to generate badge overlay", ex);
@@ -272,6 +277,7 @@ export default class ElectronPlatform extends BasePlatform {
             super.setErrorStatus(errorDidOccur);
             return;
         }
+        // Check before calling super so we don't override the previous state.
         if (this.errorDidOccur !== errorDidOccur) {
             super.setErrorStatus(errorDidOccur);
             this.badgeOverlayRenderer
@@ -281,7 +287,9 @@ export default class ElectronPlatform extends BasePlatform {
                         "setBadgeCount",
                         this.notificationCount,
                         buffer,
-                        this.errorDidOccur ? `Client error` : `${this.notificationCount} notifications`,
+                        this.errorDidOccur
+                            ? _t("common|error")
+                            : _t("notifications|icon_overlay_notifications", { count: this.notificationCount }),
                     );
                 })
                 .catch((ex) => {

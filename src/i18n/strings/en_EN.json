@@ -1695,7 +1695,8 @@
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications",
-        "mute_room": "Mute room"
+        "mute_room": "Mute room",
+        "icon_overlay_notifications": "You have %(count)s unread notification."
     },
     "notifier": {
         "m.key.verification.request": "%(name)s is requesting verification"
