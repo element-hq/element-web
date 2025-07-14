@@ -1938,8 +1938,32 @@
             "active_heading": "Arolygon gweithredol",
             "empty_active": "Nid oes unrhyw arolygon gweithredol yn yr ystafell hon",
             "empty_active_load_more": "Nid oes unrhyw arolygon gweithredol. Llwythwch fwy o arolygon barn y misoedd blaenorol",
+            "empty_active_load_more_n_days": {
+                "zero": "Does dim polau gweithredol ar gyfer y dyddiau diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "one": "Does dim polau gweithredol ar gyfer y diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "two": "Does dim polau gweithredol ar gyfer y %(count)s ddiwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "few": "Does dim polau gweithredol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "many": "Does dim polau gweithredol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "other": "Does dim polau gweithredol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol"
+            },
             "empty_past": "Nid oes arolygon o'r gorffennol yn yr ystafell hon",
             "empty_past_load_more": "Nid oes unrhyw arolygon o'r gorffennol. Llwythwch fwy o arolygon barn ar gyfer y misoedd blaenorol",
+            "empty_past_load_more_n_days": {
+                "zero": "Does dim polau'r gorffennol ar gyfer y dyddiau diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "one": "Does dim polau'r gorffennol ar gyfer y diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "two": "Does dim polau'r gorffennol ar gyfer y %(count)s ddiwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "few": "Does dim polau'r gorffennol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "many": "Does dim polau'r gorffennol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol",
+                "other": "Does dim polau'r gorffennol ar gyfer y %(count)s diwrnod diwethaf. Llwythwch ragor o bolau i weld polau'r misoedd blaenorol"
+            },
+            "final_result": {
+                "zero": "Canlyniadau terfynol yn seiliedig ar %(count)s pleidleisiau",
+                "one": "Canlyniadau terfynol yn seiliedig ar %(count)s pleidlais",
+                "two": "Canlyniadau terfynol yn seiliedig ar %(count)s bleidlais",
+                "few": "Canlyniadau terfynol yn seiliedig ar %(count)s pleidlais",
+                "many": "Canlyniadau terfynol yn seiliedig ar %(count)s phleidlais",
+                "other": "Canlyniadau terfynol yn seiliedig ar %(count)s pleidlais"
+            },
             "load_more": "Llwytho mwy o arolygon barn",
             "loading": "Wrthi'n llwytho arolygon",
             "past_heading": "Arolygon y gorffennol",
