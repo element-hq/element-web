@@ -20,24 +20,27 @@ import DesktopCapturerSourcePicker from "../../../../src/components/views/elemen
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
+import { waitFor } from "jest-matrix-react";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
 }));
 
 describe("ElectronPlatform", () => {
+    const initialiseValues = jest.fn().mockReturnValue({
+        protocol: "io.element.desktop",
+        sessionId: "session-id",
+        config: { _config: true },
+        supportedSettings: { setting1: false, setting2: true },
+        supportsBadgeOverlay: false,
+    });
     const defaultUserAgent =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36";
     const mockElectron = {
         on: jest.fn(),
         send: jest.fn(),
-        initialise: jest.fn().mockResolvedValue({
-            protocol: "io.element.desktop",
-            sessionId: "session-id",
-            config: { _config: true },
-            supportedSettings: { setting1: false, setting2: true },
-        }),
+        initialise: initialiseValues,
         setSettingValue: jest.fn().mockResolvedValue(undefined),
         getSettingValue: jest.fn().mockResolvedValue(undefined),
     } as unknown as MockedObject<Electron>;
@@ -403,6 +406,107 @@ describe("ElectronPlatform", () => {
         expect(ipcMessage![1]).toEqual({
             action: "call_state",
             state: "connected",
+        });
+    });
+
+    describe("Notification overlay badges", () => {
+        beforeEach(() => {
+            initialiseValues.mockReturnValue({
+                protocol: "io.element.desktop",
+                sessionId: "session-id",
+                config: { _config: true },
+                supportsBadgeOverlay: true,
+            });
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("should send a badge with a notification count", async () => {
+            const platform = new ElectronPlatform();
+            await platform.initialised;
+            platform.setNotificationCount(1);
+            // Badges are sent asynchronously
+            await waitFor(() => {
+                const ipcMessage = mockElectron.send.mock.lastCall;
+                expect(ipcMessage?.[1]).toEqual(1);
+                expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessage?.[3]).toEqual(`You have 1 unread notification.`);
+            });
+        });
+
+        it("should update badge and skip duplicates", async () => {
+            const platform = new ElectronPlatform();
+            await platform.initialised;
+            platform.setNotificationCount(1);
+            platform.setNotificationCount(1); // Test that duplicates do not fire.
+            platform.setNotificationCount(2);
+            // Badges are sent asynchronously
+            await waitFor(() => {
+                const [ipcMessageA, ipcMessageB] = mockElectron.send.mock.calls.filter(
+                    (call) => call[0] === "setBadgeCount",
+                );
+
+                expect(ipcMessageA?.[1]).toEqual(1);
+                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[3]).toEqual(`You have 1 unread notification.`);
+
+                expect(ipcMessageB?.[1]).toEqual(2);
+                expect(ipcMessageB?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageB?.[3]).toEqual(`You have 2 unread notifications.`);
+            });
+        });
+        it("should remove badge when notification count zeros", async () => {
+            const platform = new ElectronPlatform();
+            await platform.initialised;
+            platform.setNotificationCount(1);
+            platform.setNotificationCount(0); // Test that duplicates do not fire.
+            // Badges are sent asynchronously
+            await waitFor(() => {
+                const [ipcMessageB, ipcMessageA] = mockElectron.send.mock.calls.filter(
+                    (call) => call[0] === "setBadgeCount",
+                );
+
+                expect(ipcMessageA?.[1]).toEqual(1);
+                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[3]).toEqual(`You have 1 unread notification.`);
+
+                expect(ipcMessageB?.[1]).toEqual(0);
+                expect(ipcMessageB?.[2]).toBeNull();
+            });
+        });
+        it("should show an error badge when the application errors", async () => {
+            const platform = new ElectronPlatform();
+            await platform.initialised;
+            platform.setErrorStatus(true);
+            // Badges are sent asynchronously
+            await waitFor(() => {
+                const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "setBadgeCount");
+
+                expect(ipcMessage?.[1]).toEqual(0);
+                expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessage?.[3]).toEqual(`Error`);
+            });
+        });
+        it.only("should restore after error is resolved", async () => {
+            const platform = new ElectronPlatform();
+            await platform.initialised;
+            platform.setErrorStatus(true);
+            platform.setErrorStatus(false);
+            // Badges are sent asynchronously
+            await waitFor(() => {
+                const [ipcMessageB, ipcMessageA] = mockElectron.send.mock.calls.filter(
+                    (call) => call[0] === "setBadgeCount",
+                );
+
+                expect(ipcMessageA?.[1]).toEqual(0);
+                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[3]).toEqual(`Error`);
+
+                expect(ipcMessageB?.[1]).toEqual(0);
+                expect(ipcMessageB?.[2]).toBeNull();
+            });
         });
     });
 });

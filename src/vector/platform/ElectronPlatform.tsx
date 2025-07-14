@@ -85,10 +85,17 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     }
 }
 
+function conditionalNotifDescription(count: number): ReturnType<typeof _t> {
+    if (count === 1) {
+        return _t("notifications|icon_overlay_notifications|one", { count });
+    }
+    return _t("notifications|icon_overlay_notifications|other", { count });
+}
+
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    private readonly initialised: Promise<void>;
+    public readonly initialised: Promise<void>;
     private readonly electron: Electron;
     private protocol!: string;
     private sessionId!: string;
@@ -259,16 +266,14 @@ export default class ElectronPlatform extends BasePlatform {
             this.badgeOverlayRenderer
                 .render(count)
                 .then((buffer) => {
-                    this.electron.send(
-                        "setBadgeCount",
-                        count,
-                        buffer,
-                        _t("notifications|icon_overlay_notifications", { count }),
-                    );
+                    this.electron.send("setBadgeCount", count, buffer, conditionalNotifDescription(count));
                 })
                 .catch((ex) => {
+                    console.log("FAIL", ex);
                     logger.warn("Unable to generate badge overlay", ex);
                 });
+        } else {
+            this.electron.send("setBadgeCount", count);
         }
     }
 
@@ -280,16 +285,19 @@ export default class ElectronPlatform extends BasePlatform {
         // Check before calling super so we don't override the previous state.
         if (this.errorDidOccur !== errorDidOccur) {
             super.setErrorStatus(errorDidOccur);
-            this.badgeOverlayRenderer
-                .render(this.notificationCount || "×", this.errorDidOccur ? "#f00" : undefined)
+            let promise: Promise<ArrayBuffer | null>;
+            if (errorDidOccur) {
+                promise = this.badgeOverlayRenderer.render(this.notificationCount || "×", "#f00");
+            } else {
+                promise = this.badgeOverlayRenderer.render(this.notificationCount);
+            }
+            promise
                 .then((buffer) => {
                     this.electron.send(
                         "setBadgeCount",
                         this.notificationCount,
                         buffer,
-                        this.errorDidOccur
-                            ? _t("common|error")
-                            : _t("notifications|icon_overlay_notifications", { count: this.notificationCount }),
+                        errorDidOccur ? _t("common|error") : conditionalNotifDescription(this.notificationCount),
                     );
                 })
                 .catch((ex) => {

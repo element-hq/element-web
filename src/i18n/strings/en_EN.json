@@ -1681,6 +1681,10 @@
         "enable_prompt_toast_title": "Notifications",
         "enable_prompt_toast_title_from_message_send": "Don't miss a reply",
         "error_change_title": "Change notification settings",
+        "icon_overlay_notifications": {
+            "one": "You have %(count)s unread notification.",
+            "other": "You have %(count)s unread notifications."
+        },
         "keyword": "Keyword",
         "keyword_new": "New keyword",
         "level_activity": "Activity",
@@ -1695,8 +1699,7 @@
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications",
-        "mute_room": "Mute room",
-        "icon_overlay_notifications": "You have %(count)s unread notification."
+        "mute_room": "Mute room"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s is requesting verification"
