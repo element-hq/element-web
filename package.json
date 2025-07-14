@@ -93,7 +93,7 @@
         "@types/png-chunks-extract": "^1.0.2",
         "@types/react-virtualized": "^9.21.30",
         "@vector-im/compound-design-tokens": "^5.0.0",
-        "@vector-im/compound-web": "^8.1.2",
+        "@vector-im/compound-web": "^8.2.0",
         "@vector-im/matrix-wysiwyg": "2.38.4",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
