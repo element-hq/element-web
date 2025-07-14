@@ -46,7 +46,7 @@ export default abstract class Exporter {
     ) {
         if (
             exportOptions.maxSize < 1 * 1024 * 1024 || // Less than 1 MB
-            exportOptions.maxSize > 8000 * 1024 * 1024 || // More than 8 GB
+            exportOptions.maxSize > 2000 * 1024 * 1024 || // More than 2 GB
             (!!exportOptions.numberOfMessages && exportOptions.numberOfMessages > 10 ** 8) ||
             (exportType === ExportType.LastNMessages && !exportOptions.numberOfMessages)
         ) {
@@ -89,17 +89,30 @@ export default abstract class Exporter {
     protected async downloadZIP(): Promise<string | void> {
         const filename = this.destinationFileName;
         const filenameWithoutExt = filename.substring(0, filename.lastIndexOf(".")); // take off the extension
-        const { default: JSZip } = await import("jszip");
+        const { BlobWriter, ZipWriter } = await import("@zip.js/zip.js");
 
-        const zip = new JSZip();
+        const zipFileWriter = new BlobWriter("application/zip");
+        const zipWriter = new ZipWriter(zipFileWriter);
         // Create a writable stream to the directory
         if (!this.cancelled) this.updateProgress(_t("export_chat|generating_zip"));
         else return this.cleanUp();
 
-        for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
+        // Sometimes, media with a duplicate file name is written by an exporter.
+        // This will be reflected by the logger statement in the loop below.
+        // This should probably be fixed properly, by somehow differentiating these files by date.
+        // In the meantime, let's just pick the "last added file" as the preferred option in these cases, and log the errors in all other cases.
+        // If es2023 were to be the build target, this could become `toReversed()` to be cleaner.
+        for (const file of this.files.reverse()) {
+            const filename = filenameWithoutExt + "/" + file.name;
+            try {
+                await zipWriter.add(filename, file.blob.stream());
+            } catch (e) {
+                logger.error(filename, e);
+            }
+        }
 
-        const content = await zip.generateAsync({ type: "blob" });
-        saveAs(content, filenameWithoutExt + ".zip");
+        await zipWriter.close();
+        saveAs(await zipFileWriter.getData(), filenameWithoutExt + ".zip");
     }
 
     protected cleanUp(): string {
