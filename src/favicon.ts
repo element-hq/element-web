@@ -30,11 +30,17 @@ const defaults: IParams = {
 
 abstract class IconRenderer {
     protected readonly canvas: HTMLCanvasElement;
+    protected readonly context: CanvasRenderingContext2D;
     public constructor(
         protected readonly params: IParams = defaults,
         protected readonly baseImage?: HTMLImageElement,
     ) {
         this.canvas = document.createElement("canvas");
+        const context = this.canvas.getContext("2d")
+        if (!context) {
+            throw Error("Could not get canvas context");
+        }
+        this.context = context;
     }
 
     private options(
@@ -88,10 +94,6 @@ abstract class IconRenderer {
      * @param opts Options to adjust.
      */
     protected circle(n: number | string, opts?: Partial<IParams>): void {
-        const context = this.canvas.getContext("2d");
-        if (!context) {
-            throw Error("Could not get canvas context");
-        }
         const params = { ...this.params, ...opts };
         const opt = this.options(n, params);
 
@@ -113,44 +115,44 @@ abstract class IconRenderer {
             more = true;
         }
 
-        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         if (this.baseImage) {
-            context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
+            this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         }
-        context.beginPath();
+        this.context.beginPath();
         const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
-        context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
-        context.textAlign = "center";
+        this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
+        this.context.textAlign = "center";
 
         if (more) {
-            context.moveTo(opt.x + opt.w / 2, opt.y);
-            context.lineTo(opt.x + opt.w - opt.h / 2, opt.y);
-            context.quadraticCurveTo(opt.x + opt.w, opt.y, opt.x + opt.w, opt.y + opt.h / 2);
-            context.lineTo(opt.x + opt.w, opt.y + opt.h - opt.h / 2);
-            context.quadraticCurveTo(opt.x + opt.w, opt.y + opt.h, opt.x + opt.w - opt.h / 2, opt.y + opt.h);
-            context.lineTo(opt.x + opt.h / 2, opt.y + opt.h);
-            context.quadraticCurveTo(opt.x, opt.y + opt.h, opt.x, opt.y + opt.h - opt.h / 2);
-            context.lineTo(opt.x, opt.y + opt.h / 2);
-            context.quadraticCurveTo(opt.x, opt.y, opt.x + opt.h / 2, opt.y);
+            this.context.moveTo(opt.x + opt.w / 2, opt.y);
+            this.context.lineTo(opt.x + opt.w - opt.h / 2, opt.y);
+            this.context.quadraticCurveTo(opt.x + opt.w, opt.y, opt.x + opt.w, opt.y + opt.h / 2);
+            this.context.lineTo(opt.x + opt.w, opt.y + opt.h - opt.h / 2);
+            this.context.quadraticCurveTo(opt.x + opt.w, opt.y + opt.h, opt.x + opt.w - opt.h / 2, opt.y + opt.h);
+            this.context.lineTo(opt.x + opt.h / 2, opt.y + opt.h);
+            this.context.quadraticCurveTo(opt.x, opt.y + opt.h, opt.x, opt.y + opt.h - opt.h / 2);
+            this.context.lineTo(opt.x, opt.y + opt.h / 2);
+            this.context.quadraticCurveTo(opt.x, opt.y, opt.x + opt.h / 2, opt.y);
         } else {
-            context.arc(opt.x + opt.w / 2, opt.y + opt.h / 2, opt.h / 2, 0, 2 * Math.PI);
+            this.context.arc(opt.x + opt.w / 2, opt.y + opt.h / 2, opt.h / 2, 0, 2 * Math.PI);
         }
 
-        context.fillStyle = params.bgColor;
-        context.fill();
-        context.closePath();
-        context.beginPath();
-        context.stroke();
-        context.fillStyle = params.textColor;
+        this.context.fillStyle = params.bgColor;
+        this.context.fill();
+        this.context.closePath();
+        this.context.beginPath();
+        this.context.stroke();
+        this.context.fillStyle = params.textColor;
 
         if (typeof opt.n === "number" && opt.n > 999) {
             const count = (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+";
-            context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
+            this.context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
         } else {
-            context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
+            this.context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
         }
 
-        context.closePath();
+        this.context.closePath();
     }
 }
 
@@ -229,9 +231,8 @@ export default class Favicon extends IconRenderer {
     }
 
     private reset(): void {
-        const context = this.canvas.getContext("2d")!;
-        context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        context.drawImage(this.baseImage!, 0, 0, this.canvas.width, this.canvas.height);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.drawImage(this.baseImage!, 0, 0, this.canvas.width, this.canvas.height);
     }
 
     private ready(): void {
