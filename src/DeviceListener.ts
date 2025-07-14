@@ -15,7 +15,7 @@ import {
     type SyncState,
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
-import { logger as baseLogger, LogSpan } from "matrix-js-sdk/src/logger";
+import { logger as baseLogger, type BaseLogger, LogSpan } from "matrix-js-sdk/src/logger";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
@@ -213,6 +213,7 @@ export default class DeviceListener {
     };
 
     private onKeyBackupStatusChanged = (): void => {
+        logger.info("Backup status changed");
         this.cachedKeyBackupUploadActive = undefined;
         this.recheck();
     };
@@ -313,6 +314,7 @@ export default class DeviceListener {
     private async doRecheck(): Promise<void> {
         if (!this.running || !this.client) return; // we have been stopped
         const logSpan = new LogSpan(logger, "check_" + secureRandomString(4));
+        logSpan.debug("starting recheck...");
 
         const cli = this.client;
 
@@ -355,7 +357,7 @@ export default class DeviceListener {
                 (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
             );
 
-        const keyBackupUploadActive = await this.isKeyBackupUploadActive();
+        const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
         const backupDisabled = await this.recheckBackupDisabled(cli);
 
         // We warn if key backup upload is turned off and we have not explicitly
@@ -579,7 +581,7 @@ export default class DeviceListener {
      * trigger an auto-rageshake).
      */
     private checkKeyBackupStatus = async (): Promise<void> => {
-        if (!(await this.isKeyBackupUploadActive())) {
+        if (!(await this.isKeyBackupUploadActive(logger))) {
             dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
         }
     };
@@ -587,7 +589,7 @@ export default class DeviceListener {
     /**
      * Is key backup enabled? Use a cached answer if we have one.
      */
-    private isKeyBackupUploadActive = async (): Promise<boolean> => {
+    private isKeyBackupUploadActive = async (logger: BaseLogger): Promise<boolean> => {
         if (!this.client) {
             // To preserve existing behaviour, if there is no client, we
             // pretend key backup upload is on.
@@ -611,6 +613,7 @@ export default class DeviceListener {
         // Fetch the answer and cache it
         const activeKeyBackupVersion = await crypto.getActiveSessionBackupVersion();
         this.cachedKeyBackupUploadActive = !!activeKeyBackupVersion;
+        logger.debug(`Key backup upload is ${this.cachedKeyBackupUploadActive ? "active" : "inactive"}`);
 
         return this.cachedKeyBackupUploadActive;
     };
