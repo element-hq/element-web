@@ -36,7 +36,7 @@ abstract class IconRenderer {
         protected readonly baseImage?: HTMLImageElement,
     ) {
         this.canvas = document.createElement("canvas");
-        const context = this.canvas.getContext("2d")
+        const context = this.canvas.getContext("2d");
         if (!context) {
             throw Error("Could not get canvas context");
         }
