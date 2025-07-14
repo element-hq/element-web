@@ -95,7 +95,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         className="mx_MemberListView_container"
                         onKeyDown={onKeyDownHandler}
                     >
-                        <Form.Root>
+                        <Form.Root onSubmit={(e) => e.preventDefault()}>
                             <MemberListHeaderView vm={vm} />
                         </Form.Root>
                         <AutoSizer>

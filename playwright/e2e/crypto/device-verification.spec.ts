@@ -48,31 +48,38 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         return promiseVerificationRequest;
     }
 
-    test("Verify device with SAS during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, credentials);
+    test(
+        "Verify device with SAS during login",
+        { tag: "@screenshot" },
+        async ({ page, app, credentials, homeserver }) => {
+            await logIntoElement(page, credentials);
 
-        // Launch the verification request between alice and the bot
-        const verificationRequest = await initiateAliceVerificationRequest(page);
+            // Launch the verification request between alice and the bot
+            const verificationRequest = await initiateAliceVerificationRequest(page);
 
-        // Handle emoji SAS verification
-        const infoDialog = page.locator(".mx_InfoDialog");
-        // the bot chooses to do an emoji verification
-        const verifier = await verificationRequest.evaluateHandle((request) => request.startVerification("m.sas.v1"));
+            // Handle emoji SAS verification
+            const infoDialog = page.locator(".mx_InfoDialog");
+            // the bot chooses to do an emoji verification
+            const verifier = await verificationRequest.evaluateHandle((request) =>
+                request.startVerification("m.sas.v1"),
+            );
 
-        // Handle emoji request and check that emojis are matching
-        await doTwoWaySasVerification(page, verifier);
+            // Handle emoji request and check that emojis are matching
+            await doTwoWaySasVerification(page, verifier);
 
-        await infoDialog.getByRole("button", { name: "They match" }).click();
-        await infoDialog.getByRole("button", { name: "Got it" }).click();
+            await infoDialog.getByRole("button", { name: "They match" }).click();
+            await expect(page.locator(".mx_E2EIcon_verified")).toMatchScreenshot("device-verified-e2eIcon.png");
+            await infoDialog.getByRole("button", { name: "Got it" }).click();
 
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
+            // Check that our device is now cross-signed
+            await checkDeviceIsCrossSigned(app);
 
-        // Check that the current device is connected to key backup
-        // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen.
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
-    });
+            // Check that the current device is connected to key backup
+            // For now we don't check that the backup key is in cache because it's a bit flaky,
+            // as we need to wait for the secret gossiping to happen.
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
+        },
+    );
 
     // Regression test for https://github.com/element-hq/element-web/issues/29110
     test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {

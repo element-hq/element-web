@@ -13,6 +13,7 @@ import {
     type MatrixClient,
     ClientEvent,
     RoomStateEvent,
+    type ReceivedToDeviceMessage,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
@@ -360,7 +361,7 @@ export class StopGapWidget extends EventEmitter {
         this.client.on(ClientEvent.Event, this.onEvent);
         this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.client.on(RoomStateEvent.Events, this.onStateUpdate);
-        this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
+        this.client.on(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
 
         this.messaging.on(
             `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
@@ -493,7 +494,7 @@ export class StopGapWidget extends EventEmitter {
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.client.off(RoomStateEvent.Events, this.onStateUpdate);
-        this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
+        this.client.off(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
     }
 
     private onEvent = (ev: MatrixEvent): void => {
@@ -513,10 +514,10 @@ export class StopGapWidget extends EventEmitter {
         });
     };
 
-    private onToDeviceEvent = async (ev: MatrixEvent): Promise<void> => {
-        await this.client.decryptEventIfNeeded(ev);
-        if (ev.isDecryptionFailure()) return;
-        await this.messaging?.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
+    private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
+        const { message, encryptionInfo } = payload;
+        // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
+        await this.messaging?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
     };
 
     /**
