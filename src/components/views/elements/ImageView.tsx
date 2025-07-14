@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef, type CSSProperties, useImperativeHandle, forwardRef, ForwardedRef } from "react";
 import FocusLock from "react-focus-lock";
-import { type MatrixEvent, parseErrorResponse } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -30,8 +30,6 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import AccessibleButton from "./AccessibleButton";
-import { FileDownloader } from "../../../utils/FileDownloader";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper.ts";
 import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
 
 // Max scale to keep gaps around the image
@@ -113,11 +111,6 @@ export default class ImageView extends React.Component<IProps, IState> {
             contextMenuDisplayed: false,
         };
     }
-
-    private downloader = new FileDownloader();
-    private mediaEventHelper?: MediaEventHelper = this.props.mxEvent
-        ? new MediaEventHelper(this.props.mxEvent)
-        : undefined;
 
     // XXX: Refs to functional components
     private contextMenuButton = createRef<any>();

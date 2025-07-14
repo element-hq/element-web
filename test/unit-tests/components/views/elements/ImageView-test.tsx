@@ -36,11 +36,33 @@ describe("<ImageView />", () => {
         );
         fireEvent.click(getByRole("button", { name: "Download" }));
         await waitFor(() =>
-            expect(mocked(FileDownloader).mock.instances[1].download).toHaveBeenCalledWith({
+            expect(mocked(FileDownloader).mock.instances[0].download).toHaveBeenCalledWith({
                 blob: expect.anything(),
                 name: "filename.png",
             }),
         );
+        expect(fetchMock).toHaveFetched("https://example.com/image.png");
+    });
+
+    it("should start download on Ctrl+S", async () => {
+        fetchMock.get("https://example.com/image.png", "TESTFILE");
+
+        const { container } = render(
+            <ImageView src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
+        );
+
+        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        dialog?.focus();
+
+        fireEvent.keyDown(dialog!, { key: "s", code: "KeyS", ctrlKey: true });
+
+        await waitFor(() => {
+            expect(mocked(FileDownloader).mock.instances[0].download).toHaveBeenCalledWith({
+                blob: expect.anything(),
+                name: "filename.png",
+            });
+        });
+
         expect(fetchMock).toHaveFetched("https://example.com/image.png");
     });
 
