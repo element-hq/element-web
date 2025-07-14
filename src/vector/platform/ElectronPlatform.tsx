@@ -269,7 +269,6 @@ export default class ElectronPlatform extends BasePlatform {
                     this.electron.send("setBadgeCount", count, buffer, conditionalNotifDescription(count));
                 })
                 .catch((ex) => {
-                    console.log("FAIL", ex);
                     logger.warn("Unable to generate badge overlay", ex);
                 });
         } else {
