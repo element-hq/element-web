@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type CSSProperties } from "react";
+import React, { type JSX, createRef, type CSSProperties, useImperativeHandle, forwardRef, ForwardedRef } from "react";
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent, parseErrorResponse } from "matrix-js-sdk/src/matrix";
 
@@ -124,6 +124,8 @@ export default class ImageView extends React.Component<IProps, IState> {
     private focusLock = createRef<any>();
     private imageWrapper = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
+
+    private downloadButtonRef = createRef<{ download: () => Promise<void> }>();
 
     private initX = 0;
     private initY = 0;
@@ -307,24 +309,10 @@ export default class ImageView extends React.Component<IProps, IState> {
             case KeyBindingAction.Save:
                 ev.preventDefault();
                 ev.stopPropagation();
-                this.downloadImage();
+                this.downloadButtonRef.current?.download();
                 break;
         }
     };
-
-    private async downloadImage(): Promise<void> {
-        const res = await fetch(this.props.src);
-        if (!res.ok) {
-            throw parseErrorResponse(res, await res.text());
-        }
-
-        const blob = await res.blob();
-
-        await this.downloader.download({
-            blob,
-            name: this.mediaEventHelper?.fileName ?? this.props.name ?? _t("common|image"),
-        });
-    }
 
     private onRotateCounterClockwiseClick = (): void => {
         const cur = this.state.rotation;
@@ -573,7 +561,12 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("lightbox|rotate_right")}
                             onClick={this.onRotateClockwiseClick}
                         />
-                        <DownloadButton url={this.props.src} fileName={this.props.name} mxEvent={this.props.mxEvent} />
+                        <DownloadButton
+                            ref={this.downloadButtonRef}
+                            url={this.props.src}
+                            fileName={this.props.name}
+                            mxEvent={this.props.mxEvent}
+                        />
                         {contextMenuButton}
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_button_close"
@@ -606,16 +599,13 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 }
 
-function DownloadButton({
-    url,
-    fileName,
-    mxEvent,
-}: {
-    url: string;
-    fileName?: string;
-    mxEvent?: MatrixEvent;
-}): JSX.Element | null {
+export const DownloadButton = forwardRef<
+    { download: () => Promise<void> },
+    { url: string; fileName?: string; mxEvent?: MatrixEvent }
+>(({ url, fileName, mxEvent }, ref: ForwardedRef<{ download: () => Promise<void> }>): JSX.Element | null => {
     const { download, loading, canDownload } = useDownloadMedia(url, fileName, mxEvent);
+
+    useImperativeHandle(ref, () => ({ download }), [download]);
 
     if (!canDownload) {
         return null;
@@ -629,4 +619,4 @@ function DownloadButton({
             disabled={loading}
         />
     );
-}
+});
