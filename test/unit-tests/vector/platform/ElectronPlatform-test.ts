@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
+import { waitFor } from "jest-matrix-react";
 
 import { UpdateCheckStatus } from "../../../../src/BasePlatform";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -20,7 +21,6 @@ import DesktopCapturerSourcePicker from "../../../../src/components/views/elemen
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
-import { waitFor } from "jest-matrix-react";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
