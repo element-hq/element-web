@@ -126,7 +126,7 @@ test.describe("'Turn on key storage' toast", () => {
         await toast.getByRole("button", { name: "Continue" }).click();
 
         // Then we see the Encryption settings dialog with an option to turn on key storage
-        await expect(page.getByRole("checkbox", { name: "Allow key storage" })).toBeVisible();
+        await expect(page.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
 
         // And when we close that
         await page.getByRole("button", { name: "Close dialog" }).click();
@@ -153,7 +153,7 @@ test.describe("'Turn on key storage' toast", () => {
         await page.getByRole("button", { name: "Go to Settings" }).click();
 
         // Then we see Encryption settings again
-        await expect(page.getByRole("checkbox", { name: "Allow key storage" })).toBeVisible();
+        await expect(page.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
 
         // And when we close that, see the toast, click Dismiss, and Yes, Dismiss
         await page.getByRole("button", { name: "Close dialog" }).click();

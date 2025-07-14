@@ -36,8 +36,6 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
         [isEnabled, onSubmit],
     );
 
-    console.log("EnableLiveShare", isEnabled);
-
     return (
         <div data-testid="location-picker-enable-live-share" className="mx_EnableLiveShare">
             <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />

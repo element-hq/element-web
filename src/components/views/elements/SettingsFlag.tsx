@@ -111,15 +111,6 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                   },
               )
             : description;
-        if (this.props.name === "sendReadReceipts") {
-            console.log(
-                "Fully disabled",
-                this.props.name,
-                SettingsStore.disabledMessage(this.props.name),
-                description,
-                helpMessage,
-            );
-        }
         const disabledMessage = SettingsStore.disabledMessage(this.props.name);
         return (
             <SettingsToggleInput

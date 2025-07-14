@@ -15,24 +15,24 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
         <div
           class="mx_SettingsSection_subSections"
         >
-          <form
-            class="_root_19upo_16"
+          <div
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+            data-testid="themePanel"
           >
             <div
-              class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
-              data-testid="themePanel"
+              class="mx_SettingsSubsectionHeading"
             >
-              <div
-                class="mx_SettingsSubsectionHeading"
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
-                <h3
-                  class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
-                >
-                  Theme
-                </h3>
-              </div>
-              <div
-                class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+                Theme
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+            >
+              <form
+                class="_root_19upo_16 mx_ThemeChoicePanel_ThemeSelectors"
               >
                 <div
                   class="_inline-field_19upo_32 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
@@ -136,33 +136,33 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </label>
                   </div>
                 </div>
-              </div>
-              <div
-                class="_separator_7ckbw_8"
-                data-kind="primary"
-                data-orientation="horizontal"
-                role="separator"
-              />
+              </form>
             </div>
-          </form>
-          <div
-            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
-            data-testid="layoutPanel"
+            <div
+              class="_separator_7ckbw_8"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
+          </div>
+          <form
+            class="_root_19upo_16"
           >
             <div
-              class="mx_SettingsSubsectionHeading"
+              class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+              data-testid="layoutPanel"
             >
-              <h3
-                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              <div
+                class="mx_SettingsSubsectionHeading"
               >
-                Message layout
-              </h3>
-            </div>
-            <div
-              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
-            >
-              <form
-                class="_root_19upo_16 mx_LayoutSwitcher_LayoutSelector"
+                <h3
+                  class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+                >
+                  Message layout
+                </h3>
+              </div>
+              <div
+                class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
               >
                 <div
                   class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
@@ -543,59 +543,59 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </label>
                 </div>
-              </form>
-              <form
-                class="_root_19upo_16"
-              >
-                <div
-                  class="_inline-field_19upo_32"
+                <form
+                  class="_root_19upo_16"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field_19upo_32"
                   >
                     <div
-                      class="_container_19o42_10"
+                      class="_inline-field-control_19upo_44"
                     >
-                      <input
-                        aria-describedby="radix-«rv»"
-                        class="_input_19o42_24"
-                        id="radix-«ru»"
-                        name="compactLayout"
-                        role="switch"
-                        title=""
-                        type="checkbox"
-                      />
                       <div
-                        class="_ui_19o42_34"
-                      />
+                        class="_container_19o42_10"
+                      >
+                        <input
+                          aria-describedby="radix-«rv»"
+                          class="_input_19o42_24"
+                          id="radix-«ru»"
+                          name="compactLayout"
+                          role="switch"
+                          title=""
+                          type="checkbox"
+                        />
+                        <div
+                          class="_ui_19o42_34"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="_inline-field-body_19upo_38"
+                    >
+                      <label
+                        class="_label_19upo_59"
+                        for="radix-«ru»"
+                      >
+                        Show compact text and messages
+                      </label>
+                      <span
+                        class="_message_19upo_85 _help-message_19upo_91"
+                        id="radix-«rv»"
+                      >
+                        Modern layout must be selected to use this feature.
+                      </span>
                     </div>
                   </div>
-                  <div
-                    class="_inline-field-body_19upo_38"
-                  >
-                    <label
-                      class="_label_19upo_59"
-                      for="radix-«ru»"
-                    >
-                      Show compact text and messages
-                    </label>
-                    <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-«rv»"
-                    >
-                      Modern layout must be selected to use this feature.
-                    </span>
-                  </div>
-                </div>
-              </form>
+                </form>
+              </div>
+              <div
+                class="_separator_7ckbw_8"
+                data-kind="primary"
+                data-orientation="horizontal"
+                role="separator"
+              />
             </div>
-            <div
-              class="_separator_7ckbw_8"
-              data-kind="primary"
-              data-orientation="horizontal"
-              role="separator"
-            />
-          </div>
+          </form>
           <div
             class="mx_SettingsSubsection"
             data-testid="mx_FontScalingPanel"

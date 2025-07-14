@@ -130,7 +130,11 @@ export default function NotificationSettings2(): JSX.Element {
                             }}
                         />
                         <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
+                        <SettingsFlag
+                            name="notificationBodyEnabled"
+                            label={_t("settings|notifications|desktop_notification_message_preview")}
+                            level={SettingLevel.DEVICE}
+                        />
                         <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
                     </div>
                     <SettingsSubsection

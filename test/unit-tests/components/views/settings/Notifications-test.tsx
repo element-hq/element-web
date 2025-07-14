@@ -350,7 +350,7 @@ describe("<Notifications />", () => {
             expect(screen.getByLabelText("Enable notifications for this account")).toBeInTheDocument();
             expect(screen.getByLabelText("Enable notifications for this device")).toBeInTheDocument();
             expect(screen.getByLabelText("Enable desktop notifications for this session")).toBeInTheDocument();
-            expect(screen.getByLabelText("Show message preview in desktop notification")).toBeInTheDocument();
+            expect(screen.getByLabelText("Show message in desktop notification")).toBeInTheDocument();
             expect(screen.getByLabelText("Enable audible notifications for this session")).toBeInTheDocument();
         });
 

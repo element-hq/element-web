@@ -16,7 +16,7 @@ test.describe("Notifications tab", () => {
         await page.setViewportSize({ width: 1024, height: 1400 });
         const settings = await app.settings.openUserSettings("Notifications");
         await settings.getByLabel("Enable notifications for this account").check();
-        await settings.getByLabel("Enable notifications for this session").check();
+        await settings.getByLabel("Enable notifications for this device").check();
         await expect(settings).toMatchScreenshot("standard-notification-settings.png");
     });
 });

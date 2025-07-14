@@ -26,14 +26,14 @@ test.describe("Create Room", () => {
             await dialog.getByRole("button", { name: "Room visibility" }).click();
             await dialog.getByRole("option", { name: "Public room" }).click();
             // Fill room address
-            await dialog.getByRole("textbox", { name: "Room address" }).fill("test-room-1");
+            await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-standard");
             // Snapshot it
             await expect(dialog).toMatchScreenshot("create-room.png");
 
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
 
-            await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
+            await expect(page).toHaveURL(new RegExp(`/#/room/#test-create-room-standard:${user.homeServer}`));
             const header = page.locator(".mx_RoomHeader");
             await expect(header).toContainText(name);
         },
@@ -50,14 +50,14 @@ test.describe("Create Room", () => {
         await dialog.getByRole("button", { name: "Room visibility" }).click();
         await dialog.getByRole("option", { name: "Public room" }).click();
         // Fill room address
-        await dialog.getByRole("textbox", { name: "Room address" }).fill("test-room-1");
+        await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-video");
         // Snapshot it
         await expect(dialog).toMatchScreenshot("create-video-room.png");
 
         // Submit
         await dialog.getByRole("button", { name: "Create video room" }).click();
 
-        await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
+        await expect(page).toHaveURL(new RegExp(`/#/room/#test-create-room-video:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
     });

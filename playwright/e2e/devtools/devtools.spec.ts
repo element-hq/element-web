@@ -22,6 +22,10 @@ test.describe("Devtools", () => {
         const dialog = page.locator(".mx_Dialog");
         await dialog.getByLabel("Developer mode").check();
 
-        await expect(dialog).toMatchScreenshot("devtools-dialog.png");
+        await expect(dialog).toMatchScreenshot("devtools-dialog.png", {
+            css: `.mx_CopyableText {
+                display: none;
+            }`,
+        });
     });
 });
