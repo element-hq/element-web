@@ -1,15 +1,29 @@
-import { parseErrorResponse } from "matrix-js-sdk/src/http-api";
+/*
+Copyright 2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { parseErrorResponse } from "matrix-js-sdk/src/matrix";
 import { useRef, useState, useMemo, useEffect } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import { FileDownloader } from "../utils/FileDownloader";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
 import ModuleApi from "../modules/Api";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { logger } from "matrix-js-sdk/src/logger";
 
-export function useDownloadMedia(url: string, fileName?: string, mxEvent?: MatrixEvent) {
+export interface UseDownloadMediaReturn {
+    download: () => Promise<void>;
+    loading: boolean;
+    canDownload: boolean;
+}
+
+export function useDownloadMedia(url: string, fileName?: string, mxEvent?: MatrixEvent): UseDownloadMediaReturn {
     const downloader = useRef(new FileDownloader()).current;
     const blobRef = useRef<Blob>(null);
     const [loading, setLoading] = useState(false);

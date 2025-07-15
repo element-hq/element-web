@@ -331,7 +331,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     };
 
-    private onDownloadFunctionReady = (download: () => Promise<void>) => {
+    private onDownloadFunctionReady = (download: () => Promise<void>): void => {
         this.downloadFunction = download;
     };
 
