@@ -606,19 +606,24 @@ function DownloadButton({
             setCanDownload(true);
             return;
         }
+        // Get the hint. If the hint is static then we can immediately set it,
+        // otherwise set to false until the promise completes.
         const hints = ModuleApi.customComponents.getHintsForMessage(mxEvent);
-        // Disable downloading as soon as we know there is a hint.
-        setCanDownload(false);
-        hints
-            .allowDownloadingMedia()
-            .then((downloadable) => {
-                setCanDownload(downloadable);
-            })
-            .catch((ex) => {
-                logger.error(`Failed to check if media from ${mxEvent.getId()} could be downloaded`, ex);
-                // Err on the side of safety.
-                setCanDownload(false);
-            });
+        if (typeof hints.allowDownloadingMedia === "boolean") {
+            setCanDownload(hints.allowDownloadingMedia);
+        } else {
+            setCanDownload(false);
+            hints
+                .allowDownloadingMedia()
+                .then((downloadable) => {
+                    setCanDownload(downloadable);
+                })
+                .catch((ex) => {
+                    logger.error(`Failed to check if media from ${mxEvent.getId()} could be downloaded`, ex);
+                    // Err on the side of safety.
+                    setCanDownload(false);
+                });
+        }
     }, [mxEvent]);
 
     function showError(e: unknown): void {

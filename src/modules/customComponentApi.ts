@@ -31,13 +31,13 @@ interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentP
 }
 
 interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderHints, "allowDownloadingMedia"> {
-    // Note. This just makes it easier to use this API on Element Web as we already have the moduleized event stored.
-    allowDownloadingMedia?: () => Promise<boolean>;
+    // Note. This just makes it easier to use this API on Element Web as we already have the modularized event stored.
+    allowDownloadingMedia?: (() => Promise<boolean>) | boolean;
 }
 
 const DEFAULT_HINTS: Required<CustomMessageRenderHints> = {
     allowEditingEvent: true,
-    allowDownloadingMedia: () => Promise.resolve(true),
+    allowDownloadingMedia: true,
 };
 
 export class CustomComponentsApi implements ICustomComponentsApi {
