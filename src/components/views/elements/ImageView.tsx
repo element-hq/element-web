@@ -607,20 +607,18 @@ function DownloadButton({
             return;
         }
         const hints = ModuleApi.customComponents.getHintsForMessage(mxEvent);
-        if (hints?.allowDownloadingMedia) {
-            // Disable downloading as soon as we know there is a hint.
-            setCanDownload(false);
-            hints
-                .allowDownloadingMedia()
-                .then((downloadable) => {
-                    setCanDownload(downloadable);
-                })
-                .catch((ex) => {
-                    logger.error(`Failed to check if media from ${mxEvent.getId()} could be downloaded`, ex);
-                    // Err on the side of safety.
-                    setCanDownload(false);
-                });
-        }
+        // Disable downloading as soon as we know there is a hint.
+        setCanDownload(false);
+        hints
+            .allowDownloadingMedia()
+            .then((downloadable) => {
+                setCanDownload(downloadable);
+            })
+            .catch((ex) => {
+                logger.error(`Failed to check if media from ${mxEvent.getId()} could be downloaded`, ex);
+                // Err on the side of safety.
+                setCanDownload(false);
+            });
     }, [mxEvent]);
 
     function showError(e: unknown): void {
