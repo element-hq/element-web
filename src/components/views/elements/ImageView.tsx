@@ -620,6 +620,8 @@ function DownloadButton({
                     // Err on the side of safety.
                     setCanDownload(false);
                 });
+        } else {
+            setCanDownload(true);
         }
     }, [mxEvent]);
 
