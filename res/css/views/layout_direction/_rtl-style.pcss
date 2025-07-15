@@ -1,0 +1,355 @@
+/**
+ * Applies right-to-left layout styles to the elements within the selected scope.
+ * This is used to ensure the UI elements are properly aligned and positioned
+ * when the application is viewed in a right-to-left language environment.
+ */
+[dir="rtl"] {
+    // welcome page
+
+    div.mx_Welcome > div.mx_WelcomePage.mx_WelcomePage_guest.mx_WelcomePage_loggedIn > div.mx_ButtonRow.mx_WelcomePage_guestFunctions {
+        margin-top: unset !important;
+        margin-bottom: 20px;
+    }
+
+    // login and register page
+
+    .mx_AuthBody {
+        border-radius: 4px 0 0 4px !important;
+    }
+
+    .mx_Field_select::before {
+        right: unset !important;
+        left: 10px;
+    }
+
+    .mx_Field label {
+        left: unset !important;
+        right: 0;
+    }
+
+    .mx_SSOButtons .mx_SSOButton_mini + .mx_SSOButton_mini {
+        margin-left: unset !important;
+        margin-right: 16px;
+    }
+
+    .mx_AuthBody_fieldRow > .mx_Field:first-child {
+        margin-left: 5px !important;
+        margin-right: 0 !important;
+    }
+
+    .mx_AuthBody_fieldRow > .mx_Field:last-child {
+        margin-right: 5px !important;
+        margin-left: 0 !important;
+    }
+
+    .mx_Login_error.mx_Login_serverError {
+        text-align: right !important;
+    }
+
+    .mx_CompleteSecurity_skip {
+        right: unset !important;
+        left: 24px;
+    }
+
+    .mx_CompleteSecurity_actionRow .mx_AccessibleButton {
+        -webkit-margin-start: unset !important;
+        margin-inline-start: unset !important;
+        -webkit-margin-end: 18px;
+        margin-inline-end: 18px;
+    }
+
+    .mx_ServerPicker .mx_ServerPicker_server {
+        margin-right: unset !important;
+        margin-left: 8px !important;
+        text-align: left;
+    }
+
+    #matrixchat div.mx_AuthPage_modalContent form .mx_Field.mx_Field_input {
+        direction: ltr;
+    }
+
+    #matrixchat div.mx_AuthPage_modalContent form .mx_Field.mx_Field_input::placeholder {
+        direction: rtl;
+    }
+
+    // main page
+
+    .mx_SpaceCreateMenu_wrapper {
+        left: unset !important;
+        right: 72px;
+    }
+
+    .mx_SpaceCreateMenu_wrapper .mx_ContextualMenu_background {
+        left: unset !important;
+        right: 68px;
+    }
+
+    .mx_ToastContainer .mx_Toast_toast .mx_Toast_buttons .mx_AccessibleButton + .mx_AccessibleButton {
+        margin-left: unset !important;
+        margin-right: 5px;
+    }
+
+    .mx_TabbedView_tabsOnLeft .mx_TabbedView_tabPanel {
+        margin-left: unset !important;
+        margin-right: 240px;
+    }
+
+    .mx_Dialog_cancelButton {
+        right: unset !important;
+        left: var(--cpd-space-4x) !important;
+    }
+
+    .mx_UserSettingsDialog .mx_TabbedView .mx_SettingsTab,
+    .mx_RoomSettingsDialog .mx_TabbedView .mx_SettingsTab,
+    .mx_SpaceSettingsDialog .mx_TabbedView .mx_SettingsTab {
+        padding-right: unset !important;
+        padding-left: 100px;
+    }
+
+    .mx_ProfileSettings_controls {
+        margin-right: unset !important;
+        margin-left: 54px;
+    }
+
+    .mx_ProfileSettings_buttons > .mx_AccessibleButton_kind_link {
+        margin-right: unset !important;
+        margin-left: 10px;
+    }
+
+    .mx_TabbedView {
+        padding: 0 16px 0 0 !important;
+    }
+
+    .mx_UserMenu .mx_UserMenu_row .mx_UserMenu_userAvatarContainer {
+        margin-right: unset !important;
+        margin-left: 8px;
+    }
+
+    .mx_RoomSearch .mx_RoomSearch_icon {
+        margin-left: unset !important;
+        margin-right: 7px;
+    }
+
+    .mx_SpacePanel .mx_UserMenu {
+        margin: 12px 18px 4px 14px;
+    }
+
+    .mx_SpacePanel .mx_SpaceButton {
+        padding: 4px 0 4px 4px;
+    }
+
+    .mx_SpacePanel .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
+        margin-left: unset;
+        margin-right: var(--gutterSize);
+    }
+
+    .mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_menuButton {
+        right: unset;
+        left: 4px;
+    }
+
+    .mx_SpacePanel .mx_SpaceButton .mx_SpaceButton_name {
+        margin-left: unset;
+        margin-right: 8px;
+    }
+
+    .mx_SpacePanel .mx_SpacePanel_toggleCollapse {
+        right: unset;
+        left: -8px;
+    }
+
+    .mx_SpacePanel .mx_SpacePanel_toggleCollapse:before {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    .mx_SpacePanel .mx_SpacePanel_toggleCollapse.expanded:before {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
+
+    .mx_RoomSublist .mx_RoomSublist_headerContainer .mx_RoomSublist_headerText .mx_RoomSublist_collapseBtn {
+        margin-right: unset;
+        margin-left: 6px;
+    }
+
+    .mx_Dialog button:not(.mx_Dialog_nonDialogButton),
+    .mx_Dialog input[type="submit"],
+    .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton),
+    .mx_Dialog_buttons input[type="submit"] {
+        margin-left: 8px !important;
+        margin-right: 0 !important;
+    }
+
+    // message page
+
+    .mx_ResizeHandle.mx_ResizeHandle--horizontal {
+        display: none;
+    }
+
+    .mx_MImageBody_thumbnail_container {
+        max-width: 350px !important;
+        max-height: 350px !important;
+    }
+
+    .mx_RightPanel_ResizeHandle {
+        left: unset !important;
+        right: 5px;
+    }
+
+    .mx_EventTile .mx_MessageActionBar {
+        right: 20px !important;
+        z-index: 10 !important;
+    }
+
+    .mx_EventTile[data-self=true] .mx_MessageActionBar {
+        right: unset !important;
+        left: -20px;
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) .mx_EventTile_avatar {
+        left: unset !important;
+        right: 8px;
+    }
+
+    .mx_GroupLayout .mx_EventTile > .mx_SenderProfile {
+        min-width: fit-content;
+        display: block !important;
+        margin-left: 0 !important;
+        margin-right: 46px !important;
+    }
+
+    .mx_MessageComposer_row {
+        direction: ltr;
+    }
+
+    .mx_BasicMessageComposer_inputEmpty {
+        direction: rtl;
+    }
+
+    .mx_RoomTile .mx_RoomTile_nameContainer .mx_RoomTile_name {
+        text-align: right;
+    }
+
+    .mx_LeftPanel .mx_LeftPanel_roomListContainer .mx_LeftPanel_filterContainer .mx_LeftPanel_exploreButton {
+        margin-left: unset !important;
+        margin-right: 8px;
+    }
+
+    .mx_EventTile_content .markdown-body blockquote {
+        border-left: unset !important;
+        border-right: 2px solid #ddd;
+    }
+
+    .mx_JumpToBottomButton {
+        right: unset !important;
+        left: 24px;
+    }
+
+    .mx_EventTile[data-layout=bubble][data-self=true] .mx_EventTile_line {
+        -webkit-margin-start: -9px;
+        margin-inline-start: -9px;
+    }
+
+    .mx_EventTile[data-layout=bubble][data-self=false] .mx_EventTile_line {
+        -webkit-margin-start: auto;
+        margin-inline-start: auto;
+    }
+
+    .mx_EventTile[data-layout=bubble] .mx_EventTile_msgOption .mx_ReadReceiptGroup {
+        inset-inline-end: unset !important;
+        inset-inline-start: -49px;
+    }
+
+    .mx_GenericEventListSummary[data-layout=bubble][data-expanded=true] .mx_EventTile_info {
+        margin-left: 0;
+        margin-right: 49px;
+    }
+
+    .mx_EventTile[data-layout=bubble]:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        padding: calc(var(--gutterSize) - 1px);
+        padding-left: 60px;
+    }
+
+    .mx_EventTile[data-layout=bubble] .mx_EventTile_line .mx_MessageActionBar + .mx_MessageTimestamp, .mx_EventTile[data-layout=bubble] .mx_EventTile_line > a {
+        right: unset;
+        left: 0;
+    }
+
+    .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble] .mx_EventTile_line .mx_MessageActionBar + .mx_MessageTimestamp,
+    .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble] .mx_EventTile_line > a,
+    .mx_EventTile.mx_EventTile_info[data-layout=bubble] .mx_EventTile_line .mx_MessageActionBar + .mx_MessageTimestamp,
+    .mx_EventTile.mx_EventTile_info[data-layout=bubble] .mx_EventTile_line > a,
+    .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble] .mx_EventTile_line .mx_MessageActionBar + .mx_MessageTimestamp,
+    .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble] .mx_EventTile_line > a,
+    .mx_GenericEventListSummary[data-layout=bubble][data-expanded=false] .mx_EventTile_line .mx_MessageActionBar + .mx_MessageTimestamp,
+    .mx_GenericEventListSummary[data-layout=bubble][data-expanded=false] .mx_EventTile_line > a {
+        right: -60px;
+        left: auto;
+    }
+
+    .mx_EventTile[data-layout=bubble], .mx_GenericEventListSummary[data-layout=bubble] {
+        --EventTile_bubble-margin-inline-start: 60px;
+        --EventTile_bubble-margin-inline-end: 49px;
+    }
+
+    .mx_EventTile[data-layout=group] > .mx_DisambiguatedProfile {
+        margin-left: unset;
+        margin-right: 64px;
+    }
+
+    .mx_EventTile[data-layout=group] .mx_EventTile_e2eIcon {
+        inset: 0 -20px 0 0 !important;
+    }
+
+    .mx_GroupLayout .mx_EventTile .mx_EventTile_line {
+        padding: 8px 8px 20px 8px !important;
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) .mx_MImageBody,
+    .mx_EventTile_content {
+        margin-right: unset !important;
+    }
+
+    .mx_ThreadsActivityCentreButton.expanded {
+        margin-left: unset;
+        margin-right: 21px;
+    }
+
+    .mx_ThreadsActivityCentreButton.expanded .mx_ThreadsActivityCentreButton_Icon {
+        margin-right: unset;
+        margin-left: 14px;
+    }
+
+    .mx_QuickSettingsButton:before {
+        left: unset;
+        right: 0;
+    }
+
+    .mx_QuickSettingsButton.expanded {
+        margin-left: 12px;
+        margin-right: 20px;
+        padding-right: 44px;
+        padding-left: 8px;
+    }
+
+    .mx_EventTile_msgOption .mx_EventTile_readAvatars {
+        top: -2rem !important;
+        right: 35px;
+    }
+
+    .mx_TopUnreadMessagesBar {
+        right: unset !important;
+        left: 24px;
+    }
+
+    .mx_ReplyChain {
+        border-left: unset !important;
+        border-right: 2px solid $accent;
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) .mx_SenderProfile {
+        max-width: fit-content !important;
+    }
+
+}
