@@ -31,6 +31,8 @@ export function useDownloadMedia(url: string, fileName?: string, mxEvent?: Matri
 
                     setCanDownload(false);
                 });
+        } else {
+            setCanDownload(true);
         }
     }, [mxEvent]);
 
