@@ -64,7 +64,7 @@ import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-import { copyPlaintext, getSelectedText } from "../../../utils/strings";
+import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import RedactedBody from "../messages/RedactedBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
