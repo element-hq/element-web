@@ -840,10 +840,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Electron layer (webcontents-handler.ts)
         if (clickTarget instanceof HTMLImageElement) return;
 
-        // Return if we're in a browser and click either an a tag or we have
-        // selected text, as in those cases we want to use the native browser
-        // menu
-        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && (getSelectedText() || anchorElement)) return;
+        // Return if we're in a browser and click either an a tag, as in those cases we want to use the native browser menu
+        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
 
         // We don't want to show the menu when editing a message
         if (this.props.editState) return;
