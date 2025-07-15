@@ -1,3 +1,21 @@
+Changes in [1.11.106](https://github.com/element-hq/element-web/releases/tag/v1.11.106) (2025-07-15)
+====================================================================================================
+## ✨ Features
+
+* [Backport staging] Fix e2e icon colour ([#30304](https://github.com/element-hq/element-web/pull/30304)). Contributed by @RiotRobot.
+* Add support for module message hint `allowDownloadingMedia` ([#30252](https://github.com/element-hq/element-web/pull/30252)). Contributed by @Half-Shot.
+* Update the mobile\_guide page to the new design and link out to Element X by default. ([#30172](https://github.com/element-hq/element-web/pull/30172)). Contributed by @pixlwave.
+* Filter settings exported when rageshaking ([#30236](https://github.com/element-hq/element-web/pull/30236)). Contributed by @Half-Shot.
+* Allow Element Call to learn the room name ([#30213](https://github.com/element-hq/element-web/pull/30213)). Contributed by @robintown.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix missing image download button ([#30322](https://github.com/element-hq/element-web/pull/30322)). Contributed by @RiotRobot.
+* Fix transparent verification checkmark in dark mode ([#30235](https://github.com/element-hq/element-web/pull/30235)). Contributed by @Banbuii.
+* Fix logic in DeviceListener ([#30230](https://github.com/element-hq/element-web/pull/30230)). Contributed by @uhoreg.
+* Disable file drag-and-drop if insufficient permissions ([#30186](https://github.com/element-hq/element-web/pull/30186)). Contributed by @t3chguy.
+
+
 Changes in [1.11.105](https://github.com/element-hq/element-web/releases/tag/v1.11.105) (2025-07-01)
 ====================================================================================================
 ## ✨ Features
