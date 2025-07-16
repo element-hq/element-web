@@ -1809,7 +1809,11 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   <div
                     aria-labelledby="«r3e»"
                     class="mx_E2EIcon mx_E2EIcon_verified mx_MessageComposer_e2eIcon"
-                  />
+                  >
+                    <div
+                      class="mx_E2EIcon_normal"
+                    />
+                  </div>
                 </span>
               </div>
               <div
