@@ -414,7 +414,7 @@ describe("MessageContextMenu", () => {
             expect(dispatchSpy).toHaveBeenCalledWith(
                 expect.objectContaining({
                     action: Action.ComposerInsert,
-                    text: "> line1\n> line2\n ",
+                    text: "\n> line1\n> line2\n\n ",
                 }),
             );
 
