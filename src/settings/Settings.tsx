@@ -11,7 +11,8 @@ import React, { type ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
-import { _t, _td, type TranslationKey } from "../languageHandler";
+// Import i18n.tsx instead of languageHandler to avoid circular deps
+import { _t, _td, type TranslationKey } from "../shared-components/i18n";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
