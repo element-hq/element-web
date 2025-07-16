@@ -314,7 +314,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 .join("\n");
             dis.dispatch({
                 action: Action.ComposerInsert,
-                text: quotedText,
+                text: quotedText + "\n ",
                 timelineRenderingType: this.context.timelineRenderingType,
             });
         }
