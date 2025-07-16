@@ -95,6 +95,7 @@ originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element
 // @alpha
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
+    allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
 };
 
 // @alpha
