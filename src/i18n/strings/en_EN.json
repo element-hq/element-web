@@ -1450,6 +1450,7 @@
         "room_list_navigate_down": "Navigate down in the room list",
         "room_list_navigate_up": "Navigate up in the room list",
         "room_list_select_room": "Select room from the room list",
+        "save": "Save",
         "scroll_down_timeline": "Scroll down in the timeline",
         "scroll_up_timeline": "Scroll up in the timeline",
         "search": "Search (must be enabled)",
@@ -3370,7 +3371,6 @@
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
