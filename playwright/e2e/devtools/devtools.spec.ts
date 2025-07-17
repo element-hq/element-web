@@ -12,7 +12,7 @@ test.describe("Devtools", () => {
         displayName: "Alice",
     });
 
-    test("should render the devtools", { tag: "@screenshot" }, async ({ page, homeserver, user, app }) => {
+    test("should render the devtools", { tag: "@screenshot" }, async ({ page, homeserver, user, app, axe }) => {
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 
@@ -22,6 +22,8 @@ test.describe("Devtools", () => {
         const dialog = page.locator(".mx_Dialog");
         await dialog.getByLabel("Developer mode").check();
 
+        axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+        await expect(axe).toHaveNoViolations();
         await expect(dialog).toMatchScreenshot("devtools-dialog.png", {
             css: `.mx_CopyableText {
                 display: none;
