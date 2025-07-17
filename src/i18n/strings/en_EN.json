@@ -1681,10 +1681,6 @@
         "enable_prompt_toast_title": "Notifications",
         "enable_prompt_toast_title_from_message_send": "Don't miss a reply",
         "error_change_title": "Change notification settings",
-        "icon_overlay_notifications": {
-            "one": "You have %(count)s unread notification.",
-            "other": "You have %(count)s unread notifications."
-        },
         "keyword": "Keyword",
         "keyword_new": "New keyword",
         "level_activity": "Activity",
