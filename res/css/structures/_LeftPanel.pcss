@@ -245,5 +245,6 @@ Please see LICENSE files in the repository root for full details.
     /* Thew new rooms list is not designed to be collapsed to just icons. */
     /* 224 + 68(spaces bar) was deemed by design to be a good minimum for the left panel. */
     --collapsedWidth: 224px;
-    background-color: var(--cpd-color-bg-canvas-default);
+    /* Important to force the color on ED titlebar until we remove the old room list */
+    background-color: var(--cpd-color-bg-canvas-default) !important;
 }
