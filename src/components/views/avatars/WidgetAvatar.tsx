@@ -37,6 +37,8 @@ const WidgetAvatar: React.FC<IProps> = ({ app, className, size = "20px", ...prop
     return (
         <BaseAvatar
             {...props}
+            // Span elements cannot have a label
+            role="img"
             name={app.id}
             className={classNames("mx_WidgetAvatar", className)}
             // MSC2765
