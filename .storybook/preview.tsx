@@ -5,7 +5,7 @@ import "../res/css/shared.pcss";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { FORCE_RE_RENDER } from "storybook/internal/core-events";
-import { setLanguage } from "../src/shared-components/i18n";
+import { setLanguage } from "../src/shared-components/utils/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 export const globalTypes = {
