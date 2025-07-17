@@ -42,9 +42,9 @@ export class ViewModelSubscriptions {
     /**
      * Emit an update to all subscribed listeners.
      */
-    public emit(): void {
+    public emit = (): void => {
         for (const listener of this.listeners) {
             listener();
         }
-    }
+    };
 }
