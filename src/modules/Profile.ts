@@ -20,6 +20,7 @@ export class WatchableProfile extends Watchable<Profile> {
 
     private get profile(): Profile {
         return {
+            isGuest: OwnProfileStore.instance.matrixClient?.isGuest() ?? false,
             userId: OwnProfileStore.instance.matrixClient?.getUserId() ?? undefined,
             displayName: OwnProfileStore.instance.displayName ?? undefined,
         };
