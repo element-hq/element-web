@@ -10,27 +10,20 @@ import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { type EventTileTypeProps } from "../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
-import { ViewModelSubscriptions } from "../ViewModelSubscriptions";
 import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
-import { type ViewModel } from "../../shared-components/ViewModel";
+import { SubscriptionViewModel } from "../SubscriptionViewModel";
 
-export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot> {
-    private subs: ViewModelSubscriptions;
-
+export class TextualEventViewModel extends SubscriptionViewModel<TextualEventViewSnapshot> {
     public constructor(private eventTileProps: EventTileTypeProps) {
-        this.subs = new ViewModelSubscriptions(this.addSubscription, this.removeSubscription);
+        super();
     }
 
-    private addSubscription = (): void => {
-        this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+    protected addDownstreamSubscription = (): void => {
+        this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.subs.emit);
     };
 
-    private removeSubscription = (): void => {
-        this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
-    };
-
-    public subscribe = (listener: () => void): (() => void) => {
-        return this.subs.add(listener);
+    protected removeDownstreamSubscription = (): void => {
+        this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.subs.emit);
     };
 
     public getSnapshot = (): TextualEventViewSnapshot => {
@@ -41,9 +34,5 @@ export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot
             this.eventTileProps.showHiddenEvents,
         );
         return text;
-    };
-
-    private onEventSentinelUpdated = (): void => {
-        this.subs.emit();
     };
 }
