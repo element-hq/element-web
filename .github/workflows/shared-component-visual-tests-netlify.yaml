@@ -1,0 +1,49 @@
+# Triggers after the shared component tests have finished,
+# It uploads the received images and diffs to netlify, printing the URLs to the console
+name: Upload Shared Component Visual Test Diffs
+on:
+    workflow_run:
+        workflows: ["Shared Component Visual Tests"]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+permissions: {}
+
+jobs:
+    report:
+        if: github.event.workflow_run.conclusion == 'failure'
+        name: Upload Diffs
+        runs-on: ubuntu-24.04
+        environment: Netlify
+        permissions:
+            actions: read
+        steps:
+            - name: Install tree
+              run: "sudo apt-get install -y tree"
+
+            - name: Download Diffs
+              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+                  name: received-images
+                  path: received-images
+
+            - name: Generate Index
+              run: "tree -L 1 --noreport -H '-.' -o received-images/index.html received-images"
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@9805cd123fc9a7e421e35340a05e1ebc5dee46b5 # v3
+              with:
+                  path: received-images
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ vars.NETLIFY_SITE_ID }}
+                  desc: Shared Component Visual Diffs
+                  prefix: "diffs-"
