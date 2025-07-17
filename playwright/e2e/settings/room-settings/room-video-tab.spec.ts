@@ -30,10 +30,12 @@ test.describe("Voice & Video room settings tab", () => {
     test(
         "should be able to toggle on Element Call in the room",
         { tag: "@screenshot" },
-        async ({ page, app, user }) => {
+        async ({ page, app, user, axe }) => {
             await page.setViewportSize({ width: 1024, height: 1400 });
             const callToggle = settings.getByLabel("Enable Element Call as an additional calling option in this room");
             await callToggle.check();
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
             await expect(settings).toMatchScreenshot("room-video-settings.png");
         },
     );
