@@ -183,6 +183,30 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         );
     }
 
+    /**
+     * Returns true if the current selection is entirely within a single "mx_MTextBody" element.
+     */
+    private isSelectionWithinSingleTextBody(): boolean {
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return false;
+        const range = selection.getRangeAt(0);
+
+        function getParentByClass(node: Node | null, className: string): HTMLElement | null {
+            while (node) {
+                if (node instanceof HTMLElement && node.classList.contains(className)) {
+                    return node;
+                }
+                node = node.parentNode;
+            }
+            return null;
+        }
+
+        const startTextBody = getParentByClass(range.startContainer, "mx_MTextBody");
+        const endTextBody = getParentByClass(range.endContainer, "mx_MTextBody");
+
+        return !!startTextBody && startTextBody === endTextBody;
+    }
+
     private onResendReactionsClick = (): void => {
         for (const reaction of this.getUnsentReactions()) {
             Resend.resend(MatrixClientPeg.safeGet(), reaction);
@@ -276,6 +300,24 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onCopyClick = (): void => {
         copyPlaintext(getSelectedText());
+        this.closeMenu();
+    };
+
+    private onQuoteClick = (): void => {
+        const selectedText = getSelectedText();
+        if (selectedText) {
+            // Format as markdown quote
+            const quotedText = selectedText
+                .trim()
+                .split(/\r?\n/)
+                .map((line) => `> ${line}`)
+                .join("\n");
+            dis.dispatch({
+                action: Action.ComposerInsert,
+                text: "\n" + quotedText + "\n\n ",
+                timelineRenderingType: this.context.timelineRenderingType,
+            });
+        }
         this.closeMenu();
     };
 
@@ -549,14 +591,28 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        const selectedText = getSelectedText();
+
         let copyButton: JSX.Element | undefined;
-        if (rightClick && getSelectedText()) {
+        if (rightClick && selectedText) {
             copyButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconCopy"
                     label={_t("action|copy")}
                     triggerOnMouseDown={true} // We use onMouseDown so that the selection isn't cleared when we click
                     onClick={this.onCopyClick}
+                />
+            );
+        }
+
+        let quoteButton: JSX.Element | undefined;
+        if (rightClick && selectedText && selectedText.trim().length > 0 && this.isSelectionWithinSingleTextBody()) {
+            quoteButton = (
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconQuote"
+                    label={_t("action|quote")}
+                    triggerOnMouseDown={true}
+                    onClick={this.onQuoteClick}
                 />
             );
         }
@@ -630,10 +686,11 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let nativeItemsList: JSX.Element | undefined;
-        if (copyButton || copyLinkButton) {
+        if (copyButton || quoteButton || copyLinkButton) {
             nativeItemsList = (
                 <IconizedContextMenuOptionList>
                     {copyButton}
+                    {quoteButton}
                     {copyLinkButton}
                 </IconizedContextMenuOptionList>
             );
