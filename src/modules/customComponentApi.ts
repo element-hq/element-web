@@ -31,9 +31,14 @@ interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentP
 }
 
 interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderHints, "allowDownloadingMedia"> {
-    // Note. This just makes it easier to use this API on Element Web as we already have the moduleized event stored.
-    allowDownloadingMedia?: () => Promise<boolean>;
+    // Note. This just makes it easier to use this API on Element Web as we already have the modularized event stored.
+    allowDownloadingMedia?: (() => Promise<boolean>) | boolean;
 }
+
+const DEFAULT_HINTS: Required<CustomMessageRenderHints> = {
+    allowEditingEvent: true,
+    allowDownloadingMedia: true,
+};
 
 export class CustomComponentsApi implements ICustomComponentsApi {
     /**
@@ -116,22 +121,31 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     /**
+     * Has a custom component been registered for this event.
+     * @param mxEvent
+     * @returns `true` if a component has been registered and would be rendered, otherwise false.
+     */
+    public hasRendererForEvent(mxEvent: MatrixEvent): boolean {
+        const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
+        return !!(moduleEv && this.selectRenderer(moduleEv));
+    }
+
+    /**
      * Get hints about an message before rendering it.
      * @param mxEvent The message event being rendered.
-     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     * @returns A set of hints to use when rendering messages, provided by custom renderers. If a hint
+     * is not provided by a renderer, or no renderers are present then `DEFAULT_HINTS` are used.
      */
-    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
+    public getHintsForMessage(mxEvent: MatrixEvent): Required<CustomMessageRenderHints> {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
-        if (renderer) {
-            return {
-                ...renderer.hints,
-                // Convert from js-sdk style events to module events automatically.
-                allowDownloadingMedia: renderer.hints.allowDownloadingMedia
-                    ? () => renderer.hints.allowDownloadingMedia!(moduleEv)
-                    : undefined,
-            };
-        }
-        return null;
+        return {
+            ...DEFAULT_HINTS,
+            ...renderer?.hints,
+            // Convert from js-sdk style events to module events automatically.
+            allowDownloadingMedia: renderer?.hints.allowDownloadingMedia
+                ? () => renderer.hints.allowDownloadingMedia!(moduleEv!)
+                : DEFAULT_HINTS.allowDownloadingMedia,
+        };
     }
 }

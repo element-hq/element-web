@@ -43,22 +43,21 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
     public constructor(props: IProps) {
         super(props);
 
-        const moduleHints = ModuleApi.customComponents.getHintsForMessage(props.mxEvent);
-        const downloadState: Pick<IState, "canDownload"> = { canDownload: true };
-        if (moduleHints?.allowDownloadingMedia) {
-            downloadState.canDownload = null;
-            moduleHints
+        const hints = ModuleApi.customComponents.getHintsForMessage(props.mxEvent);
+        const downloadState: Pick<IState, "canDownload"> = { canDownload: null };
+        if (typeof hints.allowDownloadingMedia === "boolean") {
+            downloadState.canDownload = hints.allowDownloadingMedia;
+        } else {
+            downloadState.canDownload = false;
+            hints
                 .allowDownloadingMedia()
-                .then((canDownload) => {
-                    this.setState({
-                        canDownload: canDownload,
-                    });
+                .then((downloadable) => {
+                    this.setState({ canDownload: downloadable });
                 })
                 .catch((ex) => {
                     logger.error(`Failed to check if media from ${props.mxEvent.getId()} could be downloaded`, ex);
-                    this.setState({
-                        canDownload: false,
-                    });
+                    // Err on the side of safety.
+                    this.setState({ canDownload: false });
                 });
         }
 

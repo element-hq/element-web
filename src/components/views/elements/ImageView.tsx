@@ -606,9 +606,12 @@ function DownloadButton({
             setCanDownload(true);
             return;
         }
+        // Get the hint. If the hint is static then we can immediately set it,
+        // otherwise set to false until the promise completes.
         const hints = ModuleApi.customComponents.getHintsForMessage(mxEvent);
-        if (hints?.allowDownloadingMedia) {
-            // Disable downloading as soon as we know there is a hint.
+        if (typeof hints.allowDownloadingMedia === "boolean") {
+            setCanDownload(hints.allowDownloadingMedia);
+        } else {
             setCanDownload(false);
             hints
                 .allowDownloadingMedia()
