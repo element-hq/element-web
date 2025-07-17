@@ -432,7 +432,6 @@ describe("ElectronPlatform", () => {
                 const ipcMessage = mockElectron.send.mock.lastCall;
                 expect(ipcMessage?.[1]).toEqual(1);
                 expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessage?.[3]).toEqual(`You have 1 unread notification.`);
             });
         });
 
@@ -450,11 +449,9 @@ describe("ElectronPlatform", () => {
 
                 expect(ipcMessageA?.[1]).toEqual(1);
                 expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessageA?.[3]).toEqual(`You have 1 unread notification.`);
 
                 expect(ipcMessageB?.[1]).toEqual(2);
                 expect(ipcMessageB?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessageB?.[3]).toEqual(`You have 2 unread notifications.`);
             });
         });
         it("should remove badge when notification count zeros", async () => {
@@ -470,7 +467,6 @@ describe("ElectronPlatform", () => {
 
                 expect(ipcMessageA?.[1]).toEqual(1);
                 expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessageA?.[3]).toEqual(`You have 1 unread notification.`);
 
                 expect(ipcMessageB?.[1]).toEqual(0);
                 expect(ipcMessageB?.[2]).toBeNull();
@@ -486,7 +482,7 @@ describe("ElectronPlatform", () => {
 
                 expect(ipcMessage?.[1]).toEqual(0);
                 expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessage?.[3]).toEqual(`Error`);
+                expect(ipcMessage?.[3]).toEqual(true);
             });
         });
         it("should restore after error is resolved", async () => {
@@ -502,7 +498,7 @@ describe("ElectronPlatform", () => {
 
                 expect(ipcMessageA?.[1]).toEqual(0);
                 expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
-                expect(ipcMessageA?.[3]).toEqual(`Error`);
+                expect(ipcMessageA?.[3]).toEqual(true);
 
                 expect(ipcMessageB?.[1]).toEqual(0);
                 expect(ipcMessageB?.[2]).toBeNull();
