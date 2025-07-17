@@ -159,7 +159,7 @@ abstract class IconRenderer {
 export class BadgeOverlayRenderer extends IconRenderer {
     public constructor() {
         super();
-        // Overlays are 16x16 document.createElement("canvas")https://www.electronjs.org/docs/latest/api/browser-window#winsetoverlayiconoverlay-description-windows
+        // Overlays are 16x16 https://www.electronjs.org/docs/latest/api/browser-window#winsetoverlayiconoverlay-description-windows
         this.canvas.width = 16;
         this.canvas.height = 16;
     }

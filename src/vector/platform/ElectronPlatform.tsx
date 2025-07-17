@@ -263,7 +263,6 @@ export default class ElectronPlatform extends BasePlatform {
                         "setBadgeCount",
                         count,
                         buffer,
-                        _t("notifications|icon_overlay_notifications", { count }),
                     );
                 })
                 .catch((ex) => {
@@ -295,8 +294,6 @@ export default class ElectronPlatform extends BasePlatform {
                         this.notificationCount,
                         buffer,
                         errorDidOccur
-                            ? _t("common|error")
-                            : _t("notifications|icon_overlay_notifications", { count: this.notificationCount }),
                     );
                 })
                 .catch((ex) => {
