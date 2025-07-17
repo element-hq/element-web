@@ -13,6 +13,8 @@ import { type Optional } from "matrix-events-sdk";
 import { _t, getUserLanguage } from "./languageHandler";
 import { getUserTimezone } from "./TimezoneHandler";
 
+export { formatSeconds } from "./shared-components/utils/DateUtils";
+
 export const MINUTE_MS = 60000;
 export const HOUR_MS = MINUTE_MS * 60;
 export const DAY_MS = HOUR_MS * 24;
@@ -178,31 +180,6 @@ export function formatTime(date: Date, showTwelveHour = false, locale?: string):
         minute: "2-digit",
         timeZone: getUserTimezone(),
     }).format(date);
-}
-
-export function formatSeconds(inSeconds: number): string {
-    const isNegative = inSeconds < 0;
-    inSeconds = Math.abs(inSeconds);
-
-    const hours = Math.floor(inSeconds / (60 * 60))
-        .toFixed(0)
-        .padStart(2, "0");
-    const minutes = Math.floor((inSeconds % (60 * 60)) / 60)
-        .toFixed(0)
-        .padStart(2, "0");
-    const seconds = Math.floor((inSeconds % (60 * 60)) % 60)
-        .toFixed(0)
-        .padStart(2, "0");
-
-    let output = "";
-    if (hours !== "00") output += `${hours}:`;
-    output += `${minutes}:${seconds}`;
-
-    if (isNegative) {
-        output = "-" + output;
-    }
-
-    return output;
 }
 
 export function formatTimeLeft(inSeconds: number): string {
