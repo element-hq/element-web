@@ -23,8 +23,8 @@ export abstract class SubscriptionViewModel<T> implements ViewModel<T> {
     };
 
     /**
-     * Wrapper around the abstract subscribe callback as we can't call pass an abstract method directly
-     * in the constructor.
+     * Wrapper around the abstract subscribe callback as we can't assume that the subclassed method
+     * has a bound `this` context.
      */
     private addDownstreamSubscriptionWrapper = (): void => {
         this.addDownstreamSubscription();
