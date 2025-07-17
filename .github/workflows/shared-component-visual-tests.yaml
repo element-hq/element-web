@@ -49,6 +49,16 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: "yarn playwright install --with-deps --only-shell"
 
+            - name: Build Element Web resources
+              # Needed to prepare language files
+              run: "yarn build:res"
+
+            - name: Build storybook dependencies
+              # When the first test is ran, it will fail because the dependencies are not yet built.
+              # This step is to ensure that the dependencies are built before running the tests.
+              run: "yarn test:storybook:ci"
+              continue-on-error: true
+
             - name: Run Visual tests
               run: "yarn test:storybook:ci"
 

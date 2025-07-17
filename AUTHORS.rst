@@ -19,3 +19,6 @@ include:
 
 * Thom Cleary (https://github.com/thomcatdotrocks)
   Small update for tarball deployment
+
+* Alexander (https://github.com/ioalexander)
+  Save image on CTRL + S shortcut
