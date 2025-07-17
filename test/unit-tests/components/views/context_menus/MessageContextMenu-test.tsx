@@ -356,6 +356,226 @@ describe("MessageContextMenu", () => {
         });
     });
 
+    describe("quote button", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("shows quote button when selection is inside one MTextBody and getSelectedText returns text", () => {
+            mocked(getSelectedText).mockReturnValue("quoted text");
+            const isSelectionWithinSingleTextBody = jest
+                .spyOn(MessageContextMenu.prototype as any, "isSelectionWithinSingleTextBody")
+                .mockReturnValue(true);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello"));
+            const quoteButton = document.querySelector('li[aria-label="Quote"]');
+            expect(quoteButton).toBeTruthy();
+
+            isSelectionWithinSingleTextBody.mockRestore();
+        });
+
+        it("does not show quote button when getSelectedText returns empty", () => {
+            mocked(getSelectedText).mockReturnValue("");
+            const isSelectionWithinSingleTextBody = jest
+                .spyOn(MessageContextMenu.prototype as any, "isSelectionWithinSingleTextBody")
+                .mockReturnValue(true);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello"));
+            const quoteButton = document.querySelector('li[aria-label="Quote"]');
+            expect(quoteButton).toBeFalsy();
+
+            isSelectionWithinSingleTextBody.mockRestore();
+        });
+
+        it("does not show quote button when selection is not inside one MTextBody", () => {
+            mocked(getSelectedText).mockReturnValue("quoted text");
+            const isSelectionWithinSingleTextBody = jest
+                .spyOn(MessageContextMenu.prototype as any, "isSelectionWithinSingleTextBody")
+                .mockReturnValue(false);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello"));
+            const quoteButton = document.querySelector('li[aria-label="Quote"]');
+            expect(quoteButton).toBeFalsy();
+
+            isSelectionWithinSingleTextBody.mockRestore();
+        });
+
+        it("dispatches ComposerInsert with quoted text when quote button is clicked", () => {
+            mocked(getSelectedText).mockReturnValue("line1\nline2");
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+            const isSelectionWithinSingleTextBody = jest
+                .spyOn(MessageContextMenu.prototype as any, "isSelectionWithinSingleTextBody")
+                .mockReturnValue(true);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello"));
+            const quoteButton = document.querySelector('li[aria-label="Quote"]')!;
+            fireEvent.mouseDown(quoteButton);
+
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ComposerInsert,
+                    text: "\n> line1\n> line2\n\n ",
+                }),
+            );
+
+            isSelectionWithinSingleTextBody.mockRestore();
+        });
+
+        it("does not show quote button when getSelectedText returns only whitespace", () => {
+            mocked(getSelectedText).mockReturnValue("   \n\t  "); // whitespace only
+            const isSelectionWithinSingleTextBody = jest
+                .spyOn(MessageContextMenu.prototype as any, "isSelectionWithinSingleTextBody")
+                .mockReturnValue(true);
+
+            createRightClickMenuWithContent(createMessageEventContent("hello"));
+            const quoteButton = document.querySelector('li[aria-label="Quote"]');
+            expect(quoteButton).toBeFalsy();
+
+            isSelectionWithinSingleTextBody.mockRestore();
+        });
+    });
+
+    describe("isSelectionWithinSingleTextBody", () => {
+        let mockGetSelection: jest.SpyInstance;
+        let contextMenuInstance: MessageContextMenu;
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+
+            mockGetSelection = jest.spyOn(window, "getSelection");
+
+            const eventContent = createMessageEventContent("hello");
+            const mxEvent = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+
+            contextMenuInstance = new MessageContextMenu({
+                mxEvent,
+                onFinished: jest.fn(),
+                rightClick: true,
+            } as any);
+        });
+
+        afterEach(() => {
+            mockGetSelection.mockRestore();
+        });
+
+        it("returns false when there is no selection", () => {
+            mockGetSelection.mockReturnValue(null);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(false);
+        });
+
+        it("returns false when selection has no ranges", () => {
+            mockGetSelection.mockReturnValue({
+                rangeCount: 0,
+                getRangeAt: jest.fn(),
+            } as any);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(false);
+        });
+
+        it("returns true when selection is within a single mx_MTextBody element", () => {
+            // Create a mock MTextBody element
+            const textBodyElement = document.createElement("div");
+            textBodyElement.classList.add("mx_MTextBody");
+
+            // Create mock text nodes within the MTextBody
+            const startTextNode = document.createTextNode("start");
+            const endTextNode = document.createTextNode("end");
+            textBodyElement.appendChild(startTextNode);
+            textBodyElement.appendChild(endTextNode);
+
+            // Create a mock range with the text nodes
+            const mockRange = {
+                startContainer: startTextNode,
+                endContainer: endTextNode,
+            } as unknown as Range;
+
+            mockGetSelection.mockReturnValue({
+                rangeCount: 1,
+                getRangeAt: jest.fn().mockReturnValue(mockRange),
+            } as any);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(true);
+        });
+
+        it("returns false when selection spans multiple mx_MTextBody elements", () => {
+            // Create two different MTextBody elements
+            const textBody1 = document.createElement("div");
+            textBody1.classList.add("mx_MTextBody");
+            const textBody2 = document.createElement("div");
+            textBody2.classList.add("mx_MTextBody");
+
+            const startTextNode = document.createTextNode("start");
+            const endTextNode = document.createTextNode("end");
+            textBody1.appendChild(startTextNode);
+            textBody2.appendChild(endTextNode);
+
+            // Create a mock range spanning different MTextBody elements
+            const mockRange = {
+                startContainer: startTextNode,
+                endContainer: endTextNode,
+            } as unknown as Range;
+
+            mockGetSelection.mockReturnValue({
+                rangeCount: 1,
+                getRangeAt: jest.fn().mockReturnValue(mockRange),
+            } as any);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(false);
+        });
+
+        it("returns false when selection is outside any mx_MTextBody element", () => {
+            // Create regular div elements without mx_MTextBody class
+            const regularDiv1 = document.createElement("div");
+            const regularDiv2 = document.createElement("div");
+
+            const startTextNode = document.createTextNode("start");
+            const endTextNode = document.createTextNode("end");
+            regularDiv1.appendChild(startTextNode);
+            regularDiv2.appendChild(endTextNode);
+
+            // Create a mock range outside MTextBody elements
+            const mockRange = {
+                startContainer: startTextNode,
+                endContainer: endTextNode,
+            } as unknown as Range;
+
+            mockGetSelection.mockReturnValue({
+                rangeCount: 1,
+                getRangeAt: jest.fn().mockReturnValue(mockRange),
+            } as any);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(false);
+        });
+
+        it("returns true when start and end are the same mx_MTextBody element", () => {
+            const textBodyElement = document.createElement("div");
+            textBodyElement.classList.add("mx_MTextBody");
+
+            const textNode = document.createTextNode("same text");
+            textBodyElement.appendChild(textNode);
+
+            // Create a mock range within the same MTextBody element
+            const mockRange = {
+                startContainer: textNode,
+                endContainer: textNode,
+            } as unknown as Range;
+
+            mockGetSelection.mockReturnValue({
+                rangeCount: 1,
+                getRangeAt: jest.fn().mockReturnValue(mockRange),
+            } as any);
+
+            const result = (contextMenuInstance as any).isSelectionWithinSingleTextBody();
+            expect(result).toBe(true);
+        });
+    });
+
     describe("right click", () => {
         it("copy button does work as expected", () => {
             const text = "hello";
