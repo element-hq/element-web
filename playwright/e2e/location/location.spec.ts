@@ -61,7 +61,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
     test(
         "is prompted for and can consent to live location sharing",
         { tag: "@screenshot" },
-        async ({ page, user, app }) => {
+        async ({ page, user, app, axe }) => {
             await app.viewRoomById(await app.client.createRoom({}));
 
             const composerOptions = await app.openMessageComposerOptions();
@@ -70,6 +70,12 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await menu.getByRole("button", { name: "My live location" }).click();
             await menu.getByLabel("Enable live location sharing").check();
+
+            axe.disableRules([
+                "color-contrast", // XXX: Inheriting colour contrast issues from room view.
+                "region", // XXX: ContextMenu managed=false does not provide a role.
+            ]);
+            await expect(axe).toHaveNoViolations();
             await expect(menu).toMatchScreenshot("location-live-share-dialog.png");
         },
     );
