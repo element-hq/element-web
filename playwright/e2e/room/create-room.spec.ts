@@ -18,7 +18,7 @@ test.describe("Create Room", () => {
     test(
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
-        async ({ page, user, app }) => {
+        async ({ page, user, app, axe }) => {
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -28,6 +28,9 @@ test.describe("Create Room", () => {
             await dialog.getByRole("option", { name: "Public room" }).click();
             // Fill room address
             await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-standard");
+
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
             // Snapshot it
             await expect(dialog).toMatchScreenshot("create-room.png");
 
