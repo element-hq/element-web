@@ -1,25 +1,29 @@
 #!/bin/bash
+set -x
 
 # Handle symlinks here as we tend to be executed as an npm binary
 SCRIPT_PATH=$(readlink -f "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 
 IMAGE_NAME="element-web-playwright-common"
-echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
-# Build image
-PW_VERSION=$(
-  yarn list \
-    --pattern @playwright/test \
-    --depth=0 \
-    --json \
-    --non-interactive \
-    --no-progress | \
-    jq -r '.data.trees[].name | split("@")[2]' \
-  )
-echo "with Playwright version $PW_VERSION"
+build_image() {
+  echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
-docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
+  # Build image
+  PW_VERSION=$(
+    yarn list \
+      --pattern @playwright/test \
+      --depth=0 \
+      --json \
+      --non-interactive \
+      --no-progress | \
+      jq -r '.data.trees[].name | split("@")[2]' \
+    )
+  echo "with Playwright version $PW_VERSION"
+
+  docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
+}
 
 RUN_ARGS=(
   --rm
@@ -36,6 +40,35 @@ RUN_ARGS=(
   -it
 )
 
+DEFAULT_ARGS=(--grep @screenshot)
+
+# Some arguments to customise behaviour so the same script / image can be
+# re-used for other screenshot generation.
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    # Mounts a separate node_modules directory from a docker volume in the container.
+    # Must be used if executing something that requires native node modules
+    # It's a volume rather than a directory because otherwise things tend to start picking up
+    # files from it in the native environment and break.
+    --with-node-modules)
+      RUN_ARGS+=(--mount "type=volume,src=ew-docker-node-modules,dst=/work/node_modules,volume-nocopy")
+      shift
+      ;;
+    # Sets a different entrypoint (in which case the default arguments to the script will be ignored)
+    --entrypoint)
+      shift
+      RUN_ARGS+=(--entrypoint "$1")
+      DEFAULT_ARGS=()
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+build_image
+
 # Ensure we pass all symlinked node_modules to the container
 pushd node_modules || exit > /dev/null
 SYMLINKS=$(find . -maxdepth 2 -type l -not -path "./.bin/*")
@@ -47,7 +80,5 @@ for LINK in $SYMLINKS; do
     RUN_ARGS+=( "-v" "$TARGET:/work/node_modules/${LINK:2}" )
   fi
 done
-
-DEFAULT_ARGS=(--grep @screenshot)
 
 docker run "${RUN_ARGS[@]}" "$IMAGE_NAME" "${DEFAULT_ARGS[@]}" "$@"
