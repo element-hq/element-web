@@ -190,6 +190,22 @@ describe("StopGapWidgetDriver", () => {
 
         beforeEach(() => {
             driver = mkDefaultDriver();
+
+            mocked(client.getCrypto()!.encryptToDeviceMessages).mockImplementation(
+                async (eventType, devices, payload) => {
+                    return {
+                        eventType: "m.room.encrypted",
+                        batch: devices.map(({ userId, deviceId }) => ({
+                            userId,
+                            deviceId,
+                            payload: {
+                                type: "m.room.encrypted",
+                                content: { ciphertext: "ciphertext" },
+                            },
+                        })),
+                    };
+                },
+            );
         });
 
         it("sends unencrypted messages", async () => {
@@ -203,25 +219,54 @@ describe("StopGapWidgetDriver", () => {
             });
         });
 
+        it("should force encrypted traffic if room is e2ee", async () => {
+            mocked(client.getCrypto()!.isEncryptionEnabledInRoom).mockResolvedValue(true);
+
+            // Try to send with `encrypted: false`, but it should be forced to true
+            await driver.sendToDevice("org.example.foo", false, contentMap);
+            expect(client.getCrypto()!.encryptToDeviceMessages).toHaveBeenCalled();
+            expect(client.queueToDevice).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    eventType: "m.room.encrypted",
+                }),
+            );
+        });
+
+        it("Allow to send encrypted in clear room", async () => {
+            mocked(client.getCrypto()!.isEncryptionEnabledInRoom).mockResolvedValue(false);
+
+            await driver.sendToDevice("org.example.foo", true, contentMap);
+            expect(client.getCrypto()!.encryptToDeviceMessages).toHaveBeenCalled();
+            expect(client.queueToDevice).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    eventType: "m.room.encrypted",
+                }),
+            );
+        });
+
+        it("Should default to encrypted traffic for non-room widgets", async () => {
+            const driver = new StopGapWidgetDriver(
+                [],
+                new Widget({
+                    id: "an_id",
+                    creatorUserId: "@alice:example.org",
+                    type: WidgetType.CUSTOM.preferred,
+                    url: "https://call.element.io",
+                }),
+                WidgetKind.Account,
+                true,
+            );
+
+            await driver.sendToDevice("org.example.foo", false, contentMap);
+            expect(client.getCrypto()!.encryptToDeviceMessages).toHaveBeenCalled();
+            expect(client.queueToDevice).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    eventType: "m.room.encrypted",
+                }),
+            );
+        });
+
         it("sends encrypted messages", async () => {
-            const encryptToDeviceMessages = jest
-                .fn()
-                .mockImplementation(
-                    (eventType, recipients: { userId: string; deviceId: string }[], content: object) => ({
-                        eventType: "m.room.encrypted",
-                        batch: recipients.map(({ userId, deviceId }) => ({
-                            userId,
-                            deviceId,
-                            payload: {
-                                eventType,
-                                content,
-                            },
-                        })),
-                    }),
-                );
-
-            MatrixClientPeg.safeGet().getCrypto()!.encryptToDeviceMessages = encryptToDeviceMessages;
-
             await driver.sendToDevice("org.example.foo", true, {
                 "@alice:example.org": {
                     aliceMobile: {
@@ -235,14 +280,14 @@ describe("StopGapWidgetDriver", () => {
                 },
             });
 
-            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+            expect(client.getCrypto()!.encryptToDeviceMessages).toHaveBeenCalledWith(
                 "org.example.foo",
                 [{ deviceId: "aliceMobile", userId: "@alice:example.org" }],
                 {
                     hello: "alice",
                 },
             );
-            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+            expect(client.getCrypto()!.encryptToDeviceMessages).toHaveBeenCalledWith(
                 "org.example.foo",
                 [{ deviceId: "bobDesktop", userId: "@bob:example.org" }],
                 {
@@ -252,21 +297,19 @@ describe("StopGapWidgetDriver", () => {
             expect(client.queueToDevice).toHaveBeenCalledWith({
                 eventType: "m.room.encrypted",
                 batch: expect.arrayContaining([
-                    {
+                    expect.objectContaining({
                         deviceId: "aliceMobile",
-                        payload: { content: { hello: "alice" }, eventType: "org.example.foo" },
                         userId: "@alice:example.org",
-                    },
+                    }),
                 ]),
             });
             expect(client.queueToDevice).toHaveBeenCalledWith({
                 eventType: "m.room.encrypted",
                 batch: expect.arrayContaining([
-                    {
+                    expect.objectContaining({
                         deviceId: "bobDesktop",
-                        payload: { content: { hello: "bob" }, eventType: "org.example.foo" },
                         userId: "@bob:example.org",
-                    },
+                    }),
                 ]),
             });
         });
