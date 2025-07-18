@@ -55,7 +55,68 @@ jobs:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/yarn.lock') }}
 
-            - name: Run tests
+            - name: Run tests 0
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+
+            - name: Run tests 1
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+            - name: Run tests 2
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+            - name: Run tests 3
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+            - name: Run tests 4
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
+            - name: Run tests 5
               run: |
                   yarn test \
                       --verbose \
