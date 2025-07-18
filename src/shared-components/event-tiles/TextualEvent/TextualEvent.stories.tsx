@@ -16,7 +16,7 @@ export default {
     component: TextualEventComponent,
     tags: ["autodocs"],
     args: {
-        vm: new MockViewModel("Dummy textual event text"),
+        vm: new MockViewModel("Not dummy textual event text"),
     },
 } as Meta<typeof TextualEventComponent>;
 
