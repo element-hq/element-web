@@ -46,4 +46,5 @@ jobs:
                   token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
                   site_id: ${{ vars.NETLIFY_SITE_ID }}
                   desc: Shared Component Visual Diffs
+                  deployment_env: SharedComponentDiffs
                   prefix: "diffs-"
