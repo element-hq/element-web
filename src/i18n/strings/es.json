@@ -2672,7 +2672,6 @@
         },
         "creation_summary_dm": "%(creator)s creó este mensaje directo.",
         "creation_summary_room": "Sala creada y configurada por %(creator)s.",
-        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Última vez editado: %(date)s. Haz clic para ver los cambios.",

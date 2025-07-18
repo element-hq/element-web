@@ -1450,6 +1450,7 @@
         "room_list_navigate_down": "Naviger ned i romlisten",
         "room_list_navigate_up": "Naviger opp i romlisten",
         "room_list_select_room": "Velg rom fra romlisten",
+        "save": "Lagre",
         "scroll_down_timeline": "Rull ned i tidslinjen",
         "scroll_up_timeline": "Rull opp i tidslinjen",
         "search": "Søk (må være aktivert)",
@@ -3369,7 +3370,6 @@
             "unable_to_decrypt": "Kan ikke dekryptere meldingen"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
-        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Laster ned",
         "download_failed": "Nedlasting mislyktes",
         "download_failed_description": "Det oppstod en feil under nedlasting av denne filen",

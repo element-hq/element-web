@@ -1985,7 +1985,6 @@
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
         "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
-        "download_action_decrypting": "מפענח",
         "download_action_downloading": "מוריד",
         "edits": {
             "tooltip_label": "נערך ב-%(date)s. לחץ לצפייה בעריכות.",

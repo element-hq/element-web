@@ -2889,7 +2889,6 @@
         "creation_summary_dm": "%(creator)snamorona ity DM ity.",
         "creation_summary_room": "%(creator)snamorona sy nanamboatra ny efitrano.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "Decryptering",
         "download_action_downloading": "Misintona",
         "edits": {
             "tooltip_label": "Namboarina tamin'ny%(Rendez-vous . Kitiho raha hijery ny fanovana.",

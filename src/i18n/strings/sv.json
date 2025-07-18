@@ -3339,7 +3339,6 @@
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",
         "download_failed": "Nedladdning misslyckades",
         "download_failed_description": "Ett fel uppstod när den här filen laddades ned",
