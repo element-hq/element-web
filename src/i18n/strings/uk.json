@@ -3375,7 +3375,6 @@
             "unable_to_decrypt": "Не вдалося розшифрувати повідомлення"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
-        "download_action_decrypting": "Розшифрування",
         "download_action_downloading": "Завантаження",
         "download_failed": "Не вдалося завантажити",
         "download_failed_description": "Під час завантаження цього файлу сталася помилка",

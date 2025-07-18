@@ -2836,7 +2836,6 @@
             "historical_event_unverified_device": "Ir jāapliecina šī ierīce, lai piekļūtu senākām ziņām."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",
         "edits": {
             "tooltip_label": "Labots %(date)s. Klikšķināt, lai skatītu labojumus.",

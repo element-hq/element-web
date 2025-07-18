@@ -2649,7 +2649,6 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
-        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",

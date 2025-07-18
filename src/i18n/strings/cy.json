@@ -3341,7 +3341,6 @@
             "unable_to_decrypt": "Methu dadgryptio'r neges"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dadgryptio",
         "download_action_downloading": "Yn llwytho i lawr",
         "download_failed": "Methodd y llwytho i lawr",
         "download_failed_description": "Bu gwall wrth lawrlwytho'r ffeil hon",

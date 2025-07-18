@@ -3344,7 +3344,6 @@
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",
