@@ -54,6 +54,15 @@ export const RoomListItemView = memo(function RoomListItemView({
         setTimeout(() => setIsMenuOpen(false), 10);
     }, []);
 
+    let messagePreview: React.ReactNode | null = null;
+    if (vm.messagePreview) {
+        messagePreview = (
+            <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
+                {vm.messagePreview}
+            </div>
+        );
+    }
+
     const content = (
         <button
             ref={ref}
@@ -94,7 +103,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                         <div className="mx_RoomListItemView_roomName" title={vm.name}>
                             {vm.name}
                         </div>
-                        <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
+                        {messagePreview}
                     </div>
                     {showHoverMenu ? (
                         <RoomListItemMenuView

@@ -65,7 +65,7 @@ describe("<RoomListItemView />", () => {
     });
 
     test("should render a room item with a message preview", () => {
-        defaultValue.messagePreview = "The message looks list this";
+        defaultValue.messagePreview = "The message looks like this";
 
         const onClick = jest.fn();
         const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} isSelected={false} />);

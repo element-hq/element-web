@@ -45,9 +45,6 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
           >
             room1
           </div>
-          <div
-            class="mx_RoomListItemView_messagePreview"
-          />
         </div>
       </div>
     </div>
@@ -100,9 +97,6 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
           >
             room1
           </div>
-          <div
-            class="mx_RoomListItemView_messagePreview"
-          />
         </div>
         <div
           aria-hidden="true"
@@ -167,9 +161,6 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
           >
             room1
           </div>
-          <div
-            class="mx_RoomListItemView_messagePreview"
-          />
         </div>
       </div>
     </div>
@@ -224,8 +215,9 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
           </div>
           <div
             class="mx_RoomListItemView_messagePreview"
+            title="The message looks like this"
           >
-            The message looks list this
+            The message looks like this
           </div>
         </div>
       </div>
