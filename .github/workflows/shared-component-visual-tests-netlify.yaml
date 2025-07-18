@@ -35,7 +35,7 @@ jobs:
                   path: received-images
 
             - name: Generate Index
-              run: "tree -L 1 --noreport -H '-.' -o received-images/index.html received-images"
+              run: "cd received-images && tree -L 1 --noreport -H '' -o index.html ."
 
             - name: 📤 Deploy to Netlify
               uses: matrix-org/netlify-pr-preview@9805cd123fc9a7e421e35340a05e1ebc5dee46b5 # v3
