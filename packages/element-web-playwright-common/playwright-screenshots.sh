@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 # Handle symlinks here as we tend to be executed as an npm binary
 SCRIPT_PATH=$(readlink -f "$0")
