@@ -1,0 +1,69 @@
+name: Tests-debug
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [element-web-notify]
+    workflow_call:
+        inputs:
+            disable_coverage:
+                type: boolean
+                required: false
+                description: "Specify true to skip generating and uploading coverage for tests"
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The matrix-js-sdk SHA to use"
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' && inputs.disable_coverage != 'true' }}
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+
+permissions: {}
+
+jobs:
+    jest:
+        name: Jest
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
+
+            - name: Yarn cache
+              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+              with:
+                  node-version: "lts/*"
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "./scripts/layered.sh"
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Jest Cache
+              uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+              with:
+                  path: /tmp/jest_cache
+                  key: ${{ hashFiles('**/yarn.lock') }}
+
+            - name: Run tests
+              run: |
+                  yarn test \
+                      --verbose \
+                      --silent=false \
+                      --cacheDirectory /tmp/jest_cache \
+                      MatrixChat-test.tsx
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+                  # tell jest to use coloured output
+                  FORCE_COLOR: true
