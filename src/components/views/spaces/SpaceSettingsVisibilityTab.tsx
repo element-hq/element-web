@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useState } from "react";
+import React, { type ChangeEventHandler, type JSX, useCallback, useState } from "react";
 import {
     type Room,
     EventType,
@@ -15,12 +15,12 @@ import {
     JoinRule,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import AliasSettings from "../room_settings/AliasSettings";
 import { useStateToggle } from "../../../hooks/useStateToggle";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import JoinRuleSettings from "../settings/JoinRuleSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
@@ -50,6 +50,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
     const userId = cli.getUserId()!;
 
     const joinRule = useRoomState(space, (state) => state.getJoinRule());
+
     const [guestAccessEnabled, setGuestAccessEnabled] = useLocalEcho<boolean>(
         () =>
             space.currentState.getStateEvents(EventType.RoomGuestAccess, "")?.getContent()?.guest_access ===
@@ -64,6 +65,10 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                 "",
             ),
         () => setError(_t("room_settings|visibility|error_update_guest_access")),
+    );
+    const onGuestAccessEnabledChanged = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setGuestAccessEnabled(e.target.checked),
+        [setGuestAccessEnabled],
     );
     const [historyVisibility, setHistoryVisibility] = useLocalEcho<HistoryVisibility>(
         () =>
@@ -103,19 +108,15 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                 </AccessibleButton>
 
                 {showAdvancedSection && (
-                    <div className="mx_SettingsTab_toggleWithDescription">
-                        <LabelledToggleSwitch
-                            value={guestAccessEnabled}
-                            onChange={setGuestAccessEnabled}
-                            disabled={!canSetGuestAccess}
-                            label={_t("room_settings|visibility|guest_access_label")}
-                        />
-                        <p>
-                            {_t("room_settings|visibility|guest_access_explainer")}
-                            <br />
-                            {_t("room_settings|visibility|guest_access_explainer_public_space")}
-                        </p>
-                    </div>
+                    <SettingsToggleInput
+                        name="guest-access-enabled"
+                        checked={guestAccessEnabled}
+                        onChange={onGuestAccessEnabledChanged}
+                        disabled={!canSetGuestAccess}
+                        disabledMessage={_t("room_settings|visibility|guest_access_disabled")}
+                        helpMessage={_t("room_settings|visibility|guest_access_explainer")}
+                        label={_t("room_settings|visibility|guest_access_label")}
+                    />
                 )}
             </div>
         );
@@ -155,26 +156,32 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                         onError={(): void => setError(_t("room_settings|visibility|error_failed_save"))}
                         closeSettingsFn={closeSettingsFn}
                     />
-                    {advancedSection}
-                    <div className="mx_SettingsTab_toggleWithDescription">
-                        <LabelledToggleSwitch
-                            value={historyVisibility === HistoryVisibility.WorldReadable}
-                            onChange={(checked: boolean): void => {
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
+                        {advancedSection}
+                        <SettingsToggleInput
+                            name="space-history-visibility"
+                            checked={historyVisibility === HistoryVisibility.WorldReadable}
+                            onChange={(evt): void => {
                                 setHistoryVisibility(
-                                    checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
+                                    evt.target.checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared,
                                 );
                             }}
+                            helpMessage={_t("room_settings|visibility|history_visibility_anyone_space_description")}
                             disabled={!canSetHistoryVisibility}
+                            disabledMessage={_t("room_settings|visibility|history_visibility_anyone_space_disabled")}
                             label={_t("room_settings|visibility|history_visibility_anyone_space")}
                         />
                         <p>
-                            {_t("room_settings|visibility|history_visibility_anyone_space_description")}
-                            <br />
                             <strong>
                                 {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
                             </strong>
                         </p>
-                    </div>
+                    </Form.Root>
                 </SettingsFieldset>
 
                 {addressesSection}

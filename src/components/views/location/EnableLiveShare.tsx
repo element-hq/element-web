@@ -6,12 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState } from "react";
+import React, { type ChangeEventHandler, type FormEventHandler, useCallback, useState } from "react";
+import { SettingsToggleInput, Form, Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import StyledLiveBeaconIcon from "../beacon/StyledLiveBeaconIcon";
-import AccessibleButton from "../elements/AccessibleButton";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import Heading from "../typography/Heading";
 
 interface Props {
@@ -20,6 +19,23 @@ interface Props {
 
 export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
     const [isEnabled, setEnabled] = useState(false);
+
+    const onEnabledChanged = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setEnabled(e.target.checked),
+        [setEnabled],
+    );
+
+    const onSubmitForm = useCallback<FormEventHandler>(
+        (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (isEnabled) {
+                onSubmit();
+            }
+        },
+        [isEnabled, onSubmit],
+    );
+
     return (
         <div data-testid="location-picker-enable-live-share" className="mx_EnableLiveShare">
             <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />
@@ -27,22 +43,17 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
                 {_t("location_sharing|live_enable_heading")}
             </Heading>
             <p className="mx_EnableLiveShare_description">{_t("location_sharing|live_enable_description")}</p>
-            <LabelledToggleSwitch
-                data-testid="enable-live-share-toggle"
-                value={isEnabled}
-                onChange={setEnabled}
-                label={_t("location_sharing|live_toggle_label")}
-            />
-            <AccessibleButton
-                data-testid="enable-live-share-submit"
-                className="mx_EnableLiveShare_button"
-                element="button"
-                kind="primary"
-                onClick={onSubmit}
-                disabled={!isEnabled}
-            >
-                {_t("action|ok")}
-            </AccessibleButton>
+            <Form.Root onSubmit={onSubmitForm}>
+                <SettingsToggleInput
+                    name="enable-live-share-toggle"
+                    checked={isEnabled}
+                    onChange={onEnabledChanged}
+                    label={_t("location_sharing|live_toggle_label")}
+                />
+                <Button className="mx_EnableLiveShare_button" kind="primary" disabled={!isEnabled}>
+                    {_t("action|ok")}
+                </Button>
+            </Form.Root>
         </div>
     );
 };

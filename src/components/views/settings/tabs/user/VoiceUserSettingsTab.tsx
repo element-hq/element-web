@@ -7,10 +7,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -18,7 +19,6 @@ import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
@@ -140,6 +140,24 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         );
     }
 
+    private onAutoGainChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioAutoGainControl(enable);
+        this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
+    };
+
+    private onNoiseSuppressionChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioNoiseSuppression(enable);
+        this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
+    };
+
+    private onEchoCancellationChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+        const enable = event.target.checked;
+        await MediaDeviceHandler.setAudioEchoCancellation(enable);
+        this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
+    };
+
     public render(): ReactNode {
         let requestButton: ReactNode | undefined;
         let speakerDropdown: ReactNode | undefined;
@@ -169,64 +187,62 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
 
         return (
             <SettingsTab>
-                <SettingsSection>
-                    {requestButton}
-                    <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
-                        {speakerDropdown}
-                        {microphoneDropdown}
-                        <LabelledToggleSwitch
-                            value={this.state.audioAutoGainControl}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioAutoGainControl(v);
-                                this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
-                            }}
-                            label={_t("settings|voip|voice_agc")}
-                            data-testid="voice-auto-gain"
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
-                        {webcamDropdown}
-                        <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
-                    </SettingsSubsection>
-                </SettingsSection>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection>
+                        {requestButton}
+                        <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
+                            {speakerDropdown}
+                            {microphoneDropdown}
+                            <SettingsToggleInput
+                                name="voice-auto-gain"
+                                label={_t("settings|voip|voice_agc")}
+                                checked={this.state.audioAutoGainControl}
+                                onChange={this.onAutoGainChanged}
+                            />
+                        </SettingsSubsection>
+                        <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
+                            {webcamDropdown}
+                            <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                        </SettingsSubsection>
+                    </SettingsSection>
 
-                <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
-                        <LabelledToggleSwitch
-                            value={this.state.audioNoiseSuppression}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioNoiseSuppression(v);
-                                this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
-                            }}
-                            label={_t("settings|voip|noise_suppression")}
-                            data-testid="voice-noise-suppression"
-                        />
-                        <LabelledToggleSwitch
-                            value={this.state.audioEchoCancellation}
-                            onChange={async (v): Promise<void> => {
-                                await MediaDeviceHandler.setAudioEchoCancellation(v);
-                                this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
-                            }}
-                            label={_t("settings|voip|echo_cancellation")}
-                            data-testid="voice-echo-cancellation"
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|voip|connection_section")}>
-                        <SettingsFlag
-                            name="webRtcAllowPeerToPeer"
-                            level={SettingLevel.DEVICE}
-                            onChange={this.changeWebRtcMethod}
-                        />
-                        <SettingsFlag
-                            name="fallbackICEServerAllowed"
-                            label={_t("settings|voip|enable_fallback_ice_server", {
-                                server: new URL(FALLBACK_ICE_SERVER).pathname,
-                            })}
-                            level={SettingLevel.DEVICE}
-                            hideIfCannotSet
-                        />
-                    </SettingsSubsection>
-                </SettingsSection>
+                    <SettingsSection heading={_t("common|advanced")}>
+                        <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
+                            <SettingsToggleInput
+                                name="voice-noise-suppression"
+                                label={_t("settings|voip|noise_suppression")}
+                                checked={this.state.audioNoiseSuppression}
+                                onChange={this.onNoiseSuppressionChanged}
+                            />
+                            <SettingsToggleInput
+                                name="voice-echo-cancellation"
+                                label={_t("settings|voip|echo_cancellation")}
+                                checked={this.state.audioEchoCancellation}
+                                onChange={this.onEchoCancellationChanged}
+                            />
+                        </SettingsSubsection>
+                        <SettingsSubsection heading={_t("settings|voip|connection_section")}>
+                            <SettingsFlag
+                                name="webRtcAllowPeerToPeer"
+                                level={SettingLevel.DEVICE}
+                                onChange={this.changeWebRtcMethod}
+                            />
+                            <SettingsFlag
+                                name="fallbackICEServerAllowed"
+                                label={_t("settings|voip|enable_fallback_ice_server", {
+                                    server: new URL(FALLBACK_ICE_SERVER).pathname,
+                                })}
+                                level={SettingLevel.DEVICE}
+                                hideIfCannotSet
+                            />
+                        </SettingsSubsection>
+                    </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }
