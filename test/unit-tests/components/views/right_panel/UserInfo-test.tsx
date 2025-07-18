@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, act, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { render, screen, act, waitForElementToBeRemoved } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { type Mocked, mocked } from "jest-mock";
 import { type Room, User, type MatrixClient, RoomMember, Device } from "matrix-js-sdk/src/matrix";
@@ -23,7 +23,6 @@ import {
 import UserInfo, {
     disambiguateDevices,
     getPowerLevels,
-    UserInfoHeader,
     UserOptionsSection,
 } from "../../../../../src/components/views/right_panel/UserInfo";
 import dis from "../../../../../src/dispatcher/dispatcher";
@@ -437,64 +436,6 @@ describe("<UserInfo />", () => {
             }
             expect(container).toMatchSnapshot();
         });
-    });
-});
-
-describe("<UserInfoHeader />", () => {
-    const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
-
-    const defaultProps = {
-        member: defaultMember,
-        roomId: defaultRoomId,
-    };
-
-    const renderComponent = (props = {}) => {
-        const device1 = new Device({
-            deviceId: "d1",
-            userId: defaultUserId,
-            displayName: "my device",
-            algorithms: [],
-            keys: new Map(),
-        });
-        const devicesMap = new Map<string, Device>([[device1.deviceId, device1]]);
-        const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
-        mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
-
-        return render(<UserInfoHeader {...defaultProps} {...props} devices={[device1]} />, {
-            wrapper: Wrapper,
-        });
-    };
-
-    it("renders custom user identifiers in the header", () => {
-        renderComponent();
-        expect(screen.getByText("customUserIdentifier")).toBeInTheDocument();
-    });
-
-    it("renders verified badge when user is verified", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, false));
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("Verified")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders verify button", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
-        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(true);
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("Verify User")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders verification unavailable message", async () => {
-        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
-        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(false);
-        const { container } = renderComponent();
-        await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
     });
 });
 
