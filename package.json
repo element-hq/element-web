@@ -69,7 +69,8 @@
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
         "test:storybook": "test-storybook --url http://localhost:6007/",
-        "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\""
+        "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
+        "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.1.0",
