@@ -58,7 +58,7 @@ const MobileAppLinks: React.FC<{
     googlePlayUrl?: string;
     fdroidUrl?: string;
 }> = ({ appleAppStoreUrl, googlePlayUrl, fdroidUrl }) => (
-    <Flex gap="var(--cpd-space-6x)">
+    <Flex gap="var(--cpd-space-6x)" className="mx_Flex">
         {appleAppStoreUrl && (
             <a href={appleAppStoreUrl} target="_blank" rel="noreferrer noopener">
                 <img height="64" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
@@ -84,7 +84,7 @@ const DesktopAppLinks: React.FC<{
     linuxUrl?: string;
 }> = ({ macOsUrl, win64Url, win64ArmUrl, linuxUrl }) => {
     return (
-        <Flex gap="var(--cpd-space-4x)">
+        <Flex gap="var(--cpd-space-4x)" className="mx_Flex">
             {macOsUrl && (
                 <Button as="a" href={macOsUrl} kind="secondary" Icon={AppleIcon}>
                     {_t("incompatible_browser|macos")}
@@ -193,7 +193,7 @@ export const UnsupportedBrowserView: React.FC<{
                 )}
             </Text>
 
-            <Flex gap="var(--cpd-space-4x)" className="mx_ErrorView_buttons">
+            <Flex gap="var(--cpd-space-4x)" className="mx_Flex mx_ErrorView_buttons">
                 <Button Icon={PopOutIcon} kind="secondary" size="sm">
                     {_t("incompatible_browser|learn_more")}
                 </Button>
