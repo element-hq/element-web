@@ -11,7 +11,8 @@ import React, { type ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
-import { _t, _td, type TranslationKey } from "../languageHandler";
+// Import i18n.tsx instead of languageHandler to avoid circular deps
+import { _t, _td, type TranslationKey } from "../shared-components/i18n";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -173,6 +174,11 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
 
     // Whether the setting should have a warning sign in the microcopy
     shouldWarn?: boolean;
+
+    /**
+     * Whether the setting should be exported in a rageshake report.
+     */
+    shouldExportToRageshake?: boolean;
 }
 
 export interface IFeature extends Omit<IBaseSetting<boolean>, "isFeature"> {
@@ -441,6 +447,8 @@ export const SETTINGS: Settings = {
         controller: new InviteRulesConfigController(),
         supportedLevels: [SettingLevel.ACCOUNT],
         default: InviteRulesConfigController.default,
+        // Contains server names
+        shouldExportToRageshake: false,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -503,10 +511,14 @@ export const SETTINGS: Settings = {
     "mjolnirRooms": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
+        // Contains room IDs
+        shouldExportToRageshake: false,
     },
     "mjolnirPersonalRoom": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: null,
+        // Contains room ID
+        shouldExportToRageshake: false,
     },
     "feature_html_topic": {
         isFeature: true,
@@ -797,6 +809,8 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
+        // Location leak
+        shouldExportToRageshake: false,
     },
     "userTimezonePublish": {
         // This is per-device so you can avoid having devices overwrite each other.
@@ -913,6 +927,8 @@ export const SETTINGS: Settings = {
     "custom_themes": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: [],
+        // Potential privacy leak via theme origin
+        shouldExportToRageshake: false,
     },
     "use_system_theme": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -974,26 +990,36 @@ export const SETTINGS: Settings = {
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
+        // For privacy
+        shouldExportToRageshake: false,
     },
     "breadcrumb_rooms": {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
+        // Contains joined rooms
+        shouldExportToRageshake: false,
     },
     "recent_emoji": {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
+        // For privacy
+        shouldExportToRageshake: false,
     },
     "SpotlightSearch.recentSearches": {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
+        // For privacy
+        shouldExportToRageshake: false,
     },
     "showMediaEventIds": {
         // not really a setting
         supportedLevels: [SettingLevel.DEVICE],
         default: {}, // List of events => is visible
+        // Exports event IDs
+        shouldExportToRageshake: false,
     },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1003,6 +1029,8 @@ export const SETTINGS: Settings = {
     "room_directory_servers": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
+        // Contains connected servers for user
+        shouldExportToRageshake: false,
     },
     "integrationProvisioning": {
         supportedLevels: [SettingLevel.ACCOUNT],
@@ -1012,6 +1040,7 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.ROOM_ACCOUNT, SettingLevel.ROOM_DEVICE],
         supportedLevelsAreOrdered: true,
         default: {}, // none allowed
+        shouldExportToRageshake: false,
     },
     // Legacy, kept around for transitionary purposes
     "analyticsOptIn": {
@@ -1086,6 +1115,8 @@ export const SETTINGS: Settings = {
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,
+        // Contains personal information in file name
+        shouldExportToRageshake: false,
     },
     "notificationBodyEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1112,6 +1143,8 @@ export const SETTINGS: Settings = {
             allow: [],
             deny: [],
         },
+        // Expses widget information
+        shouldExportToRageshake: false,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1201,6 +1234,8 @@ export const SETTINGS: Settings = {
         // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
+        // Sensitive information in widget ID
+        shouldExportToRageshake: false,
     },
     "Widgets.layout": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
@@ -1275,6 +1310,8 @@ export const SETTINGS: Settings = {
     "activeCallRoomIds": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: [],
+        // Contains room IDs
+        shouldExportToRageshake: false,
     },
     /**
      * Enable or disable the release announcement feature
@@ -1394,7 +1431,7 @@ export const SETTINGS: Settings = {
     },
     "Electron.enableContentProtection": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("settings|preferences|enable_hardware_acceleration"),
+        displayName: _td("settings|preferences|enable_content_protection"),
         default: false,
     },
     "Developer.elementCallUrl": {

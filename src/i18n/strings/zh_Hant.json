@@ -215,8 +215,7 @@
             "setup_key_backup_title": "您將會失去您的加密訊息",
             "setup_secure_backup_description_1": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
             "setup_secure_backup_description_2": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
-            "skip_key_backup": "我不要我的加密訊息了",
-            "use_key_backup": "開始使用金鑰備份"
+            "skip_key_backup": "我不要我的加密訊息了"
         },
         "misconfigured_body": "請要求您的 %(brand)s 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
         "misconfigured_title": "您的 %(brand)s 沒有設定好",
@@ -825,7 +824,6 @@
             "warning": "如果您沒有移除復原方法，攻擊者可能會試圖存取您的帳號。請立刻在設定中變更您帳號的密碼並設定新的復原方式。"
         },
         "reset_all_button": "忘記或遺失了所有復原方法？<a>重設全部</a>",
-        "set_up_toast_description": "避免失去對加密訊息與資料的存取權",
         "set_up_toast_title": "設定安全備份",
         "setup_secure_backup": {
             "explainer": "請在登出前備份您的金鑰，以免遺失。"
@@ -2245,11 +2243,6 @@
         "insert_trailing_colon_mentions": "在使用者於訊息開頭提及之後插入跟隨冒號",
         "jump_to_bottom_on_send": "傳送訊息時，跳到時間軸底部",
         "key_backup": {
-            "backup_in_progress": "您的金鑰正在備份（第一次備份會花費數分鐘）。",
-            "backup_starting": "正在開始備份…",
-            "backup_success": "成功！",
-            "cannot_create_backup": "無法建立金鑰備份",
-            "create_title": "建立金鑰備份",
             "setup_secure_backup": {
                 "backup_setup_success_description": "您已備份此裝置的金鑰。",
                 "backup_setup_success_title": "安全備份成功",
@@ -2384,7 +2377,6 @@
             "ignore_users_empty": "您沒有忽略的使用者。",
             "ignore_users_section": "忽略使用者",
             "key_backup_algorithm": "演算法：",
-            "key_backup_connect": "將此工作階段連結至金鑰備份",
             "message_search_disable_warning": "若停用，從加密聊天室傳來的訊息將不會出現在搜尋結果中。",
             "message_search_disabled": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
             "message_search_enabled": {

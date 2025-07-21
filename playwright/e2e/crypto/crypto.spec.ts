@@ -168,6 +168,7 @@ test.describe("Cryptography", function () {
 
             // Take a snapshot of RoomSummaryCard with a verified E2EE icon
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");
+            await expect(page.locator(".mx_MessageComposer_e2eIcon")).toMatchScreenshot("composer-e2e-icon.png");
         },
     );
 

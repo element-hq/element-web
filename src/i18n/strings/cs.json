@@ -242,8 +242,7 @@
             "setup_key_backup_title": "Přijdete o přístup k šifrovaným zprávám",
             "setup_secure_backup_description_1": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
             "setup_secure_backup_description_2": "Po odhlášení budou tyto klíče z tohoto zařízení odstraněny, což znamená, že nebudete moci číst zašifrované zprávy, pokud k nim nemáte klíče v jiných zařízeních nebo je nemáte zálohované na serveru.",
-            "skip_key_backup": "Už své zašifrované zprávy nechci",
-            "use_key_backup": "Začít používat zálohu klíčů"
+            "skip_key_backup": "Už své zašifrované zprávy nechci"
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
         "misconfigured_title": "%(brand)s je špatně nakonfigurován",
@@ -788,6 +787,7 @@
             "cross_signing_status": "Stav křížového podepisování:",
             "cross_signing_untrusted": "Váš účet má v bezpečném úložišti identitu pro křížový podpis, ale v této relaci jí zatím nevěříte.",
             "crypto_not_available": "Kryptografický modul není k dispozici",
+            "device_id": "ID zařízení",
             "key_backup_active_version": "Verze aktivní zálohy:",
             "key_backup_active_version_none": "Žádné",
             "key_backup_inactive_warning": "Vaše klíče nejsou z této relace zálohovány.",
@@ -800,6 +800,8 @@
             "secret_storage_ready": "připraveno",
             "secret_storage_status": "Bezpečné úložiště:",
             "self_signing_private_key_cached_status": "Soukromý klíč s vlastním podpisem:",
+            "session": "Relace",
+            "session_fingerprint": "Otisk prstu (klíč relace)",
             "title": "Koncové šifrování",
             "user_signing_private_key_cached_status": "Podpisový soukromý klíč uživatele:"
         },
@@ -825,6 +827,7 @@
         "low_bandwidth_mode": "Režim malé šířky pásma",
         "low_bandwidth_mode_description": "Vyžaduje kompatibilní domovský server.",
         "main_timeline": "Hlavní časová osa",
+        "manual_device_verification": "Ruční ověření zařízení",
         "no_receipt_found": "Žádné potvrzení o přečtení",
         "notification_state": "Stav oznámení je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Ladění oznámení",
@@ -966,9 +969,7 @@
         },
         "reset_all_button": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Resetovat vše</a>",
         "set_up_recovery": "Nastavení obnovení",
-        "set_up_recovery_later": "Teď ne",
         "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
-        "set_up_toast_description": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
             "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
@@ -1009,6 +1010,21 @@
             "incoming_sas_dialog_waiting": "Čekání na potvrzení partnerem…",
             "incoming_sas_user_dialog_text_1": "Po ověření bude uživatel označen jako důvěryhodný. Ověřování uživatelů vám dává větší jistotu, že je komunikace důvěrná.",
             "incoming_sas_user_dialog_text_2": "Ověření uživatele označí jeho relace za důvěryhodné a vaše relace budou důvěryhodné pro něj.",
+            "manual": {
+                "already_verified": "Toto zařízení je již ověřeno",
+                "already_verified_and_wrong_fingerprint": "Zadaný otisk prstu se neshoduje, ale zařízení je již ověřené!",
+                "device_id": "ID zařízení",
+                "failure_description": "Nepodařilo se ověřit '%(deviceId)s': %(error)s",
+                "failure_title": "Ověření se nezdařilo",
+                "fingerprint": "Otisk prstu (klíč relace)",
+                "no_crypto": "Nelze ověřit zařízení - šifrování není povoleno",
+                "no_device": "Nelze ověřit zařízení - zařízení '%(deviceId)s' nebylo nalezeno",
+                "no_userid": "Nelze ověřit zařízení - nelze najít naše ID uživatele",
+                "success_description": "Zařízení (%(deviceId)s) je nyní křížově podepsáno",
+                "success_title": "Ověření proběhlo úspěšně",
+                "text": "Zadejte ID a otisk prstu jednoho ze svých vlastních zařízení a ověřte jej. POZNÁMKA to umožňuje druhému zařízení odesílat a přijímat zprávy jako vy. POKUD VÁM NĚKDO ŘEKL, ABYSTE SEM NĚCO VLOŽILI, JE PRAVDĚPODOBNÉ, ŽE JSTE PODVEDENI!",
+                "wrong_fingerprint": "Nelze ověřit zařízení '%(deviceId)s' - zadaný otisk prstu '%(fingerprint)s' neodpovídá otisku prstu zařízení, '%(fprint)s'"
+            },
             "no_key_or_device": "Vypadá to, že nemáte klíč pro obnovení ani žádné jiné zařízení, které byste mohli ověřit.  Toto zařízení nebude mít přístup ke starým zašifrovaným zprávám. Abyste mohli na tomto zařízení ověřit svou identitu, budete muset obnovit ověřovací klíče.",
             "no_support_qr_emoji": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
             "other_party_cancelled": "Druhá strana ověření zrušila.",
@@ -1958,6 +1974,7 @@
         },
         "face_pile_tooltip_shortcut": "Včetně %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Včetně vás, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Nelze určit, kterého uživatele ignorovat, protože se změnila událost člena.",
         "failed_reject_invite": "Nepodařilo se odmítnout pozvánku",
         "forget_room": "Zapomenout na tuto místnost",
         "forget_space": "Zapomenout tento prostor",
@@ -2050,6 +2067,8 @@
         "read_topic": "Klikněte pro přečtení tématu",
         "rejecting": "Odmítání pozvánky…",
         "rejoin_button": "Znovu vstoupit",
+        "room_content": "Obsah místnosti",
+        "room_is_low_priority": "Toto je místnost s nízkou prioritou",
         "search": {
             "all_rooms_button": "Vyhledávat ve všech místnostech",
             "placeholder": "Hledat zprávy…",
@@ -2100,6 +2119,7 @@
         "add_space_label": "Přidat prostor",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
+        "collapse_filters": "Sbalit seznam filtrů",
         "empty": {
             "no_chats": "Zatím žádné chaty",
             "no_chats_description": "Začněte tím, že někomu pošlete zprávu nebo vytvoříte místnost",
@@ -2107,6 +2127,7 @@
             "no_favourites": "Zatím nemáte oblíbený chat",
             "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
             "no_invites": "Nemáte žádné nepřečtené pozvánky",
+            "no_lowpriority": "Nemáte žádné místnosti s nízkou prioritou",
             "no_mentions": "Nemáte žádné nepřečtené zmínky",
             "no_people": "Zatím s nikým nemáte přímé chaty",
             "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
@@ -2116,6 +2137,7 @@
             "show_activity": "Zobrazit veškerou aktivitu",
             "show_chats": "Zobrazit všechny chaty"
         },
+        "expand_filters": "Rozbalit seznam filtrů",
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
@@ -2690,13 +2712,11 @@
         "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
         "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
+        "invite_controls": {
+            "default_label": "Povolit uživatelům pozvat vás do místností"
+        },
         "jump_to_bottom_on_send": "Po odeslání zprávy přejít na konec časové osy",
         "key_backup": {
-            "backup_in_progress": "Klíče se zálohují (první záloha může trvat pár minut).",
-            "backup_starting": "Zahájení zálohování…",
-            "backup_success": "Úspěch!",
-            "cannot_create_backup": "Nepovedlo se vyrobit zálohů klíčů",
-            "create_title": "Vytvořit zálohu klíčů",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Vaše klíče jsou nyní zálohovány z tohoto zařízení.",
                 "backup_setup_success_title": "Bezpečné zálohování bylo úspěšné",
@@ -2756,6 +2776,7 @@
             "show_in_private": "V soukromých místnostech",
             "show_media": "Vždy zobrazit"
         },
+        "not_supported": "Váš server tuto funkci neimplementuje.",
         "notifications": {
             "default_setting_description": "Toto nastavení se ve výchozím stavu použije pro všechny vaše místnosti.",
             "default_setting_section": "Chci být upozorňován na (Výchozí nastavení)",
@@ -2813,6 +2834,7 @@
             "voip": "Hlasové a video hovory"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Zabraňte zachycení obsahu okna jinými aplikacemi",
             "Electron.enableHardwareAcceleration": "Povolit hardwarovou akceleraci (restaurtujte %(appName)s, aby se změna projevila)",
             "always_show_menu_bar": "Vždy zobrazovat horní lištu okna",
             "autocomplete_delay": "Zpožnění našeptávače (ms)",
@@ -2854,7 +2876,6 @@
             "ignore_users_empty": "Nemáte žádné ignorované uživatele.",
             "ignore_users_section": "Ignorovaní uživatelé",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_connect": "Připojit k zálohování klíčů",
             "message_search_disable_warning": "Když je to zakázané, zprávy v šifrovaných místnostech se nebudou objevovat ve výsledcích vyhledávání.",
             "message_search_disabled": "Bezpečně uchovávat zprávy na tomto zařízení aby se v nich dalo vyhledávat.",
             "message_search_enabled": {
@@ -2986,6 +3007,7 @@
         "show_chat_effects": "Zobrazit efekty chatu (animace např. při přijetí konfet)",
         "show_displayname_changes": "Zobrazovat změny zobrazovaného jména",
         "show_join_leave": "Zobrazit zprávy o vstupu/odchodu (pozvánky/odebrání/vykázání nejsou ovlivněny)",
+        "show_message_previews": "Zobrazit náhledy zpráv",
         "show_nsfw_content": "Zobrazit NSFW obsah",
         "show_read_receipts": "Zobrazovat potvrzení o přečtení",
         "show_redaction_placeholder": "Zobrazovat smazané zprávy",
@@ -3092,6 +3114,8 @@
         "jumptodate": "Přejít na zadané datum na časové ose",
         "jumptodate_invalid_input": "Nebyli jsme schopni porozumět zadanému datu (%(inputDate)s). Zkuste použít formát RRRR-MM-DD.",
         "lenny": "Vloží ( ͡° ͜ʖ ͡°) na začátek zprávy",
+        "manual_device_verification_confirm_description": "To umožní jinému zařízení odesílat a přijímat zprávy jako vy. POKUD VÁM NĚKDO ŘEKL, ABYSTE SEM NĚCO VLOŽILI, JE PRAVDĚPODOBNÉ, ŽE JSTE PODVEDENI! Opravdu chcete ověřit toto další zařízení?",
+        "manual_device_verification_confirm_title": "Upozornění: ruční ověření zařízení",
         "me": "Zobrazí akci",
         "msg": "Pošle zprávu danému uživateli",
         "myavatar": "Změní váš profilový obrázek ve všech místnostech",
@@ -3132,7 +3156,7 @@
         "upgraderoom": "Aktualizuje místnost na novou verzi",
         "upgraderoom_permission_error": "Na provedení tohoto příkazu nemáte dostatečná oprávnění.",
         "usage": "Použití",
-        "verify": "Ověří uživatele, relaci a veřejné klíče",
+        "verify": "Ruční ověření jednoho ze svých vlastních zařízení",
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },

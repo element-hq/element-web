@@ -494,15 +494,12 @@ export default abstract class BasePlatform {
     }
 
     private updateFavicon(): void {
-        let bgColor = "#d00";
-        let notif: string | number = this.notificationCount;
+        const notif: string | number = this.notificationCount;
 
         if (this.errorDidOccur) {
-            notif = notif || "×";
-            bgColor = "#f00";
+            this.favicon.badge(notif || "×", { bgColor: "#f00" });
         }
-
-        this.favicon.badge(notif, { bgColor });
+        this.favicon.badge(notif);
     }
 
     /**

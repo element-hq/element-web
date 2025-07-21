@@ -216,8 +216,7 @@
             "setup_key_backup_title": "你将失去你的加密消息的访问权",
             "setup_secure_backup_description_1": "加密消息已使用端到端加密保护。只有你和拥有密钥的收件人可以阅读这些消息。",
             "setup_secure_backup_description_2": "当你登出时，这些密钥会从此设备删除。这意味着你将无法查阅已加密消息，除非你在其他设备上有那些消息的密钥，或者已将其备份到服务器。",
-            "skip_key_backup": "我不想要我的加密消息",
-            "use_key_backup": "开始使用密钥备份"
+            "skip_key_backup": "我不想要我的加密消息"
         },
         "misconfigured_body": "跟你的%(brand)s管理员确认<a>你的配置</a>不正确或重复的条目。",
         "misconfigured_title": "你的 %(brand)s 配置有错误",
@@ -767,7 +766,6 @@
             "warning": "如果你没有移除此恢复方式，可能有攻击者正试图侵入你的账户。请立即更改你的账户密码并在设置中设定一个新的恢复方式。"
         },
         "reset_all_button": "忘记或丢失了所有恢复方式？<a>全部重置</a>",
-        "set_up_toast_description": "防止丢失加密消息和数据的访问权",
         "set_up_toast_title": "设置安全备份",
         "setup_secure_backup": {
             "explainer": "在登出之前请备份密钥以免丢失。"
@@ -2079,10 +2077,6 @@
         "insert_trailing_colon_mentions": "在消息开头的提及用户的地方后面插入尾随冒号",
         "jump_to_bottom_on_send": "发送消息时跳转到时间线底部",
         "key_backup": {
-            "backup_in_progress": "正在备份你的密钥（第一次备份可能会花费几分钟时间）。",
-            "backup_success": "成功！",
-            "cannot_create_backup": "无法创建密钥备份",
-            "create_title": "创建密钥备份",
             "setup_secure_backup": {
                 "cancel_warning": "如果你现在取消，你可能会丢失加密的消息和数据，如果你丢失了登录信息的话。",
                 "confirm_security_phrase": "确认你的安全短语",
@@ -2182,7 +2176,6 @@
             "ignore_users_empty": "你没有设置忽略用户。",
             "ignore_users_section": "已忽略的用户",
             "key_backup_algorithm": "算法：",
-            "key_backup_connect": "将此会话连接到密钥备份",
             "message_search_disable_warning": "如果被禁用，加密房间内的消息不会显示在搜索结果中。",
             "message_search_disabled": "在本地安全地缓存加密消息以使其出现在搜索结果中。",
             "message_search_enabled": {

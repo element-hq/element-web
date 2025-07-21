@@ -240,8 +240,7 @@
             "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
             "setup_secure_backup_description_1": "Les messages chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) ont les clés pour lire ces messages.",
             "setup_secure_backup_description_2": "Quand vous vous déconnectez, ces clés seront supprimées de cet appareil, et vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
-            "skip_key_backup": "Je ne veux pas de mes messages chiffrés",
-            "use_key_backup": "Commencer à utiliser la sauvegarde de clés"
+            "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
         "misconfigured_title": "Votre %(brand)s est mal configuré",
@@ -786,6 +785,7 @@
             "cross_signing_status": "État de la signature croisée :",
             "cross_signing_untrusted": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
             "crypto_not_available": "Le module cryptographique n'est pas disponible",
+            "device_id": "Identifiant de l'appareil",
             "key_backup_active_version": "Version de sauvegarde active :",
             "key_backup_active_version_none": "Aucun",
             "key_backup_inactive_warning": "Vos clés ne sont pas sauvegardées sur cette session.",
@@ -798,6 +798,8 @@
             "secret_storage_ready": "prêt",
             "secret_storage_status": "Coffre secret :",
             "self_signing_private_key_cached_status": "Clé privée d’auto-signature :",
+            "session": "Session",
+            "session_fingerprint": "Empreinte numérique (clé de la session)",
             "title": "Chiffrement de bout en bout",
             "user_signing_private_key_cached_status": "Clé privée de signature de l’utilisateur :"
         },
@@ -823,6 +825,7 @@
         "low_bandwidth_mode": "Mode faible bande passante",
         "low_bandwidth_mode_description": "Nécessite un serveur d’accueil compatible.",
         "main_timeline": "Historique principal",
+        "manual_device_verification": "Vérification manuelle de l'appareil",
         "no_receipt_found": "Aucun accusé disponible",
         "notification_state": "L’état des notifications est <strong>%(notificationState)s</strong>",
         "notifications_debug": "Débogage des notifications",
@@ -915,7 +918,7 @@
             "key_validation_text": {
                 "wrong_security_key": "La clé de récupération que vous avez saisie est incorrecte."
             },
-            "privacy_warning": "Assurez vous que personne d'autre ne regarde votre écran !",
+            "privacy_warning": "Assurez-vous que personne d'autre ne regarde votre écran !",
             "restoring": "Restauration des clés depuis la sauvegarde",
             "security_key_title": "Clé de récupération"
         },
@@ -964,9 +967,7 @@
         },
         "reset_all_button": "Vous avez perdu ou oublié tous vos moyens de récupération ? <a>Tout réinitialiser</a>",
         "set_up_recovery": "Configurer la récupération",
-        "set_up_recovery_later": "Pas maintenant",
         "set_up_recovery_toast_description": "Générez une clé de récupération qui peut être utilisée pour restaurer l'historique de vos messages chiffrés au cas où vous perdriez l'accès à vos appareils.",
-        "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
             "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
@@ -1007,6 +1008,21 @@
             "incoming_sas_dialog_waiting": "Attente de la confirmation du partenaire…",
             "incoming_sas_user_dialog_text_1": "Vérifier cet utilisateur pour le marquer comme fiable. Faire confiance aux utilisateurs vous permet d’être tranquille lorsque vous utilisez des messages chiffrés de bout en bout.",
             "incoming_sas_user_dialog_text_2": "Vérifier cet utilisateur marquera sa session comme fiable, et marquera aussi votre session comme fiable pour lui.",
+            "manual": {
+                "already_verified": "Cet appareil est déjà vérifié",
+                "already_verified_and_wrong_fingerprint": "L'empreinte numérique fournie ne correspond pas, mais l'appareil est déjà vérifié !",
+                "device_id": "Identifiant de l'appareil",
+                "failure_description": "Échec de la vérification de '%(deviceId)s' : %(error)s",
+                "failure_title": "Échec de la vérification",
+                "fingerprint": "Empreinte numérique (clé de la session)",
+                "no_crypto": "Impossible de vérifier l'appareil - le chiffrement n'est pas activé",
+                "no_device": "Impossible de vérifier l'appareil - l'appareil %(deviceId)s n'a pas été trouvé",
+                "no_userid": "Impossible de vérifier l'appareil - identifiant utilisateur introuvable",
+                "success_description": "L’appareil (%(deviceId)s) est maintenant signé de manière croisée",
+                "success_title": "Vérification réussie",
+                "text": "Fournissez l'identifiant et l'empreinte numétrique de l'un de vos appareils pour le vérifier. REMARQUE : cela permet à l'autre appareil d'envoyer et de recevoir des messages comme vous. SI QUELQU'UN VOUS A DIT DE COLLER QUELQUE CHOSE ICI, IL EST PROBABLE QUE VOUS SOYEZ VICTIME D'UNE ARNAQUE !",
+                "wrong_fingerprint": "Impossible de vérifier l'appareil %(deviceId)s - l'empreinte numérique %(fingerprint)s fournie ne correspond pas à celle de l'appareil %(fprint)s"
+            },
             "no_key_or_device": "Il semblerait que vous ne disposiez pas de clé de récupération ou d’autres appareils pour réalisation la vérification. Cet appareil ne pourra pas accéder aux anciens messages chiffrés. Afin de vérifier votre identité sur cet appareil, vous devrez réinitialiser vos clés de vérifications.",
             "no_support_qr_emoji": "L’appareil que vous essayez de vérifier ne prend pas en charge les QR codes ou la vérification d’émojis, qui sont les méthodes prises en charge par %(brand)s. Essayez avec un autre client.",
             "other_party_cancelled": "L’autre personne a annulé la vérification.",
@@ -1733,9 +1749,9 @@
         },
         "total_no_votes": "Aucun vote exprimé",
         "total_not_ended": "Les résultats seront visibles lorsque le sondage sera terminé",
-        "type_closed": "Sondage terminé",
+        "type_closed": "Sondage fermé",
         "type_heading": "Type de sondage",
-        "type_open": "Ouvrir le sondage",
+        "type_open": "Sondage ouvert",
         "unable_edit_description": "Désolé, vous ne pouvez pas modifier un sondage après que les votes aient été exprimés.",
         "unable_edit_title": "Impossible de modifier le sondage"
     },
@@ -2046,6 +2062,8 @@
         "read_topic": "Cliquer pour lire le sujet",
         "rejecting": "Rejet de l’invitation…",
         "rejoin_button": "Revenir",
+        "room_content": "Contenu du salon",
+        "room_is_low_priority": "Ce salon est de priorité basse",
         "search": {
             "all_rooms_button": "Rechercher dans tous les salons",
             "placeholder": "Rechercher des messages…",
@@ -2094,6 +2112,7 @@
         "add_space_label": "Ajouter un espace",
         "breadcrumbs_empty": "Aucun salon visité récemment",
         "breadcrumbs_label": "Salons visités récemment",
+        "collapse_filters": "Réduire la liste des filtres",
         "empty": {
             "no_chats": "Pas encore de discussions",
             "no_chats_description": "Commencez par envoyer un message à quelqu'un ou en créant un salon",
@@ -2101,6 +2120,7 @@
             "no_favourites": "Vous n'avez pas encore de discussion favorite",
             "no_favourites_description": "Vous pouvez ajouter une discussion à vos favoris dans les paramètres de discussion",
             "no_invites": "Vous n'avez aucune invitation non lue",
+            "no_lowpriority": "Vous n'avez aucun salon avec une priorité basse",
             "no_mentions": "Vous n'avez aucune mention non lue",
             "no_people": "Vous n'avez encore de discussions",
             "no_people_description": "Veuillez désélectionner des filtres pour voir vos discussions",
@@ -2110,13 +2130,14 @@
             "show_activity": "Voir toutes les activités",
             "show_chats": "Afficher toutes les discussions"
         },
+        "expand_filters": "Développer la liste des filtres",
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
         "filters": {
             "favourite": "Favoris",
             "invites": "Invitations",
-            "low_priority": "Faible priorité",
+            "low_priority": "Priorité basse",
             "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
@@ -2684,13 +2705,11 @@
         "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
         "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
+        "invite_controls": {
+            "default_label": "Autoriser les utilisateurs à vous inviter dans les salons"
+        },
         "jump_to_bottom_on_send": "Sauter en bas du fil de discussion lorsque vous envoyez un message",
         "key_backup": {
-            "backup_in_progress": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
-            "backup_starting": "Début de la sauvegarde…",
-            "backup_success": "Terminé !",
-            "cannot_create_backup": "Impossible de créer la sauvegarde des clés",
-            "create_title": "Créer une sauvegarde de clé",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Vos clés sont maintenant sauvegardées depuis cet appareil.",
                 "backup_setup_success_title": "Sauvegarde sécurisée réalisée avec succès",
@@ -2750,6 +2769,7 @@
             "show_in_private": "Dans les salons privés",
             "show_media": "Toujours afficher"
         },
+        "not_supported": "Votre serveur ne propose pas cette fonctionnalité",
         "notifications": {
             "default_setting_description": "Ce réglage sera appliqué par défaut à tous vos salons.",
             "default_setting_section": "Je veux être notifié pour (réglage par défaut)",
@@ -2816,6 +2836,7 @@
             "composer_heading": "Compositeur",
             "default_timezone": "Navigateur par défaut (%(timezone)s)",
             "dialog_title": "<strong>Paramètres : </strong> Préférences",
+            "enable_content_protection": "Activer la protection du contenu",
             "enable_hardware_acceleration": "Activer l’accélération matérielle",
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
@@ -2849,7 +2870,6 @@
             "ignore_users_empty": "Vous n’avez ignoré personne.",
             "ignore_users_section": "Utilisateurs ignorés",
             "key_backup_algorithm": "Algorithme :",
-            "key_backup_connect": "Connecter cette session à la sauvegarde de clés",
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
             "message_search_enabled": {
@@ -3087,6 +3107,8 @@
         "jumptodate": "Aller à la date correspondante dans la discussion",
         "jumptodate_invalid_input": "Nous n’avons pas pu comprendre la date saisie (%(inputDate)s). Veuillez essayer en utilisant le format AAAA-MM-JJ.",
         "lenny": "Ajoute ( ͡° ͜ʖ ͡°) en préfixe du message",
+        "manual_device_verification_confirm_description": "Cela permettra à un autre appareil d'envoyer et de recevoir des messages comme vous. SI QUELQU'UN VOUS A DIT DE COLLER QUELQUE CHOSE ICI, IL EST PROBABLE QUE VOUS SOYEZ VICTIME D'UNE ARNAQUE ! Êtes-vous sûr de vouloir vérifier cet autre appareil ?",
+        "manual_device_verification_confirm_title": "Attention : vérification manuelle de l'appareil",
         "me": "Affiche l’action",
         "msg": "Envoie un message à l’utilisateur fourni",
         "myavatar": "Modifier votre image de profil dans tous les salons",
@@ -3127,7 +3149,7 @@
         "upgraderoom": "Met à niveau un salon vers une nouvelle version",
         "upgraderoom_permission_error": "Vous n’avez pas les autorisations nécessaires pour utiliser cette commande.",
         "usage": "Utilisation",
-        "verify": "Vérifie un utilisateur, une session et une collection de clés publiques",
+        "verify": "Vérifiez manuellement l'un de vos appareils",
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },

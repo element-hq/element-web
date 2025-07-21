@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LogoutDialog Prompts user to connect backup if there is a backup on the server 1`] = `
+exports[`LogoutDialog Prompts user to go to settings if there is a backup on the server 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -55,7 +55,7 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
             data-testid="dialog-primary-button"
             type="button"
           >
-            Connect this session to Key Backup
+            Go to Settings
           </button>
         </span>
       </div>
@@ -87,7 +87,7 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
 </div>
 `;
 
-exports[`LogoutDialog Prompts user to set up backup if there is no backup on the server 1`] = `
+exports[`LogoutDialog Prompts user to go to settings if there is no backup on the server 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -142,7 +142,7 @@ exports[`LogoutDialog Prompts user to set up backup if there is no backup on the
             data-testid="dialog-primary-button"
             type="button"
           >
-            Start using Key Backup
+            Go to Settings
           </button>
         </span>
       </div>

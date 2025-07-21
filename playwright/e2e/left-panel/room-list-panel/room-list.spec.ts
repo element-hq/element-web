@@ -49,8 +49,7 @@ test.describe("Room list", () => {
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
-            await page.mouse.wheel(0, 1000);
-            await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
+            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 
@@ -58,6 +57,12 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
+        });
+
+        test("should open the context menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomListView = getRoomList(page);
+            await roomListView.getByRole("gridcell", { name: "Open room room29" }).click({ button: "right" });
+            await expect(page.getByRole("menu", { name: "More Options" })).toBeVisible();
         });
 
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
@@ -109,10 +114,13 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
+            await expect(roomItem.getByTestId("notification-decoration")).not.toBeVisible();
+
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
+
             // Scroll to the end of the room list
-            await page.mouse.wheel(0, 1000);
+            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
 
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
@@ -133,8 +141,9 @@ test.describe("Room list", () => {
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
-            await page.mouse.wheel(0, 1000);
+            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
 
+            await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
             await roomListView.getByRole("gridcell", { name: "Open room room0" }).click();
 
             const filters = page.getByRole("listbox", { name: "Room list filters" });
@@ -223,17 +232,17 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
 
                 // Open the menu
-                await notificationButton.click();
+                await page.keyboard.press("Enter");
                 // Wait for the menu to be open
                 await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
                     "aria-selected",
                     "true",
                 );
 
-                // Close the menu
+                await page.keyboard.press("ArrowDown");
                 await page.keyboard.press("Escape");
-                // Focus should be back on the room list item
-                await expect(room29).toBeFocused();
+                // Focus should be back on the notification button
+                await expect(notificationButton).toBeFocused();
             });
         });
     });

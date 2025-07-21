@@ -229,13 +229,13 @@ test.describe("Room list filters and sort", () => {
             // only one room should be visible
             await expect(roomList.getByRole("gridcell", { name: "unread dm" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(4);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(4);
             await expect(primaryFilters).toMatchScreenshot("unread-primary-filters.png");
 
             await primaryFilters.getByRole("option", { name: "People" }).click();
             await expect(roomList.getByRole("gridcell", { name: "unread dm" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "invited room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(2);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(2);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
             await expect(roomList.getByRole("gridcell", { name: "unread room" })).toBeVisible();
@@ -243,21 +243,21 @@ test.describe("Room list filters and sort", () => {
             await expect(roomList.getByRole("gridcell", { name: "empty room" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "room with mention" })).toBeVisible();
             await expect(roomList.getByRole("gridcell", { name: "Low prio room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(5);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(5);
 
             await getFilterExpandButton(page).click();
 
             await primaryFilters.getByRole("option", { name: "Favourite" }).click();
             await expect(roomList.getByRole("gridcell", { name: "favourite room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(1);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(1);
 
             await primaryFilters.getByRole("option", { name: "Mentions" }).click();
             await expect(roomList.getByRole("gridcell", { name: "room with mention" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(1);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(1);
 
             await primaryFilters.getByRole("option", { name: "Invites" }).click();
             await expect(roomList.getByRole("gridcell", { name: "invited room" })).toBeVisible();
-            expect(await roomList.locator("role=gridcell").count()).toBe(1);
+            await expect.poll(() => roomList.locator("role=gridcell").count()).toBe(1);
 
             await getFilterCollapseButton(page).click();
             await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");

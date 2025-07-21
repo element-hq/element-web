@@ -197,8 +197,7 @@
             "megolm_export": "Flytja út dulritunarlykla handvirkt",
             "setup_key_backup_title": "Þú munt tapa dulrituðu skilaboðunum þínum",
             "setup_secure_backup_description_1": "Öryggi dulritaðra skilaboða er tryggt með enda-í-enda dulritun. Einungis þú og viðtakendurnir hafa dulritunarlyklana til að lesa slík skilaboð.",
-            "skip_key_backup": "Ég vil ekki dulrituðu skilaboðin mín",
-            "use_key_backup": "Byrja að nota öryggisafrit dulritunarlykla"
+            "skip_key_backup": "Ég vil ekki dulrituðu skilaboðin mín"
         },
         "misconfigured_body": "Biddu kerfisstjórann á %(brand)s að athuga hvort <a>uppsetningin þín</a> innihaldi rangar eða tvíteknar færslur.",
         "misconfigured_title": "%(brand)s-uppsetningin þín er rangt stillt",
@@ -703,7 +702,6 @@
             "title": "Endurheimtuaðferð fjarlægð"
         },
         "reset_all_button": "Gleymdirðu eða týndir öllum aðferðum til endurheimtu? <a>Endurstilla allt</a>",
-        "set_up_toast_description": "Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum",
         "set_up_toast_title": "Setja upp varið öryggisafrit",
         "setup_secure_backup": {
             "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki."
@@ -1858,10 +1856,6 @@
         "insert_trailing_colon_mentions": "Setja tvípunkt á eftir þar sem minnst er á notanda í upphafi skilaboða",
         "jump_to_bottom_on_send": "Hoppa neðst á tímalínuna þegar þú sendir skilaboð",
         "key_backup": {
-            "backup_in_progress": "Verið er að öryggisafrita dulritunarlyklana þína (öryggisafritun getur tekið dálítinn tíma í fyrsta skiptið).",
-            "backup_success": "Tókst!",
-            "cannot_create_backup": "Tókst ekki að gera öryggisafrit af dulritunarlykli",
-            "create_title": "Gera öryggisafrit af dulritunarlykli",
             "setup_secure_backup": {
                 "cancel_warning": "Ef þú hættir við núna, geturðu tapað dulrituðum skilaboðum og gögnum ef þú missir aðgang að innskráningum þínum.",
                 "confirm_security_phrase": "Staðfestu öryggisfrasann þinn",
@@ -1958,7 +1952,6 @@
             "ignore_users_empty": "Þú ert ekki með neina hunsaða notendur.",
             "ignore_users_section": "Hunsaðir notendur",
             "key_backup_algorithm": "Reiknirit:",
-            "key_backup_connect": "Tengja þessa setu við öryggisafrit af lykli",
             "message_search_disable_warning": "Ef þetta er óvirkt, munu skilaboð frá dulrituðum spjallrásum ekki birtast í leitarniðurstöðum.",
             "message_search_disabled": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum.",
             "message_search_enabled": {

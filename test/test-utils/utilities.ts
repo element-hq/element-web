@@ -188,35 +188,11 @@ export const waitEnoughCyclesForModal = async ({
 };
 
 /**
- * A horrible hack necessary to make sure modals don't leak and pollute tests.
- * `jest-matrix-react` automatic cleanup function does not pick up the async modal
- * rendering and the modals don't unmount when the component unmounts. We should strive
- * to fix this.
+ * Clears all modals that are currently open.
  */
 export const clearAllModals = async (): Promise<void> => {
     // Prevent modals from leaking and polluting other tests
-    let keepClosingModals = true;
-    while (keepClosingModals) {
-        keepClosingModals = await act(() => Modal.closeCurrentModal());
-
-        // Then wait for the screen to update (probably React rerender and async/await).
-        // Important for tests using Jest fake timers to not get into an infinite loop
-        // of removing the same modal because the promises don't flush otherwise.
-        //
-        // XXX: Maybe in the future with Jest 29.5.0+, we could use `runAllTimersAsync` instead.
-
-        // this is called in some places where timers are not faked
-        // which causes a lot of noise in the console
-        // to make a hack even hackier check if timers are faked using a weird trick from github
-        // then call the appropriate promise flusher
-        // https://github.com/facebook/jest/issues/10555#issuecomment-1136466942
-        const jestTimersFaked = setTimeout.name === "setTimeout";
-        if (jestTimersFaked) {
-            await flushPromisesWithFakeTimers();
-        } else {
-            await flushPromises();
-        }
-    }
+    act(() => Modal.forceCloseAllModals());
 };
 
 /** Install a stub object at `navigator.mediaDevices` */
