@@ -16,7 +16,7 @@ import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/set
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
