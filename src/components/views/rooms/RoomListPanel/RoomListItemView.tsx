@@ -94,7 +94,11 @@ export const RoomListItemView = memo(function RoomListItemView({
                         <div className="mx_RoomListItemView_roomName" title={vm.name}>
                             {vm.name}
                         </div>
-                        <div className="mx_RoomListItemView_messagePreview">{vm.messagePreview}</div>
+                        {vm.messagePreview && (
+                            <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
+                                {vm.messagePreview}
+                            </div>
+                        )}
                     </div>
                     {showHoverMenu ? (
                         <RoomListItemMenuView
