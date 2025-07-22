@@ -3,7 +3,7 @@
 exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
 <DocumentFragment>
   <header
-    class="mx_RoomHeader light-panel"
+    class="flex mx_RoomHeader light-panel"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <button

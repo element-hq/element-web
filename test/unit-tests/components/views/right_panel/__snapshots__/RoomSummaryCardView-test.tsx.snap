@@ -71,7 +71,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           title=""
         />
         <section
-          class="mx_RoomSummaryCard_badges"
+          class="flex mx_RoomSummaryCard_badges"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
@@ -110,7 +110,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </span>
         </section>
         <section
-          class="mx_RoomSummaryCard_topic"
+          class="flex mx_RoomSummaryCard_topic"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
@@ -831,7 +831,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           title=""
         />
         <section
-          class="mx_RoomSummaryCard_badges"
+          class="flex mx_RoomSummaryCard_badges"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
@@ -870,7 +870,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </span>
         </section>
         <section
-          class="mx_RoomSummaryCard_topic"
+          class="flex mx_RoomSummaryCard_topic"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
@@ -1553,7 +1553,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           title=""
         />
         <section
-          class="mx_RoomSummaryCard_badges"
+          class="flex mx_RoomSummaryCard_badges"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
@@ -1592,7 +1592,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </span>
         </section>
         <section
-          class="mx_RoomSummaryCard_topic"
+          class="flex mx_RoomSummaryCard_topic"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
