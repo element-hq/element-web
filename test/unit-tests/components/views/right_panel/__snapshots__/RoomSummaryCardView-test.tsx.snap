@@ -114,7 +114,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
+            class="mx_RoomSummaryCard_topic_container mx_RoomSummaryCard_topic_box box-flex"
             style="--mx-box-flex: 1;"
           >
             <p
@@ -152,7 +152,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             </button>
           </div>
           <div
-            class="mx_Box mx_RoomSummaryCard_topic_edit mx_Box--flex"
+            class="mx_RoomSummaryCard_topic_edit box-flex"
             style="--mx-box-flex: 1;"
           >
             <a
@@ -874,7 +874,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="mx_Box mx_Box--flex"
+            class="mx_RoomSummaryCard_topic_box box-flex"
             style="--mx-box-flex: 1;"
           >
             <a
@@ -1596,7 +1596,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
+            class="mx_RoomSummaryCard_topic_container mx_RoomSummaryCard_topic_box box-flex"
             style="--mx-box-flex: 1;"
           >
             <p
@@ -1634,7 +1634,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             </button>
           </div>
           <div
-            class="mx_Box mx_RoomSummaryCard_topic_edit mx_Box--flex"
+            class="mx_RoomSummaryCard_topic_edit box-flex"
             style="--mx-box-flex: 1;"
           >
             <a

@@ -28,7 +28,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         tabindex="0"
       >
         <div
-          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          class="mx_RoomHeader_info box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -247,7 +247,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         tabindex="0"
       >
         <div
-          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          class="mx_RoomHeader_info box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -552,7 +552,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         tabindex="0"
       >
         <div
-          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          class="mx_RoomHeader_info box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -934,7 +934,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         tabindex="0"
       >
         <div
-          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          class="mx_RoomHeader_info box-flex"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -1397,7 +1397,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_Box mx_RoomHeader_info mx_Box--flex"
+              class="mx_RoomHeader_info box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1609,7 +1609,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_Box mx_RoomHeader_info mx_Box--flex"
+              class="mx_RoomHeader_info box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1998,7 +1998,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_Box mx_RoomHeader_info mx_Box--flex"
+              class="mx_RoomHeader_info box-flex"
               style="--mx-box-flex: 1;"
             >
               <div
