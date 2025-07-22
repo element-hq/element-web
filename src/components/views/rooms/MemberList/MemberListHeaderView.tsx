@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Search, Text, Button, Tooltip, InlineSpinner } from "@vector-im/compound-web";
 import React from "react";
-import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
+import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Flex } from "../../../utils/Flex";
@@ -45,7 +45,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
             <OptionalTooltip canInvite={vm.canInvite}>
                 <Button
                     className="mx_MemberListHeaderView_invite_small"
-                    kind="primary"
+                    kind="secondary"
                     onClick={vm.onInviteButtonClick}
                     size="sm"
                     iconOnly={true}
