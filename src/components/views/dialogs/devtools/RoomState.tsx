@@ -157,7 +157,11 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
                         <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
                     ))}
             </FilteredList>
-            <LabelledToggleSwitch label={_t("devtools|hide_empty_content_events")} onChange={setHideEmptyState} value={hideEmptyState} />
+            <LabelledToggleSwitch
+                label={_t("devtools|hide_empty_content_events")}
+                onChange={setHideEmptyState}
+                value={hideEmptyState}
+            />
         </BaseTool>
     );
 };
