@@ -40,7 +40,11 @@ function spaceCreateOptions(serverName: string, spaceName: string, roomIds: stri
     };
 }
 
-function spaceChildInitialState(serverName: string, roomId: string, order?: string): ICreateRoomOpts["initial_state"]["0"] {
+function spaceChildInitialState(
+    serverName: string,
+    roomId: string,
+    order?: string,
+): ICreateRoomOpts["initial_state"]["0"] {
     return {
         type: "m.space.child",
         state_key: roomId,
@@ -260,7 +264,10 @@ test.describe("Spaces", () => {
         const spaceName = "Spacey Mc. Space Space";
         await app.client.createSpace({
             name: spaceName,
-            initial_state: [spaceChildInitialState(user.homeServer, roomId1), spaceChildInitialState(user.homeServer, roomId2)],
+            initial_state: [
+                spaceChildInitialState(user.homeServer, roomId1),
+                spaceChildInitialState(user.homeServer, roomId2),
+            ],
         });
 
         await app.viewSpaceHomeByName(spaceName);
