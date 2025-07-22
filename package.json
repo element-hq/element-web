@@ -116,7 +116,7 @@
         "emojibase-regex": "15.3.2",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
-        "filesize": "10.1.6",
+        "filesize": "11.0.2",
         "github-markdown-css": "^5.5.1",
         "glob-to-regexp": "^0.4.1",
         "highlight.js": "^11.3.1",
