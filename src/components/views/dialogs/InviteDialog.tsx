@@ -358,20 +358,23 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
+        const cli = MatrixClientPeg.safeGet();
+        const myUserId = cli.getSafeUserId();
 
-        const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
+        const excludedIds = new Set([myUserId]);
         if (isRoomInvite(props)) {
-            const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
-            const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
+            const room = cli.getRoom(props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
+            const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
             room.getMembersWithMembership(KnownMembership.Invite).forEach((m) => excludedIds.add(m.userId));
             room.getMembersWithMembership(KnownMembership.Join).forEach((m) => excludedIds.add(m.userId));
             // add banned users, so we don't try to invite them
             room.getMembersWithMembership(KnownMembership.Ban).forEach((m) => excludedIds.add(m.userId));
-            if (isFederated === false) {
+            const ourHomeserver = cli.getDomain();
+            if (isFederated === false && ourHomeserver) {
+                // If this room isn't federated, we must be on the same server.
                 // exclude users from external servers
-                const homeserver = props.roomId.split(":")[1];
-                this.excludeExternals(homeserver, excludedIds);
+                this.excludeExternals(ourHomeserver, excludedIds);
             }
         }
 
