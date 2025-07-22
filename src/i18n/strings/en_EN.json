@@ -819,7 +819,7 @@
         "failed_to_load": "Failed to load.",
         "failed_to_save": "Failed to save settings.",
         "failed_to_send": "Failed to send event!",
-        "hide_empty_content_events": "Hide events with empty content",
+        "show_empty_content_events": "Show events with empty content",
         "id": "ID: ",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",

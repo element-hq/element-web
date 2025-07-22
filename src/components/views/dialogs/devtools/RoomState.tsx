@@ -115,7 +115,7 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
     const [history, setHistory] = useState(false);
-    const [hideEmptyState, setHideEmptyState] = useState(false);
+    const [showEmptyState, setShowEmptyState] = useState(true);
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -152,15 +152,15 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
         <BaseTool onBack={onBack}>
             <FilteredList query={query} onChange={setQuery}>
                 {Array.from(events.entries())
-                    .filter(([_, ev]) => !hideEmptyState || Object.keys(ev.getContent()).length > 0)
+                    .filter(([_, ev]) => showEmptyState || Object.keys(ev.getContent()).length > 0)
                     .map(([stateKey, ev]) => (
                         <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
                     ))}
             </FilteredList>
             <LabelledToggleSwitch
-                label={_t("devtools|hide_empty_content_events")}
-                onChange={setHideEmptyState}
-                value={hideEmptyState}
+                label={_t("devtools|show_empty_content_events")}
+                onChange={setShowEmptyState}
+                value={showEmptyState}
             />
         </BaseTool>
     );
