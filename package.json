@@ -264,6 +264,7 @@
         "file-loader": "^6.0.0",
         "html-webpack-plugin": "^5.5.3",
         "husky": "^9.0.0",
+        "identity-obj-proxy": "^3.0.0",
         "jest": "^29.6.2",
         "jest-canvas-mock": "^2.5.2",
         "jest-environment-jsdom": "^29.7.0",
