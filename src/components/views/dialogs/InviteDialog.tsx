@@ -359,9 +359,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
         const cli = MatrixClientPeg.safeGet();
-        const myUserId = cli.getSafeUserId();
 
-        const excludedIds = new Set([myUserId]);
+        const excludedIds = new Set([cli.getSafeUserId()]);
         if (isRoomInvite(props)) {
             const room = cli.getRoom(props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
