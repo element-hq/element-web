@@ -863,6 +863,7 @@
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Settings explorer",
+        "show_empty_content_events": "Show events with empty content",
         "show_hidden_events": "Show hidden events in timeline",
         "spaces": {
             "one": "<space>",
