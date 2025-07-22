@@ -150,14 +150,11 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         return <div style={{ height: "32px" }} />;
     }
 
-    const scrollerRef = React.useCallback(
-        (element: HTMLElement | Window | null) => {
-            if (element) {
-                virtusoDomRef.current = element;
-            }
-        },
-        [keyDownCallback],
-    );
+    const scrollerRef = React.useCallback((element: HTMLElement | Window | null) => {
+        if (element) {
+            virtusoDomRef.current = element;
+        }
+    }, []);
 
     return (
         <BaseCard
@@ -183,6 +180,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     style={{ height: "100%" }}
                     context={{ focusedIndex }}
                     rangeChanged={setVisibleRange}
+                    overscan={15 * 56} 
                     data={vm.members}
                     onFocus={onFocus}
                     itemContent={(index, member, context) => getRowComponent(member, index, context.focusedIndex)}
