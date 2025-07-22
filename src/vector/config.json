@@ -1,0 +1,15 @@
+
+{
+    "default_server_config": {
+        "m.homeserver": {
+            "base_url": "https://ai.yal.chat",
+            "server_name": "yal.chat"
+        }
+    },
+    "brand": "Yal Chat",
+    "disable_custom_urls": true,
+    "disable_guests": true,
+    "jitsi": {
+        "preferred_domain": "jitsi2.yal.chat"
+    }
+}

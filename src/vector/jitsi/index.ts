@@ -385,8 +385,10 @@ function mapLanguage(language: string): string {
 // audio input it can find, while an input of null instructs it to start muted,
 // and a non-nullish input specifies the label of a specific device to use.
 // Same for video inputs.
+
 async function joinConference(audioInput?: string | null, videoInput?: string | null): Promise<void> {
     let jwt: string | undefined;
+
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
         const openIdToken = await widgetApi?.requestOpenIDConnectToken();
@@ -441,7 +443,8 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
             // https://github.com/jitsi/jitsi-meet/issues/11585
             apiLogLevels: ["warn", "error"],
         } as any,
-        jwt: jwt,
+        jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteV9qaXRzaV9hcHAiLCJpc3MiOiJteV9qaXRzaV9hcHAiLCJzdWIiOiJqaXRzaTIueWFsLmNoYXQiLCJyb29tIjoiKiIsImNvbnRleHQiOnsidXNlciI6eyJuYW1lIjoiU2Fuc2thciJ9fSwiZXhwIjoxNzUzMjA0ODAwfQ.t83ILMRrz8FqsZvtsGbXcAK_7FgcvPmRc8_r285LL1M",
+
         lang: mapLanguage(normalizeLanguage(language)),
     };
 
@@ -463,6 +466,12 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
         // settings button which would be the only way to get it back
         options.configOverwrite!.disableSelfViewSettings = true;
     }
+    console.log(" before");
+    console.log(
+        options,
+        options.jwt,
+        "dbajdbakdbajdbabdaddbajdbakdbajdbabdadddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdadbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdad",
+    );
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
 
@@ -484,6 +493,10 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
 }
 
 const onVideoConferenceJoined = (): void => {
+    console.log(
+        `after joinnnnnnnnnnnnnnnnnnnnn dbajdbakdbajdbabdaddbajdbakdbajdbabdadddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdadbajdbakdbajdbabdaddbajdbakdbajdbabdaddbajdbakdbajdbabdad`,
+    );
+
     // Although we set our displayName with the userInfo option above, that
     // option has a bug where it causes the name to be the HTML encoding of
     // what was actually intended. So, we use the displayName command to at
@@ -513,6 +526,10 @@ const onVideoConferenceLeft = (): void => {
 };
 
 const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorOccurred"]>[0]): void => {
+    console.log(
+        "erorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrrerorrrrrr",
+    );
+
     if (error.isFatal) {
         // We got disconnected. Since Jitsi Meet might send us back to the
         // prejoin screen, we're forced to act as if we hung up entirely.
