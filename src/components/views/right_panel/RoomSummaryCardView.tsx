@@ -46,9 +46,9 @@ import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import RoomName from "../elements/RoomName.tsx";
-import { Flex } from "../../utils/Flex.tsx";
+import { Flex } from "../../../shared-components/utils/Flex";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
-import { Box } from "../../utils/Box.tsx";
+import { Box } from "../../../shared-components/utils/Box";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
@@ -80,7 +80,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 gap="var(--cpd-space-2x)"
                 className="mx_RoomSummaryCard_topic"
             >
-                <Box flex="1">
+                <Box flex="1" className="mx_RoomSummaryCard_topic_box">
                     <Link kind="primary" onClick={vm.onEditClick}>
                         <Text size="sm" weight="regular">
                             {_t("right_panel|add_topic")}
@@ -103,7 +103,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                 mx_RoomSummaryCard_topic_collapsed: !vm.expanded,
             })}
         >
-            <Box flex="1" className="mx_RoomSummaryCard_topic_container">
+            <Box flex="1" className="mx_RoomSummaryCard_topic_container mx_RoomSummaryCard_topic_box">
                 <Text size="sm" weight="regular" onClick={vm.onTopicLinkClick}>
                     {content}
                 </Text>

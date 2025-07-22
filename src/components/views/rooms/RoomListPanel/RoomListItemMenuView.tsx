@@ -21,7 +21,7 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListItemMenuViewState,
     useRoomListItemMenuViewModel,

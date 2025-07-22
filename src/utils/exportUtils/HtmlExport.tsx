@@ -161,7 +161,7 @@ export default class HTMLExporter extends Exporter {
                     <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                         <div class="mx_MatrixChat">
                         <main class="mx_RoomView">
-                            <div class="mx_Flex mx_RoomHeader light-panel">
+                            <div class="mx_RoomHeader light-panel">
                                 ${roomAvatar}
                                 <div class="mx_RoomHeader_infoWrapper">
                                     <div

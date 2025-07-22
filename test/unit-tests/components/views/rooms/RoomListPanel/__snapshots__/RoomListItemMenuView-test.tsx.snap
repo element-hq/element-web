@@ -3,7 +3,7 @@
 exports[`<RoomListItemMenuView /> should render the more options menu 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListItemMenuView"
+    class="flex mx_RoomListItemMenuView"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <button
@@ -80,7 +80,7 @@ exports[`<RoomListItemMenuView /> should render the more options menu 1`] = `
 exports[`<RoomListItemMenuView /> should render the notification options menu 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListItemMenuView"
+    class="flex mx_RoomListItemMenuView"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <button

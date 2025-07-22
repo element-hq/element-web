@@ -131,11 +131,11 @@ a.mx_reply_anchor:hover {
 }
 
 .mx_RoomHeader {
-    --mx-flex-display: flex;
-    --mx-flex-direction: row;
-    --mx-flex-align: center;
-    --mx-flex-justify: start;
-    --mx-flex-gap: var(--cpd-space-3x);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: var(--cpd-space-3x);
 }
 
 .mx_ReplyChain_Export {
