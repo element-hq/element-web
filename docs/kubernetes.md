@@ -55,8 +55,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                     "https://scalar.vector.im/_matrix/integrations/v1",
                     "https://scalar.vector.im/api",
                     "https://scalar-staging.vector.im/_matrix/integrations/v1",
-                    "https://scalar-staging.vector.im/api",
-                    "https://scalar-staging.riot.im/scalar/api"
+                    "https://scalar-staging.vector.im/api"
             ],
             "bug_report_endpoint_url": "https://element.io/bugreports/submit",
             "defaultCountryCode": "GB",

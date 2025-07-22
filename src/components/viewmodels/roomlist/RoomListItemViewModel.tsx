@@ -31,6 +31,10 @@ export interface RoomListItemViewState {
      */
     name: string;
     /**
+     * Whether the context menu should be shown.
+     */
+    showContextMenu: boolean;
+    /**
      * Whether the hover menu should be shown.
      */
     showHoverMenu: boolean;
@@ -105,12 +109,12 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         setNotificationValues(getNotificationValues(notificationState));
     }, [notificationState]);
 
-    // We don't want to show the hover menu if
+    // We don't want to show the menus if
     // - there is an invitation for this room
-    // - the user doesn't have access to both notification and more options menus
+    // - the user doesn't have access to notification and more options menus
+    const showContextMenu = !invited && hasAccessToOptionsMenu(room);
     const showHoverMenu =
-        !invited &&
-        (hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
+        !invited && (showContextMenu || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
 
     const messagePreview = useRoomMessagePreview(room);
 
@@ -137,6 +141,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     return {
         name,
         notificationState,
+        showContextMenu,
         showHoverMenu,
         openRoom,
         a11yLabel,
@@ -220,7 +225,7 @@ function useRoomMessagePreview(room: Room): string | undefined {
             room,
             roomIsDM ? DefaultTagID.DM : DefaultTagID.Untagged,
         );
-        if (messagePreview) setPreviewText(messagePreview.text);
+        setPreviewText(messagePreview?.text);
     }, [room, shouldShowMessagePreview]);
 
     // MessagePreviewStore and the other AsyncStores need to be converted to TypedEventEmitter

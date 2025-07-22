@@ -64,7 +64,7 @@ export function NotificationDecoration({
         <Flex
             align="center"
             justify="center"
-            gap="var(--cpd-space-1-5x)"
+            gap="var(--cpd-space-1x)"
             {...props}
             data-testid="notification-decoration"
         >

@@ -212,8 +212,7 @@
             "setup_key_backup_title": "Perderás acceso a tus mensajes cifrados",
             "setup_secure_backup_description_1": "Los mensajes cifrados son seguros con el cifrado punto a punto. Solo tú y el/los destinatario/s tiene/n las claves para leer estos mensajes.",
             "setup_secure_backup_description_2": "Al cerrar sesión, estas claves serán eliminadas del dispositivo. Esto significa que no podrás leer mensajes cifrados salvo que tengas sus claves en otros dispositivos, o hayas hecho una copia de seguridad usando el servidor.",
-            "skip_key_backup": "No quiero mis mensajes cifrados",
-            "use_key_backup": "Comenzar a usar la copia de claves"
+            "skip_key_backup": "No quiero mis mensajes cifrados"
         },
         "misconfigured_body": "Solicita al administrador de %(brand)s que compruebe si hay entradas duplicadas o erróneas en <a>tu configuración</a>.",
         "misconfigured_title": "Tu %(brand)s tiene un error de configuración",
@@ -741,26 +740,13 @@
     "empty_room_was_name": "Sala vacía (antes era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Escribe tu frase de seguridad o <button>usa tu clave de seguridad</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Clave de seguridad inválida",
-                "recovery_key_is_correct": "¡Se ve bien!",
-                "wrong_file_type": "Tipo de archivo incorrecto",
                 "wrong_security_key": "Clave de seguridad incorrecta"
             },
-            "reset_title": "Restablecer todo",
-            "reset_warning_1": "Solo haz esto si no tienes ningún otro dispositivo con el que completar la verificación.",
-            "reset_warning_2": "Si restableces todo, volverás a empezar sin sesiones ni usuarios de confianza, y puede que no puedas ver mensajes anteriores.",
             "restoring": "Restaurando las claves desde copia de seguridad",
-            "security_key_title": "Clave de seguridad",
-            "security_phrase_incorrect_error": "No se ha podido acceder al almacenamiento seguro. Por favor, comprueba que la frase de seguridad es correcta.",
-            "security_phrase_title": "Frase de seguridad",
-            "separator": "%(securityKey)s o %(recoveryFile)s",
-            "use_security_key_prompt": "Usa tu llave de seguridad para continuar."
+            "security_key_title": "Clave de seguridad"
         },
         "bootstrap_title": "Configurando claves",
-        "cancel_entering_passphrase_description": "¿Estas seguro que quieres cancelar el ingresar tu contraseña de recuperación?",
-        "cancel_entering_passphrase_title": "¿Cancelar el ingresar tu contraseña de recuperación?",
         "confirm_encryption_setup_body": "Haz clic en el botón de abajo para confirmar la configuración del cifrado.",
         "confirm_encryption_setup_title": "Confirmar la configuración de cifrado",
         "cross_signing_room_normal": "Esta sala usa cifrado de extremo a extremo",
@@ -795,7 +781,6 @@
             "warning": "Si no eliminó el método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
         "reset_all_button": "¿Has olvidado o perdido todos los métodos de recuperación? <a>Restablecer todo</a>",
-        "set_up_toast_description": "Evita perder acceso a datos y mensajes cifrados",
         "set_up_toast_title": "Configurar copia de seguridad segura",
         "setup_secure_backup": {
             "explainer": "Haz copia de seguridad de tus claves antes de cerrar sesión para evitar perderlas."
@@ -813,7 +798,6 @@
             "accepting": "Aceptando…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
-                "reset_confirmation": "¿De verdad quieres restablecer las claves de verificación?",
                 "skip_verification": "Saltar la verificación por ahora",
                 "unable_to_verify": "No se ha podido verificar el dispositivo",
                 "verify_this_device": "Verificar este dispositivo"
@@ -883,7 +867,6 @@
             "verify_emoji_prompt": "Verifica comparando emoji únicos.",
             "verify_emoji_prompt_qr": "Si no puedes escanear el código de arriba, verifica comparando emoji únicos.",
             "verify_later": "La verificaré en otro momento",
-            "verify_reset_warning_1": "Una vez restableces las claves de verificación, no lo podrás deshacer. Después de restablecerlas, no podrás acceder a los mensajes cifrados antiguos, y cualquier persona que te haya verificado verá avisos de seguridad hasta que vuelvas a hacer la verificación con ella.",
             "verify_using_device": "Verificar con otro dispositivo",
             "verify_using_key": "Verificar con una clave de seguridad",
             "verify_using_key_or_phrase": "Verificar con una clave o frase de seguridad",
@@ -2153,10 +2136,6 @@
         "insert_trailing_colon_mentions": "Inserta automáticamente dos puntos después de las menciones que hagas al principio de los mensajes",
         "jump_to_bottom_on_send": "Saltar abajo del todo al enviar un mensaje",
         "key_backup": {
-            "backup_in_progress": "Se está realizando una copia de seguridad de sus claves (la primera copia de seguridad puede tardar unos minutos).",
-            "backup_success": "¡Éxito!",
-            "cannot_create_backup": "No se puede crear una copia de seguridad de la clave",
-            "create_title": "Crear copia de seguridad de claves",
             "setup_secure_backup": {
                 "cancel_warning": "Si cancela ahora, puede perder mensajes y datos cifrados si pierde el acceso a sus inicios de sesión.",
                 "confirm_security_phrase": "Confirma tu frase de seguridad",
@@ -2258,7 +2237,6 @@
             "ignore_users_empty": "No has ignorado a nadie.",
             "ignore_users_section": "Usuarios ignorados",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Conecta esta sesión a la copia de respaldo de tu clave",
             "message_search_disable_warning": "Si está desactivado, los mensajes de las salas cifradas no aparecerán en los resultados de búsqueda.",
             "message_search_disabled": "Almacenar localmente, de manera segura, a los mensajes cifrados localmente para que aparezcan en los resultados de búsqueda.",
             "message_search_enabled": {
@@ -2498,6 +2476,7 @@
         "upgraderoom": "Actualiza una sala a una nueva versión",
         "upgraderoom_permission_error": "No tienes los permisos requeridos para usar este comando.",
         "usage": "Uso",
+        "verify": "Verifica a un usuario, sesión y tupla de clave pública",
         "whois": "Muestra información sobre un usuario"
     },
     "space": {
@@ -2602,7 +2581,6 @@
         "heading_without_query": "Buscar",
         "join_button_text": "Unirte a %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> para desplazarte",
-        "message_search_section_title": "Otras búsquedas",
         "other_rooms_in_space": "Otras salas en %(spaceName)s",
         "public_rooms_label": "Salas públicas",
         "recent_searches_section_title": "Búsquedas recientes",
@@ -2611,7 +2589,6 @@
         "result_may_be_hidden_privacy_warning": "Algunos resultados pueden estar ocultos por motivos de privacidad",
         "result_may_be_hidden_warning": "Algunos resultados pueden estar ocultos",
         "search_dialog": "Ventana de búsqueda",
-        "search_messages_hint": "Para buscar contenido de mensajes, usa este icono en la parte de arriba de una sala: <icon/>",
         "spaces_title": "Tus espacios",
         "start_group_chat_button": "Crear conversación en grupo"
     },

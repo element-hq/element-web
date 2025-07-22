@@ -29,6 +29,7 @@ import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydra
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
+import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 
 /**
  * The possible states of the component.
@@ -131,6 +132,10 @@ export function ChangeRecoveryKey({
                                 });
                                 await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                             });
+
+                            // Record the fact that the user explicitly enabled recovery.
+                            await matrixClient.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: true });
+
                             onFinish();
                         } catch (e) {
                             logErrorAndShowErrorDialog("Failed to set up secret storage", e);

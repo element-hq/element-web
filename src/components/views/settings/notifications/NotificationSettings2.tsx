@@ -182,7 +182,7 @@ export default function NotificationSettings2(): JSX.Element {
                     description={_t("settings|notifications|play_sound_for_description")}
                 >
                     <LabelledCheckbox
-                        label="People"
+                        label={_t("common|people")}
                         value={settings.sound.people !== undefined}
                         disabled={disabled || settings.defaultLevels.dm === RoomNotifState.MentionsOnly}
                         onChange={(value) => {

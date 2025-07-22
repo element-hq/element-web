@@ -179,8 +179,7 @@
             "megolm_export": "ייצא ידנית מפתחות",
             "setup_key_backup_title": "תאבד את הגישה להודעות המוצפנות שלך",
             "setup_secure_backup_description_1": "הודעות מוצפנות מאובטחות באמצעות הצפנה מקצה לקצה. רק לך ולמקבל / ים יש / ה מקשים לקריאת הודעות אלה.",
-            "skip_key_backup": "אני לא רוצה את ההודעות המוצפנות שלי",
-            "use_key_backup": "התחל להשתמש בגיבוי מקשים"
+            "skip_key_backup": "אני לא רוצה את ההודעות המוצפנות שלי"
         },
         "misconfigured_body": "בקשו מהאדמין של %(brand)s לבדוק <a>קונפיגורציה</a> לרשומות כפולות שגויות.",
         "misconfigured_title": "ה %(brand)s שלך מוגדר באופן שגוי",
@@ -568,20 +567,12 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "מפתח אבטחה לא חוקי",
-                "recovery_key_is_correct": "נראה טוב!",
-                "wrong_file_type": "סוג קובץ שגוי",
                 "wrong_security_key": "מפתח אבטחה שגוי"
             },
             "restoring": "שחזור מפתחות מגיבוי",
-            "security_key_title": "מפתח אבטחה",
-            "security_phrase_incorrect_error": "אין אפשרות לגשת לאחסון הסודי. אנא אשר שהזנת את ביטוי האבטחה הנכון.",
-            "security_phrase_title": "ביטוי אבטחה",
-            "use_security_key_prompt": "השתמש במפתח האבטחה שלך כדי להמשיך."
+            "security_key_title": "מפתח אבטחה"
         },
         "bootstrap_title": "מגדיר מפתחות",
-        "cancel_entering_passphrase_description": "האם אתם בטוחים שהינכם רוצים לבטל?",
-        "cancel_entering_passphrase_title": "בטל הקלדת סיסמא?",
         "confirm_encryption_setup_body": "לחץ על הלחצן למטה כדי לאשר את הגדרת ההצפנה.",
         "confirm_encryption_setup_title": "אשר את הגדרת ההצפנה",
         "cross_signing_room_normal": "חדר זה מוצפן מקצה לקצה",
@@ -610,7 +601,6 @@
             "title": "שיטת השחזור הוסרה",
             "warning": "אם לא הסרת את שיטת השחזור, ייתכן שתוקף מנסה לגשת לחשבונך. שנה את סיסמת החשבון שלך והגדר מיד שיטת שחזור חדשה בהגדרות."
         },
-        "set_up_toast_description": "שמור מפני איבוד גישה אל הודעות ומידע מוצפן",
         "set_up_toast_title": "צור גיבוי מאובטח",
         "setup_secure_backup": {
             "explainer": "גבה את המפתחות שלך לפני היציאה כדי להימנע מלאבד אותם."
@@ -1627,10 +1617,6 @@
         "insert_trailing_colon_mentions": "הוסף נקודתיים לאחר אזכור המשתמש בתחילת ההודעה",
         "jump_to_bottom_on_send": "קפוץ לתחתית השיחה בעת שליחת הודעה",
         "key_backup": {
-            "backup_in_progress": "גיבוי המפתחות שלך (הגיבוי הראשון יכול לקחת מספר דקות).",
-            "backup_success": "הצלחה!",
-            "cannot_create_backup": "לא ניתן ליצור גיבוי מפתח",
-            "create_title": "צור מפתח גיבוי",
             "setup_secure_backup": {
                 "cancel_warning": "אם תבטל עכשיו, אתה עלול לאבד הודעות ונתונים מוצפנים אם תאבד את הגישה לכניסות שלך.",
                 "confirm_security_phrase": "אשר את ביטוי האבטחה שלך",
@@ -1720,7 +1706,6 @@
             "ignore_users_empty": "אין לך משתמשים שהתעלמו מהם.",
             "ignore_users_section": "משתמשים שהתעלמתם מהם",
             "key_backup_algorithm": "אלגוריתם:",
-            "key_backup_connect": "חבר את התחברות הזו לגיבוי מפתח",
             "message_search_disable_warning": "אם מושבת, הודעות מחדרים מוצפנים לא יופיעו בתוצאות החיפוש.",
             "message_search_disabled": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
             "message_search_enabled": {
@@ -1880,6 +1865,7 @@
         "upgraderoom": "משדרג את החדר לגרסא חדשה",
         "upgraderoom_permission_error": "אין לכם הרשאות להשתמש בפקודה זו.",
         "usage": "שימוש",
+        "verify": "מוודא משתמש, התחברות וצמד מפתח ציבורי",
         "whois": "מציג מידע אודות משתמש"
     },
     "space": {

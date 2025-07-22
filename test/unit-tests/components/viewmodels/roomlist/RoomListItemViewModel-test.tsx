@@ -73,6 +73,15 @@ describe("RoomListItemViewModel", () => {
         );
     });
 
+    it("should show context menu if user has access to options menu", async () => {
+        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
+        expect(vm.current.showContextMenu).toBe(true);
+    });
+
     it("should show hover menu if user has access to options menu", async () => {
         mocked(hasAccessToOptionsMenu).mockReturnValue(true);
         const { result: vm } = renderHook(
@@ -136,6 +145,28 @@ describe("RoomListItemViewModel", () => {
         rerender();
 
         expect(vm.current.messagePreview).toBe(undefined);
+    });
+
+    it("should check message preview when room change", async () => {
+        const otherRoom = mkStubRoom("roomId2", "roomName2", room.client);
+
+        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
+            text: "Message look like this",
+        } as MessagePreview);
+        mocked(useMessagePreviewToggle).mockReturnValue({
+            shouldShowMessagePreview: true,
+            toggleMessagePreview: jest.fn(),
+        });
+
+        const { result: vm, rerender } = renderHook((props) => useRoomListItemViewModel(props), {
+            initialProps: room,
+            ...withClientContextRenderOptions(room.client),
+        });
+        await waitFor(() => expect(vm.current.messagePreview).toBe("Message look like this"));
+
+        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue(null);
+        rerender(otherRoom);
+        await waitFor(() => expect(vm.current.messagePreview).toBe(undefined));
     });
 
     describe("notification", () => {

@@ -124,6 +124,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomName).raw,
+            );
+            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
@@ -498,9 +501,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (results.length >= limit) break;
             if (since !== undefined && ev.getId() === since) break;
 
-            if (ev.getType() !== eventType || ev.isState()) continue;
+            if (ev.getType() !== eventType) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (ev.getStateKey() !== undefined && stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
             results.push(ev);
         }
 

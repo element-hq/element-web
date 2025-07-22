@@ -18,7 +18,7 @@ exports[`<EncryptionUserSettingsTab /> should display a verify button when the e
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Device not verified 
+            Device not verified
           </h2>
           <div
             class="mx_SettingsSubheader"
@@ -100,7 +100,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Recovery 
+            Recovery
           </h2>
           <div
             class="mx_SettingsSubheader"
@@ -178,7 +178,8 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
       >
         <button
           aria-label="Back"
-          class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+          class="_icon-button_1pz9o_8"
+          data-kind="secondary"
           role="button"
           style="--cpd-icon-button-size: 28px;"
           tabindex="0"

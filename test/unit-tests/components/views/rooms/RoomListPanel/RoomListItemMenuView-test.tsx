@@ -28,6 +28,7 @@ describe("<RoomListItemMenuView />", () => {
         showMoreOptionsMenu: true,
         showNotificationMenu: true,
         isFavourite: true,
+        isLowPriority: true,
         canInvite: true,
         canMarkAsUnread: true,
         canMarkAsRead: true,
@@ -114,7 +115,7 @@ describe("<RoomListItemMenuView />", () => {
         expect(defaultValue.toggleFavorite).toHaveBeenCalled();
 
         await user.click(openMenu);
-        await user.click(screen.getByRole("menuitem", { name: "Low priority" }));
+        await user.click(screen.getByRole("menuitemcheckbox", { name: "Low priority" }));
         expect(defaultValue.toggleLowPriority).toHaveBeenCalled();
 
         await user.click(openMenu);

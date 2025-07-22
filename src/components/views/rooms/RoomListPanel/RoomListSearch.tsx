@@ -55,7 +55,7 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                 onClick={() => defaultDispatcher.fire(Action.OpenSpotlight)}
             >
                 <Flex as="span" justify="space-between">
-                    {_t("action|search")}
+                    <span className="mx_RoomListSearch_search_text">{_t("action|search")}</span>
                     <kbd>{IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}</kbd>
                 </Flex>
             </Button>

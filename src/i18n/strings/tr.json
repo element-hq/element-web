@@ -225,8 +225,7 @@
             "setup_key_backup_title": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
             "setup_secure_backup_description_1": "Şifreli mesajlar uçtan uca şifreleme ile korunur. Bu mesajları yalnızca siz ve alıcı(lar) okuyabilir.",
             "setup_secure_backup_description_2": "Oturumu kapattığınızda, bu anahtarlar bu cihazdan silinecek. Bu, diğer cihazlarınızda bu anahtarlara sahip olmadığınız veya anahtarları sunucuya yedeklemediğiniz sürece şifreli mesajları okuyamayacağınız anlamına gelir.",
-            "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum",
-            "use_key_backup": "Anahtar Yedekleme kullanmaya başla"
+            "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum"
         },
         "misconfigured_body": "%(brand)s yöneticinize <a>yapılandırmanızın</a> hatalı ve mükerrer girdilerini kontrol etmesi için talepte bulunun.",
         "misconfigured_title": "%(brand)s hatalı ayarlanmış",
@@ -883,26 +882,13 @@
     "empty_room_was_name": "Boş oda (%(oldName)s idi)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Devam etmek için Güvenlik İfadenizi girin veya <button>Güvenlik Anahtarınızı kullanın</button>.",
             "key_validation_text": {
-                "invalid_security_key": "Geçersiz Güvenlik Anahtarı",
-                "recovery_key_is_correct": "Güzel görünüyor!",
-                "wrong_file_type": "Yanlış dosya türü",
                 "wrong_security_key": "Yanlış Güvenlik Anahtarı"
             },
-            "reset_title": "Hepsini sıfırla",
-            "reset_warning_1": "Bunu yalnızca doğrulamayı tamamlamak için başka bir cihazınız yoksa yapın.",
-            "reset_warning_2": "Her şeyi sıfırlarsanız, güvenilen oturumlar ve güvenilen kullanıcılar olmadan yeniden başlarsınız ve geçmiş mesajları göremeyebilirsiniz.",
             "restoring": "Anahtarları yedekten geri yükle",
-            "security_key_title": "Güvenlik anahtarı",
-            "security_phrase_incorrect_error": "Gizli depolama alanına erişilemiyor. Lütfen doğru Güvenlik İfadesini girdiğinizi doğrulayın.",
-            "security_phrase_title": "Güvenlik İfadesi",
-            "separator": "%(securityKey)s veya %(recoveryFile)s",
-            "use_security_key_prompt": "Devam etmek için Güvenlik Anahtarınızı kullanın."
+            "security_key_title": "Güvenlik anahtarı"
         },
         "bootstrap_title": "Anahtarları ayarla",
-        "cancel_entering_passphrase_description": "Parola girmeyi iptal etmek istediğinizden emin misiniz?",
-        "cancel_entering_passphrase_title": "Parola girişini iptal et?",
         "confirm_encryption_setup_body": "Şifreleme kurulumunu onaylamak için aşağıdaki düğmeye tıklayın.",
         "confirm_encryption_setup_title": "Şifreleme kurulumunu onayla",
         "cross_signing_room_normal": "Bu oda uçtan uça şifreli",
@@ -947,9 +933,7 @@
         },
         "reset_all_button": "Tüm kurtarma yöntemlerini unuttunuz veya kaybettiniz mi? <a>Tümünü sıfırla</a>",
         "set_up_recovery": "Kurtarmayı ayarlayın",
-        "set_up_recovery_later": "Şimdi değil",
         "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
-        "set_up_toast_description": "Şifrelenmiş mesajlara ve verilere erişimi kaybetmemek için koruma sağlayın",
         "set_up_toast_title": "Güvenli Yedekleme kur",
         "setup_secure_backup": {
             "explainer": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle."
@@ -967,7 +951,6 @@
             "accepting": "Kabul ediyorum…",
             "after_new_login": {
                 "device_verified": "Cihaz doğrulandı",
-                "reset_confirmation": "Doğrulama anahtarlarını sıfırlamak istediğinizden emin misiniz?",
                 "skip_verification": "Şimdilik doğrulamayı atla",
                 "unable_to_verify": "Bu cihaz doğrulanamıyor",
                 "verify_this_device": "Bu cihazı doğrulayın"
@@ -1038,8 +1021,6 @@
             "verify_emoji_prompt": "Eşsiz emoji eşleştirme ile doğrulama.",
             "verify_emoji_prompt_qr": "Yukarıdaki kodu tarayamıyorsanız benzersiz emojiyi karşılaştırarak doğrulayın.",
             "verify_later": "Daha sonra doğrulayacağım",
-            "verify_reset_warning_1": "Doğrulama anahtarlarınızı sıfırlama işlemi geri alınamaz. Sıfırladıktan sonra eski şifrelenmiş mesajlara erişiminiz olmaz ve sizi daha önce doğrulamış olan arkadaşlarınız, siz onlarla yeniden doğrulayana kadar güvenlik uyarıları görür.",
-            "verify_reset_warning_2": "Lütfen yalnızca diğer tüm cihazlarınızı ve Güvenlik Anahtarınızı kaybettiğinizden eminseniz devam edin.",
             "verify_using_device": "Başka bir cihazla doğrula",
             "verify_using_key": "Güvenlik Anahtarı ile Doğrula",
             "verify_using_key_or_phrase": "Güvenlik Anahtarı veya İfadesiyle Doğrula",
@@ -2613,11 +2594,6 @@
         "insert_trailing_colon_mentions": "Mesajın başında kullanıcı etiketlerinden sonra iki nokta üst üste ekle",
         "jump_to_bottom_on_send": "Mesaj gönderdiğinizde zaman çizelgesinin en sonuna atla",
         "key_backup": {
-            "backup_in_progress": "Anahtarlarınız yedekleniyor (ilk yedekleme birkaç dakika sürebilir).",
-            "backup_starting": "Yedekleme başlatılıyor...",
-            "backup_success": "Başarılı!",
-            "cannot_create_backup": "Anahtar yedeklemesi oluşturulamıyor",
-            "create_title": "Anahtar yedeklemesi oluştur",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Anahtarlarınız artık bu cihazdan yedekleniyor.",
                 "backup_setup_success_title": "Güvenli Yedekleme başarılı",
@@ -2767,7 +2743,6 @@
             "ignore_users_empty": "Yok saydığınız kullanıcı yok.",
             "ignore_users_section": "Yoksayılan kullanıcılar",
             "key_backup_algorithm": "Algoritma:",
-            "key_backup_connect": "Anahtar Yedekleme için bu oturuma bağlanın",
             "message_search_disable_warning": "Devre dışı bırakılırsa, şifreli odalardaki mesajlar arama sonuçlarında görünmez.",
             "message_search_disabled": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
             "message_search_enabled": {
@@ -3044,6 +3019,7 @@
         "upgraderoom": "Bir odayı yeni bir versiyona yükseltir",
         "upgraderoom_permission_error": "Bu komutu kullanmak için gerekli izinlere sahip değilsin.",
         "usage": "Kullanım",
+        "verify": "Bir kullanıcı, oturum ve açık anahtar çiftini doğrular",
         "view": "Verilen adresli odayı görüntüle",
         "whois": "Bir kullanıcı hakkındaki bilgileri görüntüler"
     },
@@ -3151,7 +3127,6 @@
         "heading_without_query": "Ara",
         "join_button_text": "Katıl %(roomAddress)s",
         "keyboard_scroll_hint": "Kaydırmak için <arrows/> kullanın",
-        "message_search_section_title": "Diğer aramalar",
         "other_rooms_in_space": "%(spaceName)s alanındaki diğer odalar",
         "public_rooms_label": "Herkese açık odalar",
         "public_spaces_label": "Herkese açık alanlar",
@@ -3161,7 +3136,6 @@
         "result_may_be_hidden_privacy_warning": "Bazı sonuçlar gizlilik için gizlenmiş olabilir",
         "result_may_be_hidden_warning": "Bazı sonuçlar gizlenmiş olabilir",
         "search_dialog": "Arama İletişim Kutusu",
-        "search_messages_hint": "Mesajları aramak için odanın üst kısmında bu simgeye tıklayın <icon/>",
         "spaces_title": "Bulunduğunuz alanlar",
         "start_group_chat_button": "Grup sohbeti başlat"
     },
@@ -3210,9 +3184,7 @@
     "threads_activity_centre": {
         "header": "Mesaj dizileri etkinliği",
         "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok.",
-        "release_announcement_description": "Mesaj dizisi bildirimleri taşındı, bundan sonra burada bulabilirsiniz.",
-        "release_announcement_header": "Mesaj Dizileri Etkinlik Merkezi"
+        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
     },
     "time": {
         "about_day_ago": "yaklaşık bir gün önce",

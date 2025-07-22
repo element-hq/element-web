@@ -5,19 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defer, type IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type ElectronChannel } from "../../@types/global";
 
 interface IPCPayload {
     id?: number;
-    error?: string;
+    error?: string | { message: string };
     reply?: any;
 }
 
 export class IPCManager {
-    private pendingIpcCalls: { [ipcCallId: number]: IDeferred<any> } = {};
+    private pendingIpcCalls: { [ipcCallId: number]: PromiseWithResolvers<any> } = {};
     private nextIpcCallId = 0;
 
     public constructor(
@@ -33,7 +32,7 @@ export class IPCManager {
     public async call(name: string, ...args: any[]): Promise<any> {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
-        const deferred = defer<any>();
+        const deferred = Promise.withResolvers<any>();
         this.pendingIpcCalls[ipcCallId] = deferred;
         // Maybe add a timeout to these? Probably not necessary.
         window.electron!.send(this.sendChannel, { id: ipcCallId, name, args });
@@ -54,7 +53,12 @@ export class IPCManager {
         const callbacks = this.pendingIpcCalls[payload.id];
         delete this.pendingIpcCalls[payload.id];
         if (payload.error) {
-            callbacks.reject(payload.error);
+            // `seshat.ts` sends a JavaScript object with a `message` property. Turn it into a proper Error.
+            let error = payload.error;
+            if (typeof error === "object" && error.message) {
+                error = new Error(error.message);
+            }
+            callbacks.reject(error);
         } else {
             callbacks.resolve(payload.reply);
         }

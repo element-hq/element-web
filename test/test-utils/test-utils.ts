@@ -99,6 +99,7 @@ export function createTestClient(): MatrixClient {
         getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
         getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),
         credentials: { userId: "@userId:matrix.org" },
+        getAccessToken: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),
@@ -156,6 +157,7 @@ export function createTestClient(): MatrixClient {
             getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
             isSecretStorageReady: jest.fn().mockResolvedValue(false),
             deleteKeyBackupVersion: jest.fn(),
+            crossSignDevice: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -164,6 +166,7 @@ export function createTestClient(): MatrixClient {
         getVisibleRooms: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
         on: eventEmitter.on.bind(eventEmitter),
+        once: eventEmitter.once.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
         emit: eventEmitter.emit.bind(eventEmitter),

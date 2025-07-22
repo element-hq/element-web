@@ -6,7 +6,32 @@
  */
 
 .mx_RoomListPrimaryFilters {
-    margin: unset;
-    list-style-type: none;
-    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-3x);
+
+    .mx_RoomListPrimaryFilters_wrapping {
+        display: none;
+    }
+
+    ul {
+        margin: unset;
+        padding: unset;
+        list-style-type: none;
+        /**
+         * The InteractionObserver needs the height to be set to work properly.
+         */
+        height: 100%;
+        flex: 1;
+    }
+
+    .mx_RoomListPrimaryFilters_IconButton {
+        svg {
+            transition: transform 0.1s linear;
+        }
+    }
+
+    .mx_RoomListPrimaryFilters_IconButton[aria-expanded="true"] {
+        svg {
+            transform: rotate(180deg);
+        }
+    }
 }

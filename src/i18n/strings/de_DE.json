@@ -157,6 +157,7 @@
         "view_message": "Nachricht anzeigen",
         "view_source": "Rohdaten anzeigen",
         "yes": "Ja",
+        "yes_dismiss": "Ja, verwerfen",
         "zoom_in": "Vergrößern",
         "zoom_out": "Verkleinern"
     },
@@ -239,8 +240,7 @@
             "setup_key_backup_title": "Du wirst den Zugang zu deinen verschlüsselten Nachrichten verlieren",
             "setup_secure_backup_description_1": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
             "setup_secure_backup_description_2": "Wenn du dich abmeldest, werden die Schlüssel auf diesem Gerät gelöscht. Das bedeutet, dass du keine verschlüsselten Nachrichten mehr lesen kannst, wenn du die Schlüssel nicht auf einem anderen Gerät oder eine Sicherung auf dem Server hast.",
-            "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht",
-            "use_key_backup": "Beginne Schlüsselsicherung zu nutzen"
+            "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht"
         },
         "misconfigured_body": "Wende dich an deinen %(brand)s-Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
         "misconfigured_title": "Dein %(brand)s ist falsch konfiguriert",
@@ -386,6 +386,7 @@
             "fallback_button": "Authentifizierung beginnen",
             "mas_cross_signing_reset_cta": "Gehen Sie zu Ihren Konto",
             "mas_cross_signing_reset_description": "Setzen Sie Ihre Identität über Ihren Kontoanbieter zurück. Kommen Sie dann zurück und klicken Sie auf „Wiederholen“.",
+            "mas_cross_signing_reset_title": "Gehen sie zu ihrem Konto, um ihre Identität zurückzusetzen",
             "msisdn": "Eine Textnachricht wurde an %(msisdn)s gesendet",
             "msisdn_token_incorrect": "Token fehlerhaft",
             "msisdn_token_prompt": "Bitte gib den darin enthaltenen Code ein:",
@@ -782,7 +783,7 @@
             "cross_signing_public_keys_on_device_status": "Überkreuzsignierung öffentlicher Schlüssel:",
             "cross_signing_ready": "Kreuzsignatur ist einsatzbereit.",
             "cross_signing_status": "Status der Kreuzsignatur",
-            "cross_signing_untrusted": "Ihr Konto verfügt über eine Cross-Signing-Identität im geheimen Speicher, diese wird von dieser Sitzung jedoch noch nicht als vertrauenswürdig eingestuft.",
+            "cross_signing_untrusted": "Ihr Konto hat eine Cross-Signing-Identität im sicheren Speicher, der von dieser Sitzung jedoch noch nicht als vertrauenswürdig eingestuft wird.",
             "crypto_not_available": "Das kryptografische Modul ist nicht verfügbar",
             "key_backup_active_version": "Aktive Backup Version:",
             "key_backup_active_version_none": "Keine",
@@ -909,26 +910,15 @@
     "empty_room_was_name": "Leerer Raum (war %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Um fortzufahren, geben Sie Ihre Sicherheitsphrase ein oder <button> verwenden Sie Ihren Wiederherstellungsschlüssel</button>, um fortzufahren.",
+            "alternatives": "Wenn Sie einen Sicherheitsschlüssel oder eine Sicherheitsphrase haben, funktioniert das auch.",
             "key_validation_text": {
-                "invalid_security_key": "Ungültiger Wiederherstellungsschlüssel",
-                "recovery_key_is_correct": "Sieht gut aus!",
-                "wrong_file_type": "Falscher Dateityp",
-                "wrong_security_key": "Falscher Wiederherstellungsschlüssel"
+                "wrong_security_key": "Der eingegebene Wiederherstellungsschlüssel ist nicht korrekt."
             },
-            "reset_title": "Alles zurücksetzen",
-            "reset_warning_1": "Verwende es nur, wenn du kein Gerät, mit dem du dich verifizieren kannst, bei dir hast.",
-            "reset_warning_2": "Wenn du alles zurücksetzt, beginnst du ohne verifizierte Sitzungen und Benutzende von Neuem und siehst eventuell keine alten Nachrichten.",
+            "privacy_warning": "Stellen Sie sicher, dass niemand diesen Bildschirm sehen kann!",
             "restoring": "Schlüssel aus der Sicherung wiederherstellen",
-            "security_key_title": "Wiederherstellungsschlüssel",
-            "security_phrase_incorrect_error": "Zugriff auf sicheren Speicher nicht möglich. Bitte überprüfe, ob du die richtige Sicherheitsphrase eingegeben hast.",
-            "security_phrase_title": "Sicherheitsphrase",
-            "separator": "%(securityKey)s oder %(recoveryFile)s",
-            "use_security_key_prompt": "Verwenden Sie Ihren Wiederherstellungsschlüssel, um fortzufahren."
+            "security_key_title": "Wiederherstellungsschlüssel"
         },
         "bootstrap_title": "Schlüssel werden eingerichtet",
-        "cancel_entering_passphrase_description": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest?",
-        "cancel_entering_passphrase_title": "Eingabe der Passphrase abbrechen?",
         "confirm_encryption_setup_body": "Klick die Schaltfläche unten um die Einstellungen der Verschlüsselung zu bestätigen.",
         "confirm_encryption_setup_title": "Bestätige die Einrichtung der Verschlüsselung",
         "cross_signing_room_normal": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
@@ -973,13 +963,13 @@
         },
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
         "set_up_recovery": "Wiederherstellung einrichten",
-        "set_up_recovery_later": "Nicht jetzt",
         "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
-        "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
             "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
         },
+        "turn_on_key_storage": "Schlüsselspeicher einschalten",
+        "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
         "udd": {
             "interactive_verification_button": "Interaktiv per Emoji verifizieren",
             "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
@@ -993,7 +983,6 @@
             "accepting": "Annehmen…",
             "after_new_login": {
                 "device_verified": "Gerät verifiziert",
-                "reset_confirmation": "Willst du deine Verifizierungsschlüssel wirklich zurücksetzen?",
                 "skip_verification": "Verifizierung vorläufig überspringen",
                 "unable_to_verify": "Gerät konnte nicht verifiziert werden",
                 "verify_this_device": "Dieses Gerät verifizieren"
@@ -1064,8 +1053,6 @@
             "verify_emoji_prompt": "Durch den Vergleich einzigartiger Emojis verifizieren.",
             "verify_emoji_prompt_qr": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
             "verify_later": "Später verifizieren",
-            "verify_reset_warning_1": "Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können und Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.",
-            "verify_reset_warning_2": "Bitte fahren Sie nur fort, wenn Sie sicher sind, dass Sie Ihren Zugang zu allen anderen Geräte und Ihren Wiederherstellungsschlüssel verloren haben.",
             "verify_using_device": "Mit anderem Gerät verifizieren",
             "verify_using_key": "Mit Wiederherstellungsschlüssel verifizieren",
             "verify_using_key_or_phrase": "Mit Wiederherstellungsschlüssel oder Wiederherstellungsphrase verifizieren",
@@ -1974,7 +1961,7 @@
             },
             "room_is_public": "Dieser Raum ist öffentlich"
         },
-        "header_avatar_open_settings_label": "Chatroomeinstellungen öffnen",
+        "header_avatar_open_settings_label": "Raumeinstellungen öffnen",
         "header_face_pile_tooltip": "Personen",
         "header_untrusted_label": "Nicht vertrauenswürdig",
         "inaccessible": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
@@ -2109,11 +2096,14 @@
             "no_chats_description_no_room_rights": "Beginnen Sie damit, jemandem eine Nachricht zu senden",
             "no_favourites": "Sie haben noch keinen Lieblingschat",
             "no_favourites_description": "Sie können einen Chat in den Chat-Einstellungen zu Ihren Favoriten hinzufügen",
+            "no_invites": "Sie haben keine ungelesenen Einladungen",
+            "no_mentions": "Sie haben keine ungelesenen Erwähnungen",
             "no_people": "Sie haben noch keine direkten Chats",
             "no_people_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
             "no_rooms": "Sie sind noch in keinem Raum",
             "no_rooms_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
             "no_unread": "Glückwunsch! Sie haben keine ungelesenen Nachrichten",
+            "show_activity": "Alle Aktivitäten ansehen",
             "show_chats": "Alle Chats anzeigen"
         },
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
@@ -2121,6 +2111,8 @@
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
         "filters": {
             "favourite": "Favoriten",
+            "invites": "Einladungen",
+            "mentions": "Erwähnungen",
             "people": "Personen",
             "rooms": "Räume",
             "unread": "Ungelesene"
@@ -2151,15 +2143,21 @@
             "more_options": "Weitere Optionen",
             "open_room": "Raum öffnen %(roomName)s"
         },
+        "room_options": "Chatroomoptionen",
         "show_less": "Weniger anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
+        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
+        "sort_type": {
+            "activity": "Aktivität",
+            "atoz": "A–Z"
+        },
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
         "space_menu": {
             "home": "Space-Übersicht",
@@ -2447,6 +2445,10 @@
         "recent_changes_heading": "Letzte Änderungen, die noch nicht eingegangen sind",
         "title": "Server reagiert nicht"
     },
+    "service_worker_error": {
+        "description": "%(brand)s benötigt einen Service Worker zum Laden authentifizierter Medien aus Matrix-Inhaltsrepositorys. Dies wird von Ihrem Browser nicht unterstützt, sodass Medien möglicherweise nicht geladen werden können.",
+        "title": "Service Worker konnte nicht geladen werden"
+    },
     "seshat": {
         "error_initialising": "Initialisierung der Suche fehlgeschlagen, für weitere Informationen öffne <a>deine Einstellungen</a>",
         "reset_button": "Ereignisspeicher zurück setzen",
@@ -2540,6 +2542,8 @@
                 "session_key": "Sitzungsschlüssel:",
                 "title": "Advanced"
             },
+            "confirm_key_storage_off": "Soll die Speicherung der Schlüssel wirklich deaktiviert sein?",
+            "confirm_key_storage_off_description": "Wenn Sie sich von all Ihren Geräten abmelden, verlieren Sie Ihren Nachrichtenverlauf und müssen alle Ihre vorhandenen Kontakte erneut überprüfen. <a>Erfahre mehr </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Schlüsselspeicher löschen",
                 "confirm": "Schlüsselspeicher löschen",
@@ -2625,6 +2629,7 @@
             "discovery_needs_terms_title": "Lassen Sie sich von anderen finden",
             "display_name": "Anzeigename",
             "display_name_error": "Anzeigename konnte nicht gesetzt werden",
+            "email_adding_unsupported_by_hs": "Dieser Homeserver unterstützt das Hinzufügen von E-Mail-Adressen zu Ihrem Konto nicht.",
             "email_address_in_use": "Diese E-Mail-Adresse wird bereits verwendet",
             "email_address_label": "E-Mail-Adresse",
             "email_not_verified": "Deine E-Mail-Adresse wurde noch nicht verifiziert",
@@ -2649,7 +2654,9 @@
             "error_share_msisdn_discovery": "Teilen der Telefonnummer nicht möglich",
             "identity_server_no_token": "Kein Identitäts-Zugangs-Token gefunden",
             "identity_server_not_set": "Kein Identitäts-Server festgelegt",
+            "invalid_phone_number": "Die angegebene Telefonnummer scheint nicht gültig zu sein.",
             "language_section": "Sprache",
+            "msisdn_adding_unsupported_by_hs": "Dieser Homeserver unterstützt das Hinzufügen von Telefonnummern zu Ihrem Konto nicht.",
             "msisdn_in_use": "Diese Telefonnummer wird bereits verwendet",
             "msisdn_label": "Telefonnummer",
             "msisdn_verification_field_label": "Bestätigungscode",
@@ -2674,11 +2681,6 @@
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
-            "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",
-            "backup_starting": "Beginne Sicherung …",
-            "backup_success": "Erfolgreich!",
-            "cannot_create_backup": "Konnte Schlüsselsicherung nicht erstellen",
-            "create_title": "Schlüsselsicherung erstellen",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Deine Schlüssel werden nun von dieser Sitzung gesichert.",
                 "backup_setup_success_title": "Verschlüsselte Sicherung erfolgreich",
@@ -2836,7 +2838,6 @@
             "ignore_users_empty": "Sie haben keinen Benutzer blockiert.",
             "ignore_users_section": "Blockierte Benutzer",
             "key_backup_algorithm": "Algorithmus:",
-            "key_backup_connect": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
             "message_search_enabled": {
@@ -3113,6 +3114,7 @@
         "upgraderoom": "Aktualisiert den Raum auf eine neue Version",
         "upgraderoom_permission_error": "Du hast nicht die erforderlichen Berechtigungen, diesen Befehl zu verwenden.",
         "usage": "Verwendung",
+        "verify": "Verifiziert Benutzer, Sitzung und öffentlichen Schlüsselpaare",
         "view": "Raum mit angegebener Adresse betrachten",
         "whois": "Zeigt Informationen über Benutzer"
     },
@@ -3221,7 +3223,7 @@
         "heading_without_query": "Suche nach",
         "join_button_text": "%(roomAddress)s betreten",
         "keyboard_scroll_hint": "Benutze <arrows/> zum Scrollen",
-        "message_search_section_title": "Andere Suchen",
+        "messages_label": "Nachrichten",
         "other_rooms_in_space": "Andere Räume in %(spaceName)s",
         "public_rooms_label": "Öffentliche Räume",
         "public_spaces_label": "Öffentliche Spaces",
@@ -3231,7 +3233,6 @@
         "result_may_be_hidden_privacy_warning": "Einige Vorschläge könnten aus Gründen der Privatsphäre ausgeblendet sein",
         "result_may_be_hidden_warning": "Einige Ergebnisse können ausgeblendet sein",
         "search_dialog": "Suchdialog",
-        "search_messages_hint": "Wenn du Nachrichten durchsuchen willst, klicke auf das <icon/> Icon oberhalb des Raumes",
         "spaces_title": "Spaces, in denen du Mitglied bist",
         "start_group_chat_button": "Gruppenunterhaltung beginnen"
     },
@@ -3280,9 +3281,7 @@
     "threads_activity_centre": {
         "header": "Thread-Aktivität",
         "no_rooms_with_threads_notifs": "Sie haben noch keine Chatrooms mit Thread-Benachrichtigungen.",
-        "no_rooms_with_unread_threads": "Sie haben noch keine Chatrooms mit ungelesenen Threads.",
-        "release_announcement_description": "Die Thread-Benachrichtigungen wurden verschoben. Sie finden sie ab sofort hier.",
-        "release_announcement_header": "Thread Aktivitätszentrum"
+        "no_rooms_with_unread_threads": "Sie haben noch keine Chatrooms mit ungelesenen Threads."
     },
     "time": {
         "about_day_ago": "vor etwa einem Tag",
@@ -3793,10 +3792,11 @@
         "unavailable": "Nicht verfügbar"
     },
     "update_room_access_modal": {
-        "description": "Um einen Link zum Teilen zu erstellen, müssen Sie Gästen erlauben, diesem Chatroom beizutreten. Dadurch kann der Chatroom weniger sicher werden. Wenn Sie mit dem Anruf fertig sind, können Sie den Raum wieder privat machen.",
-        "dont_change_description": "Sie können den Anruf auch in einem separaten Chatroom führen.",
+        "description": "Um einen Link zum Teilen zu erstellen, mache diesen Chatroom <b> öffentlich </b> oder erlaube <b>Beitrittsanfragen</b>. Auf diese Weise können Gäste beitreten, ohne eingeladen zu werden.",
+        "dont_change_description": "Andernfalls, wenn Sie den Zugang dieses Raumes nicht anpassen möchten, können sie einen neuen Raum für den Anruflink erstellen.",
         "no_change": "Ich möchte die Zugriffsebene nicht ändern.",
-        "title": "Ändern Sie die Zugriffsebene des Chatrooms."
+        "revert_access_description": "(Dies kann in den Raumeinstellungen auf den vorherigen Wert zurückgesetzt werden: <b> Sicherheit & Datenschutz</b>/<b>Zutritt</b>)",
+        "title": "Gastbenutzern erlauben, diesem Raum beizutreten"
     },
     "upload_failed_generic": "Die Datei „%(fileName)s“ konnte nicht hochgeladen werden.",
     "upload_failed_size": "Die Datei „%(fileName)s“ überschreitet das Hochladelimit deines Heim-Servers",

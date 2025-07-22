@@ -35,7 +35,6 @@ interface RoomListItemMenuViewProps {
     room: Room;
     /**
      * Set the menu open state.
-     * @param isOpen
      */
     setMenuOpen: (isOpen: boolean) => void;
 }
@@ -47,7 +46,7 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-0-5x)">
+        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
             {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>
@@ -84,6 +83,21 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
             align="start"
             trigger={<MoreOptionsButton size="24px" />}
         >
+            <MoreOptionContent vm={vm} />
+        </Menu>
+    );
+}
+
+interface MoreOptionContentProps {
+    /**
+     * The view model state for the menu.
+     */
+    vm: RoomListItemMenuViewState;
+}
+
+export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
+    return (
+        <>
             {vm.canMarkAsRead && (
                 <MenuItem
                     Icon={MarkAsReadIcon}
@@ -109,12 +123,12 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 onSelect={vm.toggleFavorite}
                 onClick={(evt) => evt.stopPropagation()}
             />
-            <MenuItem
+            <ToggleMenuItem
+                checked={vm.isLowPriority}
                 Icon={ArrowDownIcon}
                 label={_t("room_list|more_options|low_priority")}
                 onSelect={vm.toggleLowPriority}
                 onClick={(evt) => evt.stopPropagation()}
-                hideChevron={true}
             />
             {vm.canInvite && (
                 <MenuItem
@@ -143,7 +157,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 onClick={(evt) => evt.stopPropagation()}
                 hideChevron={true}
             />
-        </Menu>
+        </>
     );
 }
 
@@ -154,7 +168,7 @@ interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the more options menu.
  */
-export const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
+const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
     return (
         <Tooltip label={_t("room_list|room|more_options")}>
             <IconButton aria-label={_t("room_list|room|more_options")} {...props}>
@@ -244,7 +258,7 @@ interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
 /**
  * A button to trigger the notification menu.
  */
-export const NotificationButton = function MoreOptionsButton({
+const NotificationButton = function MoreOptionsButton({
     isRoomMuted,
     ref,
     ...props

@@ -171,7 +171,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
         } catch {
             try {
                 // If that fails we'll hit any endpoint and look at the server response header
-                const res = await window.fetch(client.http.getUrl("/login"), {
+                const res = await fetch(client.http.getUrl("/login"), {
                     method: "GET",
                     mode: "cors",
                 });
@@ -257,7 +257,7 @@ export function collectSettings(body: FormData): void {
         body.append("lowBandwidth", "enabled");
     }
 
-    body.append("mx_local_settings", localStorage.getItem("mx_local_settings")!);
+    body.append("mx_local_settings", SettingsStore.exportForRageshake());
 }
 
 /**

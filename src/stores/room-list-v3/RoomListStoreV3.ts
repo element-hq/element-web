@@ -34,6 +34,7 @@ import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
+import { Action } from "../../dispatcher/actions";
 
 /**
  * These are the filters passed to the room skip list.
@@ -245,6 +246,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 this.addRoomAndEmit(payload.room, true);
                 break;
             }
+
+            case Action.AfterForgetRoom: {
+                const room = payload.room;
+                this.roomSkipList.removeRoom(room);
+                this.emit(LISTS_UPDATE_EVENT);
+                break;
+            }
         }
     }
 
@@ -313,8 +321,17 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private addRoomAndEmit(room: Room, isNewRoom = false): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
-        if (isNewRoom) this.roomSkipList.addNewRoom(room);
-        else this.roomSkipList.reInsertRoom(room);
+        if (isNewRoom) {
+            if (!VisibilityProvider.instance.isRoomVisible(room)) {
+                logger.info(
+                    `RoomListStoreV3: Refusing to add new room ${room.roomId} because isRoomVisible returned false.`,
+                );
+                return;
+            }
+            this.roomSkipList.addNewRoom(room);
+        } else {
+            this.roomSkipList.reInsertRoom(room);
+        }
         this.emit(LISTS_UPDATE_EVENT);
     }
 

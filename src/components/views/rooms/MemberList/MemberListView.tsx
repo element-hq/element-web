@@ -170,7 +170,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             onKeyDown={keyDownCallback}
         >
             <Flex align="stretch" direction="column" className="mx_MemberListView_container">
-                <Form.Root>
+                <Form.Root onSubmit={(e) => e.preventDefault()}>
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
                 <Virtuoso

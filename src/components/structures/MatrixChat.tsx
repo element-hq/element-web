@@ -13,20 +13,21 @@ import {
     EventType,
     HttpApiEvent,
     type MatrixClient,
-    type MatrixEvent,
+    MatrixEvent,
+    MsgType,
     type RoomType,
     SyncState,
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
-
 // what-input helps improve keyboard accessibility
 import "what-input";
+import sanitizeHtml from "sanitize-html";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -50,6 +51,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -94,7 +96,6 @@ import VerificationRequestToast from "../views/toasts/VerificationRequestToast";
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
-import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
@@ -107,6 +108,7 @@ import Views from "../../Views";
 import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForgetRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
@@ -123,7 +125,7 @@ import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSet
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
-import { Linkify } from "../../HtmlUtils";
+import { getHtmlText, Linkify } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
@@ -135,6 +137,10 @@ import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 import { setTheme } from "../../theme";
+import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
+import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
+import Markdown from "../../Markdown";
+import { sanitizeHtmlParams } from "../../Linkify";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -215,7 +221,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private firstSyncComplete = false;
-    private firstSyncPromise: IDeferred<void>;
+    private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
@@ -254,7 +260,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -779,6 +785,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Action.ViewHomePage:
                 this.viewHome(payload.justRegistered);
                 break;
+            case Action.Share:
+                this.viewShare(payload.format, payload.msg);
+                break;
             case Action.ViewStartChatOrReuse:
                 this.chatCreateOrReuse(payload.user_id);
                 break;
@@ -1114,6 +1123,58 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
+    private viewShare(format: ShareFormat, msg: string): void {
+        // Wait for the first sync so we can present possible rooms to share into
+        this.firstSyncPromise.promise.then(() => {
+            this.notifyNewScreen("share");
+            let rawEvent;
+            switch (format) {
+                case ShareFormat.Html: {
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: getHtmlText(msg),
+                            format: "org.matrix.custom.html",
+                            formatted_body: sanitizeHtml(msg, sanitizeHtmlParams),
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+                    break;
+                }
+                case ShareFormat.Markdown: {
+                    const html = new Markdown(msg).toHTML({ externalLinks: true });
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: msg,
+                            format: "org.matrix.custom.html",
+                            formatted_body: html,
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+                    break;
+                }
+                default:
+                    rawEvent = {
+                        type: "m.room.message",
+                        content: {
+                            msgtype: MsgType.Text,
+                            body: msg,
+                        },
+                        origin_server_ts: Date.now(),
+                    };
+            }
+            const event = new MatrixEvent(rawEvent);
+            dis.dispatch<OpenForwardDialogPayload>({
+                action: Action.OpenForwardDialog,
+                event: event,
+                permalinkCreator: null,
+            });
+        });
+    }
+
     private async createRoom(defaultPublic = false, defaultName?: string, type?: RoomType): Promise<void> {
         const modal = Modal.createDialog(CreateRoomDialog, {
             type,
@@ -1269,10 +1330,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({ action: Action.ViewHomePage });
                 }
 
-                // We have to manually update the room list because the forgotten room will not
-                // be notified to us, therefore the room list will have no other way of knowing
-                // the room is forgotten.
-                if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                if (room) {
+                    // Legacy room list store needs to be told to manually remove this room
+                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    // New room list store will remove the room on the following dispatch
+                    dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
+                }
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("error|unknown_error_code");
@@ -1471,11 +1534,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // since we're about to start the client and therefore about to do the first sync
         // We resolve the existing promise with the new one to update any existing listeners
         if (!this.firstSyncComplete) {
-            const firstSyncPromise = defer<void>();
+            const firstSyncPromise = Promise.withResolvers<void>();
             this.firstSyncPromise.resolve(firstSyncPromise.promise);
             this.firstSyncPromise = firstSyncPromise;
         } else {
-            this.firstSyncPromise = defer();
+            this.firstSyncPromise = Promise.withResolvers();
         }
         this.firstSyncComplete = false;
         const cli = MatrixClientPeg.safeGet();
@@ -1739,6 +1802,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({
                 action: Action.CreateChat,
             });
+        } else if (screen === "share") {
+            if (params && params["msg"] !== undefined) {
+                dis.dispatch<SharePayload>({
+                    action: Action.Share,
+                    msg: params["msg"],
+                    format: params["format"],
+                });
+            }
+            // if we weren't already coming at this from an existing screen
+            // and we're logged in, then explicitly default to home.
+            // if we're not logged in, then the login flow will do the right thing.
+            if (!this.state.currentRoomId && !this.state.currentUserId) {
+                this.viewHome();
+            }
         } else if (screen === "settings") {
             dis.fire(Action.ViewUserSettings);
         } else if (screen === "welcome") {

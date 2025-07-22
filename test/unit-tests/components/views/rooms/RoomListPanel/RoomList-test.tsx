@@ -10,12 +10,10 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
 import { fireEvent } from "@testing-library/dom";
 
-import { mkRoom, stubClient } from "../../../../../test-utils";
+import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { Landmark, LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 
 describe("<RoomList />", () => {
@@ -34,12 +32,6 @@ describe("<RoomList />", () => {
             isLoadingRooms: false,
             rooms,
             primaryFilters: [],
-            activateSecondaryFilter: () => {},
-            activeSecondaryFilter: SecondaryFilters.AllActivity,
-            sort: jest.fn(),
-            activeSortOption: SortOption.Activity,
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
             canCreateRoom: true,
@@ -52,7 +44,7 @@ describe("<RoomList />", () => {
     });
 
     it("should render a room list", () => {
-        const { asFragment } = render(<RoomList vm={vm} />);
+        const { asFragment } = render(<RoomList vm={vm} />, withClientContextRenderOptions(matrixClient));
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -61,7 +53,7 @@ describe("<RoomList />", () => {
         { shortcut: { key: "F6", ctrlKey: true }, isPreviousLandmark: false, label: "NextLandmark" },
     ])("should navigate to the landmark on NextLandmark.$label action", ({ shortcut, isPreviousLandmark }) => {
         const spyFindLandmark = jest.spyOn(LandmarkNavigation, "findAndFocusNextLandmark").mockReturnValue();
-        const { getByTestId } = render(<RoomList vm={vm} />);
+        const { getByTestId } = render(<RoomList vm={vm} />, withClientContextRenderOptions(matrixClient));
         const roomList = getByTestId("room-list");
         fireEvent.keyDown(roomList, shortcut);
 

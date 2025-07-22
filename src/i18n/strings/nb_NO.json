@@ -157,6 +157,7 @@
         "view_message": "Se melding",
         "view_source": "Vis kilde",
         "yes": "Ja",
+        "yes_dismiss": "Ja, avvis",
         "zoom_in": "Forstørr",
         "zoom_out": "Forminske"
     },
@@ -239,8 +240,7 @@
             "setup_key_backup_title": "Du mister tilgangen til de krypterte meldingene dine",
             "setup_secure_backup_description_1": "Krypterte meldinger er sikret med punkt-til-punkt-kryptering. Bare du og mottakeren(e) har nøklene til å lese disse meldingene.",
             "setup_secure_backup_description_2": "Når du logger av, slettes disse nøklene fra denne enheten, noe som betyr at du ikke vil kunne lese krypterte meldinger med mindre du har nøklene til dem på dine andre enheter, eller har sikkerhetskopiert dem til serveren.",
-            "skip_key_backup": "Jeg vil ikke ha mine krypterte meldinger",
-            "use_key_backup": "Begynn å bruke Nøkkelsikkerhetskopiering"
+            "skip_key_backup": "Jeg vil ikke ha mine krypterte meldinger"
         },
         "misconfigured_body": "Spør din%(brand)s administrator om å sjekke <a>konfigurasjonen din</a> for feil eller dupliserte oppføringer.",
         "misconfigured_title": "Ditt %(brand)s-oppsett er feiloppsatt",
@@ -386,6 +386,7 @@
             "fallback_button": "Begynn autentisering",
             "mas_cross_signing_reset_cta": "Gå til kontoen din",
             "mas_cross_signing_reset_description": "Tilbakestill identiteten din gjennom kontoleverandøren din, og kom deretter tilbake og klikk \"Prøv på nytt\".",
+            "mas_cross_signing_reset_title": "Gå til kontoen din for å tilbakestille identiteten din",
             "msisdn": "En SMS har blitt sendt til %(msisdn)s",
             "msisdn_token_incorrect": "Sjetongen er feil",
             "msisdn_token_prompt": "Vennligst skriv inn koden den inneholder:",
@@ -784,6 +785,7 @@
             "cross_signing_status": "Status for krysssignering:",
             "cross_signing_untrusted": "Kontoen din har en krysssigneringsidentitet i hemmelig lagring, men den er ennå ikke klarert av denne sesjonen.",
             "crypto_not_available": "Kryptografisk modul er ikke tilgjengelig",
+            "device_id": "Enhets-ID",
             "key_backup_active_version": "Aktiv sikkerhetskopiversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Nøklene dine blir ikke sikkerhetskopiert fra denne sesjonen.",
@@ -796,6 +798,8 @@
             "secret_storage_ready": "klar",
             "secret_storage_status": "Hemmelig lagringsplass:",
             "self_signing_private_key_cached_status": "Selvsignert privat nøkkel:",
+            "session": "Sesjon",
+            "session_fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
             "title": "Ende-til-ende-kryptering",
             "user_signing_private_key_cached_status": "Brukersignert privat nøkkel:"
         },
@@ -821,6 +825,7 @@
         "low_bandwidth_mode": "Lav båndbreddemodus",
         "low_bandwidth_mode_description": "Krever kompatibel hjemmeserver.",
         "main_timeline": "Hovedtidslinje",
+        "manual_device_verification": "Manuell enhetsverifisering",
         "no_receipt_found": "Ingen kvittering funnet",
         "notification_state": "Varslingsstatus er <strong>%(notificationState)s</strong>",
         "notifications_debug": "Feilsøking av varsler",
@@ -909,26 +914,15 @@
     "empty_room_was_name": "Tomt rom (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Skriv inn sikkerhetsfrasen eller <button> bruk sikkerhetsnøkkelen </button> for å fortsette.",
+            "alternatives": "Hvis du har en sikkerhetsnøkkel eller en sikkerhetsfrase, vil dette også fungere.",
             "key_validation_text": {
-                "invalid_security_key": "Ugyldig gjenopprettingsnøkkel",
-                "recovery_key_is_correct": "Ser bra ut!",
-                "wrong_file_type": "Feil filtype",
-                "wrong_security_key": "Feil gjenopprettingsnøkkel"
+                "wrong_security_key": "Gjenopprettingsnøkkelen du skrev inn er ikke riktig."
             },
-            "reset_title": "Tilbakestill alt",
-            "reset_warning_1": "Gjør dette bare hvis du ikke har noen annen enhet å fullføre verifiseringen med.",
-            "reset_warning_2": "Hvis du tilbakestiller alt, starter du på nytt uten klarerte økter, ingen klarerte brukere, og du kan kanskje ikke se tidligere meldinger.",
+            "privacy_warning": "Sørg for at ingen kan se denne skjermen!",
             "restoring": "Gjenoppretter nøkler fra sikkerhetskopi",
-            "security_key_title": "Gjenopprettingsnøkkel",
-            "security_phrase_incorrect_error": "Får ikke tilgang til hemmelig lagring. Kontroller at du har skrevet inn riktig sikkerhetsfrase.",
-            "security_phrase_title": "Sikkerhetsfrase",
-            "separator": "%(securityKey)s eller %(recoveryFile)s",
-            "use_security_key_prompt": "Bruk sikkerhetsnøkkelen din for å fortsette."
+            "security_key_title": "Gjenopprettingsnøkkel"
         },
         "bootstrap_title": "Setter opp nøkler",
-        "cancel_entering_passphrase_description": "Er du sikker på at du vil avbryte inntasting av passordfrase?",
-        "cancel_entering_passphrase_title": "Avbryte inntastingen av passordfrase?",
         "confirm_encryption_setup_body": "Klikk på knappen nedenfor for å bekrefte konfigureringen av kryptering.",
         "confirm_encryption_setup_title": "Bekreft krypteringsoppsett",
         "cross_signing_room_normal": "Dette rommet er ende-til-ende-kryptert",
@@ -973,13 +967,13 @@
         },
         "reset_all_button": "Glemt eller mistet alle gjenopprettingsmetoder?<a> Tilbakestill alt</a>",
         "set_up_recovery": "Sett opp gjenoppretting",
-        "set_up_recovery_later": "Ikke nå",
         "set_up_recovery_toast_description": "Generer en gjenopprettingsnøkkel som kan brukes til å gjenopprette den krypterte meldingshistorikken i tilfelle du mister tilgangen til enhetene dine.",
-        "set_up_toast_description": "Sikre deg mot å miste tilgang til krypterte meldinger og data",
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
         "setup_secure_backup": {
             "explainer": "Ta sikkerhetskopi av nøklene dine før du logger av for å unngå å miste dem."
         },
+        "turn_on_key_storage": "Slå på nøkkeloppbevaring",
+        "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
         "udd": {
             "interactive_verification_button": "Interaktiv verifisering ved hjelp av emoji",
             "other_ask_verify_text": "Be denne brukeren om å bekrefte sesjonen sin, eller bekreft den manuelt nedenfor.",
@@ -993,7 +987,6 @@
             "accepting": "Aksepterer …",
             "after_new_login": {
                 "device_verified": "Enhet verifisert",
-                "reset_confirmation": "Vil du virkelig tilbakestille bekreftelsesnøkler?",
                 "skip_verification": "Hopp over verifisering for nå",
                 "unable_to_verify": "Kan ikke verifisere denne enheten",
                 "verify_this_device": "Verifiser denne enheten"
@@ -1015,6 +1008,21 @@
             "incoming_sas_dialog_waiting": "Venter på at partneren skal bekrefte...",
             "incoming_sas_user_dialog_text_1": "Bekreft denne brukeren for å markere dem som klarerte. Tillit til brukere gir deg ekstra trygghet når du bruker ende-til-ende-krypterte meldinger.",
             "incoming_sas_user_dialog_text_2": "Bekreftelse av denne brukeren vil markere økten som klarert, og også merke økten din som klarert for dem.",
+            "manual": {
+                "already_verified": "Denne enheten er allerede verifisert",
+                "already_verified_and_wrong_fingerprint": "Det medfølgende fingeravtrykket stemmer ikke overens, men enheten er allerede verifisert!",
+                "device_id": "Enhets-ID",
+                "failure_description": "Kunne ikke verifisere '%(deviceId)s': %(error)s",
+                "failure_title": "Verifisering mislyktes",
+                "fingerprint": "Fingeravtrykk (sesjonsnøkkel)",
+                "no_crypto": "Kan ikke verifisere enheten - krypto er ikke aktivert",
+                "no_device": "Kunne ikke verifisere enheten - enheten '%(deviceId)s' ble ikke funnet",
+                "no_userid": "Kan ikke verifisere enheten - finner ikke bruker-ID",
+                "success_description": "Enheten (%(deviceId)s) er nå krysssignert",
+                "success_title": "Verifiseringen var vellykket",
+                "text": "Oppgi ID-en og fingeravtrykket til en av dine egne enheter for å verifisere det. MERK at dette lar den andre enheten sende og motta meldinger som deg. HVIS NOEN HAR FORTALT DEG BARE Å LIME INN NOE HER, ER DET SANNSYNLIGVIS AT DU BLIR SVINDLET!",
+                "wrong_fingerprint": "Kan ikke verifisere enheten %(deviceId)s &#39;- det medfølgende fingeravtrykket&#39;%(fingerprint)s «samsvarer ikke med enhetens fingeravtrykk»%(fprint)s &#39;"
+            },
             "no_key_or_device": "Det ser ut til at du ikke har en gjenopprettingsnøkkel eller andre enheter du kan verifisere mot.  Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille verifiseringsnøklene dine.",
             "no_support_qr_emoji": "Enheten du prøver å bekrefte støtter ikke skanning av en QR-kode eller emoji-verifikasjon, som er det som %(brand)s støtter. Prøv med en annen klient.",
             "other_party_cancelled": "Den andre parten kansellerte verifiseringen.",
@@ -1064,8 +1072,6 @@
             "verify_emoji_prompt": "Bekreft ved å sammenligne unike emoji.",
             "verify_emoji_prompt_qr": "Hvis du ikke kan skanne koden ovenfor, bekreft ved å sammenligne unike emoji.",
             "verify_later": "Jeg bekrefter senere",
-            "verify_reset_warning_1": "Tilbakestilling av bekreftelsesnøklene kan ikke angres. Etter tilbakestilling har du ikke tilgang til gamle krypterte meldinger, og eventuelle venner som tidligere har bekreftet deg, vil se sikkerhetsadvarsler til du bekrefter med dem på nytt.",
-            "verify_reset_warning_2": "Fortsett bare hvis du er sikker på at du har mistet alle de andre enhetene og sikkerhetsnøkkelen din.",
             "verify_using_device": "Bekreft med en annen enhet",
             "verify_using_key": "Bekreft med gjenopprettingsnøkkel",
             "verify_using_key_or_phrase": "Bekreft med gjenopprettingsnøkkel eller -frase",
@@ -1965,6 +1971,7 @@
         },
         "face_pile_tooltip_shortcut": "Inkludert %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inkludert deg, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan ikke avgjøre hvilken bruker som skal ignoreres siden medlemshendelsen har endret seg.",
         "failed_reject_invite": "Kunne ikke avvise invitasjonen",
         "forget_room": "Glem dette rommet",
         "forget_space": "Glem dette området",
@@ -2056,6 +2063,8 @@
         "read_topic": "Klikk for å lese emnet",
         "rejecting": "Avviser invitasjon...",
         "rejoin_button": "Bli med igjen",
+        "room_content": "Rominnhold",
+        "room_is_low_priority": "Dette er et lavt prioritert rom",
         "search": {
             "all_rooms_button": "Søk i alle rom",
             "placeholder": "Søk i meldinger...",
@@ -2102,27 +2111,35 @@
     "room_list": {
         "add_room_label": "Legg til et rom",
         "add_space_label": "Legg til område",
-        "appearance": "Utseende",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
+        "collapse_filters": "Skjul filterlisten",
         "empty": {
             "no_chats": "Ingen chatter ennå",
             "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
             "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
+            "no_invites": "Du har ingen uleste invitasjoner",
+            "no_lowpriority": "Du har ingen rom med lav prioritet",
+            "no_mentions": "Du har ingen uleste omtaler",
             "no_people": "Du har ikke direkte chatter med noen ennå",
             "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
             "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
+            "show_activity": "Se alle aktiviteter",
             "show_chats": "Vis alle chatter"
         },
+        "expand_filters": "Utvid filterlisten",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
         "filters": {
             "favourite": "Favoritter",
+            "invites": "Invitasjoner",
+            "low_priority": "Lav prioritet",
+            "mentions": "Omtaler",
             "people": "Personer",
             "rooms": "Rom",
             "unread": "Uleste"
@@ -2154,16 +2171,19 @@
             "open_room": "Åpne rom %(roomName)s"
         },
         "room_options": "Rominnstillinger",
-        "secondary_filters": "Sekundære filtre",
         "show_less": "Vis mindre",
-        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
+        "sort": "Sorter",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
+        "sort_type": {
+            "activity": "Aktivitet",
+            "atoz": "A-Å"
+        },
         "sort_unread_first": "Vis rom med uleste meldinger først",
         "space_menu": {
             "home": "Område hjem",
@@ -2451,6 +2471,10 @@
         "recent_changes_heading": "Nylige endringer som ennå ikke er mottatt",
         "title": "Serveren svarer ikke"
     },
+    "service_worker_error": {
+        "description": "%(brand)s krever en tjenestearbeider for å laste inn autentiserte medier fra Matrix-innholdslagre. Dette støttes ikke av nettleseren din, så du kan oppleve at media ikke lastes inn.",
+        "title": "Kunne ikke laste inn servicearbeider"
+    },
     "seshat": {
         "error_initialising": "Initialisering av meldingssøk mislyktes, sjekk innstillingene <a> dine </a> for mer informasjon",
         "reset_button": "Tilbakestill hendelseslageret",
@@ -2544,6 +2568,8 @@
                 "session_key": "Sesjonsnøkkel:",
                 "title": "Avansert"
             },
+            "confirm_key_storage_off": "Er du sikker på at du vil ha nøkkeloppbevaring skrudd av?",
+            "confirm_key_storage_off_description": "Hvis du logger deg av alle enhetene dine, mister du meldingshistorikken og må bekrefte alle eksisterende kontakter igjen. <a>Lær mer </a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Slett nøkkellagring",
                 "confirm": "Slett nøkkellagring",
@@ -2629,6 +2655,7 @@
             "discovery_needs_terms_title": "La folk finne deg",
             "display_name": "Visningsnavn",
             "display_name_error": "Kan ikke angi visningsnavn",
+            "email_adding_unsupported_by_hs": "Denne hjemmeserveren støtter ikke å legge til flere e-postadresser til kontoen din.",
             "email_address_in_use": "Denne e-postadressen er allerede i bruk",
             "email_address_label": "E-postadresse",
             "email_not_verified": "E-postadressen din er ikke verifisert ennå",
@@ -2653,7 +2680,9 @@
             "error_share_msisdn_discovery": "Kan ikke dele telefonnummer",
             "identity_server_no_token": "Ingen identitetstilgangstoken funnet",
             "identity_server_not_set": "Identitetsserver er ikke angitt",
+            "invalid_phone_number": "Telefonnummeret som er oppgitt ser ikke ut til å være gyldig.",
             "language_section": "Språk",
+            "msisdn_adding_unsupported_by_hs": "Denne hjemmeserveren støtter ikke å legge til telefonnumre til kontoen din.",
             "msisdn_in_use": "Dette mobilnummeret er allerede i bruk",
             "msisdn_label": "Telefonnummer",
             "msisdn_verification_field_label": "Verifikasjonskode",
@@ -2676,13 +2705,11 @@
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
+        "invite_controls": {
+            "default_label": "Tillat brukere å invitere deg til rom"
+        },
         "jump_to_bottom_on_send": "Gå til bunnen av tidslinjen når du vil sende en melding",
         "key_backup": {
-            "backup_in_progress": "Nøklene dine blir sikkerhetskopiert (den første sikkerhetskopieringen kan ta noen minutter).",
-            "backup_starting": "Starter sikkerhetskopiering...",
-            "backup_success": "Suksess!",
-            "cannot_create_backup": "Kan ikke opprette sikkerhetskopiering av nøkler",
-            "create_title": "Opprett nøkkelsikkerhetskopi",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Nøklene dine blir nå sikkerhetskopiert fra denne enheten.",
                 "backup_setup_success_title": "Sikker sikkerhetskopiering vellykket",
@@ -2742,6 +2769,7 @@
             "show_in_private": "I private rom",
             "show_media": "Vis alltid"
         },
+        "not_supported": "Serveren din implementerer ikke denne funksjonen.",
         "notifications": {
             "default_setting_description": "Denne innstillingen vil bli brukt som standard for alle rommene dine.",
             "default_setting_section": "Jeg ønsker å bli varslet for (standardinnstilling)",
@@ -2799,6 +2827,7 @@
             "voip": "Lyd- og videosamtaler"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Forhindre at innholdet i vinduet fanges opp av andre apper",
             "Electron.enableHardwareAcceleration": "Aktiver maskinvareakselerasjon (start %(appName)s på nytt for at det skal tre i kraft)",
             "always_show_menu_bar": "Vis alltid vinduets menylinje",
             "autocomplete_delay": "Autofullføringsforsinkelse (ms)",
@@ -2807,6 +2836,7 @@
             "composer_heading": "Komposør",
             "default_timezone": "Nettleserens standard (%(timezone)s)",
             "dialog_title": "<strong>Innstillinger:</strong> Preferanser",
+            "enable_content_protection": "Aktiver innholdsbeskyttelse",
             "enable_hardware_acceleration": "Aktiver maskinvareakselerasjon",
             "enable_tray_icon": "Vis skuffikonet og minimer vinduet til det når det lukkes",
             "keyboard_heading": "Tastatursnarveier",
@@ -2840,7 +2870,6 @@
             "ignore_users_empty": "Du har ingen ignorerte brukere.",
             "ignore_users_section": "Ignorerte brukere",
             "key_backup_algorithm": "Algoritme:",
-            "key_backup_connect": "Koble denne økten til hoved Backup",
             "message_search_disable_warning": "Hvis deaktivert, vises ikke meldinger fra krypterte rom i søkeresultatene.",
             "message_search_disabled": "Bufre krypterte meldinger lokalt på en sikker måte, slik at de vises i søkeresultatene.",
             "message_search_enabled": {
@@ -2971,6 +3000,7 @@
         "show_chat_effects": "Vis chatteffekter (animasjoner når du mottar f.eks. konfetti)",
         "show_displayname_changes": "Vis visningsnavnendringer",
         "show_join_leave": "Vis bli med/forlat meldinger (invitasjoner/fjernede/utestengte upåvirket)",
+        "show_message_previews": "Vise forhåndsvisninger av meldinger",
         "show_nsfw_content": "Vis NSFW-innhold",
         "show_read_receipts": "Vis lesekvitteringer sendt av andre brukere",
         "show_redaction_placeholder": "Vis en stattholder for fjernede meldinger",
@@ -3077,6 +3107,8 @@
         "jumptodate": "Gå til den gitte datoen i tidslinjen",
         "jumptodate_invalid_input": "Vi klarte ikke å forstå den gitte datoen (%(inputDate)s). Prøv å bruke formatet ÅÅÅÅ-MM-DD.",
         "lenny": "Legger til ( ͡° ͜ʖ ͡°) foran en ren tekstmelding",
+        "manual_device_verification_confirm_description": "Dette vil tillate en annen enhet å sende og motta meldinger som deg. HVIS NOEN BA DEG LIME INN NOE HER, ER DET SANNSYNLIG AT DU BLIR LURT! Er du sikker på at du vil bekrefte denne andre enheten?",
+        "manual_device_verification_confirm_title": "Forsiktig: manuell enhetsverifisering",
         "me": "Viser handling",
         "msg": "Sender en melding til den angitte brukeren",
         "myavatar": "Endrer profilbildet ditt i alle rom",
@@ -3117,6 +3149,7 @@
         "upgraderoom": "Oppgraderer et rom til en ny versjon",
         "upgraderoom_permission_error": "Du har ikke de rette tilgangene til å bruke denne kommandoen.",
         "usage": "Bruk",
+        "verify": "Verifiser en av dine egne enheter manuelt",
         "view": "Viser rom med oppgitt adresse",
         "whois": "Viser informasjon om en bruker"
     },
@@ -3225,7 +3258,7 @@
         "heading_without_query": "Søk etter",
         "join_button_text": "Bli med i %(roomAddress)s",
         "keyboard_scroll_hint": "Bruk <arrows/> for å scrolle",
-        "message_search_section_title": "Andre søk",
+        "messages_label": "Meldinger",
         "other_rooms_in_space": "Andre rom i %(spaceName)s",
         "public_rooms_label": "Offentlige rom",
         "public_spaces_label": "Offentlige områder",
@@ -3235,7 +3268,6 @@
         "result_may_be_hidden_privacy_warning": "Noen resultater kan være skjult av personvernhensyn",
         "result_may_be_hidden_warning": "Noen resultater kan være skjult",
         "search_dialog": "Søkedialog",
-        "search_messages_hint": "For å søke i meldinger, se etter dette ikonet øverst i et rom <icon/>",
         "spaces_title": "Områder du er i",
         "start_group_chat_button": "Start en gruppechat"
     },
@@ -3284,9 +3316,7 @@
     "threads_activity_centre": {
         "header": "Trådaktivitet",
         "no_rooms_with_threads_notifs": "Du har ikke rom med trådvarsler ennå.",
-        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå.",
-        "release_announcement_description": "Trådenotifikasjoner er flyttet, du finner dem her fra nå av.",
-        "release_announcement_header": "Aktivitetssenter for tråder"
+        "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
     },
     "time": {
         "about_day_ago": "cirka 1 dag siden",
@@ -3794,10 +3824,11 @@
         "unavailable": "Ikke tilgjengelig"
     },
     "update_room_access_modal": {
-        "description": "Hvis du vil opprette en delingslenke, må du tillate gjester å bli med i dette rommet. Dette kan gjøre rommet mindre sikkert. Når du er ferdig med samtalen, kan du gjøre rommet privat igjen.",
-        "dont_change_description": "Alternativt kan du holde samtalen i et eget rom.",
+        "description": "For å opprette en delingslenke, lag dette rommet <b>offentlig</b> eller aktiver alternativet for brukere å <b>be om å bli med</b> Dette lar gjester bli med uten å bli invitert.",
+        "dont_change_description": "Hvis du ikke ønsker å endre tilgangen til dette rommet, kan du opprette et nytt rom for lenken.",
         "no_change": "Jeg vil ikke endre tilgangsnivået.",
-        "title": "Endre tilgangsnivået til rommet"
+        "revert_access_description": "(Dette kan tilbakestilles til den forrige verdien i Rominnstillinger: <b>Sikkerhet og personvern</b> / <b>Tilgang</b>)",
+        "title": "Tillat gjestebrukere å bli med i dette rommet"
     },
     "upload_failed_generic": "Filen '%(fileName)s' kunne ikke lastes opp.",
     "upload_failed_size": "Filen \"%(fileName)s\" er større enn hjemmeserverens grense for opplastninger",

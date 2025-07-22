@@ -99,6 +99,7 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.send.event:m.room.redaction",
             "org.matrix.msc2762.receive.event:m.room.redaction",
             "org.matrix.msc2762.receive.state_event:m.room.create",
+            "org.matrix.msc2762.receive.state_event:m.room.name",
             "org.matrix.msc2762.receive.state_event:m.room.member",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
@@ -708,6 +709,7 @@ describe("StopGapWidgetDriver", () => {
             id: "$event-id2",
             type: "org.example.foo",
             user: "@alice:example.org",
+            skey: "",
             content: { hello: "world" },
             room: "!1:example.org",
         });
@@ -724,6 +726,12 @@ describe("StopGapWidgetDriver", () => {
             expect(
                 await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, undefined, 10, undefined),
             ).toEqual([event2, event1].map((e) => e.getEffectiveEvent()));
+        });
+
+        it("reads state events", async () => {
+            expect(
+                await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, "", 10, undefined),
+            ).toEqual([event2.getEffectiveEvent()]);
         });
 
         it("reads up to a limit", async () => {

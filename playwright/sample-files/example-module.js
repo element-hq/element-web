@@ -6,11 +6,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export default class ExampleModule {
-    static moduleApiVersion = "^0.1.0";
+    static moduleApiVersion = "^1.0.0";
     constructor(api) {
         this.api = api;
+
+        this.api.i18n.register({
+            key: {
+                en: "%(brand)s module loading successful!",
+                de: "%(brand)s-Module erfolgreich geladen!",
+            },
+        });
     }
     async load() {
-        alert("Testing module loading successful!");
+        const brand = this.api.config.get("brand");
+        alert(this.api.i18n.translate("key", { brand }));
     }
 }
