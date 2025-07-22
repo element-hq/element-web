@@ -26,7 +26,7 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler.tsx";
 import { Flex } from "../../../../shared-components/utils/Flex";
-import { Box } from "../../../utils/Box.tsx";
+import { Box } from "../../../../shared-components/utils/Box";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
