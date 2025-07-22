@@ -387,7 +387,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [],
             threepidResultsMixin: [],
-            canUseIdentityServer: !!MatrixClientPeg.safeGet().getIdentityServerUrl(),
+            canUseIdentityServer: !!cli.getIdentityServerUrl(),
             tryingIdentityServer: false,
             consultFirst: false,
             dialPadValue: "",
