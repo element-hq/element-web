@@ -61,7 +61,6 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
             </Button>
             {displayDialButton && (
                 <Button
-                    className="mx_RoomListSearch_button"
                     kind="secondary"
                     size="sm"
                     Icon={DialPadIcon}
@@ -74,7 +73,6 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
             )}
             {displayExploreButton && (
                 <Button
-                    className="mx_RoomListSearch_button"
                     kind="secondary"
                     size="sm"
                     Icon={ExploreIcon}
