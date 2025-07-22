@@ -32,8 +32,8 @@ const config: StorybookConfig = {
             // Needed for counterpart to work
             plugins: [nodePolyfills({ include: ["process", "util"] })],
             server: {
-                allowedHosts: ["localhost", ".docker.internal"]
-            }
+                allowedHosts: ["localhost", ".docker.internal"],
+            },
         });
     },
 };
