@@ -42,7 +42,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -107,7 +107,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -128,7 +128,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
