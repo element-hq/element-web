@@ -2435,7 +2435,6 @@
         },
         "creation_summary_dm": "%(creator)s creou esta MD.",
         "creation_summary_room": "%(creator)s creou e configurou a sala.",
-        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Editada o %(date)s. Preme para ver edicións.",

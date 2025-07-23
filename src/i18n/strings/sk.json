@@ -1466,6 +1466,7 @@
         "room_list_navigate_down": "Prejsť v zozname miestností smerom nadol",
         "room_list_navigate_up": "Prejsť v zozname miestností smerom hore",
         "room_list_select_room": "Vybrať miestnosť zo zoznamu miestností",
+        "save": "Uložiť",
         "scroll_down_timeline": "Posun dole na časovej osi",
         "scroll_up_timeline": "Posun hore na časovej osi",
         "search": "Vyhľadávanie (musí byť povolené)",
@@ -3412,7 +3413,6 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",

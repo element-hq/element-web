@@ -1450,6 +1450,7 @@
         "room_list_navigate_down": "Navegar para baixo na lista de salas",
         "room_list_navigate_up": "Navegar para cima na lista de salas",
         "room_list_select_room": "Selecionar sala da lista de salas",
+        "save": "Salvar",
         "scroll_down_timeline": "Rola para baixo no histórico",
         "scroll_up_timeline": "Rola para cima no histórico",
         "search": "Pesquisar (deve estar ativado)",
@@ -3369,7 +3370,6 @@
             "unable_to_decrypt": "Não foi possível descriptografar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decriptando",
         "download_action_downloading": "Baixando",
         "download_failed": "Falha no download",
         "download_failed_description": "Ocorreu um erro ao baixar esse arquivo",

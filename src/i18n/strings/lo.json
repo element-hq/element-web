@@ -2342,7 +2342,6 @@
         },
         "creation_summary_dm": "%(creator)s ສ້າງ DM ນີ້.",
         "creation_summary_room": "%(creator)s ສ້າງ ແລະ ກຳນົດຄ່າຫ້ອງ.",
-        "download_action_decrypting": "ການຖອດລະຫັດ",
         "download_action_downloading": "ກຳລັງດາວໂຫຼດ",
         "edits": {
             "tooltip_label": "ແກ້ໄຂເມື່ອ %(date)s. ກົດເພື່ອເບິ່ງການແກ້ໄຂ.",

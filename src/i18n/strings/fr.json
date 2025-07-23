@@ -568,7 +568,7 @@
         "room_name": "Nom du salon",
         "rooms": "Salons",
         "save": "Enregistrer",
-        "saved": "Sauvegardé",
+        "saved": "Enregistré",
         "saving": "Enregistrement…",
         "secure_backup": "Sauvegarde sécurisée",
         "select_all": "Tout sélectionner",
@@ -863,6 +863,7 @@
             "elementCallUrl": "Lien d'Element Call"
         },
         "settings_explorer": "Explorateur de paramètres",
+        "show_empty_content_events": "Afficher les événements sans contenu",
         "show_hidden_events": "Afficher les évènements cachés dans le fil de discussion",
         "spaces": {
             "one": "<espace>",
@@ -1450,6 +1451,7 @@
         "room_list_navigate_down": "Descendre dans la liste des salons",
         "room_list_navigate_up": "Remonter dans la liste des salons",
         "room_list_select_room": "Sélectionner un salon de la liste des salons",
+        "save": "Enregistrer",
         "scroll_down_timeline": "Faire défiler le fil de discussion vers le bas",
         "scroll_up_timeline": "Faire défiler le fil de discussion vers le haut",
         "search": "Recherche (si activée)",
@@ -2730,7 +2732,7 @@
                 "set_phrase_again": "Retournez en arrière pour la redéfinir.",
                 "settings_reminder": "Vous pouvez aussi configurer la sauvegarde sécurisée et gérer vos clés depuis les paramètres.",
                 "title_confirm_phrase": "Confirmer la phrase de sécurité",
-                "title_save_key": "Sauvegarder votre clé de récupération",
+                "title_save_key": "Enregistrer votre clé de récupération",
                 "title_set_phrase": "Définir une phrase de sécurité",
                 "unable_to_setup": "Impossible de configurer le coffre secret",
                 "use_different_passphrase": "Utiliser une phrase secrète différente ?",
@@ -3369,7 +3371,6 @@
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
         "download_failed": "Échec du téléchargement",
         "download_failed_description": "Une erreur s'est produite lors du téléchargement de ce fichier",

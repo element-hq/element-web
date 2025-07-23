@@ -785,6 +785,7 @@
             "cross_signing_status": "Korssigneringsstatus:",
             "cross_signing_untrusted": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men den är ännu inte betrodd av den här sessionen.",
             "crypto_not_available": "Kryptografisk modul är inte tillgänglig",
+            "device_id": "Enhets-ID",
             "key_backup_active_version": "Aktiv säkerhetskopiaversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Dina nycklar säkerhetskopieras inte från den här sessionen.",
@@ -797,6 +798,8 @@
             "secret_storage_ready": "klar",
             "secret_storage_status": "Hemlig lagring:",
             "self_signing_private_key_cached_status": "Självsignerande privat nyckel:",
+            "session": "Session",
+            "session_fingerprint": "Fingeravtryck (sessionsnyckel)",
             "title": "Totalsträckskryptering",
             "user_signing_private_key_cached_status": "Privat nyckel för användarsignering:"
         },
@@ -822,6 +825,7 @@
         "low_bandwidth_mode": "Lågt bandbreddsläge",
         "low_bandwidth_mode_description": "Kräver kompatibel hemserver.",
         "main_timeline": "Huvudtidslinje",
+        "manual_device_verification": "Manuell enhetsverifiering",
         "no_receipt_found": "Inga kvitton hittade",
         "notification_state": "Aviseringsstatus är <strong>%(notificationState)s</strong>",
         "notifications_debug": "Aviseringsfelsökning",
@@ -2682,6 +2686,9 @@
         "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
         "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
+        "invite_controls": {
+            "default_label": "Tillåt användare att bjuda in dig till rum"
+        },
         "jump_to_bottom_on_send": "Hoppa till botten av tidslinjen när du skickar ett meddelande",
         "key_backup": {
             "setup_secure_backup": {
@@ -2743,6 +2750,7 @@
             "show_in_private": "I privata rum",
             "show_media": "Visa alltid"
         },
+        "not_supported": "Din server implementerar inte den här funktionen.",
         "notifications": {
             "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",
             "default_setting_section": "Jag vill bli meddelad för (Standardinställning)",
@@ -3339,7 +3347,6 @@
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",
         "download_failed": "Nedladdning misslyckades",
         "download_failed_description": "Ett fel uppstod när den här filen laddades ned",
