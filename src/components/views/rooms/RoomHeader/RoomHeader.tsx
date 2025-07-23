@@ -286,7 +286,8 @@ export default function RoomHeader({
                                         <PublicIcon
                                             width="16px"
                                             height="16px"
-                                            className="mx_RoomHeader_icon text-secondary"
+                                            className="mx_RoomHeader_icon"
+                                            color="var(--cpd-color-icon-info-primary)"
                                             aria-label={_t("common|public_room")}
                                         />
                                     </Tooltip>
