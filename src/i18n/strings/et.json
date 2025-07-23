@@ -1450,6 +1450,7 @@
         "room_list_navigate_down": "Suundu jututubade loendis alla",
         "room_list_navigate_up": "Suundu jututubade loendis üles",
         "room_list_select_room": "Vali tubade loendist jututuba",
+        "save": "Salvesta",
         "scroll_down_timeline": "Liigu ajajoonel alla",
         "scroll_up_timeline": "Liigu ajajoonel üles",
         "search": "Otsing (peab olema lubatud)",
@@ -3370,7 +3371,6 @@
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "download_failed": "Allalaadimine ei õnnestunud",
         "download_failed_description": "Selle faili allalaadimisel tekkis viga",

@@ -2906,7 +2906,6 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",

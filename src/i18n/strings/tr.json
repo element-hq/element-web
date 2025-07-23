@@ -3237,7 +3237,6 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",

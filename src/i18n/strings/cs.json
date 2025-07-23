@@ -3376,7 +3376,6 @@
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
         "download_failed": "Stažení se nezdařilo",
         "download_failed_description": "Při stahování tohoto souboru došlo k chybě",

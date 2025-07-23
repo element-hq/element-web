@@ -2091,7 +2091,6 @@
         },
         "creation_summary_dm": "%(creator)s kreis ĉi tiun individuan ĉambron.",
         "creation_summary_room": "%(creator)s kreis kaj agordis la ĉambron.",
-        "download_action_decrypting": "Malĉifrante",
         "edits": {
             "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
             "tooltip_sub": "Klaku por vidi redaktojn",

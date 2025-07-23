@@ -2688,7 +2688,6 @@
         },
         "creation_summary_dm": "Ο/η %(creator)s δημιούργησε αυτό το απευθείας μήνυμα.",
         "creation_summary_room": "Ο/η %(creator)s δημιούργησε και διαμόρφωσε το δωμάτιο.",
-        "download_action_decrypting": "Αποκρυπτογράφηση",
         "download_action_downloading": "Γίνεται λήψη",
         "edits": {
             "tooltip_label": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις.",

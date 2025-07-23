@@ -159,6 +159,7 @@
         "view_message": "Wyświetl wiadomość",
         "view_source": "Wyświetl źródło",
         "yes": "Tak",
+        "yes_dismiss": "Tak, odrzuć",
         "zoom_in": "Powiększ",
         "zoom_out": "Pomniejsz"
     },
@@ -788,6 +789,7 @@
             "cross_signing_status": "Status weryfikacji krzyżowej:",
             "cross_signing_untrusted": "Twoje konto ma tożsamość weryfikacji krzyżowej w sekretnym magazynie, ale nie jest jeszcze zaufane przez tę sesję.",
             "crypto_not_available": "Moduł kryptograficzny nie jest dostępny",
+            "device_id": "ID urządzenia",
             "key_backup_active_version": "Aktywna wersja kopii zapasowej:",
             "key_backup_active_version_none": "Brak",
             "key_backup_inactive_warning": "Twoje klucze nie są przywracane na tej sesji.",
@@ -800,6 +802,8 @@
             "secret_storage_ready": "gotowe",
             "secret_storage_status": "Sekretny magazyn:",
             "self_signing_private_key_cached_status": "Samopodpisujący klucz prywatny:",
+            "session": "Sesja",
+            "session_fingerprint": "Odcisk palca (klucz sesji)",
             "title": "Szyfrowanie end-to-end",
             "user_signing_private_key_cached_status": "Podpisany przez użytkownika klucz prywatny:"
         },
@@ -825,6 +829,7 @@
         "low_bandwidth_mode": "Tryb niskiej przepustowości",
         "low_bandwidth_mode_description": "Wymaga kompatybilnego serwera domowego.",
         "main_timeline": "Główna oś czasu",
+        "manual_device_verification": "Ręczna weryfikacja urządzenia",
         "no_receipt_found": "Nie znaleziono potwierdzenia",
         "notification_state": "Status powiadomień <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug powiadomień",
@@ -915,9 +920,11 @@
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Możesz podać również klucz lub frazę bezpieczeństwa.",
             "key_validation_text": {
                 "wrong_security_key": "Wprowadzony klucz przywracania nie jest poprawny."
             },
+            "privacy_warning": "Upewnij się, że nikt nie widzi tego ekranu!",
             "restoring": "Przywracanie kluczy z kopii zapasowej",
             "security_key_title": "Klucz przywracania"
         },
@@ -971,6 +978,8 @@
         "setup_secure_backup": {
             "explainer": "Utwórz kopię zapasową kluczy przed wylogowaniem, aby ich nie utracić."
         },
+        "turn_on_key_storage": "Włącz magazyn kluczy",
+        "turn_on_key_storage_description": "Bezpiecznie przechowuj swoją tożsamość kryptograficzną i klucze wiadomości na serwerze. Umożliwi to przeglądanie historii wiadomości na każdym nowym urządzeniu.",
         "udd": {
             "interactive_verification_button": "Zweryfikuj interaktywnie za pomocą emoji",
             "other_ask_verify_text": "Poproś go/ją o zweryfikowanie tej sesji bądź zweryfikuj ją osobiście poniżej.",
@@ -1005,6 +1014,21 @@
             "incoming_sas_dialog_waiting": "Oczekiwanie na potwierdzenie partnera…",
             "incoming_sas_user_dialog_text_1": "Zweryfikuj tego użytkownika, aby oznaczyć go jako zaufanego. Użytkownicy zaufani dodają większej pewności, gdy korzystasz z wiadomości szyfrowanych end-to-end.",
             "incoming_sas_user_dialog_text_2": "Weryfikacja tego użytkownika oznaczy Twoją i jego sesję jako zaufaną.",
+            "manual": {
+                "already_verified": "To urządzenie zostało już zweryfikowane.",
+                "already_verified_and_wrong_fingerprint": "Podany odcinek palca nie pasuje, ale urządzenie zostało już zweryfikowane!",
+                "device_id": "ID urządzenia",
+                "failure_description": "Nie udało się zweryfikować '%(deviceId)s': %(error)s",
+                "failure_title": "Weryfikacja nie powiodła się",
+                "fingerprint": "Odcisk palca (klucz sesji)",
+                "no_crypto": "Nie można zweryfikować urządzenia - krypto nie jest włączone",
+                "no_device": "Nie można zweryfikować urządzenia - urządzenie '%(deviceId)s' nie zostało znalezione",
+                "no_userid": "Nie można zweryfikować urządzenia - nie udało się znaleźć ID użytkownika",
+                "success_description": "Urządzenie (%(deviceId)s) jest teraz podpisane krzyżowo",
+                "success_title": "Zweryfikowano pomyślnie",
+                "text": "Podaj ID i odcisk palca jednego ze swoich urządzeń, aby zweryfikować. UWAGA umożliwi to drugiemu urządzeniu wysyłanie i odbieranie wiadomości w Twoim imieniu. JEŚLI KTOŚ POWIEDZIAŁ CI, ŻEBYŚ COŚ TU WKLEIŁ, PRAWDOPODOBNIE JESTEŚ OSZUKIWANY!",
+                "wrong_fingerprint": "Nie można zweryfikować urządzenia '%(deviceId)s' - podany odcisk palca '%(fingerprint)s' nie pasuje do odcisku palca na urządzeniu, '%(fprint)s'"
+            },
             "no_key_or_device": "Wygląda na to, że nie masz klucza przywracania ani żadnych innych urządzeń, które mogłyby zweryfikować Twoją tożsamość.  To urządzenie nie będzie mogło odczytać wcześniej zaszyfrowanych wiadomości. Aby zweryfikować swoją tożsamość na tym urządzeniu, musisz zresetować klucze weryfikacyjne.",
             "no_support_qr_emoji": "Urządzenie, które próbujesz zweryfikować nie wspiera skanowania kodu QR lub weryfikacji emoji, czyli tego co obsługuje %(brand)s. Spróbuj użyć innego klienta.",
             "other_party_cancelled": "Druga strona anulowała weryfikację.",
@@ -1961,6 +1985,7 @@
         },
         "face_pile_tooltip_shortcut": "Włączając %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Włączając Ciebie, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Nie można określić, którego użytkownika należy zignorować, ponieważ jego wydarzenie uległo zmianie.",
         "failed_reject_invite": "Nie udało się odrzucić zaproszenia",
         "forget_room": "Zapomnij o tym pokoju",
         "forget_space": "Zapomnij tą przestrzeń",
@@ -2053,6 +2078,8 @@
         "read_topic": "Kliknij, aby przeczytać temat",
         "rejecting": "Odrzucanie zaproszenia…",
         "rejoin_button": "Dołącz ponownie",
+        "room_content": "Zawartość pokoju",
+        "room_is_low_priority": "To jest pokój o niskim priorytecie",
         "search": {
             "all_rooms_button": "Wyszukaj wszystkie pokoje",
             "placeholder": "Szukaj wiadomości...",
@@ -2102,24 +2129,33 @@
         "add_space_label": "Dodaj przestrzeń",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
+        "collapse_filters": "Zwiń listę filtrów",
         "empty": {
             "no_chats": "Nie ma jeszcze czatów",
             "no_chats_description": "Zacznij od wysłania wiadomości lub utworzenia pokoju",
             "no_chats_description_no_room_rights": "Wyślij komuś wiadomość, aby rozpocząć.",
             "no_favourites": "Nie masz jeszcze ulubionego czatu",
             "no_favourites_description": "Dodaj czat do ulubionych w ustawieniach czatu",
+            "no_invites": "Nie masz żadnych nieprzeczytanych zaproszeń",
+            "no_lowpriority": "Nie masz pokoi o niskim priorytecie",
+            "no_mentions": "Nie masz żadnych nieprzeczytanych wzmianek",
             "no_people": "Nie prowadzisz jeszcze z nikim czatów prywatnych",
             "no_people_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
             "no_rooms": "Nie jesteś jeszcze w żadnym pokoju",
             "no_rooms_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
             "no_unread": "Brawo! Nie masz żadnych nieprzeczytanych wiadomości",
+            "show_activity": "Wyświetl całą aktywność",
             "show_chats": "Pokaż wszystkie czaty"
         },
+        "expand_filters": "Rozwiń listę filtrów",
         "failed_add_tag": "Nie można dodać tagu %(tagName)s do pokoju",
         "failed_remove_tag": "Nie udało się usunąć tagu %(tagName)s z pokoju",
         "failed_set_dm_tag": "Nie udało się ustawić tagu wiadomości prywatnych",
         "filters": {
             "favourite": "Ulubione",
+            "invites": "Zaproszenia",
+            "low_priority": "Niski priorytet",
+            "mentions": "Wzmianki",
             "people": "Osoby",
             "rooms": "Pokoje",
             "unread": "Nieprzeczytane"
@@ -2550,6 +2586,8 @@
                 "session_key": "Klucz sesji:",
                 "title": "Zaawansowane"
             },
+            "confirm_key_storage_off": "Czy na pewno pozostawić wyłączony magazyn kluczy?",
+            "confirm_key_storage_off_description": "Jeśli wylogujesz się ze wszystkich swoich urządzeń, utracisz historię wiadomości i będziesz musiał ponownie zweryfikować wszystkie istniejące kontakty. <a>Dowiedz się więcej</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Usuń magazyn kluczy",
                 "confirm": "Usuń magazyn kluczy",
@@ -2685,6 +2723,9 @@
         "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
         "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
+        "invite_controls": {
+            "default_label": "Zezwól użytkownikom na zapraszanie Cię do pokojów"
+        },
         "jump_to_bottom_on_send": "Przejdź na dół osi czasu po wysłaniu wiadomości",
         "key_backup": {
             "setup_secure_backup": {
@@ -2746,6 +2787,7 @@
             "show_in_private": "W pokojach prywatnych",
             "show_media": "Zawsze pokazuj"
         },
+        "not_supported": "Twój serwer nie obsługuje tej funkcji.",
         "notifications": {
             "default_setting_description": "To ustawienie zastosuje się do wszystkich Twoich pokoi.",
             "default_setting_section": "Chce otrzymywać powiadomienia (Domyślne ustawienie)",
@@ -2803,6 +2845,7 @@
             "voip": "Połączenia audio i wideo"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Zapobiegaj przechwytywaniu zawartości okna przez inne aplikacje",
             "Electron.enableHardwareAcceleration": "Włącz akcelerację sprzętową (uruchom ponownie %(appName)s, aby zastosować zmiany).",
             "always_show_menu_bar": "Zawsze pokazuj pasek menu okna",
             "autocomplete_delay": "Opóźnienie autouzupełniania (ms)",
@@ -2811,6 +2854,7 @@
             "composer_heading": "Kompozytor",
             "default_timezone": "Ustawienie przeglądarki (%(timezone)s)",
             "dialog_title": "<strong>Ustawienia:</strong> Preferencje",
+            "enable_content_protection": "Włącz ochronę treści",
             "enable_hardware_acceleration": "Włącz przyspieszenie sprzętowe",
             "enable_tray_icon": "Pokaż ikonę w zasobniku systemowym i zminimalizuj okno do niej zamiast zamknięcia",
             "keyboard_heading": "Skróty klawiszowe",
@@ -2974,6 +3018,7 @@
         "show_chat_effects": "Pokaż efekty czatu (animacje po odebraniu np. confetti)",
         "show_displayname_changes": "Pokaż zmiany wyświetlanej nazwy",
         "show_join_leave": "Pokaż wiadomości dołączenia/opuszczenia pokoju (nie dotyczy wiadomości zaproszenia/wyrzucenia/banów)",
+        "show_message_previews": "Pokaż podglądy wiadomości",
         "show_nsfw_content": "Pokaż zawartość NSFW",
         "show_read_receipts": "Pokaż potwierdzenia odczytania wysyłane przez innych użytkowników",
         "show_redaction_placeholder": "Pokaż symbol zastępczy dla usuniętych wiadomości",
@@ -3080,6 +3125,8 @@
         "jumptodate": "Przeskocz do podanej daty w linii czasu",
         "jumptodate_invalid_input": "Nie jesteśmy w stanie rozpoznać podanej daty (%(inputDate)s). Spróbuj użyć formatu RRRR-MM-DD.",
         "lenny": "Dodaje ( ͡° ͜ʖ ͡°) na początku wiadomości tekstowej",
+        "manual_device_verification_confirm_description": "Umożliwi to drugiemu urządzeniu wysyłanie i odbieranie wiadomości w Twoim imieniu. JEŚLI KTOŚ POWIEDZIAŁ CI, ŻEBYŚ COŚ TU WKLEIŁ, PRAWDOPODOBNIE JESTEŚ OSZUKIWANY! Czy na pewno chcesz zweryfikować drugie urządzenie?",
+        "manual_device_verification_confirm_title": "Uwaga: ręczna weryfikacja urządzenia",
         "me": "Wyświetla akcję",
         "msg": "Wysyła wiadomość do wybranego użytkownika",
         "myavatar": "Zdjęcie profilowe zostanie zmienione we wszystkich pokojach",
@@ -3120,7 +3167,7 @@
         "upgraderoom": "Ulepsza pokój do nowej wersji",
         "upgraderoom_permission_error": "Nie posiadasz wymaganych uprawnień do użycia tego polecenia.",
         "usage": "Użycie",
-        "verify": "Weryfikuje użytkownika, sesję oraz klucz publiczny",
+        "verify": "Zweryfikuj ręcznie jedno ze swoich urządzeń",
         "view": "Przegląda pokój z podanym adresem",
         "whois": "Pokazuje informacje na temat użytkownika"
     },
@@ -3340,7 +3387,6 @@
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
