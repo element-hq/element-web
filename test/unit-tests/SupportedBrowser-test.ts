@@ -76,7 +76,7 @@ describe("SupportedBrowser", () => {
         // Latest Firefox on Linux
         "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0",
         // Latest Chrome on Windows
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
     ])("should not warn for supported browsers", testUserAgentFactory());
 
     it.each([
