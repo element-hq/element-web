@@ -94,6 +94,13 @@ const withTooltipProvider: Decorator = (Story) => {
 const preview: Preview = {
     tags: ["autodocs"],
     decorators: [withThemeProvider, withLanguageProvider, withTooltipProvider],
+    parameters: {
+        options: {
+            storySort: {
+                method: "alphabetical",
+            },
+        },
+    },
 };
 
 export default preview;
