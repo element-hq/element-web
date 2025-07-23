@@ -21,7 +21,7 @@ import { WidgetPermissionCustomisations } from "../customisations/WidgetPermissi
 import { WidgetVariableCustomisations } from "../customisations/WidgetVariables.ts";
 import { ConfigApi } from "./ConfigApi.ts";
 import { I18nApi } from "./I18nApi.ts";
-import { CustomComponentsApi } from "./customComponentApi.ts";
+import { CustomComponentsApi } from "./customComponentApi";
 import { WatchableProfile } from "./Profile.ts";
 import { NavigationApi } from "./Navigation.ts";
 import { openDialog } from "./Dialog.tsx";
