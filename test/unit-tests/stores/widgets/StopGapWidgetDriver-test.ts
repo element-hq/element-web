@@ -100,6 +100,8 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.receive.event:m.reaction",
             "org.matrix.msc2762.send.event:m.room.redaction",
             "org.matrix.msc2762.receive.event:m.room.redaction",
+            "org.matrix.msc2762.send.event:io.element.call.reaction",
+            "org.matrix.msc2762.receive.event:io.element.call.reaction",
             "org.matrix.msc2762.receive.state_event:m.room.create",
             "org.matrix.msc2762.receive.state_event:m.room.name",
             "org.matrix.msc2762.receive.state_event:m.room.member",
