@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type AccountAuthInfo } from "@element-hq/element-web-module-api";
+import { sleep } from "matrix-js-sdk/src/utils.ts";
 
 import type { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload.ts";
 import { Action } from "../dispatcher/actions.ts";
@@ -38,4 +39,5 @@ export async function overwriteAccountAuth(accountInfo: AccountAuthInfo): Promis
     // wait for login to complete
     await promise;
     defaultDispatcher.unregister(dispatcherRef);
+    await sleep(0); // wait for the next tick to ensure the login is fully processed
 }

@@ -510,8 +510,8 @@ export class RoomViewStore extends EventEmitter {
         });
 
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId } = this.state;
-        const address = roomAlias || roomId!;
+        const { roomAlias, roomId } = this.state;
+        const address = roomAlias || payload.roomId || roomId!;
         const viaServers = this.state.viaServers || [];
         try {
             const cli = MatrixClientPeg.safeGet();
