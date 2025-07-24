@@ -76,9 +76,10 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -93,9 +94,10 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </span>
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -836,9 +838,10 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -853,9 +856,10 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </span>
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -1558,9 +1562,10 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -1575,9 +1580,10 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </span>
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
-            data-kind="grey"
+            data-kind="blue"
           >
             <svg
+              color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
