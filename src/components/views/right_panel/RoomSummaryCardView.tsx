@@ -169,8 +169,8 @@ const RoomSummaryCardView: React.FC<IProps> = ({
 
             <Flex as="section" justify="center" gap="var(--cpd-space-2x)" className="mx_RoomSummaryCard_badges">
                 {!vm.isDirectMessage && vm.roomJoinRule === JoinRule.Public && (
-                    <Badge kind="grey">
-                        <PublicIcon width="1em" />
+                    <Badge kind="blue">
+                        <PublicIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|public_room")}
                     </Badge>
                 )}
@@ -183,8 +183,8 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 )}
 
                 {!vm.isRoomEncrypted && (
-                    <Badge kind="grey">
-                        <LockOffIcon width="1em" />
+                    <Badge kind="blue">
+                        <LockOffIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|unencrypted")}
                     </Badge>
                 )}
