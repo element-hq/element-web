@@ -934,6 +934,7 @@
         "cross_signing_user_warning": "This user has not verified all of their sessions.",
         "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
+        "event_shield_reason_mismatched_sender": "The sender of the event does not match the owner of the device that sent it.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
