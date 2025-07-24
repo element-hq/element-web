@@ -39,6 +39,7 @@
         "@types/semver": "^7.5.8",
         "@vitest/coverage-v8": "^3.0.4",
         "matrix-web-i18n": "^3.3.0",
+        "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
         "typescript": "^5.7.3",
         "vite": "^6.1.6",

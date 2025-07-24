@@ -9,6 +9,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import externalGlobals from "rollup-plugin-external-globals";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -23,9 +24,18 @@ export default defineConfig({
         target: "esnext",
         sourcemap: true,
     },
-    plugins: [dts()],
+    plugins: [
+        dts(),
+        externalGlobals({
+            // Reuse React from the host app
+            react: "window.React",
+        }),
+    ],
     define: {
         __VERSION__: JSON.stringify(process.env.npm_package_version),
+        // Use production mode for the build as it is tested against production builds of Element Web,
+        // this is required for React JSX versions to be compatible.
+        process: { env: { NODE_ENV: "production" } },
     },
     test: {
         coverage: {

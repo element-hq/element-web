@@ -283,6 +283,7 @@ export type OriginalMessageComponentProps = {
 // @public
 export interface Profile {
     displayName?: string;
+    isGuest?: boolean;
     userId?: string;
 }
 
@@ -311,6 +312,9 @@ export interface UserIdentifierCustomisations {
         withDisplayName?: boolean;
     }): string | null;
 }
+
+// @public
+export function useWatchable<T>(watchable: Watchable<T>): T;
 
 // @public
 export type Variables = {

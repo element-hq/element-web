@@ -13,6 +13,10 @@ import { Watchable } from "./watchable.ts";
  */
 export interface Profile {
     /**
+     * Indicates whether the user is a guest user.
+     */
+    isGuest?: boolean;
+    /**
      * The user ID of the logged-in user, if undefined then no user is logged in.
      */
     userId?: string;

@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { useEffect, useState } from "react";
+
 type WatchFn<T> = (value: T) => void;
 
 function shallowCompare<T extends object>(obj1: T, obj2: T): boolean {
@@ -54,4 +56,22 @@ export class Watchable<T> {
     public unwatch(listener: (value: T) => void): void {
         this.listeners.delete(listener);
     }
+}
+
+/**
+ * A React hook to use an updated Watchable value.
+ * @param watchable - The Watchable instance to watch.
+ * @returns The live value of the Watchable.
+ * @public
+ */
+export function useWatchable<T>(watchable: Watchable<T>): T {
+    const [value, setValue] = useState<T>(watchable.value);
+    useEffect(() => {
+        setValue(watchable.value);
+        watchable.watch(setValue);
+        return (): void => {
+            watchable.unwatch(setValue);
+        };
+    }, [watchable]);
+    return value;
 }
