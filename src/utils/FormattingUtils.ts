@@ -12,6 +12,9 @@ import { useIdColorHash } from "@vector-im/compound-web";
 
 import { _t, getCurrentLanguage, getUserLanguage } from "../languageHandler";
 import { jsxJoin } from "./ReactUtils";
+
+export { formatBytes } from "../shared-components/utils/FormattingUtils";
+
 const locale = getCurrentLanguage();
 
 // It's quite costly to instanciate `Intl.NumberFormat`, hence why we do not do
@@ -38,22 +41,6 @@ const formatter = new Intl.NumberFormat(locale);
  */
 export function formatCountLong(count: number): string {
     return formatter.format(count);
-}
-
-/**
- * format a size in bytes into a human readable form
- * e.g: 1024 -> 1.00 KB
- */
-export function formatBytes(bytes: number, decimals = 2): string {
-    if (bytes === 0) return "0 Bytes";
-
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
 export function getUserNameColorClass(userId: string): string {
