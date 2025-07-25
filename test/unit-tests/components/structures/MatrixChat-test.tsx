@@ -268,6 +268,10 @@ describe("<MatrixChat />", () => {
         // (must be sync otherwise the next test will start before it happens)
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
+        // that will cause the Login to kick off an update in the background, which we need to allow to finish within
+        // an `act` to avoid warnings
+        await flushPromises();
+
         localStorage.clear();
     });
 
