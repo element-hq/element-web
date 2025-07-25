@@ -757,6 +757,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
                     break;
 
+                case EventShieldReason.MISMATCHED_SENDER:
+                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
+                    break;
+
                 default:
                     shieldReasonMessage = _t("error|unknown");
                     break;
