@@ -154,12 +154,6 @@ const EventContentBody = memo(
         const [mediaIsVisible] = useMediaVisible(mxEvent?.getId(), mxEvent?.getRoomId());
 
         const replacer = useReplacer(content, mxEvent, options);
-        const linkifyOptions = useMemo(
-            () => ({
-                render: replacerToRenderFunction(replacer),
-            }),
-            [replacer],
-        );
 
         const isEmote = content.msgtype === MsgType.Emote;
 
@@ -170,6 +164,7 @@ const EventContentBody = memo(
                     // Part of Replies fallback support
                     stripReplyFallback: stripReply,
                     mediaIsVisible,
+                    linkify,
                 }),
             [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply],
         );
@@ -189,9 +184,7 @@ const EventContentBody = memo(
             </As>
         );
 
-        if (!linkify) return body;
-
-        return <Linkify options={linkifyOptions}>{body}</Linkify>;
+        return body;
     },
 );
 
