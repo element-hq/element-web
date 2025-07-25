@@ -17,7 +17,7 @@ exports[`HTMLExport should export 1`] = `
                     <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                         <div class="mx_MatrixChat">
                         <main class="mx_RoomView">
-                            <div class="mx_Flex mx_RoomHeader light-panel">
+                            <div class="mx_RoomHeader light-panel">
                                 <span role="presentation" title="!myroom:example.org" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52" style="--cpd-avatar-size:32px">!</span>
                                 <div class="mx_RoomHeader_infoWrapper">
                                     <div

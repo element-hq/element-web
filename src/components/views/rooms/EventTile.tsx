@@ -729,11 +729,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.state.shieldColour !== EventShieldColour.NONE) {
             let shieldReasonMessage: string;
             switch (this.state.shieldReason) {
-                case null:
-                case EventShieldReason.UNKNOWN:
-                    shieldReasonMessage = _t("error|unknown");
-                    break;
-
                 case EventShieldReason.UNVERIFIED_IDENTITY:
                     shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
                     break;
@@ -760,6 +755,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
                 case EventShieldReason.VERIFICATION_VIOLATION:
                     shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+                    break;
+
+                case EventShieldReason.MISMATCHED_SENDER:
+                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
+                    break;
+
+                default:
+                    shieldReasonMessage = _t("error|unknown");
                     break;
             }
 

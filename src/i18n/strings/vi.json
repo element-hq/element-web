@@ -2623,7 +2623,6 @@
         },
         "creation_summary_dm": "%(creator)s đã tạo DM này.",
         "creation_summary_room": "%(creator)s đã tạo và định cấu hình phòng.",
-        "download_action_decrypting": "Đang giải mã",
         "download_action_downloading": "Đang tải xuống",
         "edits": {
             "tooltip_label": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa.",

@@ -9,6 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import classNames from "classnames";
 import React, { type JSX, type ComponentProps, type JSXElementConstructor, useMemo } from "react";
 
+import styles from "./Flex.module.css";
+
 type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
      * The type of the HTML element
@@ -82,5 +84,5 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
         [align, direction, display, gap, justify, wrap],
     );
 
-    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), style }, children);
+    return React.createElement(as, { ...props, className: classNames(styles.flex, className), style }, children);
 }

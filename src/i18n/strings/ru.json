@@ -3366,7 +3366,6 @@
             "unable_to_decrypt": "Не удалось расшифровать сообщение"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Расшифровка",
         "download_action_downloading": "Загрузка",
         "download_failed": "Загрузка не удалась",
         "download_failed_description": "Произошла ошибка при загрузке этого файла",

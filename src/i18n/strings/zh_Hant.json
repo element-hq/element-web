@@ -2833,7 +2833,6 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
-        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",

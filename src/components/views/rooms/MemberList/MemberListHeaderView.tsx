@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { Search, Text, Button, Tooltip, InlineSpinner } from "@vector-im/compound-web";
 import React from "react";
-import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
+import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { type MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { _t } from "../../../../languageHandler";
 
@@ -45,7 +45,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
             <InviteTooltip canInvite={vm.canInvite}>
                 <Button
                     className="mx_MemberListHeaderView_invite_small"
-                    kind="primary"
+                    kind="secondary"
                     onClick={vm.onInviteButtonClick}
                     size="sm"
                     iconOnly={true}

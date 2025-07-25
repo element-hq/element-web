@@ -10,7 +10,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
     type="button"
   >
     <div
-      class="mx_Flex mx_RoomListItemView_container"
+      class="flex mx_RoomListItemView_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -33,7 +33,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
         />
       </span>
       <div
-        class="mx_Flex mx_RoomListItemView_content"
+        class="flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -62,7 +62,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
     type="button"
   >
     <div
-      class="mx_Flex mx_RoomListItemView_container"
+      class="flex mx_RoomListItemView_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -85,7 +85,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
         />
       </span>
       <div
-        class="mx_Flex mx_RoomListItemView_content"
+        class="flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -100,7 +100,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
         </div>
         <div
           aria-hidden="true"
-          class="mx_Flex"
+          class="flex"
           data-testid="notification-decoration"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
         >
@@ -126,7 +126,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
     type="button"
   >
     <div
-      class="mx_Flex mx_RoomListItemView_container"
+      class="flex mx_RoomListItemView_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -149,7 +149,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
         />
       </span>
       <div
-        class="mx_Flex mx_RoomListItemView_content"
+        class="flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -178,7 +178,7 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
     type="button"
   >
     <div
-      class="mx_Flex mx_RoomListItemView_container"
+      class="flex mx_RoomListItemView_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -201,7 +201,7 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
         />
       </span>
       <div
-        class="mx_Flex mx_RoomListItemView_content"
+        class="flex mx_RoomListItemView_content"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <div

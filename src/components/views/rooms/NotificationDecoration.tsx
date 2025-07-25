@@ -13,7 +13,7 @@ import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/vi
 import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
 
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../../shared-components/utils/Flex";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";

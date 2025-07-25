@@ -2262,7 +2262,6 @@
         "creation_summary_dm": "%(creator)sშექმნა ეს DM.",
         "creation_summary_room": "%(creator)sოთახის შექმნა და კონფიგურაცია.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "გაშიფვრა",
         "download_action_downloading": "ჩამოტვირთვა",
         "edits": {
             "tooltip_label": "რედაქტირებულია%(date)s . დააწკაპუნეთ რედაქტირების სანახავად.",

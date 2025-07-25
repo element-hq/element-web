@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
