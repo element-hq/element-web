@@ -168,6 +168,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
+            const sendRoomEvents = [EventType.CallNotify, EventType.RTCNotification];
             const sendRecvRoomEvents = [
                 "io.element.call.encryption_keys",
                 "org.matrix.rageshake_request",
@@ -175,10 +176,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 EventType.RoomRedaction,
                 "io.element.call.reaction",
             ];
-            for (const eventType of sendRecvRoomEvents) {
+            for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
+            for (const eventType of sendRecvRoomEvents)
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
-            }
 
             const sendRecvToDevice = [
                 EventType.CallInvite,
