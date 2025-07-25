@@ -11,6 +11,7 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -357,13 +358,27 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             <SettingsTab>
                 {warning}
                 <SetIntegrationManager />
-                <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {secureBackup}
-                    {eventIndex}
-                </SettingsSection>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection heading={_t("settings|security|encryption_section")}>
+                        {secureBackup}
+                        {eventIndex}
+                    </SettingsSection>
+                </Form.Root>
                 <SettingsSection heading={_t("common|privacy")}>
                     <DiscoverySettings />
-                    {posthogSection}
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
+                        {posthogSection}
+                    </Form.Root>
                 </SettingsSection>
                 {advancedSection}
             </SettingsTab>

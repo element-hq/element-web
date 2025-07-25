@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { sortBy } from "lodash";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -106,37 +107,44 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("labs|beta_section")}>
-                    <SettingsSubsectionText>
-                        {_t("labs|beta_description", { brand: SdkConfig.get("brand") })}
-                    </SettingsSubsectionText>
-                    {betaSection}
-                </SettingsSection>
-
-                {labsSections && (
-                    <SettingsSection heading={_t("labs|experimental_section")}>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection heading={_t("labs|beta_section")}>
                         <SettingsSubsectionText>
-                            {_t(
-                                "labs|experimental_description",
-                                {},
-                                {
-                                    a: (sub) => {
-                                        return (
-                                            <a
-                                                href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
-                                                rel="noreferrer noopener"
-                                                target="_blank"
-                                            >
-                                                {sub}
-                                            </a>
-                                        );
-                                    },
-                                },
-                            )}
+                            {_t("labs|beta_description", { brand: SdkConfig.get("brand") })}
                         </SettingsSubsectionText>
-                        {labsSections}
+                        {betaSection}
                     </SettingsSection>
-                )}
+
+                    {labsSections && (
+                        <SettingsSection heading={_t("labs|experimental_section")}>
+                            <SettingsSubsectionText>
+                                {_t(
+                                    "labs|experimental_description",
+                                    {},
+                                    {
+                                        a: (sub) => {
+                                            return (
+                                                <a
+                                                    href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
+                                                    rel="noreferrer noopener"
+                                                    target="_blank"
+                                                >
+                                                    {sub}
+                                                </a>
+                                            );
+                                        },
+                                    },
+                                )}
+                            </SettingsSubsectionText>
+                            {labsSections}
+                        </SettingsSection>
+                    )}
+                </Form.Root>
             </SettingsTab>
         );
     }

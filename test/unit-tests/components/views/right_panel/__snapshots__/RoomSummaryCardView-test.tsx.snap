@@ -215,6 +215,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               aria-hidden="true"
               class="_input_19o42_24"
               id="«rv»"
+              role="switch"
               type="checkbox"
             />
             <div
@@ -939,6 +940,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               aria-hidden="true"
               class="_input_19o42_24"
               id="«r5»"
+              role="switch"
               type="checkbox"
             />
             <div
@@ -1701,6 +1703,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               aria-hidden="true"
               class="_input_19o42_24"
               id="«ri»"
+              role="switch"
               type="checkbox"
             />
             <div

@@ -41,6 +41,18 @@ test.describe("Security user settings tab", () => {
             });
         });
 
+        test("should render the security tab", { tag: "@screenshot" }, async ({ app, page, user }) => {
+            await page.setViewportSize({ width: 1024, height: 1400 });
+            const tab = await app.settings.openUserSettings("Security");
+            await expect(tab).toMatchScreenshot("security-settings-tab.png", {
+                mask: [
+                    // Contains IM name.
+                    tab.locator("#mx_SetIntegrationManager_BodyText"),
+                    tab.locator("#mx_SetIntegrationManager_ManagerName"),
+                ],
+            });
+        });
+
         test("should be able to set an ID server", async ({ app, context, user, page }) => {
             const tab = await app.settings.openUserSettings("Security");
 

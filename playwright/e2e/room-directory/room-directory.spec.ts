@@ -38,12 +38,11 @@ test.describe("Room Directory", () => {
             // Publish into the public rooms directory
             const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
             await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue(`#gaming:${user.homeServer}`);
-            const checkbox = publishedAddresses
-                .locator(".mx_SettingsFlag", {
-                    hasText: `Publish this room to the public in ${user.homeServer}'s room directory?`,
-                })
-                .getByRole("switch");
-            await checkbox.check();
+            const checkbox = publishedAddresses.getByRole("switch", {
+                name: `Publish this room to the public in ${user.homeServer}'s room directory?`,
+            });
+            // .click() rather than .check() as checking happens after publish
+            await checkbox.click();
             await expect(checkbox).toBeChecked();
 
             await app.closeDialog();

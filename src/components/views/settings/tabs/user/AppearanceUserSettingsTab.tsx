@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type ReactNode } from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
-import SdkConfig from "../../../../../SdkConfig";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import Field from "../../../elements/Field";
@@ -48,7 +48,6 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
     private renderAdvancedSection(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
-        const brand = SdkConfig.get().brand;
         const toggle = (
             <AccessibleButton
                 kind="link"
@@ -62,21 +61,18 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         let advanced: React.ReactNode;
 
         if (this.state.showAdvanced) {
-            const tooltipContent = _t("settings|appearance|custom_font_description", { brand });
             advanced = (
                 <>
-                    <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} useCheckbox={true} />
+                    <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} />
 
                     <SettingsFlag
                         name="useBundledEmojiFont"
                         level={SettingLevel.DEVICE}
-                        useCheckbox={true}
                         onChange={(checked) => this.setState({ useBundledEmojiFont: checked })}
                     />
                     <SettingsFlag
                         name="useSystemFont"
                         level={SettingLevel.DEVICE}
-                        useCheckbox={true}
                         onChange={(checked) => this.setState({ useSystemFont: checked })}
                     />
                     <Field
@@ -89,8 +85,6 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
 
                             SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
                         }}
-                        tooltipContent={tooltipContent}
-                        forceTooltipVisible={true}
                         disabled={!this.state.useSystemFont}
                         value={this.state.systemFont}
                     />
@@ -110,10 +104,17 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
                     <ThemeChoicePanel />
-                    <LayoutSwitcher />
-                    <FontScalingPanel />
-                    {this.renderAdvancedSection()}
-                    <ImageSizePanel />
+                    <Form.Root
+                        onSubmit={(evt) => {
+                            evt.preventDefault();
+                            evt.stopPropagation();
+                        }}
+                    >
+                        <LayoutSwitcher />
+                        <FontScalingPanel />
+                        {this.renderAdvancedSection()}
+                        <ImageSizePanel />
+                    </Form.Root>
                 </SettingsSection>
             </SettingsTab>
         );
