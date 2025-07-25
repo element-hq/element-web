@@ -1,5 +1,12 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 import React, { useRef, type JSX, useCallback } from "react";
-import { type VirtuosoHandle, type ListRange, Virtuoso, VirtuosoProps } from "react-virtuoso";
+import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
 
 /**
  * Context object passed to each list item containing the currently focused index
@@ -16,7 +23,7 @@ export interface IListViewProps<Item, Context>
     extends Omit<VirtuosoProps<Item, ListContext<Context>>, "data" | "itemContent" | "context"> {
     /**
      * The array of items to display in the virtualized list.
-     * Each item will be passed to getRowComponent for rendering.
+     * Each item will be passed to getItemComponent for rendering.
      */
     items: Item[];
 
@@ -34,11 +41,11 @@ export interface IListViewProps<Item, Context>
      * @param onBlur - Callback to call when the item loses focus
      * @returns JSX element representing the rendered item
      */
-    getRowComponent: (index: number, item: Item, context: ListContext<Context>, onBlur: () => void) => JSX.Element;
+    getItemComponent: (index: number, item: Item, context: ListContext<Context>, onBlur: () => void) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
-     * This will be available in the ListContext passed to getRowComponent.
+     * This will be available in the ListContext passed to getItemComponent.
      */
     context?: Context;
 
@@ -70,19 +77,25 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     /** Range of currently visible items in the viewport */
     const [visibleRange, setVisibleRange] = React.useState<ListRange | undefined>(undefined);
 
+    // Extract our custom props to avoid conflicts with Virtuoso props
+    const { items, onSelectItem, getItemComponent, isItemFocusable, context, ...virtuosoProps } = props;
+
     /**
      * Wrapper function that renders each list item and provides the onBlur callback.
      * This function is called by Virtuoso for each visible item.
      */
-    const getRowComponent = (index: number, item: Item, context: ListContext<Context>): JSX.Element => {
-        const onBlur = (): void => {
-            if (focusedIndex == index) {
-                setFocusedIndex(-1);
-                setLastFocusedIndex(index);
-            }
-        };
-        return props.getRowComponent(index, item, context, onBlur);
-    };
+    const getItemComponentInternal = useCallback(
+        (index: number, item: Item, context: ListContext<Context>): JSX.Element => {
+            const onBlur = (): void => {
+                if (focusedIndex == index) {
+                    setFocusedIndex(-1);
+                    setLastFocusedIndex(index);
+                }
+            };
+            return getItemComponent(index, item, context, onBlur);
+        },
+        [focusedIndex, getItemComponent],
+    );
 
     /**
      * Scrolls to a specific item index and sets it as focused.
@@ -108,20 +121,20 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
      */
     const scrollToItem = useCallback(
         (index: number, isDirectionDown: boolean, align?: "center" | "end" | "start"): void => {
-            const totalRows = props.items.length;
+            const totalRows = items.length;
             let nextIndex = index;
 
             // Skip non-focusable items until we find a focusable one or reach the bounds
-            if (props.isItemFocusable) {
+            if (isItemFocusable) {
                 if (isDirectionDown) {
                     // Moving down: find the next focusable item
-                    while (nextIndex < totalRows - 1 && !props.isItemFocusable(props.items[nextIndex])) {
+                    while (nextIndex < totalRows - 1 && !isItemFocusable(items[nextIndex])) {
                         nextIndex++;
                     }
                     nextIndex = Math.min(totalRows - 1, nextIndex);
                 } else {
                     // Moving up: find the previous focusable item
-                    while (nextIndex > 0 && !props.isItemFocusable(props.items[nextIndex])) {
+                    while (nextIndex > 0 && !isItemFocusable(items[nextIndex])) {
                         nextIndex--;
                     }
                     nextIndex = Math.max(0, nextIndex);
@@ -130,7 +143,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
             scrollToIndex(nextIndex, align);
         },
-        [focusedIndex, scrollToIndex, props.items, props.isItemFocusable],
+        [scrollToIndex, items, isItemFocusable],
     );
 
     /**
@@ -149,14 +162,14 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 scrollToItem(focusedIndex + 1, true);
                 handled = true;
             } else if ((e.code === "Enter" || e.code === "Space") && focusedIndex >= 0) {
-                const item = props.items[focusedIndex];
-                props.onSelectItem(item);
+                const item = items[focusedIndex];
+                onSelectItem(item);
                 handled = true;
             } else if (e.code === "Home") {
                 scrollToIndex(0);
                 handled = true;
             } else if (e.code === "End") {
-                scrollToIndex(props.items.length - 1);
+                scrollToIndex(items.length - 1);
                 handled = true;
             } else if (e.code === "PageDown" && visibleRange) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
@@ -173,7 +186,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 e.preventDefault();
             }
         },
-        [scrollToIndex, scrollToItem, focusedIndex, visibleRange, props.items, props.onSelectItem],
+        [scrollToIndex, scrollToItem, focusedIndex, visibleRange, items, onSelectItem],
     );
 
     /**
@@ -200,20 +213,10 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         e.preventDefault();
     };
 
-    let listContext: ListContext<Context> = {
+    const listContext: ListContext<Context> = {
         focusedIndex: focusedIndex,
         context: props.context || ({} as Context),
     };
-
-    // Extract our custom props to avoid conflicts with Virtuoso props
-    const {
-        items,
-        onSelectItem,
-        getRowComponent: propsGetRowComponent,
-        isItemFocusable,
-        context,
-        ...virtuosoProps
-    } = props;
 
     return (
         <Virtuoso
@@ -228,7 +231,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             overscan={props.overscan}
             data={props.items}
             onFocus={onFocus}
-            itemContent={getRowComponent}
+            itemContent={getItemComponentInternal}
             {...virtuosoProps}
         />
     );

@@ -19,7 +19,7 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
-import { ListContext, ListView } from "../../../utils/ListView";
+import { type ListContext, ListView } from "../../../utils/ListView";
 
 interface IProps {
     roomId: string;
@@ -28,8 +28,9 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
+    const { isPresenceEnabled, onClickMember } = vm;
 
-    const getRowComponent = useCallback(
+    const getItemComponent = useCallback(
         (index: number, item: MemberWithSeparator, context: ListContext<any>, onBlur: () => void): JSX.Element => {
             const focused = index === context.focusedIndex;
             if (item === SEPARATOR) {
@@ -38,7 +39,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 return (
                     <RoomMemberTileView
                         member={item.member}
-                        showPresence={vm.isPresenceEnabled}
+                        showPresence={isPresenceEnabled}
                         focused={focused}
                         index={index}
                         onBlur={onBlur}
@@ -55,20 +56,20 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 );
             }
         },
-        [vm.isPresenceEnabled],
+        [isPresenceEnabled],
     );
 
     const handleSelectItem = useCallback(
         (item: MemberWithSeparator): void => {
             if (item !== SEPARATOR) {
                 if (item.member) {
-                    vm.onClickMember(item.member);
+                    onClickMember(item.member);
                 } else {
-                    vm.onClickMember(item.threePidInvite);
+                    onClickMember(item.threePidInvite);
                 }
             }
         },
-        [vm.onClickMember],
+        [onClickMember],
     );
 
     const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {
@@ -91,7 +92,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 <ListView
                     items={vm.members}
                     onSelectItem={handleSelectItem}
-                    getRowComponent={getRowComponent}
+                    getItemComponent={getItemComponent}
                     isItemFocusable={isItemFocusable}
                     overscan={15 * 56}
                     aria-label={_t("member_list|list_title")}
