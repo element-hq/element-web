@@ -13,7 +13,7 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { mocked } from "jest-mock";
 
 import { PredictableRandom } from "./test-utils/predictableRandom";
-import { initRageshake } from "../src/vector/rageshakesetup.ts";
+import * as rageshake from "../src/rageshake/rageshake";
 
 declare global {
     // eslint-disable-next-line no-var
@@ -43,13 +43,16 @@ beforeEach(() => {
 // capture logs using the rageshake infrastructure, then dump them out after the test.
 if (env["GITHUB_ACTIONS"] !== undefined) {
     beforeEach(async () => {
-        await initRageshake();
+        await rageshake.init(/* setUpPersistence = */ false);
     });
 
     afterEach(async () => {
-        process.stderr.write(`::group::Console logs from during test '${expect.getState().currentTestName}'\n\n`);
-        process.stderr.write(global.mx_rage_logger.flush(false));
-        process.stderr.write("::endgroup::\n");
+        const logs = global.mx_rage_logger.flush(/* keeplogs = */ false);
+        if (logs) {
+            process.stderr.write(`::group::Console logs from test '${expect.getState().currentTestName}'\n\n`);
+            process.stderr.write(logs);
+            process.stderr.write("::endgroup::\n");
+        }
     });
 }
 
