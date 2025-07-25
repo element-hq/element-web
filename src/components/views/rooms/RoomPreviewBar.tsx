@@ -754,6 +754,7 @@ const WrappedRoomPreviewBar = (props: IProps): JSX.Element => {
     if (moduleRenderer) {
         return moduleRenderer(
             {
+                ...props,
                 roomId: props.room?.roomId ?? props.roomId,
                 roomAlias: props.room?.getCanonicalAlias() ?? props.roomAlias,
             },
