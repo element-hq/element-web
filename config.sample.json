@@ -1,33 +1,35 @@
 {
     "default_server_config": {
         "m.homeserver": {
-            "base_url": "https://matrix-client.matrix.org",
-            "server_name": "matrix.org"
+            "base_url": "https://server.quali.chat",
+            "server_name": "server.quali.chat"
         },
         "m.identity_server": {
             "base_url": "https://vector.im"
         }
     },
     "disable_custom_urls": false,
-    "disable_guests": false,
-    "disable_login_language_selector": false,
+    "disable_guests": true,
+    "disable_login_language_selector": true,
     "disable_3pid_login": false,
     "force_verification": false,
-    "brand": "Element",
+    "brand": "quali.chat",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
         "https://scalar.vector.im/_matrix/integrations/v1",
         "https://scalar.vector.im/api",
-        "https://scalar-staging.vector.im/_matrix/integrations/v1",
-        "https://scalar-staging.vector.im/api"
+        "https://scalar-staging.vector.im/_matrix/integrations/v1"
     ],
     "default_widget_container_height": 280,
     "default_country_code": "GB",
     "show_labs_settings": false,
-    "features": {},
+    "features": {
+        "feature_rust_crypto": true,
+        "feature_new_room_decoration_ui": true
+    },
     "default_federate": true,
-    "default_theme": "light",
+    "default_theme": "custom-eclipse",
     "room_directory": {
         "servers": ["matrix.org"]
     },
@@ -36,7 +38,65 @@
         "https://matrix-client.matrix.org": false
     },
     "setting_defaults": {
-        "breadcrumbs": true
+        "breadcrumbs": true,
+        "showCallButtonsInComposer": false,
+        "feature_element_call_video_rooms": false,
+        "feature_group_calls": false,
+        "feature_disable_call_per_sender_encryption": false,
+        "feature_voice_broadcast": false,
+        "UIFeature.thirdPartyId": false,
+        "UIFeature.voip": true,
+        "UIFeature.widgets": false,
+        "UIFeature.IdentityServer": false,
+        "custom_themes": [
+            {
+                "name": "eclipse",
+                "is_dark": true,
+                "fonts": {
+                    "faces": [
+                        {
+                            "font-family": "Nunito"
+                        }
+                    ],
+                    "general": "Nunito",
+                    "monospace": "Nunito"
+                },
+                "colors": {
+                    "accent-color": "#9baff7",
+                    "primary-color": "#9baff7",
+                    "warning-color": "#bb4b55",
+                    "primary-content": "#fff",
+                    "secondary-content": "#a9b2bc",
+                    "sidebar-color-50pct": "#00000080",
+                    "quinary-content": "#26282d",
+                    "system": "#1d1f24",
+                    "panels": "#1d1f24",
+                    "icon-button-color": "#ffffff",
+                    "roomlist-background-color": "#222327",
+                    "roomlist-highlights-color": "#2F3137",
+                    "timeline-background-color": "#101317",
+                    "timeline-highlights-color": "#232429",
+                    "timeline-text-secondary-color": "#ffffff",
+                    "timeline-text-color": "#ebeef2",
+                    "cpd-color-text-decorative-1": "#80D4DE",
+                    "cpd-color-text-decorative-2": "#F8D288",
+                    "cpd-color-text-decorative-3": "#AD93F8",
+                    "cpd-color-text-decorative-4": "#80D4DE",
+                    "cpd-color-text-decorative-5": "#F8D288",
+                    "cpd-color-text-decorative-6": "#F8D288",
+                    "cpd-color-bg-decorative-1": "#80D4DE",
+                    "cpd-color-bg-decorative-2": "#F8D288",
+                    "cpd-color-bg-decorative-3": "#AD93F8",
+                    "cpd-color-bg-decorative-4": "#80D4DE",
+                    "cpd-color-bg-decorative-5": "#F8D288",
+                    "cpd-color-bg-decorative-6": "#AD93F8",
+                    "cpd-color-icon-accent-tertiary": "#9baff7",
+                    "cpd-color-icon-tertiary": "#ffffff",
+                    "cpd-color-bg-accent-rest": "#9baff7",
+                    "cpd-color-icon-success-primary": "#9baff7"
+                }
+            }
+        ]
     },
     "jitsi": {
         "preferred_domain": "meet.element.io"
@@ -46,5 +106,30 @@
         "participant_limit": 8,
         "brand": "Element Call"
     },
-    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+    "branding": {
+        "auth_header_logo_url": "welcome/images/quali.chat-logo.svg",
+        "auth_footer_links": [
+            {
+                "text": "Twitter / X",
+                "url": "https://x.com/Quali_chat"
+            },
+            {
+                "text": "Instagram",
+                "url": "https://www.instagram.com/quali.chat/"
+            },
+            {
+                "text": "Terms and Conditions",
+                "url": "https://www.quali.chat/terms"
+            },
+            {
+                "text": "Privacy Policy",
+                "url": "https://www.quali.chat/privacy"
+            }
+        ],
+        "welcome_background_url": "themes/element/img/backgrounds/2-eclipses.png"
+    },
+    "embedded_pages": {
+        "login_for_welcome": true
+    }
 }

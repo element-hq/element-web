@@ -1,4 +1,5 @@
 /*
+Copyright 2025, Keypair Establishment.
 Copyright 2019-2024 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
@@ -94,4 +95,37 @@ div.mx_AccessibleButton_kind_link.mx_Login_forgot {
 .mx_Login_fullWidthButton {
     width: 100%;
     margin-bottom: 16px;
+}
+
+// quali.chat custom
+.mx_SSOButtons .mx_SSOButton {
+    border-radius: 100px !important;
+    background-color: #fff;
+}
+
+// quali.chat custom
+.mx_SSOButton:hover {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+// quali.chat custom
+// use Nunito font for auth screen as the global settings doesn't apply to auth screens
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    src: url("$(res)/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 600;
+    src: url("$(res)/fonts/Nunito/Nunito-SemiBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 700;
+    src: url("$(res)/fonts/Nunito/Nunito-Bold.ttf") format("truetype");
 }

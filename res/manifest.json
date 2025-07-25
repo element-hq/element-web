@@ -1,6 +1,6 @@
 {
-    "name": "Element",
-    "short_name": "Element",
+    "name": "quali.chat",
+    "short_name": "quali.chat",
     "display": "standalone",
     "theme_color": "#76CFA6",
     "start_url": "index.html",

@@ -1,20 +1,40 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2019-2024 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+// quali.chat custom
 .mx_AuthHeader {
     display: flex;
-    flex-direction: column;
-    width: 206px;
-    padding: 25px 25px;
-    box-sizing: border-box;
+    padding: 25px;
+    align-items: center;
+    gap: 21px;
+}
+
+// quali.chat custom
+.mx_AuthBody_language {
+    flex: 0 1 105px;
+    margin-left: auto;
+}
+
+// quali.chat custom
+.mx_Dropdown_menu .mx_Dropdown_option {
+    color: var(--cpd-color-gray-800);
+    background-color: #000;
 }
 
 @media only screen and (max-width: 480px) {
     .mx_AuthHeader {
         display: none;
+        // quali.chat custom
+        padding: 15px;
+    }
+
+    // quali.chat custom
+    .mx_AuthBody_language {
+        flex: 1 1 60px;
     }
 }

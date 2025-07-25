@@ -1,11 +1,11 @@
 {
-    "name": "element-web",
+    "name": "quali-chat-web",
     "version": "1.11.106",
-    "description": "Element: the future of secure communication",
-    "author": "New Vector Ltd.",
+    "description": "quali.chat: the app for token-gated communities",
+    "author": "Keypair Establishment",
     "repository": {
         "type": "git",
-        "url": "https://github.com/element-hq/element-web"
+        "url": "https://github.com/quali-chat/quali-chat-web"
     },
     "license": "SEE LICENSE IN README.md",
     "files": [

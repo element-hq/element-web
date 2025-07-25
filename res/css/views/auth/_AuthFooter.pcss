@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2019-2024 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -11,12 +12,54 @@ Please see LICENSE files in the repository root for full details.
     font: var(--cpd-font-body-md-regular);
     opacity: 0.72;
     padding: 20px 0;
-    background: linear-gradient(rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.8));
+    // quali.chat custom
+    margin-top: auto;
+    // quali.chat custom
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
 }
 
 .mx_AuthFooter a:link,
 .mx_AuthFooter a:hover,
+// quali.chat custom
 .mx_AuthFooter a:visited {
-    color: $accent-fg-color;
-    margin: 0 22px;
+    color: #fff;
+    text-decoration: none;
+    margin: 0 60px;
+}
+
+// quali.chat custom
+@media (max-width: 1024px) {
+    .mx_AuthFooter a:link,
+    .mx_AuthFooter a:hover,
+    .mx_AuthFooter a:visited {
+        margin: 0 40px;
+    }
+}
+
+// quali.chat custom
+@media (max-width: 768px) {
+    .mx_AuthFooter {
+        padding: 15px 0;
+    }
+
+    .mx_AuthFooter a:link,
+    .mx_AuthFooter a:hover,
+    .mx_AuthFooter a:visited {
+        margin: 0 30px;
+        font-size: 0.9em;
+    }
+}
+
+// quali.chat custom
+@media (max-width: 480px) {
+    .mx_AuthFooter {
+        padding: 10px 0;
+    }
+
+    .mx_AuthFooter a:link,
+    .mx_AuthFooter a:hover,
+    .mx_AuthFooter a:visited {
+        margin: 0 15px;
+        font-size: 0.85em;
+    }
 }

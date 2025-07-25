@@ -209,6 +209,7 @@
         "country_dropdown": "Country Dropdown",
         "create_account_prompt": "New here? <a>Create an account</a>",
         "create_account_title": "Create account",
+        "description": "Instant, secure access to all your token communities in one decentralized chat and collaboration dApp.",
         "email_discovery_text": "Use email to optionally be discoverable by existing contacts.",
         "email_field_label": "Email",
         "email_field_label_invalid": "Doesn't look like a valid email address",
@@ -229,6 +230,7 @@
         "forgot_password_email_required": "The email address linked to your account must be entered.",
         "forgot_password_prompt": "Forgotten your password?",
         "forgot_password_send_email": "Send email",
+        "header": "Enter your exclusive token-gated chats!",
         "identifier_label": "Sign in with",
         "incorrect_credentials": "Incorrect username and/or password.",
         "incorrect_credentials_detail": "Please note you are logging into the %(hs)s server, not matrix.org.",
@@ -487,6 +489,7 @@
         "cancel": "Cancel",
         "capabilities": "Capabilities",
         "copied": "Copied!",
+        "copy_contract_address": "Copy Contract address",
         "credits": "Credits",
         "dark": "Dark",
         "description": "Description",
@@ -1100,11 +1103,11 @@
         "hs_blocked": "This homeserver has been blocked by its administrator.",
         "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Invalid configuration: no default server specified.",
-        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
+        "invalid_json": "Your quali.chat configuration contains invalid JSON. Please correct the problem and reload the page.",
         "invalid_json_detail": "The message from the parser is: %(message)s",
         "invalid_json_generic": "Invalid JSON",
         "mau": "This homeserver has hit its Monthly Active User limit.",
-        "misconfigured": "Your Element is misconfigured",
+        "misconfigured": "Your quali.chat is misconfigured",
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "non_urgent_echo_failure_toast": "Your server isn't responding to some <a>requests</a>.",
         "resource_limits": "This homeserver has exceeded one of its resource limits.",
@@ -1702,15 +1705,25 @@
         "m.key.verification.request": "%(name)s is requesting verification"
     },
     "onboarding": {
+        "automatic_access": {
+            "title": "AUTOMATIC ACCESS:",
+            "description": "You're automatically added to all the chat rooms of tokens you own."
+        },
         "create_room": "Create a Group Chat",
-        "explore_rooms": "Explore Public Rooms",
+        "explore_rooms": "Search",
         "has_avatar_label": "Great, that'll help people know it's you",
         "intro_byline": "Own your conversations.",
         "intro_welcome": "Welcome to %(appName)s",
+        "name_service": {
+            "title": "‘NS’ Integration:",
+            "description": "If you have a Name Service domain, it becomes your display name."
+        },
         "no_avatar_label": "Add a photo so people know it's you.",
-        "send_dm": "Send a Direct Message",
+        "send_dm": "Send a DM",
+        "use_case_discover_messaging": "Discover & join token-gated communities",
+        "use_case_encrypted_messaging": "Chat Wallet-to-Wallet in the encrypted Direct Messages",
         "welcome_detail": "Now, let's help you get started",
-        "welcome_user": "Welcome %(name)s"
+        "welcome_user": "HELLO, <name>"
     },
     "pill": {
         "permalink_other_room": "Message in %(room)s",
@@ -4030,7 +4043,7 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome_to_element": "Welcome to quali.chat",
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {

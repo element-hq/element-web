@@ -1,3 +1,13 @@
+# quali-chat-web
+
+A customized fork of [element-hq/element-web](https://github.com/element-hq/element-web) tailored for quali.chat, providing a Matrix-based web client interface.
+
+For accessing quali.chat on an Android or iOS device, we currently recommend the
+native apps [quali-chat-android](https://github.com/quali-chat/quali-chat-android)
+and [quali-chat-ios](https://github.com/quali-chat/quali-chat-ios).
+
+---
+
 [![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
 ![Tests](https://github.com/element-hq/element-web/actions/workflows/tests.yaml/badge.svg)
 ![Static Analysis](https://github.com/element-hq/element-web/actions/workflows/static_analysis.yaml/badge.svg)

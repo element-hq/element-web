@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
@@ -273,5 +274,139 @@ Please see LICENSE files in the repository root for full details.
         width: auto;
         max-width: 500px;
         padding: 10px;
+    }
+}
+
+// quali.chat custom
+.qc_AuthPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    width: 750px;
+    margin: 125px 0 auto 0;
+    padding-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: #08090b;
+}
+
+// quali.chat custom
+.qc_Header_title {
+    width: 380px;
+    color: #80d4de;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 36px;
+}
+
+// quali.chat custom
+.qc_Header_subtitle {
+    display: flex;
+    justify-content: center;
+    width: 473px;
+    height: 48px;
+    margin-top: 23px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-family: Helvetica;
+    letter-spacing: 1px;
+    line-height: 18px;
+}
+
+.qc_ButtonGroup {
+    margin-top: 24px;
+}
+
+// quali.chat custom
+.qc_AuthPage .qc_ButtonGroup .mx_ButtonRow .mx_SSOButtons .mx_SSOButton {
+    border-radius: 100px;
+    background-color: #fff;
+    font-family: "Nunito";
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22.5px;
+    letter-spacing: 1px;
+}
+
+// quali.chat custom
+.qc_AuthPage .qc_ButtonGroup .mx_ButtonRow .mx_SSOButtons .mx_SSOButton:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+// quali.chat custom
+@media (max-width: 1024px) {
+    .qc_AuthPage {
+        width: 650px;
+        margin: 100px 0 auto 0;
+    }
+
+    .qc_Header_title {
+        width: 340px;
+        font-size: 28px;
+        line-height: 34px;
+    }
+
+    .qc_Header_subtitle {
+        width: 400px;
+        font-size: 13px;
+        line-height: 16px;
+    }
+
+    .qc_ButtonGroup {
+        width: 300px;
+    }
+}
+
+// quali.chat custom
+@media (max-width: 768px) {
+    .qc_AuthPage {
+        width: 90%;
+        margin: 80px 0 auto 0;
+    }
+
+    .qc_Header_title {
+        width: 80%;
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .qc_Header_subtitle {
+        width: 90%;
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .qc_ButtonGroup {
+        width: 85%;
+    }
+}
+
+// quali.chat custom
+@media (max-width: 480px) {
+    .qc_AuthPage {
+        width: 95%;
+        margin: 50px 0 auto 0;
+        padding-bottom: 20px;
+    }
+
+    .qc_Header_title {
+        width: 90%;
+        font-size: 20px;
+        line-height: 26px;
+    }
+
+    .qc_Header_subtitle {
+        width: 95%;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .qc_ButtonGroup {
+        width: 95%;
     }
 }

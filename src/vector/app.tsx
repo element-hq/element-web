@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
@@ -60,7 +61,9 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
 
-    platform?.startUpdater();
+    // quali.chat custom
+    // disable updates
+    // platform?.startUpdater();
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();

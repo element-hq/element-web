@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2024 New Vector Ltd.
 Copyright 2020-2023 The Matrix.org Foundation C.I.C.
 
@@ -9,7 +10,10 @@ Please see LICENSE files in the repository root for full details.
 /* Note: the room tile expects to be in a flexbox column container */
 .mx_RoomTile {
     margin-bottom: 4px;
-    padding: 4px;
+    // quali.chat custom
+    padding: 3px 0px;
+    // quali.chat custom
+    border: 1px solid transparent;
 
     /* The tile is also a flexbox row itself */
     display: flex;
@@ -24,6 +28,14 @@ Please see LICENSE files in the repository root for full details.
     &.mx_RoomTile_hasMenuOpen {
         background-color: $panel-actions;
         border-radius: 8px;
+        // quali.chat custom
+        border-color: $accent;
+    }
+
+    // quali.chat custom
+    &.mx_RoomTile_unread {
+        background: linear-gradient(270deg, rgba(255, 255, 255, 0.33) 0%, rgba(255, 255, 255, 0) 20%),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.33) 0%, rgba(255, 255, 255, 0) 20%);
     }
 
     .mx_DecoratedRoomAvatar,

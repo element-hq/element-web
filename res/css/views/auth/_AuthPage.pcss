@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Keypair Establishment.
 Copyright 2019-2024 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -29,4 +30,15 @@ Please see LICENSE files in the repository root for full details.
     @media only screen and (max-width: 480px) {
         margin-top: 0;
     }
+}
+
+// quali.chat custom
+// use Nunito font for auth screen as the global settings doesn't apply to auth screens
+.mx_AuthPage * {
+    font-family: "Nunito";
+}
+
+// quali.chat custom
+.mx_AuthPage .mx_CompleteSecurityBody {
+    align-self: center;
 }
