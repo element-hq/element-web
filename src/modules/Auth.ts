@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type AccountAuthInfo } from "@element-hq/element-web-module-api";
-import { sleep } from "matrix-js-sdk/src/utils.ts";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import type { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload.ts";
 import { Action } from "../dispatcher/actions.ts";
