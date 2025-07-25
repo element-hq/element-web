@@ -11,28 +11,24 @@ import { type EventTileTypeProps } from "../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
 import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
-import { SubscriptionViewModel } from "../SubscriptionViewModel";
+import { BaseViewModel } from "../base/BaseViewModel";
 
-export class TextualEventViewModel extends SubscriptionViewModel<TextualEventViewSnapshot> {
-    public constructor(private eventTileProps: EventTileTypeProps) {
-        super();
+export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapshot, EventTileTypeProps> {
+    public constructor(props: EventTileTypeProps) {
+        super(props, "");
+        this.setTextFromEvent();
     }
 
+    private setTextFromEvent = (): void => {
+        const text = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
+        this.snapshot.set(text);
+    };
+
     protected addDownstreamSubscription = (): void => {
-        this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.subs.emit);
+        this.props.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
     };
 
     protected removeDownstreamSubscription = (): void => {
-        this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.subs.emit);
-    };
-
-    public getSnapshot = (): TextualEventViewSnapshot => {
-        const text = textForEvent(
-            this.eventTileProps.mxEvent,
-            MatrixClientPeg.safeGet(),
-            true,
-            this.eventTileProps.showHiddenEvents,
-        );
-        return text;
+        this.props.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
     };
 }
