@@ -154,6 +154,7 @@
         "react-string-replace": "^1.1.1",
         "react-transition-group": "^4.4.1",
         "react-virtualized": "^9.22.5",
+        "react-virtuoso": "^4.12.6",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.17.0",

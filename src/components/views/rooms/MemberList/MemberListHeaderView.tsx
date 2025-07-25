@@ -19,10 +19,10 @@ interface TooltipProps {
     children: React.ReactNode;
 }
 
-const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
-    if (canInvite) return children;
+const InviteTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
+    const description: string = canInvite ? _t("action|invite") : _t("member_list|invite_button_no_perms_tooltip");
     // If the user isn't allowed to invite others to this room, wrap with a relevant tooltip.
-    return <Tooltip description={_t("member_list|invite_button_no_perms_tooltip")}>{children}</Tooltip>;
+    return <Tooltip description={description}>{children}</Tooltip>;
 };
 
 interface Props {
@@ -42,7 +42,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
     if (shouldShowSearch) {
         /// When rendered alongside a search box, the invite button is just an icon.
         return (
-            <OptionalTooltip canInvite={vm.canInvite}>
+            <InviteTooltip canInvite={vm.canInvite}>
                 <Button
                     className="mx_MemberListHeaderView_invite_small"
                     kind="secondary"
@@ -54,13 +54,13 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
                     aria-label={_t("action|invite")}
                     type="button"
                 />
-            </OptionalTooltip>
+            </InviteTooltip>
         );
     }
 
     // Without a search box, invite button is a full size button.
     return (
-        <OptionalTooltip canInvite={vm.canInvite}>
+        <InviteTooltip canInvite={vm.canInvite}>
             <Button
                 kind="secondary"
                 size="sm"
@@ -72,7 +72,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
             >
                 {_t("action|invite")}
             </Button>
-        </OptionalTooltip>
+        </InviteTooltip>
     );
 };
 
