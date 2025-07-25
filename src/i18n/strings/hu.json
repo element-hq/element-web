@@ -860,6 +860,7 @@
             "elementCallUrl": "Element Call webcím"
         },
         "settings_explorer": "Beállításböngésző",
+        "show_empty_content_events": "Üres tartalmú események megjelenítése",
         "show_hidden_events": "Rejtett események megjelenítése az idővonalon",
         "spaces": {
             "<%(count)s szóköz>": "other",
@@ -1442,6 +1443,7 @@
         "room_list_navigate_down": "Navigálás lefelé a szobalistában",
         "room_list_navigate_up": "Navigálás felfelé a szobalistában",
         "room_list_select_room": "Szoba kiválasztása a szobalistából",
+        "save": "Mentés",
         "scroll_down_timeline": "Görgetés lefelé az idővonalon",
         "scroll_up_timeline": "Görgetés felfelé az idővonalon",
         "search": "Keresés (engedélyezni kell)",
