@@ -44,7 +44,10 @@ test.describe("Room list panel", () => {
 
     test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
         await page.setViewportSize({ width: 575, height: 600 });
-        const roomListPanel = getRoomListView(page);
-        await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+
+        const roomListView = getRoomListView(page);
+        // Wait for the last room to be visible
+        await expect(roomListView.getByRole("gridcell", { name: "Open room room19" })).toBeVisible();
+        await expect(roomListView).toMatchScreenshot("room-list-panel-smallscreen.png");
     });
 });

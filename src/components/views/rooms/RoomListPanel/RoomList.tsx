@@ -5,16 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
-import { AutoSizer, List, type ListRowProps } from "react-virtualized";
+import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
-import { RovingTabIndexProvider } from "../../../../accessibility/RovingTabIndex";
-import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
-import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
-import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 
 interface RoomListProps {
     /**
@@ -23,58 +20,90 @@ interface RoomListProps {
     vm: RoomListViewState;
 }
 
+
+type RoomListState = {
+    currentRoomIndex: number | undefined;
+    rooms: Room[];
+    spaceId: string;
+};
+
 /**
  * A virtualized list of rooms.
  */
-export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Element {
-    const roomRendererMemoized = useCallback(
-        ({ key, index, style }: ListRowProps) => (
-            <RoomListItemView room={rooms[index]} key={key} style={style} isSelected={activeIndex === index} />
-        ),
-        [rooms, activeIndex],
-    );
+export function RoomList({ vm: { rooms, activeIndex: currentRoomIndex, spaceId } }: RoomListProps): JSX.Element {
+    // To follow the grid pattern (https://www.w3.org/WAI/ARIA/apg/patterns/grid/), we need to set the first element of the list as a row.
+    // The virtuoso component is set to role="grid" and the items are set to role="gridcell".
+    // TODO REPLACE WITH A CUSToM LIST COMPONENT
+    const scrollerRef = useCallback((node: HTMLElement | Window | null) => {
+        if (node instanceof HTMLElement) {
+            node.firstElementChild?.setAttribute("role", "row");
+        }
+    }, []);
 
-    // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
+    const virtuosoRef = useRef<VirtuosoHandle | null>(null);
+    const [roomListState, setRoomListState] = useState<RoomListState>({ currentRoomIndex, rooms, spaceId});
+
+    useEffect(() => {
+        // TODO: this logic is not correct, but was introduced so that we change the spaceId and the rooms at the same time.
+        // Ideally the props should be updated in a valid way(we don't have a mismatched spaceId/rooms being passed in).
+        if(roomListState.spaceId !== spaceId && roomListState.rooms.length !== rooms.length) {
+            virtuosoRef.current?.scrollIntoView({
+                align: `start`,
+                index: currentRoomIndex || 0,
+                behavior: "auto",
+                targetsNextRefresh: true,
+            });
+            setRoomListState({ ...roomListState, rooms, spaceId, currentRoomIndex});
+        }
+    
+    }, [spaceId, rooms, currentRoomIndex, roomListState]);
+   
     return (
-        <RovingTabIndexProvider handleHomeEnd={true} handleUpDown={true}>
-            {({ onKeyDownHandler }) => (
-                <div
-                    className="mx_RoomList"
-                    data-testid="room-list"
-                    onKeyDown={(ev) => {
-                        const navAction = getKeyBindingsManager().getNavigationAction(ev);
-                        if (
-                            navAction === KeyBindingAction.NextLandmark ||
-                            navAction === KeyBindingAction.PreviousLandmark
-                        ) {
-                            LandmarkNavigation.findAndFocusNextLandmark(
-                                Landmark.ROOM_LIST,
-                                navAction === KeyBindingAction.PreviousLandmark,
-                            );
-                            ev.stopPropagation();
-                            ev.preventDefault();
-                            return;
-                        }
-                        onKeyDownHandler(ev);
-                    }}
-                >
-                    <AutoSizer>
-                        {({ height, width }) => (
-                            <List
-                                aria-label={_t("room_list|list_title")}
-                                className="mx_RoomList_List"
-                                rowRenderer={roomRendererMemoized}
-                                rowCount={rooms.length}
-                                rowHeight={48}
-                                height={height}
-                                width={width}
-                                scrollToIndex={activeIndex ?? 0}
-                                tabIndex={-1}
-                            />
-                        )}
-                    </AutoSizer>
-                </div>
+        //   <RovingTabIndexProvider handleHomeEnd={true} handleUpDown={true}>
+        //  {({ onKeyDownHandler }) => (
+        <Virtuoso
+            // key={spaceId}
+            data-testid="room-list"
+            role="grid"
+            aria-label={_t("room_list|list_title")}
+            aria-rowcount={1}
+            aria-colcount={1}
+            totalCount={roomListState.rooms.length}
+            data={roomListState.rooms}
+            fixedItemHeight={48}
+            context={{ currentRoomIndex: roomListState.currentRoomIndex }}
+            itemContent={(index, room, { currentRoomIndex }) => (
+                <RoomListItemView
+                    room={room}
+                    isSelected={currentRoomIndex === index}
+                    aria-colindex={index}
+                    role="gridcell"
+                />
             )}
-        </RovingTabIndexProvider>
+            computeItemKey={(index, item ) => item.roomId}
+            /* 240px = 5 rows */
+            increaseViewportBy={240}
+            initialTopMostItemIndex={currentRoomIndex ?? 0}
+            ref={virtuosoRef}
+            scrollerRef={scrollerRef}
+            // onKeyDown={(ev) => {
+            //     const navAction = getKeyBindingsManager().getNavigationAction(ev);
+            //     if (
+            //         navAction === KeyBindingAction.NextLandmark ||
+            //         navAction === KeyBindingAction.PreviousLandmark
+            //     ) {
+            //         LandmarkNavigation.findAndFocusNextLandmark(
+            //             Landmark.ROOM_LIST,
+            //             navAction === KeyBindingAction.PreviousLandmark,
+            //         );
+            //         ev.stopPropagation();
+            //         ev.preventDefault();
+            //         return;
+            //     }
+            //     onKeyDownHandler(ev);
+            // }}
+        />
+        //   )}
+        //    </RovingTabIndexProvider>
     );
 }
