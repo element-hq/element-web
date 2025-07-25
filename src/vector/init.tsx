@@ -82,6 +82,15 @@ export async function loadLanguage(): Promise<void> {
     }
 }
 
+export async function loadLayoutDirection(): Promise<void> {
+    try {
+        if (SdkConfig.get("default_layout_direction"))
+            document.documentElement.dir = SdkConfig.get("default_layout_direction") as string;
+    } catch (e) {
+        logger.error("Unable to set direction", e);
+    }
+}
+
 export async function loadTheme(): Promise<void> {
     return setTheme();
 }
