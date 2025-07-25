@@ -863,6 +863,7 @@
             "elementCallUrl": "Element Calli võrguaadress"
         },
         "settings_explorer": "Seadistuste haldur",
+        "show_empty_content_events": "Näita tühja sisuga sündmusi",
         "show_hidden_events": "Näita peidetud sündmusi ajajoonel",
         "spaces": {
             "other": "<%(count)s kogukonda>",

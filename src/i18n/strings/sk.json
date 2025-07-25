@@ -871,6 +871,7 @@
             "elementCallUrl": "URL adresa Element Call"
         },
         "settings_explorer": "Prieskumník nastavení",
+        "show_empty_content_events": "Zobraziť udalosti s prázdnym obsahom",
         "show_hidden_events": "Zobrazovať skryté udalosti v histórii obsahu miestností",
         "spaces": {
             "one": "<priestor>",
