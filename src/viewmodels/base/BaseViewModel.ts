@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { ViewModelNew } from "../../shared-components/ViewModel";
+import { Disposables } from "./Disposables";
 
 export abstract class BaseViewModel<P> implements ViewModelNew {
     /**
@@ -15,6 +16,7 @@ export abstract class BaseViewModel<P> implements ViewModelNew {
      */
     private snapshot: unknown = {};
     private callbacks: Set<() => void> = new Set();
+    protected disposables = new Disposables();
 
     public constructor(protected props: P) {}
 
@@ -44,5 +46,12 @@ export abstract class BaseViewModel<P> implements ViewModelNew {
         for (const callback of this.callbacks) {
             callback();
         }
+    }
+
+    /**
+     * Relinquish any resources held by this view-model.
+     */
+    public dispose(): void {
+        this.disposables.dispose();
     }
 }
