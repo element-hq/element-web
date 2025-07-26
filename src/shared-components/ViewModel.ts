@@ -21,3 +21,20 @@ export interface ViewModel<T> {
      */
     subscribe: (listener: () => void) => () => void;
 }
+
+/**
+ * The interface for a generic ViewModel passed to the shared components.
+ */
+export interface ViewModelNew {
+    /**
+     * Subscribes to changes in the view model.
+     * ViewModel will invoke the callback when the UI needs to be updated.
+     */
+    subscribe: (callback: () => void) => () => void;
+
+    /**
+     * React uses the return value of this method to determine if it needs to
+     * re-render the component.
+     */
+    getSnapshot: () => unknown;
+}
