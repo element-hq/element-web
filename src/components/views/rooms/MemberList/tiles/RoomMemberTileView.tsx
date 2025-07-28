@@ -33,7 +33,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             size="32px"
             name={member.name}
             idName={member.userId}
-            title={vm.title}
+            title={member.displayUserId}
             url={member.avatarThumbnailUrl}
             altText={_t("common|user_avatar")}
         />

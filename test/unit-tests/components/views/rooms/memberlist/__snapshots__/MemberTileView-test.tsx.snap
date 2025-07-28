@@ -24,7 +24,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org (power 0)"
+            title="@userId:matrix.org"
           >
             u
           </span>
@@ -96,7 +96,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org (power 0)"
+            title="@userId:matrix.org"
           >
             u
           </span>
@@ -168,7 +168,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
             data-type="round"
             role="presentation"
             style="--cpd-avatar-size: 32px;"
-            title="@userId:matrix.org (power 0)"
+            title="@userId:matrix.org"
           >
             u
           </span>
