@@ -174,6 +174,7 @@ const DEFAULT_CONFIG = {
         include_offline_users_on_sync: true,
     },
     room_list_publication_rules: [{ action: "allow" }],
+    modules: [] as Array<{ module: string; config?: Record<string, unknown> }>,
 };
 
 /**
