@@ -8,7 +8,7 @@
 
 import { type Locator } from "@playwright/test";
 
-import { test, expect } from "../../element-web-test";
+import { test, expect } from "../../../element-web-test";
 
 test.describe("Roles & Permissions room settings tab", () => {
     const roomName = "Test room";

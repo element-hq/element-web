@@ -6,9 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, useCallback } from "react";
-import { Field, HelpMessage, InlineField, Label, RadioInput, Root } from "@vector-im/compound-web";
+import { Field, HelpMessage, InlineField, Label, RadioInput, Root, SettingsToggleInput } from "@vector-im/compound-web";
 
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { type MediaPreviewConfig, MediaPreviewValue } from "../../../../../@types/media_preview";
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
@@ -30,12 +29,12 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
         [roomId],
     );
 
-    const avatarOnChange = useCallback(
-        (c: boolean) => {
+    const avatarOnChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (evt) => {
             changeSetting({
                 ...currentMediaPreview,
                 // Switch is inverted. "Hide avatars..."
-                invite_avatars: c ? MediaPreviewValue.Off : MediaPreviewValue.On,
+                invite_avatars: evt.target.checked ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
         },
         [changeSetting, currentMediaPreview],
@@ -83,10 +82,10 @@ export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roo
     return (
         <Root className="mx_MediaPreviewAccountSetting_Form">
             {!roomId && (
-                <LabelledToggleSwitch
-                    className="mx_MediaPreviewAccountSetting_ToggleSwitch"
+                <SettingsToggleInput
+                    name="hide_avatars"
                     label={_t("settings|media_preview|hide_avatars")}
-                    value={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
+                    checked={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
                     onChange={avatarOnChange}
                 />
             )}

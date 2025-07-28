@@ -369,4 +369,16 @@ test.describe("Spaces", () => {
         await app.viewSpaceByName("Root Space");
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
     });
+
+    test("should render spaces visibility settings", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
+        await app.client.createSpace({
+            name: "My Space",
+        });
+        await app.viewSpaceByName("My space");
+        await page.getByLabel("Settings", { exact: true }).click();
+        await app.settings.switchTab("Visibility");
+        await expect(page.locator("#mx_tabpanel_SPACE_VISIBILITY_TAB")).toMatchScreenshot(
+            "space-visibility-settings.png",
+        );
+    });
 });

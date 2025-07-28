@@ -40,9 +40,9 @@ test.describe("Appearance user settings tab", () => {
         );
 
         test("should enable compact layout when the modern layout is selected", async ({ page, app, user, util }) => {
-            await expect(util.getCompactLayoutCheckbox()).not.toBeChecked();
+            await expect(util.getCompactLayoutSwitch()).not.toBeChecked();
 
-            await util.getCompactLayoutCheckbox().click();
+            await util.getCompactLayoutSwitch().click();
             await util.assertCompactLayout();
         });
 
@@ -52,11 +52,11 @@ test.describe("Appearance user settings tab", () => {
             user,
             util,
         }) => {
-            await expect(util.getCompactLayoutCheckbox()).not.toBeDisabled();
+            await expect(util.getCompactLayoutSwitch()).not.toBeDisabled();
 
             // Select the bubble layout, which should disable the compact layout checkbox
             await util.getBubbleLayout().click();
-            await expect(util.getCompactLayoutCheckbox()).toBeDisabled();
+            await expect(util.getCompactLayoutSwitch()).toBeDisabled();
         });
     });
 });
