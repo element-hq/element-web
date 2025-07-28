@@ -37,6 +37,7 @@ describe("ListView", () => {
         onSelectItem: mockOnSelectItem,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
+        getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
     const renderListViewWithHeight = (props: Partial<IListViewProps<TestItemWithSeparator, any>> = {}) => {
@@ -58,16 +59,16 @@ describe("ListView", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockGetItemComponent.mockImplementation(
-            (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => (
-                <div
-                    className="mx_item"
-                    data-testid={`row-${index}`}
-                    tabIndex={context.focusedIndex === index ? 0 : -1}
-                >
-                    {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                    <button onClick={onBlur}>Blur</button>
-                </div>
-            ),
+            (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => {
+                const itemKey = typeof item === "string" ? item : item.id;
+                const isFocused = context.focusKey === itemKey;
+                return (
+                    <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1}>
+                        {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                        <button onClick={onBlur}>Blur</button>
+                    </div>
+                );
+            },
         );
         mockIsItemFocusable.mockImplementation((item: TestItemWithSeparator) => item !== SEPARATOR_ITEM);
     });
@@ -229,14 +230,20 @@ describe("ListView", () => {
         it("should prevent default and stop propagation for handled keys", () => {
             render(<ListView {...defaultProps} />);
             const container = screen.getByRole("grid");
-            const event = new KeyboardEvent("keydown", { code: "ArrowDown", bubbles: true, cancelable: true });
-            const preventDefault = jest.spyOn(event, "preventDefault");
-            const stopPropagation = jest.spyOn(event, "stopPropagation");
 
-            fireEvent(container, event);
+            // Focus the container first to establish initial focus
+            fireEvent.focus(container);
 
-            expect(preventDefault).toHaveBeenCalled();
-            expect(stopPropagation).toHaveBeenCalled();
+            // Create a spy to monitor the event
+            const keyDownSpy = jest.fn();
+            container.addEventListener("keydown", keyDownSpy);
+
+            fireEvent.keyDown(container, { code: "ArrowDown" });
+
+            // Check that the event was prevented and stopped
+            expect(keyDownSpy).toHaveBeenCalled();
+            const event = keyDownSpy.mock.calls[0][0];
+            expect(event.defaultPrevented).toBe(true);
         });
 
         it("should not prevent default for unhandled keys", () => {
@@ -353,20 +360,24 @@ describe("ListView", () => {
         it("should handle onBlur callback from item components", () => {
             const blurSpy = jest.fn();
             mockGetItemComponent.mockImplementation(
-                (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => (
-                    <div
-                        className="mx_item"
-                        data-testid={`row-${index}`}
-                        tabIndex={context.focusedIndex === index ? 0 : -1}
-                        onBlur={() => {
-                            onBlur();
-                            blurSpy();
-                        }}
-                    >
-                        {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                        <button>Blur</button>
-                    </div>
-                ),
+                (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => {
+                    const itemKey = typeof item === "string" ? item : item.id;
+                    const isFocused = context.focusKey === itemKey;
+                    return (
+                        <div
+                            className="mx_item"
+                            data-testid={`row-${index}`}
+                            tabIndex={isFocused ? 0 : -1}
+                            onBlur={() => {
+                                onBlur();
+                                blurSpy();
+                            }}
+                        >
+                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                            <button>Blur</button>
+                        </div>
+                    );
+                },
             );
 
             renderListViewWithHeight();

@@ -30,9 +30,20 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const { isPresenceEnabled, onClickMember } = vm;
 
+    const getItemKey = useCallback((item: MemberWithSeparator): string => {
+        if (item === SEPARATOR) {
+            return "separator";
+        } else if (item.member) {
+            return `member-${item.member.userId}`;
+        } else {
+            return `threePidInvite-${item.threePidInvite.event.getContent().public_key}`;
+        }
+    }, []);
+
     const getItemComponent = useCallback(
         (index: number, item: MemberWithSeparator, context: ListContext<any>, onBlur: () => void): JSX.Element => {
-            const focused = index === context.focusedIndex;
+            const itemKey = getItemKey(item);
+            const focused = itemKey === context.focusKey;
             if (item === SEPARATOR) {
                 return <hr className="mx_MemberListView_separator" />;
             } else if (item.member) {
@@ -56,7 +67,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 );
             }
         },
-        [isPresenceEnabled],
+        [isPresenceEnabled, getItemKey],
     );
 
     const handleSelectItem = useCallback(
@@ -93,6 +104,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     items={vm.members}
                     onSelectItem={handleSelectItem}
                     getItemComponent={getItemComponent}
+                    getItemKey={getItemKey}
                     isItemFocusable={isItemFocusable}
                     overscan={15 * 56}
                     aria-label={_t("member_list|list_title")}
