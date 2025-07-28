@@ -14,7 +14,7 @@ import React, { type ChangeEvent, type FormEvent } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import Field from "../../elements/Field";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";

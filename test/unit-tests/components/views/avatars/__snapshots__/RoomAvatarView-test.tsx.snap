@@ -93,7 +93,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     <svg
       aria-label="This room is public"
       class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
+      color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
       height="16px"
       viewBox="0 0 24 24"

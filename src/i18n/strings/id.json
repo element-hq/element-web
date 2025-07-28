@@ -3362,7 +3362,6 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",

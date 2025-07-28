@@ -2484,7 +2484,6 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
-        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
