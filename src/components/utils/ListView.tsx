@@ -73,9 +73,9 @@ export interface IListViewProps<Item, Context>
  */
 export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     /** Reference to the Virtuoso component for programmatic scrolling */
-    const virtusoHandleRef = useRef<VirtuosoHandle | null>(null);
+    const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
-    const virtusoDomRef = useRef<HTMLElement | Window | null>(null);
+    const virtuosoDomRef = useRef<HTMLElement | Window>(null);
 
     /** Key of the currently focused item (unknown if no item is focused) */
     const [focusKey, setfocusKey] = React.useState<string | undefined>(undefined);
@@ -128,7 +128,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                virtusoHandleRef?.current?.scrollIntoView({
+                virtuosoHandleRef?.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
@@ -138,7 +138,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 });
             }
         },
-        [virtusoHandleRef, items, getItemKey],
+        [items, getItemKey],
     );
 
     /**
@@ -148,23 +148,17 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     const scrollToItem = useCallback(
         (index: number, isDirectionDown: boolean, align?: "center" | "end" | "start"): void => {
             const totalRows = items.length;
-            let nextIndex = index;
+            let nextIndex: number | undefined;
 
-            // Skip non-focusable items until we find a focusable one or reach the bounds
-            if (isItemFocusable) {
-                if (isDirectionDown) {
-                    // Moving down: find the next focusable item
-                    while (nextIndex < totalRows - 1 && !isItemFocusable(items[nextIndex])) {
-                        nextIndex++;
-                    }
-                    nextIndex = Math.min(totalRows - 1, nextIndex);
-                } else {
-                    // Moving up: find the previous focusable item
-                    while (nextIndex > 0 && !isItemFocusable(items[nextIndex])) {
-                        nextIndex--;
-                    }
-                    nextIndex = Math.max(0, nextIndex);
+            for (let i = index; isDirectionDown ? i < totalRows : i >= 0; i = i + (isDirectionDown ? 1 : -1)) {
+                if (isItemFocusable(items[i])) {
+                    nextIndex = i;
+                    break;
                 }
+            }
+
+            if (nextIndex === undefined) {
+                return;
             }
 
             scrollToIndex(nextIndex, align);
@@ -222,9 +216,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
      * Stores the reference for use in focus management.
      */
     const scrollerRef = React.useCallback((element: HTMLElement | Window | null) => {
-        if (element) {
-            virtusoDomRef.current = element;
-        }
+        virtuosoDomRef.current = element;
     }, []);
 
     /**
@@ -232,7 +224,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
      * Sets initial focus to the last focused item or the first item if none was previously focused.
      */
     const onFocus = (e?: React.FocusEvent): void => {
-        if (e?.currentTarget !== virtusoDomRef.current || focusKey !== undefined) {
+        if (e?.currentTarget !== virtuosoDomRef.current || focusKey !== undefined) {
             return;
         }
 
@@ -260,10 +252,11 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             aria-rowcount={props.items.length}
             aria-colcount={1}
             scrollerRef={scrollerRef}
-            ref={virtusoHandleRef}
+            ref={virtuosoHandleRef}
             onKeyDown={keyDownCallback}
             context={listContext}
             rangeChanged={setVisibleRange}
+            // virtuoso errors internally if you pass undefined.
             overscan={props.overscan || 0}
             data={props.items}
             onFocus={onFocus}

@@ -106,7 +106,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     getItemComponent={getItemComponent}
                     getItemKey={getItemKey}
                     isItemFocusable={isItemFocusable}
-                    overscan={15 * 56}
                     aria-label={_t("member_list|list_title")}
                 />
             </Flex>
