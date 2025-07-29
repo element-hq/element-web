@@ -25,8 +25,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Badge, Button, Heading, InlineSpinner, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
-import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
+import { MenuItem } from "@vector-im/compound-web";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
@@ -40,41 +39,32 @@ import Modal from "../../../Modal";
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-import SdkConfig from "../../../SdkConfig";
 import MultiInviter from "../../../utils/MultiInviter";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { verifyUser } from "../../../verification";
 import { Action } from "../../../dispatcher/actions";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
-import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
-import MemberAvatar from "../avatars/MemberAvatar";
-import PresenceLabel from "../rooms/PresenceLabel";
 import { ShareDialog } from "../dialogs/ShareDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import { mediaFromMxc } from "../../../customisations/Media";
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { Flex } from "../../utils/Flex";
-import CopyableText from "../elements/CopyableText";
-import { useUserTimezone } from "../../../hooks/useUserTimezone";
 import { UserInfoAdminToolsContainer } from "./user_info/UserInfoAdminToolsContainer";
 import { PowerLevelSection } from "./user_info/UserInfoPowerLevels";
+import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -298,7 +288,7 @@ export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
     return !!confirmed;
 };
 
-const Container: React.FC<{
+export const Container: React.FC<{
     children: ReactNode;
     className?: string;
 }> = ({ children, className }) => {
@@ -424,16 +414,6 @@ const IgnoreToggleButton: React.FC<{
 
 const useIsSynapseAdmin = (cli?: MatrixClient): boolean => {
     return useAsyncMemo(async () => (cli ? cli.isSynapseAdministrator().catch(() => false) : false), [cli], false);
-};
-
-const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
-    return useAsyncMemo<boolean>(
-        async () => {
-            return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
-        },
-        [cli],
-        false,
-    );
 };
 
 export interface IRoomPermissions {
@@ -567,80 +547,6 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
     return devices;
 };
 
-function useHasCrossSigningKeys(cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined {
-    return useAsyncMemo(async () => {
-        if (!canVerify) return undefined;
-        return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
-    }, [cli, member, canVerify]);
-}
-
-const VerificationSection: React.FC<{
-    member: User | RoomMember;
-    devices: IDevice[];
-}> = ({ member, devices }) => {
-    const cli = useContext(MatrixClientContext);
-    let content;
-    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-
-    const userTrust = useAsyncMemo<UserVerificationStatus | undefined>(
-        async () => cli.getCrypto()?.getUserVerificationStatus(member.userId),
-        [member.userId],
-        // the user verification status is not initialized
-        undefined,
-    );
-    const hasUserVerificationStatus = Boolean(userTrust);
-    const isUserVerified = Boolean(userTrust?.isVerified());
-    const isMe = member.userId === cli.getUserId();
-    const canVerify =
-        hasUserVerificationStatus &&
-        homeserverSupportsCrossSigning &&
-        !isUserVerified &&
-        !isMe &&
-        devices &&
-        devices.length > 0;
-
-    const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
-
-    if (isUserVerified) {
-        content = (
-            <Badge kind="green" className="mx_UserInfo_verified_badge">
-                <VerifiedIcon className="mx_UserInfo_verified_icon" height="16px" width="16px" />
-                <Text size="sm" weight="medium" className="mx_UserInfo_verified_label">
-                    {_t("common|verified")}
-                </Text>
-            </Badge>
-        );
-    } else if (hasCrossSigningKeys === undefined) {
-        // We are still fetching the cross-signing keys for the user, show spinner.
-        content = <InlineSpinner size={24} />;
-    } else if (canVerify && hasCrossSigningKeys) {
-        content = (
-            <div className="mx_UserInfo_container_verifyButton">
-                <Button
-                    className="mx_UserInfo_verify_button"
-                    kind="tertiary"
-                    size="sm"
-                    onClick={() => verifyUser(cli, member as User)}
-                >
-                    {_t("user_info|verify_button")}
-                </Button>
-            </div>
-        );
-    } else {
-        content = (
-            <Text className="mx_UserInfo_verification_unavailable" size="sm">
-                ({_t("user_info|verification_unavailable")})
-            </Text>
-        );
-    }
-
-    return (
-        <Flex justify="center" align="center" className="mx_UserInfo_verification">
-            {content}
-        </Flex>
-    );
-};
-
 const BasicUserInfo: React.FC<{
     room: Room;
     member: User | RoomMember;
@@ -761,114 +667,6 @@ const BasicUserInfo: React.FC<{
 
 export type Member = User | RoomMember;
 
-export const UserInfoHeader: React.FC<{
-    member: Member;
-    devices: IDevice[];
-    roomId?: string;
-    hideVerificationSection?: boolean;
-}> = ({ member, devices, roomId, hideVerificationSection }) => {
-    const cli = useContext(MatrixClientContext);
-
-    const onMemberAvatarClick = useCallback(() => {
-        const avatarUrl = (member as RoomMember).getMxcAvatarUrl
-            ? (member as RoomMember).getMxcAvatarUrl()
-            : (member as User).avatarUrl;
-
-        const httpUrl = mediaFromMxc(avatarUrl).srcHttp;
-        if (!httpUrl) return;
-
-        const params = {
-            src: httpUrl,
-            name: (member as RoomMember).name || (member as User).displayName,
-        };
-
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
-    }, [member]);
-
-    const avatarUrl = (member as User).avatarUrl;
-
-    let presenceState: string | undefined;
-    let presenceLastActiveAgo: number | undefined;
-    let presenceCurrentlyActive: boolean | undefined;
-    if (member instanceof RoomMember && member.user) {
-        presenceState = member.user.presence;
-        presenceLastActiveAgo = member.user.lastActiveAgo;
-        presenceCurrentlyActive = member.user.currentlyActive;
-    }
-
-    const enablePresenceByHsUrl = SdkConfig.get("enable_presence_by_hs_url");
-    let showPresence = true;
-    if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
-        showPresence = enablePresenceByHsUrl[cli.baseUrl];
-    }
-
-    let presenceLabel: JSX.Element | undefined;
-    if (showPresence) {
-        presenceLabel = (
-            <PresenceLabel
-                activeAgo={presenceLastActiveAgo}
-                currentlyActive={presenceCurrentlyActive}
-                presenceState={presenceState}
-                className="mx_UserInfo_profileStatus"
-                coloured
-            />
-        );
-    }
-
-    const timezoneInfo = useUserTimezone(cli, member.userId);
-
-    const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
-        roomId,
-        withDisplayName: true,
-    });
-    const displayName = (member as RoomMember).rawDisplayName;
-    return (
-        <React.Fragment>
-            <div className="mx_UserInfo_avatar">
-                <div className="mx_UserInfo_avatar_transition">
-                    <div className="mx_UserInfo_avatar_transition_child">
-                        <MemberAvatar
-                            key={member.userId} // to instantly blank the avatar when UserInfo changes members
-                            member={member as RoomMember}
-                            size="120px"
-                            resizeMethod="scale"
-                            fallbackUserId={member.userId}
-                            onClick={onMemberAvatarClick}
-                            urls={avatarUrl ? [avatarUrl] : undefined}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <Container className="mx_UserInfo_header">
-                <Flex direction="column" align="center" className="mx_UserInfo_profile">
-                    <Heading size="sm" weight="semibold" as="h1" dir="auto">
-                        <Flex className="mx_UserInfo_profile_name" direction="row-reverse" align="center">
-                            {displayName}
-                        </Flex>
-                    </Heading>
-                    {presenceLabel}
-                    {timezoneInfo && (
-                        <Tooltip label={timezoneInfo?.timezone ?? ""}>
-                            <Flex align="center" className="mx_UserInfo_timezone">
-                                <Text size="sm" weight="regular">
-                                    {timezoneInfo?.friendly ?? ""}
-                                </Text>
-                            </Flex>
-                        </Tooltip>
-                    )}
-                    <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
-                        <CopyableText getTextToCopy={() => userIdentifier} border={false}>
-                            {userIdentifier}
-                        </CopyableText>
-                    </Text>
-                </Flex>
-                {!hideVerificationSection && <VerificationSection member={member} devices={devices} />}
-            </Container>
-        </React.Fragment>
-    );
-};
-
 interface IProps {
     user: Member;
     room?: Room;
@@ -927,7 +725,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
 
     const header = (
         <>
-            <UserInfoHeader
+            <UserInfoHeaderView
                 hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
                 member={member}
                 devices={devices}

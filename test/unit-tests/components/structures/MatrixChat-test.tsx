@@ -71,6 +71,8 @@ import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStor
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
+import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -267,6 +269,10 @@ describe("<MatrixChat />", () => {
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
+
+        // that will cause the Login to kick off an update in the background, which we need to allow to finish within
+        // an `act` to avoid warnings
+        await flushPromises();
 
         localStorage.clear();
     });
@@ -640,22 +646,29 @@ describe("<MatrixChat />", () => {
         });
 
         describe("onAction()", () => {
-            beforeEach(() => {
-                jest.spyOn(defaultDispatcher, "dispatch").mockClear();
-                jest.spyOn(defaultDispatcher, "fire").mockClear();
+            afterEach(() => {
+                jest.restoreAllMocks();
             });
-            it("should open user device settings", async () => {
+
+            it("ViewUserDeviceSettings should open user device settings", async () => {
                 await getComponentAndWaitForReady();
 
-                defaultDispatcher.dispatch({
-                    action: Action.ViewUserDeviceSettings,
-                });
+                const createDialog = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
 
-                await flushPromises();
+                await act(async () => {
+                    defaultDispatcher.dispatch({
+                        action: Action.ViewUserDeviceSettings,
+                    });
 
-                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.SessionManager,
+                    await waitFor(() =>
+                        expect(createDialog).toHaveBeenCalledWith(
+                            UserSettingsDialog,
+                            { initialTabId: UserTab.SessionManager, sdkContext: expect.any(SdkContextClass) },
+                            /*className=*/ undefined,
+                            /*isPriority=*/ false,
+                            /*isStatic=*/ true,
+                        ),
+                    );
                 });
             });
 
@@ -672,10 +685,6 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
 
                     jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
-                });
-
-                afterEach(() => {
-                    jest.restoreAllMocks();
                 });
 
                 describe("forget_room", () => {
@@ -1603,6 +1612,7 @@ describe("<MatrixChat />", () => {
             Lifecycle.setSessionLockNotStolen();
         });
 
+        // Flaky test, see https://github.com/element-hq/element-web/issues/30337
         it("waits for other tab to stop during startup", async () => {
             fetchMock.get("/welcome.html", { body: "<h1>Hello</h1>" });
             jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");

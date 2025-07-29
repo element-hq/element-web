@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type MemberWithSeparator,
     SEPARATOR,
@@ -95,7 +95,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         className="mx_MemberListView_container"
                         onKeyDown={onKeyDownHandler}
                     >
-                        <Form.Root>
+                        <Form.Root onSubmit={(e) => e.preventDefault()}>
                             <MemberListHeaderView vm={vm} />
                         </Form.Root>
                         <AutoSizer>

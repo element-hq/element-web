@@ -154,6 +154,7 @@ export const showToast = (kind: Kind): void => {
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (kind) {
+            case Kind.SET_UP_RECOVERY:
             case Kind.TURN_ON_KEY_STORAGE: {
                 // Open the user settings dialog to the encryption tab
                 const payload: OpenToTabPayload = {
@@ -166,7 +167,6 @@ export const showToast = (kind: Kind): void => {
             case Kind.VERIFY_THIS_SESSION:
                 Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
                 break;
-            case Kind.SET_UP_RECOVERY:
             case Kind.KEY_STORAGE_OUT_OF_SYNC:
             case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
                 const modal = Modal.createDialog(
@@ -248,7 +248,7 @@ export const showToast = (kind: Kind): void => {
      * key, to create a new 4S that we can store the secrets in.
      */
     const onAccessSecretStorageFailed = (
-        kind: Kind.SET_UP_RECOVERY | Kind.KEY_STORAGE_OUT_OF_SYNC | Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+        kind: Kind.KEY_STORAGE_OUT_OF_SYNC | Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
         error: Error,
     ): void => {
         if (error instanceof AccessCancelledError) {

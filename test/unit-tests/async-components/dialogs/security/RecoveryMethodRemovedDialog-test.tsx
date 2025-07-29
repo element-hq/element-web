@@ -9,7 +9,9 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "jest-matrix-react";
 
 import RecoveryMethodRemovedDialog from "../../../../../src/async-components/views/dialogs/security/RecoveryMethodRemovedDialog";
-import Modal from "../../../../../src/Modal.tsx";
+import dispatch from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import { UserTab } from "../../../../../src/components/views/dialogs/UserTab";
 
 describe("<RecoveryMethodRemovedDialog />", () => {
     afterEach(() => {
@@ -18,16 +20,15 @@ describe("<RecoveryMethodRemovedDialog />", () => {
 
     it("should open CreateKeyBackupDialog on primary action click", async () => {
         const onFinished = jest.fn();
-        const spy = jest.spyOn(Modal, "createDialog");
-        jest.mock("../../../../../src/async-components/views/dialogs/security/CreateKeyBackupDialog", () => ({
-            __test: true,
-            __esModule: true,
-            default: () => <span>mocked dialog</span>,
-        }));
+        jest.spyOn(dispatch, "dispatch");
 
         render(<RecoveryMethodRemovedDialog onFinished={onFinished} />);
         fireEvent.click(screen.getByRole("button", { name: "Set up Secure Messages" }));
-        await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-        expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
+        await waitFor(() =>
+            expect(dispatch.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+            }),
+        );
     });
 });

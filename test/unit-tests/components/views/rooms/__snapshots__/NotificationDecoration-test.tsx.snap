@@ -3,7 +3,7 @@
 exports[`<NotificationDecoration /> should render the activity decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -19,7 +19,7 @@ exports[`<NotificationDecoration /> should render the activity decoration 1`] = 
 exports[`<NotificationDecoration /> should render the invitation decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -41,7 +41,7 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
 exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -68,7 +68,7 @@ exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
 exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -93,7 +93,7 @@ exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
 exports[`<NotificationDecoration /> should render the notification decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -109,7 +109,7 @@ exports[`<NotificationDecoration /> should render the notification decoration 1`
 exports[`<NotificationDecoration /> should render the notification decoration without count 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -123,7 +123,7 @@ exports[`<NotificationDecoration /> should render the notification decoration wi
 exports[`<NotificationDecoration /> should render the unset message decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
@@ -145,7 +145,7 @@ exports[`<NotificationDecoration /> should render the unset message decoration 1
 exports[`<NotificationDecoration /> should render the video decoration 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex"
+    class="flex"
     data-testid="notification-decoration"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
