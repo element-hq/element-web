@@ -89,6 +89,8 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     // Extract our custom props to avoid conflicts with Virtuoso props
     const { items, onSelectItem, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
 
+    const isScrollingToItem = useRef<boolean>(false);
+
     // Update the key-to-index mapping whenever items change
     React.useEffect(() => {
         const newKeyToIndexMap = new Map<string, number>();
@@ -125,15 +127,21 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         (index: number, align?: "center" | "end" | "start"): void => {
             // Ensure index is within bounds
             const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
-
+            if (isScrollingToItem.current) {
+                // If already scrolling to an item drop this request. Adding further requests
+                // causes the event to bubble up and be handled by other components(unintentional timeline scrolling was observed).
+                return;
+            }
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
+                setfocusKey(key);
+                isScrollingToItem.current = true;
                 virtuosoHandleRef?.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
                     done: () => {
-                        setfocusKey(key);
+                        isScrollingToItem.current = false;
                     },
                 });
             }
@@ -195,11 +203,11 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 handled = true;
             } else if (e.code === "PageDown" && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(currentIndex + numberDisplayed, true, `start`);
+                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
                 handled = true;
             } else if (e.code === "PageUp" && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(currentIndex - numberDisplayed, false, `start`);
+                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
                 handled = true;
             }
 

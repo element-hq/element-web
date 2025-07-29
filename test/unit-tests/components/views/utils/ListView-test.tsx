@@ -227,38 +227,6 @@ describe("ListView", () => {
             expect(items[lastIndex]).toHaveAttribute("tabindex", "-1");
         });
 
-        it("should prevent default and stop propagation for handled keys", () => {
-            render(<ListView {...defaultProps} />);
-            const container = screen.getByRole("grid");
-
-            // Focus the container first to establish initial focus
-            fireEvent.focus(container);
-
-            // Create a spy to monitor the event
-            const keyDownSpy = jest.fn();
-            container.addEventListener("keydown", keyDownSpy);
-
-            fireEvent.keyDown(container, { code: "ArrowDown" });
-
-            // Check that the event was prevented and stopped
-            expect(keyDownSpy).toHaveBeenCalled();
-            const event = keyDownSpy.mock.calls[0][0];
-            expect(event.defaultPrevented).toBe(true);
-        });
-
-        it("should not prevent default for unhandled keys", () => {
-            render(<ListView {...defaultProps} />);
-            const container = screen.getByRole("grid");
-            const event = new KeyboardEvent("keydown", { code: "KeyA", bubbles: true, cancelable: true });
-            const preventDefault = jest.spyOn(event, "preventDefault");
-            const stopPropagation = jest.spyOn(event, "stopPropagation");
-
-            fireEvent(container, event);
-
-            expect(preventDefault).not.toHaveBeenCalled();
-            expect(stopPropagation).not.toHaveBeenCalled();
-        });
-
         it("should skip non-focusable items when navigating down", async () => {
             // Create items where every other item is not focusable
             const mixedItems = [

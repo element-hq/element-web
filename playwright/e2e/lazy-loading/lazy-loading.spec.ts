@@ -30,7 +30,7 @@ test.describe("Lazy Loading", () => {
     });
 
     test.beforeEach(async ({ page, homeserver, user, bot, app }) => {
-        // The charlies were running off the bottom of the screen. 
+        // The charlies were running off the bottom of the screen.
         // We no longer overscan the member list so the result is they are not in the dom.
         // Increase the viewport size to ensure they are.
         await page.setViewportSize({ width: 1000, height: 1000 });
