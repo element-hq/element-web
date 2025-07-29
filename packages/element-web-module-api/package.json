@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-module-api",
     "type": "module",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
@@ -18,7 +18,7 @@
         ".": {
             "types": "./lib/element-web-module-api-alpha.d.ts",
             "import": "./lib/element-web-plugin-engine.js",
-            "require": "./lib/element-web-plugin-engine.umd.js"
+            "require": "./lib/element-web-plugin-engine.umd.cjs"
         }
     },
     "files": [
