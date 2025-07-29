@@ -20,6 +20,7 @@ import { InvitedIconView } from "./common/InvitedIconView";
 interface IProps {
     member: RoomMember;
     index: number;
+    memberCount: number;
     onBlur?: () => void;
     showPresence?: boolean;
     focused?: boolean;
@@ -66,7 +67,8 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             ariaLabel={name}
             iconJsx={iconJsx}
             focused={props.focused}
-            index={props.index}
+            memberIndex={props.index - (member.isInvite ? 1 : 0)} // Adjust as invites are below the seperator
+            memberCount={props.memberCount}
         />
     );
 }

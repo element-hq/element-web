@@ -14,7 +14,8 @@ interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
-    index: number;
+    memberIndex: number;
+    memberCount: number;
     onBlur?: () => void;
     ariaLabel?: string;
     presenceJsx?: JSX.Element;
@@ -45,10 +46,10 @@ export function MemberTileView(props: Props): JSX.Element {
                 onClick={props.onClick}
                 onBlur={props.onBlur}
                 aria-label={props?.ariaLabel}
-                aria-rowindex={props.index + 1}
-                aria-colindex={1}
                 tabIndex={props.focused ? 0 : -1}
-                role="gridcell"
+                role="option"
+                aria-posinset={props.memberIndex + 1}
+                aria-setsize={props.memberCount}
             >
                 <div className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">

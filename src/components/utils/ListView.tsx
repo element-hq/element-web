@@ -248,7 +248,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     return (
         <Virtuoso
-            role="grid"
+            role={props.role || "grid"}
             aria-rowcount={props.items.length}
             aria-colcount={1}
             scrollerRef={scrollerRef}

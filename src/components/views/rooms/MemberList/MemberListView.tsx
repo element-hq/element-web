@@ -28,7 +28,7 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
-    const { isPresenceEnabled, onClickMember } = vm;
+    const { isPresenceEnabled, onClickMember, memberCount } = vm;
 
     const getItemKey = useCallback((item: MemberWithSeparator): string => {
         if (item === SEPARATOR) {
@@ -53,6 +53,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         showPresence={isPresenceEnabled}
                         focused={focused}
                         index={index}
+                        memberCount={memberCount}
                         onBlur={onBlur}
                     />
                 );
@@ -61,13 +62,14 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <ThreePidInviteTileView
                         threePidInvite={item.threePidInvite}
                         focused={focused}
-                        index={index}
+                        memberIndex={index - 1} // Adjust as invites are below the separator
+                        memberCount={memberCount}
                         onBlur={onBlur}
                     />
                 );
             }
         },
-        [isPresenceEnabled, getItemKey],
+        [isPresenceEnabled, getItemKey, memberCount],
     );
 
     const handleSelectItem = useCallback(
@@ -106,6 +108,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     getItemComponent={getItemComponent}
                     getItemKey={getItemKey}
                     isItemFocusable={isItemFocusable}
+                    role="listbox"
                     aria-label={_t("member_list|list_title")}
                 />
             </Flex>

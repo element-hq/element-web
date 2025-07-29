@@ -15,7 +15,8 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
-    index: number;
+    memberIndex: number;
+    memberCount: number;
     focused?: boolean;
     onBlur?: () => void;
 }
@@ -32,9 +33,9 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             avatarJsx={av}
             onClick={vm.onClick}
             onBlur={props.onBlur}
-            index={props.index}
+            memberIndex={props.memberIndex}
+            memberCount={props.memberCount}
             ariaLabel={name}
-            aria-colindex={props.index}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
             focused={props.focused}

@@ -4,11 +4,11 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
 <div>
   <div>
     <div
-      aria-colindex="1"
       aria-label="@userId:matrix.org"
-      aria-rowindex="1"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="gridcell"
+      role="option"
       tabindex="-1"
     >
       <div
@@ -76,11 +76,11 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
 <div>
   <div>
     <div
-      aria-colindex="1"
       aria-label="@userId:matrix.org"
-      aria-rowindex="1"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="gridcell"
+      role="option"
       tabindex="-1"
     >
       <div
@@ -148,11 +148,11 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
 <div>
   <div>
     <div
-      aria-colindex="1"
       aria-label="@userId:matrix.org"
-      aria-rowindex="1"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="gridcell"
+      role="option"
       tabindex="-1"
     >
       <div
@@ -202,11 +202,11 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
 <div>
   <div>
     <div
-      aria-colindex="1"
       aria-label="Foobar"
-      aria-rowindex="1"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="gridcell"
+      role="option"
       tabindex="-1"
     >
       <div
