@@ -2711,7 +2711,6 @@
         },
         "creation_summary_dm": "%(creator)s krijoi këtë DM.",
         "creation_summary_room": "%(creator)s krijoi dhe formësoi dhomën.",
-        "download_action_decrypting": "Po shfshehtëzohet",
         "download_action_downloading": "Shkarkim",
         "edits": {
             "tooltip_label": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",

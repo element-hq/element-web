@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import classNames from "classnames";
 import React, { type JSX, useMemo } from "react";
 
-type FlexProps = {
+import styles from "./Box.module.css";
+
+type BoxProps = {
     /**
      * The type of the HTML element
      * @default div
@@ -51,7 +53,7 @@ export function Box({
     className,
     children,
     ...props
-}: React.PropsWithChildren<FlexProps>): JSX.Element {
+}: React.PropsWithChildren<BoxProps>): JSX.Element {
     const style = useMemo(() => {
         const style: Record<string, any> = {};
         if (flex) style["--mx-box-flex"] = flex;
@@ -64,10 +66,10 @@ export function Box({
         as,
         {
             ...props,
-            className: classNames("mx_Box", className, {
-                "mx_Box--flex": !!flex,
-                "mx_Box--shrink": !!shrink,
-                "mx_Box--grow": !!grow,
+            className: classNames(className, {
+                [styles["box-flex"]]: !!flex,
+                [styles["box-shrink"]]: !!shrink,
+                [styles["box-grow"]]: !!grow,
             }),
             style,
         },

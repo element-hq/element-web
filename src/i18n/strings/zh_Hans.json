@@ -2589,7 +2589,6 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
-        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",

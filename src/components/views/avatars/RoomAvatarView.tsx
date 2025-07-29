@@ -135,7 +135,7 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
                 width="16px"
                 height="16px"
                 className="mx_RoomAvatarView_icon"
-                color="var(--cpd-color-icon-tertiary)"
+                color="var(--cpd-color-icon-info-primary)"
                 aria-label={_t("room|header|room_is_public")}
             />
         );

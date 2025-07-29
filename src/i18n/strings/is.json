@@ -2360,7 +2360,6 @@
         },
         "creation_summary_dm": "%(creator)s bjó til oþessi beinu skilaboð.",
         "creation_summary_room": "%(creator)s bjó til og stillti spjallrásina.",
-        "download_action_decrypting": "Afkóðun",
         "download_action_downloading": "Sæki",
         "edits": {
             "tooltip_label": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
