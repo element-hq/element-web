@@ -10,6 +10,7 @@ import React, { type JSX, useRef, useState, type Dispatch, type SetStateAction }
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -163,8 +164,9 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     return allowEmpty || !!value;
                 },
                 invalid: () => {
+                    const config = SdkConfig.get();
                     const min = 1;
-                    const max = 2000;
+                    const max = config.max_export_size_mb;
                     return _t("export_chat|enter_number_between_min_max", {
                         min,
                         max,
@@ -174,12 +176,16 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             {
                 key: "number",
                 test: ({ value }) => {
+                    const config = SdkConfig.get();
                     const parsedSize = parseInt(value!, 10);
-                    return validateNumberInRange(1, 2000)(parsedSize);
+                    const max = config.max_export_size_mb;
+                    if (typeof max === "undefined") throw new Error("max export size undefined in settings");
+                    return validateNumberInRange(1, max)(parsedSize);
                 },
                 invalid: () => {
+                    const config = SdkConfig.get();
                     const min = 1;
-                    const max = 2000;
+                    const max = config.max_export_size_mb;
                     return _t("export_chat|size_limit_min_max", { min, max });
                 },
             },

@@ -28,6 +28,7 @@
     "features": {},
     "default_federate": true,
     "default_theme": "light",
+    "max_export_size_mb": 2000,
     "room_directory": {
         "servers": ["matrix.org"]
     },

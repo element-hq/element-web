@@ -34,6 +34,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         participant_limit: 8,
         brand: "Element Call",
     },
+    max_export_size_mb: 2000,
 
     // @ts-ignore - we deliberately use the camelCase version here so we trigger
     // the fallback behaviour. If we used the snake_case version then we'd break

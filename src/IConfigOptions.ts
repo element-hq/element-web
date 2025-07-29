@@ -88,6 +88,8 @@ export interface IConfigOptions {
     default_federate?: boolean;
     default_device_display_name?: string; // for device naming on login+registration
 
+    max_export_size_mb?: number;
+
     setting_defaults?: Record<string, any>; // <SettingName, Value>
 
     integrations_ui_url?: string;
