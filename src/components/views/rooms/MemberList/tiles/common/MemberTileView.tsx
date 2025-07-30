@@ -47,13 +47,13 @@ export function MemberTileView(props: Props): JSX.Element {
                 aria-posinset={props.memberIndex + 1}
                 aria-setsize={props.memberCount}
             >
-                <div className="mx_MemberTileView_left">
+                <div aria-hidden className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">
                         {props.avatarJsx} {props.presenceJsx}
                     </div>
                     <div className="mx_MemberTileView_name">{props.nameJsx}</div>
                 </div>
-                <div className="mx_MemberTileView_right">
+                <div aria-hidden className="mx_MemberTileView_right">
                     {userLabelJsx}
                     {props.iconJsx}
                 </div>
