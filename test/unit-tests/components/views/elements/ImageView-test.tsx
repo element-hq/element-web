@@ -15,6 +15,8 @@ import ImageView from "../../../../../src/components/views/elements/ImageView";
 import { FileDownloader } from "../../../../../src/utils/FileDownloader";
 import Modal from "../../../../../src/Modal";
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "../../../../test-utils";
 
 jest.mock("../../../../../src/utils/FileDownloader");
 
@@ -42,6 +44,39 @@ describe("<ImageView />", () => {
             }),
         );
         expect(fetchMock).toHaveFetched("https://example.com/image.png");
+    });
+
+    it("should use event as download source if given", async () => {
+        stubClient();
+
+        const event = new MatrixEvent({
+            event_id: "$eventId",
+            type: "m.image",
+            content: {
+                body: "fromEvent.png",
+                url: "mxc://test.dummy/fromEvent.png",
+                file_name: "filename.png",
+            },
+            origin_server_ts: new Date(2000, 0, 1, 0, 0, 0, 0).getTime(),
+        });
+
+        fetchMock.get("http://this.is.a.url/test.dummy/fromEvent.png", "TESTFILE");
+        const { getByRole } = render(
+            <ImageView
+                src="https://test.dummy/fromSrc.png"
+                name="fromName.png"
+                onFinished={jest.fn()}
+                mxEvent={event}
+            />,
+        );
+        fireEvent.click(getByRole("button", { name: "Download" }));
+        await waitFor(() =>
+            expect(mocked(FileDownloader).mock.instances[0].download).toHaveBeenCalledWith({
+                blob: expect.anything(),
+                name: "fromEvent.png",
+            }),
+        );
+        expect(fetchMock).toHaveFetched("http://this.is.a.url/test.dummy/fromEvent.png");
     });
 
     it("should start download on Ctrl+S", async () => {
