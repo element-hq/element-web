@@ -36,7 +36,7 @@ import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { RecordingState } from "../../../audio/VoiceRecording";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
-import { type E2EStatus } from "../../../utils/ShieldUtils";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 import SendMessageComposer, { type SendMessageComposer as SendMessageComposerClass } from "./SendMessageComposer";
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -525,12 +526,27 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        const hasE2EIcon = Boolean(!this.state.isWysiwygLabEnabled && this.props.e2eStatus);
-        const e2eIcon = hasE2EIcon && (
-            <div className="mx_MessageComposer_e2eIconWrapper">
-                <E2EIcon key="e2eIcon" status={this.props.e2eStatus!} className="mx_MessageComposer_e2eIcon" />
-            </div>
-        );
+        let leftIcon: false | JSX.Element = false;
+        if (!this.state.isWysiwygLabEnabled) {
+            if (!this.props.e2eStatus) {
+                leftIcon = (
+                    <div className="mx_MessageComposer_e2eIconWrapper">
+                        <LockOffIcon
+                            width={12}
+                            height={12}
+                            color="var(--cpd-color-icon-info-primary)"
+                            className="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                        />
+                    </div>
+                );
+            } else if (this.props.e2eStatus !== E2EStatus.Normal) {
+                leftIcon = (
+                    <div className="mx_MessageComposer_e2eIconWrapper">
+                        <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" />
+                    </div>
+                );
+            }
+        }
 
         const controls: ReactNode[] = [];
         const menuPosition = this.getMenuPosition();
@@ -640,7 +656,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
-            "mx_MessageComposer_e2eStatus": hasE2EIcon,
+            "mx_MessageComposer_e2eStatus": leftIcon && this.props.e2eStatus !== E2EStatus.Normal,
             "mx_MessageComposer_wysiwyg": this.state.isWysiwygLabEnabled,
         });
 
@@ -654,7 +670,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             permalinkCreator={this.props.permalinkCreator}
                         />
                         <div className="mx_MessageComposer_row">
-                            {e2eIcon}
+                            {leftIcon}
                             {composer}
                             <div className="mx_MessageComposer_actions">
                                 {controls}
