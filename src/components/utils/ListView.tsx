@@ -94,13 +94,6 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     // Update the key-to-index mapping whenever items change
     useEffect(() => {
-        if (items.length && !tabIndexKey) {
-            setTabIndexKey(getItemKey(items[0]));
-        }
-    }, [items, getItemKey, tabIndexKey]);
-
-    // Update the key-to-index mapping whenever items change
-    useEffect(() => {
         const newKeyToIndexMap = new Map<string, number>();
         items.forEach((item, index) => {
             const key = getItemKey(item);
@@ -108,6 +101,13 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         });
         setKeyToIndexMap(newKeyToIndexMap);
     }, [items, getItemKey]);
+
+    // Ensure the tabIndexKey is set if there is none already or if the existing key is no longer displayed
+    useEffect(() => {
+        if (items.length && (!tabIndexKey || keyToIndexMap.get(tabIndexKey) === undefined)) {
+            setTabIndexKey(getItemKey(items[0]));
+        }
+    }, [items, getItemKey, tabIndexKey, keyToIndexMap]);
 
     /**
      * Scrolls to a specific item index and sets it as focused.
@@ -254,8 +254,6 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     return (
         <Virtuoso
-            aria-rowcount={props.items.length}
-            aria-colcount={1}
             tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
             scrollerRef={scrollerRef}
             ref={virtuosoHandleRef}
