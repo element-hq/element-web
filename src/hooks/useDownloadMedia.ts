@@ -59,15 +59,19 @@ export function useDownloadMedia(url: string, fileName?: string, mxEvent?: Matri
                 return downloadBlob(blobRef.current);
             }
 
-            const res = await fetch(url);
-            if (!res.ok) {
-                throw parseErrorResponse(res, await res.text());
+            // We must download via the mediaEventHelper if given as the file may need decryption.
+            if (mediaEventHelper) {
+                blobRef.current = await mediaEventHelper.sourceBlob.value;
+            } else {
+                const res = await fetch(url);
+                if (!res.ok) {
+                    throw parseErrorResponse(res, await res.text());
+                }
+
+                blobRef.current = await res.blob();
             }
 
-            const blob = await res.blob();
-            blobRef.current = blob;
-
-            await downloadBlob(blob);
+            await downloadBlob(blobRef.current);
         } catch (e) {
             showError(e);
         }
