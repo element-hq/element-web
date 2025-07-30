@@ -10,12 +10,12 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { render, fireEvent, waitFor } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import ImageView from "../../../../../src/components/views/elements/ImageView";
 import { FileDownloader } from "../../../../../src/utils/FileDownloader";
 import Modal from "../../../../../src/Modal";
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "../../../../test-utils";
 
 jest.mock("../../../../../src/utils/FileDownloader");
