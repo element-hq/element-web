@@ -18,7 +18,7 @@ interface Props {
     memberIndex: number;
     memberCount: number;
     focused?: boolean;
-    onBlur?: () => void;
+    tabIndex?: number;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -32,13 +32,13 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
-            onBlur={props.onBlur}
             memberIndex={props.memberIndex}
             memberCount={props.memberCount}
             ariaLabel={name}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
             focused={props.focused}
+            tabIndex={props.tabIndex}
         />
     );
 }

@@ -41,9 +41,10 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     }, []);
 
     const getItemComponent = useCallback(
-        (index: number, item: MemberWithSeparator, context: ListContext<any>, onBlur: () => void): JSX.Element => {
+        (index: number, item: MemberWithSeparator, context: ListContext<any>): JSX.Element => {
             const itemKey = getItemKey(item);
-            const focused = itemKey === context.focusKey;
+            const isRovingItem = itemKey === context.tabIndexKey;
+            const focused = isRovingItem && context.focused;
             if (item === SEPARATOR) {
                 return <hr className="mx_MemberListView_separator" />;
             } else if (item.member) {
@@ -52,9 +53,9 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         member={item.member}
                         showPresence={isPresenceEnabled}
                         focused={focused}
+                        tabIndex={isRovingItem ? 0 : -1}
                         index={index}
                         memberCount={memberCount}
-                        onBlur={onBlur}
                     />
                 );
             } else {
@@ -62,9 +63,9 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <ThreePidInviteTileView
                         threePidInvite={item.threePidInvite}
                         focused={focused}
+                        tabIndex={isRovingItem ? 0 : -1}
                         memberIndex={index - 1} // Adjust as invites are below the separator
                         memberCount={memberCount}
-                        onBlur={onBlur}
                     />
                 );
             }

@@ -21,9 +21,9 @@ interface IProps {
     member: RoomMember;
     index: number;
     memberCount: number;
-    onBlur?: () => void;
     showPresence?: boolean;
     focused?: boolean;
+    tabIndex?: number;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -59,7 +59,6 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
     return (
         <MemberTileView
             onClick={vm.onClick}
-            onBlur={props.onBlur}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
@@ -67,6 +66,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             ariaLabel={name}
             iconJsx={iconJsx}
             focused={props.focused}
+            tabIndex={props.tabIndex}
             memberIndex={props.index - (member.isInvite ? 1 : 0)} // Adjust as invites are below the seperator
             memberCount={props.memberCount}
         />

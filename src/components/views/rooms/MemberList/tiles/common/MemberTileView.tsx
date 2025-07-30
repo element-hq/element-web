@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import classNames from "classnames";
 import React, { useEffect, useRef, type JSX } from "react";
 
 import AccessibleButton from "../../../../elements/AccessibleButton";
@@ -16,11 +15,11 @@ interface Props {
     onClick: () => void;
     memberIndex: number;
     memberCount: number;
-    onBlur?: () => void;
     ariaLabel?: string;
     presenceJsx?: JSX.Element;
     userLabel?: React.ReactNode;
     iconJsx?: JSX.Element;
+    tabIndex?: number;
     focused?: boolean;
 }
 
@@ -40,13 +39,10 @@ export function MemberTileView(props: Props): JSX.Element {
         <div>
             <AccessibleButton
                 ref={ref}
-                className={classNames("mx_MemberTileView", {
-                    mx_MemberTileView_hover: props.focused,
-                })}
+                className="mx_MemberTileView"
                 onClick={props.onClick}
-                onBlur={props.onBlur}
                 aria-label={props?.ariaLabel}
-                tabIndex={props.focused ? 0 : -1}
+                tabIndex={props.tabIndex}
                 role="option"
                 aria-posinset={props.memberIndex + 1}
                 aria-setsize={props.memberCount}

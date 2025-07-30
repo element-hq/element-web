@@ -40,36 +40,33 @@ describe("ListView", () => {
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
+    const getListViewComponent = (props: Partial<IListViewProps<TestItemWithSeparator, any>> = {}) => {
+        const mergedProps = { ...defaultProps, ...props };
+        return <ListView {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
+    };
+
     const renderListViewWithHeight = (props: Partial<IListViewProps<TestItemWithSeparator, any>> = {}) => {
         const mergedProps = { ...defaultProps, ...props };
-        return render(
-            <div style={{ height: "400px" }}>
-                <ListView {...mergedProps} style={{ height: "100%" }} />
-            </div>,
-            {
-                wrapper: ({ children }) => (
-                    <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
-                        {children}
-                    </VirtuosoMockContext.Provider>
-                ),
-            },
-        );
+        return render(getListViewComponent(mergedProps), {
+            wrapper: ({ children }) => (
+                <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
+                    {children}
+                </VirtuosoMockContext.Provider>
+            ),
+        });
     };
 
     beforeEach(() => {
         jest.clearAllMocks();
-        mockGetItemComponent.mockImplementation(
-            (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => {
-                const itemKey = typeof item === "string" ? item : item.id;
-                const isFocused = context.focusKey === itemKey;
-                return (
-                    <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1}>
-                        {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                        <button onClick={onBlur}>Blur</button>
-                    </div>
-                );
-            },
-        );
+        mockGetItemComponent.mockImplementation((index: number, item: TestItemWithSeparator, context: any) => {
+            const itemKey = typeof item === "string" ? item : item.id;
+            const isFocused = context.tabIndexKey === itemKey;
+            return (
+                <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1}>
+                    {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                </div>
+            );
+        });
         mockIsItemFocusable.mockImplementation((item: TestItemWithSeparator) => item !== SEPARATOR_ITEM);
     });
 
@@ -79,12 +76,12 @@ describe("ListView", () => {
 
     describe("Rendering", () => {
         it("should render the ListView component", () => {
-            render(<ListView {...defaultProps} />);
+            renderListViewWithHeight();
             expect(screen.getByRole("grid")).toBeInTheDocument();
         });
 
         it("should render with empty items array", () => {
-            render(<ListView {...defaultProps} items={[]} />);
+            renderListViewWithHeight({ items: [] });
             expect(screen.getByRole("grid")).toBeInTheDocument();
         });
     });
@@ -325,46 +322,6 @@ describe("ListView", () => {
             expect(items[2]).toHaveAttribute("tabindex", "0"); // Should still be item 2
         });
 
-        it("should handle onBlur callback from item components", () => {
-            const blurSpy = jest.fn();
-            mockGetItemComponent.mockImplementation(
-                (index: number, item: TestItemWithSeparator, context: any, onBlur: () => void) => {
-                    const itemKey = typeof item === "string" ? item : item.id;
-                    const isFocused = context.focusKey === itemKey;
-                    return (
-                        <div
-                            className="mx_item"
-                            data-testid={`row-${index}`}
-                            tabIndex={isFocused ? 0 : -1}
-                            onBlur={() => {
-                                onBlur();
-                                blurSpy();
-                            }}
-                        >
-                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                            <button>Blur</button>
-                        </div>
-                    );
-                },
-            );
-
-            renderListViewWithHeight();
-            const container = screen.getByRole("grid");
-
-            fireEvent.focus(container);
-
-            // Verify focus is established
-            const items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0");
-
-            // Simulate blur on the focused item
-            const firstItem = container.querySelector("[data-testid='row-0']");
-            fireEvent.blur(firstItem!);
-
-            // Verify the blur callback was called
-            expect(blurSpy).toHaveBeenCalled();
-        });
-
         it("should not interfere with focus if item is already focused", () => {
             renderListViewWithHeight();
             const container = screen.getByRole("grid");
@@ -400,9 +357,10 @@ describe("ListView", () => {
                 { id: "2", name: "Item 2" },
             ];
             rerender(
-                <div style={{ height: "400px" }}>
-                    <ListView {...defaultProps} items={fewerItems} style={{ height: "100%" }} />
-                </div>,
+                getListViewComponent({
+                    ...defaultProps,
+                    items: fewerItems,
+                }),
             );
 
             container = screen.getByRole("grid");
