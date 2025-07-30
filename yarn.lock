@@ -4543,9 +4543,8 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.39.0":
   version "2.39.0"
@@ -10520,10 +10519,10 @@ linkify-string@4.3.1:
   resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.3.1.tgz#d6f8b7166d588a64943e3bb23302ce44047f61a2"
   integrity sha512-1AnH52wZwuJi+skG/9dUphhQEUblVGSf0ntkM8z21RS9bF7xR0qPpqnNTyCo2Obqs5MR5wi8y5wOLPoBbzxm2w==
 
-linkifyjs@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.3.1.tgz#1f246ebf4be040002accd1f4535b6af7c7e37898"
-  integrity sha512-DRSlB9DKVW04c4SUdGvKK5FR6be45lTU9M76JnngqPeeGDqPwYc0zdUErtsNVMtxPXgUWV4HbXbnC4sNyBxkYg==
+linkifyjs@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.3.2.tgz#d97eb45419aabf97ceb4b05a7adeb7b8c8ade2b1"
+  integrity sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==
 
 lint-staged@^16.0.0:
   version "16.1.2"
