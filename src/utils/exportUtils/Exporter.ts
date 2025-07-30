@@ -48,7 +48,8 @@ export default abstract class Exporter {
             exportOptions.maxSize < 1 * 1024 * 1024 || // Less than 1 MB
             exportOptions.maxSize > 8000 * 1024 * 1024 || // More than 8 GB
             (!!exportOptions.numberOfMessages && exportOptions.numberOfMessages > 10 ** 8) ||
-            (exportType === ExportType.LastNMessages && !exportOptions.numberOfMessages)
+            (exportType === ExportType.MessageNumberRange &&
+                (!exportOptions.numberOfMessagesToBeginning || !exportOptions.numberOfMessages))
         ) {
             throw new Error("Invalid export options");
         }
@@ -83,7 +84,11 @@ export default abstract class Exporter {
         const safeRoomName = sanitizeFilename(this.room.name ?? _t("common|unnamed_room")).trim() || "Unnamed Room";
         const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
         const safeBrand = sanitizeFilename(brand);
-        return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
+        const rangeDescription =
+            this.exportType == ExportType.MessageNumberRange
+            ? ` - ${this.exportOptions.numberOfMessagesToBeginning!}--${this.exportOptions.numberOfMessagesToBeginning! - this.exportOptions.numberOfMessages!}`
+            : '';
+        return `${safeBrand} - ${safeRoomName} - Chat Export${rangeDescription} - ${safeDate}`;
     }
 
     protected async downloadZIP(): Promise<string | void> {
@@ -126,10 +131,10 @@ export default abstract class Exporter {
     public getLimit(): number {
         let limit: number;
         switch (this.exportType) {
-            case ExportType.LastNMessages:
-                // validated in constructor that numberOfMessages is defined
+            case ExportType.MessageNumberRange:
+                // validated in constructor that numberOfMessagesToBeginning is defined
                 // when export type is LastNMessages
-                limit = this.exportOptions.numberOfMessages!;
+                limit = this.exportOptions.numberOfMessagesToBeginning!;
                 break;
             default:
                 limit = 10 ** 8;
@@ -176,11 +181,11 @@ export default abstract class Exporter {
                     events.push(mxEv);
                 }
 
-                if (this.exportType === ExportType.LastNMessages) {
+                if (this.exportType === ExportType.MessageNumberRange) {
                     this.updateProgress(
                         _t("export_chat|fetched_n_events_with_total", {
                             count: events.length,
-                            total: this.exportOptions.numberOfMessages,
+                            total: this.exportOptions.numberOfMessagesToBeginning!,
                         }),
                     );
                 } else {
@@ -195,6 +200,10 @@ export default abstract class Exporter {
             }
             // Reverse the events so that we preserve the order
             events.reverse();
+
+            if (this.exportType === ExportType.MessageNumberRange) {
+                events = events.slice(0, this.exportOptions.numberOfMessages!);
+            }
         }
 
         const decryptionPromises = events

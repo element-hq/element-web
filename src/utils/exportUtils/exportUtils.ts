@@ -19,11 +19,11 @@ export type ExportFormatKey = "Html" | "PlainText" | "Json";
 export enum ExportType {
     Timeline = "Timeline",
     Beginning = "Beginning",
-    LastNMessages = "LastNMessages",
+    MessageNumberRange = "MessageNumberRange",
     // START_DATE = "START_DATE",
 }
 
-export type ExportTypeKey = "Timeline" | "Beginning" | "LastNMessages";
+export type ExportTypeKey = "Timeline" | "Beginning" | "MessageNumberRange";
 
 export const textForFormat = (format: ExportFormat): string => {
     switch (format) {
@@ -42,8 +42,8 @@ export const textForType = (type: ExportType): string => {
     switch (type) {
         case ExportType.Beginning:
             return _t("export_chat|from_the_beginning");
-        case ExportType.LastNMessages:
-            return _t("export_chat|number_of_messages");
+        case ExportType.MessageNumberRange:
+            return _t("export_chat|message_number_range");
         case ExportType.Timeline:
             return _t("export_chat|current_timeline");
         default:
@@ -55,6 +55,7 @@ export const textForType = (type: ExportType): string => {
 
 export interface IExportOptions {
     // startDate?: number;
+    numberOfMessagesToBeginning?: number;
     numberOfMessages?: number;
     attachmentsIncluded: boolean;
     maxSize: number;
