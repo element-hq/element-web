@@ -9,9 +9,10 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
       aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
       role="option"
-      tabindex="-1"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -47,6 +48,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
@@ -81,9 +83,10 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
       aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
       role="option"
-      tabindex="-1"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -119,6 +122,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
@@ -153,9 +157,10 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
       aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
       role="option"
-      tabindex="-1"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -191,6 +196,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       />
     </div>
@@ -207,9 +213,10 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
       aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
       role="option"
-      tabindex="-1"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -235,6 +242,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
