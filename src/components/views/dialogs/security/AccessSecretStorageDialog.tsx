@@ -183,9 +183,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                     <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry">
                         <Field
                             inputRef={this.inputRef}
-                            element="textarea"
-                            rows={2}
-                            cols={45}
+                            element="input"
+                            type="password"
                             id="mx_securityKey"
                             label={_t("encryption|access_secret_storage_dialog|security_key_title")}
                             value={this.state.recoveryKey}
