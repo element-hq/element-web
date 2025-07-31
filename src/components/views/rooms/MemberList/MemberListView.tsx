@@ -112,7 +112,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 </Form.Root>
                 <ListView
                     items={vm.members}
-                    onSelectItem={handleSelectItem}
                     getItemComponent={getItemComponent}
                     getItemKey={getItemKey}
                     isItemFocusable={isItemFocusable}
