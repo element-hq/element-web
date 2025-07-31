@@ -30,12 +30,6 @@ export interface IListViewProps<Item, Context>
     items: Item[];
 
     /**
-     * Callback function called when an item is selected (via Enter/Space key).
-     * @param item - The selected item from the items array
-     */
-    onSelectItem: (item: Item) => void;
-
-    /**
      * Function that renders each list item as a JSX element.
      * @param index - The index of the item in the list
      * @param item - The data item to render
@@ -74,7 +68,7 @@ export interface IListViewProps<Item, Context>
  */
 export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, onSelectItem, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
+    const { items, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
@@ -181,10 +175,6 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             } else if (e.code === "ArrowDown" && currentIndex !== undefined) {
                 scrollToItem(currentIndex + 1, true);
                 handled = true;
-            } else if ((e.code === "Enter" || e.code === "Space") && currentIndex !== undefined) {
-                const item = items[currentIndex];
-                onSelectItem(item);
-                handled = true;
             } else if (e.code === "Home") {
                 scrollToIndex(0);
                 handled = true;
@@ -206,7 +196,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 e.preventDefault();
             }
         },
-        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onSelectItem],
+        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items],
     );
 
     /**
@@ -242,8 +232,12 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         [keyToIndexMap, visibleRange, scrollToIndex, tabIndexKey],
     );
 
-    const onBlur = useCallback((): void => {
-        setIsFocused(false);
+    const onBlur = useCallback((event: React.FocusEvent<HTMLDivElement>): void => {
+        // Only set isFocused to false if the focus is moving outside the list
+        // This prevents the list from losing focus when interacting with menus inside it
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsFocused(false);
+        }
     }, []);
 
     const listContext: ListContext<Context> = {
