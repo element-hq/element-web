@@ -26,12 +26,20 @@ interface IProps {
     mediaEventHelperGet: () => MediaEventHelper | undefined;
 }
 
+function useButtonTitle(loading: boolean, isEncrypted: boolean): string {
+    if (!loading) return _t("action|download");
+
+    return isEncrypted ? _t("timeline|download_action_decrypting") : _t("timeline|download_action_downloading");
+}
+
 export default function DownloadActionButton({ mxEvent, mediaEventHelperGet }: IProps): ReactElement | null {
     const mediaEventHelper = useMemo(() => mediaEventHelperGet(), [mediaEventHelperGet]);
     const downloadUrl = mediaEventHelper?.media.srcHttp ?? "";
     const fileName = mediaEventHelper?.fileName;
 
     const { download, loading, canDownload } = useDownloadMedia(downloadUrl, fileName, mxEvent);
+
+    const buttonTitle = useButtonTitle(loading, mediaEventHelper?.media.isEncrypted ?? false);
 
     if (!canDownload) return null;
 
@@ -45,7 +53,7 @@ export default function DownloadActionButton({ mxEvent, mediaEventHelperGet }: I
     return (
         <RovingAccessibleButton
             className={classes}
-            title={loading ? _t("timeline|download_action_downloading") : _t("action|download")}
+            title={buttonTitle}
             onClick={download}
             disabled={loading}
             placement="left"
