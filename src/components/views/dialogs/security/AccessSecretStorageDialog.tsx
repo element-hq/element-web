@@ -187,7 +187,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                             rows={2}
                             cols={45}
                             id="mx_securityKey"
-                            label={_t("encryption|access_secret_storage_dialog|security_key_title")}
+                            label={_t("encryption|access_secret_storage_dialog|security_key_label")}
                             value={this.state.recoveryKey}
                             onChange={this.onRecoveryKeyChange}
                             autoFocus={true}
