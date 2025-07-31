@@ -250,6 +250,7 @@ describe("<CreateRoomDialog />", () => {
                 createOpts: {},
                 name: roomName,
                 encryption: true,
+                stateEncryption: false,
                 parentSpace: undefined,
                 roomType: undefined,
             });
@@ -311,6 +312,7 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
+                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,
@@ -329,6 +331,7 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
+                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,
