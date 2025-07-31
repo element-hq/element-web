@@ -104,6 +104,10 @@ const DEFAULT_CONFIG = {
             burst_count: 10000,
         },
     },
+    rc_room_creation: {
+        per_second: 1000,
+        burst_count: 1000,
+    },
     media_store_path: "/tmp/media_store",
     max_upload_size: "50M",
     max_image_pixels: "32M",
