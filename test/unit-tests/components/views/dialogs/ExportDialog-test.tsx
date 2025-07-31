@@ -54,6 +54,8 @@ describe("<ExportDialog />", () => {
     const getExportTypeInput = ({ container }: RenderResult) => container.querySelector('select[id="export-type"]')!;
     const getAttachmentsCheckbox = ({ container }: RenderResult) =>
         container.querySelector('input[id="include-attachments"]')!;
+    const getMessageCountToBeginningInput = ({ container }: RenderResult) =>
+        container.querySelector('input[id="message-count-to-beginning"]')!;
     const getMessageCountInput = ({ container }: RenderResult) => container.querySelector('input[id="message-count"]')!;
     const getExportFormatInput = ({ container }: RenderResult, format: ExportFormat) =>
         container.querySelector(`input[id="exportFormat-${format}"]`)!;
@@ -65,6 +67,8 @@ describe("<ExportDialog />", () => {
         fireEvent.click(getExportFormatInput(component, format));
     const selectExportType = async (component: RenderResult, type: ExportType) =>
         fireEvent.change(getExportTypeInput(component), { target: { value: type } });
+    const setMessageCountToBeginning = async (component: RenderResult, count: number) =>
+        fireEvent.change(getMessageCountToBeginningInput(component), { target: { value: count } });
     const setMessageCount = async (component: RenderResult, count: number) =>
         fireEvent.change(getMessageCountInput(component), { target: { value: count } });
 
@@ -199,22 +203,25 @@ describe("<ExportDialog />", () => {
             expect(getMessageCountInput(component)).toBeFalsy();
         });
 
-        it("renders message count input with default value 100 when export type is lastNMessages", async () => {
+        it("renders message count input with default value 100 when export type is MessageNumberRange", async () => {
             const component = getComponent();
-            await selectExportType(component, ExportType.LastNMessages);
+            await selectExportType(component, ExportType.MessageNumberRange);
+            expect(getMessageCountToBeginningInput(component)).toHaveValue(100);
             expect(getMessageCountInput(component)).toHaveValue(100);
         });
 
         it("sets message count on change", async () => {
             const component = getComponent();
-            await selectExportType(component, ExportType.LastNMessages);
+            await selectExportType(component, ExportType.MessageNumberRange);
+            await setMessageCountToBeginning(component, 37);
+            expect(getMessageCountToBeginningInput(component)).toHaveValue(37);
             await setMessageCount(component, 10);
             expect(getMessageCountInput(component)).toHaveValue(10);
         });
 
         it("does not export when export type is lastNMessages and message count is falsy", async () => {
             const component = getComponent();
-            await selectExportType(component, ExportType.LastNMessages);
+            await selectExportType(component, ExportType.MessageNumberRange);
             await setMessageCount(component, 0);
             await submitForm(component);
 
@@ -223,7 +230,7 @@ describe("<ExportDialog />", () => {
 
         it("does not export when export type is lastNMessages and message count is more than max", async () => {
             const component = getComponent();
-            await selectExportType(component, ExportType.LastNMessages);
+            await selectExportType(component, ExportType.MessageNumberRange);
             await setMessageCount(component, 99999999999);
             await submitForm(component);
 
@@ -232,7 +239,7 @@ describe("<ExportDialog />", () => {
 
         it("exports when export type is NOT lastNMessages and message count is falsy", async () => {
             const component = getComponent();
-            await selectExportType(component, ExportType.LastNMessages);
+            await selectExportType(component, ExportType.MessageNumberRange);
             await setMessageCount(component, 0);
             await selectExportType(component, ExportType.Timeline);
             await submitForm(component);
