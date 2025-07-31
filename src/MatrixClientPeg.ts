@@ -437,6 +437,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             // These are always installed regardless of the labs flag so that cross-signing features
             // can toggle on without reloading and also be accessed immediately after login.
             cryptoCallbacks: { ...crossSigningCallbacks },
+            // We need the ability to encrypt/decrypt state events even if the lab is off, since rooms
+            // with state event encryption still need to function properly.
+            enableEncryptedStateEvents: true,
             roomNameGenerator: (_: string, state: RoomNameState) => {
                 switch (state.type) {
                     case RoomNameType.Generated:

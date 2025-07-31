@@ -47,6 +47,8 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
             subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName });
         } else if (room && isLocalRoom(room)) {
             subtitle = _t("timeline|m.room.encryption|enabled_local");
+        } else if (content["io.element.msc4362.encrypt_state_events"]) {
+            subtitle = _t("timeline|m.room.encryption|state_enabled");
         } else {
             subtitle = _t("timeline|m.room.encryption|enabled");
         }
@@ -54,7 +56,11 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
         return (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                title={_t("common|encryption_enabled")}
+                title={
+                    content["io.element.msc4362.encrypt_state_events"]
+                        ? _t("common|state_encryption_enabled")
+                        : _t("common|encryption_enabled")
+                }
                 subtitle={subtitle}
                 timestamp={timestamp}
             />

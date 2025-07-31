@@ -368,6 +368,43 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             </span>
           </div>
         </div>
+        <div
+          class="_inline-field_19upo_32 mx_CreateRoomDialog_e2eSwitch"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="_r_7n_"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="_r_7n_"
+            >
+              Encrypt state events
+            </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_7p_"
+            >
+              Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
+            </span>
+          </div>
+        </div>
       </form>
     </div>
     <div

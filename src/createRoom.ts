@@ -21,8 +21,12 @@ import {
     Preset,
     RestrictedAllowType,
     Visibility,
+    Direction,
+    RoomStateEvent,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 
 import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
@@ -44,6 +48,7 @@ import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/Preferred
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallMemberEventType } from "./call-types";
+import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -66,6 +71,10 @@ export interface IOpts {
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
+    /**
+     * Encrypt state events as per MSC4362
+     */
+    stateEncryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
     avatar?: File | string; // will upload if given file, else mxcUrl is needed
@@ -113,6 +122,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
+    if (opts.stateEncryption === undefined) opts.stateEncryption = false;
 
     if (client.isGuest()) {
         dis.dispatch({ action: "require_registration" });
@@ -207,12 +217,16 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     }
 
     if (opts.encryption) {
+        const content: RoomEncryptionEventContent = {
+            algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+        };
+        if (opts.stateEncryption) {
+            content["io.element.msc4362.encrypt_state_events"] = true;
+        }
         createOpts.initial_state.push({
             type: "m.room.encryption",
             state_key: "",
-            content: {
-                algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
-            },
+            content,
         });
     }
 
@@ -256,24 +270,28 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
-    if (opts.name) {
-        createOpts.name = opts.name;
-    }
-
-    if (opts.topic) {
-        createOpts.topic = opts.topic;
-    }
-
-    if (opts.avatar) {
-        let url = opts.avatar;
-        if (opts.avatar instanceof File) {
-            ({ content_uri: url } = await client.uploadContent(opts.avatar));
+    // If we are not encrypting state, copy name, topic, avatar over to
+    // createOpts so we pass them in when we call Client.createRoom().
+    if (!opts.stateEncryption) {
+        if (opts.name) {
+            createOpts.name = opts.name;
         }
 
-        createOpts.initial_state.push({
-            type: EventType.RoomAvatar,
-            content: { url },
-        });
+        if (opts.topic) {
+            createOpts.topic = opts.topic;
+        }
+
+        if (opts.avatar) {
+            let url = opts.avatar;
+            if (opts.avatar instanceof File) {
+                ({ content_uri: url } = await client.uploadContent(opts.avatar));
+            }
+
+            createOpts.initial_state.push({
+                type: EventType.RoomAvatar,
+                content: { url },
+            });
+        }
     }
 
     if (opts.historyVisibility) {
@@ -329,6 +347,13 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             });
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
+        })
+        .then(async () => {
+            // We need to set up initial state manually if state encryption is enabled, since it needs
+            // to be encrypted.
+            if (opts.encryption && opts.stateEncryption) {
+                await enableStateEventEncryption(client, await room, opts);
+            }
         })
         .finally(function () {
             if (modal) modal.close();
@@ -399,6 +424,64 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return null;
             },
         );
+}
+
+async function enableStateEventEncryption(client: MatrixClient, room: Room, opts: IOpts): Promise<void> {
+    // Don't send our state events until encryption is enabled.
+    // If this times out, we throw since we don't want to send the events unencrypted.
+    await waitForRoomEncryption(room);
+
+    // Set room name
+    if (opts.name) {
+        await client.setRoomName(room.roomId, opts.name);
+    }
+
+    // Set room topic
+    if (opts.topic) {
+        const htmlTopic = htmlSerializeFromMdIfNeeded(opts.topic, { forceHTML: false });
+        await client.setRoomTopic(room.roomId, opts.topic, htmlTopic);
+    }
+
+    // Set room avatar
+    if (opts.avatar) {
+        let url: string;
+        if (opts.avatar instanceof File) {
+            ({ content_uri: url } = await client.uploadContent(opts.avatar));
+        } else {
+            url = opts.avatar;
+        }
+        await client.sendStateEvent(room.roomId, EventType.RoomAvatar, { url }, "");
+    }
+}
+
+/**
+ * Wait until the supplied room has an `m.room.encryption` event, or time out
+ * after 30 seconds.
+ */
+async function waitForRoomEncryption(room: Room): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+        if (room.hasEncryptionStateEvent()) {
+            return resolve();
+        }
+
+        const roomState = room.getLiveTimeline().getState(Direction.Forward)!;
+
+        const timeout = setTimeout(() => {
+            logger.warn("Timed out while waiting for room to enable encryption");
+            roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+            reject(new Error("Timed out while waiting for room to enable encryption"));
+        }, 30000);
+
+        const onRoomStateUpdate = (state: RoomState): void => {
+            if (state.getStateEvents(EventType.RoomEncryption, "")) {
+                roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+                clearTimeout(timeout);
+                resolve();
+            }
+        };
+
+        roomState.on(RoomStateEvent.Update, onRoomStateUpdate);
+    });
 }
 
 /*

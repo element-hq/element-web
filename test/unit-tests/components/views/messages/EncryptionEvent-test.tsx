@@ -72,6 +72,19 @@ describe("EncryptionEvent", () => {
             );
         });
 
+        it("should show the expected texts for experimental state event encryption", async () => {
+            event.event.content!["io.element.msc4362.encrypt_state_events"] = true;
+            renderEncryptionEvent(client, event);
+            await waitFor(() =>
+                checkTexts(
+                    "Experimental state encryption enabled",
+                    "Messages and state events in this room are end-to-end encrypted. " +
+                        "When people join, you can verify them in their profile, " +
+                        "just tap on their profile picture.",
+                ),
+            );
+        });
+
         describe("with same previous algorithm", () => {
             beforeEach(() => {
                 jest.spyOn(event, "getPrevContent").mockReturnValue({

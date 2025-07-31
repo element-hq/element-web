@@ -54,6 +54,7 @@ interface IState {
     history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean | null;
+    stateEncrypted: boolean | null;
     showAdvancedSection: boolean;
 }
 
@@ -79,6 +80,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             ),
             hasAliases: false, // async loaded in componentDidMount
             encrypted: null, // async loaded in componentDidMount
+            stateEncrypted: null, // async loaded in componentDidMount
             showAdvancedSection: false,
         };
     }
@@ -89,6 +91,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({
             hasAliases: await this.hasAliases(),
             encrypted: Boolean(await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)),
+            stateEncrypted: Boolean(
+                await this.context.getCrypto()?.isStateEncryptionEnabledInRoom(this.props.room.roomId),
+            ),
         });
     }
 
