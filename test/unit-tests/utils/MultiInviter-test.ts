@@ -96,9 +96,9 @@ describe("MultiInviter", () => {
                 const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                 expect(client.invite).toHaveBeenCalledTimes(3);
-                expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
-                expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, undefined);
-                expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, undefined);
+                expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
+                expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, {});
+                expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, {});
 
                 expectAllInvitedResult(result);
             });
@@ -114,9 +114,9 @@ describe("MultiInviter", () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(3);
-                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
-                    expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, undefined);
-                    expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, undefined);
+                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
+                    expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, {});
+                    expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, {});
 
                     expectAllInvitedResult(result);
                 });
@@ -129,7 +129,7 @@ describe("MultiInviter", () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(1);
-                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
+                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
 
                     // The resolved state is 'invited' for all users.
                     // With the above client expectations, the test ensures that only the first user is invited.
@@ -230,6 +230,16 @@ describe("MultiInviter", () => {
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
                 `"This space is unfederated. You cannot invite people from external servers."`,
             );
+        });
+
+        it("should set shareEncryptedHistory if that setting is enabled", async () => {
+            mocked(SettingsStore.getValue).mockImplementation((settingName, roomId, value) => {
+                return settingName === "feature_share_history_on_invite"; // this is enabled, everything else is disabled.
+            });
+            await inviter.invite([MXID1]);
+
+            expect(client.invite).toHaveBeenCalledTimes(1);
+            expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, { shareEncryptedHistory: true });
         });
     });
 });
