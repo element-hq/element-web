@@ -515,9 +515,33 @@ export class StopGapWidget extends EventEmitter {
     };
 
     private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
+        // Check if the room the widget is in is end-to-end encrypted
+        let acceptEncryptedTrafficOnly: boolean;
+        if (this.roomId && this.client.getCrypto()) {
+            acceptEncryptedTrafficOnly = await this.client.getCrypto()!.isEncryptionEnabledInRoom(this.roomId);
+        } else {
+            // If the widget is not in a room, default to encrypted traffic only
+            acceptEncryptedTrafficOnly = true;
+        }
         const { message, encryptionInfo } = payload;
-        // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
-        await this.messaging?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+
+        if (acceptEncryptedTrafficOnly) {
+            // Only pass on to-device messages that are encrypted
+            if (encryptionInfo != null) {
+                // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
+                await this.messaging?.feedToDevice(message as IRoomEvent, true);
+            } else {
+                logger.warn(
+                    `Received to-device event in clear for a widget in an e2e room (${this.roomId}), dropping.`,
+                );
+            }
+            return;
+        } else {
+            // Forward to the widget.
+            // It is ok to send an encrypted to-device message even if the room is clear.
+            // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
+            await this.messaging?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+        }
     };
 
     /**
