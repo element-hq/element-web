@@ -124,6 +124,10 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         const toasts = new Toasts(page);
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
+
+        // There may still be a `/sendToDevice/m.secret.request` in flight, which will later throw an error and cause
+        // a *subsequent* test to fail. Tell playwright to ignore any errors resulting from in-flight routes.
+        await page.unrouteAll({ behavior: "ignoreErrors" });
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
