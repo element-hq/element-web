@@ -53,6 +53,7 @@ export interface IOpts {
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
+    stateEncryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
     avatar?: File | string; // will upload if given file, else mxcUrl is needed
@@ -100,6 +101,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
+    if (opts.stateEncryption === undefined) opts.stateEncryption = false;
 
     if (client.isGuest()) {
         dis.dispatch({ action: "require_registration" });
@@ -213,7 +215,8 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             type: "m.room.encryption",
             state_key: "",
             content: {
-                algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+                "algorithm": MEGOLM_ENCRYPTION_ALGORITHM,
+                "io.element.msc3414.encrypt_state_events": opts.stateEncryption,
             },
         });
     }

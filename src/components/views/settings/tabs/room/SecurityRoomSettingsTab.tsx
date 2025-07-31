@@ -175,7 +175,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             this.setState({ encrypted: true });
             this.context
                 .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
-                    algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+                    "algorithm": MEGOLM_ENCRYPTION_ALGORITHM,
+                    "io.element.msc3414.encrypt_state_events": false,
                 })
                 .catch((e) => {
                     logger.error(e);

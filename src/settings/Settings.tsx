@@ -50,6 +50,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import EncryptedStateEventsController from "./controllers/EncryptedStateEventsController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -221,6 +222,7 @@ export interface Settings {
     "feature_new_room_list": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
+    "feature_msc3414_encrypted_state_events": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -781,6 +783,17 @@ export const SETTINGS: Settings = {
         description: _td("labs|unrealiable_e2e"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_msc3414_encrypted_state_events": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        controller: new EncryptedStateEventsController(),
+        displayName: _td("labs|encrypted_state_events"),
+        description: _td("labs|encrypted_state_events_decsription"),
+        supportedLevels: LEVELS_ROOM_SETTINGS,
+        supportedLevelsAreOrdered: true,
+        shouldWarn: true,
         default: false,
     },
     "useCompactLayout": {

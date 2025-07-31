@@ -34,6 +34,7 @@ interface IProps {
     defaultName?: string;
     parentSpace?: Room;
     defaultEncrypted?: boolean;
+    defaultStateEncrypted?: boolean;
     onFinished(proceed?: false): void;
     onFinished(proceed: true, opts: IOpts): void;
 }
@@ -52,6 +53,10 @@ interface IState {
      * Indicates whether end-to-end encryption is enabled for the room.
      */
     isEncrypted: boolean;
+    /**
+     * Indicates whether end-to-end state encryption is enabled for this room.
+     */
+    isStateEncrypted: boolean;
     /**
      * The room name.
      */
@@ -111,6 +116,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.state = {
             isPublicKnockRoom: defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
+            isStateEncrypted: this.props.defaultStateEncrypted ?? false,
             joinRule,
             name: this.props.defaultName || "",
             topic: "",
@@ -136,6 +142,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             createOpts.room_alias_name = alias.substring(1, alias.indexOf(":"));
         } else {
             opts.encryption = this.state.isEncrypted;
+            opts.stateEncryption = this.state.isStateEncrypted;
         }
 
         if (this.state.topic) {
@@ -228,6 +235,10 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
     private onEncryptedChange = (isEncrypted: boolean): void => {
         this.setState({ isEncrypted });
+    };
+
+    private onStateEncryptedChange = (isStateEncrypted: boolean): void => {
+        this.setState({ isStateEncrypted });
     };
 
     private onAliasChange = (alias: string): void => {
@@ -373,6 +384,37 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
+        let e2eeStateSection: JSX.Element | undefined;
+        if (
+            SettingsStore.getValue("feature_msc3414_encrypted_state_events", null, false) &&
+            this.state.joinRule !== JoinRule.Public
+        ) {
+            let microcopy: string;
+            if (privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
+                if (this.state.canChangeEncryption) {
+                    microcopy = isVideoRoom
+                        ? _t("create_room|encrypted_video_room_warning")
+                        : _t("create_room|state_encrypted_warning");
+                } else {
+                    microcopy = _t("create_room|encryption_forced");
+                }
+            } else {
+                microcopy = _t("settings|security|e2ee_default_disabled_warning");
+            }
+            e2eeStateSection = (
+                <React.Fragment>
+                    <LabelledToggleSwitch
+                        label={_t("create_room|state_encryption_label")}
+                        onChange={this.onStateEncryptedChange}
+                        value={this.state.isStateEncrypted}
+                        className="mx_CreateRoomDialog_e2eSwitch" // for end-to-end tests
+                        disabled={!this.state.canChangeEncryption}
+                    />
+                    <p>{microcopy}</p>
+                </React.Fragment>
+            );
+        }
+
         let federateLabel = _t("create_room|unfederated_label_default_off");
         if (SdkConfig.get().default_federate === false) {
             // We only change the label if the default setting is different to avoid jarring text changes to the
@@ -433,6 +475,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         {publicPrivateLabel}
                         {visibilitySection}
                         {e2eeSection}
+                        {e2eeStateSection}
                         {aliasField}
                         {this.advancedSettingsEnabled && (
                             <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">

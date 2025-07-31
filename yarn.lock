@@ -2680,7 +2680,7 @@
     emojibase "^15.3.1"
     emojibase-data "^15.3.1"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^15.2.0":
+"@matrix-org/matrix-sdk-crypto-wasm@^15.3.0":
   version "15.3.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-15.3.0.tgz#141fd041ae382b793369bcee4394b0b577bdea0c"
   integrity sha512-QyxHvncvkl7nf+tnn92PjQ54gMNV8hMSpiukiDgNrqF6IYwgySTlcSdkPYdw8QjZJ0NR6fnVrNzMec0OohM3wA==
@@ -11053,10 +11053,10 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "38.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9f3ca7149518479f717c1d4a83cd2355ede791e1"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a08a2737e1c8968aa0bf95e719873527fa8b9bdf"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^15.2.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^15.3.0"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"
@@ -13820,9 +13820,9 @@ schema-utils@^4.0.0, schema-utils@^4.2.0, schema-utils@^4.3.0, schema-utils@^4.3
     ajv-keywords "^5.1.0"
 
 sdp-transform@^2.14.1:
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.2.tgz#d2cee6a1f7abe44e6332ac6cbb94e8600f32d813"
-  integrity sha512-icY6jVao7MfKCieyo1AyxFYm1baiM+fA00qW/KrNNVlkxHAd34riEKuEkUe4bBb3gJwLJZM+xT60Yj1QL8rHiA==
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.15.0.tgz#79d37a2481916f36a0534e07b32ceaa87f71df42"
+  integrity sha512-KrOH82c/W+GYQ0LHqtr3caRpM3ITglq3ljGUIb8LTki7ByacJZ9z+piSGiwZDsRyhQbYBOBJgr2k6X4BZXi3Kw==
 
 seedrandom@^3.0.5:
   version "3.0.5"
