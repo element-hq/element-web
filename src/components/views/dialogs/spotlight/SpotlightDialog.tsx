@@ -1164,7 +1164,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 // only handle these keys when we are in the recently viewed row of options
                 if (
                     !query &&
-                    !filter !== null &&
                     rovingContext.state.activeNode &&
                     rovingContext.state.nodes.length > 0 &&
                     nodeIsForRecentlyViewed(rovingContext.state.activeNode)
