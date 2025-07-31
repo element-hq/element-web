@@ -26,6 +26,11 @@ export interface RoomListViewState {
     isLoadingRooms: boolean;
 
     /**
+     * The space id associated with the rooms returned.
+     */
+    spaceId: string;
+
+    /**
      * A list of rooms to be displayed in the left panel.
      */
     rooms: Room[];
@@ -88,6 +93,7 @@ export function useRoomListViewModel(): RoomListViewState {
 
     return {
         isLoadingRooms,
+        spaceId: currentSpace?.roomId || "",
         rooms,
         canCreateRoom,
         createRoom,
