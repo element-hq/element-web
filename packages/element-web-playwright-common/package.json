@@ -24,6 +24,7 @@
         "test": "echo No tests for @element-hq/element-web-playwright-common"
     },
     "devDependencies": {
+        "@element-hq/element-web-module-api": "*",
         "@types/lodash-es": "^4.17.12",
         "typescript": "^5.8.2"
     },
