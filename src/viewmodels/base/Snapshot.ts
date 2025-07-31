@@ -30,7 +30,7 @@ export class Snapshot<T> {
      * @param snapshot A subset of the snapshot to merge into the current snapshot.
      */
     public merge(snapshot: Partial<T>): void {
-        this.snapshot = { ...this.snapshot, snapshot };
+        this.snapshot = { ...this.snapshot, ...snapshot };
         this.emit();
     }
 
