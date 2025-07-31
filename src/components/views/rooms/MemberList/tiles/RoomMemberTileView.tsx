@@ -19,7 +19,11 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface IProps {
     member: RoomMember;
+    index: number;
+    memberCount: number;
     showPresence?: boolean;
+    focused?: boolean;
+    tabIndex?: number;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -36,7 +40,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
-    const nameJSX = <DisambiguatedProfile member={member} fallbackName={name || ""} />;
+    const nameJSX = <DisambiguatedProfile withTooltip member={member} fallbackName={name || ""} />;
 
     const presenceState = member.presenceState;
     let presenceJSX: JSX.Element | undefined;
@@ -54,13 +58,17 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 
     return (
         <MemberTileView
-            title={vm.title}
             onClick={vm.onClick}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
             userLabel={vm.userLabel}
+            ariaLabel={name}
             iconJsx={iconJsx}
+            focused={props.focused}
+            tabIndex={props.tabIndex}
+            memberIndex={props.index - (member.isInvite ? 1 : 0)} // Adjust as invites are below the seperator
+            memberCount={props.memberCount}
         />
     );
 }
