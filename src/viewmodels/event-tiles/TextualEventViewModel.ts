@@ -10,18 +10,18 @@ import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { type EventTileTypeProps } from "../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
-import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
+import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEventView";
 import { BaseViewModel } from "../base/BaseViewModel";
 
 export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapshot, EventTileTypeProps> {
     public constructor(props: EventTileTypeProps) {
-        super(props, "");
+        super(props, { content: "" });
         this.setTextFromEvent();
     }
 
     private setTextFromEvent = (): void => {
-        const text = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
-        this.snapshot.set(text);
+        const content = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
+        this.snapshot.set({ content });
     };
 
     protected addDownstreamSubscription = (): void => {

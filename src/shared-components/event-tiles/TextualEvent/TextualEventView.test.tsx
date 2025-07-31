@@ -9,11 +9,11 @@ import { composeStories } from "@storybook/react-vite";
 import { render } from "jest-matrix-react";
 import React from "react";
 
-import * as stories from "./TextualEvent.stories.tsx";
+import * as stories from "./TextualEventView.stories.tsx";
 
 const { Default } = composeStories(stories);
 
-describe("TextualEvent", () => {
+describe("TextualEventView", () => {
     it("renders a textual event", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
