@@ -4543,8 +4543,9 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.39.0":
   version "2.39.0"
@@ -10509,15 +10510,15 @@ linkify-it@^4.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
-linkify-react@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.3.1.tgz#0655632d654a881e54d955ec12b1ab817d879f50"
-  integrity sha512-w8ahBdCwF9C/doS4V3nE93QF1oyORmosvi8UEUbpHYws077eGzhkxUzJQcE2/SU5Q2K7SD80M4ybwwZGHErx5Q==
+linkify-react@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.3.2.tgz#8d47fb0ad96ab5b38c07bfbebdcbc57794430693"
+  integrity sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==
 
-linkify-string@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.3.1.tgz#d6f8b7166d588a64943e3bb23302ce44047f61a2"
-  integrity sha512-1AnH52wZwuJi+skG/9dUphhQEUblVGSf0ntkM8z21RS9bF7xR0qPpqnNTyCo2Obqs5MR5wi8y5wOLPoBbzxm2w==
+linkify-string@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.3.2.tgz#535f7a3c25a8c83b862aa3263d6cb09fd4e4b3f4"
+  integrity sha512-JqBuQpSa+CSj2tskIII70SKOjPfjXwDFyjRRNFTrlg76gp2nap36xeRj/cWaXxukqBNrxM+L07XyKRsUtH/DpQ==
 
 linkifyjs@4.3.2:
   version "4.3.2"
