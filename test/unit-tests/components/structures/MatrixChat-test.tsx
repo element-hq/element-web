@@ -270,11 +270,17 @@ describe("<MatrixChat />", () => {
         // (must be sync otherwise the next test will start before it happens)
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
-        // that will cause the Login to kick off an update in the background, which we need to allow to finish within
-        // an `act` to avoid warnings
-        await flushPromises();
-
         localStorage.clear();
+
+        // This is a massive hack, but ...
+        //
+        // A lot of these tests end up completing while the login flow is still proceeding. So then, we start the next
+        // test while stuff is still ongoing from the previous test, which messes up the current test (by changing
+        // localStorage or opening modals, or whatever).
+        //
+        // There is no obvious event we could wait for which indicates that everything has completed, since each test
+        // does something different. Instead...
+        await act(() => sleep(200));
     });
 
     resetJsDomAfterEach();

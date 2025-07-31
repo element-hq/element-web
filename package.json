@@ -186,7 +186,7 @@
         "@babel/runtime": "^7.12.5",
         "@casualbot/jest-sonar-reporter": "2.2.7",
         "@element-hq/element-call-embedded": "0.13.1",
-        "@element-hq/element-web-playwright-common": "^1.4.3",
+        "@element-hq/element-web-playwright-common": "^1.4.4",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.50.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
