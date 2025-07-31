@@ -579,6 +579,7 @@
         "someone": "Someone",
         "space": "Space",
         "spaces": "Spaces",
+        "state_encryption_enabled": "Experimental state encryption enabled",
         "sticker": "Sticker",
         "stickerpack": "Stickerpack",
         "success": "Success",
@@ -686,6 +687,8 @@
         "join_rule_restricted_label": "Everyone in <SpaceName/> will be able to find and join this room.",
         "name_validation_required": "Please enter a name for the room",
         "room_visibility_label": "Room visibility",
+        "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
+        "state_encryption_label": "Encrypt state events",
         "title_private_room": "Create a private room",
         "title_public_room": "Create a public room",
         "title_video_room": "Create a video room",
@@ -1522,6 +1525,8 @@
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
+        "encrypted_state_events": "Encrypted state events (MSC4362)",
+        "encrypted_state_events_description": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
@@ -3579,6 +3584,7 @@
             "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "m.room.guest_access": {
