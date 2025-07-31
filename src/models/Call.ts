@@ -669,12 +669,12 @@ export class ElementCall extends Call {
 
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
-            embed: "true", // We're embedding EC within another application
+            confineToRoom: "true", // Only show the call interface for the configured room
             // Template variables are used, so that this can be configured using the widget data.
             skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
             returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
-            hideHeader: "true", // Hide the header since our room header is enough
+            header: "none", // Hide the header since our room header is enough
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
             roomId: roomId,
