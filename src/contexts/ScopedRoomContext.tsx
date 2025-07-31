@@ -73,7 +73,7 @@ export const ScopedRoomContextProvider = memo(
     },
 );
 
-type ScopedRoomContext<K extends Array<keyof ContextValue>> = { [key in K[number]]: ContextValue[key] };
+export type ScopedRoomContext<K extends Array<keyof ContextValue>> = { [key in K[number]]: ContextValue[key] };
 
 export function useScopedRoomContext<K extends Array<keyof ContextValue>>(...keys: K): ScopedRoomContext<K> {
     const context = useContext(ScopedRoomContext);
