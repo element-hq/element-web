@@ -131,3 +131,16 @@ export async function waitForMember(
         client.removeListener(RoomStateEvent.NewMember, handler);
     });
 }
+
+export function isOnlyAdmin(room: Room, client: MatrixClient): boolean {
+    const currentUserLevel = room.getMember(client.getUserId()!)?.powerLevel;
+
+    const userLevelValues = room.getMembers().map((m) => m.powerLevel);
+
+    const maxUserLevel = Math.max(...userLevelValues.filter((x) => typeof x === "number"));
+    // If the user is the only user with highest power level
+    return (
+        maxUserLevel === currentUserLevel &&
+        userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)
+    );
+}
