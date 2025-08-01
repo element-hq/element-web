@@ -31,4 +31,16 @@ test.describe("Create Room", () => {
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
     });
+
+    test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+        await page.getByRole("button", { name: "Add", exact: true }).click();
+        await page.getByText("Start new chat").click();
+
+        await page.getByTestId("invite-dialog-input").fill(user.userId);
+
+        await page.getByRole("button", { name: "Go" }).click();
+
+        await expect(page.getByText("Encryption enabled")).toBeVisible();
+        await expect(page.getByText("Send your first message to")).toBeVisible();
+    });
 });

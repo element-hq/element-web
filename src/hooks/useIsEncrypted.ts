@@ -10,6 +10,7 @@ import { type MatrixClient, type MatrixEvent, type Room, EventType } from "matri
 
 import { useRoomState } from "./useRoomState.ts";
 import { useAsyncMemo } from "./useAsyncMemo.ts";
+import { LocalRoom } from "../models/LocalRoom.ts";
 
 // Hook to simplify watching whether a Matrix room is encrypted, returns null if room is undefined or the state is loading
 export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | null {
@@ -21,8 +22,12 @@ export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | null {
         async () => {
             const crypto = cli.getCrypto();
             if (!room || !crypto) return null;
-
-            return crypto.isEncryptionEnabledInRoom(room.roomId);
+            if (room instanceof LocalRoom) {
+                // For local room check the state.
+                // The crypto check fails because the eventId is not valid (it is a local id)
+                return (room as LocalRoom).isEncryptionEnabled();
+            }
+            return await crypto.isEncryptionEnabledInRoom(room.roomId);
         },
         [room, encryptionStateEvent],
         null,

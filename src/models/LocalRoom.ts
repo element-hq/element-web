@@ -6,7 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    Room,
+    PendingEventOrdering,
+    MatrixEvent,
+    Direction,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 
 import { type Member } from "../utils/direct-messages";
 
@@ -49,5 +56,15 @@ export class LocalRoom extends Room {
 
     public get isError(): boolean {
         return this.state === LocalRoomState.ERROR;
+    }
+
+    public isEncryptionEnabled(): boolean {
+        // check the local room state
+        const encryptionState = this.getLiveTimeline()
+            .getState(Direction.Forward)
+            ?.getStateEvents(EventType.RoomEncryption)[0];
+        // if there is an encryption state event, it is encrypted.
+        // Regardless of the content/algorithm, we assume it is encrypted.
+        return encryptionState instanceof MatrixEvent;
     }
 }
