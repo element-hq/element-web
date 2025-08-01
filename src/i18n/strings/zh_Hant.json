@@ -1427,8 +1427,7 @@
     },
     "member_list": {
         "filter_placeholder": "過濾聊天室成員",
-        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者",
-        "power_label": "%(userName)s（權限等級 %(powerLevelNumber)s）"
+        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者"
     },
     "member_list_back_action_label": "聊天室成員",
     "message_edit_dialog_title": "訊息編輯紀錄",
@@ -2833,6 +2832,7 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
+        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",

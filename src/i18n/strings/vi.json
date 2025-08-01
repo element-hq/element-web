@@ -1314,8 +1314,7 @@
     },
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
-        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
-        "power_label": "%(userName)s (chỉ số %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác"
     },
     "member_list_back_action_label": "Thành viên phòng",
     "message_edit_dialog_title": "Chỉnh sửa tin nhắn",
@@ -2623,6 +2622,7 @@
         },
         "creation_summary_dm": "%(creator)s đã tạo DM này.",
         "creation_summary_room": "%(creator)s đã tạo và định cấu hình phòng.",
+        "download_action_decrypting": "Đang giải mã",
         "download_action_downloading": "Đang tải xuống",
         "edits": {
             "tooltip_label": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa.",

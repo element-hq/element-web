@@ -871,6 +871,7 @@
             "elementCallUrl": "URL adresa Element Call"
         },
         "settings_explorer": "Prieskumník nastavení",
+        "show_empty_content_events": "Zobraziť udalosti s prázdnym obsahom",
         "show_hidden_events": "Zobrazovať skryté udalosti v histórii obsahu miestností",
         "spaces": {
             "one": "<priestor>",
@@ -942,6 +943,7 @@
         "cross_signing_user_warning": "Tento používateľ si neoveril všetky svoje relácie.",
         "enter_recovery_key": "Zadajte kľúč na obnovenie",
         "event_shield_reason_authenticity_not_guaranteed": "Vierohodnosť tejto zašifrovanej správy nie je možné na tomto zariadení zaručiť.",
+        "event_shield_reason_mismatched_sender": "Odosielateľ udalosti sa nezhoduje s vlastníkom zariadenia, ktoré ju odoslalo.",
         "event_shield_reason_mismatched_sender_key": "Šifrované neoverenou reláciou",
         "event_shield_reason_unknown_device": "Šifrované neznámym alebo odstráneným zariadením.",
         "event_shield_reason_unsigned_device": "Šifrované zariadením, ktoré nie je overené jeho majiteľom.",
@@ -1670,8 +1672,7 @@
         "filter_placeholder": "Filtrovať členov v miestnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnenie pozývať používateľov",
         "invited_label": "Pozvaní",
-        "no_matches": "Žiadne zhody",
-        "power_label": "%(userName)s (oprávnenie %(powerLevelNumber)s)"
+        "no_matches": "Žiadne zhody"
     },
     "member_list_back_action_label": "Členovia miestnosti",
     "message_edit_dialog_title": "Úpravy správy",
@@ -3413,6 +3414,7 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
