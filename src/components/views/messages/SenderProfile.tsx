@@ -12,6 +12,7 @@ import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import DisambiguatedProfile from "./DisambiguatedProfile";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+import ModuleApi from "../../../modules/Api";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -25,16 +26,21 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         member: mxEvent.sender,
     });
 
-    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfile
-            fallbackName={mxEvent.getSender() ?? ""}
-            onClick={onClick}
-            member={member}
-            colored={true}
-            emphasizeDisplayName={true}
-            withTooltip={withTooltip}
-        />
-    ) : (
-        <></>
-    );
+    if (mxEvent.getContent().msgtype === MsgType.Emote) {
+        return <></>;
+    }
+
+    return ModuleApi.customComponents.renderMessageProfile({
+        userId: mxEvent.getSender()!,
+        rawDisplayName: member?.rawDisplayName,
+        disambiguatedName: member?.name,
+        avatarUrl: member?.getMxcAvatarUrl(),
+    }, () => <DisambiguatedProfile
+        fallbackName={mxEvent.getSender() ?? ""}
+        onClick={onClick}
+        member={member}
+        colored={true}
+        emphasizeDisplayName={true}
+        withTooltip={withTooltip}
+    />);
 }

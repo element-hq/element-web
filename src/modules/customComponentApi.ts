@@ -12,9 +12,11 @@ import type {
     CustomComponentsApi as ICustomComponentsApi,
     CustomMessageRenderFunction,
     CustomMessageComponentProps as ModuleCustomMessageComponentProps,
-    OriginalComponentProps,
+    OriginalMessageComponentProps,
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
+    MessageProfileRenderFunction,
+    MessageProfileComponentProps,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -64,6 +66,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     private readonly registeredMessageRenderers: EventRenderer[] = [];
+    private readonly messageProfileRenderer?: MessageProfileRenderFunction;
 
     public registerMessageRenderer(
         eventTypeOrFilter: EventTypeOrFilter,
@@ -72,6 +75,16 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     ): void {
         this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
     }
+
+    public registerMessageProfile(
+        renderer: MessageProfileRenderFunction,
+    ): void {
+        if (this.messageProfileRenderer) {
+            throw Error('Renderer already registered');
+        }
+        this.messageProfileRenderer = renderer;
+    }
+
     /**
      * Select the correct renderer based on the event information.
      * @param mxEvent The message event being rendered.
@@ -100,7 +113,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public renderMessage(
         props: CustomMessageComponentProps,
-        originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
+        originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(props.mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
@@ -113,6 +126,19 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             }
         }
         return originalComponent?.() ?? null;
+    }
+
+    /**
+     * Render the component for a message event.
+     * @param props Props to be passed to the custom renderer.
+     * @param originalComponent Function that will be rendered if no custom renderers are present, or as a child of a custom component.
+     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     */
+    public renderMessageProfile(
+        props: MessageProfileComponentProps,
+        originalComponent: (props?: MessageProfileComponentProps) => React.JSX.Element,
+    ): React.JSX.Element {
+        return this.messageProfileRenderer?.(props, originalComponent) ?? originalComponent(props);
     }
 
     /**
