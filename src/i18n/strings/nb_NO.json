@@ -1653,8 +1653,7 @@
         "filter_placeholder": "Filtrer rommets medlemmer",
         "invite_button_no_perms_tooltip": "Du har ikke tillatelse til å invitere brukere",
         "invited_label": "Invitert",
-        "no_matches": "Ingen treff",
-        "power_label": "%(userName)s (styrkenivå %(powerLevelNumber)s)"
+        "no_matches": "Ingen treff"
     },
     "member_list_back_action_label": "Medlemmer av rommet",
     "message_edit_dialog_title": "Meldingsredigeringer",
@@ -3370,6 +3369,7 @@
             "unable_to_decrypt": "Kan ikke dekryptere meldingen"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
+        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Laster ned",
         "download_failed": "Nedlasting mislyktes",
         "download_failed_description": "Det oppstod en feil under nedlasting av denne filen",

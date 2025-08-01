@@ -860,6 +860,7 @@
             "elementCallUrl": "URL Element Call"
         },
         "settings_explorer": "Penelusur pengaturan",
+        "show_empty_content_events": "Tampilkan peristiwa dengan isi kosong",
         "show_hidden_events": "Tampilkan peristiwa tersembunyi di lini masa",
         "spaces": {
             "one": "<space>",
@@ -1447,6 +1448,7 @@
         "room_list_navigate_down": "Pergi ke bawah di daftar ruangan",
         "room_list_navigate_up": "Pergi ke atas di daftar ruangan",
         "room_list_select_room": "Pilih ruangan dari daftar ruangan",
+        "save": "Simpan",
         "scroll_down_timeline": "Gulir ke bawah di lini masa",
         "scroll_up_timeline": "Gulir ke atas di lini masa",
         "search": "Cari (harus diaktifkan)",
@@ -1648,8 +1650,7 @@
         "filter_placeholder": "Saring anggota ruangan",
         "invite_button_no_perms_tooltip": "Anda tidak memiliki izin untuk mengundang pengguna",
         "invited_label": "Diundang",
-        "no_matches": "Tidak ada kecocokan",
-        "power_label": "%(userName)s (tingkat daya %(powerLevelNumber)s)"
+        "no_matches": "Tidak ada kecocokan"
     },
     "member_list_back_action_label": "Anggota ruangan",
     "message_edit_dialog_title": "Editan pesan",
@@ -3362,6 +3363,7 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",

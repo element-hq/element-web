@@ -1633,8 +1633,7 @@
         "filter_placeholder": "Raummitglieder filtern",
         "invite_button_no_perms_tooltip": "Du bist nicht berechtigt, Benutzer einzuladen",
         "invited_label": "Eingeladen",
-        "no_matches": "Keine Treffer",
-        "power_label": "%(userName)s (Berechtigungslevel %(powerLevelNumber)s)"
+        "no_matches": "Keine Treffer"
     },
     "member_list_back_action_label": "Raummitglieder",
     "message_edit_dialog_title": "Nachrichtenänderungen",
@@ -3334,6 +3333,7 @@
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",

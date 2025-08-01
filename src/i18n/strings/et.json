@@ -863,6 +863,7 @@
             "elementCallUrl": "Element Calli võrguaadress"
         },
         "settings_explorer": "Seadistuste haldur",
+        "show_empty_content_events": "Näita tühja sisuga sündmusi",
         "show_hidden_events": "Näita peidetud sündmusi ajajoonel",
         "spaces": {
             "other": "<%(count)s kogukonda>",
@@ -933,6 +934,7 @@
         "cross_signing_user_warning": "See kasutaja ei ole verifitseerinud kõiki oma sessioone.",
         "enter_recovery_key": "Sisesta taastevõti",
         "event_shield_reason_authenticity_not_guaranteed": "Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.",
+        "event_shield_reason_mismatched_sender": "Sündmuse saatja ja seadme omanik pole vastavuses.",
         "event_shield_reason_mismatched_sender_key": "Krüptitud verifitseerimata sessiooni poolt",
         "event_shield_reason_unknown_device": "Krüptitud tundmatu või kustutatud seadme poolt.",
         "event_shield_reason_unsigned_device": "Krüptitud seadme poolt, mida selle omanik ei ole verifitseerinud.",
@@ -1653,8 +1655,7 @@
         "filter_placeholder": "Filtreeri jututoa liikmeid",
         "invite_button_no_perms_tooltip": "Sul pole õigusi kutse saatmiseks teistele kasutajatele",
         "invited_label": "Kutsutud",
-        "no_matches": "Vasteid pole",
-        "power_label": "%(userName)s (õigused %(powerLevelNumber)s)"
+        "no_matches": "Vasteid pole"
     },
     "member_list_back_action_label": "Jututoa liikmed",
     "message_edit_dialog_title": "Sõnumite muutmised",
@@ -3371,6 +3372,7 @@
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "download_failed": "Allalaadimine ei õnnestunud",
         "download_failed_description": "Selle faili allalaadimisel tekkis viga",

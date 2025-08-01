@@ -1367,8 +1367,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtrar miembros de la sala",
-        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios",
-        "power_label": "%(userName)s (nivel de permisos %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios"
     },
     "member_list_back_action_label": "Miembros de la sala",
     "message_edit_dialog_title": "Ediciones del mensaje",
@@ -2672,6 +2671,7 @@
         },
         "creation_summary_dm": "%(creator)s creó este mensaje directo.",
         "creation_summary_room": "Sala creada y configurada por %(creator)s.",
+        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Última vez editado: %(date)s. Haz clic para ver los cambios.",

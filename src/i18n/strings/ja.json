@@ -1360,8 +1360,7 @@
         "toggle_attribution": "属性を切り替える"
     },
     "member_list": {
-        "filter_placeholder": "ルームのメンバーを絞り込む",
-        "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
+        "filter_placeholder": "ルームのメンバーを絞り込む"
     },
     "member_list_back_action_label": "ルームのメンバー",
     "message_edit_dialog_title": "メッセージの編集履歴",
@@ -2649,6 +2648,7 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
+        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",
