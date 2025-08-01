@@ -225,6 +225,8 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     const getItemComponentInternal = useCallback(
         (index: number, item: Item, context: ListContext<Context>): JSX.Element => {
             const onFocus = (e: React.FocusEvent): void => {
+                // If one of the item components has been focused directly, set the focused and tabIndex state
+                // and stop propagation so the ListViews onFocus doesn't also handle it.
                 const key = getItemKey(item);
                 setIsFocused(true);
                 setTabIndexKey(key);
