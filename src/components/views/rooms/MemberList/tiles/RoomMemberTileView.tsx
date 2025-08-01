@@ -24,6 +24,7 @@ interface IProps {
     showPresence?: boolean;
     focused?: boolean;
     tabIndex?: number;
+    onFocus: (e: React.FocusEvent) => void;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -59,6 +60,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
     return (
         <MemberTileView
             onClick={vm.onClick}
+            onFocus={props.onFocus}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}

@@ -13,6 +13,7 @@ interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
+    onFocus: (e: React.FocusEvent) => void;
     memberIndex: number;
     memberCount: number;
     ariaLabel?: string;
@@ -41,6 +42,7 @@ export function MemberTileView(props: Props): JSX.Element {
                 ref={ref}
                 className="mx_MemberTileView"
                 onClick={props.onClick}
+                onFocus={props.onFocus}
                 aria-label={props?.ariaLabel}
                 tabIndex={props.tabIndex}
                 role="option"
