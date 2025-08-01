@@ -40,7 +40,7 @@ async function replyMessage(page: Page, message: Locator, replyMessage: string):
     await line.hover();
     await line.getByRole("button", { name: "Reply", exact: true }).click();
 
-    await page.getByRole("textbox", { name: "Send a reply…" }).fill(replyMessage);
+    await page.getByRole("textbox", { name: "Send an unencrypted reply…" }).fill(replyMessage);
     await page.getByRole("button", { name: "Send message" }).click();
 
     const msgTile = page.locator(".mx_EventTile_last");
