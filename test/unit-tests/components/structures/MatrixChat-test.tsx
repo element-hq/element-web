@@ -775,6 +775,22 @@ describe("<MatrixChat />", () => {
                                 ),
                             ).toBeInTheDocument();
                         });
+                        it("should warn when user is the last admin", async () => {
+                            jest.spyOn(room, "getMembers").mockReturnValue([
+                                { powerLevel: 100 } as unknown as MatrixJs.RoomMember,
+                                { powerLevel: 0 } as unknown as MatrixJs.RoomMember,
+                            ]);
+                            jest.spyOn(room, "getMember").mockReturnValue({
+                                powerLevel: 100,
+                            } as unknown as MatrixJs.RoomMember);
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "You're the only administrator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
                         it("should do nothing on cancel", async () => {
                             dispatchAction();
                             const dialog = await screen.findByRole("dialog");
