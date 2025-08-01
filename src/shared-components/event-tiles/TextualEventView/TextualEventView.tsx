@@ -10,14 +10,15 @@ import React, { type ReactNode, type JSX } from "react";
 import { type ViewModel } from "../../ViewModel";
 import { useViewModel } from "../../useViewModel";
 
-export type TextualEventViewSnapshot = string | ReactNode;
+export type TextualEventViewSnapshot = {
+    content: string | ReactNode;
+};
 
 export interface Props {
     vm: ViewModel<TextualEventViewSnapshot>;
 }
 
-export function TextualEvent({ vm }: Props): JSX.Element {
-    const contents = useViewModel(vm);
-
-    return <div className="mx_TextualEvent">{contents}</div>;
+export function TextualEventView({ vm }: Props): JSX.Element {
+    const snapshot = useViewModel(vm);
+    return <div className="mx_TextualEvent">{snapshot.content}</div>;
 }

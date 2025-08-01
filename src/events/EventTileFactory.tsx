@@ -44,7 +44,7 @@ import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import ModuleApi from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEvent } from "../shared-components/event-tiles/TextualEvent";
+import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -81,7 +81,7 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
 export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
-    return <TextualEvent vm={vm} />;
+    return <TextualEventView vm={vm} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
