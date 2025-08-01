@@ -104,6 +104,13 @@ interface IProps {
     onPaste?(event: Event | SyntheticEvent, data: DataTransfer, model: EditorModel): boolean;
 }
 
+interface IPlatformInfo {
+    isElectron: boolean;
+    isWindows: boolean;
+    isMac: boolean;
+    isSafari: boolean;
+}
+
 interface IState {
     useMarkdown: boolean;
     showPillAvatar: boolean;
@@ -122,7 +129,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private modifiedFlag = false;
     private isIMEComposing = false;
     private hasTextSelected = false;
-    private readonly isSafari: boolean;
+    private readonly platformInfo: IPlatformInfo;
 
     private _isCaretAtEnd = false;
     private lastCaret!: DocumentOffset;
@@ -143,9 +150,20 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             showVisualBell: false,
         };
 
-        const ua = navigator.userAgent.toLowerCase();
-        this.isSafari = ua.includes("safari/") && !ua.includes("chrome/");
+        this.platformInfo = this.detectPlatform();
         this.configureEmoticonAutoReplace();
+    }
+
+    private detectPlatform(): IPlatformInfo {
+        const ua = navigator.userAgent.toLowerCase();
+        const platform = navigator.platform || "";
+        
+        return {
+            isElectron: !!(window as any).electron || ua.includes('electron'),
+            isWindows: ua.includes('win') || platform.includes('Win'),
+            isMac: ua.includes('mac') || platform.includes('Mac'),
+            isSafari: ua.includes("safari/") && !ua.includes("chrome/"),
+        };
     }
 
     public componentDidUpdate(prevProps: IProps): void {
@@ -275,32 +293,36 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onCompositionEnd = (): void => {
         this.isIMEComposing = false;
-        // some browsers (Chrome) don't fire an input event after ending a composition,
-        // so trigger a model update after the composition is done by calling the input handler.
-
-        // however, modifying the DOM (caused by the editor model update) from the compositionend handler seems
-        // to confuse the IME in Chrome, likely causing https://github.com/vector-im/element-web/issues/10913 ,
-        // so we do it async
-
-        // however, doing this async seems to break things in Safari for some reason, so browser sniff.
-
-        if (this.isSafari) {
+        // IME確定後の入力イベントをプラットフォームに応じて処理
+        
+        const triggerInput = (): void => {
             this.onInput({ inputType: "insertCompositionText" });
+        };
+        
+        if (this.platformInfo.isMac && this.platformInfo.isSafari) {
+            // Safariでは同期実行
+            triggerInput();
+        } else if (this.platformInfo.isElectron) {
+            // Electronでは確実に非同期実行
+            setTimeout(triggerInput, 0);
         } else {
-            Promise.resolve().then(() => {
-                this.onInput({ inputType: "insertCompositionText" });
-            });
+            // その他のブラウザはPromiseで非同期実行
+            Promise.resolve().then(triggerInput);
         }
     };
 
     public isComposing(event: React.KeyboardEvent): boolean {
-        // checking the event.isComposing flag just in case any browser out there
-        // emits events related to the composition after compositionend
-        // has been fired
-
-        // From https://www.stum.de/2016/06/24/handling-ime-events-in-javascript/
-        // Safari emits an additional keyDown after compositionend
-        return !!(this.isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
+        // IME composition状態の統合的な判定
+        const nativeEvent = event.nativeEvent;
+        const isNativeComposing = nativeEvent && nativeEvent.isComposing;
+        
+        // プラットフォーム固有の追加チェック
+        const isPlatformSpecificComposing = (
+            (this.platformInfo.isMac && this.platformInfo.isSafari && event.which === 229) ||
+            ((this.platformInfo.isWindows || this.platformInfo.isElectron) && event.which === 229)
+        );
+        
+        return !!(this.isIMEComposing || isNativeComposing || isPlatformSpecificComposing);
     }
 
     private onCutCopy = (event: ClipboardEvent, type: string): void => {
@@ -378,10 +400,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onInput = (event: Partial<InputEvent>): void => {
         if (!this.editorRef.current) return;
-        // ignore any input while doing IME compositions
-        if (this.isIMEComposing) {
+        
+        // IME composition中は確定イベント以外を無視
+        if (this.isIMEComposing && event.inputType !== "insertCompositionText") {
             return;
         }
+        
         this.modifiedFlag = true;
         const sel = document.getSelection()!;
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
@@ -479,11 +503,25 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onKeyDown = (event: React.KeyboardEvent): void => {
         if (!this.editorRef.current) return;
-        if (this.isSafari && event.which == 229) {
-            // Swallow the extra keyDown by Safari
+        
+        // IME composition中は全てのキーイベントを無視
+        if (this.isComposing(event)) {
+            return;
+        }
+        
+        // プラットフォーム固有のIME処理
+        if (this.platformInfo.isMac && this.platformInfo.isSafari && event.which === 229) {
+            // Safariの追加のkeyDownを無視
             event.stopPropagation();
             return;
         }
+        
+        // Windows/ElectronでのIMEキーコード229処理
+        if ((this.platformInfo.isWindows || this.platformInfo.isElectron) && event.which === 229) {
+            // Windows IMEのキーコード229を適切に処理
+            return;
+        }
+        
         const model = this.props.model;
         let handled = false;
 
