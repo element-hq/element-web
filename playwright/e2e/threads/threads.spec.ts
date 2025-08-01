@@ -395,7 +395,7 @@ test.describe("Threads", () => {
             locator = page.locator(".mx_ThreadView");
             await locator.locator(".mx_EventTile_last").hover();
             await locator.locator(".mx_EventTile_last").getByRole("button", { name: "Reply" }).click();
-            textbox = locator.getByRole("textbox", { name: "Reply to thread…" });
+            textbox = locator.getByRole("textbox", { name: "Reply to unencrypted thread…" });
             await textbox.fill("Please come here");
             await textbox.press("Enter");
             // Wait until the reply is sent
