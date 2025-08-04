@@ -133,7 +133,7 @@ export async function waitForMember(
 }
 
 export function isOnlyAdmin(room: Room): boolean {
-    const currentUserLevel = room.getMember(room.client.getUserId()!)?.powerLevel;
+    const currentUserLevel = room.getMember(room.client.getSafeUserId())?.powerLevel;
 
     const userLevelValues = room.getMembers().map((m) => m.powerLevel);
 
