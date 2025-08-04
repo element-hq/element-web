@@ -132,8 +132,8 @@ export async function waitForMember(
     });
 }
 
-export function isOnlyAdmin(room: Room, client: MatrixClient): boolean {
-    const currentUserLevel = room.getMember(client.getUserId()!)?.powerLevel;
+export function isOnlyAdmin(room: Room): boolean {
+    const currentUserLevel = room.getMember(room.client.getUserId()!)?.powerLevel;
 
     const userLevelValues = room.getMembers().map((m) => m.powerLevel);
 
