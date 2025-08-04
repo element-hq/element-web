@@ -727,6 +727,7 @@ describe("<MatrixChat />", () => {
                         await getComponentAndWaitForReady();
                         // this is thoroughly unit tested elsewhere
                         jest.spyOn(leaveRoomUtils, "leaveRoomBehaviour").mockClear().mockResolvedValue(undefined);
+                        (room as any).client = mockClient;
                     });
                     const dispatchAction = () =>
                         defaultDispatcher.dispatch({
@@ -776,7 +777,7 @@ describe("<MatrixChat />", () => {
                             ).toBeInTheDocument();
                         });
                         it("should warn when user is the last admin", async () => {
-                            jest.spyOn(room, "getMembers").mockReturnValue([
+                            jest.spyOn(room, "getJoinedMembers").mockReturnValue([
                                 { powerLevel: 100 } as unknown as MatrixJs.RoomMember,
                                 { powerLevel: 0 } as unknown as MatrixJs.RoomMember,
                             ]);
