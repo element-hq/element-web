@@ -33,7 +33,7 @@ describe("LeaveSpaceDialog", () => {
     it("should warn if user is the only admin", () => {
         const mockClient = createTestClient();
         const mockSpace = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
-        jest.spyOn(mockSpace, "getMembers").mockReturnValue([
+        jest.spyOn(mockSpace, "getJoinedMembers").mockReturnValue([
             { powerLevel: 100 } as unknown as RoomMember,
             { powerLevel: 0 } as unknown as RoomMember,
         ]);
