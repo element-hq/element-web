@@ -179,6 +179,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     </span>
     <svg
       aria-label="Away"
+      aria-labelledby="«r14»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
@@ -234,6 +235,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     </span>
     <svg
       aria-label="Busy"
+      aria-labelledby="«ru»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -291,6 +293,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     </span>
     <svg
       aria-label="Offline"
+      aria-labelledby="«ro»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -348,6 +351,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     </span>
     <svg
       aria-label="Online"
+      aria-labelledby="«ri»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"

@@ -55,17 +55,10 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     );
 }
 
-type PresenceDecorationProps = {
-    /**
-     * The presence of the user in the DM room.
-     */
-    presence: NonNullable<Presence>;
-};
-
 /**
- * Component to display the presence of a user in a DM room.
+ * Get the decoration for the avatar based on the presence.
  */
-function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element {
+function getPresenceDecoration(presence: Presence): JSX.Element {
     switch (presence) {
         case Presence.Online:
             return (
@@ -142,7 +135,7 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
             />
         );
     } else if (decoration === AvatarBadgeDecoration.Presence) {
-        return <PresenceDecoration presence={presence!} />;
+        return getPresenceDecoration(presence!);
     }
 }
 
