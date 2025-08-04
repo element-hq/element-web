@@ -19,6 +19,7 @@ interface Props {
     memberCount: number;
     focused?: boolean;
     tabIndex?: number;
+    onFocus: (e: React.FocusEvent) => void;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -39,6 +40,7 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             iconJsx={iconJsx}
             focused={props.focused}
             tabIndex={props.tabIndex}
+            onFocus={props.onFocus}
         />
     );
 }
