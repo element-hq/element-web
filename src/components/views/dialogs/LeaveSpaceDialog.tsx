@@ -43,13 +43,11 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
         rejoinWarning = _t("space|leave_dialog_public_rejoin_warning");
     }
 
-    const isOnlyAdminWrapper = (r: Room): boolean => isOnlyAdmin(r, r.client);
-
     let onlyAdminWarning;
-    if (isOnlyAdmin(space, space.client)) {
+    if (isOnlyAdmin(space)) {
         onlyAdminWarning = _t("space|leave_dialog_only_admin_warning");
     } else {
-        const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdminWrapper).length;
+        const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
             onlyAdminWarning = _t("space|leave_dialog_only_admin_room_warning");
         }

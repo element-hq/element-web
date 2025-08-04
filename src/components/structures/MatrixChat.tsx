@@ -1257,7 +1257,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const client = MatrixClientPeg.get();
         if (client && roomToLeave) {
             // If the user is the only user with highest power level
-            if (isOnlyAdmin(roomToLeave, client)) {
+            if (isOnlyAdmin(roomToLeave)) {
                 const userLevelValues = roomToLeave.getMembers().map((m) => m.powerLevel);
 
                 const maxUserLevel = Math.max(...(userLevelValues as number[]));
