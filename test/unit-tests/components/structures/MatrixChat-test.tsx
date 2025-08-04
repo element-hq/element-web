@@ -691,6 +691,8 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
 
                     jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
+                    (room as any).client = mockClient;
+                    (spaceRoom as any).client = mockClient;
                 });
 
                 describe("forget_room", () => {
@@ -727,7 +729,6 @@ describe("<MatrixChat />", () => {
                         await getComponentAndWaitForReady();
                         // this is thoroughly unit tested elsewhere
                         jest.spyOn(leaveRoomUtils, "leaveRoomBehaviour").mockClear().mockResolvedValue(undefined);
-                        (room as any).client = mockClient;
                     });
                     const dispatchAction = () =>
                         defaultDispatcher.dispatch({
