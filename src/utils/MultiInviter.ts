@@ -181,6 +181,12 @@ export default class MultiInviter {
         }
     }
 
+    /**
+     * Attempt to invite a user.
+     *
+     * Does not normally throw exceptions. If there was an error, this is reflected in {@link errors}.
+     * If the error was fatal and should prevent further invites from being done, {@link _fatal} is set.
+     */
     private doInvite(address: string, ignoreProfile: boolean): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             logger.log(`Inviting ${address}`);
@@ -204,7 +210,6 @@ export default class MultiInviter {
                     ];
 
                     let errorText: string | undefined;
-                    let fatal = false;
                     switch (err.errcode) {
                         case "M_FORBIDDEN":
                             if (isSpace) {
@@ -218,7 +223,8 @@ export default class MultiInviter {
                                         ? _t("invite|error_unfederated_room")
                                         : _t("invite|error_permissions_room");
                             }
-                            fatal = true;
+                            // No point doing further invites.
+                            this._fatal = true;
                             break;
                         case USER_ALREADY_INVITED:
                             if (isSpace) {
@@ -279,13 +285,7 @@ export default class MultiInviter {
                     this.completionStates[address] = InviteState.Error;
                     this.errors[address] = { errorText, errcode: err.errcode };
 
-                    this._fatal = fatal;
-
-                    if (fatal) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
+                    resolve();
                 });
         });
     }
@@ -327,9 +327,14 @@ export default class MultiInviter {
 
         this.doInvite(addr, false)
             .then(() => {
-                this.inviteMore(nextIndex + 1);
+                if (this._fatal) {
+                    // There was a fatal error: bail out now.
+                    this.deferred.resolve();
+                } else {
+                    this.inviteMore(nextIndex + 1);
+                }
             })
-            .catch(() => this.deferred.resolve());
+            .catch(this.deferred.reject);
     }
 
     /** Handle users which failed with an error code which indicated that their profile was unknown.
