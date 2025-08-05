@@ -181,7 +181,7 @@ export default class MultiInviter {
         }
     }
 
-    private doInvite(address: string, ignoreProfile = false): Promise<void> {
+    private doInvite(address: string, ignoreProfile: boolean): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             logger.log(`Inviting ${address}`);
 
@@ -290,7 +290,7 @@ export default class MultiInviter {
         });
     }
 
-    private inviteMore(nextIndex: number, ignoreProfile = false): void {
+    private inviteMore(nextIndex: number): void {
         if (nextIndex === this.addresses.length) {
             if (Object.keys(this.errors).length > 0) {
                 // There were problems inviting some people - see if we can invite them
@@ -327,9 +327,9 @@ export default class MultiInviter {
             return;
         }
 
-        this.doInvite(addr, ignoreProfile)
+        this.doInvite(addr, false)
             .then(() => {
-                this.inviteMore(nextIndex + 1, ignoreProfile);
+                this.inviteMore(nextIndex + 1);
             })
             .catch(() => this.deferred?.resolve(this.completionStates));
     }
