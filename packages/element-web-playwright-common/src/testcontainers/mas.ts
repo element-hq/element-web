@@ -186,9 +186,9 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
         const port = await getFreePort();
 
         this.config.http = {
+            ...this.config.http,
             public_base: `http://localhost:${port}/`,
             issuer: `http://localhost:${port}/`,
-            ...this.config.http,
         };
 
         this.withExposedPorts({
