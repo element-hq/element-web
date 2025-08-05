@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { type Room, type MatrixEvent, type MatrixClient, type User, EventType } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { EventType, type MatrixClient, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
 
 import MultiInviter, { type CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";
@@ -87,26 +86,6 @@ export function isValid3pidInvite(event: MatrixEvent): boolean {
 
     // Valid enough by our standards
     return true;
-}
-
-export function inviteUsersToRoom(
-    client: MatrixClient,
-    roomId: string,
-    userIds: string[],
-    progressCallback?: () => void,
-): Promise<void> {
-    return inviteMultipleToRoom(client, roomId, userIds, progressCallback)
-        .then((result) => {
-            const room = client.getRoom(roomId)!;
-            showAnyInviteErrors(result.states, room, result.inviter);
-        })
-        .catch((err) => {
-            logger.error(err.stack);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("invite|failed_title"),
-                description: err?.message ?? _t("invite|failed_generic"),
-            });
-        });
 }
 
 export function showAnyInviteErrors(
