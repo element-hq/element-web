@@ -1,13 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixAuthenticationServiceContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
-
+import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
 import { type Fixtures } from "../../../element-web-test.ts";
 
 export const masHomeserver: Fixtures = {
