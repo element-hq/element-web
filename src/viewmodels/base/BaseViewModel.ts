@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ViewModel } from "../../shared-components/ViewModel";
+import { Disposables } from "./Disposables";
 import { Snapshot } from "./Snapshot";
 import { ViewModelSubscriptions } from "./ViewModelSubscriptions";
 
@@ -13,6 +14,7 @@ export abstract class BaseViewModel<T, P> implements ViewModel<T> {
     protected subs: ViewModelSubscriptions;
     protected snapshot: Snapshot<T>;
     protected props: P;
+    protected disposables = new Disposables();
 
     protected constructor(props: P, initialSnapshot: T) {
         this.props = props;
@@ -32,4 +34,11 @@ export abstract class BaseViewModel<T, P> implements ViewModel<T> {
     public getSnapshot = (): T => {
         return this.snapshot.current;
     };
+
+    /**
+     * Relinquish any resources held by this view-model.
+     */
+    public dispose(): void {
+        this.disposables.dispose();
+    }
 }
