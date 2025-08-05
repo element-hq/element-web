@@ -300,9 +300,9 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
     const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
     if (!(await keyStorageToggle.isChecked())) {
-        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
     }
 
     await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
@@ -323,11 +323,11 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
 export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
     const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
     if (await keyStorageToggle.isChecked()) {
-        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
         await encryptionTab.getByRole("button", { name: "Delete key storage" }).click();
-        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).isVisible();
+        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).isVisible();
 
         // Wait for the update to account data to stick
         await new Promise((resolve) => setTimeout(resolve, 2000));
