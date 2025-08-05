@@ -300,31 +300,9 @@ export default class MultiInviter {
                 );
 
                 if (unknownProfileUsers.length > 0) {
-                    const inviteUnknowns = (): void => {
-                        const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
-                        Promise.all(promises).then(() => this.deferred?.resolve(this.completionStates));
-                    };
-
-                    if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
-                        inviteUnknowns();
-                        return;
-                    }
-
-                    logger.log("Showing failed to invite dialog...");
-                    Modal.createDialog(AskInviteAnywayDialog, {
-                        unknownProfileUsers: unknownProfileUsers.map((u) => ({
-                            userId: u,
-                            errorText: this.errors[u].errorText,
-                        })),
-                        onInviteAnyways: () => inviteUnknowns(),
-                        onGiveUp: () => {
-                            // Fake all the completion states because we already warned the user
-                            for (const addr of unknownProfileUsers) {
-                                this.completionStates[addr] = InviteState.Invited;
-                            }
-                            this.deferred?.resolve(this.completionStates);
-                        },
-                    });
+                    this.handleUnknownProfileUsers(unknownProfileUsers).then(() =>
+                        this.deferred?.resolve(this.completionStates),
+                    );
                     return;
                 }
             }
@@ -354,5 +332,40 @@ export default class MultiInviter {
                 this.inviteMore(nextIndex + 1, ignoreProfile);
             })
             .catch(() => this.deferred?.resolve(this.completionStates));
+    }
+
+    /** Handle users which failed with an error code which indicated that their profile was unknown.
+     *
+     * Depending on the `promptBeforeInviteUnknownUsers` setting, we either prompt the user for how to proceed, or
+     * send the invites anyway.
+     */
+    private handleUnknownProfileUsers(unknownProfileUsers: string[]): Promise<void> {
+        return new Promise<void>((resolve) => {
+            const inviteUnknowns = (): void => {
+                const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
+                Promise.all(promises).then(() => resolve());
+            };
+
+            if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
+                inviteUnknowns();
+                return;
+            }
+
+            logger.log("Showing failed to invite dialog...");
+            Modal.createDialog(AskInviteAnywayDialog, {
+                unknownProfileUsers: unknownProfileUsers.map((u) => ({
+                    userId: u,
+                    errorText: this.errors[u].errorText,
+                })),
+                onInviteAnyways: () => inviteUnknowns(),
+                onGiveUp: () => {
+                    // Fake all the completion states because we already warned the user
+                    for (const addr of unknownProfileUsers) {
+                        this.completionStates[addr] = InviteState.Invited;
+                    }
+                    resolve();
+                },
+            });
+        });
     }
 }
