@@ -143,9 +143,11 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: MasConfig;
     private readonly args = ["-c", "/config/config.yaml"];
 
-    public constructor(db: StartedPostgreSqlContainer) {
-        // We rely on https://github.com/element-hq/matrix-authentication-service/pull/4563 which isn't in a release yet
-        super("ghcr.io/element-hq/matrix-authentication-service:sha-3207d23");
+    public constructor(
+        db: StartedPostgreSqlContainer,
+        image: string = "ghcr.io/element-hq/matrix-authentication-service:latest",
+    ) {
+        super(image);
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.database.username = db.getUsername();
