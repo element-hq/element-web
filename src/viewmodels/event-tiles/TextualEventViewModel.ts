@@ -17,18 +17,11 @@ export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapsho
     public constructor(props: EventTileTypeProps) {
         super(props, { content: "" });
         this.setTextFromEvent();
+        this.disposables.trackListener(this.props.mxEvent, MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
     }
 
     private setTextFromEvent = (): void => {
         const content = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
         this.snapshot.set({ content });
-    };
-
-    protected addDownstreamSubscription = (): void => {
-        this.props.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
-    };
-
-    protected removeDownstreamSubscription = (): void => {
-        this.props.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
     };
 }

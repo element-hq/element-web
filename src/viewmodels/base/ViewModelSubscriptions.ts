@@ -6,19 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /**
- * Utility class for view models to manage suscriptions to their updates
+ * Utility class for view models to manage subscriptions to their updates
  */
 export class ViewModelSubscriptions {
     private listeners = new Set<() => void>();
-
-    /**
-     * @param subscribeCallback Called when the first listener subscribes.
-     * @param unsubscribeCallback Called when the last listener unsubscribes.
-     */
-    public constructor(
-        private subscribeCallback: () => void,
-        private unsubscribeCallback: () => void,
-    ) {}
 
     /**
      * Subscribe to changes in the view model.
@@ -27,15 +18,8 @@ export class ViewModelSubscriptions {
      */
     public add = (listener: () => void): (() => void) => {
         this.listeners.add(listener);
-        if (this.listeners.size === 1) {
-            this.subscribeCallback();
-        }
-
         return () => {
             this.listeners.delete(listener);
-            if (this.listeners.size === 0) {
-                this.unsubscribeCallback();
-            }
         };
     };
 
