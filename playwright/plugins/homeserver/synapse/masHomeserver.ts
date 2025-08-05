@@ -20,7 +20,7 @@ export const masHomeserver: Fixtures = {
                 .withLogConsumer(logger.getConsumer("mas"))
                 .withConfig({
                     matrix: {
-                        kind: "synapse",
+                        kind: "synapse_modern",
                         homeserver: "localhost",
                         secret,
                         endpoint: "http://homeserver:8008",
