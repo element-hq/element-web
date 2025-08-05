@@ -7,10 +7,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type HTMLProps } from "react";
 import { Temporal } from "temporal-polyfill";
+import classNames from "classnames";
 
 import { formatSeconds } from "../../utils/DateUtils";
 
-export interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role"> {
+export interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role" | "className"> {
     seconds: number;
 }
 
@@ -41,7 +42,7 @@ export class Clock extends React.Component<Props> {
                 aria-live={this.props["aria-live"]}
                 role={role}
                 /* Keep class for backward compatibility with parent component */
-                className="mx_Clock"
+                className={classNames("mx_Clock", this.props.className)}
             >
                 {formatSeconds(seconds)}
             </time>
