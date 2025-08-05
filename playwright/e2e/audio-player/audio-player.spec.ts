@@ -19,6 +19,7 @@ const clickButtonReply = async (tile: Locator) => {
         await tile.hover();
         await tile.getByRole("button", { name: "Reply", exact: true }).click();
     }).toPass();
+    await expect(tile.page().getByText("Replying", { exact: true })).toBeVisible();
 };
 
 test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {

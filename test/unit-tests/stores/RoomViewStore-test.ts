@@ -440,6 +440,17 @@ describe("RoomViewStore", function () {
             });
             expect(mocked(dis.dispatch).mock.calls[2][0]).toEqual({ action: "prompt_ask_to_join" });
         });
+
+        it("sets 'acceptSharedHistory' if that option is enabled", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, value) => {
+                return settingName === "feature_share_history_on_invite"; // this is enabled, everything else is disabled.
+            });
+
+            dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+            dis.dispatch({ action: Action.JoinRoom });
+            await untilDispatch(Action.JoinRoomReady, dis);
+            expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { acceptSharedHistory: true, viaServers: [] });
+        });
     });
 
     describe("Action.JoinRoomError", () => {

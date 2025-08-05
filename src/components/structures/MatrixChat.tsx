@@ -141,6 +141,7 @@ import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenFor
 import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
+import { isOnlyAdmin } from "../../utils/membership";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1255,29 +1256,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const client = MatrixClientPeg.get();
         if (client && roomToLeave) {
-            const plEvent = roomToLeave.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-            const plContent = plEvent ? plEvent.getContent() : {};
-            const userLevels = plContent.users || {};
-            const currentUserLevel = userLevels[client.getUserId()!];
-            const userLevelValues = Object.values(userLevels);
-            if (userLevelValues.every((x) => typeof x === "number")) {
+            // If the user is the only user with highest power level
+            if (isOnlyAdmin(roomToLeave)) {
+                const userLevelValues = roomToLeave.getJoinedMembers().map((m) => m.powerLevel);
+
                 const maxUserLevel = Math.max(...(userLevelValues as number[]));
-                // If the user is the only user with highest power level
-                if (
-                    maxUserLevel === currentUserLevel &&
-                    userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)
-                ) {
-                    const warning =
-                        maxUserLevel >= 100
-                            ? _t("leave_room_dialog|room_leave_admin_warning")
-                            : _t("leave_room_dialog|room_leave_mod_warning");
-                    warnings.push(
-                        <strong className="warning" key="last_admin_warning">
-                            {" " /* Whitespace, otherwise the sentences get smashed together */}
-                            {warning}
-                        </strong>,
-                    );
-                }
+
+                const warning =
+                    maxUserLevel >= 100
+                        ? _t("leave_room_dialog|room_leave_admin_warning")
+                        : _t("leave_room_dialog|room_leave_mod_warning");
+                warnings.push(
+                    <strong className="warning" key="last_admin_warning">
+                        {" " /* Whitespace, otherwise the sentences get smashed together */}
+                        {warning}
+                    </strong>,
+                );
             }
         }
 

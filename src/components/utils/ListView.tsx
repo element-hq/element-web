@@ -36,7 +36,12 @@ export interface IListViewProps<Item, Context>
      * @param context - The context object containing the focused key and any additional data
      * @returns JSX element representing the rendered item
      */
-    getItemComponent: (index: number, item: Item, context: ListContext<Context>) => JSX.Element;
+    getItemComponent: (
+        index: number,
+        item: Item,
+        context: ListContext<Context>,
+        onFocus: (e: React.FocusEvent) => void,
+    ) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
@@ -207,6 +212,20 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         virtuosoDomRef.current = element;
     }, []);
 
+    const getItemComponentInternal = useCallback(
+        (index: number, item: Item, context: ListContext<Context>): JSX.Element => {
+            const onFocus = (e: React.FocusEvent): void => {
+                // If one of the item components has been focused directly, set the focused and tabIndex state
+                // and stop propagation so the ListViews onFocus doesn't also handle it.
+                const key = getItemKey(item);
+                setIsFocused(true);
+                setTabIndexKey(key);
+                e.stopPropagation();
+            };
+            return getItemComponent(index, item, context, onFocus);
+        },
+        [getItemComponent, getItemKey],
+    );
     /**
      * Handles focus events on the list.
      * Sets the focused state and scrolls to the focused item if it is not currently visible.
@@ -259,7 +278,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             data={props.items}
             onFocus={onFocus}
             onBlur={onBlur}
-            itemContent={props.getItemComponent}
+            itemContent={getItemComponentInternal}
             {...virtuosoProps}
         />
     );

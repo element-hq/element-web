@@ -305,6 +305,82 @@ describe("ListView", () => {
 
             expect(container).toBeInTheDocument();
         });
+
+        it("should not scroll to top when clicking an item after manual scroll", () => {
+            // Create a larger list to enable meaningful scrolling
+            const largerItems = Array.from({ length: 50 }, (_, i) => ({
+                id: `item-${i}`,
+                name: `Item ${i}`,
+            }));
+
+            const mockOnClick = jest.fn();
+
+            mockGetItemComponent.mockImplementation(
+                (index: number, item: TestItemWithSeparator, context: any, onFocus: (e: React.FocusEvent) => void) => {
+                    const itemKey = typeof item === "string" ? item : item.id;
+                    const isFocused = context.tabIndexKey === itemKey;
+                    return (
+                        <div
+                            className="mx_item"
+                            data-testid={`row-${index}`}
+                            tabIndex={isFocused ? 0 : -1}
+                            onClick={() => mockOnClick(item)}
+                            onFocus={onFocus}
+                        >
+                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                        </div>
+                    );
+                },
+            );
+
+            const { container } = renderListViewWithHeight({ items: largerItems });
+            const listContainer = screen.getByRole("grid");
+
+            // Step 1: Focus the list initially (this sets tabIndexKey to first item: "item-0")
+            fireEvent.focus(listContainer);
+
+            // Verify first item is focused initially and tabIndexKey is set to first item
+            let items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "0");
+            expect(items[0]).toHaveAttribute("data-testid", "row-0");
+
+            // Step 2: Simulate manual scrolling (mouse wheel, scroll bar drag, etc.)
+            // This changes which items are visible but DOES NOT change tabIndexKey
+            // tabIndexKey should still point to "item-0" but "item-0" is no longer visible
+            fireEvent.scroll(listContainer, { target: { scrollTop: 300 } });
+
+            // Step 3: After scrolling, different items should now be visible
+            // but tabIndexKey should still point to "item-0" (which is no longer visible)
+            items = container.querySelectorAll(".mx_item");
+
+            // Verify that item-0 is no longer in the DOM (because it's scrolled out of view)
+            const item0 = container.querySelector("[data-testid='row-0']");
+            expect(item0).toBeNull();
+
+            // Find a visible item to click on (should be items from further down the list)
+            const visibleItems = container.querySelectorAll(".mx_item");
+            expect(visibleItems.length).toBeGreaterThan(0);
+            const clickTargetItem = visibleItems[0]; // Click on the first visible item
+
+            // Click on the visible item
+            fireEvent.click(clickTargetItem);
+
+            // The click should trigger the onFocus callback, which updates the tabIndexKey
+            // This simulates the real user interaction where clicking an item focuses it
+            fireEvent.focus(clickTargetItem);
+
+            // Verify the click was handled
+            expect(mockOnClick).toHaveBeenCalled();
+
+            // With the fix applied: the clicked item should become focused (tabindex="0")
+            // This validates that the fix prevents unwanted scrolling back to the top
+            expect(clickTargetItem).toHaveAttribute("tabindex", "0");
+
+            // The key validation: ensure we haven't scrolled back to the top
+            // item-0 should still not be visible (if the fix is working)
+            const item0AfterClick = container.querySelector("[data-testid='row-0']");
+            expect(item0AfterClick).toBeNull();
+        });
     });
 
     describe("Accessibility", () => {

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixError, JoinRule, type Room, type MatrixEvent, type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
@@ -512,15 +512,19 @@ export class RoomViewStore extends EventEmitter {
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
         const { roomAlias, roomId = payload.roomId } = this.state;
         const address = roomAlias || roomId!;
-        const viaServers = this.state.viaServers || [];
+
+        const joinOpts: IJoinRoomOpts = {
+            viaServers: this.state.viaServers || [],
+            ...(payload.opts ?? {}),
+        };
+        if (SettingsStore.getValue("feature_share_history_on_invite")) {
+            joinOpts.acceptSharedHistory = true;
+        }
+
         try {
             const cli = MatrixClientPeg.safeGet();
             await retry<Room, MatrixError>(
-                () =>
-                    cli.joinRoom(address, {
-                        viaServers,
-                        ...(payload.opts || {}),
-                    }),
+                () => cli.joinRoom(address, joinOpts),
                 NUM_JOIN_RETRY,
                 (err) => {
                     // if we received a Gateway timeout or Cloudflare timeout then retry
