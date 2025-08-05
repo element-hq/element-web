@@ -133,7 +133,7 @@ export async function waitForMember(
 }
 
 /**
- * Check if the user is the only admin in the room
+ * Check if the user is the only joined admin in the room
  * This function will *not* cause lazy loading of room members, so if these should be included then
  * the caller needs to make sure members have been loaded.
  * @param room The room to check if the user is the only admin.
