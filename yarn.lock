@@ -1191,9 +1191,9 @@
     "@babel/plugin-transform-typescript" "^7.27.1"
 
 "@babel/runtime@^7.0.0", "@babel/runtime@^7.12.13", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.17.9", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
-  version "7.27.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.6.tgz#ec4070a04d76bae8ddbb10770ba55714a417b7c6"
-  integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
+  version "7.28.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.2.tgz#2ae5a9d51cc583bd1f5673b3bb70d6d819682473"
+  integrity sha512-KHp2IflsnGywDjBWDkR9iEqiWSpc8GIi0lgTT3mOElT0PP1tG26P4tmFI2YvAdzgq9RGyoHZQEIEdZy6Ec5xCA==
 
 "@babel/template@^7.22.5", "@babel/template@^7.25.7", "@babel/template@^7.27.1", "@babel/template@^7.27.2", "@babel/template@^7.3.3":
   version "7.27.2"
@@ -4545,7 +4545,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.39.0":
   version "2.39.0"
