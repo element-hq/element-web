@@ -70,12 +70,12 @@ describe("<LayoutSwitcher />", () => {
             await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             await renderLayoutSwitcher();
 
-            expect(screen.getByRole("checkbox", { name: "Show compact text and messages" })).toBeChecked();
+            expect(screen.getByRole("switch", { name: "Show compact text and messages" })).toBeChecked();
         });
 
         it("should change the setting when toggled", async () => {
             await renderLayoutSwitcher();
-            act(() => screen.getByRole("checkbox", { name: "Show compact text and messages" }).click());
+            act(() => screen.getByRole("switch", { name: "Show compact text and messages" }).click());
 
             await waitFor(() => expect(SettingsStore.getValue("useCompactLayout")).toBe(true));
         });
@@ -83,7 +83,7 @@ describe("<LayoutSwitcher />", () => {
         it("should be disabled when the modern layout is not enabled", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
             await renderLayoutSwitcher();
-            expect(screen.getByRole("checkbox", { name: "Show compact text and messages" })).toBeDisabled();
+            expect(screen.getByRole("switch", { name: "Show compact text and messages" })).toBeDisabled();
         });
     });
 });

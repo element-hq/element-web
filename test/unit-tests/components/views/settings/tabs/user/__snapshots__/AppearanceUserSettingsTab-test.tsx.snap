@@ -561,6 +561,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         class="_input_19o42_24"
                         id="radix-«ru»"
                         name="compactLayout"
+                        role="switch"
                         title=""
                         type="checkbox"
                       />
