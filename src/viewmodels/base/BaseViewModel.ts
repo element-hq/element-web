@@ -16,10 +16,7 @@ export abstract class BaseViewModel<T, P> implements ViewModel<T> {
 
     protected constructor(props: P, initialSnapshot: T) {
         this.props = props;
-        this.subs = new ViewModelSubscriptions(
-            this.addDownstreamSubscriptionWrapper,
-            this.removeDownstreamSubscriptionWrapper,
-        );
+        this.subs = new ViewModelSubscriptions();
         this.snapshot = new Snapshot(initialSnapshot, () => {
             this.subs.emit();
         });
@@ -28,33 +25,6 @@ export abstract class BaseViewModel<T, P> implements ViewModel<T> {
     public subscribe = (listener: () => void): (() => void) => {
         return this.subs.add(listener);
     };
-
-    /**
-     * Wrapper around the abstract subscribe callback as we can't assume that the subclassed method
-     * has a bound `this` context.
-     */
-    private addDownstreamSubscriptionWrapper = (): void => {
-        this.addDownstreamSubscription();
-    };
-
-    /**
-     * Wrapper around the abstract unsubscribe callback as we can't call pass an abstract method directly
-     * in the constructor.
-     */
-    private removeDownstreamSubscriptionWrapper = (): void => {
-        this.removeDownstreamSubscription();
-    };
-
-    /**
-     * Called when the first listener subscribes: the subclass should set up any necessary subscriptions
-     * to call this.subs.emit() when the snapshot changes.
-     */
-    protected abstract addDownstreamSubscription(): void;
-
-    /**
-     * Called when the last listener unsubscribes: the subclass should clean up any subscriptions.
-     */
-    protected abstract removeDownstreamSubscription(): void;
 
     /**
      * Returns the current snapshot of the view model.
