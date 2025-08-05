@@ -14,6 +14,7 @@ export const masHomeserver: Fixtures = {
         async ({ _homeserver: homeserver, logger, network, postgres, mailpit }, use) => {
             const secret = "AnotherRandomSecret";
 
+            const limits = { burst: 10, per_second: 10 };
             const container = await new MatrixAuthenticationServiceContainer(postgres)
                 .withNetwork(network)
                 .withNetworkAliases("mas")
@@ -27,20 +28,19 @@ export const masHomeserver: Fixtures = {
                     },
                     rate_limiting: {
                         login: {
-                            burst: 10,
-                            per_second: 10,
+                            per_ip: limits,
+                            per_account: limits,
                         },
-                        registration: {
-                            burst: 10,
-                            per_second: 10,
-                        },
+                        registration: limits,
                         email_authentication: {
-                            burst: 10,
-                            per_second: 10,
+                            per_ip: limits,
+                            per_address: limits,
+                            emails_per_session: limits,
+                            attempt_per_session: limits,
                         },
                         account_recovery: {
-                            burst: 10,
-                            per_second: 10,
+                            per_ip: limits,
+                            per_address: limits,
                         },
                     },
                 })
