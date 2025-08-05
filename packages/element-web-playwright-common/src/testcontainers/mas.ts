@@ -18,12 +18,13 @@ import * as YAML from "yaml";
 import { getFreePort } from "../utils/port.js";
 import { deepCopy } from "../utils/object.js";
 import { type Credentials } from "../utils/api.js";
-
 // This file can be updated by running:
 //
 //   curl -sL https://element-hq.github.io/matrix-authentication-service/config.schema.json \
 //     | npx json-schema-to-typescript -o packages/element-web-playwright-common/src/testconainers/mas-config.ts
 import type { RootConfig as MasConfig } from "./mas-config.js";
+
+export { type MasConfig };
 
 const DEFAULT_CONFIG = {
     http: {
