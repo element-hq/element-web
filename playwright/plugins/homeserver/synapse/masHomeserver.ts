@@ -12,20 +12,20 @@ import { type Fixtures } from "../../../element-web-test.ts";
 export const masHomeserver: Fixtures = {
     mas: [
         async ({ _homeserver: homeserver, logger, network, postgres, mailpit }, use) => {
-            const config = {
-                matrix: {
-                    kind: "synapse",
-                    homeserver: "localhost",
-                    secret: "AnotherRandomSecret",
-                    endpoint: "http://homeserver:8008",
-                },
-            };
+            const secret = "AnotherRandomSecret";
 
             const container = await new MatrixAuthenticationServiceContainer(postgres)
                 .withNetwork(network)
                 .withNetworkAliases("mas")
                 .withLogConsumer(logger.getConsumer("mas"))
-                .withConfig(config)
+                .withConfig({
+                    matrix: {
+                        kind: "synapse",
+                        homeserver: "localhost",
+                        secret,
+                        endpoint: "http://homeserver:8008",
+                    },
+                })
                 .start();
 
             homeserver.withConfig({
@@ -36,7 +36,7 @@ export const masHomeserver: Fixtures = {
                 matrix_authentication_service: {
                     enabled: true,
                     endpoint: "http://mas:8080/",
-                    secret: config.matrix.secret,
+                    secret,
                 },
             });
 
