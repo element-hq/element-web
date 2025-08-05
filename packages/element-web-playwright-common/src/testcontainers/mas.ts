@@ -29,14 +29,8 @@ const DEFAULT_CONFIG = {
                     { name: "human" },
                     { name: "oauth" },
                     { name: "compat" },
-                    {
-                        name: "graphql",
-                        playground: true,
-                    },
-                    {
-                        name: "assets",
-                        path: "/usr/local/share/mas-cli/assets/",
-                    },
+                    { name: "graphql" },
+                    { name: "assets" },
                 ],
                 binds: [
                     {
@@ -60,7 +54,6 @@ const DEFAULT_CONFIG = {
                 proxy_protocol: false,
             },
         ],
-        trusted_proxies: ["192.128.0.0/16", "172.16.0.0/12", "10.0.0.0/10", "127.0.0.1/8", "fd00::/8", "::1/128"],
         public_base: "", // Needs to be set
         issuer: "", // Needs to be set
     },
@@ -70,28 +63,6 @@ const DEFAULT_CONFIG = {
         database: "postgres",
         username: "postgres",
         password: "p4S5w0rD",
-        max_connections: 10,
-        min_connections: 0,
-        connect_timeout: 30,
-        idle_timeout: 600,
-        max_lifetime: 1800,
-    },
-    telemetry: {
-        tracing: {
-            exporter: "none",
-            propagators: [],
-        },
-        metrics: {
-            exporter: "none",
-        },
-        sentry: {
-            dsn: null,
-        },
-    },
-    templates: {
-        path: "/usr/local/share/mas-cli/templates/",
-        assets_manifest: "/usr/local/share/mas-cli/manifest.json",
-        translations_path: "/usr/local/share/mas-cli/translations/",
     },
     email: {
         from: '"Authentication Service" <root@localhost>',
@@ -135,37 +106,15 @@ const DEFAULT_CONFIG = {
         minimum_complexity: 0,
     },
     policy: {
-        wasm_module: "/usr/local/share/mas-cli/policy.wasm",
-        client_registration_entrypoint: "client_registration/violation",
-        register_entrypoint: "register/violation",
-        authorization_grant_entrypoint: "authorization_grant/violation",
-        password_entrypoint: "password/violation",
-        email_entrypoint: "email/violation",
         data: {
             client_registration: {
                 // allow non-SSL and localhost URIs
                 allow_insecure_uris: true,
-                // EW doesn't have contacts at this time
-                allow_missing_contacts: true,
             },
         },
     },
-    upstream_oauth2: {
-        providers: [],
-    },
-    branding: {
-        service_name: null,
-        policy_uri: null,
-        tos_uri: null,
-        imprint: null,
-        logo_uri: null,
-    },
     account: {
         password_registration_enabled: true,
-    },
-    experimental: {
-        access_token_ttl: 300,
-        compat_token_ttl: 300,
     },
     rate_limiting: {
         login: {
