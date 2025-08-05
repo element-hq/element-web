@@ -25,6 +25,24 @@ export const masHomeserver: Fixtures = {
                         secret,
                         endpoint: "http://homeserver:8008",
                     },
+                    rate_limiting: {
+                        login: {
+                            burst: 10,
+                            per_second: 10,
+                        },
+                        registration: {
+                            burst: 10,
+                            per_second: 10,
+                        },
+                        email_authentication: {
+                            burst: 10,
+                            per_second: 10,
+                        },
+                        account_recovery: {
+                            burst: 10,
+                            per_second: 10,
+                        },
+                    },
                 })
                 .start();
 
