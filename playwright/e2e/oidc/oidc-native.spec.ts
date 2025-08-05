@@ -95,10 +95,6 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             const result = await mas.manage("kill-sessions", userId);
             expect(result.output).toContain("Ended 1 active OAuth 2.0 session");
 
-            // Workaround for Synapse's 2 minute cache on MAS token validity
-            // (https://github.com/element-hq/synapse/pull/18231)
-            await homeserver.restart();
-
             await page.goto("http://localhost:8080");
             await expect(
                 page.getByText("For security, this session has been signed out. Please sign in again."),
