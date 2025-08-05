@@ -48,7 +48,6 @@ export default class MultiInviter {
     private _fatal = false;
     private completionStates: CompletionStates = {}; // State of each address (invited or error)
     private errors: Record<string, IError> = {}; // { address: {errorText, errcode} }
-    private deferred: PromiseWithResolvers<void> = Promise.withResolvers();
     private reason: string | undefined;
 
     /**
@@ -91,13 +90,27 @@ export default class MultiInviter {
             }
         }
 
-        this.inviteMore(0);
-        await this.deferred.promise;
+        for (const addr of this.addresses) {
+            // don't try to invite it if it's an invalid address
+            // (it will already be marked as an error though,
+            // so no need to do so again)
+            if (getAddressType(addr) === null) {
+                continue;
+            }
 
-        if (this._fatal) {
-            // `doInvite` suffered a fatal error. The error should have been recorded in `errors`; it's up
-            // to the caller to report back to the user.
-            return this.completionStates;
+            // don't re-invite (there's no way in the UI to do this, but
+            // for sanity's sake)
+            if (this.completionStates[addr] === InviteState.Invited) {
+                continue;
+            }
+
+            await this.doInvite(addr, false);
+
+            if (this._fatal) {
+                // `doInvite` suffered a fatal error. The error should have been recorded in `errors`; it's up
+                // to the caller to report back to the user.
+                return this.completionStates;
+            }
         }
 
         if (Object.keys(this.errors).length > 0) {
@@ -307,41 +320,6 @@ export default class MultiInviter {
                     resolve();
                 });
         });
-    }
-
-    private inviteMore(nextIndex: number): void {
-        if (nextIndex === this.addresses.length) {
-            this.deferred.resolve();
-            return;
-        }
-
-        const addr = this.addresses[nextIndex];
-
-        // don't try to invite it if it's an invalid address
-        // (it will already be marked as an error though,
-        // so no need to do so again)
-        if (getAddressType(addr) === null) {
-            this.inviteMore(nextIndex + 1);
-            return;
-        }
-
-        // don't re-invite (there's no way in the UI to do this, but
-        // for sanity's sake)
-        if (this.completionStates[addr] === InviteState.Invited) {
-            this.inviteMore(nextIndex + 1);
-            return;
-        }
-
-        this.doInvite(addr, false)
-            .then(() => {
-                if (this._fatal) {
-                    // There was a fatal error: bail out now.
-                    this.deferred.resolve();
-                } else {
-                    this.inviteMore(nextIndex + 1);
-                }
-            })
-            .catch(this.deferred.reject);
     }
 
     /** Handle users which failed with an error code which indicated that their profile was unknown.
