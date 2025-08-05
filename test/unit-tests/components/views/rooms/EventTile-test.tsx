@@ -306,6 +306,10 @@ describe("EventTile", () => {
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
             [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
+            [
+                EventShieldReason.MISMATCHED_SENDER,
+                "The sender of the event does not match the owner of the device that sent it.",
+            ],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },

@@ -64,7 +64,7 @@ import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type ButtonEvent } from "../elements/AccessibleButton";
-import { copyPlaintext, getSelectedText } from "../../../utils/strings";
+import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import RedactedBody from "../messages/RedactedBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -729,11 +729,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.state.shieldColour !== EventShieldColour.NONE) {
             let shieldReasonMessage: string;
             switch (this.state.shieldReason) {
-                case null:
-                case EventShieldReason.UNKNOWN:
-                    shieldReasonMessage = _t("error|unknown");
-                    break;
-
                 case EventShieldReason.UNVERIFIED_IDENTITY:
                     shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
                     break;
@@ -760,6 +755,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
                 case EventShieldReason.VERIFICATION_VIOLATION:
                     shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+                    break;
+
+                case EventShieldReason.MISMATCHED_SENDER:
+                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
+                    break;
+
+                default:
+                    shieldReasonMessage = _t("error|unknown");
                     break;
             }
 
@@ -840,10 +843,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Electron layer (webcontents-handler.ts)
         if (clickTarget instanceof HTMLImageElement) return;
 
-        // Return if we're in a browser and click either an a tag or we have
-        // selected text, as in those cases we want to use the native browser
-        // menu
-        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && (getSelectedText() || anchorElement)) return;
+        // Return if we're in a browser and click either an a tag, as in those cases we want to use the native browser menu
+        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
 
         // We don't want to show the menu when editing a message
         if (this.props.editState) return;
@@ -1237,22 +1238,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {replyChain}
-                            {renderTile(
-                                TimelineRenderingType.Thread,
-                                {
-                                    ...this.props,
+                            {renderTile(TimelineRenderingType.Thread, {
+                                ...this.props,
 
-                                    // overrides
-                                    ref: this.tile,
-                                    isSeeingThroughMessageHiddenForModeration,
+                                // overrides
+                                ref: this.tile,
+                                isSeeingThroughMessageHiddenForModeration,
 
-                                    // appease TS
-                                    highlights: this.props.highlights,
-                                    highlightLink: this.props.highlightLink,
-                                    permalinkCreator: this.props.permalinkCreator!,
-                                },
-                                this.context.showHiddenEvents,
-                            )}
+                                // appease TS
+                                highlights: this.props.highlights,
+                                highlightLink: this.props.highlightLink,
+                                permalinkCreator: this.props.permalinkCreator!,
+                                showHiddenEvents: this.context.showHiddenEvents,
+                            })}
                             {actionBar}
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 {timestamp}
@@ -1383,22 +1381,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </a>,
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
-                            {renderTile(
-                                TimelineRenderingType.File,
-                                {
-                                    ...this.props,
+                            {renderTile(TimelineRenderingType.File, {
+                                ...this.props,
 
-                                    // overrides
-                                    ref: this.tile,
-                                    isSeeingThroughMessageHiddenForModeration,
+                                // overrides
+                                ref: this.tile,
+                                isSeeingThroughMessageHiddenForModeration,
 
-                                    // appease TS
-                                    highlights: this.props.highlights,
-                                    highlightLink: this.props.highlightLink,
-                                    permalinkCreator: this.props.permalinkCreator,
-                                },
-                                this.context.showHiddenEvents,
-                            )}
+                                // appease TS
+                                highlights: this.props.highlights,
+                                highlightLink: this.props.highlightLink,
+                                permalinkCreator: this.props.permalinkCreator,
+                                showHiddenEvents: this.context.showHiddenEvents,
+                            })}
                         </div>,
                     ],
                 );
@@ -1433,23 +1428,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupTimestamp}
                             {groupPadlock}
                             {replyChain}
-                            {renderTile(
-                                this.context.timelineRenderingType,
-                                {
-                                    ...this.props,
+                            {renderTile(this.context.timelineRenderingType, {
+                                ...this.props,
 
-                                    // overrides
-                                    ref: this.tile,
-                                    isSeeingThroughMessageHiddenForModeration,
-                                    timestamp: bubbleTimestamp,
+                                // overrides
+                                ref: this.tile,
+                                isSeeingThroughMessageHiddenForModeration,
+                                timestamp: bubbleTimestamp,
 
-                                    // appease TS
-                                    highlights: this.props.highlights,
-                                    highlightLink: this.props.highlightLink,
-                                    permalinkCreator: this.props.permalinkCreator,
-                                },
-                                this.context.showHiddenEvents,
-                            )}
+                                // appease TS
+                                highlights: this.props.highlights,
+                                highlightLink: this.props.highlightLink,
+                                permalinkCreator: this.props.permalinkCreator,
+                                showHiddenEvents: this.context.showHiddenEvents,
+                            })}
                             {actionBar}
                             {this.props.layout === Layout.IRC && (
                                 <>

@@ -26,7 +26,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
-import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
@@ -44,6 +43,8 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import ModuleApi from "../modules/Api";
+import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
+import { TextualEvent } from "../shared-components/event-tiles/TextualEvent";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -67,6 +68,7 @@ export interface EventTileTypeProps
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
+    showHiddenEvents: boolean;
 }
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
@@ -77,7 +79,10 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
+export const TextualEventFactory: Factory = (ref, props) => {
+    const vm = new TextualEventViewModel(props);
+    return <TextualEvent vm={vm} />;
+};
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
 
@@ -252,12 +257,11 @@ export function pickFactory(
 export function renderTile(
     renderType: TimelineRenderingType,
     props: EventTileTypeProps,
-    showHiddenEvents: boolean,
     cli?: MatrixClient,
 ): Optional<JSX.Element> {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
-    const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
+    const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents);
     if (!factory) {
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
@@ -286,6 +290,7 @@ export function renderTile(
         isSeeingThroughMessageHiddenForModeration,
         timestamp,
         inhibitInteraction,
+        showHiddenEvents,
     } = props;
 
     switch (renderType) {
@@ -309,6 +314,7 @@ export function renderTile(
                         isSeeingThroughMessageHiddenForModeration,
                         permalinkCreator,
                         inhibitInteraction,
+                        showHiddenEvents,
                     }),
             );
         default:
@@ -332,6 +338,7 @@ export function renderTile(
                         isSeeingThroughMessageHiddenForModeration,
                         timestamp,
                         inhibitInteraction,
+                        showHiddenEvents,
                     }),
             );
     }
@@ -394,6 +401,7 @@ export function renderReplyTile(
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
                 permalinkCreator,
+                showHiddenEvents,
             }),
     );
 }

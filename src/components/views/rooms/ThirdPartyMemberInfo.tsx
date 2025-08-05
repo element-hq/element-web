@@ -19,7 +19,7 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BaseCard from "../right_panel/BaseCard";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../../shared-components/utils/Flex";
 
 interface IProps {
     event: MatrixEvent;

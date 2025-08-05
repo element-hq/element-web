@@ -93,7 +93,6 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
@@ -863,6 +862,7 @@
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Settings explorer",
+        "show_empty_content_events": "Show events with empty content",
         "show_hidden_events": "Show hidden events in timeline",
         "spaces": {
             "one": "<space>",
@@ -933,6 +933,7 @@
         "cross_signing_user_warning": "This user has not verified all of their sessions.",
         "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
+        "event_shield_reason_mismatched_sender": "The sender of the event does not match the owner of the device that sent it.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
@@ -1450,6 +1451,7 @@
         "room_list_navigate_down": "Navigate down in the room list",
         "room_list_navigate_up": "Navigate up in the room list",
         "room_list_select_room": "Select room from the room list",
+        "save": "Save",
         "scroll_down_timeline": "Scroll down in the timeline",
         "scroll_up_timeline": "Scroll up in the timeline",
         "search": "Search (must be enabled)",
@@ -1531,6 +1533,9 @@
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
+        "share_history_on_invite": "Share encrypted history with new members",
+        "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
+        "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
@@ -1652,8 +1657,8 @@
         "filter_placeholder": "Search room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
-        "no_matches": "No matches",
-        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
+        "list_title": "Member list",
+        "no_matches": "No matches"
     },
     "member_list_back_action_label": "Room members",
     "message_edit_dialog_title": "Message edits",

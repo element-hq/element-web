@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixError, type MatrixClient, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { MatrixError, type MatrixClient, EventType, type EmptyObject, type InviteOpts } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -183,7 +183,11 @@ export default class MultiInviter {
                 }
             }
 
-            return this.matrixClient.invite(roomId, addr, this.reason);
+            const opts: InviteOpts = {};
+            if (this.reason !== undefined) opts.reason = this.reason;
+            if (SettingsStore.getValue("feature_share_history_on_invite")) opts.shareEncryptedHistory = true;
+
+            return this.matrixClient.invite(roomId, addr, opts);
         } else {
             throw new Error("Unsupported address");
         }

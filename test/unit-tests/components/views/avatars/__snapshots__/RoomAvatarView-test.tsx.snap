@@ -50,6 +50,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
     </span>
     <svg
       aria-label="This is a low priority room"
+      aria-labelledby="«r0»"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -92,8 +93,9 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is public"
+      aria-labelledby="«rc»"
       class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
+      color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
       height="16px"
       viewBox="0 0 24 24"
@@ -134,6 +136,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is a video room"
+      aria-labelledby="«r6»"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -176,6 +179,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     </span>
     <svg
       aria-label="Away"
+      aria-labelledby="«r14»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
@@ -231,6 +235,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     </span>
     <svg
       aria-label="Busy"
+      aria-labelledby="«ru»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -288,6 +293,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     </span>
     <svg
       aria-label="Offline"
+      aria-labelledby="«ro»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -345,6 +351,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     </span>
     <svg
       aria-label="Online"
+      aria-labelledby="«ri»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"

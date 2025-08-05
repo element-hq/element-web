@@ -139,3 +139,16 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
                   repository: vectorim/element-web
+
+            - name: Repository Dispatch
+              uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3
+              if: github.event_name != 'pull_request'
+              with:
+                  repository: element-hq/element-web-pro
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  event-type: image-built
+                  # Stable way to determine the :version
+                  client-payload: |-
+                      {
+                          "base-ref": "${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}"
+                      }

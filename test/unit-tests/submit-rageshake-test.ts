@@ -524,25 +524,16 @@ describe("Rageshakes", () => {
             consume: jest.fn(),
             warn: jest.fn(),
         } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
 
-        // @ts-ignore - mock the console logger
+        const prevLogger = global.mx_rage_logger;
         global.mx_rage_logger = mockConsoleLogger;
-
-        // @ts-ignore
-        mockConsoleLogger.flush.mockReturnValue([
-            {
-                id: "instance-0",
-                line: "line 1",
-            },
-            {
-                id: "instance-1",
-                line: "line 2",
-            },
-        ]);
-
-        const formData = await collectBugReport({ sendLogs: true });
-
-        expect(formData.get("compressed-log")).toBeDefined();
+        try {
+            const formData = await collectBugReport({ sendLogs: true });
+            expect(formData.get("compressed-log")).toBeDefined();
+        } finally {
+            global.mx_rage_logger = prevLogger;
+        }
     });
 
     describe("A-Element-R label", () => {

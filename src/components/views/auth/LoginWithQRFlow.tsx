@@ -290,7 +290,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                             data-testid="back-button"
                             className="mx_LoginWithQR_BackButton"
                             onClick={this.handleClick(Click.Back)}
-                            title="Back"
+                            title={_t("action|back")}
                         >
                             <ChevronLeftIcon />
                         </AccessibleButton>
