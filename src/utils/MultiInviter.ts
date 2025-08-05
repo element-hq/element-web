@@ -48,7 +48,7 @@ export default class MultiInviter {
     private _fatal = false;
     private completionStates: CompletionStates = {}; // State of each address (invited or error)
     private errors: Record<string, IError> = {}; // { address: {errorText, errcode} }
-    private deferred: PromiseWithResolvers<CompletionStates> | null = null;
+    private deferred: PromiseWithResolvers<void> = Promise.withResolvers();
     private reason: string | undefined;
 
     /**
@@ -74,7 +74,7 @@ export default class MultiInviter {
      * @param {string} reason Reason for inviting (optional)
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
-    public invite(addresses: string[], reason?: string): Promise<CompletionStates> {
+    public async invite(addresses: string[], reason?: string): Promise<CompletionStates> {
         if (this.addresses.length > 0) {
             throw new Error("Already inviting/invited");
         }
@@ -90,10 +90,10 @@ export default class MultiInviter {
                 };
             }
         }
-        this.deferred = Promise.withResolvers<CompletionStates>();
-        this.inviteMore(0);
 
-        return this.deferred.promise;
+        this.inviteMore(0);
+        await this.deferred.promise;
+        return this.completionStates;
     }
 
     public getCompletionState(addr: string): InviteState {
@@ -300,13 +300,11 @@ export default class MultiInviter {
                 );
 
                 if (unknownProfileUsers.length > 0) {
-                    this.handleUnknownProfileUsers(unknownProfileUsers).then(() =>
-                        this.deferred?.resolve(this.completionStates),
-                    );
+                    this.handleUnknownProfileUsers(unknownProfileUsers).then(() => this.deferred.resolve());
                     return;
                 }
             }
-            this.deferred?.resolve(this.completionStates);
+            this.deferred.resolve();
             return;
         }
 
@@ -331,7 +329,7 @@ export default class MultiInviter {
             .then(() => {
                 this.inviteMore(nextIndex + 1);
             })
-            .catch(() => this.deferred?.resolve(this.completionStates));
+            .catch(() => this.deferred.resolve());
     }
 
     /** Handle users which failed with an error code which indicated that their profile was unknown.
