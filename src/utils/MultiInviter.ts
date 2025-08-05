@@ -93,6 +93,25 @@ export default class MultiInviter {
 
         this.inviteMore(0);
         await this.deferred.promise;
+
+        if (this._fatal) {
+            // `doInvite` suffered a fatal error. The error should have been recorded in `errors`; it's up
+            // to the caller to report back to the user.
+            return this.completionStates;
+        }
+
+        if (Object.keys(this.errors).length > 0) {
+            // There were problems inviting some people - see if we can invite them
+            // without caring if they exist or not.
+            const unknownProfileUsers = Object.keys(this.errors).filter((a) =>
+                UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode),
+            );
+
+            if (unknownProfileUsers.length > 0) {
+                await this.handleUnknownProfileUsers(unknownProfileUsers);
+            }
+        }
+
         return this.completionStates;
     }
 
@@ -292,18 +311,6 @@ export default class MultiInviter {
 
     private inviteMore(nextIndex: number): void {
         if (nextIndex === this.addresses.length) {
-            if (Object.keys(this.errors).length > 0) {
-                // There were problems inviting some people - see if we can invite them
-                // without caring if they exist or not.
-                const unknownProfileUsers = Object.keys(this.errors).filter((a) =>
-                    UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode),
-                );
-
-                if (unknownProfileUsers.length > 0) {
-                    this.handleUnknownProfileUsers(unknownProfileUsers).then(() => this.deferred.resolve());
-                    return;
-                }
-            }
             this.deferred.resolve();
             return;
         }
