@@ -44,9 +44,7 @@ const USER_BANNED = "IO.ELEMENT.BANNED";
  * Invites multiple addresses to a room, handling rate limiting from the server
  */
 export default class MultiInviter {
-    private canceled = false;
     private addresses: string[] = [];
-    private busy = false;
     private _fatal = false;
     private completionStates: CompletionStates = {}; // State of each address (invited or error)
     private errors: Record<string, IError> = {}; // { address: {errorText, errcode} }
@@ -96,16 +94,6 @@ export default class MultiInviter {
         this.inviteMore(0);
 
         return this.deferred.promise;
-    }
-
-    /**
-     * Stops inviting. Causes promises returned by invite() to be rejected.
-     */
-    public cancel(): void {
-        if (!this.busy) return;
-
-        this.canceled = true;
-        this.deferred?.reject(new Error("canceled"));
     }
 
     public getCompletionState(addr: string): InviteState {
@@ -200,10 +188,6 @@ export default class MultiInviter {
             const doInvite = this.inviteToRoom(this.roomId, address, ignoreProfile);
             doInvite
                 .then(() => {
-                    if (this.canceled) {
-                        return;
-                    }
-
                     this.completionStates[address] = InviteState.Invited;
                     delete this.errors[address];
 
@@ -211,10 +195,6 @@ export default class MultiInviter {
                     this.progressCallback?.();
                 })
                 .catch((err) => {
-                    if (this.canceled) {
-                        return;
-                    }
-
                     logger.error(err);
 
                     const room = this.roomId ? this.matrixClient.getRoom(this.roomId) : null;
@@ -299,7 +279,6 @@ export default class MultiInviter {
                     this.completionStates[address] = InviteState.Error;
                     this.errors[address] = { errorText, errcode: err.errcode };
 
-                    this.busy = !fatal;
                     this._fatal = fatal;
 
                     if (fatal) {
@@ -312,12 +291,7 @@ export default class MultiInviter {
     }
 
     private inviteMore(nextIndex: number, ignoreProfile = false): void {
-        if (this.canceled) {
-            return;
-        }
-
         if (nextIndex === this.addresses.length) {
-            this.busy = false;
             if (Object.keys(this.errors).length > 0) {
                 // There were problems inviting some people - see if we can invite them
                 // without caring if they exist or not.
