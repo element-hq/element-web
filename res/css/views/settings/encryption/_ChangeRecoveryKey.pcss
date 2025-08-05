@@ -68,5 +68,33 @@
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-8x);
+
+        > div {
+            /*
+             * Be more specific here to avoid "margin: 9px" from _common.pcss
+             */
+            > div:not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) {
+                > input[name="recoveryKey"] {
+                    /*
+                     * From figma https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=375-77506&t=d82NdRBDoKsUe1C9-4
+                     */
+                    height: 70px;
+                    padding: 12px 12px 12px 16px;
+                    border: 1px solid;
+                    border-radius: 8px;
+                    margin: 0px;
+                }
+
+                > button {
+                    /*
+                     * See figma https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=375-77506&t=d82NdRBDoKsUe1C9-4
+                     * Avoid stretching the hide/show symbol to the height of the input, and centre it vertically.
+                     */
+                    height: 24.5px;
+                    padding: var(--cpd-space-1x);
+                    margin: 12.25px 4px 4px 4px;
+                }
+            }
+        }
     }
 }
