@@ -18,6 +18,13 @@ import * as YAML from "yaml";
 import { getFreePort } from "../utils/port.js";
 import { deepCopy } from "../utils/object.js";
 import { type Credentials } from "../utils/api.js";
+// This file can be updated by running:
+//
+//   curl -sL https://element-hq.github.io/matrix-authentication-service/config.schema.json \
+//     | npx json-schema-to-typescript -o packages/element-web-playwright-common/src/testconainers/mas-config.ts
+import type { RootConfig as MasConfig } from "./mas-config.js";
+
+export { type MasConfig };
 
 const DEFAULT_CONFIG = {
     http: {
@@ -29,14 +36,8 @@ const DEFAULT_CONFIG = {
                     { name: "human" },
                     { name: "oauth" },
                     { name: "compat" },
-                    {
-                        name: "graphql",
-                        playground: true,
-                    },
-                    {
-                        name: "assets",
-                        path: "/usr/local/share/mas-cli/assets/",
-                    },
+                    { name: "graphql" },
+                    { name: "assets" },
                 ],
                 binds: [
                     {
@@ -60,7 +61,6 @@ const DEFAULT_CONFIG = {
                 proxy_protocol: false,
             },
         ],
-        trusted_proxies: ["192.128.0.0/16", "172.16.0.0/12", "10.0.0.0/10", "127.0.0.1/8", "fd00::/8", "::1/128"],
         public_base: "", // Needs to be set
         issuer: "", // Needs to be set
     },
@@ -70,28 +70,6 @@ const DEFAULT_CONFIG = {
         database: "postgres",
         username: "postgres",
         password: "p4S5w0rD",
-        max_connections: 10,
-        min_connections: 0,
-        connect_timeout: 30,
-        idle_timeout: 600,
-        max_lifetime: 1800,
-    },
-    telemetry: {
-        tracing: {
-            exporter: "none",
-            propagators: [],
-        },
-        metrics: {
-            exporter: "none",
-        },
-        sentry: {
-            dsn: null,
-        },
-    },
-    templates: {
-        path: "/usr/local/share/mas-cli/templates/",
-        assets_manifest: "/usr/local/share/mas-cli/manifest.json",
-        translations_path: "/usr/local/share/mas-cli/translations/",
     },
     email: {
         from: '"Authentication Service" <root@localhost>',
@@ -135,37 +113,19 @@ const DEFAULT_CONFIG = {
         minimum_complexity: 0,
     },
     policy: {
-        wasm_module: "/usr/local/share/mas-cli/policy.wasm",
-        client_registration_entrypoint: "client_registration/violation",
-        register_entrypoint: "register/violation",
-        authorization_grant_entrypoint: "authorization_grant/violation",
-        password_entrypoint: "password/violation",
-        email_entrypoint: "email/violation",
         data: {
             client_registration: {
                 // allow non-SSL and localhost URIs
                 allow_insecure_uris: true,
-                // EW doesn't have contacts at this time
-                allow_missing_contacts: true,
             },
         },
-    },
-    upstream_oauth2: {
-        providers: [],
-    },
-    branding: {
-        service_name: null,
-        policy_uri: null,
-        tos_uri: null,
-        imprint: null,
-        logo_uri: null,
     },
     account: {
         password_registration_enabled: true,
     },
-    experimental: {
-        access_token_ttl: 300,
-        compat_token_ttl: 300,
+    matrix: {
+        kind: "synapse",
+        secret: "", // Needs to be set
     },
     rate_limiting: {
         login: {
@@ -177,12 +137,7 @@ const DEFAULT_CONFIG = {
             per_second: 1,
         },
     },
-};
-
-/**
- * Incomplete type for the MAS configuration.
- */
-export type MasConfig = typeof DEFAULT_CONFIG;
+} satisfies MasConfig;
 
 /**
  * A container running the Matrix Authentication Service.
@@ -194,13 +149,17 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: MasConfig;
     private readonly args = ["-c", "/config/config.yaml"];
 
-    public constructor(db: StartedPostgreSqlContainer) {
-        // We rely on https://github.com/element-hq/matrix-authentication-service/pull/4563 which isn't in a release yet
-        super("ghcr.io/element-hq/matrix-authentication-service:sha-3207d23");
+    public constructor(
+        db: StartedPostgreSqlContainer,
+        image: string = "ghcr.io/element-hq/matrix-authentication-service:latest",
+    ) {
+        super(image);
 
-        this.config = deepCopy(DEFAULT_CONFIG);
-        this.config.database.username = db.getUsername();
-        this.config.database.password = db.getPassword();
+        const initialConfig = deepCopy(DEFAULT_CONFIG);
+        initialConfig.database.username = db.getUsername();
+        initialConfig.database.password = db.getPassword();
+
+        this.config = initialConfig;
 
         this.withExposedPorts(8080, 8081)
             .withWaitStrategy(Wait.forHttp("/health", 8081))
@@ -211,7 +170,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
      * Adds additional configuration to the MAS config.
      * @param config - additional config fields to add
      */
-    public withConfig(config: object): this {
+    public withConfig(config: Partial<MasConfig>): this {
         this.config = {
             ...this.config,
             ...config,
@@ -226,8 +185,11 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
         // MAS config issuer needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
 
-        this.config.http.public_base = `http://localhost:${port}/`;
-        this.config.http.issuer = `http://localhost:${port}/`;
+        this.config.http = {
+            public_base: `http://localhost:${port}/`,
+            issuer: `http://localhost:${port}/`,
+            ...this.config.http,
+        };
 
         this.withExposedPorts({
             container: 8080,

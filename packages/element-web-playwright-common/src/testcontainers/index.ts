@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+export { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 export type { HomeserverInstance, HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.js";
 export { type SynapseConfig, SynapseContainer, StartedSynapseContainer } from "./synapse.js";
 export {
