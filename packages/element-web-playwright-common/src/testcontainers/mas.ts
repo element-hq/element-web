@@ -19,6 +19,12 @@ import { getFreePort } from "../utils/port.js";
 import { deepCopy } from "../utils/object.js";
 import { type Credentials } from "../utils/api.js";
 
+// This file can be updated by running:
+//
+//   curl -sL https://element-hq.github.io/matrix-authentication-service/config.schema.json \
+//     | npx json-schema-to-typescript -o packages/element-web-playwright-common/src/testconainers/mas-config.ts
+import type { RootConfig as MasConfig } from "./mas-config.js";
+
 const DEFAULT_CONFIG = {
     http: {
         listeners: [
@@ -116,6 +122,10 @@ const DEFAULT_CONFIG = {
     account: {
         password_registration_enabled: true,
     },
+    matrix: {
+        kind: "synapse",
+        secret: "", // Needs to be set
+    },
     rate_limiting: {
         login: {
             burst: 10,
@@ -126,12 +136,7 @@ const DEFAULT_CONFIG = {
             per_second: 1,
         },
     },
-};
-
-/**
- * Incomplete type for the MAS configuration.
- */
-export type MasConfig = typeof DEFAULT_CONFIG;
+} satisfies MasConfig;
 
 /**
  * A container running the Matrix Authentication Service.
@@ -149,9 +154,11 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     ) {
         super(image);
 
-        this.config = deepCopy(DEFAULT_CONFIG);
-        this.config.database.username = db.getUsername();
-        this.config.database.password = db.getPassword();
+        const initialConfig = deepCopy(DEFAULT_CONFIG);
+        initialConfig.database.username = db.getUsername();
+        initialConfig.database.password = db.getPassword();
+
+        this.config = initialConfig;
 
         this.withExposedPorts(8080, 8081)
             .withWaitStrategy(Wait.forHttp("/health", 8081))
@@ -162,7 +169,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
      * Adds additional configuration to the MAS config.
      * @param config - additional config fields to add
      */
-    public withConfig(config: object): this {
+    public withConfig(config: Partial<MasConfig>): this {
         this.config = {
             ...this.config,
             ...config,
@@ -177,8 +184,11 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
         // MAS config issuer needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
 
-        this.config.http.public_base = `http://localhost:${port}/`;
-        this.config.http.issuer = `http://localhost:${port}/`;
+        this.config.http = {
+            public_base: `http://localhost:${port}/`,
+            issuer: `http://localhost:${port}/`,
+            ...this.config.http,
+        };
 
         this.withExposedPorts({
             container: 8080,
