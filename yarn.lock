@@ -1677,10 +1677,10 @@
   resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz#519c1549b0e147759e7825701ecffd25e5819f7b"
   integrity sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==
 
-"@element-hq/element-call-embedded@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-call-embedded/-/element-call-embedded-0.13.1.tgz#9161f657f7bebdb5339847b7a8f0a3149a36f95c"
-  integrity sha512-6RGZPdx+gOCzpJNe+dbftEyiWuNx+2H+uXiZp7QN8SOZ3dl/yjg0JcK60wsC48i7gXy/6ERdbwTgaL9ez8mvhA==
+"@element-hq/element-call-embedded@0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-call-embedded/-/element-call-embedded-0.14.1.tgz#358c537e147ff3d48028cfb65d414cfe89ac1371"
+  integrity sha512-1ODnohNvg7bgR8tg+rIF81MYGChNXVD96lBWkCI96ygjGg7U+HqqA8sY0YsRN5oJ9aLDQPicSr09XwLEXSPmjQ==
 
 "@element-hq/element-web-module-api@1.3.0":
   version "1.3.0"
