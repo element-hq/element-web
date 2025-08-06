@@ -41,7 +41,12 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     }, []);
 
     const getItemComponent = useCallback(
-        (index: number, item: MemberWithSeparator, context: ListContext<any>): JSX.Element => {
+        (
+            index: number,
+            item: MemberWithSeparator,
+            context: ListContext<any>,
+            onFocus: (e: React.FocusEvent) => void,
+        ): JSX.Element => {
             const itemKey = getItemKey(item);
             const isRovingItem = itemKey === context.tabIndexKey;
             const focused = isRovingItem && context.focused;
@@ -56,6 +61,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         tabIndex={isRovingItem ? 0 : -1}
                         index={index}
                         memberCount={memberCount}
+                        onFocus={onFocus}
                     />
                 );
             } else {
@@ -66,6 +72,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         tabIndex={isRovingItem ? 0 : -1}
                         memberIndex={index - 1} // Adjust as invites are below the separator
                         memberCount={memberCount}
+                        onFocus={onFocus}
                     />
                 );
             }

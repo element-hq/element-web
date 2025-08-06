@@ -93,7 +93,6 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
@@ -921,6 +920,7 @@
             },
             "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
+            "security_key_label": "Recovery key",
             "security_key_title": "Recovery key"
         },
         "bootstrap_title": "Setting up keys",
