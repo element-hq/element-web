@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { type Meta, type StoryFn } from "@storybook/react-vite";
 
-import { TextualEvent as TextualEventComponent } from "./TextualEvent";
+import { TextualEventView as TextualEventComponent } from "./TextualEventView";
 import { MockViewModel } from "../../MockViewModel";
 
 export default {
@@ -16,7 +16,7 @@ export default {
     component: TextualEventComponent,
     tags: ["autodocs"],
     args: {
-        vm: new MockViewModel("Dummy textual event text"),
+        vm: new MockViewModel({ content: "Dummy textual event text" }),
     },
 } as Meta<typeof TextualEventComponent>;
 
