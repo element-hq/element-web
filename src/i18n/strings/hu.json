@@ -93,7 +93,6 @@
         "maximise": "Teljes méret",
         "mention": "Megemlítés",
         "minimise": "Lecsukás",
-        "new_message": "Új üzenet",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "next": "Következő",
@@ -860,6 +859,7 @@
             "elementCallUrl": "Element Call webcím"
         },
         "settings_explorer": "Beállításböngésző",
+        "show_empty_content_events": "Üres tartalmú események megjelenítése",
         "show_hidden_events": "Rejtett események megjelenítése az idővonalon",
         "spaces": {
             "<%(count)s szóköz>": "other",
@@ -1442,6 +1442,7 @@
         "room_list_navigate_down": "Navigálás lefelé a szobalistában",
         "room_list_navigate_up": "Navigálás felfelé a szobalistában",
         "room_list_select_room": "Szoba kiválasztása a szobalistából",
+        "save": "Mentés",
         "scroll_down_timeline": "Görgetés lefelé az idővonalon",
         "scroll_up_timeline": "Görgetés felfelé az idővonalon",
         "search": "Keresés (engedélyezni kell)",
@@ -1643,8 +1644,7 @@
         "filter_placeholder": "Szoba tagság szűrése",
         "invite_button_no_perms_tooltip": "Nincs jogosultsága felhasználók meghívására",
         "invited_label": "Meghívott",
-        "no_matches": "Nincs egyezés",
-        "power_label": "%(userName)s (szint: %(powerLevelNumber)s)"
+        "no_matches": "Nincs egyezés"
     },
     "member_list_back_action_label": "Szobatagok",
     "message_edit_dialog_title": "Üzenetszerkesztések",
@@ -3344,6 +3344,7 @@
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",

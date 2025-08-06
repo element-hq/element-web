@@ -81,7 +81,6 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
-        "new_message": "Nova mensagem",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
@@ -1603,8 +1602,7 @@
         "filter_placeholder": "Filtrar integrantes da sala",
         "invite_button_no_perms_tooltip": "Não tens permissão para convidar utilizadores",
         "invited_label": "Convidado",
-        "no_matches": "Sem correspondências",
-        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
+        "no_matches": "Sem correspondências"
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições de mensagens",
@@ -3267,6 +3265,7 @@
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Descriptografando",
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",

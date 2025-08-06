@@ -93,7 +93,6 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
-        "new_message": "Nova mensagem",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
@@ -650,7 +649,7 @@
         "placeholder_reply": "Digite sua resposta…",
         "placeholder_reply_encrypted": "Digite sua resposta criptografada…",
         "placeholder_thread": "Responder ao tópico…",
-        "placeholder_thread_encrypted": "Responder ao tópico criptografado…",
+        "placeholder_thread_encrypted": "Responder ao tópico...",
         "poll_button": "Enquete",
         "poll_button_no_perms_description": "Você não tem permissão para iniciar enquetes nesta sala.",
         "poll_button_no_perms_title": "Permissão necessária",
@@ -1653,8 +1652,7 @@
         "filter_placeholder": "Pesquisar participantes da sala",
         "invite_button_no_perms_tooltip": "Você não tem permissão para convidar usuários",
         "invited_label": "Convidado",
-        "no_matches": "Sem correspondências",
-        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
+        "no_matches": "Sem correspondências"
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições na mensagem",
@@ -3370,6 +3368,7 @@
             "unable_to_decrypt": "Não foi possível descriptografar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Decriptando",
         "download_action_downloading": "Baixando",
         "download_failed": "Falha no download",
         "download_failed_description": "Ocorreu um erro ao baixar esse arquivo",

@@ -1035,8 +1035,7 @@
         "toggle_attribution": "דפדפו בין האפשרויות"
     },
     "member_list": {
-        "filter_placeholder": "סינון חברי חדר",
-        "power_label": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)"
+        "filter_placeholder": "סינון חברי חדר"
     },
     "member_list_back_action_label": "חברי החדר",
     "message_edit_dialog_title": "עריכת הודעות",
@@ -1985,6 +1984,7 @@
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
         "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
+        "download_action_decrypting": "מפענח",
         "download_action_downloading": "מוריד",
         "edits": {
             "tooltip_label": "נערך ב-%(date)s. לחץ לצפייה בעריכות.",
