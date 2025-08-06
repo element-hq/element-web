@@ -21,11 +21,10 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
-    MatrixRTCSession,
+    type MatrixRTCSession,
     MatrixRTCSessionEvent,
     type CallMembership,
     MatrixRTCSessionManagerEvents,
-    type ICallNotifyContent,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type EventEmitter from "events";
@@ -42,11 +41,12 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidge
 import { getCurrentLanguage } from "../languageHandler";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
-import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
+import RoomListStore from "../stores/room-list/RoomListStore.ts";
+import { DefaultTagID } from "../stores/room-list/models.ts";
 
 const TIMEOUT_MS = 16000;
 
@@ -678,6 +678,14 @@ export class ElementCall extends Call {
             theme: "$org.matrix.msc2873.client_theme",
         });
 
+        const room = client.getRoom(roomId);
+        if (room !== null && !isVideoRoom(room)) {
+            params.append(
+                "sendNotificationType",
+                RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM) ? "ring" : "notification",
+            );
+        }
+
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
@@ -852,31 +860,6 @@ export class ElementCall extends Call {
         ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
     }
 
-    protected async sendCallNotify(): Promise<void> {
-        const room = this.room;
-        const existingOtherRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
-            // filter all memberships where the application is m.call and the call_id is ""
-            (m) => {
-                const isRoomCallMember = m.application === "m.call" && m.callId === "";
-                const isThisDevice = m.deviceId === this.client.deviceId;
-                return isRoomCallMember && !isThisDevice;
-            },
-        );
-
-        const memberCount = getJoinedNonFunctionalMembers(room).length;
-        if (!isVideoRoom(room) && existingOtherRoomCallMembers.length === 0) {
-            // send ringing event
-            const content: ICallNotifyContent = {
-                "application": "m.call",
-                "m.mentions": { user_ids: [], room: true },
-                "notify_type": memberCount == 2 ? "ring" : "notify",
-                "call_id": "",
-            };
-
-            await room.client.sendEvent(room.roomId, EventType.CallNotify, content);
-        }
-    }
-
     protected async performConnection(
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
@@ -885,9 +868,8 @@ export class ElementCall extends Call {
         this.messaging!.once(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
 
-        // TODO: if the widget informs us when the join button is clicked (widget action), so we can
-        // - set state to connecting
-        // - send call notify
+        // TODO: Watch for a widget action telling us that the join button was clicked, rather than
+        // relying on the MatrixRTC session state, to set the state to connecting
         const session = this.client.matrixRTC.getActiveRoomSession(this.room);
         if (session) {
             await waitForEvent(
@@ -906,7 +888,6 @@ export class ElementCall extends Call {
                 false, // allow user to wait as long as they want (no timeout)
             );
         }
-        this.sendCallNotify();
     }
 
     protected async performDisconnection(): Promise<void> {
