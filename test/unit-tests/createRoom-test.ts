@@ -19,6 +19,7 @@ import { JitsiCall, ElementCall } from "../../src/models/Call";
 import createRoom, { checkUserIsAllowedToChangeEncryption, canEncryptToAllUsers } from "../../src/createRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../src/call-types";
+import DMRoomMap from "../../src/utils/DMRoomMap";
 
 describe("createRoom", () => {
     mockPlatformPeg();
@@ -27,6 +28,7 @@ describe("createRoom", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        DMRoomMap.makeShared(client);
     });
 
     afterEach(() => jest.clearAllMocks());
