@@ -674,6 +674,8 @@ describe("ElementCall", () => {
     });
 
     describe("get", () => {
+        afterEach(() => Call.get(room)?.destroy());
+
         it("finds no calls", () => {
             expect(Call.get(room)).toBeNull();
         });
@@ -681,7 +683,6 @@ describe("ElementCall", () => {
         it("finds calls", async () => {
             ElementCall.create(room);
             expect(Call.get(room)).toBeInstanceOf(ElementCall);
-            Call.get(room)?.destroy();
         });
 
         it("should use element call URL from developer settings if present", async () => {
@@ -698,7 +699,6 @@ describe("ElementCall", () => {
             const call = ElementCall.get(room);
             expect(call?.widget.url.startsWith("https://call.element.dev/")).toBeTruthy();
             SettingsStore.getValue = originalGetValue;
-            call?.destroy();
         });
 
         it("finds ongoing calls that are created by the session manager", async () => {
@@ -710,7 +710,6 @@ describe("ElementCall", () => {
             } as unknown as MatrixRTCSession);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-            call.destroy();
         });
 
         it("passes font settings through widget URL", async () => {
@@ -772,7 +771,6 @@ describe("ElementCall", () => {
             const urlParams2 = new URLSearchParams(new URL(call2.widget.url).hash.slice(1));
             expect(urlParams2.has("allowIceFallback")).toBe(true);
 
-            call2.destroy();
             SettingsStore.getValue = originalGetValue;
         });
 
@@ -799,7 +797,6 @@ describe("ElementCall", () => {
             expect(urlParams.get("posthogUserId")).toBe("123456789987654321");
             expect(urlParams.get("posthogApiHost")).toBe("https://posthog");
             expect(urlParams.get("posthogApiKey")).toBe("DEADBEEF");
-            call.destroy();
         });
 
         it("does not pass analyticsID if `pseudonymousAnalyticsOptIn` set to false", async () => {
@@ -817,7 +814,6 @@ describe("ElementCall", () => {
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBeFalsy();
-            call.destroy();
         });
 
         it("passes feature_allow_screen_share_only_mode setting to allowVoipWithNoMedia url param", async () => {
@@ -840,7 +836,6 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("allowVoipWithNoMedia")).toBe("true");
             SettingsStore.getValue = originalGetValue;
-            call.destroy();
         });
 
         it("passes empty analyticsID if the id is not in the account data", async () => {
