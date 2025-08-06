@@ -10,7 +10,6 @@ import {
     TypedEventEmitter,
     RoomEvent,
     RoomStateEvent,
-    EventType,
     type MatrixClient,
     type IMyDevice,
     type Room,
@@ -20,7 +19,6 @@ import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
     MatrixRTCSession,
@@ -643,10 +641,6 @@ export class JitsiCall extends Call {
  * (somewhat cheekily named)
  */
 export class ElementCall extends Call {
-    // TODO this is only there to support backwards compatibility in timeline rendering
-    // this should not be part of this class since it has nothing to do with it.
-    public static readonly CALL_EVENT_TYPE = new NamespacedValue(null, EventType.GroupCallPrefix);
-    public static readonly MEMBER_EVENT_TYPE = new NamespacedValue(null, EventType.GroupCallMemberPrefix);
     public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
     private settingsStoreCallEncryptionWatcher?: string;

@@ -18,6 +18,7 @@ import WidgetUtils from "../../src/utils/WidgetUtils";
 import { JitsiCall, ElementCall } from "../../src/models/Call";
 import createRoom, { checkUserIsAllowedToChangeEncryption, canEncryptToAllUsers } from "../../src/createRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../src/call-types";
 
 describe("createRoom", () => {
     mockPlatformPeg();
@@ -75,11 +76,9 @@ describe("createRoom", () => {
 
         const userPower = client.createRoom.mock.calls[0][0].power_level_content_override?.users?.[userId];
         const callPower =
-            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCall.CALL_EVENT_TYPE.name];
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallEventType.name];
         const callMemberPower =
-            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[
-                ElementCall.MEMBER_EVENT_TYPE.name
-            ];
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallMemberEventType.name];
 
         // We should have had enough power to be able to set up the call
         expect(userPower).toBeGreaterThanOrEqual(callPower!);
@@ -112,11 +111,9 @@ describe("createRoom", () => {
         await createRoom(client, {});
 
         const callPower =
-            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCall.CALL_EVENT_TYPE.name];
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallEventType.name];
         const callMemberPower =
-            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[
-                ElementCall.MEMBER_EVENT_TYPE.name
-            ];
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCallMemberEventType.name];
 
         expect(callPower).toBe(100);
         expect(callMemberPower).toBe(0);
