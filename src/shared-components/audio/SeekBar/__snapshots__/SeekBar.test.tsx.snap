@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Seekbar renders the clock 1`] = `
+<div>
+  <input
+    aria-label="Audio seek bar"
+    class="seekBar"
+    max="100"
+    min="0"
+    step="1"
+    style="--fillTo: 0.5;"
+    type="range"
+    value="50"
+  />
+</div>
+`;

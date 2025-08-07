@@ -154,6 +154,7 @@ export class ElementWidget extends Widget {
 
 export class StopGapWidget extends EventEmitter {
     private client: MatrixClient;
+    private iframe: HTMLIFrameElement | null = null;
     private messaging: ClientWidgetApi | null = null;
     private mockWidget: ElementWidget;
     private scalarToken?: string;
@@ -242,10 +243,6 @@ export class StopGapWidget extends EventEmitter {
         return parsed.toString().replace(/%24/g, "$");
     }
 
-    public get started(): boolean {
-        return !!this.messaging;
-    }
-
     private onThemeChange = (theme: string): void => {
         this.messaging?.updateTheme({ name: theme });
     };
@@ -278,9 +275,10 @@ export class StopGapWidget extends EventEmitter {
      * This starts the messaging for the widget if it is not in the state `started` yet.
      * @param iframe the iframe the widget should use
      */
-    public startMessaging(iframe: HTMLIFrameElement): any {
-        if (this.started) return;
+    public startMessaging(iframe: HTMLIFrameElement): void {
+        if (this.messaging !== null) return;
 
+        this.iframe = iframe;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
         const driver = new StopGapWidgetDriver(
             allowedCapabilities,
@@ -478,16 +476,26 @@ export class StopGapWidget extends EventEmitter {
      * @param opts
      */
     public stopMessaging(opts = { forceDestroy: false }): void {
-        if (
-            !opts?.forceDestroy &&
-            ActiveWidgetStore.instance.getWidgetPersistence(this.mockWidget.id, this.roomId ?? null)
-        ) {
+        if (this.messaging === null || this.iframe === null) return;
+        if (opts.forceDestroy) {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
+            // In practice we could just do `+= ''` to trick the browser into
+            // thinking the URL changed, however I can foresee this being
+            // optimized out by a browser. Instead, we'll just point the iframe
+            // at a page that is reasonably safe to use in the event the iframe
+            // doesn't wink away.
+            this.iframe!.src = "about:blank";
+        } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.mockWidget.id, this.roomId ?? null)) {
             logger.log("Skipping destroy - persistent widget");
             return;
         }
-        if (!this.started) return;
+
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget, this.roomId);
+        this.messaging?.removeAllListeners(); // Guard against the 'ready' event firing after stopping
         this.messaging = null;
+        this.iframe = null;
 
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 

@@ -111,6 +111,7 @@ interface IState {
     backgroundImage?: string;
 }
 
+const NEW_ROOM_LIST_MIN_WIDTH = 224;
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
  * determined by the page_type property.
@@ -261,10 +262,15 @@ class LoggedInView extends React.Component<IProps, IState> {
         let panelCollapsed: boolean;
         const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-        const toggleSize = useNewRoomList ? 224 : 206 - 50;
+        const toggleSize = useNewRoomList ? NEW_ROOM_LIST_MIN_WIDTH : 206 - 50;
+
         const collapseConfig: ICollapseConfig = {
             toggleSize,
             onCollapsed: (collapsed) => {
+                if (useNewRoomList) {
+                    // The new room list does not support collapsing.
+                    return;
+                }
                 panelCollapsed = collapsed;
                 if (collapsed) {
                     dis.dispatch({ action: "hide_left_panel" });
@@ -281,11 +287,13 @@ class LoggedInView extends React.Component<IProps, IState> {
                 this.props.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
-                if (!panelCollapsed) window.localStorage.setItem("mx_lhs_size", "" + panelSize);
+                // Always save the lhs size for the new room list.
+                if (useNewRoomList || !panelCollapsed) window.localStorage.setItem("mx_lhs_size", "" + panelSize);
                 this.props.resizeNotifier.stopResizing();
             },
             isItemCollapsed: (domNode) => {
-                return domNode.classList.contains("mx_LeftPanel_minimized");
+                // New rooms list does not support collapsing.
+                return !useNewRoomList && domNode.classList.contains("mx_LeftPanel_minimized");
             },
             handler: this.resizeHandler.current ?? undefined,
         };
@@ -299,8 +307,11 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private loadResizerPreferences(): void {
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         let lhsSize = parseInt(window.localStorage.getItem("mx_lhs_size")!, 10);
-        if (isNaN(lhsSize)) {
+        // If the user has not set a size, or for the new room list if the size is less than the minimum width,
+        // set a default size.
+        if (isNaN(lhsSize) || (useNewRoomList && lhsSize < NEW_ROOM_LIST_MIN_WIDTH)) {
             lhsSize = 350;
         }
         this.resizer?.forHandleWithId("lp-resizer")?.resize(lhsSize);

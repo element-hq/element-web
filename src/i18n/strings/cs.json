@@ -95,7 +95,6 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
-        "new_message": "Nová zpráva",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
@@ -865,6 +864,7 @@
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Průzkumník nastavení",
+        "show_empty_content_events": "Zobrazit události s prázdným obsahem",
         "show_hidden_events": "Zobrazovat v časové ose skryté události",
         "spaces": {
             "one": "<mezera>",
@@ -935,6 +935,7 @@
         "cross_signing_user_warning": "Tento uživatel zatím neověřil všechny své relace.",
         "enter_recovery_key": "Zadejte klíč pro obnovení",
         "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
+        "event_shield_reason_mismatched_sender": "Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo.",
         "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
         "event_shield_reason_unknown_device": "Šifrováno neznámým nebo smazaným zařízením.",
         "event_shield_reason_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem.",
@@ -1452,6 +1453,7 @@
         "room_list_navigate_down": "Přejít dolů v seznamu místností",
         "room_list_navigate_up": "Přejít nahoru v seznamu místností",
         "room_list_select_room": "Vybrat místnost v seznamu",
+        "save": "Uložit",
         "scroll_down_timeline": "Posunout se na časové ose dolů",
         "scroll_up_timeline": "Posunout se na časové ose nahoru",
         "search": "Hledat (musí být povoleno)",
@@ -1655,8 +1657,7 @@
         "filter_placeholder": "Najít člena místnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnění zvát uživatele",
         "invited_label": "Pozván",
-        "no_matches": "Žádné shody",
-        "power_label": "%(userName)s (oprávnění %(powerLevelNumber)s)"
+        "no_matches": "Žádné shody"
     },
     "member_list_back_action_label": "Členové místnosti",
     "message_edit_dialog_title": "Úpravy zpráv",
@@ -2843,6 +2844,7 @@
             "composer_heading": "Editor zpráv",
             "default_timezone": "Výchozí nastavení prohlížeče (%(timezone)s )",
             "dialog_title": "<strong>Nastavení:</strong> Předvolby",
+            "enable_content_protection": "Povolit ochranu obsahu",
             "enable_hardware_acceleration": "Povolit hardwarovou akceleraci",
             "enable_tray_icon": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
             "keyboard_heading": "Klávesové zkratky",
@@ -3376,6 +3378,7 @@
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
         "download_failed": "Stažení se nezdařilo",
         "download_failed_description": "Při stahování tohoto souboru došlo k chybě",

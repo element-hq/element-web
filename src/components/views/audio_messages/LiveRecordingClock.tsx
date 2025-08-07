@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { type IRecordingUpdate } from "../../../audio/VoiceRecording";
-import Clock from "./Clock";
+import { Clock } from "../../../shared-components/audio/Clock";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 
