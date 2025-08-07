@@ -33,6 +33,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
+import { Resizer } from "../../../../src/resizer";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -473,6 +474,71 @@ describe("<LoggedInView />", () => {
             expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
             expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+        });
+    });
+
+    describe("resizer preferences", () => {
+        beforeEach(() => {
+            // Clear localStorage before each test
+            window.localStorage.clear();
+        });
+
+        it("should call resize with default size when localStorage contains NaN value", () => {
+            // Set invalid value in localStorage that will result in NaN
+            window.localStorage.setItem("mx_lhs_size", "not-a-number");
+
+            const mockResize = jest.fn();
+            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
+
+            jest.spyOn(Resizer.prototype, "attach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "detach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "forHandleWithId").mockImplementation(mockForHandleWithId);
+            jest.spyOn(Resizer.prototype, "setClassNames").mockImplementation(() => {});
+
+            getComponent();
+
+            // Verify that when lhsSize is NaN, it defaults to 350 and calls resize
+            expect(mockForHandleWithId).toHaveBeenCalledWith("lp-resizer");
+            expect(mockResize).toHaveBeenCalledWith(350);
+        });
+
+        it("should use existing size when localStorage contains valid value", () => {
+            // Set valid value in localStorage
+            window.localStorage.setItem("mx_lhs_size", "400");
+
+            const mockResize = jest.fn();
+            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
+
+            jest.spyOn(Resizer.prototype, "attach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "detach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "forHandleWithId").mockImplementation(mockForHandleWithId);
+            jest.spyOn(Resizer.prototype, "setClassNames").mockImplementation(() => {});
+
+            getComponent();
+
+            // Verify the resize method was called with the stored size (400)
+            expect(mockResize).toHaveBeenCalledWith(400);
+        });
+
+        it("should enforce minimum width for new room list when stored size is zero", async () => {
+            // Enable new room list feature
+            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
+
+            // 0 repesents the collapsed state for the old room list, which could have been set before the new room list was enabled
+            window.localStorage.setItem("mx_lhs_size", "0");
+
+            const mockResize = jest.fn();
+            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
+
+            jest.spyOn(Resizer.prototype, "attach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "detach").mockImplementation(() => {});
+            jest.spyOn(Resizer.prototype, "forHandleWithId").mockImplementation(mockForHandleWithId);
+            jest.spyOn(Resizer.prototype, "setClassNames").mockImplementation(() => {});
+
+            getComponent();
+
+            // Verify the resize method was called with the default size (350) when stored size is below minimum
+            expect(mockResize).toHaveBeenCalledWith(350);
         });
     });
 });
