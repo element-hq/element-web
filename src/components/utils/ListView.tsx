@@ -5,10 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { useComposedRefs } from "@radix-ui/react-compose-refs";
 import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
-import { useCombinedRef } from "../../hooks/useCombinedRef";
-
 /**
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
@@ -64,6 +63,8 @@ export interface IListViewProps<Item, Context>
      * @return The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
+
+    ref?: React.Ref<VirtuosoHandle>;
 }
 
 /**
@@ -73,19 +74,15 @@ export interface IListViewProps<Item, Context>
  * @template Item - The type of data items in the list
  * @template Context - The type of additional context data passed to items
  */
-export const ListView = React.forwardRef<VirtuosoHandle, IListViewProps<any, any>>(function ListView<
-    Item,
-    Context = any,
->(props: IListViewProps<Item, Context>, ref: React.Ref<VirtuosoHandle>): React.ReactElement {
+export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
+    const { items, getItemComponent, isItemFocusable, getItemKey, context, ref, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const internalRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
-
     // Combined ref callback to handle both internal use and forwarding
-    const combinedRef = useCombinedRef(internalRef, ref);
+    const composedRef = useComposedRefs(internalRef, props.ref);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
         props.items[0] ? getItemKey(props.items[0]) : undefined,
@@ -277,7 +274,7 @@ export const ListView = React.forwardRef<VirtuosoHandle, IListViewProps<any, any
         <Virtuoso
             tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
             scrollerRef={scrollerRef}
-            ref={combinedRef}
+            ref={composedRef}
             onKeyDown={keyDownCallback}
             context={listContext}
             rangeChanged={setVisibleRange}
@@ -290,4 +287,4 @@ export const ListView = React.forwardRef<VirtuosoHandle, IListViewProps<any, any
             {...virtuosoProps}
         />
     );
-});
+}

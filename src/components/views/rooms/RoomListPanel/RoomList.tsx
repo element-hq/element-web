@@ -6,13 +6,13 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState, type JSX } from "react";
+import { type VirtuosoHandle } from "react-virtuoso";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
-import { ListContext, ListView } from "../../../utils/ListView";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { VirtuosoHandle } from "react-virtuoso";
+import { type ListContext, ListView } from "../../../utils/ListView";
 
 interface RoomListProps {
     /**
@@ -73,7 +73,7 @@ export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Ele
         // targetsNextRefresh affects the next update so we store activeIndex in state here to force a re-render
         setActiveIndexInternal(activeIndex);
     }, [activeIndex, rooms.length]); // Dependencies that should trigger the scroll
-    console.log("!! rooms.length", rooms.length, "activeIndex", activeIndex, "virtuosoRef", virtuosoRef.current);
+
     return (
         <ListView
             ref={virtuosoRef}
