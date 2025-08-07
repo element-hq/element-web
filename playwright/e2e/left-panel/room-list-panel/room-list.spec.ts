@@ -50,6 +50,10 @@ test.describe("Room list", () => {
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
             await app.scrollListToBottom(roomListView);
+
+            // scrollListToBottom seems to leave the mouse hovered over the list, move it away.
+            await page.getByRole("button", { name: "User menu" }).hover();
+    
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 
