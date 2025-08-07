@@ -498,12 +498,17 @@ describe("<LoggedInView />", () => {
     });
 
     describe("resizer preferences", () => {
+        let mockResize: jest.Mock;
+        let mockForHandleWithId: jest.Mock;
         beforeEach(() => {
             // Clear localStorage before each test
             window.localStorage.clear();
 
-            // Reset the mock resizer instance
-            mockResizerInstance.forHandleWithId.mockReturnValue({ resize: jest.fn() });
+            mockResize = jest.fn();
+            mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
+
+            // Update the shared mock instance for this test
+            mockResizerInstance.forHandleWithId = mockForHandleWithId;
 
             // Clear any global callback state
             delete (global as any).__resizeCallbacks;
@@ -512,13 +517,6 @@ describe("<LoggedInView />", () => {
         it("should call resize with default size when localStorage contains NaN value", () => {
             // Set invalid value in localStorage that will result in NaN
             window.localStorage.setItem("mx_lhs_size", "not-a-number");
-
-            // Create fresh mock functions for this test
-            const mockResize = jest.fn();
-            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
-
-            // Update the shared mock instance for this test
-            mockResizerInstance.forHandleWithId = mockForHandleWithId;
 
             getComponent();
 
@@ -530,11 +528,6 @@ describe("<LoggedInView />", () => {
         it("should use existing size when localStorage contains valid value", () => {
             // Set valid value in localStorage
             window.localStorage.setItem("mx_lhs_size", "400");
-
-            const mockResize = jest.fn();
-            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
-
-            mockResizerInstance.forHandleWithId = mockForHandleWithId;
 
             getComponent();
 
@@ -548,10 +541,6 @@ describe("<LoggedInView />", () => {
 
             // 0 represents the collapsed state for the old room list, which could have been set before the new room list was enabled
             window.localStorage.setItem("mx_lhs_size", "0");
-
-            const mockResize = jest.fn();
-            const mockForHandleWithId = jest.fn().mockReturnValue({ resize: mockResize });
-            mockResizerInstance.forHandleWithId = mockForHandleWithId;
 
             getComponent();
 
