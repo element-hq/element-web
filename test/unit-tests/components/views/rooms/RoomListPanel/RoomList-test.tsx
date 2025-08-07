@@ -21,11 +21,6 @@ describe("<RoomList />", () => {
     let vm: RoomListViewState;
 
     beforeEach(() => {
-        // Needed to render the virtualized list in rtl tests
-        // https://github.com/bvaughn/react-virtualized/issues/493#issuecomment-640084107
-        jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(1500);
-        jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(1500);
-
         matrixClient = stubClient();
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
         vm = {
