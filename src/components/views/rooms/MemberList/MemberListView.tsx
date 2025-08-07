@@ -80,19 +80,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         [isPresenceEnabled, getItemKey, memberCount],
     );
 
-    const handleSelectItem = useCallback(
-        (item: MemberWithSeparator): void => {
-            if (item !== SEPARATOR) {
-                if (item.member) {
-                    onClickMember(item.member);
-                } else {
-                    onClickMember(item.threePidInvite);
-                }
-            }
-        },
-        [onClickMember],
-    );
-
     const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {
         return item !== SEPARATOR;
     }, []);
