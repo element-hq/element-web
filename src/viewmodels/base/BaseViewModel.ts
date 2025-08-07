@@ -5,17 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ViewModel } from "../shared-components/ViewModel";
+import { type ViewModel } from "../../shared-components/ViewModel";
+import { Snapshot } from "./Snapshot";
 import { ViewModelSubscriptions } from "./ViewModelSubscriptions";
 
-export abstract class SubscriptionViewModel<T> implements ViewModel<T> {
+export abstract class BaseViewModel<T, P> implements ViewModel<T> {
     protected subs: ViewModelSubscriptions;
+    protected snapshot: Snapshot<T>;
+    protected props: P;
 
-    protected constructor() {
+    protected constructor(props: P, initialSnapshot: T) {
+        this.props = props;
         this.subs = new ViewModelSubscriptions(
             this.addDownstreamSubscriptionWrapper,
             this.removeDownstreamSubscriptionWrapper,
         );
+        this.snapshot = new Snapshot(initialSnapshot, () => {
+            this.subs.emit();
+        });
     }
 
     public subscribe = (listener: () => void): (() => void) => {
@@ -52,5 +59,7 @@ export abstract class SubscriptionViewModel<T> implements ViewModel<T> {
     /**
      * Returns the current snapshot of the view model.
      */
-    public abstract getSnapshot: () => T;
+    public getSnapshot = (): T => {
+        return this.snapshot.current;
+    };
 }
