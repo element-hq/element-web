@@ -54,16 +54,16 @@ export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Ele
     }, []);
 
     useEffect(() => {
-        // When the rooms length or active index changes(from changing the space, filter, etc), scroll to the active room.
+        // When the rooms length or active index changes(from changing the space, filter, etc), scroll to the active room,
+        // or the top of the list if the active room is no longer in the list.
         if (
-            activeIndex !== undefined &&
             rooms.length != undefined &&
             virtuosoRef.current &&
             (lastRoomsCount.current !== rooms.length || lastActiveIndex.current !== activeIndex)
         ) {
             virtuosoRef.current.scrollIntoView({
                 align: `start`,
-                index: activeIndex,
+                index: activeIndex || 0,
                 behavior: "auto",
                 targetsNextRefresh: true,
             });
