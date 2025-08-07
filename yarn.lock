@@ -13091,10 +13091,9 @@ react-virtualized@^9.22.5:
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-react-virtuoso@^4.12.6:
-  version "4.12.6"
-  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.12.6.tgz#20fe374d43cce3c9821e29f4cc4d050596d06d01"
-  integrity sha512-bfvS6aCL1ehXmq39KRiz/vxznGUbtA27I5I24TYCe1DhMf84O3aVNCIwrSjYQjkJGJGzY46ihdN8WkYlemuhMQ==
+"react-virtuoso@https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?36f7b675163853fc08ddc2704de90e59baa6f3fa&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build":
+  version "4.13.0"
+  resolved "https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?36f7b675163853fc08ddc2704de90e59baa6f3fa&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build#a979dd4bb7c14e30c8011d5c3db9301fc8466e84"
 
 "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.0.0:
   version "19.1.0"

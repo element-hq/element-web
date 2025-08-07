@@ -29,6 +29,10 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
      * Whether the room is focused
      */
     isFocused: boolean;
+    /**
+     * A callback that indicates the item has received focus
+     */
+    onFocus: (e: React.FocusEvent) => void;
 }
 
 /**
@@ -38,6 +42,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     room,
     isSelected,
     isFocused,
+    onFocus,
     ...props
 }: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
@@ -78,6 +83,7 @@ export const RoomListItemView = memo(function RoomListItemView({
             aria-selected={isSelected}
             aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
+            onFocus={onFocus}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
             tabIndex={isFocused ? 0 : -1}
