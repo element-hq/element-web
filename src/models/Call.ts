@@ -191,10 +191,23 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      */
     public abstract clean(): Promise<void>;
 
-    /**
-     * Contacts the widget to disconnect from the call.
-     */
-    protected abstract performDisconnection(): Promise<void>;
+    protected async performDisconnection(): Promise<void> {
+        const response = waitForEvent(
+            this.messaging!,
+            `action:${ElementWidgetActions.HangupCall}`,
+            (ev: CustomEvent<IWidgetApiRequest>) => {
+                ev.preventDefault();
+                this.messaging!.transport.reply(ev.detail, {}); // ack
+                return true;
+            },
+        );
+        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
+        try {
+            await Promise.all([request, response]);
+        } catch (e) {
+            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
+        }
+    }
 
     /**
      * Starts the communication between the widget and the call.
@@ -287,6 +300,22 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         this.setDisconnected();
         this.close();
     };
+
+    protected onJoin(ev: CustomEvent<IWidgetApiRequest>): void {
+        ev.preventDefault();
+        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.setConnected();
+    }
+
+    protected async onHangup(ev: CustomEvent<IWidgetApiRequest>): Promise<void> {
+        // If we're already in the middle of a client-initiated disconnection,
+        // ignore the event
+        if (this.connectionState === ConnectionState.Disconnecting) return;
+
+        ev.preventDefault();
+        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.setDisconnected();
+    }
 }
 
 export type { JitsiCallMemberContent };
@@ -445,21 +474,7 @@ export class JitsiCall extends Call {
     }
 
     protected async performDisconnection(): Promise<void> {
-        const response = waitForEvent(
-            this.messaging!,
-            `action:${ElementWidgetActions.HangupCall}`,
-            (ev: CustomEvent<IWidgetApiRequest>) => {
-                ev.preventDefault();
-                this.messaging!.transport.reply(ev.detail, {}); // ack
-                return true;
-            },
-        );
-        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
-        try {
-            await Promise.all([request, response]);
-        } catch (e) {
-            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
-        }
+        await super.performDisconnection();
     }
 
     public close(): void {
@@ -524,22 +539,14 @@ export class JitsiCall extends Call {
         await this.messaging!.transport.send(ElementWidgetActions.SpotlightLayout, {});
     };
 
-    private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
-        ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-        this.setConnected();
-    };
+    protected onJoin(ev: CustomEvent<IWidgetApiRequest>): void {
+        super.onJoin(ev);
+    }
 
-    private readonly onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        // If we're already in the middle of a client-initiated disconnection,
-        // ignore the event
-        if (this.connectionState === ConnectionState.Disconnecting) return;
-
-        ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-        this.setDisconnected();
+    protected async onHangup(ev: CustomEvent<IWidgetApiRequest>): Promise<void> {
+        await super.onHangup(ev);
         if (!isVideoRoom(this.room)) this.close();
-    };
+    }
 }
 
 /**
@@ -775,21 +782,7 @@ export class ElementCall extends Call {
     }
 
     protected async performDisconnection(): Promise<void> {
-        const response = waitForEvent(
-            this.messaging!,
-            `action:${ElementWidgetActions.HangupCall}`,
-            (ev: CustomEvent<IWidgetApiRequest>) => {
-                ev.preventDefault();
-                this.messaging!.transport.reply(ev.detail, {}); // ack
-                return true;
-            },
-        );
-        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
-        try {
-            await Promise.all([request, response]);
-        } catch (e) {
-            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
-        }
+        await super.performDisconnection();
     }
 
     public close(): void {
@@ -844,21 +837,13 @@ export class ElementCall extends Call {
         this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
-    private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
-        ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-        this.setConnected();
-    };
+    protected onJoin(ev: CustomEvent<IWidgetApiRequest>): void {
+        super.onJoin(ev);
+    }
 
-    private readonly onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        // If we're already in the middle of a client-initiated disconnection,
-        // ignore the event
-        if (this.connectionState === ConnectionState.Disconnecting) return;
-
-        ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-        this.setDisconnected();
-    };
+    protected async onHangup(ev: CustomEvent<IWidgetApiRequest>): Promise<void> {
+        await super.onHangup(ev);
+    }
 
     private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
