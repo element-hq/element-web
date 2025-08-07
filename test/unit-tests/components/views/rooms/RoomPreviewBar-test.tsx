@@ -500,7 +500,9 @@ describe("<RoomPreviewBar />", () => {
     });
 
     it("should render Module roomPreviewBarRenderer if specified", () => {
-        jest.spyOn(ModuleApi.customComponents, "roomPreviewBarRenderer", "get").mockReturnValue(() => "Test component");
+        jest.spyOn(ModuleApi.customComponents, "roomPreviewBarRenderer", "get").mockReturnValue(() => (
+            <>Test component</>
+        ));
         const { getByText } = render(<RoomPreviewBar />);
         expect(getByText("Test component")).toBeTruthy();
     });
