@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { EventType, type MatrixClient, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
 
-import MultiInviter, { type CompletionStates } from "./utils/MultiInviter";
+import MultiInviter, { type CompletionStates, type MultiInviterOptions } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InviteDialog from "./components/views/dialogs/InviteDialog";
@@ -33,16 +33,16 @@ export interface IInviteResult {
  *
  * @param {string} roomId The ID of the room to invite to
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
- * @param {function} progressCallback optional callback, fired after each invite.
+ * @param options Options object.
  * @returns {Promise} Promise
  */
 export async function inviteMultipleToRoom(
     client: MatrixClient,
     roomId: string,
     addresses: string[],
-    progressCallback?: () => void,
+    options: MultiInviterOptions = {},
 ): Promise<IInviteResult> {
-    const inviter = new MultiInviter(client, roomId, progressCallback);
+    const inviter = new MultiInviter(client, roomId, options);
     return { states: await inviter.invite(addresses), inviter };
 }
 

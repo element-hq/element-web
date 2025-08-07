@@ -152,7 +152,7 @@ async function inviteUsersToRoom(
     userIds: string[],
     progressCallback?: () => void,
 ): Promise<void> {
-    const result = await inviteMultipleToRoom(client, roomId, userIds, progressCallback);
+    const result = await inviteMultipleToRoom(client, roomId, userIds, { progressCallback });
     const room = client.getRoom(roomId)!;
     showAnyInviteErrors(result.states, room, result.inviter);
 }

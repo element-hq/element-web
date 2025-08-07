@@ -40,6 +40,12 @@ const USER_ALREADY_JOINED = "IO.ELEMENT.ALREADY_JOINED";
 const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
 const USER_BANNED = "IO.ELEMENT.BANNED";
 
+/** Options interface for {@link MultiInviter} */
+export interface MultiInviterOptions {
+    /** Optional callback, fired after each invite */
+    progressCallback?: () => void;
+}
+
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
  */
@@ -53,12 +59,12 @@ export default class MultiInviter {
     /**
      * @param matrixClient the client of the logged in user
      * @param {string} roomId The ID of the room to invite to
-     * @param {function} progressCallback optional callback, fired after each invite.
+     * @param options Options object
      */
     public constructor(
         private readonly matrixClient: MatrixClient,
         private roomId: string,
-        private readonly progressCallback?: () => void,
+        private readonly options: MultiInviterOptions = {},
     ) {}
 
     public get fatal(): boolean {
@@ -232,7 +238,7 @@ export default class MultiInviter {
                     delete this.errors[address];
 
                     resolve();
-                    this.progressCallback?.();
+                    this.options.progressCallback?.();
                 })
                 .catch((err) => {
                     logger.error(err);
