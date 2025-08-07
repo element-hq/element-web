@@ -80,7 +80,6 @@
         "maximise": "Maksimize",
         "mention": "Sizden bahsediyor",
         "minimise": "Minimize",
-        "new_message": "Yeni mesaj",
         "new_room": "Yeni oda",
         "new_video_room": "Yeni video odası",
         "next": "İleri",
@@ -1601,8 +1600,7 @@
         "filter_placeholder": "Oda üyelerini Filtrele",
         "invite_button_no_perms_tooltip": "Kullanıcıları davet etme izniniz yok",
         "invited_label": "Davet Edildi",
-        "no_matches": "Eşleşme yok",
-        "power_label": "%(userName)s (güç %(powerLevelNumber)s)"
+        "no_matches": "Eşleşme yok"
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
@@ -3237,6 +3235,7 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",

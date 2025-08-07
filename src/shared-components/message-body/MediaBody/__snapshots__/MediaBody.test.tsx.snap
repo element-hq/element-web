@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MediaBody renders the media body 1`] = `
+<div>
+  <div
+    class="mx_MediaBody mediaBody"
+  >
+    Media content goes here
+  </div>
+</div>
+`;

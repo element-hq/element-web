@@ -217,7 +217,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         </div>
       </button>
       <button
-        aria-label="New message"
+        aria-label="Start chat"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"

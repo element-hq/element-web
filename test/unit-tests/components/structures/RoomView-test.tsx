@@ -582,8 +582,8 @@ describe("RoomView", () => {
             ).toBeInTheDocument();
 
             // no message composer
-            expect(screen.queryByText("Send an encrypted message…")).not.toBeInTheDocument();
             expect(screen.queryByText("Send a message…")).not.toBeInTheDocument();
+            expect(screen.queryByText("Send an unencrypted message…")).not.toBeInTheDocument();
         });
     });
 

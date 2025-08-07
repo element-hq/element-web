@@ -36,9 +36,9 @@ import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
-import { ElementCall } from "./models/Call";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
+import { ElementCallEventType } from "./call-types.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -922,7 +922,7 @@ for (const evType of ALL_RULE_TYPES) {
 }
 
 // Add both stable and unstable m.call events
-for (const evType of ElementCall.CALL_EVENT_TYPE.names) {
+for (const evType of ElementCallEventType.names) {
     stateHandlers[evType] = textForCallEvent;
 }
 

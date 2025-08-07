@@ -154,8 +154,8 @@ test.describe("Cryptography", function () {
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await startDMWithBob(page, bob);
             // send first message
-            await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
-            await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
+            await page.getByRole("textbox", { name: "Send an unencrypted message…" }).fill("Hey!");
+            await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter");
             await checkDMRoom(page);
             const bobRoomId = await bobJoin(page, bob);
             await expect(page.locator(".mx_MessageComposer_e2eIcon")).toMatchScreenshot("composer-e2e-icon-normal.png");
