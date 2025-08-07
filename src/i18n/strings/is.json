@@ -1202,8 +1202,7 @@
         "toggle_attribution": "Víxla tilvísun af/á"
     },
     "member_list": {
-        "filter_placeholder": "Sía meðlimi spjallrásar",
-        "power_label": "%(userName)s (með völd sem %(powerLevelNumber)s)"
+        "filter_placeholder": "Sía meðlimi spjallrásar"
     },
     "member_list_back_action_label": "Meðlimir spjallrásar",
     "message_edit_dialog_title": "Breytingar á skilaboðum",
@@ -2360,6 +2359,7 @@
         },
         "creation_summary_dm": "%(creator)s bjó til oþessi beinu skilaboð.",
         "creation_summary_room": "%(creator)s bjó til og stillti spjallrásina.",
+        "download_action_decrypting": "Afkóðun",
         "download_action_downloading": "Sæki",
         "edits": {
             "tooltip_label": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
