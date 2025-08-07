@@ -26,9 +26,9 @@ export interface IInviteResult {
 }
 
 /**
- * Invites multiple addresses to a room
- * Simpler interface to utils/MultiInviter but with
- * no option to cancel.
+ * Invites multiple addresses to a room.
+ *
+ * Simpler interface to {@link MultiInviter}.
  *
  * @param {string} roomId The ID of the room to invite to
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.

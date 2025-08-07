@@ -93,7 +93,6 @@
         "maximise": "Maximera",
         "mention": "Nämn",
         "minimise": "Minimera",
-        "new_message": "Nytt meddelande",
         "new_room": "Nytt rum",
         "new_video_room": "Nytt videorum",
         "next": "Nästa",
@@ -1008,6 +1007,9 @@
             "incoming_sas_dialog_waiting": "Väntar på att andra parten ska bekräfta …",
             "incoming_sas_user_dialog_text_1": "Verifiera denna användare för att markera den som betrodd. Att lita på användare ger en extra sinnesfrid när man använder totalsträckskrypterade meddelanden.",
             "incoming_sas_user_dialog_text_2": "Att verifiera den här användaren kommer att markera dess session som betrodd, och markera din session som betrodd för denne.",
+            "manual": {
+                "already_verified": "Den här enheten är redan verifierad"
+            },
             "no_key_or_device": "Det ser ut som att du inte har någon säkerhetsnyckel eller några andra enheter du kan verifiera mot. Den här enheten kommer inte kunna komma åt gamla krypterad meddelanden. För att verifiera din identitet på den här enheten så behöver du återställa dina verifieringsnycklar.",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "other_party_cancelled": "Den andra parten avbröt verifieringen.",
@@ -1637,8 +1639,7 @@
         "filter_placeholder": "Filtrera rumsmedlemmar",
         "invite_button_no_perms_tooltip": "Du är inte behörig att bjuda in användare",
         "invited_label": "Inbjuden",
-        "no_matches": "Inga matchningar",
-        "power_label": "%(userName)s (behörighet %(powerLevelNumber)s)"
+        "no_matches": "Inga matchningar"
     },
     "member_list_back_action_label": "Rumsmedlemmar",
     "message_edit_dialog_title": "Meddelanderedigeringar",
@@ -3347,6 +3348,7 @@
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",
         "download_failed": "Nedladdning misslyckades",
         "download_failed_description": "Ett fel uppstod när den här filen laddades ned",

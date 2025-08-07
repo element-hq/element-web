@@ -82,7 +82,6 @@
         "maximise": "Suurenna",
         "mention": "Mainitse",
         "minimise": "Pienennä",
-        "new_message": "Uusi viesti",
         "new_room": "Uusi huone",
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
@@ -1400,8 +1399,7 @@
         },
         "filter_placeholder": "Suodata huoneen jäseniä",
         "invite_button_no_perms_tooltip": "Sinulla ei ole lupaa kutsua käyttäjiä",
-        "invited_label": "Kutsuttu",
-        "power_label": "%(userName)s (oikeustaso %(powerLevelNumber)s)"
+        "invited_label": "Kutsuttu"
     },
     "member_list_back_action_label": "Huoneen jäsenet",
     "message_edit_dialog_title": "Viestin muokkaukset",
@@ -2890,6 +2888,7 @@
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "download_failed": "Lataus epäonnistui",
         "download_failed_description": "Tiedostoa ladattaessa tapahtui virhe",

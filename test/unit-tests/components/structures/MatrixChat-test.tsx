@@ -691,6 +691,8 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
 
                     jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
+                    (room as any).client = mockClient;
+                    (spaceRoom as any).client = mockClient;
                 });
 
                 describe("forget_room", () => {
@@ -772,6 +774,22 @@ describe("<MatrixChat />", () => {
                             expect(
                                 screen.getByText(
                                     "This room is not public. You will not be able to rejoin without an invite.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                        it("should warn when user is the last admin", async () => {
+                            jest.spyOn(room, "getJoinedMembers").mockReturnValue([
+                                { powerLevel: 100 } as unknown as MatrixJs.RoomMember,
+                                { powerLevel: 0 } as unknown as MatrixJs.RoomMember,
+                            ]);
+                            jest.spyOn(room, "getMember").mockReturnValue({
+                                powerLevel: 100,
+                            } as unknown as MatrixJs.RoomMember);
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "You're the only administrator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
                                 ),
                             ).toBeInTheDocument();
                         });
