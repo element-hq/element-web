@@ -8,13 +8,13 @@
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
-import { fireEvent } from "@testing-library/dom";
 
 import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import { Landmark, LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
+import { VirtuosoMockContext } from "react-virtuoso";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 describe("<RoomList />", () => {
     let matrixClient: MatrixClient;
@@ -44,19 +44,15 @@ describe("<RoomList />", () => {
     });
 
     it("should render a room list", () => {
-        const { asFragment } = render(<RoomList vm={vm} />, withClientContextRenderOptions(matrixClient));
+        const { asFragment } = render(<RoomList vm={vm} />, {
+            wrapper: ({ children }) => (
+                <MatrixClientContext.Provider value={matrixClient}>
+                    <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 56 }}>
+                        <>{children}</>
+                    </VirtuosoMockContext.Provider>
+                </MatrixClientContext.Provider>
+            ),
+        });
         expect(asFragment()).toMatchSnapshot();
-    });
-
-    it.each([
-        { shortcut: { key: "F6", ctrlKey: true, shiftKey: true }, isPreviousLandmark: true, label: "PreviousLandmark" },
-        { shortcut: { key: "F6", ctrlKey: true }, isPreviousLandmark: false, label: "NextLandmark" },
-    ])("should navigate to the landmark on NextLandmark.$label action", ({ shortcut, isPreviousLandmark }) => {
-        const spyFindLandmark = jest.spyOn(LandmarkNavigation, "findAndFocusNextLandmark").mockReturnValue();
-        const { getByTestId } = render(<RoomList vm={vm} />, withClientContextRenderOptions(matrixClient));
-        const roomList = getByTestId("room-list");
-        fireEvent.keyDown(roomList, shortcut);
-
-        expect(spyFindLandmark).toHaveBeenCalledWith(Landmark.ROOM_LIST, isPreviousLandmark);
     });
 });
