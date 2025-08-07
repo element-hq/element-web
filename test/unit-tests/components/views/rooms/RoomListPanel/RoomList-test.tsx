@@ -8,12 +8,12 @@
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
+import { VirtuosoMockContext } from "react-virtuoso";
 
-import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
+import { mkRoom, stubClient } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
-import { VirtuosoMockContext } from "react-virtuoso";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 describe("<RoomList />", () => {

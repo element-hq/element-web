@@ -80,7 +80,7 @@ describe("<RoomListItemView />", () => {
         const user = userEvent.setup();
         render(<RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />);
 
-        await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
+        await user.click(screen.getByRole("gridcell", { name: `Open room ${room.name}` }));
         expect(defaultValue.openRoom).toHaveBeenCalled();
     });
 
@@ -92,7 +92,7 @@ describe("<RoomListItemView />", () => {
             <RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        const listItem = screen.getByRole("gridcell", { name: `Open room ${room.name}` });
         expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
 
         await user.hover(listItem);
@@ -100,24 +100,24 @@ describe("<RoomListItemView />", () => {
     });
 
     test("should hover decoration if focused", async () => {
-        const user = userEvent.setup();
-        render(
-            <RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />,
+        const { rerender } = render(
+            <RoomListItemView room={room} isSelected={false} isFocused={true} onFocus={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
-        await user.click(listItem);
-        expect(listItem).toHaveClass("mx_RoomListItemView_hover");
+        const listItem = screen.getByRole("gridcell", { name: `Open room ${room.name}` });
 
-        await user.tab();
-        await waitFor(() => expect(listItem).not.toHaveClass("mx_RoomListItemView_hover"));
+        expect(listItem).toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover");
+
+        rerender(<RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />);
+
+        await waitFor(() => expect(listItem).not.toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover"));
     });
 
     test("should be selected if isSelected=true", async () => {
         const { asFragment } = render(
             <RoomListItemView room={room} isSelected={true} isFocused={false} onFocus={jest.fn()} />,
         );
-        expect(screen.queryByRole("button", { name: `Open room ${room.name}` })).toHaveAttribute(
+        expect(screen.queryByRole("gridcell", { name: `Open room ${room.name}` })).toHaveAttribute(
             "aria-selected",
             "true",
         );
@@ -146,7 +146,7 @@ describe("<RoomListItemView />", () => {
         });
 
         render(<RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />);
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        const listItem = screen.getByRole("gridcell", { name: `Open room ${room.name}` });
         await user.hover(listItem);
 
         expect(screen.queryByRole("notification-decoration")).toBeNull();
@@ -164,7 +164,7 @@ describe("<RoomListItemView />", () => {
             <RoomListItemView room={room} isSelected={false} isFocused={false} onFocus={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
-        const button = screen.getByRole("button", { name: `Open room ${room.name}` });
+        const button = screen.getByRole("gridcell", { name: `Open room ${room.name}` });
         await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
         await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
         // Menu should close
