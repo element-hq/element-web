@@ -35,7 +35,10 @@ interface ISeekCSS extends CSSProperties {
 
 const ARROW_SKIP_SECONDS = 5; // arbitrary
 
-export default class SeekBar extends React.PureComponent<IProps, IState> {
+/**
+ * @deprecated Use {@link SeekBar} instead.
+ */
+export default class LegacySeekBar extends React.PureComponent<IProps, IState> {
     // We use an animation frame request to avoid overly spamming prop updates, even if we aren't
     // really using anything demanding on the CSS front.
 

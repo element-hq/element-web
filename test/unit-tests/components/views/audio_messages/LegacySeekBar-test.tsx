@@ -12,13 +12,13 @@ import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 
 import { type Playback } from "../../../../../src/audio/Playback";
 import { createTestPlayback } from "../../../../test-utils/audio";
-import SeekBar from "../../../../../src/components/views/audio_messages/SeekBar";
+import LegacySeekBar from "../../../../../src/components/views/audio_messages/LegacySeekBar";
 
 describe("SeekBar", () => {
     let playback: Playback;
     let renderResult: RenderResult;
     let frameRequestCallback: FrameRequestCallback;
-    let seekBarRef: RefObject<SeekBar | null>;
+    let seekBarRef: RefObject<LegacySeekBar | null>;
 
     beforeEach(() => {
         seekBarRef = createRef();
@@ -38,7 +38,7 @@ describe("SeekBar", () => {
                 durationSeconds: 0,
                 timeSeconds: 0,
             });
-            renderResult = render(<SeekBar ref={seekBarRef} playback={playback} />);
+            renderResult = render(<LegacySeekBar ref={seekBarRef} playback={playback} />);
         });
 
         it("should render correctly", () => {
@@ -49,7 +49,7 @@ describe("SeekBar", () => {
     describe("when rendering a SeekBar", () => {
         beforeEach(() => {
             playback = createTestPlayback();
-            renderResult = render(<SeekBar ref={seekBarRef} playback={playback} />);
+            renderResult = render(<LegacySeekBar ref={seekBarRef} playback={playback} />);
         });
 
         it("should render the initial position", () => {
@@ -115,7 +115,7 @@ describe("SeekBar", () => {
 
     describe("when rendering a disabled SeekBar", () => {
         beforeEach(async () => {
-            renderResult = render(<SeekBar disabled={true} playback={playback} />);
+            renderResult = render(<LegacySeekBar disabled={true} playback={playback} />);
         });
 
         it("should render as expected", () => {
