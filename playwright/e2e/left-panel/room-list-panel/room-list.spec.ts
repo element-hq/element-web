@@ -53,7 +53,7 @@ test.describe("Room list", () => {
 
             // scrollListToBottom seems to leave the mouse hovered over the list, move it away.
             await page.getByRole("button", { name: "User menu" }).hover();
-    
+
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 
