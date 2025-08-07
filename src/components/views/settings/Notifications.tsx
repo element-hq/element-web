@@ -807,7 +807,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         return (
             <div>
                 <div data-testid={`notif-section-${category}`} className="mx_UserNotifSettings_grid">
-                    <SettingsSubsectionHeading heading={sectionName} />
+                    <SettingsSubsectionHeading heading={sectionName} as="h2" />
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.Off]}</span>
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.On]}</span>
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.Loud]}</span>
