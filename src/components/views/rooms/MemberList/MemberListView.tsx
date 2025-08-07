@@ -28,7 +28,7 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
-    const { isPresenceEnabled, onClickMember, memberCount } = vm;
+    const { isPresenceEnabled, memberCount } = vm;
 
     const getItemKey = useCallback((item: MemberWithSeparator): string => {
         if (item === SEPARATOR) {
