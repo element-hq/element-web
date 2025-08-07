@@ -445,11 +445,12 @@ export default class AppTile extends React.Component<IProps, IState> {
      * Callback ref for the parent div of the iframe.
      */
     private iframeParentRef = (element: HTMLElement | null): void => {
+        if (this.unmounted) return;
         // Detach the existing iframe (if any) from the document so we know not
         // to do anything further with it, like starting up the messaging
         this.iframeParent?.querySelector("iframe")?.remove();
         this.iframeParent = element;
-        if (this.unmounted) return;
+
         if (element && this.sgWidget) {
             this.startMessaging();
         } else {
