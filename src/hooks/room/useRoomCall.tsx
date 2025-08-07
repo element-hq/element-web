@@ -18,7 +18,7 @@ import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";
-import { ConnectionState, ElementCall } from "../../models/Call";
+import { ConnectionState } from "../../models/Call";
 import { placeCall } from "../../utils/room/placeCall";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
@@ -36,6 +36,7 @@ import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
+import { ElementCallMemberEventType } from "../../call-types";
 
 export enum PlatformCallType {
     ElementCall,
@@ -135,7 +136,7 @@ export const useRoomCall = (
 
     const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
-        room.currentState.mayClientSendStateEvent(ElementCall.MEMBER_EVENT_TYPE.name, room.client),
+        room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
     ]);
 
     // The options provided to the RoomHeader.
