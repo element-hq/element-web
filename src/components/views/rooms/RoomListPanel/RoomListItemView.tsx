@@ -86,6 +86,7 @@ export const RoomListItemView = memo(function RoomListItemView({
             onFocus={onFocus}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
+            onBlur={() => setHover(false)}
             tabIndex={isFocused ? 0 : -1}
             {...props}
         >
