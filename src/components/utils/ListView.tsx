@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { useComposedRefs } from "@radix-ui/react-compose-refs";
 import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
-
 /**
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
@@ -30,16 +30,11 @@ export interface IListViewProps<Item, Context>
     items: Item[];
 
     /**
-     * Callback function called when an item is selected (via Enter/Space key).
-     * @param item - The selected item from the items array
-     */
-    onSelectItem: (item: Item) => void;
-
-    /**
      * Function that renders each list item as a JSX element.
      * @param index - The index of the item in the list
      * @param item - The data item to render
      * @param context - The context object containing the focused key and any additional data
+     * @param onFocus - A callback that is required to be called when the item component receives focus
      * @returns JSX element representing the rendered item
      */
     getItemComponent: (
@@ -68,6 +63,8 @@ export interface IListViewProps<Item, Context>
      * @return The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
+
+    ref?: React.Ref<VirtuosoHandle>;
 }
 
 /**
@@ -79,11 +76,13 @@ export interface IListViewProps<Item, Context>
  */
 export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, onSelectItem, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
+    const { items, getItemComponent, isItemFocusable, getItemKey, context, ref, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
-    const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
+    const internalRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
+    // Combined ref callback to handle both internal use and forwarding
+    const composedRef = useComposedRefs(internalRef, props.ref);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
         props.items[0] ? getItemKey(props.items[0]) : undefined,
@@ -131,7 +130,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
                 isScrollingToItem.current = true;
-                virtuosoHandleRef?.current?.scrollIntoView({
+                internalRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
@@ -186,10 +185,6 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             } else if (e.code === "ArrowDown" && currentIndex !== undefined) {
                 scrollToItem(currentIndex + 1, true);
                 handled = true;
-            } else if ((e.code === "Enter" || e.code === "Space") && currentIndex !== undefined) {
-                const item = items[currentIndex];
-                onSelectItem(item);
-                handled = true;
             } else if (e.code === "Home") {
                 scrollToIndex(0);
                 handled = true;
@@ -211,7 +206,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 e.preventDefault();
             }
         },
-        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onSelectItem],
+        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items],
     );
 
     /**
@@ -261,8 +256,12 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         [keyToIndexMap, visibleRange, scrollToIndex, tabIndexKey],
     );
 
-    const onBlur = useCallback((): void => {
-        setIsFocused(false);
+    const onBlur = useCallback((event: React.FocusEvent<HTMLDivElement>): void => {
+        // Only set isFocused to false if the focus is moving outside the list
+        // This prevents the list from losing focus when interacting with menus inside it
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsFocused(false);
+        }
     }, []);
 
     const listContext: ListContext<Context> = {
@@ -275,7 +274,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         <Virtuoso
             tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
             scrollerRef={scrollerRef}
-            ref={virtuosoHandleRef}
+            ref={composedRef}
             onKeyDown={keyDownCallback}
             context={listContext}
             rangeChanged={setVisibleRange}

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
@@ -77,9 +77,15 @@ export function useFilteredRooms(): FilteredRooms {
     const filterUndefined = (array: (FilterKey | undefined)[]): FilterKey[] =>
         array.filter((f) => f !== undefined) as FilterKey[];
 
-    const getAppliedFilters = (): FilterKey[] => {
+    const getAppliedFilters = useCallback((): FilterKey[] => {
         return filterUndefined([primaryFilter]);
-    };
+    }, [primaryFilter]);
+
+    useEffect(() => {
+        // Update the rooms state when the primary filter changes
+        const filters = getAppliedFilters();
+        updateRoomsFromStore(filters);
+    }, [getAppliedFilters, updateRoomsFromStore]);
 
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
         const filters = getAppliedFilters();

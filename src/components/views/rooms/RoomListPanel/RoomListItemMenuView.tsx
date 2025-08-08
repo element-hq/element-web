@@ -46,7 +46,13 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
+        <Flex
+            className="mx_RoomListItemMenuView"
+            align="center"
+            gap="var(--cpd-space-1x)"
+            // We don't want keyboard navigation event to bubble up to the ListView changing the focused item
+            onKeyDown={(e) => e.stopPropagation()}
+        >
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
             {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>

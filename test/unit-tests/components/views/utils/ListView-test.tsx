@@ -21,7 +21,6 @@ const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
 describe("ListView", () => {
-    const mockOnSelectItem = jest.fn();
     const mockGetItemComponent = jest.fn();
     const mockIsItemFocusable = jest.fn();
 
@@ -34,7 +33,6 @@ describe("ListView", () => {
 
     const defaultProps: IListViewProps<TestItemWithSeparator, any> = {
         items: defaultItems,
-        onSelectItem: mockOnSelectItem,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
@@ -50,7 +48,7 @@ describe("ListView", () => {
         return render(getListViewComponent(mergedProps), {
             wrapper: ({ children }) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
-                    {children}
+                    <>{children}</>
                 </VirtuosoMockContext.Provider>
             ),
         });
@@ -87,33 +85,6 @@ describe("ListView", () => {
     });
 
     describe("Keyboard Navigation", () => {
-        it("should handle Enter key and call onSelectItem when focused", async () => {
-            renderListViewWithHeight();
-            const container = screen.getByRole("grid");
-
-            expect(container.querySelectorAll(".mx_item")).toHaveLength(4);
-
-            // Focus to activate the list and navigate to first focusable item
-            fireEvent.focus(container);
-
-            fireEvent.keyDown(container, { code: "Enter" });
-
-            expect(mockOnSelectItem).toHaveBeenCalledWith(defaultItems[0]);
-        });
-
-        it("should handle Space key and call onSelectItem when focused", () => {
-            renderListViewWithHeight();
-            const container = screen.getByRole("grid");
-
-            expect(container.querySelectorAll(".mx_item")).toHaveLength(4);
-            // Focus to activate the list and navigate to first focusable item
-            fireEvent.focus(container);
-
-            fireEvent.keyDown(container, { code: "Space" });
-
-            expect(mockOnSelectItem).toHaveBeenCalledWith(defaultItems[0]);
-        });
-
         it("should handle ArrowDown key navigation", () => {
             renderListViewWithHeight();
             const container = screen.getByRole("grid");
