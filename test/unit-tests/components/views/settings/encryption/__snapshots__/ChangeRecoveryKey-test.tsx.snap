@@ -261,7 +261,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           Enter recovery key
         </label>
         <div
-          class="_container_1s836_8"
+          class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
           id="«r1»"
         >
           <input
@@ -422,7 +422,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           Enter recovery key
         </label>
         <div
-          class="_container_1s836_8"
+          class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
           id="«r1»"
         >
           <input
