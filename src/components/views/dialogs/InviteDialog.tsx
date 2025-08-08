@@ -1282,7 +1282,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    public render(): React.ReactNode {
+    private hasSelection(): boolean {
+        return this.state.targets.length > 0 || (!!this.state.filterText && this.state.filterText.includes("@"));
+    }
+
+    /**
+     * Render content of the common "users" tab that is shown whether we have a regular invite dialog or a
+     * "CallTransfer" one.
+     */
+    private renderMainTab(): JSX.Element {
         let spinner: JSX.Element | undefined;
         if (this.state.busy) {
             spinner = <Spinner w={20} h={20} />;
@@ -1295,9 +1303,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let footer;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
-
-        const hasSelection =
-            this.state.targets.length > 0 || (this.state.filterText && this.state.filterText.includes("@"));
 
         const cli = MatrixClientPeg.safeGet();
         const userId = cli.getUserId()!;
@@ -1403,7 +1408,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     kind="primary"
                     onClick={goButtonFn}
                     className="mx_InviteDialog_goButton"
-                    disabled={this.state.busy || !hasSelection}
+                    disabled={this.state.busy || !this.hasSelection()}
                 >
                     {buttonText}
                 </AccessibleButton>
@@ -1425,7 +1430,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
         }
 
-        const usersSection = (
+        return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
                 <div className="mx_InviteDialog_addressBar">
@@ -1442,6 +1447,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 {footer}
             </React.Fragment>
         );
+    }
+
+    public render(): React.ReactNode {
+        const usersSection = this.renderMainTab();
 
         let dialogContent;
         if (this.props.kind === InviteKind.CallTransfer) {
@@ -1514,7 +1523,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     <AccessibleButton
                         kind="primary"
                         onClick={this.transferCall}
-                        disabled={!hasSelection && this.state.dialPadValue === ""}
+                        disabled={!this.hasSelection() && this.state.dialPadValue === ""}
                     >
                         {_t("action|transfer")}
                     </AccessibleButton>
