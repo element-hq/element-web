@@ -213,11 +213,12 @@ export const useRoomCall = (
             return State.NoOneHere;
         }
 
-        if (!mayCreateElementCalls && !mayEditWidgets) {
+        if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
         }
         return State.NoCall;
     }, [
+        callOptions,
         connectedCalls,
         canInviteGuests,
         hasGroupCall,
