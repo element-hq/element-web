@@ -1270,7 +1270,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let helpText;
         let buttonText;
         let goButtonFn: (() => Promise<void>) | null = null;
-        let consultConnectSection;
         let extraSection;
         let footer;
 
@@ -1386,29 +1385,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             goButtonFn = this.inviteUsers;
         } else if (this.props.kind === InviteKind.CallTransfer) {
             title = _t("action|transfer");
-
-            consultConnectSection = (
-                <div className="mx_InviteDialog_transferConsultConnect">
-                    <label>
-                        <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
-                        {_t("voip|transfer_consult_first_label")}
-                    </label>
-                    <AccessibleButton
-                        kind="secondary"
-                        onClick={this.onCancel}
-                        className="mx_InviteDialog_transferConsultConnect_pushRight"
-                    >
-                        {_t("action|cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton
-                        kind="primary"
-                        onClick={this.transferCall}
-                        disabled={!hasSelection && this.state.dialPadValue === ""}
-                    >
-                        {_t("action|transfer")}
-                    </AccessibleButton>
-                </div>
-            );
         }
 
         const goButton =
@@ -1511,6 +1487,30 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     dialPadSection,
                 ),
             );
+
+            const consultConnectSection = (
+                <div className="mx_InviteDialog_transferConsultConnect">
+                    <label>
+                        <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
+                        {_t("voip|transfer_consult_first_label")}
+                    </label>
+                    <AccessibleButton
+                        kind="secondary"
+                        onClick={this.onCancel}
+                        className="mx_InviteDialog_transferConsultConnect_pushRight"
+                    >
+                        {_t("action|cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={this.transferCall}
+                        disabled={!hasSelection && this.state.dialPadValue === ""}
+                    >
+                        {_t("action|transfer")}
+                    </AccessibleButton>
+                </div>
+            );
+
             dialogContent = (
                 <React.Fragment>
                     <TabbedView<TabId>
@@ -1523,12 +1523,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 </React.Fragment>
             );
         } else {
-            dialogContent = (
-                <React.Fragment>
-                    {usersSection}
-                    {consultConnectSection}
-                </React.Fragment>
-            );
+            dialogContent = usersSection;
         }
 
         return (
