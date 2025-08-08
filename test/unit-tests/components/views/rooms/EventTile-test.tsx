@@ -503,14 +503,24 @@ describe("EventTile", () => {
             expect(isHighlighted(container)).toBeFalsy();
         });
 
-        it(`does not highlight when message's push actions does not have a highlight tweak`, () => {
+        it("does not highlight when message's push actions does not have a highlight tweak", () => {
             mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
             const { container } = getComponent();
 
             expect(isHighlighted(container)).toBeFalsy();
         });
 
-        it(`highlights when message's push actions have a highlight tweak`, () => {
+        it("does not highlight when message's push actions have a highlight tweak but message has been redacted", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const { container } = getComponent({ isRedacted: true });
+
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
+        it("highlights when message's push actions have a highlight tweak", () => {
             mocked(client.getPushActionsForEvent).mockReturnValue({
                 notify: true,
                 tweaks: { [TweakName.Highlight]: true },
