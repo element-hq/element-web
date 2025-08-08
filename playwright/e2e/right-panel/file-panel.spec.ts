@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Download, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
@@ -189,23 +189,13 @@ test.describe("FilePanel", () => {
 
             const link = imageBody.locator(".mx_MFileBody_download a");
 
-            const newPagePromise = context.waitForEvent("page");
-
-            const downloadPromise = new Promise<Download>((resolve) => {
-                page.once("download", resolve);
-            });
+            const downloadPromise = page.waitForEvent("download");
 
             // Click the anchor link (not the image itself)
             await link.click();
 
-            const newPage = await newPagePromise;
-            // XXX: Clicking the link opens the image in a new tab on some browsers rather than downloading
-            await expect(newPage)
-                .toHaveURL(/.+\/_matrix\/media\/\w+\/download\/localhost\/\w+/)
-                .catch(async () => {
-                    const download = await downloadPromise;
-                    expect(download.suggestedFilename()).toBe("riot.png");
-                });
+            const download = await downloadPromise;
+            expect(download.suggestedFilename()).toBe("riot.png");
         });
     });
 });
