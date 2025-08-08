@@ -442,7 +442,8 @@ describe("RoomView", () => {
         );
 
         const { container } = await renderRoomView();
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).toBeInTheDocument());
+        // We no longer show the grey shield for encrypted rooms, so it should not be there.
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).not.toBeInTheDocument());
 
         const verificationStatus = new UserVerificationStatus(true, true, false);
         jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
