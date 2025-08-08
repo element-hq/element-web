@@ -329,20 +329,10 @@ describe("SendWysiwygComposer", () => {
     describe.each([{ isRichTextEnabled: true }, { isRichTextEnabled: false }])(
         "Left icon when %s",
         ({ isRichTextEnabled }) => {
-            // beforeEach(async () => {
-            //     customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
-            //     await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
-            //     emojiButton = screen.getByLabelText("Emoji");
-            // });
-
-            afterEach(() => {
-                jest.resetAllMocks();
-            });
-
             it.each([
                 [E2EStatus.Verified, "mx_E2EIcon_verified"],
                 [E2EStatus.Warning, "mx_E2EIcon_warning"],
-                [E2EStatus.Unencrypted, "mx_MessageComposer_UnencryptedIcon"],
+                [undefined, undefined],
             ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedClass) => {
                 // When
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, undefined, e2eStatus);
@@ -350,7 +340,7 @@ describe("SendWysiwygComposer", () => {
                 const leftIcon = screen.getByTestId("wysiwyg-composer-left-icon");
                 // Then
                 expect(leftIcon).toBeInTheDocument();
-                expect(leftIcon).toHaveClass(`mx_E2EIcon ${expectedClass}`);
+                expect(leftIcon).toHaveClass(expectedClass ? `mx_E2EIcon ${expectedClass}` : `mx_E2EIcon`);
             });
         },
     );

@@ -64,7 +64,7 @@ export default function SendWysiwygComposer({
                 width={12}
                 height={12}
                 color="var(--cpd-color-icon-info-primary)"
-                className="mx_E2EIcon mx_MessageComposer_UnencryptedIcon"
+                className="mx_E2EIcon"
             />
         );
     } else if (e2eStatus !== E2EStatus.Normal) {
