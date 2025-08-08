@@ -350,7 +350,11 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
                 <Label>{_t("settings|encryption|recovery|enter_recovery_key")}</Label>
 
-                <PasswordControl required={true} title={_t("settings|encryption|recovery|enter_recovery_key")} />
+                <PasswordControl
+                    required={true}
+                    title={_t("settings|encryption|recovery|enter_recovery_key")}
+                    className="mx_KeyForm_password mx_no_textinput"
+                />
                 {isKeyInvalidAndFilled && (
                     <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
                 )}
