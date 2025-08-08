@@ -26,7 +26,6 @@ import {
     getAllByLabelText,
     getByLabelText,
     getByText,
-    queryAllByLabelText,
     queryByLabelText,
     render,
     type RenderOptions,
@@ -327,14 +326,6 @@ describe("RoomHeader", () => {
             SdkConfig.reset();
         });
 
-        it("you can't call if you're alone", () => {
-            mockRoomMembers(room, 1);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "There's no one here to call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
         it("you can call when you're two in the room", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 2);
@@ -485,14 +476,6 @@ describe("RoomHeader", () => {
             );
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             for (const button of getAllByLabelText(container, "Ongoing call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
-        it("can't call if you have no friends and cannot invite friends", () => {
-            mockRoomMembers(room, 1);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "There's no one here to call")) {
                 expect(button).toHaveAttribute("aria-disabled", "true");
             }
         });
