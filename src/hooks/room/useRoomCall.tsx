@@ -73,7 +73,6 @@ export const getPlatformCallTypeProps = (
 
 const enum State {
     NoCall,
-    NoOneHere,
     NoPermission,
     Unpinned,
     Ongoing,
@@ -209,9 +208,6 @@ export const useRoomCall = (
         if (hasLegacyCall) {
             return State.Ongoing;
         }
-        if (memberCount <= 1 && !canInviteGuests) {
-            return State.NoOneHere;
-        }
 
         if (!mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
@@ -264,10 +260,6 @@ export const useRoomCall = (
         case State.Ongoing:
             voiceCallDisabledReason = _t("voip|disabled_ongoing_call");
             videoCallDisabledReason = _t("voip|disabled_ongoing_call");
-            break;
-        case State.NoOneHere:
-            voiceCallDisabledReason = _t("voip|disabled_no_one_here");
-            videoCallDisabledReason = _t("voip|disabled_no_one_here");
             break;
         case State.Unpinned:
         case State.NotJoined:
