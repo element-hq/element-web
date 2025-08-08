@@ -1259,28 +1259,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         });
     }
 
-    /** Get a suitable title for the dialog, given its `kind` and the type of room that we are inviting to. */
-    private getTitle(): string {
-        if (this.props.kind === InviteKind.Dm) {
-            return _t("space|add_existing_room_space|dm_heading");
-        } else if (this.props.kind === InviteKind.Invite) {
-            const roomId = this.props.roomId;
-            const room = MatrixClientPeg.get()?.getRoom(roomId);
-            const isSpace = room?.isSpaceRoom();
-            return isSpace
-                ? _t("invite|to_space", {
-                      spaceName: room?.name || _t("common|unnamed_space"),
-                  })
-                : _t("invite|to_room", {
-                      roomName: room?.name || _t("common|unnamed_room"),
-                  });
-        } else if (this.props.kind === InviteKind.CallTransfer) {
-            return _t("action|transfer");
-        } else {
-            throw new Error(`Unsupported InviteDialog kind ${this.props.kind}`);
-        }
-    }
-
     private hasSelection(): boolean {
         return this.state.targets.length > 0 || (!!this.state.filterText && this.state.filterText.includes("@"));
     }
@@ -1454,12 +1432,28 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
      * See also: {@link renderCallTransferDialog}.
      */
     private renderRegularDialog(): React.ReactNode {
+        let title;
+        if (this.props.kind === InviteKind.Dm) {
+            title = _t("space|add_existing_room_space|dm_heading");
+        } else if (this.props.kind === InviteKind.Invite) {
+            const roomId = this.props.roomId;
+            const room = MatrixClientPeg.get()?.getRoom(roomId);
+            const isSpace = room?.isSpaceRoom();
+            title = isSpace
+                ? _t("invite|to_space", {
+                      spaceName: room?.name || _t("common|unnamed_space"),
+                  })
+                : _t("invite|to_room", {
+                      roomName: room?.name || _t("common|unnamed_room"),
+                  });
+        }
+
         return (
             <BaseDialog
                 className="mx_InviteDialog_other"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={this.getTitle()}
+                title={title}
                 screenName={this.screenName}
             >
                 <div className="mx_InviteDialog_content">{this.renderMainTab()}</div>
@@ -1563,7 +1557,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 className="mx_InviteDialog_transfer"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={this.getTitle()}
+                title={_t("action|transfer")}
                 screenName={this.screenName}
             >
                 <div className="mx_InviteDialog_content">{dialogContent}</div>
