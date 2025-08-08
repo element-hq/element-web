@@ -1762,6 +1762,7 @@
     },
     "power_level": {
         "admin": "Admin",
+        "creator": "Owner",
         "custom": "Custom (%(level)s)",
         "custom_level": "Custom level",
         "default": "Default",
