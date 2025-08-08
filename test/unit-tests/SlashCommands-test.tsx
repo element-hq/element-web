@@ -127,12 +127,7 @@ describe("SlashCommands", () => {
             setCurrentRoom();
         });
 
-        it("should be disabled by default", () => {
-            expect(command.isEnabled(client)).toBe(false);
-        });
-
-        it("should be enabled for developerMode", () => {
-            SettingsStore.setValue("developerMode", null, SettingLevel.DEVICE, true);
+        it("should be enabled by default", () => {
             expect(command.isEnabled(client)).toBe(true);
         });
     });
