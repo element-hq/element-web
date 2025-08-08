@@ -3964,7 +3964,6 @@
         "dialpad": "Dialpad",
         "disable_camera": "Turn off camera",
         "disable_microphone": "Mute microphone",
-        "disabled_no_one_here": "There's no one here to call",
         "disabled_no_perms_start_video_call": "You do not have permission to start video calls",
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
         "disabled_ongoing_call": "Ongoing call",

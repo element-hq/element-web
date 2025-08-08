@@ -32,7 +32,6 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
-import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
@@ -196,7 +195,6 @@ export const useRoomCall = (
     const connectedCalls = useEventEmitterState(CallStore.instance, CallStoreEvent.ConnectedCalls, () =>
         Array.from(CallStore.instance.connectedCalls),
     );
-    const { canInviteGuests } = useGuestAccessInformation(room);
 
     const state = useMemo((): State => {
         if (connectedCalls.find((call) => call.roomId != room.roomId)) {
@@ -215,14 +213,12 @@ export const useRoomCall = (
         return State.NoCall;
     }, [
         connectedCalls,
-        canInviteGuests,
         hasGroupCall,
         hasJitsiWidget,
         hasLegacyCall,
         hasManagedHybridWidget,
         mayCreateElementCalls,
         mayEditWidgets,
-        memberCount,
         promptPinWidget,
         room.roomId,
     ]);
