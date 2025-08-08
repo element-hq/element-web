@@ -31,11 +31,13 @@ export interface MemberTileViewState extends MemberTileViewModelProps {
 }
 
 export enum PowerStatus {
+    Creator = "creator",
     Admin = "admin",
     Moderator = "moderator",
 }
 
 const PowerLabel: Record<PowerStatus, TranslationKey> = {
+    [PowerStatus.Creator]: _td("power_level|creator"),
     [PowerStatus.Admin]: _td("power_level|admin"),
     [PowerStatus.Moderator]: _td("power_level|moderator"),
 };
@@ -115,6 +117,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
     const name = props.member.name;
 
     const powerStatusMap = new Map([
+        [Infinity, PowerStatus.Creator],
         [100, PowerStatus.Admin],
         [50, PowerStatus.Moderator],
     ]);
