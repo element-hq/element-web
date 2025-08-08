@@ -6,9 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type SyntheticEvent } from "react";
-import classNames from "classnames";
-import { RoomMember, type Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
+import React, { createRef, type JSX, type ReactNode, type SyntheticEvent } from "react";
+import { EventType, MatrixError, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -1449,108 +1448,119 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
     }
 
-    public render(): React.ReactNode {
+    /**
+     * Render the complete dialog, given this is not a call transfer dialog.
+     *
+     * See also: {@link renderCallTransferDialog}.
+     */
+    private renderRegularDialog(): React.ReactNode {
+        return (
+            <BaseDialog
+                className="mx_InviteDialog_other"
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={this.getTitle()}
+                screenName={this.screenName}
+            >
+                <div className="mx_InviteDialog_content">{this.renderMainTab()}</div>
+            </BaseDialog>
+        );
+    }
+
+    /**
+     * Render the complete call transfer dialog.
+     *
+     * See also: {@link renderRegularDialog}.
+     */
+    private renderCallTransferDialog(): React.ReactNode {
         const usersSection = this.renderMainTab();
 
-        let dialogContent;
-        if (this.props.kind === InviteKind.CallTransfer) {
-            const tabs: NonEmptyArray<Tab<TabId>> = [
-                new Tab(
-                    TabId.UserDirectory,
-                    _td("invite|transfer_user_directory_tab"),
-                    "mx_InviteDialog_userDirectoryIcon",
-                    usersSection,
-                ),
-            ];
+        const tabs: NonEmptyArray<Tab<TabId>> = [
+            new Tab(
+                TabId.UserDirectory,
+                _td("invite|transfer_user_directory_tab"),
+                "mx_InviteDialog_userDirectoryIcon",
+                usersSection,
+            ),
+        ];
 
-            const backspaceButton = <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />;
+        const backspaceButton = <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />;
 
-            // Only show the backspace button if the field has content
-            let dialPadField;
-            if (this.state.dialPadValue.length !== 0) {
-                dialPadField = (
-                    <Field
-                        ref={this.numberEntryFieldRef}
-                        className="mx_InviteDialog_dialPadField"
-                        id="dialpad_number"
-                        value={this.state.dialPadValue}
-                        autoFocus={true}
-                        onChange={this.onDialChange}
-                        postfixComponent={backspaceButton}
-                    />
-                );
-            } else {
-                dialPadField = (
-                    <Field
-                        ref={this.numberEntryFieldRef}
-                        className="mx_InviteDialog_dialPadField"
-                        id="dialpad_number"
-                        value={this.state.dialPadValue}
-                        autoFocus={true}
-                        onChange={this.onDialChange}
-                    />
-                );
-            }
-
-            const dialPadSection = (
-                <div className="mx_InviteDialog_dialPad">
-                    <form onSubmit={this.onDialFormSubmit}>{dialPadField}</form>
-                    <Dialpad hasDial={false} onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress} />
-                </div>
-            );
-            tabs.push(
-                new Tab(
-                    TabId.DialPad,
-                    _td("invite|transfer_dial_pad_tab"),
-                    "mx_InviteDialog_dialPadIcon",
-                    dialPadSection,
-                ),
-            );
-
-            const consultConnectSection = (
-                <div className="mx_InviteDialog_transferConsultConnect">
-                    <label>
-                        <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
-                        {_t("voip|transfer_consult_first_label")}
-                    </label>
-                    <AccessibleButton
-                        kind="secondary"
-                        onClick={this.onCancel}
-                        className="mx_InviteDialog_transferConsultConnect_pushRight"
-                    >
-                        {_t("action|cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton
-                        kind="primary"
-                        onClick={this.transferCall}
-                        disabled={!this.hasSelection() && this.state.dialPadValue === ""}
-                    >
-                        {_t("action|transfer")}
-                    </AccessibleButton>
-                </div>
-            );
-
-            dialogContent = (
-                <React.Fragment>
-                    <TabbedView<TabId>
-                        tabs={tabs}
-                        activeTabId={this.state.currentTabId}
-                        tabLocation={TabLocation.TOP}
-                        onChange={this.onTabChange}
-                    />
-                    {consultConnectSection}
-                </React.Fragment>
+        // Only show the backspace button if the field has content
+        let dialPadField;
+        if (this.state.dialPadValue.length !== 0) {
+            dialPadField = (
+                <Field
+                    ref={this.numberEntryFieldRef}
+                    className="mx_InviteDialog_dialPadField"
+                    id="dialpad_number"
+                    value={this.state.dialPadValue}
+                    autoFocus={true}
+                    onChange={this.onDialChange}
+                    postfixComponent={backspaceButton}
+                />
             );
         } else {
-            dialogContent = usersSection;
+            dialPadField = (
+                <Field
+                    ref={this.numberEntryFieldRef}
+                    className="mx_InviteDialog_dialPadField"
+                    id="dialpad_number"
+                    value={this.state.dialPadValue}
+                    autoFocus={true}
+                    onChange={this.onDialChange}
+                />
+            );
         }
+
+        const dialPadSection = (
+            <div className="mx_InviteDialog_dialPad">
+                <form onSubmit={this.onDialFormSubmit}>{dialPadField}</form>
+                <Dialpad hasDial={false} onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress} />
+            </div>
+        );
+        tabs.push(
+            new Tab(TabId.DialPad, _td("invite|transfer_dial_pad_tab"), "mx_InviteDialog_dialPadIcon", dialPadSection),
+        );
+
+        const consultConnectSection = (
+            <div className="mx_InviteDialog_transferConsultConnect">
+                <label>
+                    <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
+                    {_t("voip|transfer_consult_first_label")}
+                </label>
+                <AccessibleButton
+                    kind="secondary"
+                    onClick={this.onCancel}
+                    className="mx_InviteDialog_transferConsultConnect_pushRight"
+                >
+                    {_t("action|cancel")}
+                </AccessibleButton>
+                <AccessibleButton
+                    kind="primary"
+                    onClick={this.transferCall}
+                    disabled={!this.hasSelection() && this.state.dialPadValue === ""}
+                >
+                    {_t("action|transfer")}
+                </AccessibleButton>
+            </div>
+        );
+
+        const dialogContent = (
+            <React.Fragment>
+                <TabbedView<TabId>
+                    tabs={tabs}
+                    activeTabId={this.state.currentTabId}
+                    tabLocation={TabLocation.TOP}
+                    onChange={this.onTabChange}
+                />
+                {consultConnectSection}
+            </React.Fragment>
+        );
 
         return (
             <BaseDialog
-                className={classNames({
-                    mx_InviteDialog_transfer: this.props.kind === InviteKind.CallTransfer,
-                    mx_InviteDialog_other: this.props.kind !== InviteKind.CallTransfer,
-                })}
+                className="mx_InviteDialog_transfer"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={this.getTitle()}
@@ -1559,5 +1569,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 <div className="mx_InviteDialog_content">{dialogContent}</div>
             </BaseDialog>
         );
+    }
+
+    public render(): React.ReactNode {
+        if (this.props.kind === InviteKind.CallTransfer) {
+            return this.renderCallTransferDialog();
+        } else {
+            return this.renderRegularDialog();
+        }
     }
 }
