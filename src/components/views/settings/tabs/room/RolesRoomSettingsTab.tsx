@@ -348,10 +348,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             powerLevelDescriptors.users_default.defaultValue,
         );
 
-        let currentUserLevel = userLevels[client.getUserId()!];
-        if (currentUserLevel === undefined) {
-            currentUserLevel = defaultUserLevel;
-        }
+        const currentUserLevel = room.getMember(client.getSafeUserId())?.powerLevel ?? defaultUserLevel;
 
         this.populateDefaultPlEvents(
             eventsLevels,
