@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useMemo, type ReactNode } from "react";
 import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
 import { WysiwygComposer } from "./components/WysiwygComposer";
@@ -18,7 +19,6 @@ import E2EIcon from "../E2EIcon";
 import { type MenuProps } from "../../../structures/ContextMenu";
 import { Emoji } from "./components/Emoji";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
-import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 
 interface ContentProps {
     disabled?: boolean;
@@ -60,6 +60,7 @@ export default function SendWysiwygComposer({
     if (!e2eStatus) {
         leftIcon = (
             <LockOffIcon
+                data-testid="wysiwyg-composer-left-icon"
                 width={12}
                 height={12}
                 color="var(--cpd-color-icon-info-primary)"
@@ -67,7 +68,7 @@ export default function SendWysiwygComposer({
             />
         );
     } else if (e2eStatus !== E2EStatus.Normal) {
-        leftIcon = <E2EIcon status={E2EStatus.Warning} />;
+        leftIcon = <E2EIcon data-testid="wysiwyg-composer-left-icon" status={e2eStatus} />;
     }
     return (
         <ComposerContext.Provider value={defaultContextValue}>
