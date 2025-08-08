@@ -13058,9 +13058,10 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-"react-virtuoso@https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?36f7b675163853fc08ddc2704de90e59baa6f3fa&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build":
+react-virtuoso@^4.13.0:
   version "4.13.0"
-  resolved "https://gitpkg.vercel.app/langleyd/react-virtuoso/packages/react-virtuoso?36f7b675163853fc08ddc2704de90e59baa6f3fa&scripts.postinstall=npm%20install%20--ignore-scripts%20%26%26%20npm%20run%20build#a979dd4bb7c14e30c8011d5c3db9301fc8466e84"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.13.0.tgz#908197f1afd60993c7953897dacf0aff30028304"
+  integrity sha512-XHv2Fglpx80yFPdjZkV9d1baACKghg/ucpDFEXwaix7z0AfVQj+mF6lM+YQR6UC/TwzXG2rJKydRMb3+7iV3PA==
 
 "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.0.0:
   version "19.1.1"
