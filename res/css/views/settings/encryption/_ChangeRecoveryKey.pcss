@@ -68,5 +68,28 @@
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-8x);
+
+        .mx_KeyForm_password {
+            > input[name="recoveryKey"] {
+                /*
+                 * From figma https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=375-77506&t=d82NdRBDoKsUe1C9-4
+                 */
+                height: 70px;
+                padding: var(--cpd-space-3x) var(--cpd-space-3x) var(--cpd-space-3x) var(--cpd-space-4x);
+                border: var(--cpd-border-width-1) solid;
+                border-radius: 8px;
+                margin: 0px;
+            }
+
+            > button {
+                /*
+                 * See figma https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=375-77506&t=d82NdRBDoKsUe1C9-4
+                 * Avoid stretching the hide/show symbol to the height of the input, and centre it vertically.
+                 */
+                height: 24.5px;
+                padding: var(--cpd-space-1x);
+                align-self: center;
+            }
+        }
     }
 }
