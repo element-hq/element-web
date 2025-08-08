@@ -337,7 +337,7 @@ describe("SendWysiwygComposer", () => {
                 // When
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, undefined, e2eStatus);
                 await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
-                const leftIcon = screen.getByTestId("wysiwyg-composer-left-icon");
+                const leftIcon = screen.getByTestId("e2e-icon");
                 // Then
                 expect(leftIcon).toBeInTheDocument();
                 expect(leftIcon).toHaveClass(expectedClass ? `mx_E2EIcon ${expectedClass}` : `mx_E2EIcon`);

@@ -60,7 +60,7 @@ export default function SendWysiwygComposer({
     if (!e2eStatus) {
         leftIcon = (
             <LockOffIcon
-                data-testid="wysiwyg-composer-left-icon"
+                data-testid="e2e-icon"
                 width={12}
                 height={12}
                 color="var(--cpd-color-icon-info-primary)"
@@ -68,7 +68,7 @@ export default function SendWysiwygComposer({
             />
         );
     } else if (e2eStatus !== E2EStatus.Normal) {
-        leftIcon = <E2EIcon data-testid="wysiwyg-composer-left-icon" status={e2eStatus} />;
+        leftIcon = <E2EIcon status={e2eStatus} />;
     }
     return (
         <ComposerContext.Provider value={defaultContextValue}>
