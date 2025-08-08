@@ -1264,6 +1264,66 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     /**
+     * Render the "suggestions" section, which shows a list of people you might want to invite, together with any
+     * errors from the previous iteration.
+     */
+    private renderSuggestions(): JSX.Element {
+        // If we're starting a DM, add a footer which showing our matrix.to link, for copying & pasting.
+        let footer;
+        if (this.props.kind === InviteKind.Dm) {
+            const link = makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId());
+            footer = (
+                <div className="mx_InviteDialog_footer">
+                    <h3>{_t("invite|send_link_prompt")}</h3>
+                    <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId())}>
+                        <a className="mx_InviteDialog_footer_link" href={link} onClick={this.onLinkClick}>
+                            {link}
+                        </a>
+                    </CopyableText>
+                </div>
+            );
+        }
+
+        let results: React.ReactNode | null = null;
+        let onlyOneThreepidNote: React.ReactNode | null = null;
+
+        if (!this.canInviteMore() || (this.hasFilterAtLeastOneEmail() && !this.canInviteThirdParty())) {
+            // We are in DM case here, because of the checks in canInviteMore() / canInviteThirdParty().
+            // Show a note saying "Invites by email can only be sent one at a time".
+            onlyOneThreepidNote = <div className="mx_InviteDialog_oneThreepid">{_t("invite|email_limit_one")}</div>;
+        } else {
+            let extraSection;
+            if (this.props.kind === InviteKind.Dm) {
+                // Some extra words saying "Some suggestions may be hidden for privacy"
+                extraSection = (
+                    <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
+                        <span>{_t("invite|suggestions_disclaimer")}</span>
+                        <p>{_t("invite|suggestions_disclaimer_prompt")}</p>
+                    </div>
+                );
+            }
+
+            results = (
+                <div className="mx_InviteDialog_userSections">
+                    {this.renderSection("recents")}
+                    {this.renderSection("suggestions")}
+                    {extraSection}
+                </div>
+            );
+        }
+
+        return (
+            <React.Fragment>
+                {this.renderIdentityServerWarning()}
+                <div className="error">{this.state.errorText}</div>
+                {onlyOneThreepidNote}
+                {results}
+                {footer}
+            </React.Fragment>
+        );
+    }
+
+    /**
      * Render content of the common "users" tab that is shown whether we have a regular invite dialog or a
      * "CallTransfer" one.
      */
@@ -1276,8 +1336,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let helpText;
         let buttonText;
         let goButtonFn: (() => Promise<void>) | null = null;
-        let extraSection;
-        let footer;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
@@ -1316,23 +1374,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("action|go");
             goButtonFn = this.checkProfileAndStartDm;
-            extraSection = (
-                <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
-                    <span>{_t("invite|suggestions_disclaimer")}</span>
-                    <p>{_t("invite|suggestions_disclaimer_prompt")}</p>
-                </div>
-            );
-            const link = makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId());
-            footer = (
-                <div className="mx_InviteDialog_footer">
-                    <h3>{_t("invite|send_link_prompt")}</h3>
-                    <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.safeGet().getSafeUserId())}>
-                        <a className="mx_InviteDialog_footer_link" href={link} onClick={this.onLinkClick}>
-                            {link}
-                        </a>
-                    </CopyableText>
-                </div>
-            );
         } else if (this.props.kind === InviteKind.Invite) {
             const roomId = this.props.roomId;
             const room = MatrixClientPeg.get()?.getRoom(roomId);
@@ -1391,22 +1432,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 </AccessibleButton>
             );
 
-        let results: React.ReactNode | null = null;
-        let onlyOneThreepidNote: React.ReactNode | null = null;
-
-        if (!this.canInviteMore() || (this.hasFilterAtLeastOneEmail() && !this.canInviteThirdParty())) {
-            // We are in DM case here, because of the checks in canInviteMore() / canInviteThirdParty().
-            onlyOneThreepidNote = <div className="mx_InviteDialog_oneThreepid">{_t("invite|email_limit_one")}</div>;
-        } else {
-            results = (
-                <div className="mx_InviteDialog_userSections">
-                    {this.renderSection("recents")}
-                    {this.renderSection("suggestions")}
-                    {extraSection}
-                </div>
-            );
-        }
-
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
@@ -1417,11 +1442,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         {spinner}
                     </div>
                 </div>
-                {this.renderIdentityServerWarning()}
-                <div className="error">{this.state.errorText}</div>
-                {onlyOneThreepidNote}
-                {results}
-                {footer}
+                {this.renderSuggestions()}
             </React.Fragment>
         );
     }
