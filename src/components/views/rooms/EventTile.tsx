@@ -666,6 +666,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.context.timelineRenderingType === TimelineRenderingType.Notification) return false;
         if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
 
+        if (this.props.isRedacted) return false;
+
         const cli = MatrixClientPeg.safeGet();
         const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         // get the actions for the previous version of the event too if it is an edit
