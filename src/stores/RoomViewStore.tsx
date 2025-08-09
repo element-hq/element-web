@@ -510,8 +510,8 @@ export class RoomViewStore extends EventEmitter {
         });
 
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId } = this.state;
-        const address = roomAlias || roomId!;
+        const { roomAlias, roomId } = this.state;
+        const address = payload.roomId || roomAlias || roomId!;
 
         const joinOpts: IJoinRoomOpts = {
             viaServers: this.state.viaServers || [],
@@ -520,7 +520,6 @@ export class RoomViewStore extends EventEmitter {
         if (SettingsStore.getValue("feature_share_history_on_invite")) {
             joinOpts.acceptSharedHistory = true;
         }
-
         try {
             const cli = MatrixClientPeg.safeGet();
             await retry<Room, MatrixError>(
