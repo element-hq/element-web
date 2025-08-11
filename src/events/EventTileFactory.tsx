@@ -71,25 +71,24 @@ export interface EventTileTypeProps
     showHiddenEvents: boolean;
 }
 
-type FactoryProps = Omit<EventTileTypeProps, "ref">;
-type Factory<X = FactoryProps> = (ref: React.RefObject<any> | undefined, props: X) => JSX.Element;
+type Factory<X = EventTileTypeProps> = (props: X) => JSX.Element;
 
-export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
-const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
-    <LegacyCallEvent ref={ref} {...props} />
+export const MessageEventFactory: Factory = (props) => <MessageEvent {...props} />;
+const LegacyCallEventFactory: Factory<EventTileTypeProps & { callEventGrouper: LegacyCallEventGrouper }> = (props) => (
+    <LegacyCallEvent {...props} />
 );
-const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => {
+const CallEventFactory: Factory = (props) => <CallEvent {...props} />;
+export const TextualEventFactory: Factory = (props) => {
     const vm = new TextualEventViewModel(props);
     return <TextualEventView vm={vm} />;
 };
-const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
-const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
+const VerificationReqFactory: Factory = (props) => <MKeyVerificationRequest {...props} />;
+const HiddenEventFactory: Factory = (props) => <HiddenBody {...props} />;
 
 // These factories are exported for reference comparison against pickFactory()
-export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
-export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
-export const RoomCreateEventFactory: Factory = (_ref, props) => <RoomPredecessorTile {...props} />;
+export const JitsiEventFactory: Factory = (props) => <MJitsiWidgetEvent {...props} />;
+export const JSONEventFactory: Factory = (props) => <ViewSourceEvent {...props} />;
+export const RoomCreateEventFactory: Factory = (props) => <RoomPredecessorTile {...props} />;
 
 const EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomMessage, MessageEventFactory], // note that verification requests are handled in pickFactory()
@@ -102,12 +101,12 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
-    [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
+    [EventType.RoomEncryption, (props) => <EncryptionEvent {...props} />],
     [EventType.RoomCanonicalAlias, TextualEventFactory],
     [EventType.RoomCreate, RoomCreateEventFactory],
     [EventType.RoomMember, TextualEventFactory],
     [EventType.RoomName, TextualEventFactory],
-    [EventType.RoomAvatar, (ref, props) => <RoomAvatarEvent ref={ref} {...props} />],
+    [EventType.RoomAvatar, (props) => <RoomAvatarEvent {...props} />],
     [EventType.RoomThirdPartyInvite, TextualEventFactory],
     [EventType.RoomHistoryVisibility, TextualEventFactory],
     [EventType.RoomTopic, TextualEventFactory],
@@ -302,8 +301,9 @@ export function renderTile(
                     mxEvent: props.mxEvent,
                 },
                 (origProps) =>
-                    factory(props.ref, {
+                    factory({
                         // We only want a subset of props, so we don't end up causing issues for downstream components.
+                        ref,
                         mxEvent,
                         highlights,
                         highlightLink,
@@ -323,7 +323,8 @@ export function renderTile(
                     mxEvent: props.mxEvent,
                 },
                 (origProps) =>
-                    factory(ref, {
+                    factory({
+                        ref,
                         // NEARLY ALL THE OPTIONS!
                         mxEvent,
                         forExport,
@@ -389,7 +390,8 @@ export function renderReplyTile(
             mxEvent: props.mxEvent,
         },
         (origProps) =>
-            factory(ref, {
+            factory({
+                ref,
                 mxEvent,
                 highlights,
                 highlightLink,
