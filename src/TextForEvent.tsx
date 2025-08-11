@@ -572,8 +572,11 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
     const senderName = getSenderName(event);
     const roomId = event.getRoomId()!;
 
-    const pinned = event.getContent<{ pinned: string[] }>().pinned ?? [];
-    const previouslyPinned: string[] = event.getPrevContent().pinned ?? [];
+    const content = event.getContent<{ pinned: string[] }>();
+    const prevContent = event.getPrevContent();
+
+    const pinned = Array.isArray(content.pinned) ? content.pinned : [];
+    const previouslyPinned: string[] = Array.isArray(prevContent.pinned) ? prevContent.pinned : [];
     const newlyPinned = pinned.filter((item) => previouslyPinned.indexOf(item) < 0);
     const newlyUnpinned = previouslyPinned.filter((item) => pinned.indexOf(item) < 0);
 
