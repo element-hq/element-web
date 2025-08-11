@@ -50,6 +50,7 @@ export class Disposables {
      * Add an event listener that will be removed on dispose
      */
     public trackListener(emitter: EventEmitter, event: string, callback: (...args: unknown[]) => void): void {
+        this.throwIfDisposed();
         emitter.on(event, callback);
         this.track(() => {
             emitter.off(event, callback);
