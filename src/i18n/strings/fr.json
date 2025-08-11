@@ -1763,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Administrateur",
+        "creator": "Propriétaire",
         "custom": "Personnalisé (%(level)s)",
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
@@ -3397,6 +3398,7 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
+            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
             "error_processing_voice_message": "Erreur lors du traitement du message vocal",

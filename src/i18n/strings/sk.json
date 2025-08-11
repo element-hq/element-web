@@ -929,6 +929,7 @@
             },
             "privacy_warning": "Uistite sa, že túto obrazovku nikto neuvidí!",
             "restoring": "Obnovenie kľúčov zo zálohy",
+            "security_key_label": "Kľúč na obnovenie",
             "security_key_title": "Zadajte svoj kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
@@ -3439,6 +3440,7 @@
             "unable_to_find": "Pokus o načítanie konkrétneho bodu na časovej osi tejto miestnosti, ale nepodarilo sa ho nájsť."
         },
         "m.audio": {
+            "audio_player": "Prehrávač zvuku",
             "error_downloading_audio": "Chyba pri sťahovaní zvuku",
             "error_processing_audio": "Chyba pri spracovaní hlasovej správy",
             "error_processing_voice_message": "Chyba pri spracovaní hlasovej správy",
