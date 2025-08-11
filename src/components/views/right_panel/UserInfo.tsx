@@ -1154,10 +1154,7 @@ const VerificationSection: React.FC<{
     const canVerify =
         hasUserVerificationStatus &&
         homeserverSupportsCrossSigning &&
-        !isUserVerified &&
-        !isMe &&
-        devices &&
-        devices.length > 0;
+        !isUserVerified;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
 
@@ -1173,7 +1170,7 @@ const VerificationSection: React.FC<{
     } else if (hasCrossSigningKeys === undefined) {
         // We are still fetching the cross-signing keys for the user, show spinner.
         content = <InlineSpinner size={24} />;
-    } else if (canVerify && hasCrossSigningKeys) {
+    } else if (canVerify && hasCrossSigningKeys && !isMe) {
         content = (
             <div className="mx_UserInfo_container_verifyButton">
                 <Button
