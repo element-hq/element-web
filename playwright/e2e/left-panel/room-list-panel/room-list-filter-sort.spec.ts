@@ -140,7 +140,8 @@ test.describe("Room list filters and sort", () => {
             // Open the non-favourite room
             const roomListView = getRoomList(page);
             const tile = roomListView.getByRole("gridcell", { name: "Open room room-non-fav" });
-            await tile.scrollIntoViewIfNeeded();
+            // item may not be in the DOM using scrollListToBottom rather than scrollIntoViewIfNeeded
+            await app.scrollListToBottom(roomListView);
             await tile.click();
 
             // Enable Favourite filter

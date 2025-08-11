@@ -49,7 +49,11 @@ test.describe("Room list", () => {
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
-            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
+            await app.scrollListToBottom(roomListView);
+
+            // scrollListToBottom seems to leave the mouse hovered over the list, move it away.
+            await page.getByRole("button", { name: "User menu" }).hover();
+
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 
@@ -120,7 +124,7 @@ test.describe("Room list", () => {
             await roomListView.getByRole("gridcell", { name: "Open room room28" }).click();
 
             // Scroll to the end of the room list
-            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
+            await app.scrollListToBottom(roomListView);
 
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
@@ -141,7 +145,7 @@ test.describe("Room list", () => {
             // Put focus on the room list
             await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
             // Scroll to the end of the room list
-            await app.scrollListToBottom(page.locator(".mx_RoomList_List"));
+            await app.scrollListToBottom(roomListView);
 
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
             await roomListView.getByRole("gridcell", { name: "Open room room0" }).click();
