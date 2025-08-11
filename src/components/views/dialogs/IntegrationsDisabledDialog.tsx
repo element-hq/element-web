@@ -13,6 +13,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { UserTab } from "./UserTab";
 
 interface IProps {
     onFinished(): void;
@@ -25,7 +26,10 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
 
     private onOpenSettingsClick = (): void => {
         this.props.onFinished();
-        dis.fire(Action.ViewUserSettings);
+        dis.dispatch({
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Security,
+        });
     };
 
     public render(): React.ReactNode {
