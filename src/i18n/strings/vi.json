@@ -1314,8 +1314,7 @@
     },
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
-        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
-        "power_label": "%(userName)s (chỉ số %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác"
     },
     "member_list_back_action_label": "Thành viên phòng",
     "message_edit_dialog_title": "Chỉnh sửa tin nhắn",

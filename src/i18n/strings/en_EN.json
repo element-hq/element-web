@@ -93,7 +93,6 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
@@ -645,12 +644,12 @@
         "mode_plain": "Hide formatting",
         "mode_rich_text": "Show formatting",
         "no_perms_notice": "You do not have permission to post to this room",
-        "placeholder": "Send a message…",
-        "placeholder_encrypted": "Send an encrypted message…",
-        "placeholder_reply": "Send a reply…",
-        "placeholder_reply_encrypted": "Send an encrypted reply…",
-        "placeholder_thread": "Reply to thread…",
-        "placeholder_thread_encrypted": "Reply to encrypted thread…",
+        "placeholder": "Send an unencrypted message…",
+        "placeholder_encrypted": "Send a message…",
+        "placeholder_reply": "Send an unencrypted reply…",
+        "placeholder_reply_encrypted": "Send a reply…",
+        "placeholder_thread": "Reply to unencrypted thread…",
+        "placeholder_thread_encrypted": "Reply to thread…",
         "poll_button": "Poll",
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
         "poll_button_no_perms_title": "Permission Required",
@@ -863,6 +862,7 @@
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Settings explorer",
+        "show_empty_content_events": "Show events with empty content",
         "show_hidden_events": "Show hidden events in timeline",
         "spaces": {
             "one": "<space>",
@@ -920,7 +920,8 @@
             },
             "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Recovery key"
+            "security_key_label": "Recovery key",
+            "security_key_title": "Enter your recovery key"
         },
         "bootstrap_title": "Setting up keys",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
@@ -933,6 +934,7 @@
         "cross_signing_user_warning": "This user has not verified all of their sessions.",
         "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
+        "event_shield_reason_mismatched_sender": "The sender of the event does not match the owner of the device that sent it.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
@@ -1532,6 +1534,9 @@
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
+        "share_history_on_invite": "Share encrypted history with new members",
+        "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
+        "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
@@ -1653,8 +1658,8 @@
         "filter_placeholder": "Search room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
-        "no_matches": "No matches",
-        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
+        "list_title": "Member list",
+        "no_matches": "No matches"
     },
     "member_list_back_action_label": "Room members",
     "message_edit_dialog_title": "Message edits",
@@ -1758,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Admin",
+        "creator": "Owner",
         "custom": "Custom (%(level)s)",
         "custom_level": "Custom level",
         "default": "Default",
@@ -3371,6 +3377,7 @@
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
@@ -3392,6 +3399,7 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
+            "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
             "error_processing_voice_message": "Error processing voice message",

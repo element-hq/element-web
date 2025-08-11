@@ -1256,8 +1256,7 @@
         "toggle_attribution": "Attributie in-/uitschakelen"
     },
     "member_list": {
-        "filter_placeholder": "Kamerleden filteren",
-        "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
+        "filter_placeholder": "Kamerleden filteren"
     },
     "member_list_back_action_label": "Kamerleden",
     "message_edit_dialog_title": "Berichtbewerkingen",

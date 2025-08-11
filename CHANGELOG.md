@@ -1,3 +1,62 @@
+Changes in [1.11.109](https://github.com/element-hq/element-web/releases/tag/v1.11.109) (2025-08-11)
+====================================================================================================
+This release supports the upcoming v12 ("hydra") Matrix room version and is necessary to view and participate in these rooms.
+
+## ✨ Features
+
+* [Backport staging] Allow /upgraderoom command without developer mode enabled ([#30529](https://github.com/element-hq/element-web/pull/30529)). Contributed by @RiotRobot.
+* [Backport staging] Support for creator/owner power level ([#30526](https://github.com/element-hq/element-web/pull/30526)). Contributed by @RiotRobot.
+* New room list: change icon and label of menu item for to start a DM ([#30470](https://github.com/element-hq/element-web/pull/30470)). Contributed by @florianduros.
+* Implement the member list with virtuoso ([#29869](https://github.com/element-hq/element-web/pull/29869)). Contributed by @langleyd.
+* Add labs option for history sharing on invite ([#30313](https://github.com/element-hq/element-web/pull/30313)). Contributed by @richvdh.
+* Bump wysiwyg to 2.39.0 adding support for pasting rich text content in the Rich Text Edtior ([#30421](https://github.com/element-hq/element-web/pull/30421)). Contributed by @langleyd.
+* Support `EventShieldReason.MISMATCHED_SENDER` ([#30403](https://github.com/element-hq/element-web/pull/30403)). Contributed by @richvdh.
+* Change unencrypted and public pills to blue ([#30399](https://github.com/element-hq/element-web/pull/30399)). Contributed by @florianduros.
+* Change color of public room icon ([#30390](https://github.com/element-hq/element-web/pull/30390)). Contributed by @florianduros.
+* Script for updating storybook screenshots ([#30340](https://github.com/element-hq/element-web/pull/30340)). Contributed by @dbkr.
+* Add toggle to hide empty state in devtools ([#30352](https://github.com/element-hq/element-web/pull/30352)). Contributed by @toger5.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Use userId to filter users in non-federated rooms when showing the InviteDialog ([#30537](https://github.com/element-hq/element-web/pull/30537)). Contributed by @RiotRobot.
+* [Backport staging] Catch error when encountering invalid m.room.pinned\_events event ([#30536](https://github.com/element-hq/element-web/pull/30536)). Contributed by @RiotRobot.
+* Update for compatibility with v12 rooms ([#30452](https://github.com/element-hq/element-web/pull/30452)). Contributed by @dbkr.
+* New room list: fix tooltip on presence ([#30474](https://github.com/element-hq/element-web/pull/30474)). Contributed by @florianduros.
+* New room list: add tooltip for presence and room status ([#30472](https://github.com/element-hq/element-web/pull/30472)). Contributed by @florianduros.
+* Fix: Clicking on an item in the member list causes it to scroll to the top rather than show the profile view ([#30455](https://github.com/element-hq/element-web/pull/30455)). Contributed by @langleyd.
+* Put the 'decrypting' tooltip back ([#30446](https://github.com/element-hq/element-web/pull/30446)). Contributed by @dbkr.
+* Use server name explicitly for via. ([#30362](https://github.com/element-hq/element-web/pull/30362)). Contributed by @Half-Shot.
+* fix: replace hardcoded string in poll history dialog ([#30402](https://github.com/element-hq/element-web/pull/30402)). Contributed by @florianduros.
+* fix: replace hardcoded string on qr code back button ([#30401](https://github.com/element-hq/element-web/pull/30401)). Contributed by @florianduros.
+* Fix color of icon button with outline ([#30361](https://github.com/element-hq/element-web/pull/30361)). Contributed by @florianduros.
+
+
+Changes in [1.11.108](https://github.com/element-hq/element-web/releases/tag/v1.11.108) (2025-07-30)
+====================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix downloaded attachments not being decrypted ([#30434](https://github.com/element-hq/element-web/pull/30434)). Contributed by @RiotRobot.
+
+
+Changes in [1.11.107](https://github.com/element-hq/element-web/releases/tag/v1.11.107) (2025-07-29)
+====================================================================================================
+## ✨ Features
+
+* Message preview should show tooltip with the full message on hover ([#30265](https://github.com/element-hq/element-web/pull/30265)). Contributed by @MidhunSureshR.
+* Support rendering notification badges on platforms that do their own icon overlays ([#30315](https://github.com/element-hq/element-web/pull/30315)). Contributed by @Half-Shot.
+* Add SubscriptionViewModel base class ([#30297](https://github.com/element-hq/element-web/pull/30297)). Contributed by @dbkr.
+* Enhancement: Save image on CTRL+S ([#30330](https://github.com/element-hq/element-web/pull/30330)). Contributed by @ioalexander.
+* Add quote functionality to MessageContextMenu (#29893) ([#30323](https://github.com/element-hq/element-web/pull/30323)). Contributed by @AlirezaMrtz.
+* Initial structure for shared component views ([#30216](https://github.com/element-hq/element-web/pull/30216)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix e2e shield being invisible in white mode for encrypted room ([#30411](https://github.com/element-hq/element-web/pull/30411)). Contributed by @RiotRobot.
+* Force ED titlebar color for new room list ([#30332](https://github.com/element-hq/element-web/pull/30332)). Contributed by @florianduros.
+* Add a background color to left panel for macos titlebar in element desktop ([#30328](https://github.com/element-hq/element-web/pull/30328)). Contributed by @florianduros.
+* Fix: Prevent page refresh on Enter key in right panel member search ([#30312](https://github.com/element-hq/element-web/pull/30312)). Contributed by @AlirezaMrtz.
+
+
 Changes in [1.11.106](https://github.com/element-hq/element-web/releases/tag/v1.11.106) (2025-07-15)
 ====================================================================================================
 ## ✨ Features

@@ -7,7 +7,7 @@
 
 import React, { type JSX, type PropsWithChildren } from "react";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 
 /**
  * A component for emphasised text within an {@link EncryptionCard}

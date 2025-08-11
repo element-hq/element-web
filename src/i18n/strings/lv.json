@@ -1398,8 +1398,7 @@
     },
     "member_list": {
         "filter_placeholder": "Atfiltrēt istabas dalībniekus",
-        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus",
-        "power_label": "%(userName)s (tiesību līmenis %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus"
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",

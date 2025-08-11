@@ -1367,8 +1367,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtrar miembros de la sala",
-        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios",
-        "power_label": "%(userName)s (nivel de permisos %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios"
     },
     "member_list_back_action_label": "Miembros de la sala",
     "message_edit_dialog_title": "Ediciones del mensaje",

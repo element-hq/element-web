@@ -1446,8 +1446,7 @@
     },
     "member_list": {
         "filter_placeholder": "Sivanina ny mpikambana ao amin'ny efitrano",
-        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao",
-        "power_label": "%(userName)s(hery%(powerLevelNumber)s )"
+        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao"
     },
     "member_list_back_action_label": "Mpikambana ao amin'ny efitrano",
     "message_edit_dialog_title": "Fanovana hafatra",

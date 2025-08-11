@@ -1088,8 +1088,7 @@
         "share_type_prompt": "Kiel vi volas kunhavigi vian lokon?"
     },
     "member_list": {
-        "filter_placeholder": "Filtri ĉambranojn",
-        "power_label": "%(userName)s (povnivelo je %(powerLevelNumber)s)"
+        "filter_placeholder": "Filtri ĉambranojn"
     },
     "message_edit_dialog_title": "Redaktoj de mesaĝoj",
     "mobile_guide": {

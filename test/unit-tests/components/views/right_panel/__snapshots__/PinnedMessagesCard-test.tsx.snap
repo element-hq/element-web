@@ -50,7 +50,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
       tabindex="-1"
     >
       <div
-        class="mx_Flex mx_EmptyState"
+        class="flex mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg

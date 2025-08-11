@@ -1461,8 +1461,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
-        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti"
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
