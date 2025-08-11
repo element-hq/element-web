@@ -69,9 +69,11 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
+     * Any failures are returned via the {@link CompletionStates} in the result.
+     *
      * @param {array} addresses Array of addresses to invite
      * @param {string} reason Reason for inviting (optional)
-     * @returns {Promise} Resolved when all invitations in the queue are complete
+     * @returns {Promise} Resolved when all invitations in the queue are complete.
      */
     public async invite(addresses: string[], reason?: string): Promise<CompletionStates> {
         if (this.addresses.length > 0) {

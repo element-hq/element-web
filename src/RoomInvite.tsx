@@ -29,6 +29,8 @@ export interface IInviteResult {
  *
  * Simpler interface to {@link MultiInviter}.
  *
+ * Any failures are returned via the `states` in the result.
+ *
  * @param {string} roomId The ID of the room to invite to
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @param {function} progressCallback optional callback, fired after each invite.

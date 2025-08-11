@@ -146,22 +146,13 @@ export async function upgradeRoom(
     return newRoomId;
 }
 
-function inviteUsersToRoom(
+async function inviteUsersToRoom(
     client: MatrixClient,
     roomId: string,
     userIds: string[],
     progressCallback?: () => void,
 ): Promise<void> {
-    return inviteMultipleToRoom(client, roomId, userIds, progressCallback)
-        .then((result) => {
-            const room = client.getRoom(roomId)!;
-            showAnyInviteErrors(result.states, room, result.inviter);
-        })
-        .catch((err) => {
-            logger.error(err.stack);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("invite|failed_title"),
-                description: err?.message ?? _t("invite|failed_generic"),
-            });
-        });
+    const result = await inviteMultipleToRoom(client, roomId, userIds, progressCallback);
+    const room = client.getRoom(roomId)!;
+    showAnyInviteErrors(result.states, room, result.inviter);
 }
