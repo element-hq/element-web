@@ -1372,8 +1372,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
-        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
+        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues"
     },
     "member_list_back_action_label": "Anëtarë dhome",
     "message_edit_dialog_title": "Përpunime mesazhi",

@@ -1035,8 +1035,7 @@
         "toggle_attribution": "דפדפו בין האפשרויות"
     },
     "member_list": {
-        "filter_placeholder": "סינון חברי חדר",
-        "power_label": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)"
+        "filter_placeholder": "סינון חברי חדר"
     },
     "member_list_back_action_label": "חברי החדר",
     "message_edit_dialog_title": "עריכת הודעות",

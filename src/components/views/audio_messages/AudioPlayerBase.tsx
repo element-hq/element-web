@@ -14,7 +14,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { _t } from "../../../languageHandler";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import type SeekBar from "./SeekBar";
+import type LegacySeekBar from "./LegacySeekBar";
 import type PlayPauseButton from "./PlayPauseButton";
 
 export interface IProps {
@@ -31,7 +31,7 @@ interface IState {
 }
 
 export default abstract class AudioPlayerBase<T extends IProps = IProps> extends React.PureComponent<T, IState> {
-    protected seekRef = createRef<SeekBar>();
+    protected seekRef = createRef<LegacySeekBar>();
     protected playPauseRef = createRef<PlayPauseButton>();
 
     public constructor(props: T) {

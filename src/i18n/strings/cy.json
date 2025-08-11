@@ -97,7 +97,6 @@
         "maximise": "Mwyhau",
         "mention": "Crybwyll",
         "minimise": "Lleihau",
-        "new_message": "Neges newydd",
         "new_room": "Ystafell newydd",
         "new_video_room": "Ystafell fideo newydd",
         "next": "Nesaf",
@@ -1691,8 +1690,7 @@
         "filter_placeholder": "Hidlo aelodau'r ystafell",
         "invite_button_no_perms_tooltip": "Nid oes gennych ganiatâd i wahodd defnyddwyr",
         "invited_label": "Gwahoddwyd",
-        "no_matches": "Dim cyfatebiaeth",
-        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
+        "no_matches": "Dim cyfatebiaeth"
     },
     "member_list_back_action_label": "Aelodau'r ystafell",
     "message_edit_dialog_title": "Golygiadau neges",

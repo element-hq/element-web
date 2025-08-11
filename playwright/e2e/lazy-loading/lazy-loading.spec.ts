@@ -30,6 +30,10 @@ test.describe("Lazy Loading", () => {
     });
 
     test.beforeEach(async ({ page, homeserver, user, bot, app }) => {
+        // The charlies were running off the bottom of the screen.
+        // We no longer overscan the member list so the result is they are not in the dom.
+        // Increase the viewport size to ensure they are.
+        await page.setViewportSize({ width: 1000, height: 1000 });
         for (let i = 1; i <= 10; i++) {
             const displayName = `Charly #${i}`;
             const bot = new Bot(page, homeserver, { displayName, startClient: false, autoAcceptInvites: false });

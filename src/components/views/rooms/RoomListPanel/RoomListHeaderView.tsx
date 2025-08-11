@@ -14,9 +14,10 @@ import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
 import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/preferences";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
@@ -49,7 +50,7 @@ export function RoomListHeaderView(): JSX.Element {
                 {vm.displayComposeMenu ? (
                     <ComposeMenu vm={vm} />
                 ) : (
-                    <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
+                    <IconButton aria-label={_t("action|start_chat")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
                         <ComposeIcon color="var(--cpd-color-icon-secondary)" />
                     </IconButton>
                 )}
@@ -143,12 +144,7 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
                 </IconButton>
             }
         >
-            <MenuItem
-                Icon={UserAddIcon}
-                label={_t("action|new_message")}
-                onSelect={vm.createChatRoom}
-                hideChevron={true}
-            />
+            <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={vm.createChatRoom} hideChevron={true} />
             {vm.canCreateRoom && (
                 <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={vm.createRoom} hideChevron={true} />
             )}

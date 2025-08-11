@@ -1337,8 +1337,7 @@
         "toggle_attribution": "切换属性"
     },
     "member_list": {
-        "filter_placeholder": "过滤房间成员",
-        "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
+        "filter_placeholder": "过滤房间成员"
     },
     "member_list_back_action_label": "房间成员",
     "message_edit_dialog_title": "消息编辑历史",

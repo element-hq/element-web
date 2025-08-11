@@ -12,7 +12,7 @@ import { VerifiedIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 
 import { useUserInfoVerificationViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
 import { type IDevice } from "../UserInfo";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 
 export const UserInfoHeaderVerificationView: React.FC<{

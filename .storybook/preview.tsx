@@ -5,7 +5,8 @@ import "../res/css/shared.pcss";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { FORCE_RE_RENDER } from "storybook/internal/core-events";
-import { setLanguage } from "../src/shared-components/i18n";
+import { setLanguage } from "../src/shared-components/utils/i18n";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 export const globalTypes = {
     theme: {
@@ -82,9 +83,24 @@ export const withLanguageProvider: Decorator = (Story, context) => {
     );
 };
 
+const withTooltipProvider: Decorator = (Story) => {
+    return (
+        <TooltipProvider>
+            <Story />
+        </TooltipProvider>
+    );
+};
+
 const preview: Preview = {
     tags: ["autodocs"],
-    decorators: [withThemeProvider, withLanguageProvider],
+    decorators: [withThemeProvider, withLanguageProvider, withTooltipProvider],
+    parameters: {
+        options: {
+            storySort: {
+                method: "alphabetical",
+            },
+        },
+    },
 };
 
 export default preview;

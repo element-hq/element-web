@@ -76,13 +76,13 @@ import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
-import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
+import { ElementCallEventType } from "../../../call-types";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -729,11 +729,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.state.shieldColour !== EventShieldColour.NONE) {
             let shieldReasonMessage: string;
             switch (this.state.shieldReason) {
-                case null:
-                case EventShieldReason.UNKNOWN:
-                    shieldReasonMessage = _t("error|unknown");
-                    break;
-
                 case EventShieldReason.UNVERIFIED_IDENTITY:
                     shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
                     break;
@@ -760,6 +755,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
                 case EventShieldReason.VERIFICATION_VIOLATION:
                     shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+                    break;
+
+                case EventShieldReason.MISMATCHED_SENDER:
+                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
+                    break;
+
+                default:
+                    shieldReasonMessage = _t("error|unknown");
                     break;
             }
 
@@ -981,7 +984,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent || this.state.contextMenu,
             mx_EventTile_continuation:
-                isContinuation || eventType === EventType.CallInvite || ElementCall.CALL_EVENT_TYPE.matches(eventType),
+                isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
@@ -1034,7 +1037,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         } else if (
             (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File) ||
             eventType === EventType.CallInvite ||
-            ElementCall.CALL_EVENT_TYPE.matches(eventType)
+            ElementCallEventType.matches(eventType)
         ) {
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;

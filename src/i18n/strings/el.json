@@ -1370,8 +1370,7 @@
         "share_type_prompt": "Τι τύπο τοποθεσίας θέλετε να μοιραστείτε;"
     },
     "member_list": {
-        "filter_placeholder": "Φιλτράρισμα μελών",
-        "power_label": "%(userName)s (δύναμη %(powerLevelNumber)s)"
+        "filter_placeholder": "Φιλτράρισμα μελών"
     },
     "member_list_back_action_label": "Μέλη δωματίου",
     "message_edit_dialog_title": "Επεξεργασίες μηνυμάτων",

@@ -3,7 +3,7 @@
 exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -24,7 +24,7 @@ exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] =
 exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -45,7 +45,7 @@ exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -66,7 +66,7 @@ exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 exports[`<EmptyRoomList /> should display the empty state for the invite filter 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -91,7 +91,7 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
 exports[`<EmptyRoomList /> should display the empty state for the low priority filter 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -116,7 +116,7 @@ exports[`<EmptyRoomList /> should display the empty state for the low priority f
 exports[`<EmptyRoomList /> should display the empty state for the mention filter 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -141,7 +141,7 @@ exports[`<EmptyRoomList /> should display the empty state for the mention filter
 exports[`<EmptyRoomList /> should display the empty state for the unread filter 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -166,7 +166,7 @@ exports[`<EmptyRoomList /> should display the empty state for the unread filter 
 exports[`<EmptyRoomList /> should not render the new room button if the user doesn't have the rights to create a room 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -181,7 +181,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
       Get started by messaging someone
     </span>
     <div
-      class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="flex mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -200,10 +200,10 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+            d="m1.5 21.25 1.45-4.95a10.2 10.2 0 0 1-.712-2.1A10.2 10.2 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22q-1.125 0-2.2-.238a10.2 10.2 0 0 1-2.1-.712L2.75 22.5a.94.94 0 0 1-1-.25.94.94 0 0 1-.25-1m2.45-1.2 3.2-.95a1 1 0 0 1 .275-.062q.15-.013.275-.013.225 0 .438.038.212.036.412.137a7.4 7.4 0 0 0 1.675.6Q11.1 20 12 20q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12q0 .9.2 1.775t.6 1.675q.176.325.188.688t-.088.712z"
           />
         </svg>
-        New message
+        Start chat
       </button>
     </div>
   </div>
@@ -213,7 +213,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
 exports[`<EmptyRoomList /> should render the default placeholder when there is no filter 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_EmptyRoomList_GenericPlaceholder"
+    class="flex mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -228,7 +228,7 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
       Get started by messaging someone or by creating a room
     </span>
     <div
-      class="mx_Flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="flex mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -247,10 +247,10 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+            d="m1.5 21.25 1.45-4.95a10.2 10.2 0 0 1-.712-2.1A10.2 10.2 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22q-1.125 0-2.2-.238a10.2 10.2 0 0 1-2.1-.712L2.75 22.5a.94.94 0 0 1-1-.25.94.94 0 0 1-.25-1m2.45-1.2 3.2-.95a1 1 0 0 1 .275-.062q.15-.013.275-.013.225 0 .438.038.212.036.412.137a7.4 7.4 0 0 0 1.675.6Q11.1 20 12 20q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12q0 .9.2 1.775t.6 1.675q.176.325.188.688t-.088.712z"
           />
         </svg>
-        New message
+        Start chat
       </button>
       <button
         class="_button_vczzf_8 _has-icon_vczzf_57"

@@ -1360,8 +1360,7 @@
         "toggle_attribution": "属性を切り替える"
     },
     "member_list": {
-        "filter_placeholder": "ルームのメンバーを絞り込む",
-        "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
+        "filter_placeholder": "ルームのメンバーを絞り込む"
     },
     "member_list_back_action_label": "ルームのメンバー",
     "message_edit_dialog_title": "メッセージの編集履歴",
