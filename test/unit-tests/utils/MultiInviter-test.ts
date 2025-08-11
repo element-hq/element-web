@@ -15,7 +15,7 @@ import Modal, { type ComponentType, type ComponentProps } from "../../../src/Mod
 import SettingsStore from "../../../src/settings/SettingsStore";
 import MultiInviter, { type CompletionStates } from "../../../src/utils/MultiInviter";
 import * as TestUtilsMatrix from "../../test-utils";
-import type AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
+import AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
 import ConfirmUserActionDialog from "../../../src/components/views/dialogs/ConfirmUserActionDialog";
 
 const ROOMID = "!room:server";
@@ -55,11 +55,12 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 };
 
 const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
-    mocked(Modal.createDialog).mockImplementation(
-        (Element: ComponentType, props?: ComponentProps<ComponentType>): any => {
+    mocked(Modal.createDialog).mockImplementation((Element: ComponentType, props?: ComponentProps<ComponentType>) => {
+        if (Element === AskInviteAnywayDialog) {
             (props as ComponentProps<typeof AskInviteAnywayDialog>)[callbackName]();
-        },
-    );
+        }
+        return { close: jest.fn(), finished: new Promise(() => {}) };
+    });
 };
 
 const expectAllInvitedResult = (result: CompletionStates) => {
@@ -76,6 +77,7 @@ describe("MultiInviter", () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
+        mocked(Modal.createDialog).mockReturnValue({ close: jest.fn(), finished: new Promise(() => {}) });
 
         TestUtilsMatrix.stubClient();
         client = MatrixClientPeg.safeGet() as jest.Mocked<MatrixClient>;
@@ -95,6 +97,22 @@ describe("MultiInviter", () => {
     });
 
     describe("invite", () => {
+        it("should show a progress dialog while the invite happens", async () => {
+            const mockModalHandle = { close: jest.fn(), finished: new Promise<[]>(() => {}) };
+            mocked(Modal.createDialog).mockReturnValue(mockModalHandle);
+
+            const invitePromise = Promise.withResolvers<{}>();
+            client.invite.mockReturnValue(invitePromise.promise);
+
+            const resultPromise = inviter.invite([MXID1]);
+            expect(Modal.createDialog).toHaveBeenCalledTimes(1);
+            expect(mockModalHandle.close).not.toHaveBeenCalled();
+
+            invitePromise.resolve({});
+            await resultPromise;
+            expect(mockModalHandle.close).toHaveBeenCalled();
+        });
+
         describe("with promptBeforeInviteUnknownUsers = false", () => {
             beforeEach(() => mockPromptBeforeInviteUnknownUsers(false));
 

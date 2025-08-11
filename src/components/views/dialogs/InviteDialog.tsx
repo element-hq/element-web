@@ -623,7 +623,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds);
+            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, {
+                // We show our own progress body, so don't pop up a separate dialog.
+                inhibitProgressDialog: true,
+            });
             if (!this.shouldAbortAfterInviteError(result, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
