@@ -26,7 +26,7 @@ export class Disposables {
      * Relinquish all tracked disposable values
      */
     public dispose(): void {
-        this.throwIfDisposed();
+        if (this.isDisposed) return;
         this._isDisposed = true;
         for (const disposable of this.disposables) {
             if (typeof disposable === "function") {
