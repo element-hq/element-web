@@ -42,9 +42,9 @@ describe("RoomListViewModel", () => {
         const { rooms } = mockAndCreateRooms();
         const { result: vm } = renderHook(() => useRoomListViewModel());
 
-        expect(vm.current.rooms).toHaveLength(10);
+        expect(vm.current.roomsState).toHaveLength(10);
         for (const room of rooms) {
-            expect(vm.current.rooms).toContain(room);
+            expect(vm.current.roomsState).toContain(room);
         }
     });
 
@@ -57,7 +57,7 @@ describe("RoomListViewModel", () => {
         await act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
 
         await waitFor(() => {
-            expect(vm.current.rooms).toContain(newRoom);
+            expect(vm.current.roomsState).toContain(newRoom);
         });
     });
 
@@ -176,7 +176,7 @@ describe("RoomListViewModel", () => {
     describe("Sticky room and active index", () => {
         function expectActiveRoom(vm: ReturnType<typeof useRoomListViewModel>, i: number, roomId: string) {
             expect(vm.activeIndex).toEqual(i);
-            expect(vm.rooms[i].roomId).toEqual(roomId);
+            expect(vm.roomsState[i].roomId).toEqual(roomId);
         }
 
         it("active index is calculated with the last opened room in a space", () => {

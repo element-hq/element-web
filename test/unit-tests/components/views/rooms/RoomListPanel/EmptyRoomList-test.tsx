@@ -19,7 +19,7 @@ describe("<EmptyRoomList />", () => {
     beforeEach(() => {
         vm = {
             isLoadingRooms: false,
-            rooms: [],
+            roomsState: [],
             primaryFilters: [],
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
