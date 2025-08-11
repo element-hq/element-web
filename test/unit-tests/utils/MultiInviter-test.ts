@@ -24,10 +24,14 @@ const MXID1 = "@user1:server";
 const MXID2 = "@user2:server";
 const MXID3 = "@user3:server";
 
-const MXID_PROFILE_STATES: Record<string, Promise<any>> = {
-    [MXID1]: Promise.resolve({}),
-    [MXID2]: Promise.reject(new MatrixError({ errcode: "M_FORBIDDEN" })),
-    [MXID3]: Promise.reject(new MatrixError({ errcode: "M_NOT_FOUND" })),
+const MXID_PROFILE_STATES: Record<string, () => {}> = {
+    [MXID1]: () => ({}),
+    [MXID2]: () => {
+        throw new MatrixError({ errcode: "M_FORBIDDEN" });
+    },
+    [MXID3]: () => {
+        throw new MatrixError({ errcode: "M_NOT_FOUND" });
+    },
 };
 
 jest.mock("../../../src/Modal", () => ({
@@ -80,8 +84,10 @@ describe("MultiInviter", () => {
         client.invite.mockResolvedValue({});
 
         client.getProfileInfo = jest.fn();
-        client.getProfileInfo.mockImplementation((userId: string) => {
-            return MXID_PROFILE_STATES[userId] || Promise.reject();
+        client.getProfileInfo.mockImplementation(async (userId: string) => {
+            const m = MXID_PROFILE_STATES[userId];
+            if (m) return m();
+            throw new Error();
         });
         client.unban = jest.fn();
 
