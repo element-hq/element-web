@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { createElement } from "react";
 
 import type {
     CustomComponentsApi as ICustomComponentsApi,
@@ -16,7 +17,6 @@ import type {
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
 } from "@element-hq/element-web-module-api";
-import type React from "react";
 
 type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRenderer"]>[0];
 
@@ -112,7 +112,11 @@ export class CustomComponentsApi implements ICustomComponentsApi {
                 // Fall through to original component. If the module encounters an error we still want to display messages to the user!
             }
         }
-        return originalComponent?.() ?? null;
+
+        if (originalComponent) {
+            return createElement(originalComponent);
+        }
+        return null;
     }
 
     /**
