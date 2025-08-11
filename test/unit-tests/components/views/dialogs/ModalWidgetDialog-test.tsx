@@ -12,11 +12,11 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import { mocked } from "jest-mock";
 import { findLast, last } from "lodash";
 
-import ModalWidgetDialog from "../../../../src/components/views/dialogs/ModalWidgetDialog";
-import { stubClient } from "../../../test-utils";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../src/dispatcher/actions";
-import SettingsStore from "../../../../src/settings/SettingsStore";
+import ModalWidgetDialog from "../../../../../src/components/views/dialogs/ModalWidgetDialog";
+import { stubClient } from "../../../../test-utils";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 jest.mock("matrix-widget-api", () => ({
     ...jest.requireActual("matrix-widget-api"),
