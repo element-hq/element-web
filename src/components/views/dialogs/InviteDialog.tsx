@@ -40,7 +40,6 @@ import Field from "../elements/Field";
 import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
 import Dialpad from "../voip/DialPad";
 import QuestionDialog from "./QuestionDialog";
-import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import LegacyCallHandler from "../../../LegacyCallHandler";
@@ -65,6 +64,7 @@ import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
 import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
+import InviteProgressBody from "./InviteProgressBody.tsx";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -329,8 +329,14 @@ interface IInviteDialogState {
     dialPadValue: string;
     currentTabId: TabId;
 
-    // These two flags are used for the 'Go' button to communicate what is going on.
+    /**
+     * True if we are sending the invites.
+     *
+     * We will grey out the action button, hide the suggestions, and display a spinner.
+     */
     busy: boolean;
+
+    /** Error from the last attempt to send invites. */
     errorText?: string;
 }
 
@@ -1328,11 +1334,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
      * "CallTransfer" one.
      */
     private renderMainTab(): JSX.Element {
-        let spinner: JSX.Element | undefined;
-        if (this.state.busy) {
-            spinner = <Spinner w={20} h={20} />;
-        }
-
         let helpText;
         let buttonText;
         let goButtonFn: (() => Promise<void>) | null = null;
@@ -1437,12 +1438,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
                 <div className="mx_InviteDialog_addressBar">
                     {this.renderEditor()}
-                    <div className="mx_InviteDialog_buttonAndSpinner">
-                        {goButton}
-                        {spinner}
-                    </div>
+                    {goButton}
                 </div>
-                {this.renderSuggestions()}
+                {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
             </React.Fragment>
         );
     }
