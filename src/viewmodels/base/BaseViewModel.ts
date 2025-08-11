@@ -41,4 +41,11 @@ export abstract class BaseViewModel<T, P> implements ViewModel<T> {
     public dispose(): void {
         this.disposables.dispose();
     }
+
+    /**
+     * Whether this view-model has been disposed.
+     */
+    public get isDisposed(): boolean {
+        return this.disposables.isDisposed;
+    }
 }
