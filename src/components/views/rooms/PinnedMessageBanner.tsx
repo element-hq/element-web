@@ -64,6 +64,8 @@ export function PinnedMessageBanner({
         setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
+    const isLastMessage = currentEventIndex === eventCount - 1;
+
     const pinnedEvent = pinnedEvents[currentEventIndex];
     useNotifyTimeline(pinnedEvent, resizeNotifier);
 
@@ -90,13 +92,18 @@ export function PinnedMessageBanner({
 
     return (
         <div
+            role="region"
             className="mx_PinnedMessageBanner"
             data-single-message={isSinglePinnedEvent}
             aria-label={_t("room|pinned_message_banner|description")}
             data-testid="pinned-message-banner"
         >
             <button
-                aria-label={_t("room|pinned_message_banner|go_to_message")}
+                aria-description={
+                    isLastMessage
+                        ? _t("room|pinned_message_banner|go_to_newest_message")
+                        : _t("room|pinned_message_banner|go_to_next_message")
+                }
                 type="button"
                 className="mx_PinnedMessageBanner_main"
                 onClick={onBannerClick}

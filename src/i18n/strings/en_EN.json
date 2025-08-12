@@ -2063,8 +2063,9 @@
         "pinned_message_banner": {
             "button_close_list": "Close list",
             "button_view_all": "View all",
-            "description": "This room has pinned messages. Click to view them.",
-            "go_to_message": "View the pinned message in the timeline.",
+            "description": "Pinned messages",
+            "go_to_newest_message": "View the pinned message in the timeline and the newest pinned message here",
+            "go_to_next_message": "View the pinned message in the timeline and the next oldest pinned message here",
             "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
         },
         "read_topic": "Click to read topic",
