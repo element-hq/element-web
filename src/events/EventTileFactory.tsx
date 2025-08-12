@@ -45,6 +45,7 @@ import ModuleApi from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
 import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
 import { ElementCallEventType } from "../call-types";
+import { useAutoDisposedViewModel } from "../viewmodels/base/useAutoDisposedViewModel";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -79,7 +80,7 @@ const LegacyCallEventFactory: Factory<EventTileTypeProps & { callEventGrouper: L
 );
 const CallEventFactory: Factory = (props) => <CallEvent {...props} />;
 export const TextualEventFactory: Factory = (props) => {
-    const vm = new TextualEventViewModel(props);
+    const vm = useAutoDisposedViewModel(() => new TextualEventViewModel(props));
     return <TextualEventView vm={vm} />;
 };
 const VerificationReqFactory: Factory = (props) => <MKeyVerificationRequest {...props} />;
