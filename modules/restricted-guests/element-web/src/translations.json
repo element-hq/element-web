@@ -1,0 +1,38 @@
+{
+    "register_dialog_register_username_label": {
+        "en": "Username",
+        "de": "Benutzername"
+    },
+    "register_dialog_title": {
+        "en": "Request room access",
+        "de": "Raumbeitritt anfragen"
+    },
+    "register_dialog_busy": {
+        "en": "Creating your account...",
+        "de": "Erstelle dein Konto..."
+    },
+    "register_dialog_continue_label": {
+        "en": "Continue as guest",
+        "de": "Als Gast fortfahren"
+    },
+    "register_dialog_field_label": {
+        "en": "Name",
+        "de": "Name"
+    },
+    "register_dialog_existing_account": {
+        "en": "I already have an account.",
+        "de": "Ich habe bereits einen Account."
+    },
+    "register_dialog_error": {
+        "en": "The account creation failed.",
+        "de": "Die Anmeldung als Gastnutzer ist fehlgeschlagen."
+    },
+    "join_message": {
+        "en": "Join the room to participate",
+        "de": "Treten Sie dem Raum bei, um teilzunehmen"
+    },
+    "join_cta": {
+        "en": "Join",
+        "de": "Verbinden"
+    }
+}
