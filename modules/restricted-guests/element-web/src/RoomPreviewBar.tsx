@@ -14,7 +14,7 @@ import { useWatchable } from "@element-hq/element-web-module-api";
 import { ModuleConfig } from "./config.ts";
 import RegisterDialog from "./RegisterDialog.tsx";
 
-export interface RoomPreviewBarProps {
+interface RoomPreviewBarProps {
     api: Api;
     config: ModuleConfig;
     children: JSX.Element;

@@ -34,7 +34,7 @@ export const ModuleConfig = z.object({
 
 export type ModuleConfig = z.infer<typeof ModuleConfig>;
 
-export type ConfigSchema = ZodSchema<z.output<typeof ModuleConfig>, ZodTypeDef, z.input<typeof ModuleConfig>>;
+type ConfigSchema = ZodSchema<z.output<typeof ModuleConfig>, ZodTypeDef, z.input<typeof ModuleConfig>>;
 
 export const CONFIG_KEY = "io.element.element-web-modules.restricted-guests";
 

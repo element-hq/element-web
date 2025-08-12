@@ -11,7 +11,7 @@ import { Form } from "@vector-im/compound-web";
 
 import { ModuleConfig } from "./config.ts";
 
-export interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
+interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
     api: Api;
     config: ModuleConfig;
 }
