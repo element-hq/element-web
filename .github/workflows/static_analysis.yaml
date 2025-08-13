@@ -52,6 +52,7 @@ jobs:
                 error|misconfigured
                 welcome_to_element
                 devtools|settings|elementCallUrl
+                labs|sliding_sync_description
 
     rethemendex_lint:
         name: "Rethemendex Check"
