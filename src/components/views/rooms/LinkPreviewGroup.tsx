@@ -25,9 +25,10 @@ interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
     onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
+    id?: string; // optional ID for the root element
 }
 
-const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
+const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, id }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
     const [mediaVisible] = useMediaVisible(mxEvent.getId(), mxEvent.getRoomId());
@@ -55,7 +56,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) =
     }
 
     return (
-        <div className="mx_LinkPreviewGroup">
+        <div className="mx_LinkPreviewGroup" id={id}>
             {showPreviews.map(([link, preview], i) => (
                 <LinkPreviewWidget
                     mediaVisible={mediaVisible}

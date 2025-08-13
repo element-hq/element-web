@@ -343,7 +343,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.replacingEventId) {
             body = (
-                <div dir="auto" className="mx_EventTile_annotated">
+                <div dir="auto" className="mx_EventTile_annotated" id={this.props.id}>
                     {body}
                     {this.renderEditedMarker()}
                 </div>
@@ -351,7 +351,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (this.props.isSeeingThroughMessageHiddenForModeration) {
             body = (
-                <div dir="auto" className="mx_EventTile_annotated">
+                <div dir="auto" className="mx_EventTile_annotated" id={this.props.id}>
                     {body}
                     {this.renderPendingModerationMarker()}
                 </div>
@@ -359,10 +359,15 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
 
         if (this.props.highlightLink) {
-            body = <a href={this.props.highlightLink}>{body}</a>;
+            body = (
+                <a href={this.props.highlightLink} id={this.props.id}>
+                    {body}
+                </a>
+            );
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
             body = (
                 <AccessibleButton
+                    id={this.props.id}
                     kind="link_inline"
                     onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
                 >
@@ -375,6 +380,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
             widgets = (
                 <LinkPreviewGroup
+                    id={this.props.id}
                     links={this.state.links}
                     mxEvent={this.props.mxEvent}
                     onCancelClick={this.onCancelClick}
@@ -384,7 +390,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
+                <div
+                    id={this.props.id}
+                    className="mx_MEmoteBody mx_EventTile_content"
+                    onClick={this.onBodyLinkClick}
+                    dir="auto"
+                >
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
@@ -397,7 +408,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                <div id={this.props.id} className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
@@ -405,14 +416,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isCaption) {
             return (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
+                <div id={this.props.id} className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+            <div id={this.props.id} className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                 {body}
                 {widgets}
             </div>
