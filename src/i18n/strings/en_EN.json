@@ -1538,7 +1538,7 @@
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
-        "sliding_sync_description": "Under active development, cannot be disabled.",
+        "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
