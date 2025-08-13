@@ -572,7 +572,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         return (
             <span>
                 <WidgetAvatar app={this.props.app} size="20px" />
-                <h3>{name}</h3>
+                <h1>{name}</h1>
                 <span>
                     {title ? titleSpacer : ""}
                     {title}
