@@ -151,12 +151,26 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         `_${clientUserId}_${clientDeviceId}`,
                     ).raw,
                 );
+                this.allowedCapabilities.add(
+                    WidgetEventCapability.forStateEvent(
+                        EventDirection.Send,
+                        "org.matrix.msc3401.call.member",
+                        `_${clientUserId}_${clientDeviceId}_m.call`,
+                    ).raw,
+                );
                 // Version with no leading underscore, for room versions whose auth rules allow it
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
                         "org.matrix.msc3401.call.member",
                         `${clientUserId}_${clientDeviceId}`,
+                    ).raw,
+                );
+                this.allowedCapabilities.add(
+                    WidgetEventCapability.forStateEvent(
+                        EventDirection.Send,
+                        "org.matrix.msc3401.call.member",
+                        `${clientUserId}_${clientDeviceId}_m.call`,
                     ).raw,
                 );
             }
