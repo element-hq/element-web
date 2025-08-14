@@ -13,9 +13,9 @@ import {
     Field,
     IconButton,
     Label,
+    PasswordControl,
     Root,
     Text,
-    TextControl,
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
@@ -350,7 +350,11 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
                 <Label>{_t("settings|encryption|recovery|enter_recovery_key")}</Label>
 
-                <TextControl required={true} />
+                <PasswordControl
+                    required={true}
+                    title={_t("settings|encryption|recovery|enter_recovery_key")}
+                    className="mx_KeyForm_password mx_no_textinput"
+                />
                 {isKeyInvalidAndFilled && (
                     <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
                 )}
