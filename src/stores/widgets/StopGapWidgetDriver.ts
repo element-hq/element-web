@@ -144,6 +144,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             const clientDeviceId = MatrixClientPeg.safeGet().getDeviceId();
             if (clientDeviceId !== null) {
                 // For the session membership type compliant with MSC4143
+                // Note MSC4143 still uses the org.matrix.msc3401 unstable prefix
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
