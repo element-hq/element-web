@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useEffect, useRef, useState } from "react";
+import React, { type JSX, useEffect, useId, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
@@ -64,8 +64,12 @@ export function PinnedMessageBanner({
         setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
+    const isLastMessage = currentEventIndex === eventCount - 1;
+
     const pinnedEvent = pinnedEvents[currentEventIndex];
     useNotifyTimeline(pinnedEvent, resizeNotifier);
+
+    const id = useId();
 
     if (!pinnedEvent) return null;
 
@@ -90,18 +94,24 @@ export function PinnedMessageBanner({
 
     return (
         <div
+            role="region"
             className="mx_PinnedMessageBanner"
             data-single-message={isSinglePinnedEvent}
             aria-label={_t("room|pinned_message_banner|description")}
             data-testid="pinned-message-banner"
         >
             <button
-                aria-label={_t("room|pinned_message_banner|go_to_message")}
+                aria-label={
+                    isLastMessage
+                        ? _t("room|pinned_message_banner|go_to_newest_message")
+                        : _t("room|pinned_message_banner|go_to_next_message")
+                }
+                aria-describedby={id}
                 type="button"
                 className="mx_PinnedMessageBanner_main"
                 onClick={onBannerClick}
             >
-                <div className="mx_PinnedMessageBanner_content">
+                <div className="mx_PinnedMessageBanner_content" id={id}>
                     <Indicators count={eventCount} currentIndex={currentEventIndex} />
                     <PinIcon width="20px" height="20px" className="mx_PinnedMessageBanner_PinIcon" />
                     {!isSinglePinnedEvent && (

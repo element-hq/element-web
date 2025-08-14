@@ -139,7 +139,12 @@ describe("<PinnedMessageBanner />", () => {
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
 
         const { asFragment, rerender } = renderBanner();
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the newest pinned message here",
+            }),
+        );
         expect(screen.getByText("First pinned message")).toBeVisible();
 
         jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
@@ -162,7 +167,11 @@ describe("<PinnedMessageBanner />", () => {
         renderBanner();
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
 
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the newest pinned message here",
+            }),
+        );
         expect(screen.getByText("First pinned message")).toBeVisible();
         expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 Pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
@@ -173,7 +182,11 @@ describe("<PinnedMessageBanner />", () => {
             metricsTrigger: undefined, // room doesn't change
         });
 
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the next oldest pinned message here",
+            }),
+        );
         expect(screen.getByText("Second pinned message")).toBeVisible();
         expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
@@ -224,7 +237,11 @@ describe("<PinnedMessageBanner />", () => {
             // The banner is displayed, so we need to resize the timeline
             expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
 
-            await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+            await userEvent.click(
+                screen.getByRole("button", {
+                    name: "View the pinned message in the timeline and the newest pinned message here",
+                }),
+            );
             await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
             // The banner is already displayed, so we don't need to resize the timeline
             expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
