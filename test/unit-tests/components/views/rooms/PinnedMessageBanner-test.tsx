@@ -142,7 +142,7 @@ describe("<PinnedMessageBanner />", () => {
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
         await userEvent.click(
             screen.getByRole("button", {
-                name: "2 of 2 Pinned messages Second pinned message",
+                name: "View the pinned message in the timeline and the newest pinned message here",
             }),
         );
         expect(screen.getByText("First pinned message")).toBeVisible();
@@ -169,7 +169,7 @@ describe("<PinnedMessageBanner />", () => {
 
         await userEvent.click(
             screen.getByRole("button", {
-                name: "2 of 2 Pinned messages Second pinned message",
+                name: "View the pinned message in the timeline and the newest pinned message here",
             }),
         );
         expect(screen.getByText("First pinned message")).toBeVisible();
@@ -182,7 +182,11 @@ describe("<PinnedMessageBanner />", () => {
             metricsTrigger: undefined, // room doesn't change
         });
 
-        await userEvent.click(screen.getByRole("button", { name: "1 of 2 Pinned messages First pinned message" }));
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the next oldest pinned message here",
+            }),
+        );
         expect(screen.getByText("Second pinned message")).toBeVisible();
         expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
@@ -235,7 +239,7 @@ describe("<PinnedMessageBanner />", () => {
 
             await userEvent.click(
                 screen.getByRole("button", {
-                    name: "2 of 2 Pinned messages Second pinned message",
+                    name: "View the pinned message in the timeline and the newest pinned message here",
                 }),
             );
             await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
