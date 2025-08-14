@@ -27,7 +27,7 @@ Element has several tiers of support for different environments:
 - Best effort
     - Definition:
         - Issues **accepted**, regressions **do not block** the release
-        - The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        - The wider Element Products (including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
         - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
     - Last major release of Firefox ESR and Chrome/Edge Extended Stable
 - Community Supported
