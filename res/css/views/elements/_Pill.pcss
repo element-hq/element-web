@@ -11,8 +11,7 @@ Please see LICENSE files in the repository root for full details.
     line-height: $font-17px;
     border-radius: $font-16px;
     vertical-align: text-top;
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     box-sizing: border-box;
     max-width: 100%;
     overflow: hidden;
@@ -57,6 +56,8 @@ Please see LICENSE files in the repository root for full details.
         margin-inline-start: -0.3em; /* Otherwise the gap is too large */
         margin-inline-end: 0.2em;
         min-width: $font-16px; /* ensure the avatar is not compressed */
+        user-select: text;
+        vertical-align: -2.5px;
     }
 
     .mx_Pill_text {
