@@ -13,6 +13,7 @@ import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
 import { type ListContext, ListView } from "../../../utils/ListView";
 import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";
+import { Components } from "react-virtuoso";
 
 interface RoomListProps {
     /**
@@ -49,6 +50,8 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
                     isSelected={isSelected}
                     isFocused={isFocused}
                     tabIndex={isRovingItem ? 0 : -1}
+                    roomIndex={index}
+                    roomCount={rooms.rooms.length}
                     onFocus={onFocus}
                 />
             );
@@ -84,7 +87,7 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
             }}
             initialTopMostItemIndex={activeIndex}
             data-testid="room-list"
-            role="grid"
+            role="listbox"
             aria-label={_t("room_list|list_title")}
             fixedItemHeight={48}
             items={rooms.rooms}
