@@ -77,6 +77,9 @@ export class AudioPlayerViewModel
 
     public constructor(props: Props) {
         super(props, AudioPlayerViewModel.computeSnapshot(props.playback, props.mediaName));
+        this.disposables.trackListener(props.playback, UPDATE_EVENT, this.setSnapshot);
+        // There is no unsubscribe method in SimpleObservable
+        this.props.playback.clockInfo.liveData.onUpdate(this.setSnapshot);
 
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
@@ -95,15 +98,6 @@ export class AudioPlayerViewModel
             this.error = true;
             this.setSnapshot();
         }
-    }
-
-    protected addDownstreamSubscription(): void {
-        this.props.playback.on(UPDATE_EVENT, this.setSnapshot);
-        // There is no unsubscribe method in SimpleObservable
-        this.props.playback.clockInfo.liveData.onUpdate(this.setSnapshot);
-    }
-    protected removeDownstreamSubscription(): void {
-        this.props.playback.off(UPDATE_EVENT, this.setSnapshot);
     }
 
     /**
