@@ -46,13 +46,7 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex
-            className="mx_RoomListItemMenuView"
-            align="center"
-            gap="var(--cpd-space-1x)"
-            // We don't want keyboard navigation event to bubble up to the ListView changing the focused item
-            onKeyDown={(e) => e.stopPropagation()}
-        >
+        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
             {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>
@@ -103,7 +97,10 @@ interface MoreOptionContentProps {
 
 export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     return (
-        <>
+        <div
+            // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
+            onKeyDown={(e) => e.stopPropagation()}
+        >
             {vm.canMarkAsRead && (
                 <MenuItem
                     Icon={MarkAsReadIcon}
@@ -163,7 +160,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                 onClick={(evt) => evt.stopPropagation()}
                 hideChevron={true}
             />
-        </>
+        </div>
     );
 }
 
@@ -202,54 +199,59 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
     const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
 
     return (
-        <Menu
-            open={open}
-            onOpenChange={(isOpen) => {
-                setOpen(isOpen);
-                setMenuOpen(isOpen);
-            }}
-            title={_t("room_list|notification_options")}
-            showTitle={false}
-            align="start"
-            trigger={<NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" />}
+        <div
+            // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
+            onKeyDown={(e) => e.stopPropagation()}
         >
-            <MenuItem
-                aria-selected={vm.isNotificationAllMessage}
-                hideChevron={true}
-                label={_t("notifications|default_settings")}
-                onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessages)}
-                onClick={(evt) => evt.stopPropagation()}
+            <Menu
+                open={open}
+                onOpenChange={(isOpen) => {
+                    setOpen(isOpen);
+                    setMenuOpen(isOpen);
+                }}
+                title={_t("room_list|notification_options")}
+                showTitle={false}
+                align="start"
+                trigger={<NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" />}
             >
-                {vm.isNotificationAllMessage && checkComponent}
-            </MenuItem>
-            <MenuItem
-                aria-selected={vm.isNotificationAllMessageLoud}
-                hideChevron={true}
-                label={_t("notifications|all_messages")}
-                onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessagesLoud)}
-                onClick={(evt) => evt.stopPropagation()}
-            >
-                {vm.isNotificationAllMessageLoud && checkComponent}
-            </MenuItem>
-            <MenuItem
-                aria-selected={vm.isNotificationMentionOnly}
-                hideChevron={true}
-                label={_t("notifications|mentions_keywords")}
-                onSelect={() => vm.setRoomNotifState(RoomNotifState.MentionsOnly)}
-                onClick={(evt) => evt.stopPropagation()}
-            >
-                {vm.isNotificationMentionOnly && checkComponent}
-            </MenuItem>
-            <MenuItem
-                aria-selected={vm.isNotificationMute}
-                hideChevron={true}
-                label={_t("notifications|mute_room")}
-                onSelect={() => vm.setRoomNotifState(RoomNotifState.Mute)}
-                onClick={(evt) => evt.stopPropagation()}
-            >
-                {vm.isNotificationMute && checkComponent}
-            </MenuItem>
-        </Menu>
+                <MenuItem
+                    aria-selected={vm.isNotificationAllMessage}
+                    hideChevron={true}
+                    label={_t("notifications|default_settings")}
+                    onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessages)}
+                    onClick={(evt) => evt.stopPropagation()}
+                >
+                    {vm.isNotificationAllMessage && checkComponent}
+                </MenuItem>
+                <MenuItem
+                    aria-selected={vm.isNotificationAllMessageLoud}
+                    hideChevron={true}
+                    label={_t("notifications|all_messages")}
+                    onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessagesLoud)}
+                    onClick={(evt) => evt.stopPropagation()}
+                >
+                    {vm.isNotificationAllMessageLoud && checkComponent}
+                </MenuItem>
+                <MenuItem
+                    aria-selected={vm.isNotificationMentionOnly}
+                    hideChevron={true}
+                    label={_t("notifications|mentions_keywords")}
+                    onSelect={() => vm.setRoomNotifState(RoomNotifState.MentionsOnly)}
+                    onClick={(evt) => evt.stopPropagation()}
+                >
+                    {vm.isNotificationMentionOnly && checkComponent}
+                </MenuItem>
+                <MenuItem
+                    aria-selected={vm.isNotificationMute}
+                    hideChevron={true}
+                    label={_t("notifications|mute_room")}
+                    onSelect={() => vm.setRoomNotifState(RoomNotifState.Mute)}
+                    onClick={(evt) => evt.stopPropagation()}
+                >
+                    {vm.isNotificationMute && checkComponent}
+                </MenuItem>
+            </Menu>
+        </div>
     );
 }
 
