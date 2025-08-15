@@ -13,7 +13,6 @@ import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
 import { type ListContext, ListView } from "../../../utils/ListView";
 import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";
-import { Components } from "react-virtuoso";
 
 interface RoomListProps {
     /**
@@ -28,7 +27,7 @@ interface RoomListProps {
 export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFilter } }: RoomListProps): JSX.Element {
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastActivePrimaryFilter = useRef<PrimaryFilter | undefined>(undefined);
-
+    const roomCount = rooms.rooms.length;
     const getItemComponent = useCallback(
         (
             index: number,
@@ -51,12 +50,12 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
                     isFocused={isFocused}
                     tabIndex={isRovingItem ? 0 : -1}
                     roomIndex={index}
-                    roomCount={rooms.rooms.length}
+                    roomCount={roomCount}
                     onFocus={onFocus}
                 />
             );
         },
-        [activeIndex],
+        [activeIndex, roomCount],
     );
 
     const getItemKey = useCallback((item: Room): string => {
