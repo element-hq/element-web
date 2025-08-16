@@ -18,7 +18,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog, { type IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
-import { upgradeRoom } from "../../../utils/RoomUpgrade";
+import { type RoomUpgradeProgress, upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import dis from "../../../dispatcher/dispatcher";
@@ -120,7 +120,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                 opts: IFinishedOpts,
                 fn: (progressText: string, progress: number, total: number) => void,
             ): Promise<void> => {
-                const roomId = await upgradeRoom(room, targetVersion, opts.invite, true, true, true, (progress) => {
+                const progressCallback = (progress: RoomUpgradeProgress): void => {
                     const total = 2 + progress.updateSpacesTotal + progress.inviteUsersTotal;
                     if (!progress.roomUpgraded) {
                         fn(_t("room_settings|security|join_rule_upgrade_upgrading_room"), 0, total);
@@ -151,7 +151,20 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                             total,
                         );
                     }
-                });
+                };
+                const roomId = await upgradeRoom(
+                    room,
+                    targetVersion,
+                    opts.invite,
+                    true,
+                    true,
+                    true,
+                    progressCallback,
+
+                    // We want to keep the RoomUpgradeDialog open during the upgrade, so don't replace it with the
+                    // invite progress dialog.
+                    /* inhibitInviteProgressDialog: */ true,
+                );
 
                 closeSettingsFn?.();
 

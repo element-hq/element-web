@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InviteProgressBody should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_InviteProgressBody"
+  >
+    <div
+      class="mx_InlineSpinner"
+    >
+      <div
+        aria-label="Loading…"
+        class="mx_InlineSpinner_icon mx_Spinner_icon"
+        style="width: 32px; height: 32px;"
+      />
+    </div>
+    <h1>
+      Preparing invitations...
+    </h1>
+    Do not close the app until finished.
+  </div>
+</DocumentFragment>
+`;

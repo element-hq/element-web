@@ -63,17 +63,6 @@ Please see LICENSE files in the repository root for full details.
         height: 25px;
         line-height: $font-25px;
     }
-
-    .mx_InviteDialog_buttonAndSpinner {
-        .mx_Spinner {
-            /* Width and height are required to trick the layout engine. */
-            width: 20px;
-            height: 20px;
-            margin-inline-start: 5px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-    }
 }
 
 .mx_InviteDialog_section {
@@ -218,6 +207,10 @@ Please see LICENSE files in the repository root for full details.
     flex-direction: column;
     flex-grow: 1;
     overflow: hidden;
+
+    .mx_InviteProgressBody {
+        margin-top: var(--cpd-space-12x);
+    }
 }
 
 .mx_InviteDialog_transfer {
