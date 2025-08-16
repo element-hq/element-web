@@ -34,7 +34,7 @@ export const UserInfoHeaderVerificationView: React.FC<{
     } else if (vm.hasCrossSigningKeys === undefined) {
         // We are still fetching the cross-signing keys for the user, show spinner.
         content = <InlineSpinner size={24} />;
-    } else if (vm.canVerify && vm.hasCrossSigningKeys) {
+    } else if (vm.canVerify && vm.hasCrossSigningKeys && !vm.isMe) {
         content = (
             <div className="mx_UserInfo_container_verifyButton">
                 <Button
