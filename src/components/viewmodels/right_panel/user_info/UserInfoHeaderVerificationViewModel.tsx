@@ -24,6 +24,10 @@ export interface UserInfoVerificationSectionState {
      */
     isUserVerified: boolean;
     /**
+     * used to determine if the user is self
+     */
+    isMe: boolean;
+    /**
      * callback function when verifyUser button is clicked
      */
     verifySelectedUser: () => Promise<void>;
@@ -70,10 +74,7 @@ export const useUserInfoVerificationViewModel = (
     const canVerify =
         hasUserVerificationStatus &&
         homeserverSupportsCrossSigning &&
-        !isUserVerified &&
-        !isMe &&
-        devices &&
-        devices.length > 0;
+        !isUserVerified;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
     const verifySelectedUser = (): Promise<void> => verifyUser(cli, member as User);
@@ -82,6 +83,7 @@ export const useUserInfoVerificationViewModel = (
         canVerify,
         hasCrossSigningKeys,
         isUserVerified,
+        isMe,
         verifySelectedUser,
     };
 };
