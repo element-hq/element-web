@@ -1449,8 +1449,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Video call"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1459,7 +1459,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 aria-labelledby="«r2c»"
@@ -1476,8 +1476,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Voice call"
             aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
@@ -1487,7 +1487,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 fill="currentColor"
@@ -1661,8 +1661,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Video call"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1671,7 +1671,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 aria-labelledby="«r2c»"
@@ -1688,8 +1688,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Voice call"
             aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
@@ -1699,7 +1699,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 fill="currentColor"
@@ -2189,9 +2189,11 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
       >
         <aside
+          aria-label="Right panel"
           class="mx_RightPanel"
           data-testid="right-panel"
           id="mx_RightPanel"
+          tabindex="-1"
         >
           <div
             class="mx_BaseCard mx_ThreadPanel mx_TimelineCard"

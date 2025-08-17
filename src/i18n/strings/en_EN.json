@@ -1538,7 +1538,7 @@
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
-        "sliding_sync_description": "Under active development, cannot be disabled.",
+        "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
@@ -1917,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Thread options"
         },
+        "title": "Right panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -3965,7 +3966,6 @@
         "dialpad": "Dialpad",
         "disable_camera": "Turn off camera",
         "disable_microphone": "Mute microphone",
-        "disabled_no_one_here": "There's no one here to call",
         "disabled_no_perms_start_video_call": "You do not have permission to start video calls",
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
         "disabled_ongoing_call": "Ongoing call",
