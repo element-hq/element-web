@@ -214,7 +214,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
 
                 // When we start verifying with another device
-                await page.getByRole("button", { name: "Verify with another device" }).click();
+                await page.getByRole("button", { name: "Use another device" }).click();
 
                 // And then cancel it
                 await page.getByRole("button", { name: "Close dialog" }).click();
@@ -231,7 +231,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
  * Perform interactive emoji verification for a new device.
  */
 async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedDevicePage: Page) {
-    await deviceToVerifyPage.getByRole("button", { name: "Verify with another device" }).click();
+    await deviceToVerifyPage.getByRole("button", { name: "Use another device" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "Verify session" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "Start" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "They match" }).click();

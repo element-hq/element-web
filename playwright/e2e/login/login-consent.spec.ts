@@ -277,8 +277,8 @@ test.describe("Login", () => {
                     let h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
                     await expect(h1).toBeVisible();
 
-                    // Click "Verify with another device"
-                    await page.getByRole("button", { name: "Verify with another device" }).click();
+                    // Click "Use another device"
+                    await page.getByRole("button", { name: "Use another device" }).click();
 
                     // Cancel the new dialog
                     await page.getByRole("button", { name: "Close dialog" }).click();
