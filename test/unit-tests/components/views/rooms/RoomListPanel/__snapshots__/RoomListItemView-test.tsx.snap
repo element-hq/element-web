@@ -4,9 +4,11 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
+    aria-posinset="1"
     aria-selected="true"
+    aria-setsize="1"
     class="flex mx_RoomListItemView mx_RoomListItemView_selected"
-    role="gridcell"
+    role="option"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     tabindex="-1"
     type="button"
@@ -53,9 +55,11 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
+    aria-posinset="1"
     aria-selected="false"
+    aria-setsize="1"
     class="flex mx_RoomListItemView"
-    role="gridcell"
+    role="option"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     tabindex="-1"
     type="button"
@@ -114,9 +118,11 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
+    aria-posinset="1"
     aria-selected="false"
+    aria-setsize="0"
     class="flex mx_RoomListItemView"
-    role="gridcell"
+    role="option"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     tabindex="-1"
     type="button"
@@ -163,9 +169,11 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
 <DocumentFragment>
   <button
     aria-label="Open room room1"
+    aria-posinset="1"
     aria-selected="false"
+    aria-setsize="1"
     class="flex mx_RoomListItemView"
-    role="gridcell"
+    role="option"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     tabindex="-1"
     type="button"
