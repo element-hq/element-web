@@ -152,7 +152,7 @@ test.describe("Room list filters and sort", () => {
 
             // Ensure the room list is not scrolled
             const isScrolledDown = await page
-                .getByRole("listbox", { name: "Room list" })
+                .getByRole("listbox", { name: "Room list" , exact: true })
                 .evaluate((e) => e.scrollTop !== 0);
             expect(isScrolledDown).toStrictEqual(false);
         });
