@@ -7,6 +7,7 @@
 
 import React, { useCallback, useRef, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { type ScrollIntoViewLocation } from "react-virtuoso";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
@@ -62,28 +63,32 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
         return item.roomId;
     }, []);
 
+    const scrollIntoViewOnChange = useCallback(
+        (params: {
+            context: ListContext<{ spaceId: string; activePrimaryFilter: PrimaryFilter | undefined }>;
+        }): ScrollIntoViewLocation | null | undefined | false | void => {
+            const { spaceId, activePrimaryFilter } = params.context.context;
+            const shouldScrollIndexIntoView =
+                lastSpaceId.current !== spaceId || lastActivePrimaryFilter.current !== activePrimaryFilter;
+            lastActivePrimaryFilter.current = activePrimaryFilter;
+            lastSpaceId.current = spaceId;
+
+            if (shouldScrollIndexIntoView) {
+                return {
+                    align: `start`,
+                    index: activeIndex || 0,
+                    behavior: "auto",
+                };
+            }
+            return false;
+        },
+        [activeIndex],
+    );
+
     return (
         <ListView
             context={{ spaceId: rooms.spaceId, activePrimaryFilter }}
-            scrollIntoViewOnChange={({
-                context: {
-                    context: { spaceId, activePrimaryFilter },
-                },
-            }) => {
-                const shouldScrollIndexIntoView =
-                    lastSpaceId.current !== spaceId || lastActivePrimaryFilter.current !== activePrimaryFilter;
-                lastActivePrimaryFilter.current = activePrimaryFilter;
-                lastSpaceId.current = spaceId;
-
-                if (shouldScrollIndexIntoView) {
-                    return {
-                        align: `start`,
-                        index: activeIndex || 0,
-                        behavior: "auto",
-                    };
-                }
-                return false;
-            }}
+            scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeIndex}
             data-testid="room-list"
             role="listbox"

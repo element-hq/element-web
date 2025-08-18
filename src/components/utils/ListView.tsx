@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useComposedRefs } from "@radix-ui/react-compose-refs";
 import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
 /**
@@ -63,8 +62,6 @@ export interface IListViewProps<Item, Context>
      * @return The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
-
-    ref?: React.Ref<VirtuosoHandle>;
 }
 
 /**
@@ -76,13 +73,11 @@ export interface IListViewProps<Item, Context>
  */
 export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, getItemComponent, isItemFocusable, getItemKey, context, ref, ...virtuosoProps } = props;
+    const { items, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
-    const internalRef = useRef<VirtuosoHandle>(null);
+    const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
-    // Combined ref callback to handle both internal use and forwarding
-    const composedRef = useComposedRefs(internalRef, props.ref);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
         props.items[0] ? getItemKey(props.items[0]) : undefined,
@@ -130,7 +125,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
                 isScrollingToItem.current = true;
-                internalRef.current?.scrollIntoView({
+                virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
@@ -273,8 +268,8 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     return (
         <Virtuoso
             tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
+            ref={virtuosoHandleRef}
             scrollerRef={scrollerRef}
-            ref={composedRef}
             onKeyDown={keyDownCallback}
             context={listContext}
             rangeChanged={setVisibleRange}
