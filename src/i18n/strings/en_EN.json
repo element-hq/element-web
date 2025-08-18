@@ -996,6 +996,7 @@
             "cancelled_self": "You cancelled verification on your other device.",
             "cancelled_user": "%(displayName)s cancelled verification.",
             "cancelling": "Cancelling…",
+            "cant_confirm": "Can't confirm?",
             "complete_action": "Got It",
             "complete_description": "You've successfully verified this user.",
             "complete_title": "Verified!",
