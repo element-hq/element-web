@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
+
+import { isModifiedKeyEvent, Key } from "../../Keyboard";
 /**
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
@@ -169,28 +171,29 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
      */
     const keyDownCallback = useCallback(
         (e: React.KeyboardEvent) => {
-            if (!e) return; // Guard against null/undefined events
+            // Guard against null/undefined events and modified keys which we don't want to handle here but do
+            // at the settings level shortcuts(E.g. Select next room, etc )
+            if (!e || isModifiedKeyEvent(e)) return;
 
             const currentIndex = tabIndexKey ? keyToIndexMap.get(tabIndexKey) : undefined;
-
             let handled = false;
-            if (e.code === "ArrowUp" && currentIndex !== undefined) {
+            if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
                 scrollToItem(currentIndex - 1, false);
                 handled = true;
-            } else if (e.code === "ArrowDown" && currentIndex !== undefined) {
+            } else if (e.code === Key.ARROW_DOWN && currentIndex !== undefined) {
                 scrollToItem(currentIndex + 1, true);
                 handled = true;
-            } else if (e.code === "Home") {
+            } else if (e.code === Key.HOME) {
                 scrollToIndex(0);
                 handled = true;
-            } else if (e.code === "End") {
+            } else if (e.code === Key.END) {
                 scrollToIndex(items.length - 1);
                 handled = true;
-            } else if (e.code === "PageDown" && visibleRange && currentIndex !== undefined) {
+            } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
                 scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
                 handled = true;
-            } else if (e.code === "PageUp" && visibleRange && currentIndex !== undefined) {
+            } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
                 scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
                 handled = true;

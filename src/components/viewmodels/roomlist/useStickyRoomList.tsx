@@ -121,7 +121,6 @@ export function useStickyRoomList(rooms: SpaceRoomsState): StickyRoomListResult 
     useEffect(() => {
         let newRoomId: string | null = null;
         let isRoomChange = false;
-        // const newSpace = SpaceStore.instance.activeSpace;
         if (currentSpaceRef.current !== rooms.spaceId) {
             /*
             If the space has changed, we check if we can immediately set the active

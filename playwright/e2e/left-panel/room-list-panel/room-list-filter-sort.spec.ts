@@ -152,7 +152,7 @@ test.describe("Room list filters and sort", () => {
 
             // Ensure the room list is not scrolled
             const isScrolledDown = await page
-                .getByRole("grid", { name: "Room list" })
+                .getByRole("listbox", { name: "Room list" })
                 .evaluate((e) => e.scrollTop !== 0);
             expect(isScrolledDown).toStrictEqual(false);
         });
@@ -285,7 +285,7 @@ test.describe("Room list filters and sort", () => {
                 await bot.sendMessage(unReadRoomId, "Hello!");
 
                 // Let's activate the unread filter now
-                await primaryFilters.getByRole("option", { name: "Unread"}).click();
+                await primaryFilters.getByRole("option", { name: "Unread" }).click();
 
                 // Unread filter should only show unread room and not unread dm!
                 const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
