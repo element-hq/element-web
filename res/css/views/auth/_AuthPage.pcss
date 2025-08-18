@@ -29,4 +29,13 @@ Please see LICENSE files in the repository root for full details.
     @media only screen and (max-width: 480px) {
         margin-top: 0;
     }
+
+    /* Extra class to indicate that the component is providing its own blurring,
+     * so we don't apply ours */
+    &.mx_AuthPage_modal_noBlur {
+        box-shadow: none;
+        .mx_AuthPage_modalContent {
+            background: none !important;
+        }
+    }
 }
