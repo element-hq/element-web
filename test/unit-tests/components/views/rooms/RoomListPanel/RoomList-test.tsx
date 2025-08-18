@@ -25,7 +25,7 @@ describe("<RoomList />", () => {
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
         vm = {
             isLoadingRooms: false,
-            roomsState: rooms,
+            roomsState: { spaceId: "home", rooms },
             primaryFilters: [],
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
