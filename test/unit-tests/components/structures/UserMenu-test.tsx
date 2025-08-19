@@ -112,7 +112,6 @@ describe("<UserMenu>", () => {
 
     it("should render 'Link new device' button in OIDC native mode", async () => {
         sdkContext.client = stubClient();
-        mocked(sdkContext.client.getAuthIssuer).mockResolvedValue({ issuer: "https://issuer/" });
         const openIdMetadata = mockOpenIdConfiguration("https://issuer/");
         openIdMetadata.grant_types_supported.push(DEVICE_CODE_SCOPE);
         fetchMock.get("https://issuer/.well-known/openid-configuration", openIdMetadata);

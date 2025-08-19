@@ -1337,8 +1337,7 @@
         "toggle_attribution": "切换属性"
     },
     "member_list": {
-        "filter_placeholder": "过滤房间成员",
-        "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
+        "filter_placeholder": "过滤房间成员"
     },
     "member_list_back_action_label": "房间成员",
     "message_edit_dialog_title": "消息编辑历史",
@@ -2589,6 +2588,7 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
+        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -3112,7 +3112,6 @@
         "dialpad": "拨号盘",
         "disable_camera": "关闭相机",
         "disable_microphone": "静音麦克风",
-        "disabled_no_one_here": "这里没有人可以打电话",
         "disabled_no_perms_start_video_call": "你没有权限开始视频通话",
         "disabled_no_perms_start_voice_call": "你没有权限开始语音通话",
         "disabled_ongoing_call": "正在进行的通话",

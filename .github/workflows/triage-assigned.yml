@@ -15,7 +15,7 @@ jobs:
             contains(github.event.issue.assignees.*.login, 'dbkr') ||
             contains(github.event.issue.assignees.*.login, 'MidhunSureshR')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/67
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

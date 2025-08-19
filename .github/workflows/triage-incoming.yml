@@ -10,7 +10,7 @@ jobs:
     automate-project-columns:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/120
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

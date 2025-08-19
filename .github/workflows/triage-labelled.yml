@@ -112,7 +112,7 @@ jobs:
              contains(github.event.issue.labels.*.name, 'O-Frequent') ||
              contains(github.event.issue.labels.*.name, 'A11y'))
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/18
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -123,7 +123,7 @@ jobs:
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Product')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/28
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -134,7 +134,7 @@ jobs:
         if: >
             contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/48
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -145,7 +145,7 @@ jobs:
         if: >
             contains(github.event.issue.labels.*.name, 'Team: VoIP')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/41
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -156,7 +156,7 @@ jobs:
         if: >
             contains(github.event.issue.labels.*.name, 'Team: Crypto')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/76
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -172,7 +172,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Testing') ||
             contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
         steps:
-            - uses: actions/add-to-project@main
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
               with:
                   project-url: https://github.com/orgs/element-hq/projects/101
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

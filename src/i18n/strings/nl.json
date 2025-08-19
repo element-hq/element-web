@@ -1256,8 +1256,7 @@
         "toggle_attribution": "Attributie in-/uitschakelen"
     },
     "member_list": {
-        "filter_placeholder": "Kamerleden filteren",
-        "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
+        "filter_placeholder": "Kamerleden filteren"
     },
     "member_list_back_action_label": "Kamerleden",
     "message_edit_dialog_title": "Berichtbewerkingen",
@@ -2484,6 +2483,7 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
+        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
@@ -3012,7 +3012,6 @@
         "dialpad": "Toetsen",
         "disable_camera": "Camera uitschakelen",
         "disable_microphone": "Microfoon dempen",
-        "disabled_no_one_here": "Er is hier niemand om te bellen",
         "disabled_no_perms_start_video_call": "U heeft geen toestemming om videogesprekken te starten",
         "disabled_no_perms_start_voice_call": "U heeft geen toestemming om spraakoproepen te starten",
         "disabled_ongoing_call": "Lopende oproep",

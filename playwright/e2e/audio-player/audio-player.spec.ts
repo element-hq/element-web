@@ -19,6 +19,7 @@ const clickButtonReply = async (tile: Locator) => {
         await tile.hover();
         await tile.getByRole("button", { name: "Reply", exact: true }).click();
     }).toPass();
+    await expect(tile.page().getByText("Replying", { exact: true })).toBeVisible();
 };
 
 test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
@@ -39,7 +40,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // wait for the tile to finish loading
         await expect(
             page
-                .locator(".mx_AudioPlayer_mediaName")
+                .getByTestId("audio-player-name")
                 .last()
                 .filter({ hasText: file.split("/").at(-1) }),
         ).toBeVisible();
@@ -54,12 +55,10 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Check that the audio player is rendered and its button becomes visible
         const checkPlayerVisibility = async (locator: Locator) => {
             // Assert that the audio player and media information are visible
-            const mediaInfo = locator.locator(
-                ".mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container .mx_AudioPlayer_mediaInfo",
-            );
-            await expect(mediaInfo.locator(".mx_AudioPlayer_mediaName", { hasText: ".ogg" })).toBeVisible(); // extension
-            await expect(mediaInfo.locator(".mx_AudioPlayer_byline", { hasText: "00:01" })).toBeVisible();
-            await expect(mediaInfo.locator(".mx_AudioPlayer_byline", { hasText: "(3.56 KB)" })).toBeVisible(); // actual size
+            const mediaInfo = locator.getByRole("region", { name: "Audio player" });
+            await expect(mediaInfo.getByText(".ogg")).toBeVisible(); // extension
+            await expect(mediaInfo.getByRole("time")).toHaveText("00:01"); // duration
+            await expect(mediaInfo.getByText("(3.56 KB)")).toBeVisible(); // actual size;
 
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
@@ -78,7 +77,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         }
 
         // Check the status of the seek bar
-        expect(await page.locator(".mx_AudioPlayer_seek input[type='range']").count()).toBeGreaterThan(0);
+        expect(await page.getByRole("region", { name: "Audio player" }).getByRole("slider").count()).toBeGreaterThan(0);
 
         // Enable IRC layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -100,7 +99,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     display: none !important;
                 }
             `,
-            mask: [page.locator(".mx_AudioPlayer_seek")],
+            mask: [page.getByTestId("audio-player-seek")],
         };
 
         // Take a snapshot of mx_EventTile_last on IRC layout
@@ -186,9 +185,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
         // Assert that the audio player is rendered
-        const container = page.locator(".mx_EventTile_last .mx_AudioPlayer_container");
+        const container = page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" });
         // Assert that the counter is zero before clicking the play button
-        await expect(container.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+        await expect(container.getByRole("timer")).toHaveText("00:00");
 
         // Find and click "Play" button, the wait is to make the test less flaky
         await expect(container.getByRole("button", { name: "Play" })).toBeVisible();
@@ -198,7 +197,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(container.getByRole("button", { name: "Pause" })).toBeVisible();
 
         // Assert that the timer is reset when the audio file finished playing
-        await expect(container.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+        await expect(container.getByRole("timer")).toHaveText("00:00");
 
         // Assert that "Play" button can be found
         await expect(container.getByRole("button", { name: "Play" })).toBeVisible();
@@ -226,7 +225,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
             // Assert the audio player is rendered
-            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+            await expect(page.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Find and click "Reply" button on MessageActionBar
             const tile = page.locator(".mx_EventTile_last");
@@ -236,7 +235,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
             // Assert that the audio player is rendered
-            await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
+            await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that replied audio file is rendered as file button inside ReplyChain
             const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody_info[role='button']");
@@ -261,7 +260,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await uploadFile(page, "playwright/sample-files/upload-first.ogg");
 
             // Assert that the audio player is rendered
-            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+            await expect(
+                page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+            ).toBeVisible();
 
             await clickButtonReply(tile);
 
@@ -269,7 +270,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await uploadFile(page, "playwright/sample-files/upload-second.ogg");
 
             // Assert that the audio player is rendered
-            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+            await expect(
+                page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+            ).toBeVisible();
 
             await clickButtonReply(tile);
 
@@ -277,7 +280,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await uploadFile(page, "playwright/sample-files/upload-third.ogg");
 
             // Assert that the audio player is rendered
-            await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
+            await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that there are two "mx_ReplyChain" elements
             await expect(tile.locator(".mx_ReplyChain")).toHaveCount(2);
@@ -313,7 +316,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // On the main timeline
         const messageList = page.locator(".mx_RoomView_MessageList");
         // Assert the audio player is rendered
-        await expect(messageList.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+        await expect(
+            messageList.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+        ).toBeVisible();
         // Find and click "Reply in thread" button
         await messageList.locator(".mx_EventTile_last").hover();
         await messageList.locator(".mx_EventTile_last").getByRole("button", { name: "Reply in thread" }).click();
@@ -321,10 +326,10 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // On a thread
         const thread = page.locator(".mx_ThreadView");
         const threadTile = thread.locator(".mx_EventTile_last");
-        const audioPlayer = threadTile.locator(".mx_AudioPlayer_container");
+        const audioPlayer = threadTile.getByRole("region", { name: "Audio player" });
 
         // Assert that the counter is zero before clicking the play button
-        await expect(audioPlayer.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+        await expect(audioPlayer.getByRole("timer")).toHaveText("00:00");
 
         // Find and click "Play" button, the wait is to make the test less flaky
         await expect(audioPlayer.getByRole("button", { name: "Play" })).toBeVisible();
@@ -334,7 +339,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(audioPlayer.getByRole("button", { name: "Pause" })).toBeVisible();
 
         // Assert that the timer is reset when the audio file finished playing
-        await expect(audioPlayer.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+        await expect(audioPlayer.getByRole("timer")).toHaveText("00:00");
 
         // Assert that "Play" button can be found
         await expect(audioPlayer.getByRole("button", { name: "Play" })).not.toBeDisabled();

@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { type Room, type MatrixEvent, type MatrixClient, type User, EventType } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { EventType, type MatrixClient, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
 
-import MultiInviter, { type CompletionStates } from "./utils/MultiInviter";
+import MultiInviter, { type CompletionStates, type MultiInviterOptions } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InviteDialog from "./components/views/dialogs/InviteDialog";
@@ -26,22 +25,24 @@ export interface IInviteResult {
 }
 
 /**
- * Invites multiple addresses to a room
- * Simpler interface to utils/MultiInviter but with
- * no option to cancel.
+ * Invites multiple addresses to a room.
+ *
+ * Simpler interface to {@link MultiInviter}.
+ *
+ * Any failures are returned via the `states` in the result.
  *
  * @param {string} roomId The ID of the room to invite to
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
- * @param {function} progressCallback optional callback, fired after each invite.
+ * @param options Options object.
  * @returns {Promise} Promise
  */
 export async function inviteMultipleToRoom(
     client: MatrixClient,
     roomId: string,
     addresses: string[],
-    progressCallback?: () => void,
+    options: MultiInviterOptions = {},
 ): Promise<IInviteResult> {
-    const inviter = new MultiInviter(client, roomId, progressCallback);
+    const inviter = new MultiInviter(client, roomId, options);
     return { states: await inviter.invite(addresses), inviter };
 }
 
@@ -87,26 +88,6 @@ export function isValid3pidInvite(event: MatrixEvent): boolean {
 
     // Valid enough by our standards
     return true;
-}
-
-export function inviteUsersToRoom(
-    client: MatrixClient,
-    roomId: string,
-    userIds: string[],
-    progressCallback?: () => void,
-): Promise<void> {
-    return inviteMultipleToRoom(client, roomId, userIds, progressCallback)
-        .then((result) => {
-            const room = client.getRoom(roomId)!;
-            showAnyInviteErrors(result.states, room, result.inviter);
-        })
-        .catch((err) => {
-            logger.error(err.stack);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("invite|failed_title"),
-                description: err?.message ?? _t("invite|failed_generic"),
-            });
-        });
 }
 
 export function showAnyInviteErrors(

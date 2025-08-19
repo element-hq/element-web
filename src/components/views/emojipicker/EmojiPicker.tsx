@@ -26,7 +26,7 @@ import {
     Type,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
-import { clamp } from "../../../utils/numbers";
+import { clamp } from "../../../shared-components/utils/numbers";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 
 export const CATEGORY_HEADER_HEIGHT = 20;

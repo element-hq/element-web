@@ -22,7 +22,7 @@ import ResizeHandle from "../elements/ResizeHandle";
 import Resizer, { type IConfig } from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
+import { clamp, percentageOf, percentageWithin } from "../../../shared-components/utils/numbers";
 import UIStore from "../../../stores/UIStore";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";

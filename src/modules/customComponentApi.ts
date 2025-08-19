@@ -12,9 +12,10 @@ import type {
     CustomComponentsApi as ICustomComponentsApi,
     CustomMessageRenderFunction,
     CustomMessageComponentProps as ModuleCustomMessageComponentProps,
-    OriginalComponentProps,
+    OriginalMessageComponentProps,
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
+    CustomRoomPreviewBarRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -72,6 +73,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     ): void {
         this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
     }
+
     /**
      * Select the correct renderer based on the event information.
      * @param mxEvent The message event being rendered.
@@ -100,7 +102,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public renderMessage(
         props: CustomMessageComponentProps,
-        originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
+        originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(props.mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
@@ -133,5 +135,22 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             };
         }
         return null;
+    }
+
+    private _roomPreviewBarRenderer?: CustomRoomPreviewBarRenderFunction;
+
+    /**
+     * Get the custom room preview bar renderer, if any has been registered.
+     */
+    public get roomPreviewBarRenderer(): CustomRoomPreviewBarRenderFunction | undefined {
+        return this._roomPreviewBarRenderer;
+    }
+
+    /**
+     * Register a custom room preview bar renderer.
+     * @param renderer - the function that will render the custom room preview bar.
+     */
+    public registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void {
+        this._roomPreviewBarRenderer = renderer;
     }
 }

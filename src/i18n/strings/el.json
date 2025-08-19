@@ -1370,8 +1370,7 @@
         "share_type_prompt": "Τι τύπο τοποθεσίας θέλετε να μοιραστείτε;"
     },
     "member_list": {
-        "filter_placeholder": "Φιλτράρισμα μελών",
-        "power_label": "%(userName)s (δύναμη %(powerLevelNumber)s)"
+        "filter_placeholder": "Φιλτράρισμα μελών"
     },
     "member_list_back_action_label": "Μέλη δωματίου",
     "message_edit_dialog_title": "Επεξεργασίες μηνυμάτων",
@@ -2688,6 +2687,7 @@
         },
         "creation_summary_dm": "Ο/η %(creator)s δημιούργησε αυτό το απευθείας μήνυμα.",
         "creation_summary_room": "Ο/η %(creator)s δημιούργησε και διαμόρφωσε το δωμάτιο.",
+        "download_action_decrypting": "Αποκρυπτογράφηση",
         "download_action_downloading": "Γίνεται λήψη",
         "edits": {
             "tooltip_label": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις.",
@@ -3220,7 +3220,6 @@
         "dialpad": "Πληκτρολόγιο κλήσης",
         "disable_camera": "Απενεργοποίηση κάμερας",
         "disable_microphone": "Σίγαση μικροφώνου",
-        "disabled_no_one_here": "Δεν υπάρχει κανείς εδώ για να καλέσετε",
         "disabled_no_perms_start_video_call": "Δεν έχετε δικαίωμα έναρξης βιντεοκλήσεων",
         "disabled_no_perms_start_voice_call": "Δεν έχετε δικαίωμα έναρξης φωνητικών κλήσεων",
         "disabled_ongoing_call": "Κλήση σε εξέλιξη",

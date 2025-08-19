@@ -178,7 +178,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const isEncrypted = this.props.mediaEventHelper?.media.isEncrypted;
         const contentUrl = this.getContentUrl();
-        const contentFileSize = this.content.info ? this.content.info.size : null;
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
         // defaultProps breaks types on IBodyProps, so instead define the default here.
         const showGenericPlaceholder = this.props.showGenericPlaceholder ?? true;
@@ -285,21 +284,9 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 target: "_blank",
                 rel: "noreferrer noopener",
 
-                // We set the href regardless of whether or not we intercept the download
-                // because we don't really want to convert the file to a blob eagerly, and
-                // still want "open in new tab" and "save link as" to work.
-                href: contentUrl,
-            };
-
-            // Blobs can only have up to 500mb, so if the file reports as being too large then
-            // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
-            // it is too big. There is the risk of the reported file size and the actual file size
-            // being different, however the user shouldn't normally run into this problem.
-            const fileTooBig = typeof contentFileSize === "number" ? contentFileSize > 524288000 : true;
-
-            if (["application/pdf"].includes(fileType) && !fileTooBig) {
-                // We want to force a download on this type, so use an onClick handler.
-                downloadProps["onClick"] = (e) => {
+                // We cannot rely on href+download to download media due to the authenticated media API as it relies
+                // on authentication via headers, so we'll have to download the file into memory and then download it.
+                onClick: (e) => {
                     logger.log(`Downloading ${fileType} as blob (unencrypted)`);
 
                     // Avoid letting the <a> do its thing
@@ -319,11 +306,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         tempAnchor.click();
                         tempAnchor.remove();
                     });
-                };
-            } else {
-                // Else we are hoping the browser will do the right thing
-                downloadProps["download"] = this.fileName;
-            }
+                },
+            };
 
             return (
                 <span className="mx_MFileBody">

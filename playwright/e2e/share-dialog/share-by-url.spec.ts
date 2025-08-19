@@ -18,13 +18,14 @@ test.describe("share from URL", () => {
 
     test("should share message when users navigates to share URL", async ({ page, user, room, app }) => {
         await page.goto("/#/share?msg=Hello+world");
+        const dialog = page.getByRole("dialog", { name: "Forward message" });
         // The forward message dialog doesn't update as new infomation arrives via sync, which means sometimes
         // this is just says, "Empty room". For the same reason, we can't reliably write a test for loading the
         // app straight away with a /#/share url as the room doesn't appear until the client syncs.]
         // Ideally we should fix the forward dialog to update and eliminate races, until then, there is only one
         // room so we click the first button.
-        await page.getByRole("listitem" /*, { name: "A test room" }*/).getByRole("button", { name: "Send" }).click();
-        await page.keyboard.press("Escape");
+        await dialog.getByRole("listitem" /*, { name: "A test room" }*/).getByRole("button", { name: "Send" }).click();
+        await dialog.getByRole("button", { name: "Close" }).click();
         await app.viewRoomByName("A test room");
         const lastMessage = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
         await expect(lastMessage).toBeVisible();

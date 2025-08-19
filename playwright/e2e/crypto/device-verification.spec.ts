@@ -209,7 +209,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         const dialog = page.locator(".mx_Dialog");
         // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
         // (cf https://github.com/element-hq/element-web/issues/30089)
-        await dialog.locator("textarea").pressSequentially(recoveryKey);
+        await dialog.getByTitle("Recovery key").pressSequentially(recoveryKey);
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
         await page.getByRole("button", { name: "Done" }).click();

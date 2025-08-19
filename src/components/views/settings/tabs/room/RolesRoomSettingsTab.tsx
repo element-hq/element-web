@@ -26,13 +26,13 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from "../../SettingsFieldset";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { ElementCall } from "../../../../../models/Call";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { PowerLevelSelector } from "../../PowerLevelSelector";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -63,8 +63,8 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     [EventType.RoomRedaction]: { isState: false, hideForSpace: true },
 
     // MSC3401: Native Group VoIP signaling
-    [ElementCall.CALL_EVENT_TYPE.name]: { isState: true, hideForSpace: true },
-    [ElementCall.MEMBER_EVENT_TYPE.name]: { isState: true, hideForSpace: true },
+    [ElementCallEventType.name]: { isState: true, hideForSpace: true },
+    [ElementCallMemberEventType.name]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
@@ -298,8 +298,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
 
         // MSC3401: Native Group VoIP signaling
         if (SettingsStore.getValue("feature_group_calls")) {
-            plEventsToLabels[ElementCall.CALL_EVENT_TYPE.name] = _td("room_settings|permissions|m.call");
-            plEventsToLabels[ElementCall.MEMBER_EVENT_TYPE.name] = _td("room_settings|permissions|m.call.member");
+            plEventsToLabels[ElementCallEventType.name] = _td("room_settings|permissions|m.call");
+            plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
@@ -348,10 +348,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             powerLevelDescriptors.users_default.defaultValue,
         );
 
-        let currentUserLevel = userLevels[client.getUserId()!];
-        if (currentUserLevel === undefined) {
-            currentUserLevel = defaultUserLevel;
-        }
+        const currentUserLevel = room.getMember(client.getSafeUserId())?.powerLevel ?? defaultUserLevel;
 
         this.populateDefaultPlEvents(
             eventsLevels,

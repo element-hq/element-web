@@ -125,8 +125,8 @@ describe("DecryptionFailureTracker", function () {
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;
-        const error2 = DecryptionFailureCode.MEGOLM_BAD_ROOM;
-        const error3 = DecryptionFailureCode.MEGOLM_MISSING_FIELDS;
+        const error2 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE;
+        const error3 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD;
 
         // event that will be marked as visible before it's marked as undecryptable
         const markedVisibleFirst = await createFailedDecryptionEvent({ code: error1 });
@@ -536,8 +536,8 @@ describe("DecryptionFailureTracker", function () {
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;
-        const error2 = DecryptionFailureCode.MEGOLM_BAD_ROOM;
-        const error3 = DecryptionFailureCode.MEGOLM_MISSING_FIELDS;
+        const error2 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE;
+        const error3 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD;
 
         // event that will be slow to decrypt
         const lateDecryption = await createFailedDecryptionEvent({ code: error1 });
@@ -638,8 +638,8 @@ describe("DecryptionFailureTracker", function () {
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;
-        const error2 = DecryptionFailureCode.MEGOLM_BAD_ROOM;
-        const error3 = DecryptionFailureCode.MEGOLM_MISSING_FIELDS;
+        const error2 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE;
+        const error3 = DecryptionFailureCode.MEGOLM_KEY_WITHHELD;
 
         // event from a federated user (@alice:example.com)
         const federatedDecryption = await createFailedDecryptionEvent({

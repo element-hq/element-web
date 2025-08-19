@@ -24,7 +24,7 @@ import RolesRoomSettingsTab from "../../../../../../../src/components/views/sett
 import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { ElementCall } from "../../../../../../../src/models/Call";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../../../src/call-types";
 
 describe("RolesRoomSettingsTab", () => {
     const userId = "@alice:server.org";
@@ -116,7 +116,7 @@ describe("RolesRoomSettingsTab", () => {
                     expect(getJoinCallSelectedOption(tab)?.textContent).toBe("Default");
                     expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
                         events: {
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                            [ElementCallMemberEventType.name]: 0,
                         },
                     });
                 });
@@ -137,7 +137,7 @@ describe("RolesRoomSettingsTab", () => {
                     expect(getStartCallSelectedOption(tab)?.textContent).toBe("Default");
                     expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
                         events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: 0,
+                            [ElementCallEventType.name]: 0,
                         },
                     });
                 });

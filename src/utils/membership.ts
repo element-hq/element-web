@@ -131,3 +131,23 @@ export async function waitForMember(
         client.removeListener(RoomStateEvent.NewMember, handler);
     });
 }
+
+/**
+ * Check if the user is the only joined admin in the room
+ * This function will *not* cause lazy loading of room members, so if these should be included then
+ * the caller needs to make sure members have been loaded.
+ * @param room The room to check if the user is the only admin.
+ * @returns True if the user is the only user with the highest power level, false otherwise
+ */
+export function isOnlyAdmin(room: Room): boolean {
+    const currentUserLevel = room.getMember(room.client.getSafeUserId())?.powerLevel;
+
+    const userLevelValues = room.getJoinedMembers().map((m) => m.powerLevel);
+
+    const maxUserLevel = Math.max(...userLevelValues.filter((x) => typeof x === "number"));
+    // If the user is the only user with highest power level
+    return (
+        maxUserLevel === currentUserLevel &&
+        userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)
+    );
+}

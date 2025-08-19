@@ -91,10 +91,10 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await csAPI.deleteBackupVersion(backupInfo.version);
 
-        await page.getByRole("textbox", { name: "Send an encrypted message…" }).fill("/discardsession");
+        await page.getByRole("textbox", { name: "Send a message…" }).fill("/discardsession");
         await page.getByRole("button", { name: "Send message" }).click();
 
-        await page.getByRole("textbox", { name: "Send an encrypted message…" }).fill("Message with broken key backup");
+        await page.getByRole("textbox", { name: "Send a message…" }).fill("Message with broken key backup");
         await page.getByRole("button", { name: "Send message" }).click();
 
         // Should be the message we sent plus the room creation event

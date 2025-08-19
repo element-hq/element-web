@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, EventType, ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { inviteUsersToRoom } from "../RoomInvite";
+import { inviteMultipleToRoom, showAnyInviteErrors } from "../RoomInvite";
 import Modal, { type IHandle } from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
@@ -144,4 +144,15 @@ export async function upgradeRoom(
 
     spinnerModal?.close();
     return newRoomId;
+}
+
+async function inviteUsersToRoom(
+    client: MatrixClient,
+    roomId: string,
+    userIds: string[],
+    progressCallback?: () => void,
+): Promise<void> {
+    const result = await inviteMultipleToRoom(client, roomId, userIds, { progressCallback });
+    const room = client.getRoom(roomId)!;
+    showAnyInviteErrors(result.states, room, result.inviter);
 }

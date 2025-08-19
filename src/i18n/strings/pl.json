@@ -95,7 +95,6 @@
         "maximise": "Maksymalizuj",
         "mention": "Wzmianka",
         "minimise": "Minimalizuj",
-        "new_message": "Nowa wiadomość",
         "new_room": "Nowy pokój",
         "new_video_room": "Nowy pokój wideo",
         "next": "Dalej",
@@ -152,7 +151,7 @@
         "upgrade": "Ulepsz",
         "upload": "Prześlij",
         "upload_file": "Prześlij plik",
-        "verify": "Weryfikuj",
+        "verify": "Zweryfikuj",
         "view": "Wyświetl",
         "view_all": "Pokaż wszystkie",
         "view_list": "Wyświetl listę",
@@ -868,6 +867,7 @@
             "elementCallUrl": "Adres URL Element Call"
         },
         "settings_explorer": "Eksplorator ustawień",
+        "show_empty_content_events": "Pokaż wydarzenia z pustą zawartością",
         "show_hidden_events": "Pokaż ukryte wydarzenia na linii czasowej",
         "spaces": {
             "one": "<space>",
@@ -939,6 +939,7 @@
         "cross_signing_user_warning": "Ten użytkownik nie zweryfikował wszystkich swoich sesji.",
         "enter_recovery_key": "Wprowadź klucz przywracania",
         "event_shield_reason_authenticity_not_guaranteed": "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.",
+        "event_shield_reason_mismatched_sender": "Nadawca zdarzenia nie pasuje do właściciela urządzenia, które je wysłał.",
         "event_shield_reason_mismatched_sender_key": "Zaszyfrowano przez sesję niezweryfikowaną",
         "event_shield_reason_unknown_device": "Zaszyfrowano przez nieznane lub usunięte urządzenie.",
         "event_shield_reason_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
@@ -1042,7 +1043,7 @@
             "qr_reciprocate_same_shield_device": "Prawie gotowe! Czy drugie urządzenie pokazuje tę samą tarczę?",
             "qr_reciprocate_same_shield_user": "Prawie gotowe! Czy %(displayName)s pokazuje tę samą tarczę?",
             "request_toast_accept": "Zweryfikuj sesję",
-            "request_toast_accept_user": "Weryfikuj użytkownika",
+            "request_toast_accept_user": "Zweryfikuj użytkownika",
             "request_toast_decline_counter": "Ignoruj (%(counter)s)",
             "request_toast_detail": "%(deviceId)s z %(ip)s",
             "reset_proceed_prompt": "Zresetuj",
@@ -1068,7 +1069,7 @@
             "unverified_sessions_toast_description": "Sprawdź, by upewnić się że Twoje konto jest bezpieczne",
             "unverified_sessions_toast_reject": "Później",
             "unverified_sessions_toast_title": "Masz niezweryfikowane sesje",
-            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym. Jeśli korzystasz z urządzenia mobilnego, otwórz na niej aplikację.",
+            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym. Jeśli korzystasz z urządzenia mobilnego, otwórz na nim aplikację.",
             "verification_dialog_title_device": "Zweryfikuj drugie urządzenie",
             "verification_dialog_title_user": "Żądanie weryfikacji",
             "verification_skip_warning": "Bez weryfikacji, nie będziesz posiadać dostępu do wszystkich swoich wiadomości, a inni będą Cię widzieć jako niezaufanego.",
@@ -1463,6 +1464,7 @@
         "room_list_navigate_down": "Przejdź w dół listy pokoi",
         "room_list_navigate_up": "Przejdź w górę listy pokoi",
         "room_list_select_room": "Wybierz pokój z listy pokojów",
+        "save": "Zapisz",
         "scroll_down_timeline": "Przewiń w dół na osi czasu",
         "scroll_up_timeline": "Przewiń w górę na osi czasu",
         "search": "Wyszukiwanie (musi być włączone)",
@@ -1666,8 +1668,7 @@
         "filter_placeholder": "Filtruj członków pokoju",
         "invite_button_no_perms_tooltip": "Nie posiadasz uprawnień, aby zapraszać użytkowników",
         "invited_label": "Zaproszono",
-        "no_matches": "Brak wyników",
-        "power_label": "%(userName)s (moc uprawnień administratorskich %(powerLevelNumber)s)"
+        "no_matches": "Brak wyników"
     },
     "member_list_back_action_label": "Członkowie pokoju",
     "message_edit_dialog_title": "Edycje wiadomości",
@@ -3387,6 +3388,7 @@
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
@@ -3942,7 +3944,7 @@
         "unban_space_warning": "Nie będą w stanie uzyskać dostępu gdziekolwiek, gdzie nie jesteś administratorem.",
         "unignore_button": "Przestań ignorować",
         "verification_unavailable": "Weryfikacja użytkownika jest niedostępna",
-        "verify_button": "Weryfikuj użytkownika",
+        "verify_button": "Zweryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
     },
     "user_menu": {
@@ -3980,7 +3982,6 @@
         "dialpad": "Klawiatura telefoniczna",
         "disable_camera": "Wyłącz kamerę",
         "disable_microphone": "Wycisz mikrofon",
-        "disabled_no_one_here": "Nie ma tu nikogo, do kogo można zadzwonić",
         "disabled_no_perms_start_video_call": "Nie masz uprawnień do rozpoczęcia rozmowy wideo",
         "disabled_no_perms_start_voice_call": "Nie masz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",

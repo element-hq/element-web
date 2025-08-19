@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://app.element.io/?loginToken=123&state=abc&code=xyz&no_universal_links&something_else=value"}
+ */
+
 /*
 Copyright 2024 New Vector Ltd.
 
@@ -42,11 +47,27 @@ describe("showError", () => {
 describe("loadApp", () => {
     beforeEach(setUpMatrixChatDiv);
 
-    it("should set window.matrixChat to the MatrixChat instance", async () => {
+    beforeEach(async () => {
         fetchMock.get("https://matrix.org/_matrix/client/versions", { versions: ["v1.6"] });
         SdkConfig.put({ default_server_config: { "m.homeserver": { base_url: "https://matrix.org" } } });
+    });
+
+    it("should set window.matrixChat to the MatrixChat instance", async () => {
+        await loadApp({});
+        await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
+    });
+
+    it("should pass onTokenLoginCompleted which strips searchParams to MatrixChat", async () => {
+        const spy = jest.spyOn(window.history, "replaceState");
 
         await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
+        window.matrixChat!.props.onTokenLoginCompleted();
+
+        expect(spy).toHaveBeenCalledWith(
+            null,
+            "",
+            expect.stringContaining("https://app.element.io/?something_else=value"),
+        );
     });
 });

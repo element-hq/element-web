@@ -6,14 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Button } from "@vector-im/compound-web";
+import { Button, PasswordInput } from "@vector-im/compound-web";
 import LockSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 import { debounce } from "lodash";
 import classNames from "classnames";
 import React, { type ChangeEvent, type FormEvent } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
-import Field from "../../elements/Field";
 import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
@@ -53,7 +52,7 @@ interface IState {
  * Access Secure Secret Storage by requesting the user's passphrase.
  */
 export default class AccessSecretStorageDialog extends React.PureComponent<IProps, IState> {
-    private inputRef = React.createRef<HTMLTextAreaElement>();
+    private inputRef = React.createRef<HTMLInputElement>();
 
     public constructor(props: IProps) {
         super(props);
@@ -119,7 +118,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         });
     }
 
-    private onRecoveryKeyChange = (ev: ChangeEvent<HTMLTextAreaElement>): void => {
+    private onRecoveryKeyChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             recoveryKey: ev.target.value,
         });
@@ -181,17 +180,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                     autoComplete="off"
                 >
                     <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry">
-                        <Field
-                            inputRef={this.inputRef}
-                            element="textarea"
-                            rows={2}
-                            cols={45}
+                        <PasswordInput
+                            ref={this.inputRef}
                             id="mx_securityKey"
-                            label={_t("encryption|access_secret_storage_dialog|security_key_title")}
+                            title={_t("encryption|access_secret_storage_dialog|security_key_label")}
+                            placeholder={_t("encryption|access_secret_storage_dialog|security_key_label")}
                             value={this.state.recoveryKey}
                             onChange={this.onRecoveryKeyChange}
                             autoFocus={true}
-                            forceValidity={this.state.recoveryKeyCorrect ?? undefined}
                             autoComplete="off"
                         />
                     </div>

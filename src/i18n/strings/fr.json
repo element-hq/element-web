@@ -93,7 +93,6 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
-        "new_message": "Nouveau message",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
@@ -645,12 +644,12 @@
         "mode_plain": "Masquer le formatage",
         "mode_rich_text": "Afficher le formatage",
         "no_perms_notice": "Vous n’avez pas la permission de poster dans ce salon",
-        "placeholder": "Envoyer un message…",
+        "placeholder": "Envoyer un message non chiffré…",
         "placeholder_encrypted": "Envoyer un message chiffré…",
-        "placeholder_reply": "Envoyer une réponse…",
-        "placeholder_reply_encrypted": "Envoyer une réponse chiffrée…",
-        "placeholder_thread": "Répondre au fil de discussion…",
-        "placeholder_thread_encrypted": "Répondre au fil de discussion chiffré…",
+        "placeholder_reply": "Envoyer une réponse non chiffrée…",
+        "placeholder_reply_encrypted": "Envoyer une réponse...",
+        "placeholder_thread": "Répondre au fil de discussion non chiffré…",
+        "placeholder_thread_encrypted": "Répondre au fil de discussion...",
         "poll_button": "Sondage",
         "poll_button_no_perms_description": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
         "poll_button_no_perms_title": "Autorisation requise",
@@ -921,7 +920,8 @@
             },
             "privacy_warning": "Assurez-vous que personne d'autre ne regarde votre écran !",
             "restoring": "Restauration des clés depuis la sauvegarde",
-            "security_key_title": "Clé de récupération"
+            "security_key_label": "Clé de récupération",
+            "security_key_title": "Saisir votre clé de récupération"
         },
         "bootstrap_title": "Configuration des clés",
         "confirm_encryption_setup_body": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
@@ -934,6 +934,7 @@
         "cross_signing_user_warning": "Cet utilisateur n’a pas vérifié toutes ses sessions.",
         "enter_recovery_key": "Saisir la clé de récupération",
         "event_shield_reason_authenticity_not_guaranteed": "L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.",
+        "event_shield_reason_mismatched_sender": "L'expéditeur de ce message ne correspond pas au propriétaire de l'appareil qui l'a envoyé.",
         "event_shield_reason_mismatched_sender_key": "Chiffré par une session non vérifiée",
         "event_shield_reason_unknown_device": "Chiffré par un appareil inconnu ou supprimé.",
         "event_shield_reason_unsigned_device": "Chiffré par un appareil non vérifié par son propriétaire.",
@@ -1533,6 +1534,9 @@
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
+        "share_history_on_invite": "Partagez l'historique chiffré avec les nouveaux membres",
+        "share_history_on_invite_description": "Lorsque vous invitez un utilisateur dans un salon chiffré dont la visibilité de l'historique est définie sur « partagée », partagez l'historique chiffré avec cet utilisateur et acceptez l'historique chiffré lorsque vous êtes invité dans une telle salon.",
+        "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver",
@@ -1654,8 +1658,8 @@
         "filter_placeholder": "Filtrer les membres du salon",
         "invite_button_no_perms_tooltip": "Vous n’avez pas la permission d’inviter des utilisateurs",
         "invited_label": "Invité",
-        "no_matches": "Aucune correspondance",
-        "power_label": "%(userName)s (rang %(powerLevelNumber)s)"
+        "list_title": "Liste des membres",
+        "no_matches": "Aucune correspondance"
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
@@ -1759,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Administrateur",
+        "creator": "Propriétaire",
         "custom": "Personnalisé (%(level)s)",
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
@@ -1911,6 +1916,7 @@
         "thread_list": {
             "context_menu_label": "Options des fils de discussion"
         },
+        "title": "Panneau droit",
         "video_room_chat": {
             "title": "Conversation privée"
         }
@@ -3371,6 +3377,7 @@
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
         "download_failed": "Échec du téléchargement",
         "download_failed_description": "Une erreur s'est produite lors du téléchargement de ce fichier",
@@ -3392,6 +3399,7 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
+            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
             "error_processing_voice_message": "Erreur lors du traitement du message vocal",
@@ -3957,7 +3965,6 @@
         "dialpad": "Pavé numérique",
         "disable_camera": "Désactiver la caméra",
         "disable_microphone": "Désactiver le microphone",
-        "disabled_no_one_here": "Il n’y a personne à appeler ici",
         "disabled_no_perms_start_video_call": "Vous n’avez pas la permission de démarrer un appel vidéo",
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",

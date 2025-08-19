@@ -98,11 +98,17 @@ describe("MemberTileView", () => {
             );
             expect(container2).toHaveTextContent("Admin");
 
-            member.isInvite = true;
+            member.powerLevel = Infinity;
             const { container: container3 } = render(
                 <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
-            expect(container3).toHaveTextContent("Invited");
+            expect(container3).toHaveTextContent("Owner");
+
+            member.isInvite = true;
+            const { container: container4 } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
+            expect(container4).toHaveTextContent("Invited");
         });
     });
 

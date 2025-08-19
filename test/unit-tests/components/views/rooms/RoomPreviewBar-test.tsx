@@ -16,6 +16,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomPreviewBar from "../../../../../src/components/views/rooms/RoomPreviewBar";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import ModuleApi from "../../../../../src/modules/Api.ts";
 
 jest.mock("../../../../../src/IdentityAuthClient", () => {
     return jest.fn().mockImplementation(() => {
@@ -496,5 +497,13 @@ describe("<RoomPreviewBar />", () => {
             fireEvent.click(getSecondaryActionButton(component)!);
             expect(onCancelAskToJoin).toHaveBeenCalled();
         });
+    });
+
+    it("should render Module roomPreviewBarRenderer if specified", () => {
+        jest.spyOn(ModuleApi.customComponents, "roomPreviewBarRenderer", "get").mockReturnValue(() => (
+            <>Test component</>
+        ));
+        const { getByText } = render(<RoomPreviewBar />);
+        expect(getByText("Test component")).toBeTruthy();
     });
 });

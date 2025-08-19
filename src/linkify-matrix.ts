@@ -121,55 +121,76 @@ export const ELEMENT_URL_PATTERN =
     "(?:app|beta|staging|develop)\\.element\\.io/" +
     ")(#.*)";
 
-export const options: Opts = {
-    events: function (href: string, type: string): EventListeners {
-        switch (type as Type) {
-            case Type.URL: {
-                // intercept local permalinks to users and show them like userids (in userinfo of current room)
-                try {
-                    const permalink = parsePermalink(href);
-                    if (permalink?.userId) {
+// Attach click handlers to links based on their type
+function events(href: string, type: string): EventListeners {
+    switch (type as Type) {
+        case Type.URL: {
+            // intercept local permalinks to users and show them like userids (in userinfo of current room)
+            try {
+                const permalink = parsePermalink(href);
+                if (permalink?.userId) {
+                    return {
+                        click: function (e: MouseEvent) {
+                            onUserClick(e, permalink.userId!);
+                        },
+                    };
+                } else {
+                    // for events, rooms etc. (anything other than users)
+                    const localHref = tryTransformPermalinkToLocalHref(href);
+                    if (localHref !== href) {
+                        // it could be converted to a localHref -> therefore handle locally
                         return {
                             click: function (e: MouseEvent) {
-                                onUserClick(e, permalink.userId!);
+                                e.preventDefault();
+                                window.location.hash = localHref;
                             },
                         };
-                    } else {
-                        // for events, rooms etc. (anything other than users)
-                        const localHref = tryTransformPermalinkToLocalHref(href);
-                        if (localHref !== href) {
-                            // it could be converted to a localHref -> therefore handle locally
-                            return {
-                                click: function (e: MouseEvent) {
-                                    e.preventDefault();
-                                    window.location.hash = localHref;
-                                },
-                            };
-                        }
                     }
-                } catch {
-                    // OK fine, it's not actually a permalink
                 }
-                break;
+            } catch {
+                // OK fine, it's not actually a permalink
             }
-            case Type.UserId:
-                return {
-                    click: function (e: MouseEvent) {
-                        const userId = parsePermalink(href)?.userId ?? href;
-                        if (userId) onUserClick(e, userId);
-                    },
-                };
-            case Type.RoomAlias:
-                return {
-                    click: function (e: MouseEvent) {
-                        const alias = parsePermalink(href)?.roomIdOrAlias ?? href;
-                        if (alias) onAliasClick(e, alias);
-                    },
-                };
+            break;
         }
+        case Type.UserId:
+            return {
+                click: function (e: MouseEvent) {
+                    e.preventDefault();
+                    const userId = parsePermalink(href)?.userId ?? href;
+                    if (userId) onUserClick(e, userId);
+                },
+            };
+        case Type.RoomAlias:
+            return {
+                click: function (e: MouseEvent) {
+                    e.preventDefault();
+                    const alias = parsePermalink(href)?.roomIdOrAlias ?? href;
+                    if (alias) onAliasClick(e, alias);
+                },
+            };
+    }
 
-        return {};
-    },
+    return {};
+}
+
+// linkify-react doesn't respect `events` and needs it mapping to React attributes
+// so we need to manually add the click handler to the attributes
+// https://linkify.js.org/docs/linkify-react.html#events
+function attributes(href: string, type: string): Record<string, unknown> {
+    const attrs: Record<string, unknown> = {
+        rel: "noreferrer noopener",
+    };
+
+    const options = events(href, type);
+    if (options?.click) {
+        attrs.onClick = options.click;
+    }
+
+    return attrs;
+}
+
+export const options: Opts = {
+    events,
 
     formatHref: function (href: string, type: Type | string): string {
         switch (type) {
@@ -194,9 +215,7 @@ export const options: Opts = {
         }
     },
 
-    attributes: {
-        rel: "noreferrer noopener",
-    },
+    attributes,
 
     ignoreTags: ["a", "pre", "code"],
 

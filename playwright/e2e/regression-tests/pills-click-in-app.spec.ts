@@ -29,7 +29,7 @@ test.describe("Pills", () => {
 
         // send a message using the built-in room mention functionality (autocomplete)
         await page
-            .getByRole("textbox", { name: "Send a message…" })
+            .getByRole("textbox", { name: "Send an unencrypted message…" })
             .pressSequentially(`Hello world! Join here: #${targetLocalpart.substring(0, 3)}`);
         await page.locator(".mx_Autocomplete_Completion_title").click();
         await page.getByRole("button", { name: "Send message" }).click();

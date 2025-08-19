@@ -40,11 +40,11 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
-import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import ModuleApi from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEvent } from "../shared-components/event-tiles/TextualEvent";
+import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
+import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -81,7 +81,7 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
 export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
-    return <TextualEvent vm={vm} />;
+    return <TextualEventView vm={vm} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
@@ -122,7 +122,7 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomGuestAccess, TextualEventFactory],
 ]);
 
-for (const evType of ElementCall.CALL_EVENT_TYPE.names) {
+for (const evType of ElementCallEventType.names) {
     STATE_EVENT_TILE_TYPES.set(evType, CallEventFactory);
 }
 
@@ -444,9 +444,7 @@ export function haveRendererForEvent(
         const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
         const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
         return Boolean(predecessor);
-    } else if (
-        ElementCall.CALL_EVENT_TYPE.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))
-    ) {
+    } else if (ElementCallEventType.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
         const intent = mxEvent.getContent()["m.intent"];
         const newlyStarted = Object.keys(mxEvent.getPrevContent()).length === 0;
         // Only interested in events that mark the start of a non-room call

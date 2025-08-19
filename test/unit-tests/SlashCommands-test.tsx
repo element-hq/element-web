@@ -14,14 +14,12 @@ import { act, waitFor } from "jest-matrix-react";
 import { type Command, Commands, getCommand } from "../../src/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
-import SettingsStore from "../../src/settings/SettingsStore";
 import { SdkContextClass } from "../../src/contexts/SDKContext";
 import Modal, { type ComponentType, type IHandle } from "../../src/Modal";
 import WidgetUtils from "../../src/utils/WidgetUtils";
 import { WidgetType } from "../../src/widgets/WidgetType";
 import { warnSelfDemote } from "../../src/components/views/right_panel/UserInfo";
 import dispatcher from "../../src/dispatcher/dispatcher";
-import { SettingLevel } from "../../src/settings/SettingLevel";
 import QuestionDialog from "../../src/components/views/dialogs/QuestionDialog";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
 
@@ -127,12 +125,7 @@ describe("SlashCommands", () => {
             setCurrentRoom();
         });
 
-        it("should be disabled by default", () => {
-            expect(command.isEnabled(client)).toBe(false);
-        });
-
-        it("should be enabled for developerMode", () => {
-            SettingsStore.setValue("developerMode", null, SettingLevel.DEVICE, true);
+        it("should be enabled by default", () => {
             expect(command.isEnabled(client)).toBe(true);
         });
     });

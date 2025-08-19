@@ -31,7 +31,7 @@ describe("AccessSecretStorageDialog", () => {
 
     const enterRecoveryKey = async (valueToEnter: string = recoveryKey): Promise<void> => {
         await act(async () => {
-            fireEvent.change(screen.getByRole("textbox"), {
+            fireEvent.change(screen.getByTitle("Recovery key"), {
                 target: {
                     value: valueToEnter,
                 },
@@ -67,7 +67,7 @@ describe("AccessSecretStorageDialog", () => {
         renderComponent({ onFinished, checkPrivateKey });
 
         // check that the input field is focused
-        expect(screen.getByRole("textbox")).toHaveFocus();
+        expect(screen.getByTitle("Recovery key")).toHaveFocus();
 
         await enterRecoveryKey();
         await submitDialog();
@@ -111,7 +111,7 @@ describe("AccessSecretStorageDialog", () => {
         renderComponent({ checkPrivateKey, keyInfo });
 
         await enterRecoveryKey();
-        expect(screen.getByRole("textbox")).toHaveValue(recoveryKey);
+        expect(screen.getByTitle("Recovery key")).toHaveValue(recoveryKey);
 
         await expect(screen.findByText("The recovery key you entered is not correct.")).resolves.toBeInTheDocument();
         expect(screen.getByText("Continue")).toHaveAttribute("aria-disabled", "true");

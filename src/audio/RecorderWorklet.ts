@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IAmplitudePayload, type ITimingPayload, PayloadEvent, WORKLET_NAME } from "./consts";
-import { percentageOf } from "../utils/numbers";
+import { percentageOf } from "../shared-components/utils/numbers";
 
 // from AudioWorkletGlobalScope: https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletGlobalScope
 declare const currentTime: number;

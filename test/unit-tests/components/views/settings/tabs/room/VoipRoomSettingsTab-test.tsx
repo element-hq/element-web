@@ -13,7 +13,7 @@ import { type MatrixClient, type Room, type MatrixEvent, EventType, JoinRule } f
 import { mkStubRoom, stubClient } from "../../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { VoipRoomSettingsTab } from "../../../../../../../src/components/views/settings/tabs/room/VoipRoomSettingsTab";
-import { ElementCall } from "../../../../../../../src/models/Call";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../../../src/call-types";
 
 describe("VoipRoomSettingsTab", () => {
     const roomId = "!room:example.com";
@@ -48,7 +48,7 @@ describe("VoipRoomSettingsTab", () => {
 
         describe("correct state", () => {
             it("shows enabled when call member power level is 0", () => {
-                mockPowerLevels({ [ElementCall.MEMBER_EVENT_TYPE.name]: 0 });
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
 
                 const tab = renderTab();
 
@@ -56,7 +56,7 @@ describe("VoipRoomSettingsTab", () => {
             });
 
             it.each([1, 50, 100])("shows disabled when call member power level is 0", (level: number) => {
-                mockPowerLevels({ [ElementCall.MEMBER_EVENT_TYPE.name]: level });
+                mockPowerLevels({ [ElementCallMemberEventType.name]: level });
 
                 const tab = renderTab();
 
@@ -67,7 +67,7 @@ describe("VoipRoomSettingsTab", () => {
         describe("enabling/disabling", () => {
             describe("enabling Element calls", () => {
                 beforeEach(() => {
-                    mockPowerLevels({ [ElementCall.MEMBER_EVENT_TYPE.name]: 100 });
+                    mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
                 });
 
                 it("enables Element calls in public room", async () => {
@@ -82,8 +82,8 @@ describe("VoipRoomSettingsTab", () => {
                             EventType.RoomPowerLevels,
                             expect.objectContaining({
                                 events: {
-                                    [ElementCall.CALL_EVENT_TYPE.name]: 50,
-                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                    [ElementCallEventType.name]: 50,
+                                    [ElementCallMemberEventType.name]: 0,
                                 },
                             }),
                         ),
@@ -102,8 +102,8 @@ describe("VoipRoomSettingsTab", () => {
                             EventType.RoomPowerLevels,
                             expect.objectContaining({
                                 events: {
-                                    [ElementCall.CALL_EVENT_TYPE.name]: 0,
-                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                    [ElementCallEventType.name]: 0,
+                                    [ElementCallMemberEventType.name]: 0,
                                 },
                             }),
                         ),
@@ -112,7 +112,7 @@ describe("VoipRoomSettingsTab", () => {
             });
 
             it("disables Element calls", async () => {
-                mockPowerLevels({ [ElementCall.MEMBER_EVENT_TYPE.name]: 0 });
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
 
                 const tab = renderTab();
 
@@ -123,8 +123,8 @@ describe("VoipRoomSettingsTab", () => {
                         EventType.RoomPowerLevels,
                         expect.objectContaining({
                             events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 100,
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 100,
+                                [ElementCallEventType.name]: 100,
+                                [ElementCallMemberEventType.name]: 100,
                             },
                         }),
                     ),

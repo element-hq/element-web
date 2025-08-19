@@ -20,7 +20,7 @@ import {
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
 import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
-import { ElementCall } from "../models/Call";
+import { ElementCallEventType } from "../call-types";
 
 const calcIsInfoMessage = (
     eventType: EventType | string,
@@ -82,7 +82,7 @@ export function getEventDisplayInfo(
         eventType === EventType.RoomEncryption ||
         factory === JitsiEventFactory;
     const isLeftAlignedBubbleMessage =
-        !isBubbleMessage && (eventType === EventType.CallInvite || ElementCall.CALL_EVENT_TYPE.matches(eventType));
+        !isBubbleMessage && (eventType === EventType.CallInvite || ElementCallEventType.matches(eventType));
     let isInfoMessage = calcIsInfoMessage(eventType, content, isBubbleMessage, isLeftAlignedBubbleMessage);
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent =

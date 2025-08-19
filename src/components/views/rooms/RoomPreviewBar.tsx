@@ -31,6 +31,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 import Field from "../elements/Field";
+import ModuleApi from "../../../modules/Api.ts";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
@@ -116,7 +117,7 @@ interface IState {
     reason?: string;
 }
 
-export default class RoomPreviewBar extends React.Component<IProps, IState> {
+class RoomPreviewBar extends React.Component<IProps, IState> {
     public static defaultProps = {
         onJoinClick() {},
     };
@@ -747,3 +748,21 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         );
     }
 }
+
+const WrappedRoomPreviewBar = (props: IProps): JSX.Element => {
+    const moduleRenderer = ModuleApi.customComponents.roomPreviewBarRenderer;
+    if (moduleRenderer) {
+        return moduleRenderer(
+            {
+                ...props,
+                roomId: props.room?.roomId ?? props.roomId,
+                roomAlias: props.room?.getCanonicalAlias() ?? props.roomAlias,
+            },
+            (props) => <RoomPreviewBar {...props} />,
+        );
+    }
+
+    return <RoomPreviewBar {...props} />;
+};
+
+export default WrappedRoomPreviewBar;
