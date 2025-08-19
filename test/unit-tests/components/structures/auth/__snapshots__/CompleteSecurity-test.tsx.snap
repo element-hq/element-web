@@ -37,7 +37,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
               class="mx_CompleteSecurity_body"
             >
               <div
-                class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+                class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
               >
                 <div
                   class="mx_EncryptionCard_header"
@@ -88,8 +88,10 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                 <div
                   class="mx_EncryptionCard_buttons"
                 >
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="primary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
@@ -105,21 +107,25 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                       />
                     </svg>
                      Use another device
-                  </div>
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                  </button>
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="secondary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
                     Can't confirm?
-                  </div>
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_tertiary"
+                  </button>
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="tertiary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
                     Sign out
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -201,7 +207,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
               class="mx_CompleteSecurity_body"
             >
               <div
-                class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+                class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
               >
                 <div
                   class="mx_EncryptionCard_header"
@@ -252,27 +258,33 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                 <div
                   class="mx_EncryptionCard_buttons"
                 >
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="primary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
                     Use recovery key
-                  </div>
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                  </button>
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="secondary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
                     Can't confirm?
-                  </div>
-                  <div
-                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_tertiary"
+                  </button>
+                  <button
+                    class="_button_vczzf_8"
+                    data-kind="tertiary"
+                    data-size="lg"
                     role="button"
                     tabindex="0"
                   >
                     Sign out
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
