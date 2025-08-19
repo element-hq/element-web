@@ -38,7 +38,7 @@ test.describe("Dehydration", () => {
         // Reset the identity key
         const settings = await app.settings.openUserSettings("Encryption");
         await settings.getByRole("button", { name: "Verify this device" }).click();
-        await page.getByRole("button", { name: "Proceed with reset" }).click();
+        await page.getByRole("button", { name: "Can't confirm?" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
 
         // Set up recovery
@@ -106,7 +106,7 @@ test.describe("Dehydration", () => {
         await logIntoElement(page, credentials);
 
         // Oh no, we forgot our recovery key - reset our identity
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Reset all" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Can't confirm" }).click();
         await expect(
             page.getByRole("heading", { name: "Are you sure you want to reset your identity?" }),
         ).toBeVisible();

@@ -133,8 +133,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
 
-        // We should be in (we see an error because we have no recovery key).
-        await expect(page.getByText("Unable to verify this device")).toBeVisible();
+        // We should be in
+        await expect(page.getByText("Confirm your identity")).toBeVisible();
     });
 
     test.describe("with force_verification on", () => {
@@ -166,7 +166,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "Continue" }).click();
 
             // We should be being warned that we need to verify (but we can't)
-            await expect(page.getByText("Unable to verify this device")).toBeVisible();
+            await expect(page.getByText("Confirm your identity")).toBeVisible();
 
             // And there should be no way to close this prompt
             await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
