@@ -4160,10 +4160,10 @@
     "@types/prop-types" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@19.1.9":
-  version "19.1.9"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.1.9.tgz#f42b24f35474566a39b5c3a98e4d0c425b79a849"
-  integrity sha512-WmdoynAX8Stew/36uTSVMcLJJ1KRh6L3IZRx1PZ7qJtBqT3dYTgyDTx8H1qoRghErydW7xw9mSJ3wS//tCRpFA==
+"@types/react@*", "@types/react@19.1.10":
+  version "19.1.10"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.1.10.tgz#a05015952ef328e1b85579c839a71304b07d21d9"
+  integrity sha512-EhBeSYX0Y6ye8pNebpKrwFJq7BoQ8J5SO6NlvNwwHjSj6adXJViPQrKlsyPw7hLBLvckEMO1yxeGdR82YBBlDg==
   dependencies:
     csstype "^3.0.2"
 
@@ -4561,7 +4561,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.39.0":
   version "2.39.0"
