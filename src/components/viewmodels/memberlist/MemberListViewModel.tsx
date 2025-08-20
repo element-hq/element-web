@@ -113,7 +113,6 @@ export interface MemberListViewState {
     shouldShowSearch: boolean;
     isLoading: boolean;
     canInvite: boolean;
-    onClickMember: (member: RoomMember | ThreePIDInvite) => void;
     onInviteButtonClick: (ev: ButtonEvent) => void;
 }
 export function useMemberListViewModel(roomId: string): MemberListViewState {
@@ -135,14 +134,6 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
      * in the room when the search functionality is used.
      */
     const [memberCount, setMemberCount] = useState(0);
-
-    const onClickMember = (member: RoomMember | ThreePIDInvite): void => {
-        dis.dispatch({
-            action: Action.ViewUser,
-            member: member,
-            push: true,
-        });
-    };
 
     const loadMembers = useMemo(
         () =>
@@ -278,7 +269,6 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         isPresenceEnabled,
         isLoading,
         onInviteButtonClick,
-        onClickMember,
         shouldShowSearch: totalMemberCount >= 20,
         canInvite,
     };
