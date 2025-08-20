@@ -38,8 +38,6 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
-import { Action } from "../../../dispatcher/actions";
-import dis from "../../../dispatcher/dispatcher";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
