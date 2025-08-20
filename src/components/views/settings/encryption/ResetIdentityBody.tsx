@@ -129,6 +129,6 @@ function titleForVariant(variant: ResetIdentityBodyVariant): string {
         case "forgot":
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
         case "cant_confirm":
-            return _t("settings|encryption|advanced|breadcrumb_tittle_cant_confirm");
+            return _t("settings|encryption|advanced|breadcrumb_title_cant_confirm");
     }
 }

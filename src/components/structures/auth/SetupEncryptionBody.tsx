@@ -129,7 +129,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     };
 
-    private onLogOutClick = (): void => {
+    private onLogoutClick = (): void => {
         dispatcher.dispatch({ action: "logout" });
     };
 
@@ -180,7 +180,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             let logOutButton;
             if (this.props.allowLogout) {
                 logOutButton = (
-                    <Button kind="tertiary" onClick={this.onLogOutClick}>
+                    <Button kind="tertiary" onClick={this.onLogoutClick}>
                         {_t("action|sign_out")}
                     </Button>
                 );
