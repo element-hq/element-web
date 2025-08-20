@@ -72,6 +72,7 @@ const expectNoPill = (value: string) => {
     expect(getSearchField()).toHaveValue(value);
 };
 
+const serverDomain = "example.org";
 const roomId = "!111111111111111111:example.org";
 const aliceId = "@alice:example.org";
 const aliceEmail = "foobar@email.com";
@@ -103,6 +104,7 @@ describe("InviteDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
+            getDomain: jest.fn().mockReturnValue(serverDomain),
             getUserId: jest.fn().mockReturnValue(bobId),
             getSafeUserId: jest.fn().mockReturnValue(bobId),
             isGuest: jest.fn().mockReturnValue(false),

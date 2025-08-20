@@ -787,7 +787,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       </div>
       <div
         aria-label="Message composer"
-        class="mx_MessageComposer"
+        class="mx_MessageComposer mx_MessageComposer_e2eStatus"
         role="region"
       >
         <div
@@ -796,6 +796,23 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           <div
             class="mx_MessageComposer_row"
           >
+            <div
+              class="mx_MessageComposer_e2eIconWrapper"
+            >
+              <svg
+                class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                color="var(--cpd-color-icon-info-primary)"
+                fill="currentColor"
+                height="12"
+                viewBox="0 0 24 24"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                />
+              </svg>
+            </div>
             <div
               class="mx_SendMessageComposer"
             >
@@ -854,14 +871,14 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                   aria-autocomplete="list"
                   aria-disabled="false"
                   aria-haspopup="listbox"
-                  aria-label="Send a message…"
+                  aria-label="Send an unencrypted message…"
                   aria-multiline="true"
                   class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
                   contenteditable="true"
                   data-testid="basicmessagecomposer"
                   dir="auto"
                   role="textbox"
-                  style="--placeholder: 'Send\\ a\\ message…';"
+                  style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
                   tabindex="0"
                   translate="no"
                 >
@@ -1164,7 +1181,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </div>
       <div
         aria-label="Message composer"
-        class="mx_MessageComposer"
+        class="mx_MessageComposer mx_MessageComposer_e2eStatus"
         role="region"
       >
         <div
@@ -1173,6 +1190,23 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           <div
             class="mx_MessageComposer_row"
           >
+            <div
+              class="mx_MessageComposer_e2eIconWrapper"
+            >
+              <svg
+                class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                color="var(--cpd-color-icon-info-primary)"
+                fill="currentColor"
+                height="12"
+                viewBox="0 0 24 24"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                />
+              </svg>
+            </div>
             <div
               class="mx_SendMessageComposer"
             >
@@ -1231,14 +1265,14 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   aria-autocomplete="list"
                   aria-disabled="false"
                   aria-haspopup="listbox"
-                  aria-label="Send a message…"
+                  aria-label="Send an unencrypted message…"
                   aria-multiline="true"
                   class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
                   contenteditable="true"
                   data-testid="basicmessagecomposer"
                   dir="auto"
                   role="textbox"
-                  style="--placeholder: 'Send\\ a\\ message…';"
+                  style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
                   tabindex="0"
                   translate="no"
                 >
@@ -1415,8 +1449,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Video call"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1425,7 +1459,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 aria-labelledby="«r2c»"
@@ -1442,8 +1476,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Voice call"
             aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
@@ -1453,7 +1487,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 fill="currentColor"
@@ -1627,8 +1661,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Video call"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1637,7 +1671,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 aria-labelledby="«r2c»"
@@ -1654,8 +1688,8 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             </div>
           </button>
           <button
-            aria-disabled="true"
-            aria-label="There's no one here to call"
+            aria-disabled="false"
+            aria-label="Voice call"
             aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
@@ -1665,7 +1699,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               class="_indicator-icon_zr2a0_17"
-              style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+              style="--cpd-icon-button-size: 100%;"
             >
               <svg
                 fill="currentColor"
@@ -1809,6 +1843,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   <div
                     aria-labelledby="«r3e»"
                     class="mx_E2EIcon mx_E2EIcon_verified mx_MessageComposer_e2eIcon"
+                    data-testid="e2e-icon"
                   >
                     <div
                       class="mx_E2EIcon_normal"
@@ -1874,14 +1909,14 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                     aria-autocomplete="list"
                     aria-disabled="false"
                     aria-haspopup="listbox"
-                    aria-label="Send an encrypted message…"
+                    aria-label="Send a message…"
                     aria-multiline="true"
                     class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
                     contenteditable="true"
                     data-testid="basicmessagecomposer"
                     dir="auto"
                     role="textbox"
-                    style="--placeholder: 'Send\\ an\\ encrypted\\ message…';"
+                    style="--placeholder: 'Send\\ a\\ message…';"
                     tabindex="0"
                     translate="no"
                   >
@@ -2154,9 +2189,11 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
       >
         <aside
+          aria-label="Right panel"
           class="mx_RightPanel"
           data-testid="right-panel"
           id="mx_RightPanel"
+          tabindex="-1"
         >
           <div
             class="mx_BaseCard mx_ThreadPanel mx_TimelineCard"
@@ -2221,7 +2258,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             </div>
             <div
               aria-label="Message composer"
-              class="mx_MessageComposer mx_MessageComposer--compact"
+              class="mx_MessageComposer mx_MessageComposer--compact mx_MessageComposer_e2eStatus"
               role="region"
             >
               <div
@@ -2230,6 +2267,23 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 <div
                   class="mx_MessageComposer_row"
                 >
+                  <div
+                    class="mx_MessageComposer_e2eIconWrapper"
+                  >
+                    <svg
+                      class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                      color="var(--cpd-color-icon-info-primary)"
+                      fill="currentColor"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      width="12"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                      />
+                    </svg>
+                  </div>
                   <div
                     class="mx_SendMessageComposer"
                   >
@@ -2288,14 +2342,14 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                         aria-autocomplete="list"
                         aria-disabled="false"
                         aria-haspopup="listbox"
-                        aria-label="Send a message…"
+                        aria-label="Send an unencrypted message…"
                         aria-multiline="true"
                         class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
                         contenteditable="true"
                         data-testid="basicmessagecomposer"
                         dir="auto"
                         role="textbox"
-                        style="--placeholder: 'Send\\ a\\ message…';"
+                        style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
                         tabindex="0"
                         translate="no"
                       >

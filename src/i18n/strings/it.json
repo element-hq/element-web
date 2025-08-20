@@ -1461,8 +1461,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
-        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti"
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
@@ -2906,6 +2905,7 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
@@ -3468,7 +3468,6 @@
         "dialpad": "Tastierino",
         "disable_camera": "Spegni la fotocamera",
         "disable_microphone": "Spegni il microfono",
-        "disabled_no_one_here": "Non c'è nessuno da chiamare qui",
         "disabled_no_perms_start_video_call": "Non hai il permesso di avviare videochiamate",
         "disabled_no_perms_start_voice_call": "Non hai il permesso di avviare chiamate",
         "disabled_ongoing_call": "Chiamata in corso",

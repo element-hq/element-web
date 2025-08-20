@@ -93,7 +93,6 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
@@ -645,12 +644,12 @@
         "mode_plain": "Hide formatting",
         "mode_rich_text": "Show formatting",
         "no_perms_notice": "You do not have permission to post to this room",
-        "placeholder": "Send a message…",
-        "placeholder_encrypted": "Send an encrypted message…",
-        "placeholder_reply": "Send a reply…",
-        "placeholder_reply_encrypted": "Send an encrypted reply…",
-        "placeholder_thread": "Reply to thread…",
-        "placeholder_thread_encrypted": "Reply to encrypted thread…",
+        "placeholder": "Send an unencrypted message…",
+        "placeholder_encrypted": "Send a message…",
+        "placeholder_reply": "Send an unencrypted reply…",
+        "placeholder_reply_encrypted": "Send a reply…",
+        "placeholder_thread": "Reply to unencrypted thread…",
+        "placeholder_thread_encrypted": "Reply to thread…",
         "poll_button": "Poll",
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
         "poll_button_no_perms_title": "Permission Required",
@@ -921,7 +920,8 @@
             },
             "privacy_warning": "Make sure nobody can see this screen!",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Recovery key"
+            "security_key_label": "Recovery key",
+            "security_key_title": "Enter your recovery key"
         },
         "bootstrap_title": "Setting up keys",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
@@ -1538,7 +1538,7 @@
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
-        "sliding_sync_description": "Under active development, cannot be disabled.",
+        "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
@@ -1763,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Admin",
+        "creator": "Owner",
         "custom": "Custom (%(level)s)",
         "custom_level": "Custom level",
         "default": "Default",
@@ -1916,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Thread options"
         },
+        "title": "Right panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -3398,6 +3400,7 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
+            "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
             "error_processing_voice_message": "Error processing voice message",
@@ -3963,7 +3966,6 @@
         "dialpad": "Dialpad",
         "disable_camera": "Turn off camera",
         "disable_microphone": "Mute microphone",
-        "disabled_no_one_here": "There's no one here to call",
         "disabled_no_perms_start_video_call": "You do not have permission to start video calls",
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
         "disabled_ongoing_call": "Ongoing call",

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlayPauseButton renders the button in default state 1`] = `
+<div>
+  <button
+    aria-disabled="false"
+    aria-label="Play"
+    aria-labelledby="«r0»"
+    class="_icon-button_1pz9o_8 button"
+    data-kind="primary"
+    role="button"
+    style="--cpd-icon-button-size: 32px;"
+    tabindex="0"
+  >
+    <div
+      class="_indicator-icon_zr2a0_17"
+      style="--cpd-icon-button-size: 100%;"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+        />
+      </svg>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`PlayPauseButton renders the button in playing state 1`] = `
+<div>
+  <button
+    aria-disabled="false"
+    aria-label="Pause"
+    aria-labelledby="«r6»"
+    class="_icon-button_1pz9o_8 button"
+    data-kind="primary"
+    role="button"
+    style="--cpd-icon-button-size: 32px;"
+    tabindex="0"
+  >
+    <div
+      class="_indicator-icon_zr2a0_17"
+      style="--cpd-icon-button-size: 100%;"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 4a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2m8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2"
+        />
+      </svg>
+    </div>
+  </button>
+</div>
+`;

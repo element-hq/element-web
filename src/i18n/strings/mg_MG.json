@@ -1446,8 +1446,7 @@
     },
     "member_list": {
         "filter_placeholder": "Sivanina ny mpikambana ao amin'ny efitrano",
-        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao",
-        "power_label": "%(userName)s(hery%(powerLevelNumber)s )"
+        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao"
     },
     "member_list_back_action_label": "Mpikambana ao amin'ny efitrano",
     "message_edit_dialog_title": "Fanovana hafatra",
@@ -2889,6 +2888,7 @@
         "creation_summary_dm": "%(creator)snamorona ity DM ity.",
         "creation_summary_room": "%(creator)snamorona sy nanamboatra ny efitrano.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
+        "download_action_decrypting": "Decryptering",
         "download_action_downloading": "Misintona",
         "edits": {
             "tooltip_label": "Namboarina tamin'ny%(Rendez-vous . Kitiho raha hijery ny fanovana.",
@@ -3449,7 +3449,6 @@
         "dialpad": "Fehizoro nomerika",
         "disable_camera": "Vonoy ny fakantsary",
         "disable_microphone": "Tapaina ny mikrô finday",
-        "disabled_no_one_here": "Tsy misy olona azo antsoina eto",
         "disabled_no_perms_start_video_call": "Tsy manana alalana hanombohana antso an-tsary ianao",
         "disabled_no_perms_start_voice_call": "Tsy manana alalana hanombohana antso an-tariby ianao",
         "disabled_ongoing_call": "Antso mitohy",
