@@ -56,9 +56,13 @@ export enum RoomListStoreV3Event {
     ListsLoaded = "lists_loaded",
 }
 
-// A list of rooms in a specific space
-export type SpaceRoomsState = {
+// The result object for returning rooms from the store
+export type RoomsResult = {
+    // The ID of the active space queried
     spaceId: string;
+    // The filter queried
+    filterKeys?: FilterKey[];
+    // The resulting list of rooms
     rooms: Room[];
 };
 
@@ -113,11 +117,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
-    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): SpaceRoomsState {
+    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = SpaceStore.instance.activeSpace;
         if (this.roomSkipList?.initialized)
-            return { spaceId: spaceId, rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)) };
-        else return { spaceId: spaceId, rooms: [] };
+            return {
+                spaceId: spaceId,
+                filterKeys,
+                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
+            };
+        else return { spaceId: spaceId, filterKeys, rooms: [] };
     }
 
     /**

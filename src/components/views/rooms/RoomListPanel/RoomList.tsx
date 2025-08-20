@@ -8,12 +8,13 @@
 import React, { useCallback, useRef, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { type ScrollIntoViewLocation } from "react-virtuoso";
+import { isEqual } from "lodash";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
 import { type ListContext, ListView } from "../../../utils/ListView";
-import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";
+import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 
 interface RoomListProps {
     /**
@@ -25,17 +26,17 @@ interface RoomListProps {
 /**
  * A virtualized list of rooms.
  */
-export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFilter } }: RoomListProps): JSX.Element {
+export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): JSX.Element {
     const lastSpaceId = useRef<string | undefined>(undefined);
-    const lastActivePrimaryFilter = useRef<PrimaryFilter | undefined>(undefined);
-    const roomCount = rooms.rooms.length;
+    const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
+    const roomCount = roomsResult.rooms.length;
     const getItemComponent = useCallback(
         (
             index: number,
             item: Room,
             context: ListContext<{
                 spaceId: string;
-                activePrimaryFilter: PrimaryFilter | undefined;
+                filterKeys: FilterKey[] | undefined;
             }>,
             onFocus: (e: React.FocusEvent) => void,
         ): JSX.Element => {
@@ -65,12 +66,12 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
 
     const scrollIntoViewOnChange = useCallback(
         (params: {
-            context: ListContext<{ spaceId: string; activePrimaryFilter: PrimaryFilter | undefined }>;
+            context: ListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
         }): ScrollIntoViewLocation | null | undefined | false | void => {
-            const { spaceId, activePrimaryFilter } = params.context.context;
+            const { spaceId, filterKeys } = params.context.context;
             const shouldScrollIndexIntoView =
-                lastSpaceId.current !== spaceId || lastActivePrimaryFilter.current !== activePrimaryFilter;
-            lastActivePrimaryFilter.current = activePrimaryFilter;
+                lastSpaceId.current !== spaceId || !isEqual(lastFilterKeys.current, filterKeys);
+            lastFilterKeys.current = filterKeys;
             lastSpaceId.current = spaceId;
 
             if (shouldScrollIndexIntoView) {
@@ -87,14 +88,14 @@ export function RoomList({ vm: { roomsState: rooms, activeIndex, activePrimaryFi
 
     return (
         <ListView
-            context={{ spaceId: rooms.spaceId, activePrimaryFilter }}
+            context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeIndex}
             data-testid="room-list"
             role="listbox"
             aria-label={_t("room_list|list_title")}
             fixedItemHeight={48}
-            items={rooms.rooms}
+            items={roomsResult.rooms}
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}
             isItemFocusable={() => true}

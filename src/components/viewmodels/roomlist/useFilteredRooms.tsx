@@ -12,7 +12,7 @@ import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import RoomListStoreV3, {
     LISTS_LOADED_EVENT,
     LISTS_UPDATE_EVENT,
-    type SpaceRoomsState,
+    type RoomsResult,
 } from "../../../stores/room-list-v3/RoomListStoreV3";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -38,7 +38,7 @@ export interface PrimaryFilter {
 interface FilteredRooms {
     primaryFilters: PrimaryFilter[];
     isLoadingRooms: boolean;
-    roomsState: SpaceRoomsState;
+    roomsResult: RoomsResult;
     /**
      * The currently active primary filter.
      * If no primary filter is active, this will be undefined.
@@ -66,12 +66,12 @@ export function useFilteredRooms(): FilteredRooms {
      */
     const [primaryFilter, setPrimaryFilter] = useState<FilterKey | undefined>();
 
-    const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
+    const [roomsResult, setRoomsResult] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
     const [isLoadingRooms, setIsLoadingRooms] = useState(() => RoomListStoreV3.instance.isLoadingRooms);
 
     const updateRoomsFromStore = useCallback((filters: FilterKey[] = []): void => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
-        setRooms(newRooms);
+        setRoomsResult(newRooms);
     }, []);
 
     // Reset filters when active space changes
@@ -131,6 +131,6 @@ export function useFilteredRooms(): FilteredRooms {
         isLoadingRooms,
         primaryFilters,
         activePrimaryFilter,
-        roomsState: rooms,
+        roomsResult,
     };
 }
