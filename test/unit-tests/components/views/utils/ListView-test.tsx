@@ -21,7 +21,6 @@ const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
 describe("ListView", () => {
-    const mockOnSelectItem = jest.fn();
     const mockGetItemComponent = jest.fn();
     const mockIsItemFocusable = jest.fn();
 
@@ -34,7 +33,6 @@ describe("ListView", () => {
 
     const defaultProps: IListViewProps<TestItemWithSeparator, any> = {
         items: defaultItems,
-        onSelectItem: mockOnSelectItem,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
