@@ -50,6 +50,9 @@ describe("<RoomList />", () => {
                 </MatrixClientContext.Provider>
             ),
         });
+        // At the moment the context prop on Virtuoso gets rendered in the dom as "[object Object]".
+        // This is a general issue with the react-virtuoso library.
+        // TODO: Update the snapshot when the following issue is resolved: https://github.com/petyosi/react-virtuoso/issues/1281
         expect(asFragment()).toMatchSnapshot();
     });
 
