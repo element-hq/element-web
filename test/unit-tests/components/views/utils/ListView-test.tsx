@@ -48,7 +48,7 @@ describe("ListView", () => {
         return render(getListViewComponent(mergedProps), {
             wrapper: ({ children }) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
-                    {children}
+                    <>{children}</>
                 </VirtuosoMockContext.Provider>
             ),
         });
