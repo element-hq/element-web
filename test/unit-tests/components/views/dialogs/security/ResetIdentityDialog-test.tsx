@@ -12,8 +12,8 @@ import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { type Mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { getMockClientWithEventEmitter } from "../../../../test-utils";
-import { ResetIdentityDialog } from "../../../../../src/components/views/dialogs/ResetIdentityDialog";
+import { getMockClientWithEventEmitter } from "../../../../../test-utils";
+import { ResetIdentityDialog } from "../../../../../../src/components/views/dialogs/ResetIdentityDialog";
 
 describe("ResetIdentityDialog", () => {
     afterEach(() => {

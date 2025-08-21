@@ -10,8 +10,8 @@ import React from "react";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
-import { InitialCryptoSetupDialog } from "../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
-import { InitialCryptoSetupStore } from "../../../../../src/stores/InitialCryptoSetupStore";
+import { InitialCryptoSetupDialog } from "../../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
+import { InitialCryptoSetupStore } from "../../../../../../src/stores/InitialCryptoSetupStore";
 
 describe("InitialCryptoSetupDialog", () => {
     const storeMock = {

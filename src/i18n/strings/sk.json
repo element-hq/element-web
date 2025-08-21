@@ -929,6 +929,7 @@
             },
             "privacy_warning": "Uistite sa, že túto obrazovku nikto neuvidí!",
             "restoring": "Obnovenie kľúčov zo zálohy",
+            "security_key_label": "Kľúč na obnovenie",
             "security_key_title": "Zadajte svoj kľúč na obnovenie"
         },
         "bootstrap_title": "Príprava kľúčov",
@@ -3439,6 +3440,7 @@
             "unable_to_find": "Pokus o načítanie konkrétneho bodu na časovej osi tejto miestnosti, ale nepodarilo sa ho nájsť."
         },
         "m.audio": {
+            "audio_player": "Prehrávač zvuku",
             "error_downloading_audio": "Chyba pri sťahovaní zvuku",
             "error_processing_audio": "Chyba pri spracovaní hlasovej správy",
             "error_processing_voice_message": "Chyba pri spracovaní hlasovej správy",
@@ -4040,7 +4042,6 @@
         "dialpad": "Číselník",
         "disable_camera": "Vypnúť kameru",
         "disable_microphone": "Stlmiť mikrofón",
-        "disabled_no_one_here": "Nie je tu nikto, komu by ste mohli zavolať",
         "disabled_no_perms_start_video_call": "Nemáte povolenie na spustenie videohovorov",
         "disabled_no_perms_start_voice_call": "Nemáte povolenie na spustenie hlasových hovorov",
         "disabled_ongoing_call": "Prebiehajúci hovor",

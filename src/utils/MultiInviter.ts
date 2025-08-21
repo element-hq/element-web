@@ -40,6 +40,12 @@ const USER_ALREADY_JOINED = "IO.ELEMENT.ALREADY_JOINED";
 const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
 const USER_BANNED = "IO.ELEMENT.BANNED";
 
+/** Options interface for {@link MultiInviter} */
+export interface MultiInviterOptions {
+    /** Optional callback, fired after each invite */
+    progressCallback?: () => void;
+}
+
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
  */
@@ -53,12 +59,12 @@ export default class MultiInviter {
     /**
      * @param matrixClient the client of the logged in user
      * @param {string} roomId The ID of the room to invite to
-     * @param {function} progressCallback optional callback, fired after each invite.
+     * @param options Options object
      */
     public constructor(
         private readonly matrixClient: MatrixClient,
         private roomId: string,
-        private readonly progressCallback?: () => void,
+        private readonly options: MultiInviterOptions = {},
     ) {}
 
     public get fatal(): boolean {
@@ -69,9 +75,11 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
+     * Any failures are returned via the {@link CompletionStates} in the result.
+     *
      * @param {array} addresses Array of addresses to invite
      * @param {string} reason Reason for inviting (optional)
-     * @returns {Promise} Resolved when all invitations in the queue are complete
+     * @returns {Promise} Resolved when all invitations in the queue are complete.
      */
     public async invite(addresses: string[], reason?: string): Promise<CompletionStates> {
         if (this.addresses.length > 0) {
@@ -230,7 +238,7 @@ export default class MultiInviter {
                     delete this.errors[address];
 
                     resolve();
-                    this.progressCallback?.();
+                    this.options.progressCallback?.();
                 })
                 .catch((err) => {
                     logger.error(err);

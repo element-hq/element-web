@@ -1463,7 +1463,7 @@
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
         "toggle_microphone_mute": "Lülita mikrofoni summutamine sisse/välja",
         "toggle_right_panel": "Lülita parem paan sisse/välja",
-        "toggle_space_panel": "Lülita kogukondade riba sisse/välja",
+        "toggle_space_panel": "Lülita kogukondade paan sisse/välja",
         "toggle_top_left_menu": "Lülita ülemine vasak menüü sisse/välja",
         "toggle_webcam_mute": "Lülita veebikaamera sisse/välja",
         "upload_file": "Laadi fail üles"
@@ -1763,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Peakasutaja",
+        "creator": "Omanik",
         "custom": "Kohandatud õigused (%(level)s)",
         "custom_level": "Kohandatud õigused",
         "default": "Tavaline",
@@ -1916,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Jutulõnga valikud"
         },
+        "title": "Parem paan",
         "video_room_chat": {
             "title": "Vestle"
         }
@@ -3398,6 +3400,7 @@
             "unable_to_find": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida."
         },
         "m.audio": {
+            "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "error_processing_audio": "Viga häälsõnumi töötlemisel",
             "error_processing_voice_message": "Viga häälsõnumi töötlemisel",
@@ -3963,7 +3966,6 @@
         "dialpad": "Numbriklahvistik",
         "disable_camera": "Lülita kaamera välja",
         "disable_microphone": "Summuta mikrofon",
-        "disabled_no_one_here": "Siin ei leidu kedagi, kellele helistada",
         "disabled_no_perms_start_video_call": "Sul ei ole piisavalt õigusi videokõne alustamiseks",
         "disabled_no_perms_start_voice_call": "Sul ei ole piisavalt õigusi häälkõne alustamiseks",
         "disabled_ongoing_call": "Kõne on pooleli",

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { type MethodLikeKeys, mocked, type MockedObject, type PropertyLikeKeys } from "jest-mock";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { type MatrixClient, type Room, MatrixError, User } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
@@ -138,7 +138,6 @@ export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixC
     isVersionSupported: jest.fn().mockResolvedValue(false),
     getVersions: jest.fn().mockResolvedValue({}),
     isFallbackICEServerAllowed: jest.fn(),
-    getAuthIssuer: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNKNOWN" }, 404)),
 });
 
 export const mockClientMethodsDevice = (
