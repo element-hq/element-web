@@ -71,7 +71,7 @@ export interface IListViewProps<Item, Context>
      * @param e - The keyboard event
      * @returns
      */
-    onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 /**
