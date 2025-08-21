@@ -39,7 +39,7 @@ export const HAS_REFRESH_TOKEN_STORAGE_KEY = "mx_has_refresh_token";
  * @param pickleKey
  * @returns AES key
  */
-async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array> {
+async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array<ArrayBuffer>> {
     const pickleKeyBuffer = new Uint8Array(pickleKey.length);
     for (let i = 0; i < pickleKey.length; i++) {
         pickleKeyBuffer[i] = pickleKey.charCodeAt(i);
