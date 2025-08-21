@@ -1463,7 +1463,7 @@
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
         "toggle_microphone_mute": "Lülita mikrofoni summutamine sisse/välja",
         "toggle_right_panel": "Lülita parem paan sisse/välja",
-        "toggle_space_panel": "Lülita kogukondade riba sisse/välja",
+        "toggle_space_panel": "Lülita kogukondade paan sisse/välja",
         "toggle_top_left_menu": "Lülita ülemine vasak menüü sisse/välja",
         "toggle_webcam_mute": "Lülita veebikaamera sisse/välja",
         "upload_file": "Laadi fail üles"
@@ -1917,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Jutulõnga valikud"
         },
+        "title": "Parem paan",
         "video_room_chat": {
             "title": "Vestle"
         }
