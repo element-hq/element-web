@@ -15,6 +15,9 @@ import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
 import { type ListContext, ListView } from "../../../utils/ListView";
 import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
+import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
+import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 
 interface RoomListProps {
     /**
@@ -86,6 +89,19 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
         [activeIndex],
     );
 
+    const keyDownCallback = useCallback((ev: React.KeyboardEvent) => {
+        const navAction = getKeyBindingsManager().getNavigationAction(ev);
+        if (navAction === KeyBindingAction.NextLandmark || navAction === KeyBindingAction.PreviousLandmark) {
+            LandmarkNavigation.findAndFocusNextLandmark(
+                Landmark.ROOM_LIST,
+                navAction === KeyBindingAction.PreviousLandmark,
+            );
+            ev.stopPropagation();
+            ev.preventDefault();
+            return;
+        }
+    }, []);
+
     return (
         <ListView
             context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
@@ -99,6 +115,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}
             isItemFocusable={() => true}
+            onKeyDown={keyDownCallback}
         />
     );
 }
