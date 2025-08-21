@@ -16,6 +16,7 @@ import { RoomList } from "../../../../../../src/components/views/rooms/RoomListP
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { Landmark, LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
+import { mkRoom, stubClient } from "../../../../../test-utils";
 
 describe("<RoomList />", () => {
     let matrixClient: MatrixClient;
