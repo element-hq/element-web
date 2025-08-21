@@ -22,7 +22,7 @@ import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -59,7 +59,7 @@ export enum RoomListStoreV3Event {
 // The result object for returning rooms from the store
 export type RoomsResult = {
     // The ID of the active space queried
-    spaceId: string;
+    spaceId: SpaceKey;
     // The filter queried
     filterKeys?: FilterKey[];
     // The resulting list of rooms
