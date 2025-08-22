@@ -10,10 +10,8 @@ import React from "react";
 import Modal from "../../../Modal.tsx";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 
-interface Props {}
-
 /** A Modal dialog that pops up while room invites are being sent. */
-const InviteProgressDialog: React.FC<Props> = (_) => {
+const InviteProgressDialog: React.FC = (_) => {
     return <InviteProgressBody />;
 };
 
