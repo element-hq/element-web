@@ -1763,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Administrateur",
+        "creator": "Propriétaire",
         "custom": "Personnalisé (%(level)s)",
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
@@ -1915,6 +1916,7 @@
         "thread_list": {
             "context_menu_label": "Options des fils de discussion"
         },
+        "title": "Panneau droit",
         "video_room_chat": {
             "title": "Conversation privée"
         }
@@ -3397,6 +3399,7 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
+            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
             "error_processing_voice_message": "Erreur lors du traitement du message vocal",
@@ -3962,7 +3965,6 @@
         "dialpad": "Pavé numérique",
         "disable_camera": "Désactiver la caméra",
         "disable_microphone": "Désactiver le microphone",
-        "disabled_no_one_here": "Il n’y a personne à appeler ici",
         "disabled_no_perms_start_video_call": "Vous n’avez pas la permission de démarrer un appel vidéo",
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",

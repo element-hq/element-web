@@ -644,12 +644,12 @@
         "mode_plain": "Dölj formatering",
         "mode_rich_text": "Visa formatering",
         "no_perms_notice": "Du har inte behörighet att posta till detta rum",
-        "placeholder": "Skicka ett meddelande…",
-        "placeholder_encrypted": "Skicka ett krypterat meddelande…",
-        "placeholder_reply": "Skicka ett svar…",
-        "placeholder_reply_encrypted": "Skicka ett krypterat svar…",
-        "placeholder_thread": "Svara på tråd…",
-        "placeholder_thread_encrypted": "Svara på krypterad tråd…",
+        "placeholder": "Skicka ett okrypterat meddelande …",
+        "placeholder_encrypted": "Skicka ett meddelande …",
+        "placeholder_reply": "Skicka ett okrypterat svar …",
+        "placeholder_reply_encrypted": "Skicka ett svar …",
+        "placeholder_thread": "Svara på okrypterad tråd …",
+        "placeholder_thread_encrypted": "Svara på tråd …",
         "poll_button": "Omröstning",
         "poll_button_no_perms_description": "Du får inte starta omröstningar i det här rummet.",
         "poll_button_no_perms_title": "Behörighet krävs",
@@ -862,6 +862,7 @@
             "elementCallUrl": "Element Call-URL"
         },
         "settings_explorer": "Inställningar",
+        "show_empty_content_events": "Visa händelser med tomt innehåll",
         "show_hidden_events": "Visa dolda händelser i tidslinjen",
         "spaces": {
             "one": "<mellanslag>",
@@ -915,11 +916,12 @@
         "access_secret_storage_dialog": {
             "alternatives": "Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också.",
             "key_validation_text": {
-                "wrong_security_key": "Fel säkerhetsnyckel"
+                "wrong_security_key": "Återställningsnyckeln du angav är inte korrekt."
             },
             "privacy_warning": "Se till att ingen kan se den här skärmen",
             "restoring": "Återställer nycklar från säkerhetskopia",
-            "security_key_title": "Säkerhetsnyckel"
+            "security_key_label": "Återställningsnyckel",
+            "security_key_title": "Ange din återställningsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
@@ -932,6 +934,7 @@
         "cross_signing_user_warning": "Den här användaren har inte verifierat alla sina sessioner.",
         "enter_recovery_key": "Ange återställningsnyckel",
         "event_shield_reason_authenticity_not_guaranteed": "Det krypterade meddelandets äkthet kan inte garanteras på den här enheten.",
+        "event_shield_reason_mismatched_sender": "Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den.",
         "event_shield_reason_mismatched_sender_key": "Krypterat av en overifierad session",
         "event_shield_reason_unknown_device": "Krypterad av en okänd eller raderad enhet.",
         "event_shield_reason_unsigned_device": "Krypterad av en enhet som inte har verifierats av dess ägare.",
@@ -1008,7 +1011,19 @@
             "incoming_sas_user_dialog_text_1": "Verifiera denna användare för att markera den som betrodd. Att lita på användare ger en extra sinnesfrid när man använder totalsträckskrypterade meddelanden.",
             "incoming_sas_user_dialog_text_2": "Att verifiera den här användaren kommer att markera dess session som betrodd, och markera din session som betrodd för denne.",
             "manual": {
-                "already_verified": "Den här enheten är redan verifierad"
+                "already_verified": "Den här enheten är redan verifierad",
+                "already_verified_and_wrong_fingerprint": "Det angivna fingeravtrycket matchar inte, men enheten är redan verifierad!",
+                "device_id": "Enhets-ID",
+                "failure_description": "Misslyckades att verifiera '%(deviceId)s': %(error)s",
+                "failure_title": "Verifiering misslyckades",
+                "fingerprint": "Fingeravtryck (sessionsnyckel)",
+                "no_crypto": "Kunde inte verifiera enhet – krypto är inte aktiverat",
+                "no_device": "Kunde inte verifiera enhet – enheten '%(deviceId)s' hittades inte.",
+                "no_userid": "Kunde inte verifiera enhet – kan inte hitta vårt användar-ID",
+                "success_description": "Den här enheten (%(deviceId)s) är nu korssignerad.",
+                "success_title": "Verifiering lyckades",
+                "text": "Ange ID och fingeravtryck för en av dina egna enheter för att verifiera den. OBSERVERA att detta gör att den andra enheten kan skicka och ta emot meddelanden som om den vore du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD!",
+                "wrong_fingerprint": "Kunde inte verifiera enheten '%(deviceId)s' - det angivna fingeravtrycket '%(fingerprint)s' stämmer inte överens med enhetens fingeravtryck, '%(fprint)s'"
             },
             "no_key_or_device": "Det ser ut som att du inte har någon säkerhetsnyckel eller några andra enheter du kan verifiera mot. Den här enheten kommer inte kunna komma åt gamla krypterad meddelanden. För att verifiera din identitet på den här enheten så behöver du återställa dina verifieringsnycklar.",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
@@ -1437,6 +1452,7 @@
         "room_list_navigate_down": "Navigera ner i rumslistan",
         "room_list_navigate_up": "Navigera upp i rumslistan",
         "room_list_select_room": "Välj rum från rumslistan",
+        "save": "Spara",
         "scroll_down_timeline": "Skrolla ner i tidslinjen",
         "scroll_up_timeline": "Skrolla upp i tidslinjen",
         "search": "Sök (måste vara aktiverat)",
@@ -1518,6 +1534,9 @@
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
         "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
+        "share_history_on_invite": "Dela encrypted historik med nya medlemmar",
+        "share_history_on_invite_description": "När du bjuder in en användare till ett krypterat rum där historiksynlighet är inställd på \"delad\" så delar du krypterad historik med den användaren och du accepterar krypterad historik när du blir inbjuden till ett sådant rum.",
+        "share_history_on_invite_warning": "Den här funktionen är EXPERIMENTELL och alla säkerhetsåtgärder är inte implementerade. Aktivera inte på produktionskonton.",
         "sliding_sync": "Sliding sync-läge",
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
@@ -1639,6 +1658,7 @@
         "filter_placeholder": "Filtrera rumsmedlemmar",
         "invite_button_no_perms_tooltip": "Du är inte behörig att bjuda in användare",
         "invited_label": "Inbjuden",
+        "list_title": "Medlemslista",
         "no_matches": "Inga matchningar"
     },
     "member_list_back_action_label": "Rumsmedlemmar",
@@ -2048,6 +2068,7 @@
         "read_topic": "Klicka för att läsa ämne",
         "rejecting": "Nekar inbjudan …",
         "rejoin_button": "Gå med igen",
+        "room_content": "Rumsinnehåll",
         "room_is_low_priority": "Detta är ett lågprioriterat room",
         "search": {
             "all_rooms_button": "Sök i alla rum",
@@ -2097,6 +2118,7 @@
         "add_space_label": "Lägg till utrymme",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
+        "collapse_filters": "Kollapsa filterlista",
         "empty": {
             "no_chats": "Inga chattar än",
             "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
@@ -2104,6 +2126,7 @@
             "no_favourites": "Du har ingen favoritchatt än",
             "no_favourites_description": "Du kan lägga till en chatt till dina favoriter i chattinställningarna",
             "no_invites": "Du har inga olästa inbjudningar",
+            "no_lowpriority": "Du har inga lågprioriterade rum.",
             "no_mentions": "Du har inga olästa omnämnanden",
             "no_people": "Du har inte direktchattar med någon ännu",
             "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
@@ -2113,6 +2136,7 @@
             "show_activity": "Visa all aktivitet",
             "show_chats": "Visa alla chattar"
         },
+        "expand_filters": "Expandera filterlista",
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
         "failed_remove_tag": "Misslyckades att radera etiketten %(tagName)s från rummet",
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
@@ -2818,6 +2842,7 @@
             "composer_heading": "Meddelandefält",
             "default_timezone": "Webbläsarens standard (%(timezone)s)",
             "dialog_title": "<strong>Inställningar:</strong> Alternativ",
+            "enable_content_protection": "Aktivera innehållsskydd",
             "enable_hardware_acceleration": "Aktivera hårdvaruaccelerering",
             "enable_tray_icon": "Visa ikon i systembrickan och minimera programmet till den när fönstret stängs",
             "keyboard_heading": "Tangentbordsgenvägar",
@@ -3088,6 +3113,8 @@
         "jumptodate": "Hoppa till det angivna datumet i tidslinjen",
         "jumptodate_invalid_input": "Vi kunde inte förstå det givna datumet (%(inputDate)s). Pröva formatet ÅÅÅÅ-MM-DD.",
         "lenny": "Lägger till ( ͡° ͜ʖ ͡°) i början på ett textmeddelande",
+        "manual_device_verification_confirm_description": "Detta gör det möjligt för en annan enhet att skicka och ta emot meddelanden som du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD! Är du säker på att du vill verifiera den andra enheten?",
+        "manual_device_verification_confirm_title": "Varning: manuell verifiering av enhet",
         "me": "Visar åtgärd",
         "msg": "Skickar ett meddelande till den valda användaren",
         "myavatar": "Byter din profilbild i alla rum",
@@ -3370,6 +3397,7 @@
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den."
         },
         "m.audio": {
+            "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "error_processing_audio": "Fel vid hantering av ljudmeddelande",
             "error_processing_voice_message": "Fel vid hantering av röstmeddelande",
@@ -3935,7 +3963,6 @@
         "dialpad": "Knappsats",
         "disable_camera": "Stäng av kamera",
         "disable_microphone": "Slå av mikrofonen",
-        "disabled_no_one_here": "Det finns ingen här att ringa",
         "disabled_no_perms_start_video_call": "Du är inte behörig att starta videosamtal",
         "disabled_no_perms_start_voice_call": "Du är inte behörig att starta röstsamtal",
         "disabled_ongoing_call": "Pågående samtal",

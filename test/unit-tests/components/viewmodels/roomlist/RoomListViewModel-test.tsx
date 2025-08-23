@@ -30,7 +30,7 @@ describe("RoomListViewModel", () => {
         const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
         const fn = jest
             .spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace")
-            .mockImplementation(() => [...rooms]);
+            .mockImplementation(() => ({ spaceId: "home", rooms: [...rooms] }));
         return { rooms, fn };
     }
 
@@ -42,9 +42,9 @@ describe("RoomListViewModel", () => {
         const { rooms } = mockAndCreateRooms();
         const { result: vm } = renderHook(() => useRoomListViewModel());
 
-        expect(vm.current.rooms).toHaveLength(10);
+        expect(vm.current.roomsResult.rooms).toHaveLength(10);
         for (const room of rooms) {
-            expect(vm.current.rooms).toContain(room);
+            expect(vm.current.roomsResult.rooms).toContain(room);
         }
     });
 
@@ -57,7 +57,7 @@ describe("RoomListViewModel", () => {
         await act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
 
         await waitFor(() => {
-            expect(vm.current.rooms).toContain(newRoom);
+            expect(vm.current.roomsResult.rooms).toContain(newRoom);
         });
     });
 
@@ -176,7 +176,7 @@ describe("RoomListViewModel", () => {
     describe("Sticky room and active index", () => {
         function expectActiveRoom(vm: ReturnType<typeof useRoomListViewModel>, i: number, roomId: string) {
             expect(vm.activeIndex).toEqual(i);
-            expect(vm.rooms[i].roomId).toEqual(roomId);
+            expect(vm.roomsResult.rooms[i].roomId).toEqual(roomId);
         }
 
         it("active index is calculated with the last opened room in a space", () => {
@@ -187,9 +187,9 @@ describe("RoomListViewModel", () => {
 
             const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
             // Let's say all the rooms are in space1
-            const roomsInSpace1 = [...rooms];
+            const roomsInSpace1 = { spaceId: currentSpace, rooms: [...rooms] };
             // Let's say all rooms with even index are in space 2
-            const roomsInSpace2 = [...rooms].filter((_, i) => i % 2 === 0);
+            const roomsInSpace2 = { spaceId: "!space2:matrix.org", rooms: [...rooms].filter((_, i) => i % 2 === 0) };
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockImplementation(() =>
                 currentSpace === "!space1:matrix.org" ? roomsInSpace1 : roomsInSpace2,
             );
