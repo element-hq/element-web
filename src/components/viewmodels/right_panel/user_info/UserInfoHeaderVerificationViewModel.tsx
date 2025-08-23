@@ -71,10 +71,7 @@ export const useUserInfoVerificationViewModel = (
     const hasUserVerificationStatus = Boolean(userTrust);
     const isUserVerified = Boolean(userTrust?.isVerified());
     const isMe = member.userId === cli.getUserId();
-    const canVerify =
-        hasUserVerificationStatus &&
-        homeserverSupportsCrossSigning &&
-        !isUserVerified;
+    const canVerify = hasUserVerificationStatus && homeserverSupportsCrossSigning && !isUserVerified;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
     const verifySelectedUser = (): Promise<void> => verifyUser(cli, member as User);
