@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
+import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
+import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
+import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -17,25 +19,29 @@ import Modal from "../../../Modal";
 import VerificationRequestDialog from "../../views/dialogs/VerificationRequestDialog";
 import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStore";
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
-import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
+import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
-
-function keyHasPassphrase(keyInfo: SecretStorageKeyDescription): boolean {
-    return Boolean(keyInfo.passphrase && keyInfo.passphrase.salt && keyInfo.passphrase.iterations);
-}
+import { EncryptionCard } from "../../views/settings/encryption/EncryptionCard";
+import { EncryptionCardButtons } from "../../views/settings/encryption/EncryptionCardButtons";
+import { EncryptionCardEmphasisedContent } from "../../views/settings/encryption/EncryptionCardEmphasisedContent";
+import ExternalLink from "../../views/elements/ExternalLink";
+import dispatcher from "../../../dispatcher/dispatcher";
 
 interface IProps {
     onFinished: () => void;
+    allowLogout?: boolean;
 }
 
 interface IState {
     phase?: Phase;
     verificationRequest: VerificationRequest | null;
     backupInfo: KeyBackupInfo | null;
-    lostKeys: boolean;
 }
 
+/**
+ * Component to set up encryption by verifying the current device.
+ */
 export default class SetupEncryptionBody extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
@@ -48,7 +54,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             // Because of the latter, it lives in the state.
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
-            lostKeys: store.lostKeys(),
         };
     }
 
@@ -67,7 +72,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             phase: store.phase,
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
-            lostKeys: store.lostKeys(),
         });
     };
 
@@ -112,8 +116,8 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         store.returnAfterSkip();
     };
 
-    private onResetClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
+    private onResetClick = (): void => {
+        const store = SetupEncryptionStore.sharedInstance();
         Modal.createDialog(ResetIdentityDialog, {
             onReset: () => {
                 // The user completed the reset process - close this dialog
@@ -121,8 +125,12 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
-            variant: "confirm",
+            variant: store.lostKeys() ? "cant_confirm" : "confirm",
         });
+    };
+
+    private onLogoutClick = (): void => {
+        dispatcher.dispatch({ action: "logout" });
     };
 
     private onDoneClick = (): void => {
@@ -136,7 +144,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-        const { phase, lostKeys } = this.state;
+        const { phase } = this.state;
 
         if (this.state.verificationRequest && cli.getUser(this.state.verificationRequest.otherUserId)) {
             return (
@@ -149,69 +157,59 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 />
             );
         } else if (phase === Phase.Intro) {
-            if (lostKeys) {
-                return (
-                    <div>
-                        <p>{_t("encryption|verification|no_key_or_device")}</p>
+            const store = SetupEncryptionStore.sharedInstance();
 
-                        <div className="mx_CompleteSecurity_actionRow">
-                            <AccessibleButton kind="primary" onClick={this.onResetClick}>
-                                {_t("encryption|verification|reset_proceed_prompt")}
-                            </AccessibleButton>
-                        </div>
-                    </div>
-                );
-            } else {
-                const store = SetupEncryptionStore.sharedInstance();
-                let recoveryKeyPrompt;
-                if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
-                    recoveryKeyPrompt = _t("encryption|verification|verify_using_key_or_phrase");
-                } else if (store.keyInfo) {
-                    recoveryKeyPrompt = _t("encryption|verification|verify_using_key");
-                }
-
-                let useRecoveryKeyButton;
-                if (recoveryKeyPrompt) {
-                    useRecoveryKeyButton = (
-                        <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
-                            {recoveryKeyPrompt}
-                        </AccessibleButton>
-                    );
-                }
-
-                let verifyButton;
-                if (store.hasDevicesToVerifyAgainst) {
-                    verifyButton = (
-                        <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
-                            {_t("encryption|verification|verify_using_device")}
-                        </AccessibleButton>
-                    );
-                }
-
-                return (
-                    <div>
-                        <p>{_t("encryption|verification|verification_description")}</p>
-
-                        <div className="mx_CompleteSecurity_actionRow">
-                            {verifyButton}
-                            {useRecoveryKeyButton}
-                        </div>
-                        <div className="mx_SetupEncryptionBody_reset">
-                            {_t("encryption|reset_all_button", undefined, {
-                                a: (sub) => (
-                                    <AccessibleButton
-                                        kind="link_inline"
-                                        className="mx_SetupEncryptionBody_reset_link"
-                                        onClick={this.onResetClick}
-                                    >
-                                        {sub}
-                                    </AccessibleButton>
-                                ),
-                            })}
-                        </div>
-                    </div>
+            let verifyButton;
+            if (store.hasDevicesToVerifyAgainst) {
+                verifyButton = (
+                    <Button kind="primary" onClick={this.onVerifyClick}>
+                        <DevicesIcon /> {_t("encryption|verification|verify_using_device")}
+                    </Button>
                 );
             }
+
+            let useRecoveryKeyButton;
+            if (store.keyInfo) {
+                useRecoveryKeyButton = (
+                    <Button kind="primary" onClick={this.onUsePassphraseClick}>
+                        {_t("encryption|verification|verify_using_key")}
+                    </Button>
+                );
+            }
+
+            let logOutButton;
+            if (this.props.allowLogout) {
+                logOutButton = (
+                    <Button kind="tertiary" onClick={this.onLogoutClick}>
+                        {_t("action|sign_out")}
+                    </Button>
+                );
+            }
+
+            return (
+                <EncryptionCard
+                    title={_t("encryption|verification|confirm_identity_title")}
+                    Icon={LockIcon}
+                    className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
+                >
+                    <EncryptionCardEmphasisedContent>
+                        <span>{_t("encryption|verification|verification_description")}</span>
+                        <span>
+                            <ExternalLink href="https://element.io/help#encryption-device-verification">
+                                {_t("action|learn_more")}
+                            </ExternalLink>
+                        </span>
+                    </EncryptionCardEmphasisedContent>
+                    <EncryptionCardButtons>
+                        {verifyButton}
+                        {useRecoveryKeyButton}
+                        <Button kind="secondary" onClick={this.onResetClick}>
+                            {_t("encryption|verification|cant_confirm")}
+                        </Button>
+                        {logOutButton}
+                    </EncryptionCardButtons>
+                </EncryptionCard>
+            );
         } else if (phase === Phase.Done) {
             let message: JSX.Element;
             if (this.state.backupInfo) {
