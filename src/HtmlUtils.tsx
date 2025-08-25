@@ -326,11 +326,11 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
         sanitizeParams = {
             ...sanitizeParams,
             allowedClasses: {
-                ... sanitizeParams.allowedClasses,
-                'a': sanitizeParams.allowedClasses?.['a'] === true ? true : [
-                    ... (sanitizeParams.allowedClasses?.['a'] || []),
-                    'linkified',
-                ],
+                ...sanitizeParams.allowedClasses,
+                a:
+                    sanitizeParams.allowedClasses?.["a"] === true
+                        ? true
+                        : [...(sanitizeParams.allowedClasses?.["a"] || []), "linkified"],
             },
         };
     }
@@ -452,14 +452,15 @@ export function bodyToNode(
     });
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && eventInfo.safeBody) {
-        // This has to be done after the emojiBody check as to not break big emoji on replies
-        formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
-    }
-
     let emojiBodyElements: JSX.Element[] | undefined;
-    if (!eventInfo.safeBody && eventInfo.bodyHasEmoji) {
-        emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+
+    if (eventInfo.bodyHasEmoji) {
+        if (eventInfo.safeBody) {
+            // This has to be done after the emojiBody check as to not break big emoji on replies
+            formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
+        } else {
+            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+        }
     }
 
     return { strippedBody: eventInfo.strippedBody, formattedBody, emojiBodyElements, className };
@@ -482,7 +483,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && formattedBody) {
+    if (eventInfo.bodyHasEmoji && formattedBody) {
         // This has to be done after the emojiBody check above as to not break big emoji on replies
         formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
     }

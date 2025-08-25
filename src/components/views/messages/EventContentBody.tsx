@@ -11,7 +11,6 @@ import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { bodyToNode } from "../../../HtmlUtils.tsx";
-import { Linkify } from "../../../Linkify.tsx";
 import PlatformPeg from "../../../PlatformPeg.ts";
 import {
     applyReplacerOnString,
@@ -23,7 +22,6 @@ import {
     ambiguousLinkTooltipRenderer,
     codeBlockRenderer,
     spoilerRenderer,
-    replacerToRenderFunction,
 } from "../../../renderer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
@@ -166,7 +164,7 @@ const EventContentBody = memo(
                     mediaIsVisible,
                     linkify,
                 }),
-            [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply],
+            [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply, linkify],
         );
 
         if (as === "div") includeDir = true; // force dir="auto" on divs

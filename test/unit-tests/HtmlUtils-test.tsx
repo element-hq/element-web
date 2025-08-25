@@ -98,7 +98,9 @@ describe("bodyToHtml", () => {
             },
         );
 
-        expect(html).toMatchInlineSnapshot(`"foo <a href="http://link.example/test/path" class="linkified" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`);
+        expect(html).toMatchInlineSnapshot(
+            `"foo <a href="http://link.example/test/path" class="linkified" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
+        );
     });
 
     it("should hightlight parts of links in HTML message highlighting", () => {
@@ -106,7 +108,7 @@ describe("bodyToHtml", () => {
             {
                 body: "foo http://link.example/test/path bar",
                 msgtype: "m.text",
-                formatted_body: "foo <a href=\"http://link.example/test/path\">http://link.example/test/path</a> bar",
+                formatted_body: 'foo <a href="http://link.example/test/path">http://link.example/test/path</a> bar',
                 format: "org.matrix.custom.html",
             },
             ["test"],
@@ -115,7 +117,9 @@ describe("bodyToHtml", () => {
             },
         );
 
-        expect(html).toMatchInlineSnapshot(`"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`);
+        expect(html).toMatchInlineSnapshot(
+            `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
+        );
     });
 
     it("does not mistake characters in text presentation mode for emoji", () => {
