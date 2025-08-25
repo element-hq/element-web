@@ -35,9 +35,10 @@ interface IState {
 export default class LegacyCallViewForRoom extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
+        const call = this.getCall();
         this.state = {
-            call: this.getCall(),
-            sidebarShown: LegacyCallHandler.instance.isCallSidebarShown(this.props.roomId),
+            call,
+            sidebarShown: !!call && LegacyCallHandler.instance.isCallSidebarShown(call.callId),
         };
     }
 
@@ -58,7 +59,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         if (newCall !== this.state.call) {
             this.setState({ call: newCall });
         }
-        const newSidebarShown = LegacyCallHandler.instance.isCallSidebarShown(this.props.roomId);
+        const newSidebarShown = !!newCall && LegacyCallHandler.instance.isCallSidebarShown(newCall.callId);
         if (newSidebarShown !== this.state.sidebarShown) {
             this.setState({ sidebarShown: newSidebarShown });
         }
@@ -84,7 +85,8 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
     };
 
     private setSidebarShown = (sidebarShown: boolean): void => {
-        LegacyCallHandler.instance.setCallSidebarShown(this.props.roomId, sidebarShown);
+        if (!this.state.call) return;
+        LegacyCallHandler.instance.setCallSidebarShown(this.state.call.callId, sidebarShown);
     };
 
     public render(): React.ReactNode {

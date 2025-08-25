@@ -80,4 +80,25 @@ describe("LegacyCallView", () => {
         rerender(<LegacyCallView call={call} sidebarShown={true} />);
         expect(container.querySelector(".mx_LegacyCallViewSidebar")).toBeTruthy();
     });
+
+    it("should not show the sidebar button in picture-in-picture mode", async () => {
+        stubClient();
+
+        const call = {
+            on: jest.fn(),
+            removeListener: jest.fn(),
+            getFeeds: jest.fn().mockReturnValue([]),
+            isLocalOnHold: jest.fn().mockReturnValue(false),
+            isRemoteOnHold: jest.fn().mockReturnValue(false),
+            isMicrophoneMuted: jest.fn().mockReturnValue(false),
+            isLocalVideoMuted: jest.fn().mockReturnValue(false),
+            isScreensharing: jest.fn().mockReturnValue(false),
+        } as unknown as MatrixCall;
+        DMRoomMap.setShared({
+            getUserIdForRoomId: jest.fn().mockReturnValue("test-user"),
+        } as unknown as DMRoomMap);
+
+        const { container } = render(<LegacyCallView call={call} sidebarShown={false} pipMode={true} />);
+        expect(container.querySelector(".mx_LegacyCallViewButtons_button_sidebar")).toBeFalsy();
+    });
 });
