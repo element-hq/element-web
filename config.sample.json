@@ -24,6 +24,7 @@
     ],
     "default_widget_container_height": 280,
     "default_country_code": "GB",
+    "default_layout_direction": "ltr",
     "show_labs_settings": false,
     "features": {},
     "default_federate": true,
