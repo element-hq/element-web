@@ -25,6 +25,7 @@ interface IProps {
 
 interface IState {
     call: MatrixCall | null;
+    sidebarShown: boolean;
 }
 
 /*
@@ -34,25 +35,33 @@ interface IState {
 export default class LegacyCallViewForRoom extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
+        const call = this.getCall();
         this.state = {
-            call: this.getCall(),
+            call,
+            sidebarShown: !!call && LegacyCallHandler.instance.isCallSidebarShown(call.callId),
         };
     }
 
     public componentDidMount(): void {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
+        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
     }
 
     public componentWillUnmount(): void {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
+        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.ShownSidebarsChanged, this.updateCall);
     }
 
     private updateCall = (): void => {
         const newCall = this.getCall();
         if (newCall !== this.state.call) {
             this.setState({ call: newCall });
+        }
+        const newSidebarShown = !!newCall && LegacyCallHandler.instance.isCallSidebarShown(newCall.callId);
+        if (newSidebarShown !== this.state.sidebarShown) {
+            this.setState({ sidebarShown: newSidebarShown });
         }
     };
 
@@ -73,6 +82,11 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
 
     private onResizeStop = (): void => {
         this.props.resizeNotifier.stopResizing();
+    };
+
+    private setSidebarShown = (sidebarShown: boolean): void => {
+        if (!this.state.call) return;
+        LegacyCallHandler.instance.setCallSidebarShown(this.state.call.callId, sidebarShown);
     };
 
     public render(): React.ReactNode {
@@ -99,7 +113,13 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
                     className="mx_LegacyCallViewForRoom_ResizeWrapper"
                     handleClasses={{ bottom: "mx_LegacyCallViewForRoom_ResizeHandle" }}
                 >
-                    <LegacyCallView call={this.state.call} pipMode={false} showApps={this.props.showApps} />
+                    <LegacyCallView
+                        call={this.state.call}
+                        pipMode={false}
+                        showApps={this.props.showApps}
+                        sidebarShown={this.state.sidebarShown}
+                        setSidebarShown={this.setSidebarShown}
+                    />
                 </Resizable>
             </div>
         );

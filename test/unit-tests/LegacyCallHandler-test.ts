@@ -585,4 +585,42 @@ describe("LegacyCallHandler without third party protocols", () => {
             expect(mockAudioBufferSourceNode.start).not.toHaveBeenCalled();
         });
     });
+
+    describe("sidebar state", () => {
+        const roomId = "test-room-id";
+
+        it("should default to showing sidebar", () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.safeGet(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.safeGet();
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            expect(callHandler.isCallSidebarShown(call.callId)).toEqual(true);
+        });
+
+        it("should remember sidebar state per call", () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.safeGet(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.safeGet();
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            expect(callHandler.isCallSidebarShown(call.callId)).toEqual(true);
+            callHandler.setCallSidebarShown(call.callId, false);
+            expect(callHandler.isCallSidebarShown(call.callId)).toEqual(false);
+
+            call.emit(CallEvent.Hangup, call);
+
+            const call2 = new MatrixCall({
+                client: MatrixClientPeg.safeGet(),
+                roomId,
+            });
+            cli.emit(CallEventHandlerEvent.Incoming, call2);
+
+            expect(callHandler.isCallSidebarShown(call2.callId)).toEqual(true);
+        });
+    });
 });
