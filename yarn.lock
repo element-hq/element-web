@@ -3965,6 +3965,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/content-type@^1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@types/content-type/-/content-type-1.1.9.tgz#a0240a8141b33549ac0ca6847f4b801580012bca"
+  integrity sha512-Hq9IMnfekuOCsEmYl4QX2HBrT+XsfXiupfrLLY8Dcf3Puf4BkBOxSbWYTITSOQAhJoYPBez+b4MJRpIYL65z8A==
+
 "@types/counterpart@^0.18.1":
   version "0.18.4"
   resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.4.tgz#e3e331b7e0d5496873d417839f3b2bbcf555bb73"
@@ -4333,6 +4338,11 @@
   integrity sha512-l6rX1MUXje5ztPT0cAFtUayXF06DqPhRyfVXareEN5gGCFaP/iwsxIyKODr9XDhfxPpN6vXUFNfo5kZMXCxBtw==
   dependencies:
     htmlparser2 "^8.0.0"
+
+"@types/sdp-transform@^2.4.10":
+  version "2.4.10"
+  resolved "https://registry.yarnpkg.com/@types/sdp-transform/-/sdp-transform-2.4.10.tgz#f4e60fbc97f66527f221a3ae092be7c465c55f56"
+  integrity sha512-999diMTpgQGt+dj+tAEQNvBAJYkOip83NJn1RruqNmqeLYNZpQnUX/YrugR+ekXvdJ9pdkZtYg1jiM3mG3NhRg==
 
 "@types/seedrandom@^3.0.8":
   version "3.0.8"
