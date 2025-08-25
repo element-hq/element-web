@@ -14,7 +14,7 @@ import { type IWidget } from "matrix-widget-api";
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { type IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { clamp, defaultNumber, sum } from "../../utils/numbers";
+import { clamp, defaultNumber, sum } from "../../shared-components/utils/numbers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";

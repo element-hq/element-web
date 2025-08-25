@@ -19,6 +19,7 @@ import FilteredList from "./FilteredList";
 import Spinner from "../../elements/Spinner";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
+import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 
 export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
@@ -114,6 +115,7 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
     const [history, setHistory] = useState(false);
+    const [showEmptyState, setShowEmptyState] = useState(true);
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -149,10 +151,17 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     return (
         <BaseTool onBack={onBack}>
             <FilteredList query={query} onChange={setQuery}>
-                {Array.from(events.entries()).map(([stateKey, ev]) => (
-                    <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
-                ))}
+                {Array.from(events.entries())
+                    .filter(([_, ev]) => showEmptyState || Object.keys(ev.getContent()).length > 0)
+                    .map(([stateKey, ev]) => (
+                        <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
+                    ))}
             </FilteredList>
+            <LabelledToggleSwitch
+                label={_t("devtools|show_empty_content_events")}
+                onChange={setShowEmptyState}
+                value={showEmptyState}
+            />
         </BaseTool>
     );
 };

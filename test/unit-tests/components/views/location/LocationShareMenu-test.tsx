@@ -48,6 +48,7 @@ jest.mock("../../../../../src/settings/SettingsStore", () => ({
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
         instance: {
+            on: jest.fn(),
             displayName: "Ernie",
             getHttpAvatarUrl: jest.fn().mockReturnValue("image.com/img"),
         },

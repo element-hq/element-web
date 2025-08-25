@@ -19,7 +19,7 @@ describe("<EmptyRoomList />", () => {
     beforeEach(() => {
         vm = {
             isLoadingRooms: false,
-            rooms: [],
+            roomsResult: { spaceId: "home", rooms: [] },
             primaryFilters: [],
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
@@ -35,7 +35,7 @@ describe("<EmptyRoomList />", () => {
         expect(screen.getByText("No chats yet")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
 
-        await user.click(screen.getByRole("button", { name: "New message" }));
+        await user.click(screen.getByRole("button", { name: "Start chat" }));
         expect(vm.createChatRoom).toHaveBeenCalled();
 
         await user.click(screen.getByRole("button", { name: "New room" }));

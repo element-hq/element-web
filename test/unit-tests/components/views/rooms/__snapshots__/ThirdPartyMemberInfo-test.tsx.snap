@@ -50,11 +50,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
       tabindex="-1"
     >
       <div
-        class="mx_Flex mx_ThirdPartyMemberInfo"
+        class="flex mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="mx_Flex"
+          class="flex"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
@@ -125,11 +125,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
       tabindex="-1"
     >
       <div
-        class="mx_Flex mx_ThirdPartyMemberInfo"
+        class="flex mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="mx_Flex"
+          class="flex"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span

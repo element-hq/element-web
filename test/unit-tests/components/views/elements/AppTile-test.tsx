@@ -43,6 +43,7 @@ import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permal
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
         instance: {
+            on: jest.fn(),
             isProfileInfoFetched: true,
             removeListener: jest.fn(),
             getHttpAvatarUrl: jest.fn().mockReturnValue("http://avatar_url"),

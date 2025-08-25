@@ -17,11 +17,13 @@ const config: Config = {
         // This is needed to be able to load dual CJS/ESM WASM packages e.g. rust crypto & matrix-wywiwyg
         customExportConditions: ["browser", "node"],
     },
-    testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
+    testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)", "<rootDir>/src/shared-components/**/*.test.[t]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
     moduleNameMapper: {
+        // Support CSS module
+        "\\.(module.css)$": "identity-obj-proxy",
         "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
@@ -38,8 +40,6 @@ const config: Config = {
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
-        // Requires ESM which is incompatible with our current Jest setup
-        "^@element-hq/element-web-module-api$": "<rootDir>/__mocks__/empty.js",
     },
     transformIgnorePatterns: ["/node_modules/(?!(mime|matrix-js-sdk)).+$"],
     collectCoverageFrom: [

@@ -12,9 +12,10 @@ import type {
     CustomComponentsApi as ICustomComponentsApi,
     CustomMessageRenderFunction,
     CustomMessageComponentProps as ModuleCustomMessageComponentProps,
-    OriginalComponentProps,
-    CustomMessageRenderHints,
+    OriginalMessageComponentProps,
+    CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
+    CustomRoomPreviewBarRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -23,11 +24,16 @@ type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRendere
 type EventRenderer = {
     eventTypeOrFilter: EventTypeOrFilter;
     renderer: CustomMessageRenderFunction;
-    hints: CustomMessageRenderHints;
+    hints: ModuleCustomCustomMessageRenderHints;
 };
 
 interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentProps, "mxEvent"> {
     mxEvent: MatrixEvent;
+}
+
+interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderHints, "allowDownloadingMedia"> {
+    // Note. This just makes it easier to use this API on Element Web as we already have the moduleized event stored.
+    allowDownloadingMedia?: () => Promise<boolean>;
 }
 
 export class CustomComponentsApi implements ICustomComponentsApi {
@@ -63,10 +69,11 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     public registerMessageRenderer(
         eventTypeOrFilter: EventTypeOrFilter,
         renderer: CustomMessageRenderFunction,
-        hints: CustomMessageRenderHints = {},
+        hints: ModuleCustomCustomMessageRenderHints = {},
     ): void {
         this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
     }
+
     /**
      * Select the correct renderer based on the event information.
      * @param mxEvent The message event being rendered.
@@ -95,7 +102,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public renderMessage(
         props: CustomMessageComponentProps,
-        originalComponent?: (props?: OriginalComponentProps) => React.JSX.Element,
+        originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(props.mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
@@ -119,8 +126,31 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         const moduleEv = CustomComponentsApi.getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectRenderer(moduleEv);
         if (renderer) {
-            return renderer.hints;
+            return {
+                ...renderer.hints,
+                // Convert from js-sdk style events to module events automatically.
+                allowDownloadingMedia: renderer.hints.allowDownloadingMedia
+                    ? () => renderer.hints.allowDownloadingMedia!(moduleEv)
+                    : undefined,
+            };
         }
         return null;
+    }
+
+    private _roomPreviewBarRenderer?: CustomRoomPreviewBarRenderFunction;
+
+    /**
+     * Get the custom room preview bar renderer, if any has been registered.
+     */
+    public get roomPreviewBarRenderer(): CustomRoomPreviewBarRenderFunction | undefined {
+        return this._roomPreviewBarRenderer;
+    }
+
+    /**
+     * Register a custom room preview bar renderer.
+     * @param renderer - the function that will render the custom room preview bar.
+     */
+    public registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void {
+        this._roomPreviewBarRenderer = renderer;
     }
 }

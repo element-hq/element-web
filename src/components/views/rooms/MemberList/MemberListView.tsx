@@ -6,11 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Form } from "@vector-im/compound-web";
-import React, { type JSX } from "react";
-import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
-import { AutoSizer } from "react-virtualized";
+import React, { type JSX, useCallback } from "react";
 
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type MemberWithSeparator,
     SEPARATOR,
@@ -21,7 +19,7 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
-import { RovingTabIndexProvider } from "../../../../accessibility/RovingTabIndex";
+import { type ListContext, ListView } from "../../../utils/ListView";
 
 interface IProps {
     roomId: string;
@@ -30,53 +28,61 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
+    const { isPresenceEnabled, memberCount } = vm;
 
-    const totalRows = vm.members.length;
-
-    const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
+    const getItemKey = useCallback((item: MemberWithSeparator): string => {
         if (item === SEPARATOR) {
-            return <hr className="mx_MemberListView_separator" />;
+            return "separator";
         } else if (item.member) {
-            return <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} />;
+            return `member-${item.member.userId}`;
         } else {
-            return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
+            return `threePidInvite-${item.threePidInvite.event.getContent().public_key}`;
         }
-    };
+    }, []);
 
-    const getRowHeight = ({ index }: { index: number }): number => {
-        if (vm.members[index] === SEPARATOR) {
-            /**
-             * This is a separator of 2px height rendered between
-             * joined and invited members.
-             */
-            return 2;
-        } else if (totalRows && index === totalRows) {
-            /**
-             * The empty spacer div rendered at the bottom should
-             * have a height of 32px.
-             */
-            return 32;
-        } else {
-            /**
-             * The actual member tiles have a height of 56px.
-             */
-            return 56;
-        }
-    };
+    const getItemComponent = useCallback(
+        (
+            index: number,
+            item: MemberWithSeparator,
+            context: ListContext<any>,
+            onFocus: (e: React.FocusEvent) => void,
+        ): JSX.Element => {
+            const itemKey = getItemKey(item);
+            const isRovingItem = itemKey === context.tabIndexKey;
+            const focused = isRovingItem && context.focused;
+            if (item === SEPARATOR) {
+                return <hr className="mx_MemberListView_separator" />;
+            } else if (item.member) {
+                return (
+                    <RoomMemberTileView
+                        member={item.member}
+                        showPresence={isPresenceEnabled}
+                        focused={focused}
+                        tabIndex={isRovingItem ? 0 : -1}
+                        index={index}
+                        memberCount={memberCount}
+                        onFocus={onFocus}
+                    />
+                );
+            } else {
+                return (
+                    <ThreePidInviteTileView
+                        threePidInvite={item.threePidInvite}
+                        focused={focused}
+                        tabIndex={isRovingItem ? 0 : -1}
+                        memberIndex={index - 1} // Adjust as invites are below the separator
+                        memberCount={memberCount}
+                        onFocus={onFocus}
+                    />
+                );
+            }
+        },
+        [isPresenceEnabled, getItemKey, memberCount],
+    );
 
-    const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
-        if (index === totalRows) {
-            // We've rendered all the members,
-            // now we render an empty div to add some space to the end of the list.
-            return <div key={key} style={style} />;
-        }
-        const item = vm.members[index];
-        return (
-            <div key={key} style={style}>
-                {getRowComponent(item)}
-            </div>
-        );
-    };
+    const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {
+        return item !== SEPARATOR;
+    }, []);
 
     return (
         <BaseCard
@@ -87,34 +93,19 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             header={_t("common|people")}
             onClose={props.onClose}
         >
-            <RovingTabIndexProvider handleUpDown scrollIntoView>
-                {({ onKeyDownHandler }) => (
-                    <Flex
-                        align="stretch"
-                        direction="column"
-                        className="mx_MemberListView_container"
-                        onKeyDown={onKeyDownHandler}
-                    >
-                        <Form.Root>
-                            <MemberListHeaderView vm={vm} />
-                        </Form.Root>
-                        <AutoSizer>
-                            {({ height, width }) => (
-                                <List
-                                    rowRenderer={rowRenderer}
-                                    rowHeight={getRowHeight}
-                                    // The +1 refers to the additional empty div that we render at the end of the list.
-                                    rowCount={totalRows + 1}
-                                    // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-                                    height={height - 113}
-                                    width={width}
-                                    overscanRowCount={15}
-                                />
-                            )}
-                        </AutoSizer>
-                    </Flex>
-                )}
-            </RovingTabIndexProvider>
+            <Flex align="stretch" direction="column" className="mx_MemberListView_container">
+                <Form.Root onSubmit={(e) => e.preventDefault()}>
+                    <MemberListHeaderView vm={vm} />
+                </Form.Root>
+                <ListView
+                    items={vm.members}
+                    getItemComponent={getItemComponent}
+                    getItemKey={getItemKey}
+                    isItemFocusable={isItemFocusable}
+                    role="listbox"
+                    aria-label={_t("member_list|list_title")}
+                />
+            </Flex>
         </BaseCard>
     );
 };

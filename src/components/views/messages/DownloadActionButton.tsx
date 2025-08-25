@@ -7,17 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import React, { type JSX } from "react";
+import React, { type ReactElement, useMemo } from "react";
 import classNames from "classnames";
 import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
-import { FileDownloader } from "../../../utils/FileDownloader";
-import Modal from "../../../Modal";
-import ErrorDialog from "../dialogs/ErrorDialog";
+import { _t } from "../../../languageHandler";
+import { useDownloadMedia } from "../../../hooks/useDownloadMedia";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -28,92 +26,40 @@ interface IProps {
     mediaEventHelperGet: () => MediaEventHelper | undefined;
 }
 
-interface IState {
-    loading: boolean;
-    blob?: Blob;
-    tooltip: TranslationKey;
+function useButtonTitle(loading: boolean, isEncrypted: boolean): string {
+    if (!loading) return _t("action|download");
+
+    return isEncrypted ? _t("timeline|download_action_decrypting") : _t("timeline|download_action_downloading");
 }
 
-export default class DownloadActionButton extends React.PureComponent<IProps, IState> {
-    private downloader = new FileDownloader();
+export default function DownloadActionButton({ mxEvent, mediaEventHelperGet }: IProps): ReactElement | null {
+    const mediaEventHelper = useMemo(() => mediaEventHelperGet(), [mediaEventHelperGet]);
+    const downloadUrl = mediaEventHelper?.media.srcHttp ?? "";
+    const fileName = mediaEventHelper?.fileName;
 
-    public constructor(props: IProps) {
-        super(props);
+    const { download, loading, canDownload } = useDownloadMedia(downloadUrl, fileName, mxEvent);
 
-        this.state = {
-            loading: false,
-            tooltip: _td("timeline|download_action_downloading"),
-        };
-    }
+    const buttonTitle = useButtonTitle(loading, mediaEventHelper?.media.isEncrypted ?? false);
 
-    private onDownloadClick = async (): Promise<void> => {
-        try {
-            await this.doDownload();
-        } catch (e) {
-            Modal.createDialog(ErrorDialog, {
-                title: _t("timeline|download_failed"),
-                description: (
-                    <>
-                        <div>{_t("timeline|download_failed_description")}</div>
-                        <div>{e instanceof Error ? e.toString() : ""}</div>
-                    </>
-                ),
-            });
-            this.setState({ loading: false });
-        }
-    };
+    if (!canDownload) return null;
 
-    private async doDownload(): Promise<void> {
-        const mediaEventHelper = this.props.mediaEventHelperGet();
-        if (this.state.loading || !mediaEventHelper) return;
+    const spinner = loading ? <Spinner w={18} h={18} /> : undefined;
+    const classes = classNames({
+        mx_MessageActionBar_iconButton: true,
+        mx_MessageActionBar_downloadButton: true,
+        mx_MessageActionBar_downloadSpinnerButton: !!spinner,
+    });
 
-        if (mediaEventHelper.media.isEncrypted) {
-            this.setState({ tooltip: _td("timeline|download_action_decrypting") });
-        }
-
-        this.setState({ loading: true });
-
-        if (this.state.blob) {
-            // Cheat and trigger a download, again.
-            return this.downloadBlob(this.state.blob);
-        }
-
-        const blob = await mediaEventHelper.sourceBlob.value;
-        this.setState({ blob });
-        await this.downloadBlob(blob);
-    }
-
-    private async downloadBlob(blob: Blob): Promise<void> {
-        await this.downloader.download({
-            blob,
-            name: this.props.mediaEventHelperGet()!.fileName,
-        });
-        this.setState({ loading: false });
-    }
-
-    public render(): React.ReactNode {
-        let spinner: JSX.Element | undefined;
-        if (this.state.loading) {
-            spinner = <Spinner w={18} h={18} />;
-        }
-
-        const classes = classNames({
-            mx_MessageActionBar_iconButton: true,
-            mx_MessageActionBar_downloadButton: true,
-            mx_MessageActionBar_downloadSpinnerButton: !!spinner,
-        });
-
-        return (
-            <RovingAccessibleButton
-                className={classes}
-                title={spinner ? _t(this.state.tooltip) : _t("action|download")}
-                onClick={this.onDownloadClick}
-                disabled={!!spinner}
-                placement="left"
-            >
-                <DownloadIcon />
-                {spinner}
-            </RovingAccessibleButton>
-        );
-    }
+    return (
+        <RovingAccessibleButton
+            className={classes}
+            title={buttonTitle}
+            onClick={download}
+            disabled={loading}
+            placement="left"
+        >
+            <DownloadIcon />
+            {spinner}
+        </RovingAccessibleButton>
+    );
 }
