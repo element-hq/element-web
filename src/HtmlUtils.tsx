@@ -22,7 +22,7 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { sanitizeHtmlParams, transformTags } from "./Linkify";
+import { linkifyHtml, sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
@@ -298,6 +298,7 @@ export interface EventRenderOpts {
      * Should inline media be rendered?
      */
     mediaIsVisible?: boolean;
+    linkify?: boolean;
 }
 
 function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
@@ -316,6 +317,20 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
                     // Remove element
                     return { tagName, attribs: {} };
                 },
+            },
+        };
+    }
+
+    if (opts.linkify) {
+        // Prevent mutating the source of sanitizeParams.
+        sanitizeParams = {
+            ...sanitizeParams,
+            allowedClasses: {
+                ...sanitizeParams.allowedClasses,
+                a:
+                    sanitizeParams.allowedClasses?.["a"] === true
+                        ? true
+                        : [...(sanitizeParams.allowedClasses?.["a"] || []), "linkified"],
             },
         };
     }
@@ -346,7 +361,9 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
             ? new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink)
             : null;
 
-        if (isFormattedBody) {
+        if (isFormattedBody || opts.linkify) {
+            let unsafeBody = formattedBody || escapeHtml(plainBody);
+
             if (highlighter) {
                 // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
                 // to highlight HTML tags themselves. However, this does mean that we don't highlight textnodes which
@@ -358,20 +375,27 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
                 };
             }
 
-            safeBody = sanitizeHtml(formattedBody!, sanitizeParams);
-            const phtml = new DOMParser().parseFromString(safeBody, "text/html");
-            const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
-            isHtmlMessage = !isPlainText;
+            if (opts.linkify) {
+                unsafeBody = linkifyHtml(unsafeBody!);
+            }
 
-            if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
-                [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
-                    e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
-                        throwOnError: false,
-                        displayMode: e.tagName == "DIV",
-                        output: "htmlAndMathml",
+            safeBody = sanitizeHtml(unsafeBody!, sanitizeParams);
+
+            if (isFormattedBody) {
+                const phtml = new DOMParser().parseFromString(safeBody, "text/html");
+                const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
+                isHtmlMessage = !isPlainText;
+
+                if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
+                    [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
+                        e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
+                            throwOnError: false,
+                            displayMode: e.tagName == "DIV",
+                            output: "htmlAndMathml",
+                        });
                     });
-                });
-                safeBody = phtml.body.innerHTML;
+                    safeBody = phtml.body.innerHTML;
+                }
             }
         } else if (highlighter) {
             safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
@@ -428,14 +452,15 @@ export function bodyToNode(
     });
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && eventInfo.safeBody) {
-        // This has to be done after the emojiBody check as to not break big emoji on replies
-        formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
-    }
-
     let emojiBodyElements: JSX.Element[] | undefined;
-    if (!eventInfo.safeBody && eventInfo.bodyHasEmoji) {
-        emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+
+    if (eventInfo.bodyHasEmoji) {
+        if (eventInfo.safeBody) {
+            // This has to be done after the emojiBody check as to not break big emoji on replies
+            formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
+        } else {
+            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+        }
     }
 
     return { strippedBody: eventInfo.strippedBody, formattedBody, emojiBodyElements, className };
@@ -458,7 +483,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && formattedBody) {
+    if (eventInfo.bodyHasEmoji && formattedBody) {
         // This has to be done after the emojiBody check above as to not break big emoji on replies
         formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
     }

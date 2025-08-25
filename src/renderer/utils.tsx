@@ -88,6 +88,7 @@ export function replacerToRenderFunction(replacer: Replacer): Opts["render"] {
 
 interface Parameters {
     isHtml: boolean;
+    replace: Replacer;
     // Required for keywordPillRenderer
     keywordRegexpPattern?: RegExp;
     // Required for mentionPillRenderer
@@ -114,7 +115,7 @@ export type RendererMap = Partial<
     }
 >;
 
-type PreparedRenderer = (parameters: Parameters) => Replacer;
+type PreparedRenderer = (parameters: Omit<Parameters, "replace">) => Replacer;
 
 /**
  * Combines multiple renderers into a single Replacer function
@@ -122,19 +123,22 @@ type PreparedRenderer = (parameters: Parameters) => Replacer;
  */
 export const combineRenderers =
     (...renderers: RendererMap[]): PreparedRenderer =>
-    (parameters) =>
-    (node, index) => {
-        if (node.type === "text") {
-            for (const replacer of renderers) {
-                const result = replacer[Node.TEXT_NODE]?.(node, parameters, index);
-                if (result) return result;
+    (parameters) => {
+        const replace: Replacer = (node, index) => {
+            if (node.type === "text") {
+                for (const replacer of renderers) {
+                    const result = replacer[Node.TEXT_NODE]?.(node, parametersWithReplace, index);
+                    if (result) return result;
+                }
             }
-        }
-        if (node instanceof Element) {
-            const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
-            for (const replacer of renderers) {
-                const result = replacer[tagName]?.(node, parameters, index);
-                if (result) return result;
+            if (node instanceof Element) {
+                const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
+                for (const replacer of renderers) {
+                    const result = replacer[tagName]?.(node, parametersWithReplace, index);
+                    if (result) return result;
+                }
             }
-        }
+        };
+        const parametersWithReplace: Parameters = { ...parameters, replace };
+        return replace;
     };

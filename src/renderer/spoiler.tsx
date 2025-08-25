@@ -15,10 +15,12 @@ import Spoiler from "../components/views/elements/Spoiler.tsx";
  * Replaces spans with `data-mx-spoiler` with a Spoiler component.
  */
 export const spoilerRenderer: RendererMap = {
-    span: (span) => {
+    span: (span, params) => {
         const reason = span.attribs["data-mx-spoiler"];
         if (typeof reason === "string") {
-            return <Spoiler reason={reason}>{domToReact(span.children as DOMNode[])}</Spoiler>;
+            return (
+                <Spoiler reason={reason}>{domToReact(span.children as DOMNode[], { replace: params.replace })}</Spoiler>
+            );
         }
     },
 };
