@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2018-2021 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
@@ -42,6 +42,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
+import { BadgeOverlayRenderer } from "../../favicon";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -87,10 +88,11 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    private readonly initialised: Promise<void>;
+    public readonly initialised: Promise<void>;
     private readonly electron: Electron;
     private protocol!: string;
     private sessionId!: string;
+    private badgeOverlayRenderer?: BadgeOverlayRenderer;
     private config!: IConfigOptions;
     private supportedSettings?: Record<string, boolean>;
 
@@ -194,11 +196,15 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     private async initialise(): Promise<void> {
-        const { protocol, sessionId, config, supportedSettings } = await this.electron.initialise();
+        const { protocol, sessionId, config, supportedSettings, supportsBadgeOverlay } =
+            await this.electron.initialise();
         this.protocol = protocol;
         this.sessionId = sessionId;
         this.config = config;
         this.supportedSettings = supportedSettings;
+        if (supportsBadgeOverlay) {
+            this.badgeOverlayRenderer = new BadgeOverlayRenderer();
+        }
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -249,8 +255,42 @@ export default class ElectronPlatform extends BasePlatform {
     public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
+        if (this.badgeOverlayRenderer) {
+            this.badgeOverlayRenderer
+                .render(count)
+                .then((buffer) => {
+                    this.electron.send("setBadgeCount", count, buffer);
+                })
+                .catch((ex) => {
+                    logger.warn("Unable to generate badge overlay", ex);
+                });
+        } else {
+            this.electron.send("setBadgeCount", count);
+        }
+    }
 
-        this.electron.send("setBadgeCount", count);
+    public setErrorStatus(errorDidOccur: boolean): void {
+        if (!this.badgeOverlayRenderer) {
+            super.setErrorStatus(errorDidOccur);
+            return;
+        }
+        // Check before calling super so we don't override the previous state.
+        if (this.errorDidOccur !== errorDidOccur) {
+            super.setErrorStatus(errorDidOccur);
+            let promise: Promise<ArrayBuffer | null>;
+            if (errorDidOccur) {
+                promise = this.badgeOverlayRenderer.render(this.notificationCount || "×", "#f00");
+            } else {
+                promise = this.badgeOverlayRenderer.render(this.notificationCount);
+            }
+            promise
+                .then((buffer) => {
+                    this.electron.send("setBadgeCount", this.notificationCount, buffer, errorDidOccur);
+                })
+                .catch((ex) => {
+                    logger.warn("Unable to generate badge overlay", ex);
+                });
+        }
     }
 
     public supportsNotifications(): boolean {

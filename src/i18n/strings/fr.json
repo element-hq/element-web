@@ -93,7 +93,6 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
-        "new_message": "Nouveau message",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
@@ -240,8 +239,7 @@
             "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
             "setup_secure_backup_description_1": "Les messages chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) ont les clés pour lire ces messages.",
             "setup_secure_backup_description_2": "Quand vous vous déconnectez, ces clés seront supprimées de cet appareil, et vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
-            "skip_key_backup": "Je ne veux pas de mes messages chiffrés",
-            "use_key_backup": "Commencer à utiliser la sauvegarde de clés"
+            "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
         "misconfigured_title": "Votre %(brand)s est mal configuré",
@@ -569,7 +567,7 @@
         "room_name": "Nom du salon",
         "rooms": "Salons",
         "save": "Enregistrer",
-        "saved": "Sauvegardé",
+        "saved": "Enregistré",
         "saving": "Enregistrement…",
         "secure_backup": "Sauvegarde sécurisée",
         "select_all": "Tout sélectionner",
@@ -646,12 +644,12 @@
         "mode_plain": "Masquer le formatage",
         "mode_rich_text": "Afficher le formatage",
         "no_perms_notice": "Vous n’avez pas la permission de poster dans ce salon",
-        "placeholder": "Envoyer un message…",
+        "placeholder": "Envoyer un message non chiffré…",
         "placeholder_encrypted": "Envoyer un message chiffré…",
-        "placeholder_reply": "Envoyer une réponse…",
-        "placeholder_reply_encrypted": "Envoyer une réponse chiffrée…",
-        "placeholder_thread": "Répondre au fil de discussion…",
-        "placeholder_thread_encrypted": "Répondre au fil de discussion chiffré…",
+        "placeholder_reply": "Envoyer une réponse non chiffrée…",
+        "placeholder_reply_encrypted": "Envoyer une réponse...",
+        "placeholder_thread": "Répondre au fil de discussion non chiffré…",
+        "placeholder_thread_encrypted": "Répondre au fil de discussion...",
         "poll_button": "Sondage",
         "poll_button_no_perms_description": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
         "poll_button_no_perms_title": "Autorisation requise",
@@ -864,6 +862,7 @@
             "elementCallUrl": "Lien d'Element Call"
         },
         "settings_explorer": "Explorateur de paramètres",
+        "show_empty_content_events": "Afficher les événements sans contenu",
         "show_hidden_events": "Afficher les évènements cachés dans le fil de discussion",
         "spaces": {
             "one": "<espace>",
@@ -921,7 +920,8 @@
             },
             "privacy_warning": "Assurez-vous que personne d'autre ne regarde votre écran !",
             "restoring": "Restauration des clés depuis la sauvegarde",
-            "security_key_title": "Clé de récupération"
+            "security_key_label": "Clé de récupération",
+            "security_key_title": "Saisir votre clé de récupération"
         },
         "bootstrap_title": "Configuration des clés",
         "confirm_encryption_setup_body": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
@@ -934,6 +934,7 @@
         "cross_signing_user_warning": "Cet utilisateur n’a pas vérifié toutes ses sessions.",
         "enter_recovery_key": "Saisir la clé de récupération",
         "event_shield_reason_authenticity_not_guaranteed": "L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.",
+        "event_shield_reason_mismatched_sender": "L'expéditeur de ce message ne correspond pas au propriétaire de l'appareil qui l'a envoyé.",
         "event_shield_reason_mismatched_sender_key": "Chiffré par une session non vérifiée",
         "event_shield_reason_unknown_device": "Chiffré par un appareil inconnu ou supprimé.",
         "event_shield_reason_unsigned_device": "Chiffré par un appareil non vérifié par son propriétaire.",
@@ -969,7 +970,6 @@
         "reset_all_button": "Vous avez perdu ou oublié tous vos moyens de récupération ? <a>Tout réinitialiser</a>",
         "set_up_recovery": "Configurer la récupération",
         "set_up_recovery_toast_description": "Générez une clé de récupération qui peut être utilisée pour restaurer l'historique de vos messages chiffrés au cas où vous perdriez l'accès à vos appareils.",
-        "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
             "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
@@ -1452,6 +1452,7 @@
         "room_list_navigate_down": "Descendre dans la liste des salons",
         "room_list_navigate_up": "Remonter dans la liste des salons",
         "room_list_select_room": "Sélectionner un salon de la liste des salons",
+        "save": "Enregistrer",
         "scroll_down_timeline": "Faire défiler le fil de discussion vers le bas",
         "scroll_up_timeline": "Faire défiler le fil de discussion vers le haut",
         "search": "Recherche (si activée)",
@@ -1533,6 +1534,9 @@
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
+        "share_history_on_invite": "Partagez l'historique chiffré avec les nouveaux membres",
+        "share_history_on_invite_description": "Lorsque vous invitez un utilisateur dans un salon chiffré dont la visibilité de l'historique est définie sur « partagée », partagez l'historique chiffré avec cet utilisateur et acceptez l'historique chiffré lorsque vous êtes invité dans une telle salon.",
+        "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver",
@@ -1654,8 +1658,8 @@
         "filter_placeholder": "Filtrer les membres du salon",
         "invite_button_no_perms_tooltip": "Vous n’avez pas la permission d’inviter des utilisateurs",
         "invited_label": "Invité",
-        "no_matches": "Aucune correspondance",
-        "power_label": "%(userName)s (rang %(powerLevelNumber)s)"
+        "list_title": "Liste des membres",
+        "no_matches": "Aucune correspondance"
     },
     "member_list_back_action_label": "Membres du salon",
     "message_edit_dialog_title": "Modifications du message",
@@ -1759,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Administrateur",
+        "creator": "Propriétaire",
         "custom": "Personnalisé (%(level)s)",
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
@@ -1911,6 +1916,7 @@
         "thread_list": {
             "context_menu_label": "Options des fils de discussion"
         },
+        "title": "Panneau droit",
         "video_room_chat": {
             "title": "Conversation privée"
         }
@@ -2712,11 +2718,6 @@
         },
         "jump_to_bottom_on_send": "Sauter en bas du fil de discussion lorsque vous envoyez un message",
         "key_backup": {
-            "backup_in_progress": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
-            "backup_starting": "Début de la sauvegarde…",
-            "backup_success": "Terminé !",
-            "cannot_create_backup": "Impossible de créer la sauvegarde des clés",
-            "create_title": "Créer une sauvegarde de clé",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Vos clés sont maintenant sauvegardées depuis cet appareil.",
                 "backup_setup_success_title": "Sauvegarde sécurisée réalisée avec succès",
@@ -2737,7 +2738,7 @@
                 "set_phrase_again": "Retournez en arrière pour la redéfinir.",
                 "settings_reminder": "Vous pouvez aussi configurer la sauvegarde sécurisée et gérer vos clés depuis les paramètres.",
                 "title_confirm_phrase": "Confirmer la phrase de sécurité",
-                "title_save_key": "Sauvegarder votre clé de récupération",
+                "title_save_key": "Enregistrer votre clé de récupération",
                 "title_set_phrase": "Définir une phrase de sécurité",
                 "unable_to_setup": "Impossible de configurer le coffre secret",
                 "use_different_passphrase": "Utiliser une phrase secrète différente ?",
@@ -2843,6 +2844,7 @@
             "composer_heading": "Compositeur",
             "default_timezone": "Navigateur par défaut (%(timezone)s)",
             "dialog_title": "<strong>Paramètres : </strong> Préférences",
+            "enable_content_protection": "Activer la protection du contenu",
             "enable_hardware_acceleration": "Activer l’accélération matérielle",
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
@@ -2876,7 +2878,6 @@
             "ignore_users_empty": "Vous n’avez ignoré personne.",
             "ignore_users_section": "Utilisateurs ignorés",
             "key_backup_algorithm": "Algorithme :",
-            "key_backup_connect": "Connecter cette session à la sauvegarde de clés",
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
             "message_search_enabled": {
@@ -3398,6 +3399,7 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
+            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
             "error_processing_voice_message": "Erreur lors du traitement du message vocal",
@@ -3963,7 +3965,6 @@
         "dialpad": "Pavé numérique",
         "disable_camera": "Désactiver la caméra",
         "disable_microphone": "Désactiver le microphone",
-        "disabled_no_one_here": "Il n’y a personne à appeler ici",
         "disabled_no_perms_start_video_call": "Vous n’avez pas la permission de démarrer un appel vidéo",
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",

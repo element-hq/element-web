@@ -27,6 +27,7 @@ describe("BugReportDialog", () => {
         return render(<BugReportDialog onFinished={onFinished} />);
     }
 
+    let prevLogger: ConsoleLogger;
     beforeEach(() => {
         jest.resetAllMocks();
         SdkConfig.put({
@@ -48,24 +49,14 @@ describe("BugReportDialog", () => {
             consume: jest.fn(),
             warn: jest.fn(),
         } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
 
-        // @ts-ignore - mock the console logger
+        prevLogger = global.mx_rage_logger;
         global.mx_rage_logger = mockConsoleLogger;
-
-        // @ts-ignore
-        mockConsoleLogger.flush.mockReturnValue([
-            {
-                id: "instance-0",
-                line: "line 1",
-            },
-            {
-                id: "instance-1",
-                line: "line 2",
-            },
-        ]);
     });
 
     afterEach(() => {
+        global.mx_rage_logger = prevLogger;
         jest.restoreAllMocks();
         SdkConfig.reset();
         fetchMock.restore();

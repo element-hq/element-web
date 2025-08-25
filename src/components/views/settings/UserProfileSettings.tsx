@@ -26,7 +26,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../../shared-components/utils/Flex";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>

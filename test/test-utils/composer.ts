@@ -25,7 +25,7 @@ export const addTextToComposer = (container: HTMLElement, text: string) =>
 
 export const addTextToComposerRTL = async (renderResult: RenderResult, text: string): Promise<void> => {
     await act(async () => {
-        await userEvent.click(renderResult.getByLabelText("Send a message…"));
+        await userEvent.click(renderResult.getByLabelText("Send an unencrypted message…"));
         await userEvent.keyboard(text);
     });
 };

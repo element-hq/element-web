@@ -6,18 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, EventType, ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { inviteUsersToRoom } from "../RoomInvite";
+import { inviteMultipleToRoom, showAnyInviteErrors } from "../RoomInvite";
 import Modal, { type IHandle } from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
+import type { MultiInviterOptions } from "./MultiInviter";
 
-interface IProgress {
+export interface RoomUpgradeProgress {
     roomUpgraded: boolean;
     roomSynced?: boolean;
     inviteUsersProgress?: number;
@@ -50,7 +51,8 @@ export async function upgradeRoom(
     handleError = true,
     updateSpaces = true,
     awaitRoom = false,
-    progressCallback?: (progress: IProgress) => void,
+    progressCallback?: (progress: RoomUpgradeProgress) => void,
+    inhibitInviteProgressDialog = false,
 ): Promise<string> {
     const cli = room.client;
     let spinnerModal: IHandle<any> | undefined;
@@ -77,7 +79,7 @@ export async function upgradeRoom(
             ) as Room[];
     }
 
-    const progress: IProgress = {
+    const progress: RoomUpgradeProgress = {
         roomUpgraded: false,
         roomSynced: awaitRoom || inviteUsers ? false : undefined,
         inviteUsersProgress: inviteUsers ? 0 : undefined,
@@ -112,9 +114,12 @@ export async function upgradeRoom(
 
     if (toInvite.length > 0) {
         // Errors are handled internally to this function
-        await inviteUsersToRoom(cli, newRoomId, toInvite, () => {
-            progress.inviteUsersProgress!++;
-            progressCallback?.(progress);
+        await inviteUsersToRoom(cli, newRoomId, toInvite, {
+            progressCallback: () => {
+                progress.inviteUsersProgress!++;
+                progressCallback?.(progress);
+            },
+            inhibitProgressDialog: inhibitInviteProgressDialog,
         });
     }
 
@@ -144,4 +149,15 @@ export async function upgradeRoom(
 
     spinnerModal?.close();
     return newRoomId;
+}
+
+async function inviteUsersToRoom(
+    client: MatrixClient,
+    roomId: string,
+    userIds: string[],
+    inviteOptions: MultiInviterOptions,
+): Promise<void> {
+    const result = await inviteMultipleToRoom(client, roomId, userIds, inviteOptions);
+    const room = client.getRoom(roomId)!;
+    showAnyInviteErrors(result.states, room, result.inviter);
 }

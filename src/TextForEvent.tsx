@@ -36,9 +36,9 @@ import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
-import { ElementCall } from "./models/Call";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
+import { ElementCallEventType } from "./call-types.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -572,8 +572,11 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
     const senderName = getSenderName(event);
     const roomId = event.getRoomId()!;
 
-    const pinned = event.getContent<{ pinned: string[] }>().pinned ?? [];
-    const previouslyPinned: string[] = event.getPrevContent().pinned ?? [];
+    const content = event.getContent<{ pinned: string[] }>();
+    const prevContent = event.getPrevContent();
+
+    const pinned = Array.isArray(content.pinned) ? content.pinned : [];
+    const previouslyPinned: string[] = Array.isArray(prevContent.pinned) ? prevContent.pinned : [];
     const newlyPinned = pinned.filter((item) => previouslyPinned.indexOf(item) < 0);
     const newlyUnpinned = previouslyPinned.filter((item) => pinned.indexOf(item) < 0);
 
@@ -922,7 +925,7 @@ for (const evType of ALL_RULE_TYPES) {
 }
 
 // Add both stable and unstable m.call events
-for (const evType of ElementCall.CALL_EVENT_TYPE.names) {
+for (const evType of ElementCallEventType.names) {
     stateHandlers[evType] = textForCallEvent;
 }
 

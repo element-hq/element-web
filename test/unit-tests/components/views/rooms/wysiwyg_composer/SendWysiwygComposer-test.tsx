@@ -24,6 +24,7 @@ import {
 import { setSelection } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+import { E2EStatus } from "../../../../../../src/utils/ShieldUtils.ts";
 
 jest.mock("../../../../../../src/components/views/rooms/EmojiButton", () => ({
     EmojiButton: ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
@@ -69,6 +70,7 @@ describe("SendWysiwygComposer", () => {
         disabled = false,
         isRichTextEnabled = true,
         placeholder?: string,
+        e2eStatus?: E2EStatus,
     ) => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
@@ -80,6 +82,7 @@ describe("SendWysiwygComposer", () => {
                         isRichTextEnabled={isRichTextEnabled}
                         menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })}
                         placeholder={placeholder}
+                        e2eStatus={e2eStatus}
                     />
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
@@ -319,6 +322,25 @@ describe("SendWysiwygComposer", () => {
 
                 // Then
                 await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(/wo🦫d/));
+            });
+        },
+    );
+
+    describe.each([{ isRichTextEnabled: true }, { isRichTextEnabled: false }])(
+        "Left icon when %s",
+        ({ isRichTextEnabled }) => {
+            it.each([
+                [E2EStatus.Verified, "mx_E2EIcon_verified"],
+                [E2EStatus.Warning, "mx_E2EIcon_warning"],
+                [undefined, undefined],
+            ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedClass) => {
+                // When
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, undefined, e2eStatus);
+                await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+                const leftIcon = screen.getByTestId("e2e-icon");
+                // Then
+                expect(leftIcon).toBeInTheDocument();
+                expect(leftIcon).toHaveClass(expectedClass ? `mx_E2EIcon ${expectedClass}` : `mx_E2EIcon`);
             });
         },
     );

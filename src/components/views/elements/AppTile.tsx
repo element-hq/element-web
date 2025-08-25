@@ -62,6 +62,20 @@ import { parseUrl } from "../../../utils/UrlUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
 
+// Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
+// because that would allow the iframe to programmatically remove the sandbox attribute, but
+// this would only be for content hosted on the same origin as the element client: anything
+// hosted on the same origin as the client will get the same access as if you clicked
+// a link to it.
+const sandboxFlags =
+    "allow-forms allow-popups allow-popups-to-escape-sandbox " +
+    "allow-same-origin allow-scripts allow-presentation allow-downloads";
+
+// Additional iframe feature permissions
+// (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
+const iframeFeatures =
+    "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; clipboard-read;";
+
 interface IProps {
     app: IWidget | IApp;
     // If room is not specified then it is an account level widget
@@ -138,7 +152,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private contextMenuButton = createRef<any>();
-    private iframe?: HTMLIFrameElement; // ref to the iframe (callback style)
+    private iframeParent: HTMLElement | null = null; // parent div of the iframe
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
     private sgWidget?: StopGapWidget;
@@ -397,18 +411,47 @@ export default class AppTile extends React.Component<IProps, IState> {
         });
     }
 
+    /**
+     * Creates the widget iframe and opens communication with the widget.
+     */
     private startMessaging(): void {
-        try {
-            this.sgWidget?.startMessaging(this.iframe!);
-        } catch (e) {
-            logger.error("Failed to start widget", e);
-        }
+        // We create the iframe ourselves rather than leaving the job to React,
+        // because we need the lifetime of the messaging and the iframe to be
+        // the same; we don't want strict mode, for instance, to cause the
+        // messaging to restart (lose its state) without also killing the widget
+        const iframe = document.createElement("iframe");
+        iframe.title = WidgetUtils.getWidgetName(this.props.app);
+        iframe.allow = iframeFeatures;
+        iframe.src = this.sgWidget!.embedUrl;
+        iframe.allowFullscreen = true;
+        iframe.sandbox = sandboxFlags;
+        this.iframeParent!.appendChild(iframe);
+        // In order to start the widget messaging we need iframe.contentWindow
+        // to exist. Waiting until the next layout gives the browser a chance to
+        // initialize it.
+        requestAnimationFrame(() => {
+            // Handle the race condition (seen in strict mode) where the element
+            // is added and then removed before we enter this callback
+            if (iframe.parentElement === null) return;
+            try {
+                this.sgWidget?.startMessaging(iframe);
+            } catch (e) {
+                logger.error("Failed to start widget", e);
+            }
+        });
     }
 
-    private iframeRefChange = (ref: HTMLIFrameElement): void => {
-        this.iframe = ref;
+    /**
+     * Callback ref for the parent div of the iframe.
+     */
+    private iframeParentRef = (element: HTMLElement | null): void => {
         if (this.unmounted) return;
-        if (ref) {
+        // Detach the existing iframe (if any) from the document so we know not
+        // to do anything further with it, like starting up the messaging
+        this.iframeParent?.querySelector("iframe")?.remove();
+        this.iframeParent = element;
+
+        if (element && this.sgWidget) {
             this.startMessaging();
         } else {
             this.resetWidget(this.props);
@@ -426,24 +469,8 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     /**
      * Ends all widget interaction, such as cancelling calls and disabling webcams.
-     * @private
-     * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
-    private async endWidgetActions(): Promise<void> {
-        // widget migration dev note: async to maintain signature
-        // HACK: This is a really dirty way to ensure that Jitsi cleans up
-        // its hold on the webcam. Without this, the widget holds a media
-        // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
-        if (this.iframe) {
-            // In practice we could just do `+= ''` to trick the browser
-            // into thinking the URL changed, however I can foresee this
-            // being optimized out by a browser. Instead, we'll just point
-            // the iframe at a page that is reasonably safe to use in the
-            // event the iframe doesn't wink away.
-            // This is relative to where the Element instance is located.
-            this.iframe.src = "about:blank";
-        }
-
+    private endWidgetActions(): void {
         if (WidgetType.JITSI.matches(this.props.app.type) && this.props.room) {
             LegacyCallHandler.instance.hangupCallApp(this.props.room.roomId);
         }
@@ -457,6 +484,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         this.sgWidget?.stopMessaging({ forceDestroy: true });
     }
+
     private onWidgetReady = (): void => {
         this.setState({ loading: false });
     };
@@ -554,16 +582,11 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private reload(): void {
-        this.endWidgetActions().then(() => {
-            // reset messaging
-            this.resetWidget(this.props);
-            this.startMessaging();
-
-            if (this.iframe && this.sgWidget) {
-                // Reload iframe
-                this.iframe.src = this.sgWidget.embedUrl;
-            }
-        });
+        this.endWidgetActions();
+        // reset messaging
+        this.resetWidget(this.props);
+        this.iframeParent?.querySelector("iframe")?.remove();
+        this.startMessaging();
     }
 
     // TODO replace with full screen interactions
@@ -621,20 +644,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         let appTileBody: JSX.Element | undefined;
 
-        // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
-        // because that would allow the iframe to programmatically remove the sandbox attribute, but
-        // this would only be for content hosted on the same origin as the element client: anything
-        // hosted on the same origin as the client will get the same access as if you clicked
-        // a link to it.
-        const sandboxFlags =
-            "allow-forms allow-popups allow-popups-to-escape-sandbox " +
-            "allow-same-origin allow-scripts allow-presentation allow-downloads";
-
-        // Additional iframe feature permissions
-        // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
-        const iframeFeatures =
-            "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; " + "clipboard-read;";
-
         const appTileBodyClass = classNames({
             "mx_AppTileBody": true,
             "mx_AppTileBody--large": !this.props.miniMode,
@@ -653,8 +662,6 @@ export default class AppTile extends React.Component<IProps, IState> {
                 <Spinner message={_t("common|loading")} />
             </div>
         );
-
-        const widgetTitle = WidgetUtils.getWidgetName(this.props.app);
 
         if (this.sgWidget === null) {
             appTileBody = (
@@ -692,16 +699,8 @@ export default class AppTile extends React.Component<IProps, IState> {
             } else if (this.sgWidget) {
                 appTileBody = (
                     <>
-                        <div className={appTileBodyClass} style={appTileBodyStyles}>
+                        <div className={appTileBodyClass} style={appTileBodyStyles} ref={this.iframeParentRef}>
                             {this.state.loading && loadingElement}
-                            <iframe
-                                title={widgetTitle}
-                                allow={iframeFeatures}
-                                ref={this.iframeRefChange}
-                                src={this.sgWidget.embedUrl}
-                                allowFullScreen={true}
-                                sandbox={sandboxFlags}
-                            />
                         </div>
                         {this.props.overlay}
                     </>

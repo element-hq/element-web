@@ -80,7 +80,6 @@
         "maximise": "Maksimize",
         "mention": "Sizden bahsediyor",
         "minimise": "Minimize",
-        "new_message": "Yeni mesaj",
         "new_room": "Yeni oda",
         "new_video_room": "Yeni video odası",
         "next": "İleri",
@@ -225,8 +224,7 @@
             "setup_key_backup_title": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
             "setup_secure_backup_description_1": "Şifreli mesajlar uçtan uca şifreleme ile korunur. Bu mesajları yalnızca siz ve alıcı(lar) okuyabilir.",
             "setup_secure_backup_description_2": "Oturumu kapattığınızda, bu anahtarlar bu cihazdan silinecek. Bu, diğer cihazlarınızda bu anahtarlara sahip olmadığınız veya anahtarları sunucuya yedeklemediğiniz sürece şifreli mesajları okuyamayacağınız anlamına gelir.",
-            "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum",
-            "use_key_backup": "Anahtar Yedekleme kullanmaya başla"
+            "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum"
         },
         "misconfigured_body": "%(brand)s yöneticinize <a>yapılandırmanızın</a> hatalı ve mükerrer girdilerini kontrol etmesi için talepte bulunun.",
         "misconfigured_title": "%(brand)s hatalı ayarlanmış",
@@ -935,7 +933,6 @@
         "reset_all_button": "Tüm kurtarma yöntemlerini unuttunuz veya kaybettiniz mi? <a>Tümünü sıfırla</a>",
         "set_up_recovery": "Kurtarmayı ayarlayın",
         "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
-        "set_up_toast_description": "Şifrelenmiş mesajlara ve verilere erişimi kaybetmemek için koruma sağlayın",
         "set_up_toast_title": "Güvenli Yedekleme kur",
         "setup_secure_backup": {
             "explainer": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle."
@@ -1603,8 +1600,7 @@
         "filter_placeholder": "Oda üyelerini Filtrele",
         "invite_button_no_perms_tooltip": "Kullanıcıları davet etme izniniz yok",
         "invited_label": "Davet Edildi",
-        "no_matches": "Eşleşme yok",
-        "power_label": "%(userName)s (güç %(powerLevelNumber)s)"
+        "no_matches": "Eşleşme yok"
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
@@ -2596,11 +2592,6 @@
         "insert_trailing_colon_mentions": "Mesajın başında kullanıcı etiketlerinden sonra iki nokta üst üste ekle",
         "jump_to_bottom_on_send": "Mesaj gönderdiğinizde zaman çizelgesinin en sonuna atla",
         "key_backup": {
-            "backup_in_progress": "Anahtarlarınız yedekleniyor (ilk yedekleme birkaç dakika sürebilir).",
-            "backup_starting": "Yedekleme başlatılıyor...",
-            "backup_success": "Başarılı!",
-            "cannot_create_backup": "Anahtar yedeklemesi oluşturulamıyor",
-            "create_title": "Anahtar yedeklemesi oluştur",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Anahtarlarınız artık bu cihazdan yedekleniyor.",
                 "backup_setup_success_title": "Güvenli Yedekleme başarılı",
@@ -2750,7 +2741,6 @@
             "ignore_users_empty": "Yok saydığınız kullanıcı yok.",
             "ignore_users_section": "Yoksayılan kullanıcılar",
             "key_backup_algorithm": "Algoritma:",
-            "key_backup_connect": "Anahtar Yedekleme için bu oturuma bağlanın",
             "message_search_disable_warning": "Devre dışı bırakılırsa, şifreli odalardaki mesajlar arama sonuçlarında görünmez.",
             "message_search_disabled": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
             "message_search_enabled": {
@@ -3826,7 +3816,6 @@
         "dialpad": "Tuş takımı",
         "disable_camera": "Kamerayı kapat",
         "disable_microphone": "Mikrofonu sessize al",
-        "disabled_no_one_here": "Burada arayacak kimse yok.",
         "disabled_no_perms_start_video_call": "Görüntülü arama başlatmak için izniniz yok",
         "disabled_no_perms_start_voice_call": "Sesli arama başlatmak için izniniz yok",
         "disabled_ongoing_call": "Devam eden çağrı",

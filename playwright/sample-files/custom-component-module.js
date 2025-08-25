@@ -5,8 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// Note: eslint-plugin-jsdoc doesn't like import types as parameters, so we
+// get around it with @typedef
+/**
+ * @typedef {import("@element-hq/element-web-module-api").Api} Api
+ */
+
 export default class CustomComponentModule {
     static moduleApiVersion = "^1.2.0";
+    /**
+     * Basic module for testing.
+     * @param {Api} api API object
+     */
     constructor(api) {
         this.api = api;
         this.api.customComponents.registerMessageRenderer(
@@ -40,6 +50,15 @@ export default class CustomComponentModule {
                 throw new Error("Fail test!");
             },
         );
+
+        this.api.customComponents.registerMessageRenderer(
+            (mxEvent) => mxEvent.type === "m.room.message" && mxEvent.content.msgtype === "m.image",
+            (_props, originalComponent) => {
+                return originalComponent();
+            },
+            { allowDownloadingMedia: async (mxEvent) => mxEvent.content.body !== "bad.png" },
+        );
+
         // Order is specific here to avoid this overriding the other renderers
         this.api.customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
             const body = props.mxEvent.content.body;

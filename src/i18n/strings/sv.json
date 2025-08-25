@@ -93,7 +93,6 @@
         "maximise": "Maximera",
         "mention": "Nämn",
         "minimise": "Minimera",
-        "new_message": "Nytt meddelande",
         "new_room": "Nytt rum",
         "new_video_room": "Nytt videorum",
         "next": "Nästa",
@@ -157,6 +156,7 @@
         "view_message": "Visa meddelande",
         "view_source": "Visa källa",
         "yes": "Ja",
+        "yes_dismiss": "Ja, avvisa",
         "zoom_in": "Zooma in",
         "zoom_out": "Zooma ut"
     },
@@ -239,8 +239,7 @@
             "setup_key_backup_title": "Du kommer att förlora åtkomst till dina krypterade meddelanden",
             "setup_secure_backup_description_1": "Krypterade meddelanden är säkrade med totalsträckskryptering. Bara du och mottagaren/na har nycklarna för att läsa dessa meddelanden.",
             "setup_secure_backup_description_2": "När du loggar ut kommer nycklarna att raderas från den här enheten, vilket betyder att du inte kommer kunna läsa krypterade meddelanden om du inte har nycklarna för dem på dina andra enheter, eller säkerhetskopierade dem till servern.",
-            "skip_key_backup": "Jag vill inte ha mina krypterade meddelanden",
-            "use_key_backup": "Börja använda nyckelsäkerhetskopiering"
+            "skip_key_backup": "Jag vill inte ha mina krypterade meddelanden"
         },
         "misconfigured_body": "Be din %(brand)s-administratör att kolla <a>din konfiguration</a> efter felaktiga eller duplicerade poster.",
         "misconfigured_title": "Din %(brand)s är felkonfigurerad",
@@ -645,12 +644,12 @@
         "mode_plain": "Dölj formatering",
         "mode_rich_text": "Visa formatering",
         "no_perms_notice": "Du har inte behörighet att posta till detta rum",
-        "placeholder": "Skicka ett meddelande…",
-        "placeholder_encrypted": "Skicka ett krypterat meddelande…",
-        "placeholder_reply": "Skicka ett svar…",
-        "placeholder_reply_encrypted": "Skicka ett krypterat svar…",
-        "placeholder_thread": "Svara på tråd…",
-        "placeholder_thread_encrypted": "Svara på krypterad tråd…",
+        "placeholder": "Skicka ett okrypterat meddelande …",
+        "placeholder_encrypted": "Skicka ett meddelande …",
+        "placeholder_reply": "Skicka ett okrypterat svar …",
+        "placeholder_reply_encrypted": "Skicka ett svar …",
+        "placeholder_thread": "Svara på okrypterad tråd …",
+        "placeholder_thread_encrypted": "Svara på tråd …",
         "poll_button": "Omröstning",
         "poll_button_no_perms_description": "Du får inte starta omröstningar i det här rummet.",
         "poll_button_no_perms_title": "Behörighet krävs",
@@ -785,6 +784,7 @@
             "cross_signing_status": "Korssigneringsstatus:",
             "cross_signing_untrusted": "Ditt konto har en korssigneringsidentitet i hemlig lagring, men den är ännu inte betrodd av den här sessionen.",
             "crypto_not_available": "Kryptografisk modul är inte tillgänglig",
+            "device_id": "Enhets-ID",
             "key_backup_active_version": "Aktiv säkerhetskopiaversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Dina nycklar säkerhetskopieras inte från den här sessionen.",
@@ -797,6 +797,8 @@
             "secret_storage_ready": "klar",
             "secret_storage_status": "Hemlig lagring:",
             "self_signing_private_key_cached_status": "Självsignerande privat nyckel:",
+            "session": "Session",
+            "session_fingerprint": "Fingeravtryck (sessionsnyckel)",
             "title": "Totalsträckskryptering",
             "user_signing_private_key_cached_status": "Privat nyckel för användarsignering:"
         },
@@ -822,6 +824,7 @@
         "low_bandwidth_mode": "Lågt bandbreddsläge",
         "low_bandwidth_mode_description": "Kräver kompatibel hemserver.",
         "main_timeline": "Huvudtidslinje",
+        "manual_device_verification": "Manuell enhetsverifiering",
         "no_receipt_found": "Inga kvitton hittade",
         "notification_state": "Aviseringsstatus är <strong>%(notificationState)s</strong>",
         "notifications_debug": "Aviseringsfelsökning",
@@ -859,6 +862,7 @@
             "elementCallUrl": "Element Call-URL"
         },
         "settings_explorer": "Inställningar",
+        "show_empty_content_events": "Visa händelser med tomt innehåll",
         "show_hidden_events": "Visa dolda händelser i tidslinjen",
         "spaces": {
             "one": "<mellanslag>",
@@ -910,11 +914,14 @@
     "empty_room_was_name": "Tomt rum (var %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
+            "alternatives": "Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också.",
             "key_validation_text": {
-                "wrong_security_key": "Fel säkerhetsnyckel"
+                "wrong_security_key": "Återställningsnyckeln du angav är inte korrekt."
             },
+            "privacy_warning": "Se till att ingen kan se den här skärmen",
             "restoring": "Återställer nycklar från säkerhetskopia",
-            "security_key_title": "Säkerhetsnyckel"
+            "security_key_label": "Återställningsnyckel",
+            "security_key_title": "Ange din återställningsnyckel"
         },
         "bootstrap_title": "Sätter upp nycklar",
         "confirm_encryption_setup_body": "Klicka på knappen nedan för att bekräfta inställning av kryptering.",
@@ -927,6 +934,7 @@
         "cross_signing_user_warning": "Den här användaren har inte verifierat alla sina sessioner.",
         "enter_recovery_key": "Ange återställningsnyckel",
         "event_shield_reason_authenticity_not_guaranteed": "Det krypterade meddelandets äkthet kan inte garanteras på den här enheten.",
+        "event_shield_reason_mismatched_sender": "Avsändaren av händelsen matchar inte ägaren av den enhet som skickade den.",
         "event_shield_reason_mismatched_sender_key": "Krypterat av en overifierad session",
         "event_shield_reason_unknown_device": "Krypterad av en okänd eller raderad enhet.",
         "event_shield_reason_unsigned_device": "Krypterad av en enhet som inte har verifierats av dess ägare.",
@@ -962,11 +970,12 @@
         "reset_all_button": "Glömt eller förlorat alla återställningsalternativ? <a>Återställ allt</a>",
         "set_up_recovery": "Ställ in återställning",
         "set_up_recovery_toast_description": "Generera en återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.",
-        "set_up_toast_description": "Skydda mot att förlora åtkomst till krypterade meddelanden och data",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
         "setup_secure_backup": {
             "explainer": "Säkerhetskopiera dina nycklar innan du loggar ut för att undvika att du blir av med dem."
         },
+        "turn_on_key_storage": "Slå på nyckellagring",
+        "turn_on_key_storage_description": "Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter.",
         "udd": {
             "interactive_verification_button": "Verifiera interaktivt med emoji",
             "other_ask_verify_text": "Be den här användaren att verifiera sin session, eller verifiera den manuellt nedan.",
@@ -1001,6 +1010,21 @@
             "incoming_sas_dialog_waiting": "Väntar på att andra parten ska bekräfta …",
             "incoming_sas_user_dialog_text_1": "Verifiera denna användare för att markera den som betrodd. Att lita på användare ger en extra sinnesfrid när man använder totalsträckskrypterade meddelanden.",
             "incoming_sas_user_dialog_text_2": "Att verifiera den här användaren kommer att markera dess session som betrodd, och markera din session som betrodd för denne.",
+            "manual": {
+                "already_verified": "Den här enheten är redan verifierad",
+                "already_verified_and_wrong_fingerprint": "Det angivna fingeravtrycket matchar inte, men enheten är redan verifierad!",
+                "device_id": "Enhets-ID",
+                "failure_description": "Misslyckades att verifiera '%(deviceId)s': %(error)s",
+                "failure_title": "Verifiering misslyckades",
+                "fingerprint": "Fingeravtryck (sessionsnyckel)",
+                "no_crypto": "Kunde inte verifiera enhet – krypto är inte aktiverat",
+                "no_device": "Kunde inte verifiera enhet – enheten '%(deviceId)s' hittades inte.",
+                "no_userid": "Kunde inte verifiera enhet – kan inte hitta vårt användar-ID",
+                "success_description": "Den här enheten (%(deviceId)s) är nu korssignerad.",
+                "success_title": "Verifiering lyckades",
+                "text": "Ange ID och fingeravtryck för en av dina egna enheter för att verifiera den. OBSERVERA att detta gör att den andra enheten kan skicka och ta emot meddelanden som om den vore du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD!",
+                "wrong_fingerprint": "Kunde inte verifiera enheten '%(deviceId)s' - det angivna fingeravtrycket '%(fingerprint)s' stämmer inte överens med enhetens fingeravtryck, '%(fprint)s'"
+            },
             "no_key_or_device": "Det ser ut som att du inte har någon säkerhetsnyckel eller några andra enheter du kan verifiera mot. Den här enheten kommer inte kunna komma åt gamla krypterad meddelanden. För att verifiera din identitet på den här enheten så behöver du återställa dina verifieringsnycklar.",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "other_party_cancelled": "Den andra parten avbröt verifieringen.",
@@ -1342,6 +1366,10 @@
         "name_email_mxid_share_space": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>), eller <a>dela det här rummet</a>.",
         "name_mxid_share_room": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
         "name_mxid_share_space": "Bjud in någon med deras namn eller användarnamn (som <userId/>), eller <a>dela det här utrymmet</a>.",
+        "progress": {
+            "dont_close": "Stäng inte appen förrän det är klart.",
+            "preparing": "Förbereder inbjudningar …"
+        },
         "recents_section": "Senaste konversationerna",
         "room_failed_partial": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
         "room_failed_partial_title": "Vissa inbjudningar kunde inte skickas",
@@ -1428,6 +1456,7 @@
         "room_list_navigate_down": "Navigera ner i rumslistan",
         "room_list_navigate_up": "Navigera upp i rumslistan",
         "room_list_select_room": "Välj rum från rumslistan",
+        "save": "Spara",
         "scroll_down_timeline": "Skrolla ner i tidslinjen",
         "scroll_up_timeline": "Skrolla upp i tidslinjen",
         "search": "Sök (måste vara aktiverat)",
@@ -1509,6 +1538,9 @@
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
         "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
+        "share_history_on_invite": "Dela encrypted historik med nya medlemmar",
+        "share_history_on_invite_description": "När du bjuder in en användare till ett krypterat rum där historiksynlighet är inställd på \"delad\" så delar du krypterad historik med den användaren och du accepterar krypterad historik när du blir inbjuden till ett sådant rum.",
+        "share_history_on_invite_warning": "Den här funktionen är EXPERIMENTELL och alla säkerhetsåtgärder är inte implementerade. Aktivera inte på produktionskonton.",
         "sliding_sync": "Sliding sync-läge",
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
@@ -1630,8 +1662,8 @@
         "filter_placeholder": "Filtrera rumsmedlemmar",
         "invite_button_no_perms_tooltip": "Du är inte behörig att bjuda in användare",
         "invited_label": "Inbjuden",
-        "no_matches": "Inga matchningar",
-        "power_label": "%(userName)s (behörighet %(powerLevelNumber)s)"
+        "list_title": "Medlemslista",
+        "no_matches": "Inga matchningar"
     },
     "member_list_back_action_label": "Rumsmedlemmar",
     "message_edit_dialog_title": "Meddelanderedigeringar",
@@ -1735,6 +1767,7 @@
     },
     "power_level": {
         "admin": "Administratör",
+        "creator": "Ägare",
         "custom": "Anpassad (%(level)s)",
         "custom_level": "Anpassad nivå",
         "default": "Standard",
@@ -1887,6 +1920,7 @@
         "thread_list": {
             "context_menu_label": "Trådalternativ"
         },
+        "title": "Högerpanel",
         "video_room_chat": {
             "title": "Chatt"
         }
@@ -1948,6 +1982,7 @@
         },
         "face_pile_tooltip_shortcut": "Inklusive %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Inklusive dig, %(commaSeparatedMembers)s",
+        "failed_determine_user": "Kan inte avgöra vilken användare som ska ignoreras eftersom medlemshändelsen har ändrats.",
         "failed_reject_invite": "Misslyckades att avböja inbjudan",
         "forget_room": "Glöm det här rummet",
         "forget_space": "Glöm det här utrymmet",
@@ -2039,6 +2074,8 @@
         "read_topic": "Klicka för att läsa ämne",
         "rejecting": "Nekar inbjudan …",
         "rejoin_button": "Gå med igen",
+        "room_content": "Rumsinnehåll",
+        "room_is_low_priority": "Detta är ett lågprioriterat room",
         "search": {
             "all_rooms_button": "Sök i alla rum",
             "placeholder": "Sök meddelanden...",
@@ -2087,24 +2124,33 @@
         "add_space_label": "Lägg till utrymme",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
+        "collapse_filters": "Kollapsa filterlista",
         "empty": {
             "no_chats": "Inga chattar än",
             "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
             "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon",
             "no_favourites": "Du har ingen favoritchatt än",
             "no_favourites_description": "Du kan lägga till en chatt till dina favoriter i chattinställningarna",
+            "no_invites": "Du har inga olästa inbjudningar",
+            "no_lowpriority": "Du har inga lågprioriterade rum.",
+            "no_mentions": "Du har inga olästa omnämnanden",
             "no_people": "Du har inte direktchattar med någon ännu",
             "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
             "no_rooms": "Du är inte i något rum än",
             "no_rooms_description": "Du kan avmarkera filter för att se dina andra chattar",
             "no_unread": "Grattis! Du har inga olästa meddelanden",
+            "show_activity": "Visa all aktivitet",
             "show_chats": "Visa alla chattar"
         },
+        "expand_filters": "Expandera filterlista",
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
         "failed_remove_tag": "Misslyckades att radera etiketten %(tagName)s från rummet",
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
         "filters": {
             "favourite": "Favoriter",
+            "invites": "Inbjudningar",
+            "low_priority": "Låg prioritet",
+            "mentions": "Omnämnanden",
             "people": "Personer",
             "rooms": "Rum",
             "unread": "Olästa"
@@ -2142,9 +2188,14 @@
             "one": "Visa %(count)s till"
         },
         "show_previews": "Visa förhandsgranskningar av meddelanden",
+        "sort": "Sortera",
         "sort_by": "Sortera efter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Ö",
+        "sort_type": {
+            "activity": "Aktivitet",
+            "atoz": "A-Ö"
+        },
         "sort_unread_first": "Visa rum med olästa meddelanden först",
         "space_menu": {
             "home": "Utrymmeshem",
@@ -2432,6 +2483,10 @@
         "recent_changes_heading": "Nyliga ändringar har inte mottagits än",
         "title": "Servern svarar inte"
     },
+    "service_worker_error": {
+        "description": "%(brand)s kräver en service worker för att läsa in autentiserade media från Matrix-innehållsförråd. Detta stöds inte av din webbläsare, så du kan uppleva att media misslyckas att laddas.",
+        "title": "Misslyckades att ladda service worker"
+    },
     "seshat": {
         "error_initialising": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information",
         "reset_button": "Återställ händelselagring",
@@ -2525,6 +2580,8 @@
                 "session_key": "Sessionsnyckel:",
                 "title": "Avancerad"
             },
+            "confirm_key_storage_off": "Är du säker på att du vill hålla nyckellagring avstängd?",
+            "confirm_key_storage_off_description": "Om du loggar ut från alla dina enheter kommer du att förlora din meddelandehistorik och måste verifiera alla dina befintliga kontakter igen. <a>Läs mer</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Radera nyckellagring",
                 "confirm": "Radera nyckellagring",
@@ -2660,13 +2717,11 @@
         "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
         "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
+        "invite_controls": {
+            "default_label": "Tillåt användare att bjuda in dig till rum"
+        },
         "jump_to_bottom_on_send": "Hoppa till botten av tidslinjen när du skickar ett meddelande",
         "key_backup": {
-            "backup_in_progress": "Dina nycklar säkerhetskopieras (den första säkerhetskopieringen kan ta några minuter).",
-            "backup_starting": "Startar säkerhetskopiering …",
-            "backup_success": "Framgång!",
-            "cannot_create_backup": "Kunde inte skapa nyckelsäkerhetskopia",
-            "create_title": "Skapa nyckelsäkerhetskopia",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Dina nycklar säkerhetskopieras nu från denna enhet.",
                 "backup_setup_success_title": "Säkerhetskopiering lyckades",
@@ -2726,6 +2781,7 @@
             "show_in_private": "I privata rum",
             "show_media": "Visa alltid"
         },
+        "not_supported": "Din server implementerar inte den här funktionen.",
         "notifications": {
             "default_setting_description": "Denna inställning kommer att tillämpas som standard för alla dina rum.",
             "default_setting_section": "Jag vill bli meddelad för (Standardinställning)",
@@ -2783,6 +2839,7 @@
             "voip": "Ljud- och videosamtal"
         },
         "preferences": {
+            "Electron.enableContentProtection": "Förhindra att fönsterinnehållet spelas in av andra appar",
             "Electron.enableHardwareAcceleration": "Aktivera hårdvaruacceleration (starta om%(appName)s att träda i kraft)",
             "always_show_menu_bar": "Visa alltid fönstermenyn",
             "autocomplete_delay": "Autokompletteringsfördröjning (ms)",
@@ -2791,6 +2848,7 @@
             "composer_heading": "Meddelandefält",
             "default_timezone": "Webbläsarens standard (%(timezone)s)",
             "dialog_title": "<strong>Inställningar:</strong> Alternativ",
+            "enable_content_protection": "Aktivera innehållsskydd",
             "enable_hardware_acceleration": "Aktivera hårdvaruaccelerering",
             "enable_tray_icon": "Visa ikon i systembrickan och minimera programmet till den när fönstret stängs",
             "keyboard_heading": "Tangentbordsgenvägar",
@@ -2824,7 +2882,6 @@
             "ignore_users_empty": "Du har inga ignorerade användare.",
             "ignore_users_section": "Ignorerade användare",
             "key_backup_algorithm": "Algoritm:",
-            "key_backup_connect": "Anslut den här sessionen till nyckelsäkerhetskopiering",
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
             "message_search_enabled": {
@@ -2955,6 +3012,7 @@
         "show_chat_effects": "Visa chatteffekter (animeringar när du tar emot t.ex. konfetti)",
         "show_displayname_changes": "Visa visningsnamnsändringar",
         "show_join_leave": "Visa gå med/lämna-meddelanden (inbjudningar/borttagningar/banningar påverkas inte)",
+        "show_message_previews": "Visa förhandsgranskningar av meddelanden",
         "show_nsfw_content": "Visa NSFW-innehåll",
         "show_read_receipts": "Visa läskvitton som skickats av andra användare",
         "show_redaction_placeholder": "Visa en platshållare för borttagna meddelanden",
@@ -3061,6 +3119,8 @@
         "jumptodate": "Hoppa till det angivna datumet i tidslinjen",
         "jumptodate_invalid_input": "Vi kunde inte förstå det givna datumet (%(inputDate)s). Pröva formatet ÅÅÅÅ-MM-DD.",
         "lenny": "Lägger till ( ͡° ͜ʖ ͡°) i början på ett textmeddelande",
+        "manual_device_verification_confirm_description": "Detta gör det möjligt för en annan enhet att skicka och ta emot meddelanden som du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD! Är du säker på att du vill verifiera den andra enheten?",
+        "manual_device_verification_confirm_title": "Varning: manuell verifiering av enhet",
         "me": "Visar åtgärd",
         "msg": "Skickar ett meddelande till den valda användaren",
         "myavatar": "Byter din profilbild i alla rum",
@@ -3343,6 +3403,7 @@
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den."
         },
         "m.audio": {
+            "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "error_processing_audio": "Fel vid hantering av ljudmeddelande",
             "error_processing_voice_message": "Fel vid hantering av röstmeddelande",
@@ -3908,7 +3969,6 @@
         "dialpad": "Knappsats",
         "disable_camera": "Stäng av kamera",
         "disable_microphone": "Slå av mikrofonen",
-        "disabled_no_one_here": "Det finns ingen här att ringa",
         "disabled_no_perms_start_video_call": "Du är inte behörig att starta videosamtal",
         "disabled_no_perms_start_voice_call": "Du är inte behörig att starta röstsamtal",
         "disabled_ongoing_call": "Pågående samtal",

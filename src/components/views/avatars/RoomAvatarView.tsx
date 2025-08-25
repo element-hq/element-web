@@ -14,6 +14,7 @@ import OnlineOrUnavailableIcon from "@vector-im/compound-design-tokens/assets/we
 import OfflineIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-outline-8x8";
 import BusyIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-strikethrough-8x8";
 import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
 import RoomAvatar from "./RoomAvatar";
 import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
@@ -37,6 +38,7 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;
 
     const icon = getAvatarDecoration(vm.badgeDecoration, vm.presence);
+    const label = getDecorationLabel(vm.badgeDecoration, vm.presence);
 
     // Presence indicator and video/public icons don't have the same size
     // We use different masks
@@ -48,22 +50,15 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     return (
         <div className="mx_RoomAvatarView">
             <RoomAvatar className={classNames("mx_RoomAvatarView_RoomAvatar", maskClass)} size="32px" room={room} />
-            {icon}
+            {label ? <Tooltip label={label}>{icon}</Tooltip> : icon}
         </div>
     );
 }
 
-type PresenceDecorationProps = {
-    /**
-     * The presence of the user in the DM room.
-     */
-    presence: NonNullable<Presence>;
-};
-
 /**
- * Component to display the presence of a user in a DM room.
+ * Get the decoration for the avatar based on the presence.
  */
-function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element {
+function getPresenceDecoration(presence: Presence): JSX.Element {
     switch (presence) {
         case Presence.Online:
             return (
@@ -72,7 +67,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     height="8px"
                     className="mx_RoomAvatarView_PresenceDecoration"
                     color="var(--cpd-color-icon-accent-primary)"
-                    aria-label={_t("presence|online")}
+                    aria-label={getPresenceLabel(presence)}
                 />
             );
         case Presence.Away:
@@ -82,7 +77,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     height="8px"
                     className="mx_RoomAvatarView_PresenceDecoration"
                     color="var(--cpd-color-icon-quaternary)"
-                    aria-label={_t("presence|away")}
+                    aria-label={getPresenceLabel(presence)}
                 />
             );
         case Presence.Offline:
@@ -92,7 +87,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     height="8px"
                     className="mx_RoomAvatarView_PresenceDecoration"
                     color="var(--cpd-color-icon-tertiary)"
-                    aria-label={_t("presence|offline")}
+                    aria-label={getPresenceLabel(presence)}
                 />
             );
         case Presence.Busy:
@@ -102,7 +97,7 @@ function PresenceDecoration({ presence }: PresenceDecorationProps): JSX.Element 
                     height="8px"
                     className="mx_RoomAvatarView_PresenceDecoration"
                     color="var(--cpd-color-icon-tertiary)"
-                    aria-label={_t("presence|busy")}
+                    aria-label={getPresenceLabel(presence)}
                 />
             );
     }
@@ -116,7 +111,7 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
                 height="16px"
                 className="mx_RoomAvatarView_icon"
                 color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|room_is_low_priority")}
+                aria-label={getDecorationLabel(decoration, presence)}
             />
         );
     } else if (decoration === AvatarBadgeDecoration.VideoRoom) {
@@ -126,7 +121,7 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
                 height="16px"
                 className="mx_RoomAvatarView_icon"
                 color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|video_room")}
+                aria-label={getDecorationLabel(decoration, presence)}
             />
         );
     } else if (decoration === AvatarBadgeDecoration.PublicRoom) {
@@ -135,11 +130,45 @@ function getAvatarDecoration(decoration: AvatarBadgeDecoration, presence: Presen
                 width="16px"
                 height="16px"
                 className="mx_RoomAvatarView_icon"
-                color="var(--cpd-color-icon-tertiary)"
-                aria-label={_t("room|header|room_is_public")}
+                color="var(--cpd-color-icon-info-primary)"
+                aria-label={getDecorationLabel(decoration, presence)}
             />
         );
     } else if (decoration === AvatarBadgeDecoration.Presence) {
-        return <PresenceDecoration presence={presence!} />;
+        return getPresenceDecoration(presence!);
+    }
+}
+
+/**
+ * Get the label for the avatar decoration.
+ * This is used for the tooltip and a11y label.
+ */
+function getDecorationLabel(decoration: AvatarBadgeDecoration, presence: Presence | null): string | undefined {
+    switch (decoration) {
+        case AvatarBadgeDecoration.LowPriority:
+            return _t("room|room_is_low_priority");
+        case AvatarBadgeDecoration.VideoRoom:
+            return _t("room|video_room");
+        case AvatarBadgeDecoration.PublicRoom:
+            return _t("room|header|room_is_public");
+        case AvatarBadgeDecoration.Presence:
+            return getPresenceLabel(presence!);
+    }
+}
+
+/**
+ * Get the label for the presence.
+ * This is used for the tooltip and a11y label.
+ */
+function getPresenceLabel(presence: Presence): string {
+    switch (presence) {
+        case Presence.Online:
+            return _t("presence|online");
+        case Presence.Away:
+            return _t("presence|away");
+        case Presence.Offline:
+            return _t("presence|offline");
+        case Presence.Busy:
+            return _t("presence|busy");
     }
 }

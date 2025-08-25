@@ -74,9 +74,19 @@ const E2EIcon: React.FC<Props> = ({
 
     let content: JSX.Element;
     if (onClick) {
-        content = <AccessibleButton onClick={onClick} className={classes} style={style} />;
+        content = <AccessibleButton onClick={onClick} className={classes} style={style} data-testid="e2e-icon" />;
     } else {
-        content = <div className={classes} style={style} />;
+        // Verified and warning icon have a transparent cutout, so add a white background.
+        // The normal icon already has the correct shape and size, so reuse that.
+        if (status === E2EStatus.Verified || status === E2EStatus.Warning) {
+            content = (
+                <div className={classes} style={style} data-testid="e2e-icon">
+                    <div className="mx_E2EIcon_normal" />
+                </div>
+            );
+        } else {
+            content = <div className={classes} style={style} data-testid="e2e-icon" />;
+        }
     }
 
     if (!e2eTitle || hideTooltip) {

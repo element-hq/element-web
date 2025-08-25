@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Download, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
@@ -63,9 +63,7 @@ test.describe("FilePanel", () => {
             await expect(roomViewBody.locator(".mx_EventTile[data-layout='group'] img[alt='riot.png']")).toBeVisible();
 
             // Assert that the audio player is rendered
-            await expect(
-                roomViewBody.locator(".mx_EventTile[data-layout='group'] .mx_AudioPlayer_container"),
-            ).toBeVisible();
+            await expect(roomViewBody.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that the file button exists
             await expect(
@@ -97,9 +95,7 @@ test.describe("FilePanel", () => {
             await expect(image.locator("img[alt='riot.png']")).toBeVisible();
 
             // Detect the audio file
-            const audio = filePanelMessageList.locator(
-                ".mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container",
-            );
+            const audio = filePanelMessageList.getByRole("region", { name: "Audio player" });
             // Assert that the play button is rendered
             await expect(audio.getByRole("button", { name: "Play" })).toBeVisible();
 
@@ -130,7 +126,7 @@ test.describe("FilePanel", () => {
             // Take a snapshot of file tiles list on FilePanel
             await expect(filePanelMessageList).toMatchScreenshot("file-tiles-list.png", {
                 // Exclude timestamps & flaky seek bar from snapshot
-                mask: [page.locator(".mx_MessageTimestamp, .mx_AudioPlayer_seek")],
+                mask: [page.locator(".mx_MessageTimestamp"), page.getByTestId("audio-player-seek")],
             });
         });
 
@@ -138,21 +134,19 @@ test.describe("FilePanel", () => {
             // Upload an image file
             await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
-            const audioBody = page.locator(
-                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container",
-            );
+            const audioBody = page.getByTestId("right-panel").getByRole("region", { name: "Audio player" });
+
             // Assert that the audio player is rendered
-            // Assert that the audio file information is rendered
-            const mediaInfo = audioBody.locator(".mx_AudioPlayer_mediaInfo");
-            await expect(mediaInfo.locator(".mx_AudioPlayer_mediaName").getByText("1sec.ogg")).toBeVisible();
-            await expect(mediaInfo.locator(".mx_AudioPlayer_byline", { hasText: "00:01" })).toBeVisible();
-            await expect(mediaInfo.locator(".mx_AudioPlayer_byline", { hasText: "(3.56 KB)" })).toBeVisible(); // actual size
+            // Assert that the audio file information is rendered;
+            await expect(audioBody.getByText("1sec.ogg")).toBeVisible(); // extension
+            await expect(audioBody.getByRole("time")).toHaveText("00:01"); // duration
+            await expect(audioBody.getByText("(3.56 KB)")).toBeVisible(); // actual size;
 
             // Assert that the duration counter is 00:01 before clicking the play button
-            await expect(audioBody.locator(".mx_AudioPlayer_mediaInfo time", { hasText: "00:01" })).toBeVisible();
+            await expect(audioBody.getByRole("time")).toHaveText("00:01");
 
             // Assert that the counter is zero before clicking the play button
-            await expect(audioBody.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+            await expect(audioBody.getByRole("timer")).toHaveText("00:00");
 
             // Click the play button
             await audioBody.getByRole("button", { name: "Play" }).click();
@@ -161,7 +155,7 @@ test.describe("FilePanel", () => {
             await expect(audioBody.getByRole("button", { name: "Pause" })).toBeVisible();
 
             // Assert that the timer is reset when the audio file finished playing
-            await expect(audioBody.locator(".mx_AudioPlayer_seek [role='timer']", { hasText: "00:00" })).toBeVisible();
+            await expect(audioBody.getByRole("timer")).toHaveText("00:00");
 
             // Assert that the play button is rendered
             await expect(audioBody.getByRole("button", { name: "Play" })).toBeVisible();
@@ -195,23 +189,13 @@ test.describe("FilePanel", () => {
 
             const link = imageBody.locator(".mx_MFileBody_download a");
 
-            const newPagePromise = context.waitForEvent("page");
-
-            const downloadPromise = new Promise<Download>((resolve) => {
-                page.once("download", resolve);
-            });
+            const downloadPromise = page.waitForEvent("download");
 
             // Click the anchor link (not the image itself)
             await link.click();
 
-            const newPage = await newPagePromise;
-            // XXX: Clicking the link opens the image in a new tab on some browsers rather than downloading
-            await expect(newPage)
-                .toHaveURL(/.+\/_matrix\/media\/\w+\/download\/localhost\/\w+/)
-                .catch(async () => {
-                    const download = await downloadPromise;
-                    expect(download.suggestedFilename()).toBe("riot.png");
-                });
+            const download = await downloadPromise;
+            expect(download.suggestedFilename()).toBe("riot.png");
         });
     });
 });

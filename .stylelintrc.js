@@ -70,5 +70,13 @@ module.exports = {
                 ],
             },
         ],
+        "property-no-deprecated": [
+            true,
+            {
+                ignoreProperties: ["-webkit-box-orient", "word-wrap"],
+            },
+        ],
+        "nesting-selector-no-missing-scoping-root": null,
+        "no-invalid-position-declaration": null,
     },
 };

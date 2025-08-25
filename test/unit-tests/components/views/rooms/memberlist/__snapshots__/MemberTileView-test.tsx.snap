@@ -4,12 +4,15 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
-      tabindex="-1"
+      role="option"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -33,6 +36,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -44,10 +48,11 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«ri»"
+          aria-labelledby="«r6»"
           class="mx_E2EIconView"
         >
           <svg
@@ -73,12 +78,15 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
-      tabindex="-1"
+      role="option"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -102,6 +110,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -113,10 +122,11 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r8»"
+          aria-labelledby="«r0»"
           class="mx_E2EIconView"
         >
           <svg
@@ -142,12 +152,15 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
 <div>
   <div>
     <div
-      aria-label="@userId:matrix.org (power 0)"
+      aria-label="@userId:matrix.org"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
-      tabindex="-1"
+      role="option"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -171,6 +184,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
         >
           <div
             class="mx_DisambiguatedProfile"
+            title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
               class=""
@@ -182,6 +196,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       />
     </div>
@@ -193,11 +208,15 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
 <div>
   <div>
     <div
+      aria-label="Foobar"
+      aria-posinset="1"
+      aria-setsize="1"
       class="mx_AccessibleButton mx_MemberTileView"
-      role="button"
-      tabindex="-1"
+      role="option"
+      tabindex="0"
     >
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_left"
       >
         <div
@@ -223,6 +242,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
         </div>
       </div>
       <div
+        aria-hidden="true"
         class="mx_MemberTileView_right"
       >
         <div
@@ -231,7 +251,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
           Invited
         </div>
         <div
-          class="mx_Flex mx_InvitedIconView"
+          class="flex mx_InvitedIconView"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <svg

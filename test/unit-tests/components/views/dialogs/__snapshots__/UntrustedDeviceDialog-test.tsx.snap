@@ -22,8 +22,13 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of a
       >
         <div
           class="mx_E2EIcon mx_E2EIcon_warning"
+          data-testid="e2e-icon"
           style="width: 24px; height: 24px;"
-        />
+        >
+          <div
+            class="mx_E2EIcon_normal"
+          />
+        </div>
         Not Trusted
       </h1>
     </div>
@@ -96,8 +101,13 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of t
       >
         <div
           class="mx_E2EIcon mx_E2EIcon_warning"
+          data-testid="e2e-icon"
           style="width: 24px; height: 24px;"
-        />
+        >
+          <div
+            class="mx_E2EIcon_normal"
+          />
+        </div>
         Not Trusted
       </h1>
     </div>

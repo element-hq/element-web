@@ -14,10 +14,10 @@ import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
-import { ElementCall } from "../../../../../models/Call";
 import { useRoomState } from "../../../../../hooks/useRoomState";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { SettingsSection } from "../../shared/SettingsSection";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
 
 interface ElementCallSwitchProps {
     room: Room;
@@ -42,7 +42,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     );
 
     const [elementCallEnabled, setElementCallEnabled] = useState<boolean>(() => {
-        return content.events?.[ElementCall.MEMBER_EVENT_TYPE.name] === 0;
+        return content.events?.[ElementCallMemberEventType.name] === 0;
     });
 
     const onChange = useCallback(
@@ -56,13 +56,13 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
                 const userLevel = newContent.events[EventType.RoomMessage] ?? content.users_default ?? 0;
                 const moderatorLevel = content.kick ?? 50;
 
-                newContent.events[ElementCall.CALL_EVENT_TYPE.name] = isPublic ? moderatorLevel : userLevel;
-                newContent.events[ElementCall.MEMBER_EVENT_TYPE.name] = userLevel;
+                newContent.events[ElementCallEventType.name] = isPublic ? moderatorLevel : userLevel;
+                newContent.events[ElementCallMemberEventType.name] = userLevel;
             } else {
                 const adminLevel = newContent.events[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
 
-                newContent.events[ElementCall.CALL_EVENT_TYPE.name] = adminLevel;
-                newContent.events[ElementCall.MEMBER_EVENT_TYPE.name] = adminLevel;
+                newContent.events[ElementCallEventType.name] = adminLevel;
+                newContent.events[ElementCallMemberEventType.name] = adminLevel;
             }
 
             room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
