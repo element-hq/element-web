@@ -58,14 +58,14 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
         throw friendlyError("Invalid file: too short", _t("encryption|import_invalid_keyfile", { brand }));
     }
 
-    const salt = body.subarray(1, 1 + 16);
-    const iv = body.subarray(17, 17 + 16);
+    const salt = body.subarray(1, 1 + 16).slice();
+    const iv = body.subarray(17, 17 + 16).slice();
     const iterations = (body[33] << 24) | (body[34] << 16) | (body[35] << 8) | body[36];
-    const ciphertext = body.subarray(37, 37 + ciphertextLength);
-    const hmac = body.subarray(-32);
+    const ciphertext = body.subarray(37, 37 + ciphertextLength).slice();
+    const hmac = body.subarray(-32).slice();
 
     const [aesKey, hmacKey] = await deriveKeys(salt, iterations, password);
-    const toVerify = body.subarray(0, -32);
+    const toVerify = body.subarray(0, -32).slice();
 
     let isValid;
     try {
@@ -180,7 +180,11 @@ export async function encryptMegolmKeyFile(
  * @param {String} password  password
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
-async function deriveKeys(salt: Uint8Array, iterations: number, password: string): Promise<[CryptoKey, CryptoKey]> {
+async function deriveKeys(
+    salt: Uint8Array<ArrayBuffer>,
+    iterations: number,
+    password: string,
+): Promise<[CryptoKey, CryptoKey]> {
     const start = new Date();
 
     let key;

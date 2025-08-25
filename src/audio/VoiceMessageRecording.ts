@@ -142,7 +142,7 @@ export class VoiceMessageRecording implements IDestroyable {
         this.buffer = concat(this.buffer, buf);
     };
 
-    private get audioBuffer(): Uint8Array {
+    private get audioBuffer(): Uint8Array<ArrayBuffer> {
         // We need a clone of the buffer to avoid accidentally changing the position
         // on the real thing.
         return this.buffer.slice(0);
