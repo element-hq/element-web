@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useRef, type JSX } from "react";
+import React, { useCallback, useRef, useState, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
@@ -33,6 +33,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
     const roomCount = roomsResult.rooms.length;
+    const [isScrolling, setIsScrolling] = useState(false);
     const getItemComponent = useCallback(
         (
             index: number,
@@ -57,10 +58,11 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
                     roomIndex={index}
                     roomCount={roomCount}
                     onFocus={onFocus}
+                    listIsScrolling={isScrolling}
                 />
             );
         },
-        [activeIndex, roomCount],
+        [activeIndex, roomCount, isScrolling],
     );
 
     const getItemKey = useCallback((item: Room): string => {
@@ -116,6 +118,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             getItemKey={getItemKey}
             isItemFocusable={() => true}
             onKeyDown={keyDownCallback}
+            isScrolling={setIsScrolling}
         />
     );
 }

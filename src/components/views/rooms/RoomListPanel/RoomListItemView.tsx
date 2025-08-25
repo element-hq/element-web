@@ -41,6 +41,10 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
      * The total number of rooms in the list
      */
     roomCount: number;
+    /**
+     * Whether the list is currently scrolling
+     */
+    listIsScrolling: boolean;
 }
 
 /**
@@ -53,6 +57,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     onFocus,
     roomIndex: index,
     roomCount: count,
+    listIsScrolling,
     ...props
 }: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
@@ -141,7 +146,7 @@ export const RoomListItemView = memo(function RoomListItemView({
         </Flex>
     );
 
-    if (!vm.showContextMenu) return content;
+    if (!vm.showContextMenu || listIsScrolling) return content;
 
     return (
         <RoomListItemContextMenuView
