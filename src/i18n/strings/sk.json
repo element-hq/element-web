@@ -1380,6 +1380,10 @@
         "name_email_mxid_share_space": "Pozvite niekoho pomocou jeho mena, e-mailovej adresy, používateľského mena (napríklad <userId/>) alebo <a>zdieľajte tento priestor</a>.",
         "name_mxid_share_room": "Pozvite niekoho pomocou jeho mena, používateľského mena (napríklad <userId/>) alebo <a>zdieľate túto miestnosť</a>.",
         "name_mxid_share_space": "Pozvite niekoho pomocou jeho mena, používateľského mena (napríklad <userId/>) alebo <a>zdieľajte tento priestor</a>.",
+        "progress": {
+            "dont_close": "Nezatvárajte aplikáciu, kým nie je proces dokončený.",
+            "preparing": "Príprava pozvánok..."
+        },
         "recents_section": "Nedávne konverzácie",
         "room_failed_partial": "Ostatným sme pozvánky poslali, ale nižšie uvedené osoby nemohli byť pozvané do <RoomName/>",
         "room_failed_partial_title": "Niektoré pozvánky nebolo možné odoslať",
@@ -1782,6 +1786,7 @@
     },
     "power_level": {
         "admin": "Správca",
+        "creator": "Vlastník",
         "custom": "Vlastný (%(level)s)",
         "custom_level": "Vlastná úroveň",
         "default": "Predvolené",
@@ -1940,6 +1945,7 @@
         "thread_list": {
             "context_menu_label": "Možnosti vlákna"
         },
+        "title": "Pravý panel",
         "video_room_chat": {
             "title": "Konverzácia"
         }
