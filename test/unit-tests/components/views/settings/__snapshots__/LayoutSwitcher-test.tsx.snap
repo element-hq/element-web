@@ -418,7 +418,6 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 class="_input_19o42_24"
                 id="radix-«rr»"
                 name="compactLayout"
-                role="switch"
                 title=""
                 type="checkbox"
               />
