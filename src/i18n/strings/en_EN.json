@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
         "poll_button_no_perms_title": "Permission Required",
         "replying_title": "Replying",
+        "room_unencrypted": "Messages in this room are not end-to-end encrypted",
         "room_upgraded_link": "The conversation continues here.",
         "room_upgraded_notice": "This room has been replaced and is no longer active.",
         "send_button_title": "Send message",
