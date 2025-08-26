@@ -34,6 +34,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
                 class="_input_19o42_24"
                 id="radix-«r28»"
                 name="systemTheme"
+                role="switch"
                 title=""
                 type="checkbox"
               />
@@ -312,6 +313,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
                 class="_input_19o42_24"
                 id="radix-«r10»"
                 name="systemTheme"
+                role="switch"
                 title=""
                 type="checkbox"
               />
@@ -590,6 +592,7 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
                 class="_input_19o42_24"
                 id="radix-«r0»"
                 name="systemTheme"
+                role="switch"
                 title=""
                 type="checkbox"
               />
