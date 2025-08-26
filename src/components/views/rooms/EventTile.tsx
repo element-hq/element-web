@@ -28,9 +28,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import {
     CryptoEvent,
-    DecryptionFailureCode,
     EventShieldColour,
-    EventShieldReason,
+    type EventShieldReason,
     type UserVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
@@ -75,7 +74,6 @@ import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../event
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -83,6 +81,8 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import { E2ePadlockViewModel } from "../../../viewmodels/event-tile/E2ePadlockViewModel";
+import { E2EPadlockView } from "../../../shared-components/event-tile/E2ePadlockView";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -286,6 +286,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
+    private e2ePadlockViewModel: E2ePadlockViewModel;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -297,7 +298,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
-    private unmounted = false;
+    // private unmounted = false;
 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -328,6 +329,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // to determine if we've already subscribed and use a combination of other flags to find
         // out if we should even be subscribed at all.
         this.isListeningForReceipts = false;
+
+        this.e2ePadlockViewModel = new E2ePadlockViewModel({
+            event: this.props.mxEvent,
+            cli: MatrixClientPeg.get()!,
+            isRoomEncrypted: !!this.context.isRoomEncrypted,
+        });
     }
 
     /**
@@ -386,7 +393,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidMount(): void {
-        this.unmounted = false;
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
@@ -441,8 +447,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
         this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
-        this.unmounted = false;
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
+        if (this.e2ePadlockViewModel) this.e2ePadlockViewModel.dispose();
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
@@ -577,33 +583,33 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private verifyEvent(): void {
-        this.doVerifyEvent().catch((e) => {
+        this.e2ePadlockViewModel.verifyEvent().catch((e) => {
             const event = this.props.mxEvent;
             logger.error(`Error getting encryption info on event ${event.getId()} in room ${event.getRoomId()}`, e);
         });
     }
 
-    private async doVerifyEvent(): Promise<void> {
-        // if the event was edited, show the verification info for the edit, not
-        // the original
-        const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+    // private async doVerifyEvent(): Promise<void> {
+    //     // if the event was edited, show the verification info for the edit, not
+    //     // the original
+    //     const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
-        if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
-            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
-            return;
-        }
+    //     if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
+    //         this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
+    //         return;
+    //     }
 
-        const encryptionInfo =
-            (await MatrixClientPeg.safeGet().getCrypto()?.getEncryptionInfoForEvent(mxEvent)) ?? null;
-        if (this.unmounted) return;
-        if (encryptionInfo === null) {
-            // likely a decryption error
-            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
-            return;
-        }
+    //     const encryptionInfo =
+    //         (await MatrixClientPeg.safeGet().getCrypto()?.getEncryptionInfoForEvent(mxEvent)) ?? null;
+    //     if (this.unmounted) return;
+    //     if (encryptionInfo === null) {
+    //         // likely a decryption error
+    //         this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
+    //         return;
+    //     }
 
-        this.setState({ shieldColour: encryptionInfo.shieldColour, shieldReason: encryptionInfo.shieldReason });
-    }
+    //     this.setState({ shieldColour: encryptionInfo.shieldColour, shieldReason: encryptionInfo.shieldReason });
+    // }
 
     private propsEqual(objA: EventTileProps, objB: EventTileProps): boolean {
         const keysA = Object.keys(objA) as Array<keyof EventTileProps>;
@@ -708,98 +714,95 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private renderE2EPadlock(): ReactNode {
-        // if the event was edited, show the verification info for the edit, not
-        // the original
-        const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+    // private renderE2EPadlock(): ReactNode {
+    //     // if the event was edited, show the verification info for the edit, not
+    //     // the original
+    //     const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
-        // no icon for local rooms
-        if (isLocalRoom(ev.getRoomId()!)) return null;
+    //     // no icon for local rooms
+    //     if (isLocalRoom(ev.getRoomId()!)) return null;
 
-        // event could not be decrypted
-        if (ev.isDecryptionFailure()) {
-            switch (ev.decryptionFailureReason) {
-                // These two errors get icons from DecryptionFailureBody, so we hide the padlock icon
-                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
-                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return null;
-                default:
-                    return <E2ePadlockDecryptionFailure />;
-            }
-        }
+    //     // event could not be decrypted
+    //     if (ev.isDecryptionFailure()) {
+    //         switch (ev.decryptionFailureReason) {
+    //             // These two errors get icons from DecryptionFailureBody, so we hide the padlock icon
+    //             case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+    //             case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+    //                 return null;
+    //             default:
+    //                 return <E2ePadlockDecryptionFailure />;
+    //         }
+    //     }
 
-        if (this.state.shieldColour !== EventShieldColour.NONE) {
-            let shieldReasonMessage: string;
-            switch (this.state.shieldReason) {
-                case EventShieldReason.UNVERIFIED_IDENTITY:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
-                    break;
+    //     if (this.state.shieldColour !== EventShieldColour.NONE) {
+    //         let shieldReasonMessage: string;
+    //         switch (this.state.shieldReason) {
+    //             case null:
+    //             case EventShieldReason.UNKNOWN:
+    //                 shieldReasonMessage = _t("error|unknown");
+    //                 break;
 
-                case EventShieldReason.UNSIGNED_DEVICE:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unsigned_device");
-                    break;
+    //             case EventShieldReason.UNVERIFIED_IDENTITY:
+    //                 shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
+    //                 break;
 
-                case EventShieldReason.UNKNOWN_DEVICE:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unknown_device");
-                    break;
+    //             case EventShieldReason.UNSIGNED_DEVICE:
+    //                 shieldReasonMessage = _t("encryption|event_shield_reason_unsigned_device");
+    //                 break;
 
-                case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_authenticity_not_guaranteed");
-                    break;
+    //             case EventShieldReason.UNKNOWN_DEVICE:
+    //                 shieldReasonMessage = _t("encryption|event_shield_reason_unknown_device");
+    //                 break;
 
-                case EventShieldReason.MISMATCHED_SENDER_KEY:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
-                    break;
+    //             case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
+    //                 shieldReasonMessage = _t("encryption|event_shield_reason_authenticity_not_guaranteed");
+    //                 break;
 
-                case EventShieldReason.SENT_IN_CLEAR:
-                    shieldReasonMessage = _t("common|unencrypted");
-                    break;
+    //             case EventShieldReason.MISMATCHED_SENDER_KEY:
+    //                 shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
+    //                 break;
 
-                case EventShieldReason.VERIFICATION_VIOLATION:
-                    shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
-                    break;
+    //             case EventShieldReason.SENT_IN_CLEAR:
+    //                 shieldReasonMessage = _t("common|unencrypted");
+    //                 break;
 
-                case EventShieldReason.MISMATCHED_SENDER:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
-                    break;
+    //             case EventShieldReason.VERIFICATION_VIOLATION:
+    //                 shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+    //                 break;
+    //         }
 
-                default:
-                    shieldReasonMessage = _t("error|unknown");
-                    break;
-            }
+    //         if (this.state.shieldColour === EventShieldColour.GREY) {
+    //             return <E2ePadlock icon={E2ePadlockIcon.Normal} title={shieldReasonMessage} />;
+    //         } else {
+    //             // red, by elimination
+    //             return <E2ePadlock icon={E2ePadlockIcon.Warning} title={shieldReasonMessage} />;
+    //         }
+    //     }
 
-            if (this.state.shieldColour === EventShieldColour.GREY) {
-                return <E2ePadlock icon={E2ePadlockIcon.Normal} title={shieldReasonMessage} />;
-            } else {
-                // red, by elimination
-                return <E2ePadlock icon={E2ePadlockIcon.Warning} title={shieldReasonMessage} />;
-            }
-        }
+    //     if (this.context.isRoomEncrypted) {
+    //         // else if room is encrypted
+    //         // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
+    //         if (ev.status === EventStatus.ENCRYPTING) {
+    //             return null;
+    //         }
+    //         if (ev.status === EventStatus.NOT_SENT) {
+    //             return null;
+    //         }
+    //         if (ev.isState()) {
+    //             return null; // we expect this to be unencrypted
+    //         }
+    //         if (ev.isRedacted()) {
+    //             return null; // we expect this to be unencrypted
+    //         }
+    //         if (!ev.isEncrypted()) {
+    //             // if the event is not encrypted, but it's an e2e room, show a warning
+    //             return <E2ePadlockUnencrypted />;
+    //         }
+    //     }
 
-        if (this.context.isRoomEncrypted) {
-            // else if room is encrypted
-            // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
-            if (ev.status === EventStatus.ENCRYPTING) {
-                return null;
-            }
-            if (ev.status === EventStatus.NOT_SENT) {
-                return null;
-            }
-            if (ev.isState()) {
-                return null; // we expect this to be unencrypted
-            }
-            if (ev.isRedacted()) {
-                return null; // we expect this to be unencrypted
-            }
-            if (!ev.isEncrypted()) {
-                // if the event is not encrypted, but it's an e2e room, show a warning
-                return <E2ePadlockUnencrypted />;
-            }
-        }
-
-        // no padlock needed
-        return null;
-    }
+    //     // no padlock needed
+    //     return null;
+    // }
 
     private onActionBarFocusChange = (actionBarFocused: boolean): void => {
         this.setState({ actionBarFocused });
@@ -1174,8 +1177,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
         const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : undefined;
-        const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
-        const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
+        const padlock = <E2EPadlockView vm={this.e2ePadlockViewModel} />;
+        const groupPadlock = !useIRCLayout && !isBubbleMessage && padlock;
+        const ircPadlock = useIRCLayout && !isBubbleMessage && padlock;
 
         let msgOption: JSX.Element | undefined;
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
@@ -1486,53 +1490,6 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
     );
 };
 export default SafeEventTile;
-
-function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
-}
-
-function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return (
-        <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} {...props} />
-    );
-}
-
-enum E2ePadlockIcon {
-    /** grey shield */
-    Normal = "normal",
-
-    /** red shield with (!) */
-    Warning = "warning",
-
-    /** key in grey circle */
-    DecryptionFailure = "decryption_failure",
-}
-
-interface IE2ePadlockProps {
-    icon: E2ePadlockIcon;
-    title: string;
-}
-
-class E2ePadlock extends React.Component<IE2ePadlockProps> {
-    public constructor(props: IE2ePadlockProps) {
-        super(props);
-
-        this.state = {
-            hover: false,
-        };
-    }
-
-    public render(): ReactNode {
-        const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
-        // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
-        // https://github.com/element-hq/compound/issues/294
-        return (
-            <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
-            </Tooltip>
-        );
-    }
-}
 
 interface ISentReceiptProps {
     messageState: EventStatus | null;
