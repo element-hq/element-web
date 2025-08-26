@@ -35,7 +35,9 @@ describe("MemberTileView", () => {
         });
 
         it("should not display an E2EIcon when the e2E status = normal", () => {
-            const { container } = render(<RoomMemberTileView member={member} />);
+            const { container } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
             const e2eIcon = container.querySelector(".mx_E2EIconView");
             expect(e2eIcon).toBeNull();
             expect(container).toMatchSnapshot();
@@ -47,7 +49,9 @@ describe("MemberTileView", () => {
                 wasCrossSigningVerified: jest.fn().mockReturnValue(true),
             } as unknown as UserVerificationStatus);
 
-            const { container } = render(<RoomMemberTileView member={member} />);
+            const { container } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
                 expect(screen.getByText("This user has not verified all of their sessions.")).toBeInTheDocument();
@@ -68,7 +72,9 @@ describe("MemberTileView", () => {
                 crossSigningVerified: true,
             } as DeviceVerificationStatus);
 
-            const { container } = render(<RoomMemberTileView member={member} />);
+            const { container } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
 
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
@@ -81,16 +87,28 @@ describe("MemberTileView", () => {
 
         it("renders user labels correctly", async () => {
             member.powerLevel = 50;
-            const { container: container1 } = render(<RoomMemberTileView member={member} />);
+            const { container: container1 } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
             expect(container1).toHaveTextContent("Moderator");
 
             member.powerLevel = 100;
-            const { container: container2 } = render(<RoomMemberTileView member={member} />);
+            const { container: container2 } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
             expect(container2).toHaveTextContent("Admin");
 
+            member.powerLevel = Infinity;
+            const { container: container3 } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
+            expect(container3).toHaveTextContent("Owner");
+
             member.isInvite = true;
-            const { container: container3 } = render(<RoomMemberTileView member={member} />);
-            expect(container3).toHaveTextContent("Invited");
+            const { container: container4 } = render(
+                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+            );
+            expect(container4).toHaveTextContent("Invited");
         });
     });
 
@@ -109,7 +127,14 @@ describe("MemberTileView", () => {
 
         it("renders ThreePidInvite correctly", async () => {
             const [{ threePidInvite }] = getPending3PidInvites(room);
-            const { container } = render(<ThreePidInviteTileView threePidInvite={threePidInvite!} />);
+            const { container } = render(
+                <ThreePidInviteTileView
+                    threePidInvite={threePidInvite!}
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
             expect(container).toMatchSnapshot();
         });
     });

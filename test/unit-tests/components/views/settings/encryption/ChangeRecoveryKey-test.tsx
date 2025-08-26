@@ -96,7 +96,7 @@ describe("<ChangeRecoveryKey />", () => {
             const finishButton = screen.getByRole("button", { name: "Finish set up" });
             expect(finishButton).toHaveAttribute("aria-disabled", "true");
 
-            const input = screen.getByRole("textbox");
+            const input = screen.getByTitle("Enter recovery key");
             // If the user enters an incorrect recovery key, the finish button should be disabled
             // and we display an error message
             await userEvent.type(input, "wrong recovery key");
@@ -130,7 +130,7 @@ describe("<ChangeRecoveryKey />", () => {
             await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
 
             const finishButton = screen.getByRole("button", { name: "Finish set up" });
-            const input = screen.getByRole("textbox");
+            const input = screen.getByTitle("Enter recovery key");
             await userEvent.type(input, "encoded private key");
             await user.click(finishButton);
 

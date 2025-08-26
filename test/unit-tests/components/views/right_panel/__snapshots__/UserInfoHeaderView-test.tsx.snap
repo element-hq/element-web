@@ -31,7 +31,7 @@ exports[`<UserInfoHeaderView /> renders custom user identifiers in the header 1`
     class="mx_UserInfo_container mx_UserInfo_header"
   >
     <div
-      class="mx_Flex mx_UserInfo_profile"
+      class="flex mx_UserInfo_profile"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -39,7 +39,7 @@ exports[`<UserInfoHeaderView /> renders custom user identifiers in the header 1`
         dir="auto"
       >
         <div
-          class="mx_Flex mx_UserInfo_profile_name"
+          class="flex mx_UserInfo_profile_name"
           style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           @user:example.com
@@ -62,7 +62,7 @@ exports[`<UserInfoHeaderView /> renders custom user identifiers in the header 1`
       </p>
     </div>
     <div
-      class="mx_Flex mx_UserInfo_verification"
+      class="flex mx_UserInfo_verification"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <svg

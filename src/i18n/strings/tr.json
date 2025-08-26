@@ -80,7 +80,6 @@
         "maximise": "Maksimize",
         "mention": "Sizden bahsediyor",
         "minimise": "Minimize",
-        "new_message": "Yeni mesaj",
         "new_room": "Yeni oda",
         "new_video_room": "Yeni video odası",
         "next": "İleri",
@@ -1601,8 +1600,7 @@
         "filter_placeholder": "Oda üyelerini Filtrele",
         "invite_button_no_perms_tooltip": "Kullanıcıları davet etme izniniz yok",
         "invited_label": "Davet Edildi",
-        "no_matches": "Eşleşme yok",
-        "power_label": "%(userName)s (güç %(powerLevelNumber)s)"
+        "no_matches": "Eşleşme yok"
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
@@ -3818,7 +3816,6 @@
         "dialpad": "Tuş takımı",
         "disable_camera": "Kamerayı kapat",
         "disable_microphone": "Mikrofonu sessize al",
-        "disabled_no_one_here": "Burada arayacak kimse yok.",
         "disabled_no_perms_start_video_call": "Görüntülü arama başlatmak için izniniz yok",
         "disabled_no_perms_start_voice_call": "Sesli arama başlatmak için izniniz yok",
         "disabled_ongoing_call": "Devam eden çağrı",

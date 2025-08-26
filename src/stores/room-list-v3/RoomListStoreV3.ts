@@ -22,7 +22,7 @@ import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -55,6 +55,16 @@ export enum RoomListStoreV3Event {
     // The event which is called when the room list is loaded.
     ListsLoaded = "lists_loaded",
 }
+
+// The result object for returning rooms from the store
+export type RoomsResult = {
+    // The ID of the active space queried
+    spaceId: SpaceKey;
+    // The filter queried
+    filterKeys?: FilterKey[];
+    // The resulting list of rooms
+    rooms: Room[];
+};
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
@@ -107,9 +117,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
-    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): Room[] {
-        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys));
-        else return [];
+    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
+        const spaceId = SpaceStore.instance.activeSpace;
+        if (this.roomSkipList?.initialized)
+            return {
+                spaceId: spaceId,
+                filterKeys,
+                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
+            };
+        else return { spaceId: spaceId, filterKeys, rooms: [] };
     }
 
     /**

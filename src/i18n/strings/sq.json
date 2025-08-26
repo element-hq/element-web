@@ -1372,8 +1372,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
-        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
+        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues"
     },
     "member_list_back_action_label": "Anëtarë dhome",
     "message_edit_dialog_title": "Përpunime mesazhi",
@@ -3254,7 +3253,6 @@
         "dialpad": "Butona numrash",
         "disable_camera": "Çaktivizo kamerën",
         "disable_microphone": "Heshtoje mikrofonin",
-        "disabled_no_one_here": "Këtu s’ka kënd që të thirret",
         "disabled_no_perms_start_video_call": "S’keni leje të nisni thirrje me video",
         "disabled_no_perms_start_voice_call": "S’keni leje të nisni thirrje me zë",
         "disabled_ongoing_call": "Thirrje në kryerje e sipër",

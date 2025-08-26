@@ -23,7 +23,7 @@ async function openSpaceContextMenu(page: Page, app: ElementAppPage, spaceName: 
     return page.locator(".mx_SpacePanel_contextMenu");
 }
 
-function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateRoomOpts {
+function spaceCreateOptions(serverName: string, spaceName: string, roomIds: string[] = []): ICreateRoomOpts {
     return {
         creation_content: {
             type: "m.space",
@@ -35,17 +35,21 @@ function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateR
                     name: spaceName,
                 },
             },
-            ...roomIds.map((r) => spaceChildInitialState(r)),
+            ...roomIds.map((r) => spaceChildInitialState(serverName, r)),
         ],
     };
 }
 
-function spaceChildInitialState(roomId: string, order?: string): ICreateRoomOpts["initial_state"]["0"] {
+function spaceChildInitialState(
+    serverName: string,
+    roomId: string,
+    order?: string,
+): ICreateRoomOpts["initial_state"]["0"] {
     return {
         type: "m.space.child",
         state_key: roomId,
         content: {
-            via: [roomId.split(":")[1]],
+            via: [serverName],
             order,
         },
     };
@@ -240,7 +244,7 @@ test.describe("Spaces", () => {
         });
         await expect(await app.getSpacePanelButton("My Space")).toBeVisible();
 
-        const roomId = await bot.createRoom(spaceCreateOptions("Space Space"));
+        const roomId = await bot.createRoom(spaceCreateOptions(user.homeServer, "Space Space"));
         await bot.inviteUser(roomId, user.userId);
 
         // Assert that `Space Space` is above `My Space` due to it being an invite
@@ -260,7 +264,10 @@ test.describe("Spaces", () => {
         const spaceName = "Spacey Mc. Space Space";
         await app.client.createSpace({
             name: spaceName,
-            initial_state: [spaceChildInitialState(roomId1), spaceChildInitialState(roomId2)],
+            initial_state: [
+                spaceChildInitialState(user.homeServer, roomId1),
+                spaceChildInitialState(user.homeServer, roomId2),
+            ],
         });
 
         await app.viewSpaceHomeByName(spaceName);
@@ -287,7 +294,7 @@ test.describe("Spaces", () => {
             });
             await app.client.createSpace({
                 name: "Root Space",
-                initial_state: [spaceChildInitialState(childSpaceId)],
+                initial_state: [spaceChildInitialState(user.homeServer, childSpaceId)],
             });
 
             // Find collapsed Space panel
@@ -323,7 +330,7 @@ test.describe("Spaces", () => {
             name: "Test Room",
             topic: "This is a topic https://github.com/matrix-org/matrix-react-sdk/pull/10060 with a link",
         });
-        const spaceId = await bot.createRoom(spaceCreateOptions("Test Space", [roomId]));
+        const spaceId = await bot.createRoom(spaceCreateOptions(user.homeServer, "Test Space", [roomId]));
         await bot.inviteUser(spaceId, user.userId);
 
         await expect(await app.getSpacePanelButton("Test Space")).toBeVisible();
@@ -361,9 +368,9 @@ test.describe("Spaces", () => {
         await app.client.createSpace({
             name: "Root Space",
             initial_state: [
-                spaceChildInitialState(childSpaceId1, "a"),
-                spaceChildInitialState(childSpaceId2, "b"),
-                spaceChildInitialState(childSpaceId3, "c"),
+                spaceChildInitialState(user.homeServer, childSpaceId1, "a"),
+                spaceChildInitialState(user.homeServer, childSpaceId2, "b"),
+                spaceChildInitialState(user.homeServer, childSpaceId3, "c"),
             ],
         });
         await app.viewSpaceByName("Root Space");

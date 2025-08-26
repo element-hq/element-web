@@ -209,7 +209,7 @@ describe("useRoomListHeaderViewModel", () => {
             const rooms = range(10).map((i) => mkStubRoom(`foo${i}:matrix.org`, `Foo ${i}`, undefined));
             const fn = jest
                 .spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace")
-                .mockImplementation(() => [...rooms]);
+                .mockImplementation(() => ({ spaceId: "home", rooms: [...rooms] }));
             return { rooms, fn };
         }
 

@@ -18,7 +18,7 @@ import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";
-import { ConnectionState, ElementCall } from "../../models/Call";
+import { ConnectionState } from "../../models/Call";
 import { placeCall } from "../../utils/room/placeCall";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
@@ -32,10 +32,10 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
-import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
+import { ElementCallMemberEventType } from "../../call-types";
 
 export enum PlatformCallType {
     ElementCall,
@@ -72,7 +72,6 @@ export const getPlatformCallTypeProps = (
 
 const enum State {
     NoCall,
-    NoOneHere,
     NoPermission,
     Unpinned,
     Ongoing,
@@ -135,7 +134,7 @@ export const useRoomCall = (
 
     const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
-        room.currentState.mayClientSendStateEvent(ElementCall.MEMBER_EVENT_TYPE.name, room.client),
+        room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
     ]);
 
     // The options provided to the RoomHeader.
@@ -196,7 +195,6 @@ export const useRoomCall = (
     const connectedCalls = useEventEmitterState(CallStore.instance, CallStoreEvent.ConnectedCalls, () =>
         Array.from(CallStore.instance.connectedCalls),
     );
-    const { canInviteGuests } = useGuestAccessInformation(room);
 
     const state = useMemo((): State => {
         if (connectedCalls.find((call) => call.roomId != room.roomId)) {
@@ -208,24 +206,20 @@ export const useRoomCall = (
         if (hasLegacyCall) {
             return State.Ongoing;
         }
-        if (memberCount <= 1 && !canInviteGuests) {
-            return State.NoOneHere;
-        }
 
-        if (!mayCreateElementCalls && !mayEditWidgets) {
+        if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
         }
         return State.NoCall;
     }, [
+        callOptions,
         connectedCalls,
-        canInviteGuests,
         hasGroupCall,
         hasJitsiWidget,
         hasLegacyCall,
         hasManagedHybridWidget,
         mayCreateElementCalls,
         mayEditWidgets,
-        memberCount,
         promptPinWidget,
         room.roomId,
     ]);
@@ -263,10 +257,6 @@ export const useRoomCall = (
         case State.Ongoing:
             voiceCallDisabledReason = _t("voip|disabled_ongoing_call");
             videoCallDisabledReason = _t("voip|disabled_ongoing_call");
-            break;
-        case State.NoOneHere:
-            voiceCallDisabledReason = _t("voip|disabled_no_one_here");
-            videoCallDisabledReason = _t("voip|disabled_no_one_here");
             break;
         case State.Unpinned:
         case State.NotJoined:

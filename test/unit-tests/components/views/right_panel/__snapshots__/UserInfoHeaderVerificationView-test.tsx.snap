@@ -3,7 +3,7 @@
 exports[`<UserInfoHeaderVerificationView /> renders verification unavailable message 1`] = `
 <div>
   <div
-    class="mx_Flex mx_UserInfo_verification"
+    class="flex mx_UserInfo_verification"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <p
@@ -20,7 +20,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verification unavailable mes
 exports[`<UserInfoHeaderVerificationView /> renders verified badge when user is verified 1`] = `
 <div>
   <div
-    class="mx_Flex mx_UserInfo_verification"
+    class="flex mx_UserInfo_verification"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <span
@@ -52,7 +52,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verified badge when user is 
 exports[`<UserInfoHeaderVerificationView /> renders verify button 1`] = `
 <div>
   <div
-    class="mx_Flex mx_UserInfo_verification"
+    class="flex mx_UserInfo_verification"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div

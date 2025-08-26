@@ -306,6 +306,10 @@ describe("EventTile", () => {
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
             [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
+            [
+                EventShieldReason.MISMATCHED_SENDER,
+                "The sender of the event does not match the owner of the device that sent it.",
+            ],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
@@ -499,14 +503,24 @@ describe("EventTile", () => {
             expect(isHighlighted(container)).toBeFalsy();
         });
 
-        it(`does not highlight when message's push actions does not have a highlight tweak`, () => {
+        it("does not highlight when message's push actions does not have a highlight tweak", () => {
             mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
             const { container } = getComponent();
 
             expect(isHighlighted(container)).toBeFalsy();
         });
 
-        it(`highlights when message's push actions have a highlight tweak`, () => {
+        it("does not highlight when message's push actions have a highlight tweak but message has been redacted", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const { container } = getComponent({ isRedacted: true });
+
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
+        it("highlights when message's push actions have a highlight tweak", () => {
             mocked(client.getPushActionsForEvent).mockReturnValue({
                 notify: true,
                 tweaks: { [TweakName.Highlight]: true },

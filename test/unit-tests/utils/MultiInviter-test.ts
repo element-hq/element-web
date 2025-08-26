@@ -15,7 +15,7 @@ import Modal, { type ComponentType, type ComponentProps } from "../../../src/Mod
 import SettingsStore from "../../../src/settings/SettingsStore";
 import MultiInviter, { type CompletionStates } from "../../../src/utils/MultiInviter";
 import * as TestUtilsMatrix from "../../test-utils";
-import type AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
+import AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
 import ConfirmUserActionDialog from "../../../src/components/views/dialogs/ConfirmUserActionDialog";
 
 const ROOMID = "!room:server";
@@ -24,10 +24,14 @@ const MXID1 = "@user1:server";
 const MXID2 = "@user2:server";
 const MXID3 = "@user3:server";
 
-const MXID_PROFILE_STATES: Record<string, Promise<any>> = {
-    [MXID1]: Promise.resolve({}),
-    [MXID2]: Promise.reject(new MatrixError({ errcode: "M_FORBIDDEN" })),
-    [MXID3]: Promise.reject(new MatrixError({ errcode: "M_NOT_FOUND" })),
+const MXID_PROFILE_STATES: Record<string, () => {}> = {
+    [MXID1]: () => ({}),
+    [MXID2]: () => {
+        throw new MatrixError({ errcode: "M_FORBIDDEN" });
+    },
+    [MXID3]: () => {
+        throw new MatrixError({ errcode: "M_NOT_FOUND" });
+    },
 };
 
 jest.mock("../../../src/Modal", () => ({
@@ -51,11 +55,12 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 };
 
 const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
-    mocked(Modal.createDialog).mockImplementation(
-        (Element: ComponentType, props?: ComponentProps<ComponentType>): any => {
+    mocked(Modal.createDialog).mockImplementation((Element: ComponentType, props?: ComponentProps<ComponentType>) => {
+        if (Element === AskInviteAnywayDialog) {
             (props as ComponentProps<typeof AskInviteAnywayDialog>)[callbackName]();
-        },
-    );
+        }
+        return { close: jest.fn(), finished: new Promise(() => {}) };
+    });
 };
 
 const expectAllInvitedResult = (result: CompletionStates) => {
@@ -72,6 +77,7 @@ describe("MultiInviter", () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
+        mocked(Modal.createDialog).mockReturnValue({ close: jest.fn(), finished: new Promise(() => {}) });
 
         TestUtilsMatrix.stubClient();
         client = MatrixClientPeg.safeGet() as jest.Mocked<MatrixClient>;
@@ -80,8 +86,10 @@ describe("MultiInviter", () => {
         client.invite.mockResolvedValue({});
 
         client.getProfileInfo = jest.fn();
-        client.getProfileInfo.mockImplementation((userId: string) => {
-            return MXID_PROFILE_STATES[userId] || Promise.reject();
+        client.getProfileInfo.mockImplementation(async (userId: string) => {
+            const m = MXID_PROFILE_STATES[userId];
+            if (m) return m();
+            throw new Error();
         });
         client.unban = jest.fn();
 
@@ -89,6 +97,22 @@ describe("MultiInviter", () => {
     });
 
     describe("invite", () => {
+        it("should show a progress dialog while the invite happens", async () => {
+            const mockModalHandle = { close: jest.fn(), finished: new Promise<[]>(() => {}) };
+            mocked(Modal.createDialog).mockReturnValue(mockModalHandle);
+
+            const invitePromise = Promise.withResolvers<{}>();
+            client.invite.mockReturnValue(invitePromise.promise);
+
+            const resultPromise = inviter.invite([MXID1]);
+            expect(Modal.createDialog).toHaveBeenCalledTimes(1);
+            expect(mockModalHandle.close).not.toHaveBeenCalled();
+
+            invitePromise.resolve({});
+            await resultPromise;
+            expect(mockModalHandle.close).toHaveBeenCalled();
+        });
+
         describe("with promptBeforeInviteUnknownUsers = false", () => {
             beforeEach(() => mockPromptBeforeInviteUnknownUsers(false));
 
@@ -96,9 +120,9 @@ describe("MultiInviter", () => {
                 const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                 expect(client.invite).toHaveBeenCalledTimes(3);
-                expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
-                expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, undefined);
-                expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, undefined);
+                expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
+                expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, {});
+                expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, {});
 
                 expectAllInvitedResult(result);
             });
@@ -114,9 +138,9 @@ describe("MultiInviter", () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(3);
-                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
-                    expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, undefined);
-                    expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, undefined);
+                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
+                    expect(client.invite).toHaveBeenNthCalledWith(2, ROOMID, MXID2, {});
+                    expect(client.invite).toHaveBeenNthCalledWith(3, ROOMID, MXID3, {});
 
                     expectAllInvitedResult(result);
                 });
@@ -129,7 +153,7 @@ describe("MultiInviter", () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(1);
-                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, undefined);
+                    expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, {});
 
                     // The resolved state is 'invited' for all users.
                     // With the above client expectations, the test ensures that only the first user is invited.
@@ -230,6 +254,16 @@ describe("MultiInviter", () => {
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
                 `"This space is unfederated. You cannot invite people from external servers."`,
             );
+        });
+
+        it("should set shareEncryptedHistory if that setting is enabled", async () => {
+            mocked(SettingsStore.getValue).mockImplementation((settingName, roomId, value) => {
+                return settingName === "feature_share_history_on_invite"; // this is enabled, everything else is disabled.
+            });
+            await inviter.invite([MXID1]);
+
+            expect(client.invite).toHaveBeenCalledTimes(1);
+            expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, { shareEncryptedHistory: true });
         });
     });
 });

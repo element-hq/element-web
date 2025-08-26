@@ -124,6 +124,10 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         const toasts = new Toasts(page);
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
+
+        // There may still be a `/sendToDevice/m.secret.request` in flight, which will later throw an error and cause
+        // a *subsequent* test to fail. Tell playwright to ignore any errors resulting from in-flight routes.
+        await page.unrouteAll({ behavior: "ignoreErrors" });
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
@@ -205,7 +209,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         const dialog = page.locator(".mx_Dialog");
         // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
         // (cf https://github.com/element-hq/element-web/issues/30089)
-        await dialog.locator("textarea").pressSequentially(recoveryKey);
+        await dialog.getByTitle("Recovery key").pressSequentially(recoveryKey);
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
         await page.getByRole("button", { name: "Done" }).click();

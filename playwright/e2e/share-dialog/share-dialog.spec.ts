@@ -35,7 +35,7 @@ test.describe("Share dialog", () => {
 
         const rightPanel = await app.toggleRoomInfoPanel();
         await rightPanel.getByRole("menuitem", { name: "People" }).click();
-        await rightPanel.getByRole("button", { name: `${user.userId} (power 100)` }).click();
+        await rightPanel.getByRole("option", { name: user.displayName }).click();
         await rightPanel.getByRole("button", { name: "Share profile" }).click();
 
         const dialog = page.getByRole("dialog", { name: "Share User" });

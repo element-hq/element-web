@@ -885,8 +885,7 @@
         "rotate_left": "Pasukti Kairėn"
     },
     "member_list": {
-        "filter_placeholder": "Filtruoti kambario dalyvius",
-        "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
+        "filter_placeholder": "Filtruoti kambario dalyvius"
     },
     "member_list_back_action_label": "Kambario nariai",
     "message_edit_dialog_title": "Žinutės redagavimai",
