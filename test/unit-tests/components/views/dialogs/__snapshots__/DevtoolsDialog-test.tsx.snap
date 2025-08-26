@@ -112,7 +112,9 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
       <form
         class="_root_19upo_16"
       >
-        <h2>
+        <h2
+          class="mx_DevTools_toolHeading"
+        >
           Options
         </h2>
         <div
