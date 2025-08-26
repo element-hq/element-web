@@ -59,7 +59,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
-            aria-labelledby="«rg4»"
+            aria-labelledby="«rh2»"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       <button
         aria-disabled="false"
         aria-label="Voice call"
-        aria-labelledby="«rg9»"
+        aria-labelledby="«rh7»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -101,7 +101,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       </button>
       <button
         aria-label="Threads"
-        aria-labelledby="«rge»"
+        aria-labelledby="«rhc»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -128,7 +128,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rgj»"
+        aria-labelledby="«rhh»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -158,7 +158,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rgo»"
+          aria-labelledby="«rhm»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -278,7 +278,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
-            aria-labelledby="«rh2»"
+            aria-labelledby="«ri0»"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -294,7 +294,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       <button
         aria-disabled="false"
         aria-label="Voice call"
-        aria-labelledby="«rh7»"
+        aria-labelledby="«ri5»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -320,7 +320,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </button>
       <button
         aria-label="Threads"
-        aria-labelledby="«rhc»"
+        aria-labelledby="«ria»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -347,7 +347,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rhh»"
+        aria-labelledby="«rif»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -377,7 +377,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rhm»"
+          aria-labelledby="«rik»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -583,7 +583,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
-            aria-labelledby="«rbo»"
+            aria-labelledby="«rca»"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -599,7 +599,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       <button
         aria-disabled="false"
         aria-label="Voice call"
-        aria-labelledby="«rbt»"
+        aria-labelledby="«rcf»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -625,7 +625,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       </button>
       <button
         aria-label="Threads"
-        aria-labelledby="«rc2»"
+        aria-labelledby="«rck»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -652,7 +652,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rc7»"
+        aria-labelledby="«rcp»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -682,7 +682,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rcc»"
+          aria-labelledby="«rcu»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -800,6 +800,8 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
               class="mx_MessageComposer_e2eIconWrapper"
             >
               <svg
+                aria-label="Messages in this room are not end-to-end encrypted"
+                aria-labelledby="«rd7»"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -982,7 +984,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
-            aria-labelledby="«rdu»"
+            aria-labelledby="«rem»"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -998,7 +1000,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       <button
         aria-disabled="false"
         aria-label="Voice call"
-        aria-labelledby="«re3»"
+        aria-labelledby="«rer»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -1024,7 +1026,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </button>
       <button
         aria-label="Threads"
-        aria-labelledby="«re8»"
+        aria-labelledby="«rf0»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -1051,7 +1053,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«red»"
+        aria-labelledby="«rf5»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -1081,7 +1083,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rei»"
+          aria-labelledby="«rfa»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -1194,6 +1196,8 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               class="mx_MessageComposer_e2eIconWrapper"
             >
               <svg
+                aria-label="Messages in this room are not end-to-end encrypted"
+                aria-labelledby="«rfj»"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -1462,7 +1466,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="«r2c»"
+                aria-labelledby="«r2i»"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1478,7 +1482,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="«r2h»"
+            aria-labelledby="«r2n»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1504,7 +1508,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r2m»"
+            aria-labelledby="«r2s»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1531,7 +1535,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r2r»"
+            aria-labelledby="«r31»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1561,7 +1565,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r30»"
+              aria-labelledby="«r36»"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -1674,7 +1678,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="«r2c»"
+                aria-labelledby="«r2i»"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1690,7 +1694,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="«r2h»"
+            aria-labelledby="«r2n»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1716,7 +1720,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r2m»"
+            aria-labelledby="«r2s»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1743,7 +1747,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r2r»"
+            aria-labelledby="«r31»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1773,7 +1777,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r30»"
+              aria-labelledby="«r36»"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -1841,7 +1845,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   tabindex="0"
                 >
                   <div
-                    aria-labelledby="«r3e»"
+                    aria-labelledby="«r3k»"
                     class="mx_E2EIcon mx_E2EIcon_verified mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
                   >
@@ -2052,7 +2056,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Chat"
-            aria-labelledby="«r7c»"
+            aria-labelledby="«r7i»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2079,7 +2083,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r7h»"
+            aria-labelledby="«r7n»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2106,7 +2110,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r7m»"
+            aria-labelledby="«r7s»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2136,7 +2140,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r7r»"
+              aria-labelledby="«r81»"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -2212,7 +2216,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 </p>
               </div>
               <button
-                aria-labelledby="«r84»"
+                aria-labelledby="«r8a»"
                 class="_icon-button_1pz9o_8"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
@@ -2271,6 +2275,8 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                     class="mx_MessageComposer_e2eIconWrapper"
                   >
                     <svg
+                      aria-label="Messages in this room are not end-to-end encrypted"
+                      aria-labelledby="«r8j»"
                       class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                       color="var(--cpd-color-icon-info-primary)"
                       fill="currentColor"

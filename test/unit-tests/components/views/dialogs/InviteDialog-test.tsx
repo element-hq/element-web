@@ -137,6 +137,7 @@ describe("InviteDialog", () => {
             supportsThreads: jest.fn().mockReturnValue(false),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
             getClientWellKnown: jest.fn().mockResolvedValue({}),
+            invite: jest.fn(),
         });
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
         DMRoomMap.makeShared(mockClient);
@@ -404,6 +405,18 @@ describe("InviteDialog", () => {
 
         const tile = await screen.findByText(aliceId, { selector: ".mx_InviteDialog_userTile_name" });
         expect(tile).toBeInTheDocument();
+    });
+
+    describe("while the invite is in progress", () => {
+        it("should show a spinner", async () => {
+            mockClient.invite.mockReturnValue(new Promise(() => {}));
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+            await enterIntoSearchField(bobId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await screen.findByText("Preparing invitations...");
+        });
     });
 
     describe("when inviting a user with an unknown profile", () => {

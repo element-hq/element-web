@@ -23,7 +23,7 @@ jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListViewMode
 describe("<RoomListView />", () => {
     const defaultValue: RoomListViewState = {
         isLoadingRooms: false,
-        rooms: [],
+        roomsResult: { spaceId: "home", rooms: [] },
         primaryFilters: [],
         createRoom: jest.fn(),
         createChatRoom: jest.fn(),
@@ -56,10 +56,10 @@ describe("<RoomListView />", () => {
     it("should render a room list", () => {
         mocked(useRoomListViewModel).mockReturnValue({
             ...defaultValue,
-            rooms: [mkRoom(matrixClient, "testing room")],
+            roomsResult: { spaceId: "home", rooms: [mkRoom(matrixClient, "testing room")] },
         });
 
         render(<RoomListView />);
-        expect(screen.getByRole("grid", { name: "Room list" })).toBeInTheDocument();
+        expect(screen.getByRole("listbox", { name: "Room list" })).toBeInTheDocument();
     });
 });
