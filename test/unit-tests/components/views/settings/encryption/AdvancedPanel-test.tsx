@@ -74,7 +74,7 @@ describe("<AdvancedPanel />", () => {
             await renderAdvancedPanel();
 
             expect(screen.getByTestId("otherSettings")).toMatchSnapshot();
-            const checkbox = screen.getByRole("switch", {
+            const checkbox = screen.getByRole("checkbox", {
                 name: "In encrypted rooms, only send messages to verified users",
             });
             expect(checkbox).toBeChecked();
