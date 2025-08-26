@@ -146,6 +146,10 @@ export const RoomListItemView = memo(function RoomListItemView({
         </Flex>
     );
 
+    // Rendering multiple context menus can causes crashes in radix upstream,
+    // See https://github.com/radix-ui/primitives/issues/2717.
+    // We also don't need the context menu while scrolling so can improve scroll performance
+    // by not rendering it.
     if (!vm.showContextMenu || listIsScrolling) return content;
 
     return (
