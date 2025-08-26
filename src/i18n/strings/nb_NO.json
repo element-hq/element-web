@@ -1366,6 +1366,10 @@
         "name_email_mxid_share_space": "Inviter noen ved å bruke navn, e-postadresse, brukernavn (lik <userId/>) eller <a> del dette området</a>.",
         "name_mxid_share_room": "Inviter noen ved å bruke navnet, brukernavnet (som <userId/>) eller <a>del dette rommet</a>.",
         "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt, brukernavnet (lik <userId/>) eller <a> dele dette området</a>.",
+        "progress": {
+            "dont_close": "Ikke lukk appen før den er ferdig.",
+            "preparing": "Forbereder invitasjoner..."
+        },
         "recents_section": "Nylige samtaler",
         "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
         "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",
@@ -1917,6 +1921,7 @@
         "thread_list": {
             "context_menu_label": "Trådalternativer"
         },
+        "title": "Høyre panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -3961,7 +3966,6 @@
         "dialpad": "Nummerpanel",
         "disable_camera": "Stopp kameraet",
         "disable_microphone": "Demp mikrofonen",
-        "disabled_no_one_here": "Det er ingen her å ringe",
         "disabled_no_perms_start_video_call": "Du har ikke tillatelse til å starte videosamtaler",
         "disabled_no_perms_start_voice_call": "Du har ikke tillatelse til å starte taleanrop",
         "disabled_ongoing_call": "Pågående samtale",

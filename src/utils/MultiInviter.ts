@@ -16,6 +16,7 @@ import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
 import ConfirmUserActionDialog from "../components/views/dialogs/ConfirmUserActionDialog";
+import { openInviteProgressDialog } from "../components/views/dialogs/InviteProgressDialog.tsx";
 
 export enum InviteState {
     Invited = "invited",
@@ -40,6 +41,18 @@ const USER_ALREADY_JOINED = "IO.ELEMENT.ALREADY_JOINED";
 const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
 const USER_BANNED = "IO.ELEMENT.BANNED";
 
+/** Options interface for {@link MultiInviter} */
+export interface MultiInviterOptions {
+    /** Optional callback, fired after each invite */
+    progressCallback?: () => void;
+
+    /**
+     * By default, we will pop up a "Preparing invitations..." dialog while the invites are being sent. Set this to
+     * `true` to inhibit it (in which case, you probably want to implement another bit of feedback UI).
+     */
+    inhibitProgressDialog?: boolean;
+}
+
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
  */
@@ -53,12 +66,12 @@ export default class MultiInviter {
     /**
      * @param matrixClient the client of the logged in user
      * @param {string} roomId The ID of the room to invite to
-     * @param {function} progressCallback optional callback, fired after each invite.
+     * @param options Options object
      */
     public constructor(
         private readonly matrixClient: MatrixClient,
         private roomId: string,
-        private readonly progressCallback?: () => void,
+        private readonly options: MultiInviterOptions = {},
     ) {}
 
     public get fatal(): boolean {
@@ -69,9 +82,11 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
+     * Any failures are returned via the {@link CompletionStates} in the result.
+     *
      * @param {array} addresses Array of addresses to invite
      * @param {string} reason Reason for inviting (optional)
-     * @returns {Promise} Resolved when all invitations in the queue are complete
+     * @returns {Promise} Resolved when all invitations in the queue are complete.
      */
     public async invite(addresses: string[], reason?: string): Promise<CompletionStates> {
         if (this.addresses.length > 0) {
@@ -80,49 +95,59 @@ export default class MultiInviter {
         this.addresses.push(...addresses);
         this.reason = reason;
 
-        for (const addr of this.addresses) {
-            if (getAddressType(addr) === null) {
-                this.completionStates[addr] = InviteState.Error;
-                this.errors[addr] = {
-                    errcode: "M_INVALID",
-                    errorText: _t("invite|invalid_address"),
-                };
-            }
+        let closeDialog: (() => void) | undefined;
+        if (!this.options.inhibitProgressDialog) {
+            closeDialog = openInviteProgressDialog();
         }
 
-        for (const addr of this.addresses) {
-            // don't try to invite it if it's an invalid address
-            // (it will already be marked as an error though,
-            // so no need to do so again)
-            if (getAddressType(addr) === null) {
-                continue;
+        try {
+            for (const addr of this.addresses) {
+                if (getAddressType(addr) === null) {
+                    this.completionStates[addr] = InviteState.Error;
+                    this.errors[addr] = {
+                        errcode: "M_INVALID",
+                        errorText: _t("invite|invalid_address"),
+                    };
+                }
             }
 
-            // don't re-invite (there's no way in the UI to do this, but
-            // for sanity's sake)
-            if (this.completionStates[addr] === InviteState.Invited) {
-                continue;
+            for (const addr of this.addresses) {
+                // don't try to invite it if it's an invalid address
+                // (it will already be marked as an error though,
+                // so no need to do so again)
+                if (getAddressType(addr) === null) {
+                    continue;
+                }
+
+                // don't re-invite (there's no way in the UI to do this, but
+                // for sanity's sake)
+                if (this.completionStates[addr] === InviteState.Invited) {
+                    continue;
+                }
+
+                await this.doInvite(addr, false);
+
+                if (this._fatal) {
+                    // `doInvite` suffered a fatal error. The error should have been recorded in `errors`; it's up
+                    // to the caller to report back to the user.
+                    return this.completionStates;
+                }
             }
 
-            await this.doInvite(addr, false);
+            if (Object.keys(this.errors).length > 0) {
+                // There were problems inviting some people - see if we can invite them
+                // without caring if they exist or not.
+                const unknownProfileUsers = Object.keys(this.errors).filter((a) =>
+                    UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode),
+                );
 
-            if (this._fatal) {
-                // `doInvite` suffered a fatal error. The error should have been recorded in `errors`; it's up
-                // to the caller to report back to the user.
-                return this.completionStates;
+                if (unknownProfileUsers.length > 0) {
+                    await this.handleUnknownProfileUsers(unknownProfileUsers);
+                }
             }
-        }
-
-        if (Object.keys(this.errors).length > 0) {
-            // There were problems inviting some people - see if we can invite them
-            // without caring if they exist or not.
-            const unknownProfileUsers = Object.keys(this.errors).filter((a) =>
-                UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode),
-            );
-
-            if (unknownProfileUsers.length > 0) {
-                await this.handleUnknownProfileUsers(unknownProfileUsers);
-            }
+        } finally {
+            // Remember to close the progress dialog, if we opened one.
+            closeDialog?.();
         }
 
         return this.completionStates;
@@ -230,7 +255,7 @@ export default class MultiInviter {
                     delete this.errors[address];
 
                     resolve();
-                    this.progressCallback?.();
+                    this.options.progressCallback?.();
                 })
                 .catch((err) => {
                     logger.error(err);

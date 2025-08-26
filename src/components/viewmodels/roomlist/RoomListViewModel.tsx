@@ -18,6 +18,7 @@ import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useStickyRoomList } from "./useStickyRoomList";
 import { useRoomListNavigation } from "./useRoomListNavigation";
+import { type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
 
 export interface RoomListViewState {
     /**
@@ -26,9 +27,9 @@ export interface RoomListViewState {
     isLoadingRooms: boolean;
 
     /**
-     * A list of rooms to be displayed in the left panel.
+     * The room results to be displayed (along with the spaceId and filter keys at the time of query)
      */
-    rooms: Room[];
+    roomsResult: RoomsResult;
 
     /**
      * Create a chat room
@@ -71,10 +72,10 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
-    const { isLoadingRooms, primaryFilters, activePrimaryFilter, rooms: filteredRooms } = useFilteredRooms();
-    const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
+    const { isLoadingRooms, primaryFilters, activePrimaryFilter, roomsResult: filteredRooms } = useFilteredRooms();
+    const { activeIndex, roomsResult } = useStickyRoomList(filteredRooms);
 
-    useRoomListNavigation(rooms);
+    useRoomListNavigation(roomsResult.rooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
@@ -88,7 +89,7 @@ export function useRoomListViewModel(): RoomListViewState {
 
     return {
         isLoadingRooms,
-        rooms,
+        roomsResult,
         canCreateRoom,
         createRoom,
         createChatRoom,

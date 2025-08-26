@@ -125,7 +125,7 @@ export async function renderMemberList(
         {
             wrapper: ({ children }) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 600, itemHeight: 56 }}>
-                    {children}
+                    <>{children}</>
                 </VirtuosoMockContext.Provider>
             ),
         },
