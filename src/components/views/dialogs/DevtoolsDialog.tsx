@@ -106,7 +106,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         evt.stopPropagation();
                     }}
                 >
-                    <h2>{_t("common|options")}</h2>
+                    <h2 className="mx_DevTools_toolHeading">{_t("common|options")}</h2>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
