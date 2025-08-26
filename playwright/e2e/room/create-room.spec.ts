@@ -1,5 +1,6 @@
 /*
-Copyright 2025 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -17,7 +18,7 @@ test.describe("Create Room", () => {
     test(
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
-        async ({ page, user, app }) => {
+        async ({ page, user, app, axe }) => {
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -27,6 +28,9 @@ test.describe("Create Room", () => {
             await dialog.getByRole("option", { name: "Public room" }).click();
             // Fill room address
             await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-standard");
+
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
             // Snapshot it
             await expect(dialog).toMatchScreenshot("create-room.png");
 

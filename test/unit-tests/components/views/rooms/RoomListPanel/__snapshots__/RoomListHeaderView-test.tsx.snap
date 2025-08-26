@@ -4,12 +4,12 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="mx_Flex mx_RoomListHeaderView"
+    class="flex mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="mx_Flex mx_RoomListHeaderView_title"
+      class="flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -51,7 +51,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       </button>
     </div>
     <div
-      class="mx_Flex"
+      class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -133,12 +133,12 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="mx_Flex mx_RoomListHeaderView"
+    class="flex mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="mx_Flex mx_RoomListHeaderView_title"
+      class="flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -180,7 +180,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       </button>
     </div>
     <div
-      class="mx_Flex"
+      class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -217,7 +217,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         </div>
       </button>
       <button
-        aria-label="New message"
+        aria-label="Start chat"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -256,12 +256,12 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="mx_Flex mx_RoomListHeaderView"
+    class="flex mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="mx_Flex mx_RoomListHeaderView_title"
+      class="flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -303,7 +303,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       </button>
     </div>
     <div
-      class="mx_Flex"
+      class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -385,12 +385,12 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="mx_Flex mx_RoomListHeaderView"
+    class="flex mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="mx_Flex mx_RoomListHeaderView_title"
+      class="flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -432,7 +432,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       </button>
     </div>
     <div
-      class="mx_Flex"
+      class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -514,12 +514,12 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="mx_Flex mx_RoomListHeaderView"
+    class="flex mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="mx_Flex mx_RoomListHeaderView_title"
+      class="flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -529,7 +529,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       </h1>
     </div>
     <div
-      class="mx_Flex"
+      class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button

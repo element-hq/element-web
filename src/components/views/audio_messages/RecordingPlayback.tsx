@@ -11,7 +11,7 @@ import React, { type ReactNode } from "react";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase, { type IProps as IAudioPlayerBaseProps } from "./AudioPlayerBase";
-import SeekBar from "./SeekBar";
+import LegacySeekBar from "./LegacySeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
 import { PlaybackState } from "../../../audio/Playback";
 
@@ -49,7 +49,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
             <>
                 <div className="mx_RecordingPlayback_timelineLayoutMiddle">
                     <PlaybackWaveform playback={this.props.playback} />
-                    <SeekBar
+                    <LegacySeekBar
                         playback={this.props.playback}
                         tabIndex={0} // allow keyboard users to fall into the seek bar
                         disabled={this.state.playbackPhase === PlaybackState.Decoding}

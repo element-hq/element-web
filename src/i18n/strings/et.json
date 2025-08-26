@@ -93,7 +93,6 @@
         "maximise": "Suurenda maksimaalseks",
         "mention": "Maini",
         "minimise": "Väike vaade",
-        "new_message": "Uus sõnum",
         "new_room": "Uus jututuba",
         "new_video_room": "Uus videotuba",
         "next": "Järgmine",
@@ -616,7 +615,7 @@
             "notification_a11y": "Teavituste automaatne lõpetamine",
             "notification_description": "Jututoa teavitus",
             "room_a11y": "Jututubade nimede automaatne lõpetamine",
-            "space_a11y": "Kogukonnakeskuste dünaamiline otsing",
+            "space_a11y": "Kogukondade dünaamiline otsing",
             "user_a11y": "Kasutajanimede automaatne lõpetamine",
             "user_description": "Kasutajad"
         },
@@ -645,12 +644,12 @@
         "mode_plain": "Peida vormindus",
         "mode_rich_text": "Näita vormingut",
         "no_perms_notice": "Sul ei ole õigusi siia jututuppa kirjutamiseks",
-        "placeholder": "Saada sõnum…",
-        "placeholder_encrypted": "Saada krüptitud sõnum…",
-        "placeholder_reply": "Saada vastus…",
-        "placeholder_reply_encrypted": "Saada krüptitud vastus…",
-        "placeholder_thread": "Vasta jutulõngas…",
-        "placeholder_thread_encrypted": "Vasta krüptitud jutulõngas…",
+        "placeholder": "Saada krüptimata sõnum…",
+        "placeholder_encrypted": "Saada sõnum…",
+        "placeholder_reply": "Saada krüptimata vastus…",
+        "placeholder_reply_encrypted": "Saada vastus…",
+        "placeholder_thread": "Vasta krüptimata jutulõngas…",
+        "placeholder_thread_encrypted": "Vasta jutulõngas…",
         "poll_button": "Küsitlus",
         "poll_button_no_perms_description": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas.",
         "poll_button_no_perms_title": "Vaja on täiendavaid õigusi",
@@ -705,7 +704,7 @@
         "creating_rooms": "Loon jututube…",
         "done_action": "Palun vaata minu kogukonnakeskust",
         "done_action_first_room": "Mine minu esimese jututoa juurde",
-        "explainer": "Kogukonnakeskused on uus võimalus jututubade ja inimeste liitmiseks. Missugust kogukonnakeskust sa tahaksid luua? Sa saad seda hiljem muuta.",
+        "explainer": "Kogukonnad on uus võimalus jututubade ja inimeste liitmiseks. Missugust kogukonda sa tahaksid luua? Sa saad seda hiljem muuta.",
         "failed_create_initial_rooms": "Algsete jututubade loomine ei õnnestunud",
         "failed_invite_users": "Järgnevate kasutajate kutsumine kogukonnakeskusesse ei õnnestunud: %(csvUsers)s",
         "invite_teammates_by_username": "Kutsu kasutajanime alusel",
@@ -863,6 +862,7 @@
             "elementCallUrl": "Element Calli võrguaadress"
         },
         "settings_explorer": "Seadistuste haldur",
+        "show_empty_content_events": "Näita tühja sisuga sündmusi",
         "show_hidden_events": "Näita peidetud sündmusi ajajoonel",
         "spaces": {
             "other": "<%(count)s kogukonda>",
@@ -920,7 +920,8 @@
             },
             "privacy_warning": "Palun vaata, et keegi teine ei näeks seda ekraanivaadet!",
             "restoring": "Taastan võtmed varundusest",
-            "security_key_title": "Taastevõti"
+            "security_key_label": "Taastevõti",
+            "security_key_title": "Sisesta oma taastevõti"
         },
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "confirm_encryption_setup_body": "Kinnitamaks, et soovid krüptimist seadistada, klõpsi järgnevat nuppu.",
@@ -933,6 +934,7 @@
         "cross_signing_user_warning": "See kasutaja ei ole verifitseerinud kõiki oma sessioone.",
         "enter_recovery_key": "Sisesta taastevõti",
         "event_shield_reason_authenticity_not_guaranteed": "Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.",
+        "event_shield_reason_mismatched_sender": "Sündmuse saatja ja seadme omanik pole vastavuses.",
         "event_shield_reason_mismatched_sender_key": "Krüptitud verifitseerimata sessiooni poolt",
         "event_shield_reason_unknown_device": "Krüptitud tundmatu või kustutatud seadme poolt.",
         "event_shield_reason_unsigned_device": "Krüptitud seadme poolt, mida selle omanik ei ole verifitseerinud.",
@@ -1450,6 +1452,7 @@
         "room_list_navigate_down": "Suundu jututubade loendis alla",
         "room_list_navigate_up": "Suundu jututubade loendis üles",
         "room_list_select_room": "Vali tubade loendist jututuba",
+        "save": "Salvesta",
         "scroll_down_timeline": "Liigu ajajoonel alla",
         "scroll_up_timeline": "Liigu ajajoonel üles",
         "search": "Otsing (peab olema lubatud)",
@@ -1460,7 +1463,7 @@
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
         "toggle_microphone_mute": "Lülita mikrofoni summutamine sisse/välja",
         "toggle_right_panel": "Lülita parem paan sisse/välja",
-        "toggle_space_panel": "Lülita kogukondade riba sisse/välja",
+        "toggle_space_panel": "Lülita kogukondade paan sisse/välja",
         "toggle_top_left_menu": "Lülita ülemine vasak menüü sisse/välja",
         "toggle_webcam_mute": "Lülita veebikaamera sisse/välja",
         "upload_file": "Laadi fail üles"
@@ -1531,6 +1534,9 @@
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
+        "share_history_on_invite": "Jaga uute liikmetega krüptitud ajalugu",
+        "share_history_on_invite_description": "Kutsudes uut kasutajat krüptitud jututuppa, kus ajaloo nähtavus on märgitud jagatuks, siis sa jagad ajalugu selle kasutajaga ning kutsutuna nõustud selle jagamisega.",
+        "share_history_on_invite_warning": "See funktsionaalsus on KATSELINE ja kõik turvameetmed pole veel kasutusel. Palun ära kasuta tarbeserveris.",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi",
@@ -1652,8 +1658,8 @@
         "filter_placeholder": "Filtreeri jututoa liikmeid",
         "invite_button_no_perms_tooltip": "Sul pole õigusi kutse saatmiseks teistele kasutajatele",
         "invited_label": "Kutsutud",
-        "no_matches": "Vasteid pole",
-        "power_label": "%(userName)s (õigused %(powerLevelNumber)s)"
+        "list_title": "Liikmete loend",
+        "no_matches": "Vasteid pole"
     },
     "member_list_back_action_label": "Jututoa liikmed",
     "message_edit_dialog_title": "Sõnumite muutmised",
@@ -1757,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Peakasutaja",
+        "creator": "Omanik",
         "custom": "Kohandatud õigused (%(level)s)",
         "custom_level": "Kohandatud õigused",
         "default": "Tavaline",
@@ -1910,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Jutulõnga valikud"
         },
+        "title": "Parem paan",
         "video_room_chat": {
             "title": "Vestle"
         }
@@ -2110,7 +2118,7 @@
     },
     "room_list": {
         "add_room_label": "Lisa jututuba",
-        "add_space_label": "Lisa kogukonnakeskus",
+        "add_space_label": "Lisa kogukond",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
         "collapse_filters": "Ahenda filtriloendit",
@@ -2380,7 +2388,7 @@
             "join_rule_knock": "Küsi võimalust liitumiseks",
             "join_rule_knock_description": "Kasutajade ei saa liituda enne, kui selleks vastav luba on antud.",
             "join_rule_public_description": "Kõik saavad jututuba leida ja sellega liituda.",
-            "join_rule_restricted": "Kogukonnakeskuse liikmed",
+            "join_rule_restricted": "Kogukonna liikmed",
             "join_rule_restricted_description": "Kõik kogukonnakeskuse liikmed saavad jututuba leida ja sellega liituda. <a>Muuda lubatud kogukonnakeskuste loendit.</a>",
             "join_rule_restricted_description_active_space": "Kõik <spaceName/> kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka muid kogukonnakeskuseid.",
             "join_rule_restricted_description_prompt": "Kõik kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka mitu kogukonnakeskust.",
@@ -2431,7 +2439,7 @@
             "guest_access_explainer": "Külalised võivad liituda kogukonnakeskusega ilma kasutajakontota.",
             "guest_access_explainer_public_space": "Seda saad kasutada näiteks avalike kogukonnakeskuste puhul.",
             "guest_access_label": "Luba ligipääs külalistele",
-            "history_visibility_anyone_space": "Kogukonnakeskuse eelvaade",
+            "history_visibility_anyone_space": "Kogukonna eelvaade",
             "history_visibility_anyone_space_description": "Luba huvilistel enne liitumist näha kogukonnakeskuse eelvaadet.",
             "history_visibility_anyone_space_recommendation": "Soovitame avalike kogukonnakeskuste puhul.",
             "title": "Nähtavus"
@@ -3392,6 +3400,7 @@
             "unable_to_find": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida."
         },
         "m.audio": {
+            "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "error_processing_audio": "Viga häälsõnumi töötlemisel",
             "error_processing_voice_message": "Viga häälsõnumi töötlemisel",
@@ -3957,7 +3966,6 @@
         "dialpad": "Numbriklahvistik",
         "disable_camera": "Lülita kaamera välja",
         "disable_microphone": "Summuta mikrofon",
-        "disabled_no_one_here": "Siin ei leidu kedagi, kellele helistada",
         "disabled_no_perms_start_video_call": "Sul ei ole piisavalt õigusi videokõne alustamiseks",
         "disabled_no_perms_start_voice_call": "Sul ei ole piisavalt õigusi häälkõne alustamiseks",
         "disabled_ongoing_call": "Kõne on pooleli",

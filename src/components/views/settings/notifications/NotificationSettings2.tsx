@@ -32,6 +32,7 @@ import { SettingsSection } from "../shared/SettingsSection";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { NotificationPusherSettings } from "./NotificationPusherSettings";
 import SettingsFlag from "../../elements/SettingsFlag";
+import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
 
 enum NotificationDefaultLevels {
     AllMessages = "all_messages",
@@ -138,7 +139,12 @@ export default function NotificationSettings2(): JSX.Element {
                         <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
                     </div>
                     <SettingsSubsection
-                        heading={_t("settings|notifications|default_setting_section")}
+                        heading={
+                            <SettingsSubsectionHeading
+                                heading={_t("settings|notifications|default_setting_section")}
+                                as="h2"
+                            />
+                        }
                         description={_t("settings|notifications|default_setting_description")}
                     >
                         <StyledRadioGroup
@@ -165,7 +171,12 @@ export default function NotificationSettings2(): JSX.Element {
                         />
                     </SettingsSubsection>
                     <SettingsSubsection
-                        heading={_t("settings|notifications|play_sound_for_section")}
+                        heading={
+                            <SettingsSubsectionHeading
+                                heading={_t("settings|notifications|play_sound_for_section")}
+                                as="h2"
+                            />
+                        }
                         description={_t("settings|notifications|play_sound_for_description")}
                     >
                         <LabelledCheckbox
@@ -211,7 +222,9 @@ export default function NotificationSettings2(): JSX.Element {
                             }}
                         />
                     </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|notifications|other_section")}>
+                    <SettingsSubsection
+                        heading={<SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />}
+                    >
                         <LabelledCheckbox
                             label={_t("settings|notifications|invites")}
                             value={settings.activity.invite}
@@ -256,7 +269,9 @@ export default function NotificationSettings2(): JSX.Element {
                         />
                     </SettingsSubsection>
                     <SettingsSubsection
-                        heading={_t("settings|notifications|mentions_keywords")}
+                        heading={
+                            <SettingsSubsectionHeading heading={_t("settings|notifications|mentions_keywords")} as="h2" />
+                        }
                         description={_t(
                             "settings|notifications|keywords",
                             {},

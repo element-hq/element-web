@@ -477,6 +477,8 @@ export default abstract class BasePlatform {
         // The redirect URL has to exactly match that registered at the OIDC server, so
         // ensure that the fragment part of the URL is empty.
         url.hash = "";
+        // Set no_universal_links=true to prevent the callback being handled by Element X installed on macOS Apple Silicon
+        url.searchParams.set("no_universal_links", "true");
         return url;
     }
 
@@ -494,15 +496,12 @@ export default abstract class BasePlatform {
     }
 
     private updateFavicon(): void {
-        let bgColor = "#d00";
-        let notif: string | number = this.notificationCount;
+        const notif: string | number = this.notificationCount;
 
         if (this.errorDidOccur) {
-            notif = notif || "×";
-            bgColor = "#f00";
+            this.favicon.badge(notif || "×", { bgColor: "#f00" });
         }
-
-        this.favicon.badge(notif, { bgColor });
+        this.favicon.badge(notif);
     }
 
     /**

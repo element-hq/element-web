@@ -85,7 +85,9 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
             <BaseTool onBack={onBack}>
                 {Object.entries(Tools).map(([category, tools]) => (
                     <div key={category}>
-                        <h3>{_t(categoryLabels[category as unknown as Category])}</h3>
+                        <h2 className="mx_DevTools_toolHeading">
+                            {_t(categoryLabels[category as unknown as Category])}
+                        </h2>
                         {tools.map(([label, tool]) => {
                             const onClick = (): void => {
                                 setTool([label, tool]);
@@ -104,7 +106,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         evt.stopPropagation();
                     }}
                 >
-                    <h3>{_t("common|options")}</h3>
+                    <h2>{_t("common|options")}</h2>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />

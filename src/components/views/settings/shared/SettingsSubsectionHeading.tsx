@@ -12,13 +12,19 @@ import Heading from "../../typography/Heading";
 
 export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivElement> {
     heading: string;
+    as?: React.ComponentProps<typeof Heading>["as"];
     children?: React.ReactNode;
 }
 
-export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({ heading, children, ...rest }) => {
+export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({
+    heading,
+    as = "h3",
+    children,
+    ...rest
+}) => {
     return (
         <div {...rest} className="mx_SettingsSubsectionHeading">
-            <Heading className="mx_SettingsSubsectionHeading_heading" size="4" as="h3">
+            <Heading className="mx_SettingsSubsectionHeading_heading" size="4" as={as}>
                 {heading}
             </Heading>
             {children}

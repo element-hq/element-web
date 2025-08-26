@@ -10,40 +10,18 @@ import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { type EventTileTypeProps } from "../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
-import { ViewModelSubscriptions } from "../ViewModelSubscriptions";
-import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEvent/TextualEvent";
-import { type ViewModel } from "../../shared-components/ViewModel";
+import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEventView/TextualEventView";
+import { BaseViewModel } from "../base/BaseViewModel";
 
-export class TextualEventViewModel implements ViewModel<TextualEventViewSnapshot> {
-    private subs: ViewModelSubscriptions;
-
-    public constructor(private eventTileProps: EventTileTypeProps) {
-        this.subs = new ViewModelSubscriptions(this.addSubscription, this.removeSubscription);
+export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapshot, EventTileTypeProps> {
+    public constructor(props: EventTileTypeProps) {
+        super(props, { content: "" });
+        this.setTextFromEvent();
+        this.disposables.trackListener(this.props.mxEvent, MatrixEventEvent.SentinelUpdated, this.setTextFromEvent);
     }
 
-    private addSubscription = (): void => {
-        this.eventTileProps.mxEvent.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
-    };
-
-    private removeSubscription = (): void => {
-        this.eventTileProps.mxEvent.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
-    };
-
-    public subscribe = (listener: () => void): (() => void) => {
-        return this.subs.add(listener);
-    };
-
-    public getSnapshot = (): TextualEventViewSnapshot => {
-        const text = textForEvent(
-            this.eventTileProps.mxEvent,
-            MatrixClientPeg.safeGet(),
-            true,
-            this.eventTileProps.showHiddenEvents,
-        );
-        return text;
-    };
-
-    private onEventSentinelUpdated = (): void => {
-        this.subs.emit();
+    private setTextFromEvent = (): void => {
+        const content = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
+        this.snapshot.set({ content });
     };
 }

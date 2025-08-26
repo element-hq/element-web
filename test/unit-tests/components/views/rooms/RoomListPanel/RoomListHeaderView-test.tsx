@@ -69,7 +69,7 @@ describe("<RoomListHeaderView />", () => {
             expect(screen.queryByRole("button", { name: "Add" })).toBeNull();
             expect(asFragment()).toMatchSnapshot();
 
-            await user.click(screen.getByRole("button", { name: "New message" }));
+            await user.click(screen.getByRole("button", { name: "Start chat" }));
             expect(defaultValue.createChatRoom).toHaveBeenCalled();
         });
 
@@ -80,7 +80,7 @@ describe("<RoomListHeaderView />", () => {
             const openMenu = screen.getByRole("button", { name: "Add" });
             await user.click(openMenu);
 
-            await user.click(screen.getByRole("menuitem", { name: "New message" }));
+            await user.click(screen.getByRole("menuitem", { name: "Start chat" }));
             expect(defaultValue.createChatRoom).toHaveBeenCalled();
 
             await user.click(openMenu);

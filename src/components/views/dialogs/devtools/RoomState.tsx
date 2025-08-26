@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { ChangeEventHandler, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { type IContent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
@@ -19,6 +19,7 @@ import FilteredList from "./FilteredList";
 import Spinner from "../../elements/Spinner";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
@@ -114,6 +115,12 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
     const [history, setHistory] = useState(false);
+    const [showEmptyState, setShowEmptyState] = useState(true);
+    const onEmptyStateToggled = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setShowEmptyState(e.target.checked),
+        [setShowEmptyState],
+    );
+
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -149,10 +156,24 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     return (
         <BaseTool onBack={onBack}>
             <FilteredList query={query} onChange={setQuery}>
-                {Array.from(events.entries()).map(([stateKey, ev]) => (
-                    <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
-                ))}
+                {Array.from(events.entries())
+                    .filter(([_, ev]) => showEmptyState || Object.keys(ev.getContent()).length > 0)
+                    .map(([stateKey, ev]) => (
+                        <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
+                    ))}
             </FilteredList>
+            <Form.Root 
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}>
+                <SettingsToggleInput
+                    name="empty_state_toggle"
+                    label={_t("devtools|show_empty_content_events")}
+                    onChange={onEmptyStateToggled}
+                    checked={showEmptyState}
+                />
+            </Form.Root>
         </BaseTool>
     );
 };

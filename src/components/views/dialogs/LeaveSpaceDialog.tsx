@@ -15,22 +15,12 @@ import BaseDialog from "../dialogs/BaseDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
 import { filterBoolean } from "../../../utils/arrays";
+import { isOnlyAdmin } from "../../../utils/membership";
 
 interface IProps {
     space: Room;
     onFinished(leave: boolean, rooms?: Room[]): void;
 }
-
-const isOnlyAdmin = (room: Room): boolean => {
-    const userId = room.client.getSafeUserId();
-    if (room.getMember(userId)?.powerLevelNorm !== 100) {
-        return false; // user is not an admin
-    }
-    return room.getJoinedMembers().every((member) => {
-        // return true if every other member has a lower power level (we are highest)
-        return member.userId === userId || member.powerLevelNorm < 100;
-    });
-};
 
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     const spaceChildren = useMemo(() => {

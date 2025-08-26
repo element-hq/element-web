@@ -1,5 +1,5 @@
 /*
-Copyright 2020-2024 New Vector Ltd.
+Copyright 2020-2025 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -28,56 +28,19 @@ const defaults: IParams = {
     isLeft: false,
 };
 
-// Allows dynamic rendering of a circular badge atop the loaded favicon
-// supports colour, font and basic positioning parameters.
-// Based upon https://github.com/ejci/favico.js/blob/master/favico.js [MIT license]
-export default class Favicon {
-    private readonly browser = {
-        ff: typeof window.InstallTrigger !== "undefined",
-        opera: !!window.opera || navigator.userAgent.includes("Opera"),
-    };
-
-    private readonly params: IParams;
-    private readonly canvas: HTMLCanvasElement;
-    private readonly baseImage: HTMLImageElement;
-    private context!: CanvasRenderingContext2D;
-    private icons: HTMLLinkElement[];
-
-    private isReady = false;
-    // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
-    private readyCb?: () => void;
-
-    public constructor(params: Partial<IParams> = {}) {
-        this.params = { ...defaults, ...params };
-
-        this.icons = Favicon.getIcons();
-        // create work canvas
+abstract class IconRenderer {
+    protected readonly canvas: HTMLCanvasElement;
+    protected readonly context: CanvasRenderingContext2D;
+    public constructor(
+        protected readonly params: IParams = defaults,
+        protected readonly baseImage?: HTMLImageElement,
+    ) {
         this.canvas = document.createElement("canvas");
-        // create clone of favicon as a base
-        this.baseImage = document.createElement("img");
-
-        const lastIcon = this.icons[this.icons.length - 1];
-        if (lastIcon.hasAttribute("href")) {
-            this.baseImage.setAttribute("crossOrigin", "anonymous");
-            this.baseImage.onload = (): void => {
-                // get height and width of the favicon
-                this.canvas.height = this.baseImage.height > 0 ? this.baseImage.height : 32;
-                this.canvas.width = this.baseImage.width > 0 ? this.baseImage.width : 32;
-                this.context = this.canvas.getContext("2d")!;
-                this.ready();
-            };
-            this.baseImage.setAttribute("src", lastIcon.getAttribute("href")!);
-        } else {
-            this.canvas.height = this.baseImage.height = 32;
-            this.canvas.width = this.baseImage.width = 32;
-            this.context = this.canvas.getContext("2d")!;
-            this.ready();
+        const context = this.canvas.getContext("2d");
+        if (!context) {
+            throw Error("Could not get canvas context");
         }
-    }
-
-    private reset(): void {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
+        this.context = context;
     }
 
     private options(
@@ -125,11 +88,23 @@ export default class Favicon {
         return opt;
     }
 
-    private circle(n: number | string, opts?: Partial<IParams>): void {
+    /**
+     * Draws a circualr status icon, usually over the top of the application icon.
+     * @param n The content of the circle. Should be a number or a single character.
+     * @param opts Options to adjust.
+     */
+    protected circle(n: number | string, opts?: Partial<IParams>): void {
         const params = { ...this.params, ...opts };
         const opt = this.options(n, params);
 
         let more = false;
+        if (!this.baseImage) {
+            // If we omit the background, assume the entire canvas is our target.
+            opt.x = 0;
+            opt.y = 0;
+            opt.w = this.canvas.width;
+            opt.h = this.canvas.height;
+        }
         if (opt.len === 2) {
             opt.x = opt.x - opt.w * 0.4;
             opt.w = opt.w * 1.4;
@@ -141,7 +116,9 @@ export default class Favicon {
         }
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
+        if (this.baseImage) {
+            this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
+        }
         this.context.beginPath();
         const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
@@ -176,6 +153,86 @@ export default class Favicon {
         }
 
         this.context.closePath();
+    }
+}
+
+export class BadgeOverlayRenderer extends IconRenderer {
+    public constructor() {
+        super();
+        // Overlays are 16x16 https://www.electronjs.org/docs/latest/api/browser-window#winsetoverlayiconoverlay-description-windows
+        this.canvas.width = 16;
+        this.canvas.height = 16;
+    }
+
+    /**
+     * Generate an overlay badge without the application icon, and export
+     * as an ArrayBuffer
+     * @param contents The content of the circle. Should be a number or a single character.
+     * @param bgColor Optional alternative background colo.r
+     * @returns An ArrayBuffer representing a 16x16 icon in `image/png` format, or `null` if no badge should be drawn.
+     */
+    public async render(contents: number | string, bgColor?: string): Promise<ArrayBuffer | null> {
+        if (contents === 0) {
+            return null;
+        }
+
+        this.circle(contents, { ...(bgColor ? { bgColor } : undefined) });
+        return new Promise((resolve, reject) => {
+            this.canvas.toBlob(
+                (blob) => {
+                    if (blob) {
+                        resolve(blob.arrayBuffer());
+                    }
+                    reject(new Error("Could not render badge overlay as blob"));
+                },
+                "image/png",
+                1,
+            );
+        });
+    }
+}
+
+// Allows dynamic rendering of a circular badge atop the loaded favicon
+// supports colour, font and basic positioning parameters.
+// Based upon https://github.com/ejci/favico.js/blob/master/favico.js [MIT license]
+export default class Favicon extends IconRenderer {
+    private readonly browser = {
+        ff: typeof window.InstallTrigger !== "undefined",
+        opera: !!window.opera || navigator.userAgent.includes("Opera"),
+    };
+
+    private icons: HTMLLinkElement[];
+
+    private isReady = false;
+    // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
+    private readyCb?: () => void;
+
+    public constructor() {
+        const baseImage = document.createElement("img");
+        super(defaults, baseImage);
+
+        this.icons = Favicon.getIcons();
+
+        const lastIcon = this.icons[this.icons.length - 1];
+        if (lastIcon.hasAttribute("href")) {
+            baseImage.setAttribute("crossOrigin", "anonymous");
+            baseImage.onload = (): void => {
+                // get height and width of the favicon
+                this.canvas.height = baseImage.height > 0 ? baseImage.height : 32;
+                this.canvas.width = baseImage.width > 0 ? baseImage.width : 32;
+                this.ready();
+            };
+            baseImage.setAttribute("src", lastIcon.getAttribute("href")!);
+        } else {
+            this.canvas.height = baseImage.height = 32;
+            this.canvas.width = baseImage.width = 32;
+            this.ready();
+        }
+    }
+
+    private reset(): void {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.drawImage(this.baseImage!, 0, 0, this.canvas.width, this.canvas.height);
     }
 
     private ready(): void {

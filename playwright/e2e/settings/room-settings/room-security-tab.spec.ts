@@ -24,18 +24,25 @@ test.describe("Roles & Permissions room settings tab", () => {
         settings = await app.settings.openRoomSettings("Security & Privacy");
     });
 
-    test("should be able to toggle on encryption in a room", { tag: "@screenshot" }, async ({ page, app, user }) => {
-        await page.setViewportSize({ width: 1024, height: 1400 });
-        const encryptedToggle = settings.getByLabel("Encrypted");
-        await encryptedToggle.click();
+    test(
+        "should be able to toggle on encryption in a room",
+        { tag: "@screenshot" },
+        async ({ page, app, user, axe }) => {
+            await page.setViewportSize({ width: 1024, height: 1400 });
+            const encryptedToggle = settings.getByLabel("Encrypted");
+            await encryptedToggle.click();
 
-        // Accept the dialog.
-        await page.getByRole("button", { name: "Ok " }).click();
+            // Accept the dialog.
+            await page.getByRole("button", { name: "Ok " }).click();
 
-        await expect(encryptedToggle).toBeChecked();
-        await expect(encryptedToggle).toBeDisabled();
+            await expect(encryptedToggle).toBeChecked();
+            await expect(encryptedToggle).toBeDisabled();
 
-        await settings.getByLabel("Only send messages to verified users.").check();
-        await expect(settings).toMatchScreenshot("room-security-settings.png");
-    });
+            await settings.getByLabel("Only send messages to verified users.").check();
+
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
+            await expect(settings).toMatchScreenshot("room-security-settings.png");
+        },
+    );
 });

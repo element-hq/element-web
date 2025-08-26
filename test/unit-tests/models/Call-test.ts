@@ -51,6 +51,9 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
+import RoomListStore from "../../../src/stores/room-list/RoomListStore.ts";
+import { DefaultTagID } from "../../../src/stores/room-list/models.ts";
+import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [
@@ -78,6 +81,7 @@ const setUpClientRoomAndStores = (): {
 } => {
     stubClient();
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
+    DMRoomMap.makeShared(client);
 
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,
@@ -674,6 +678,8 @@ describe("ElementCall", () => {
     });
 
     describe("get", () => {
+        afterEach(() => Call.get(room)?.destroy());
+
         it("finds no calls", () => {
             expect(Call.get(room)).toBeNull();
         });
@@ -681,7 +687,6 @@ describe("ElementCall", () => {
         it("finds calls", async () => {
             ElementCall.create(room);
             expect(Call.get(room)).toBeInstanceOf(ElementCall);
-            Call.get(room)?.destroy();
         });
 
         it("should use element call URL from developer settings if present", async () => {
@@ -698,7 +703,6 @@ describe("ElementCall", () => {
             const call = ElementCall.get(room);
             expect(call?.widget.url.startsWith("https://call.element.dev/")).toBeTruthy();
             SettingsStore.getValue = originalGetValue;
-            call?.destroy();
         });
 
         it("finds ongoing calls that are created by the session manager", async () => {
@@ -710,7 +714,6 @@ describe("ElementCall", () => {
             } as unknown as MatrixRTCSession);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-            call.destroy();
         });
 
         it("passes font settings through widget URL", async () => {
@@ -772,7 +775,6 @@ describe("ElementCall", () => {
             const urlParams2 = new URLSearchParams(new URL(call2.widget.url).hash.slice(1));
             expect(urlParams2.has("allowIceFallback")).toBe(true);
 
-            call2.destroy();
             SettingsStore.getValue = originalGetValue;
         });
 
@@ -799,7 +801,6 @@ describe("ElementCall", () => {
             expect(urlParams.get("posthogUserId")).toBe("123456789987654321");
             expect(urlParams.get("posthogApiHost")).toBe("https://posthog");
             expect(urlParams.get("posthogApiKey")).toBe("DEADBEEF");
-            call.destroy();
         });
 
         it("does not pass analyticsID if `pseudonymousAnalyticsOptIn` set to false", async () => {
@@ -817,7 +818,6 @@ describe("ElementCall", () => {
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBeFalsy();
-            call.destroy();
         });
 
         it("passes feature_allow_screen_share_only_mode setting to allowVoipWithNoMedia url param", async () => {
@@ -840,7 +840,6 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("allowVoipWithNoMedia")).toBe("true");
             SettingsStore.getValue = originalGetValue;
-            call.destroy();
         });
 
         it("passes empty analyticsID if the id is not in the account data", async () => {
@@ -856,6 +855,30 @@ describe("ElementCall", () => {
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBeFalsy();
+        });
+
+        it("requests ringing notifications in DMs", async () => {
+            const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
+            try {
+                tagsSpy.mockReturnValue([DefaultTagID.DM]);
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("sendNotificationType")).toBe("ring");
+            } finally {
+                tagsSpy.mockRestore();
+            }
+        });
+
+        it("requests visual notifications in non-DMs", async () => {
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("sendNotificationType")).toBe("notification");
         });
     });
 
@@ -1018,31 +1041,6 @@ describe("ElementCall", () => {
             enabledSettings.delete("feature_disable_call_per_sender_encryption");
             roomSpy.mockRestore();
             addWidgetSpy.mockRestore();
-        });
-
-        it("sends notify event on connect in a room with more than two members", async () => {
-            const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            ElementCall.create(room);
-            await callConnectProcedure(Call.get(room) as ElementCall);
-            expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
-                "application": "m.call",
-                "call_id": "",
-                "m.mentions": { room: true, user_ids: [] },
-                "notify_type": "notify",
-            });
-        });
-        it("sends ring on create in a DM (two participants) room", async () => {
-            setRoomMembers(["@user:example.com", "@user2:example.com"]);
-
-            const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            ElementCall.create(room);
-            await callConnectProcedure(Call.get(room) as ElementCall);
-            expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
-                "application": "m.call",
-                "call_id": "",
-                "m.mentions": { room: true, user_ids: [] },
-                "notify_type": "ring",
-            });
         });
     });
 

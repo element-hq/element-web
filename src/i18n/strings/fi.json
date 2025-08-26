@@ -82,7 +82,6 @@
         "maximise": "Suurenna",
         "mention": "Mainitse",
         "minimise": "Pienennä",
-        "new_message": "Uusi viesti",
         "new_room": "Uusi huone",
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
@@ -708,7 +707,8 @@
         "twemoji_colr": "<colr>twemoji-colr</colr>-fontti © <author>Mozilla Foundation</author>, käytössä <terms>Apache 2.0</terms>:n ehtojen mukaisesti."
     },
     "decline_invitation_dialog": {
-        "reason_description": "Kerro syy huoneen ilmoittamiseen."
+        "reason_description": "Kerro syy huoneen ilmoittamiseen.",
+        "title": "Kieltäydy kutsusta"
     },
     "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
     "devtools": {
@@ -1240,6 +1240,7 @@
         "room_list_navigate_down": "Liiku alas huoneluettelossa",
         "room_list_navigate_up": "Liiku ylös huoneluettelossa",
         "room_list_select_room": "Valitse huone huoneluettelosta",
+        "save": "Tallenna",
         "scroll_down_timeline": "Vieritä alas aikajanalla",
         "scroll_up_timeline": "Vieritä ylös aikajanalla",
         "search": "Haku (pitää olla käytössä)",
@@ -1398,8 +1399,7 @@
         },
         "filter_placeholder": "Suodata huoneen jäseniä",
         "invite_button_no_perms_tooltip": "Sinulla ei ole lupaa kutsua käyttäjiä",
-        "invited_label": "Kutsuttu",
-        "power_label": "%(userName)s (oikeustaso %(powerLevelNumber)s)"
+        "invited_label": "Kutsuttu"
     },
     "member_list_back_action_label": "Huoneen jäsenet",
     "message_edit_dialog_title": "Viestin muokkaukset",
@@ -2356,6 +2356,7 @@
         "notifications": {
             "desktop_notification_message_preview": "Näytä viestin esikatselu työpöytäilmoituksessa",
             "dialog_title": "<strong>Asetukset:</strong> Ilmoitukset",
+            "email_section": "Sähköpostin yhteenveto",
             "enable_audible_notifications_session": "Ota käyttöön ääni-ilmoitukset tälle istunnolle",
             "enable_desktop_notifications_session": "Ota käyttöön työpöytäilmoitukset tälle istunnolle",
             "enable_email_notifications": "Sähköposti-ilmoitukset osoitteeseen %(email)s",
@@ -2548,6 +2549,7 @@
         "show_chat_effects": "Näytä keskustelutehosteet (animaatiot, kun saat esim. konfettia)",
         "show_displayname_changes": "Näytä näyttönimien muutokset",
         "show_join_leave": "Näytä liittymis- ja poistumisviestit (ei vaikutusta kutsuihin, poistamisiin ja porttikieltoihin)",
+        "show_message_previews": "Näytä viestien esikatselut",
         "show_nsfw_content": "Näytä NSFW-sisältö",
         "show_read_receipts": "Näytä muiden käyttäjien lukukuittaukset",
         "show_redaction_placeholder": "Näytä paikanpitäjä poistetuille viesteille",
@@ -3422,7 +3424,6 @@
         "dialpad": "Numeronäppäimistö",
         "disable_camera": "Sammuta kamera",
         "disable_microphone": "Mykistä mikrofoni",
-        "disabled_no_one_here": "Täällä ei ole ketään, jolle voisi soittaa",
         "disabled_no_perms_start_video_call": "Sinulla ei ole oikeutta aloittaa videopuheluita",
         "disabled_no_perms_start_voice_call": "Sinulla ei ole oikeutta aloittaa äänipuheluita",
         "disabled_ongoing_call": "Käynnissä oleva puhelu",

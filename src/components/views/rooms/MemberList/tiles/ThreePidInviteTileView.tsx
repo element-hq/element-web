@@ -15,20 +15,32 @@ import { InvitedIconView } from "./common/InvitedIconView";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
+    memberIndex: number;
+    memberCount: number;
+    focused?: boolean;
+    tabIndex?: number;
+    onFocus: (e: React.FocusEvent) => void;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
     const vm = useThreePidTileViewModel(props);
     const av = <BaseAvatar name={vm.name} size="32px" aria-hidden="true" />;
     const iconJsx = <InvitedIconView isThreePid={true} />;
+    const name = vm.name;
 
     return (
         <MemberTileView
-            nameJsx={vm.name}
+            nameJsx={name}
             avatarJsx={av}
             onClick={vm.onClick}
+            memberIndex={props.memberIndex}
+            memberCount={props.memberCount}
+            ariaLabel={name}
             userLabel={vm.userLabel}
             iconJsx={iconJsx}
+            focused={props.focused}
+            tabIndex={props.tabIndex}
+            onFocus={props.onFocus}
         />
     );
 }

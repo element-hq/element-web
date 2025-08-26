@@ -49,7 +49,7 @@ test.describe("Widger permissions dialog", () => {
     test(
         "should be updated if user is re-invited into the room with updated state event",
         { tag: "@screenshot" },
-        async ({ page, app, user }) => {
+        async ({ page, app, user, axe }) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,
             });
@@ -87,6 +87,9 @@ test.describe("Widger permissions dialog", () => {
 
             // open the room
             await app.viewRoomByName(ROOM_NAME);
+
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
             await expect(page.locator(".mx_WidgetCapabilitiesPromptDialog")).toMatchScreenshot(
                 "widget-capabilites-prompt.png",
             );
