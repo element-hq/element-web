@@ -223,7 +223,9 @@ export default function NotificationSettings2(): JSX.Element {
                         />
                     </SettingsSubsection>
                     <SettingsSubsection
-                        heading={<SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />}
+                        heading={
+                            <SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />
+                        }
                     >
                         <LabelledCheckbox
                             label={_t("settings|notifications|invites")}
@@ -270,7 +272,10 @@ export default function NotificationSettings2(): JSX.Element {
                     </SettingsSubsection>
                     <SettingsSubsection
                         heading={
-                            <SettingsSubsectionHeading heading={_t("settings|notifications|mentions_keywords")} as="h2" />
+                            <SettingsSubsectionHeading
+                                heading={_t("settings|notifications|mentions_keywords")}
+                                as="h2"
+                            />
                         }
                         description={_t(
                             "settings|notifications|keywords",
