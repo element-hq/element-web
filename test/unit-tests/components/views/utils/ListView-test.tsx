@@ -200,7 +200,7 @@ describe("ListView", () => {
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
-            
+
             // Store initial state - first item should be focused
             const initialItems = container.querySelectorAll(".mx_item");
             expect(initialItems[0]).toHaveAttribute("tabindex", "0");
@@ -208,35 +208,35 @@ describe("ListView", () => {
 
             // Test ArrowDown with Ctrl modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", ctrlKey: true });
-            
+
             let items = container.querySelectorAll(".mx_item");
             expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
             expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Alt modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", altKey: true });
-            
+
             items = container.querySelectorAll(".mx_item");
             expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
             expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Shift modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", shiftKey: true });
-            
+
             items = container.querySelectorAll(".mx_item");
             expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
             expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Meta/Cmd modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", metaKey: true });
-            
+
             items = container.querySelectorAll(".mx_item");
             expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
             expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
 
             // Test normal ArrowDown without modifiers - SHOULD navigate
             fireEvent.keyDown(container, { code: "ArrowDown" });
-            
+
             items = container.querySelectorAll(".mx_item");
             expect(items[0]).toHaveAttribute("tabindex", "-1"); // Should have moved from first item
             expect(items[2]).toHaveAttribute("tabindex", "0"); // Should have moved to third item (skipping separator)
