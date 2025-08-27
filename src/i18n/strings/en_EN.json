@@ -989,7 +989,6 @@
             "after_new_login": {
                 "device_verified": "Device verified",
                 "skip_verification": "Skip verification for now",
-                "unable_to_verify": "Unable to verify this device",
                 "verify_this_device": "Verify this device"
             },
             "cancelled": "You cancelled verification.",
@@ -1073,8 +1072,8 @@
             "verify_emoji_prompt": "Verify by comparing unique emoji.",
             "verify_emoji_prompt_qr": "If you can't scan the code above, verify by comparing unique emoji.",
             "verify_later": "I'll verify later",
-            "verify_using_device": "Verify with another device",
-            "verify_using_key": "Verify with Recovery Key",
+            "verify_using_device": "Use another device",
+            "verify_using_key": "Use recovery key",
             "waiting_for_user_accept": "Waiting for %(displayName)s to accept…",
             "waiting_other_device": "Waiting for you to verify on your other device…",
             "waiting_other_device_details": "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…",

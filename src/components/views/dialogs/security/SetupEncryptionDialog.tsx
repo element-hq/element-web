@@ -10,55 +10,19 @@ import React from "react";
 
 import SetupEncryptionBody from "../../../structures/auth/SetupEncryptionBody";
 import BaseDialog from "../BaseDialog";
-import { _t } from "../../../../languageHandler";
-import { SetupEncryptionStore, Phase } from "../../../../stores/SetupEncryptionStore";
-
-function iconFromPhase(phase?: Phase): string {
-    if (phase === Phase.Done) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        return require("../../../../../res/img/e2e/verified-deprecated.svg").default;
-    } else {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        return require("../../../../../res/img/e2e/warning-deprecated.svg").default;
-    }
-}
 
 interface IProps {
     onFinished(): void;
 }
-interface IState {
-    icon: string;
-}
 
-export default class SetupEncryptionDialog extends React.Component<IProps, IState> {
-    private store: SetupEncryptionStore;
-
+export default class SetupEncryptionDialog extends React.Component<IProps> {
     public constructor(props: IProps) {
         super(props);
-
-        this.store = SetupEncryptionStore.sharedInstance();
-        this.state = { icon: iconFromPhase(this.store.phase) };
     }
-
-    public componentDidMount(): void {
-        this.store.on("update", this.onStoreUpdate);
-    }
-
-    public componentWillUnmount(): void {
-        this.store.removeListener("update", this.onStoreUpdate);
-    }
-
-    private onStoreUpdate = (): void => {
-        this.setState({ icon: iconFromPhase(this.store.phase) });
-    };
 
     public render(): React.ReactNode {
         return (
-            <BaseDialog
-                headerImage={this.state.icon}
-                onFinished={this.props.onFinished}
-                title={_t("encryption|verify_toast_title")}
-            >
+            <BaseDialog onFinished={this.props.onFinished} fixedWidth={false}>
                 <SetupEncryptionBody onFinished={this.props.onFinished} />
             </BaseDialog>
         );

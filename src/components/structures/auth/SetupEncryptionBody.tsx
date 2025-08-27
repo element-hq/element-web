@@ -48,6 +48,9 @@ interface IState {
     backupInfo: KeyBackupInfo | null;
 }
 
+/**
+ * Component to set up encryption by verifying the current device.
+ */
 export default class SetupEncryptionBody extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);

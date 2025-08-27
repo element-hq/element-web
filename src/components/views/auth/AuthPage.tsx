@@ -8,11 +8,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import classNames from "classnames";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthFooter from "./AuthFooter";
 
-export default class AuthPage extends React.PureComponent<React.PropsWithChildren> {
+interface IProps {
+    /**
+     * An additional class to apply to the modal wrapper.
+     */
+    modalClass?: string;
+}
+
+export default class AuthPage extends React.PureComponent<React.PropsWithChildren<IProps>> {
     private static welcomeBackgroundUrl?: string;
 
     // cache the url as a static to prevent it changing without refreshing
@@ -62,9 +70,11 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             borderRadius: "8px",
         };
 
+        const modalClasses = classNames("mx_AuthPage_modal", this.props.modalClass);
+
         return (
             <div className="mx_AuthPage" style={pageStyle}>
-                <div className="mx_AuthPage_modal" style={modalStyle}>
+                <div className={modalClasses} style={modalStyle}>
                     <div className="mx_AuthPage_modalBlur" style={blurStyle} />
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
                         {this.props.children}
