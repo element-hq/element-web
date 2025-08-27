@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -20,10 +19,6 @@ import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
-
-function keyHasPassphrase(keyInfo: SecretStorageKeyDescription): boolean {
-    return Boolean(keyInfo.passphrase && keyInfo.passphrase.salt && keyInfo.passphrase.iterations);
-}
 
 interface IProps {
     onFinished: () => void;
@@ -164,18 +159,12 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 );
             } else {
                 const store = SetupEncryptionStore.sharedInstance();
-                let recoveryKeyPrompt;
-                if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
-                    recoveryKeyPrompt = _t("encryption|verification|verify_using_key_or_phrase");
-                } else if (store.keyInfo) {
-                    recoveryKeyPrompt = _t("encryption|verification|verify_using_key");
-                }
 
                 let useRecoveryKeyButton;
-                if (recoveryKeyPrompt) {
+                if (store.keyInfo) {
                     useRecoveryKeyButton = (
                         <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
-                            {recoveryKeyPrompt}
+                            {_t("encryption|verification|verify_using_key")}
                         </AccessibleButton>
                     );
                 }

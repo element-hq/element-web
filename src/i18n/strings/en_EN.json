@@ -1076,7 +1076,6 @@
             "verify_later": "I'll verify later",
             "verify_using_device": "Verify with another device",
             "verify_using_key": "Verify with Recovery Key",
-            "verify_using_key_or_phrase": "Verify with Recovery Key or Phrase",
             "waiting_for_user_accept": "Waiting for %(displayName)s to accept…",
             "waiting_other_device": "Waiting for you to verify on your other device…",
             "waiting_other_device_details": "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…",
