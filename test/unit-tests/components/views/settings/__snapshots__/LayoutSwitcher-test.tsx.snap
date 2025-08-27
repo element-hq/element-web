@@ -97,7 +97,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="mx_eventTile_$9999999999999999999999999999999999999999999"
+                  id="4"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -224,7 +224,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="mx_eventTile_$9999999999999999999999999999999999999999999"
+                  id="5"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -351,7 +351,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="mx_eventTile_$9999999999999999999999999999999999999999999"
+                  id="6"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
