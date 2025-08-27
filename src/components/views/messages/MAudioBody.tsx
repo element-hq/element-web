@@ -14,7 +14,6 @@ import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { type Playback } from "../../../audio/Playback";
 import InlineSpinner from "../elements/InlineSpinner";
 import { _t } from "../../../languageHandler";
-import AudioPlayer from "../audio_messages/AudioPlayer";
 import MFileBody from "./MFileBody";
 import { type IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
@@ -22,10 +21,13 @@ import { isVoiceMessage } from "../../../utils/EventUtils";
 import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
+import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
+import { AudioPlayerView } from "../../../shared-components/audio/AudioPlayerView";
 
 interface IState {
     error?: boolean;
     playback?: Playback;
+    audioPlayerVm?: AudioPlayerViewModel;
 }
 
 export default class MAudioBody extends React.PureComponent<IBodyProps, IState> {
@@ -61,7 +63,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // We should have a buffer to work with now: let's set it up
         const playback = PlaybackManager.instance.createPlaybackInstance(buffer, waveform);
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
-        this.setState({ playback });
+        this.setState({ playback, audioPlayerVm: new AudioPlayerViewModel({ playback, mediaName: content.body }) });
 
         if (isVoiceMessage(this.props.mxEvent)) {
             PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!).unsortedEnqueue(this.props.mxEvent, playback);
@@ -72,6 +74,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public componentWillUnmount(): void {
         this.state.playback?.destroy();
+        this.state.audioPlayerVm?.dispose();
     }
 
     protected get showFileBody(): boolean {
@@ -113,7 +116,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // At this point we should have a playable state
         return (
             <span className="mx_MAudioBody">
-                <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
+                {this.state.audioPlayerVm && <AudioPlayerView vm={this.state.audioPlayerVm} />}
                 {this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />}
             </span>
         );

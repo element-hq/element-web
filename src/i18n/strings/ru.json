@@ -95,7 +95,6 @@
         "maximise": "Развернуть",
         "mention": "Упомянуть",
         "minimise": "Свернуть",
-        "new_message": "Новое сообщение",
         "new_room": "Новая комната",
         "new_video_room": "Новая видеокомната",
         "next": "Далее",
@@ -1657,8 +1656,7 @@
         "filter_placeholder": "Поиск по участникам",
         "invite_button_no_perms_tooltip": "У вас нет разрешения приглашать пользователей",
         "invited_label": "Приглашены",
-        "no_matches": "Нет совпадений",
-        "power_label": "%(userName)s (уровень прав %(powerLevelNumber)s)"
+        "no_matches": "Нет совпадений"
     },
     "member_list_back_action_label": "Участники комнаты",
     "message_edit_dialog_title": "Правки сообщения",
@@ -3366,6 +3364,7 @@
             "unable_to_decrypt": "Не удалось расшифровать сообщение"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Расшифровка",
         "download_action_downloading": "Загрузка",
         "download_failed": "Загрузка не удалась",
         "download_failed_description": "Произошла ошибка при загрузке этого файла",
@@ -3954,7 +3953,6 @@
         "dialpad": "Панель набора номера",
         "disable_camera": "Отключить камеру",
         "disable_microphone": "Отключить микрофон",
-        "disabled_no_one_here": "Здесь некому звонить",
         "disabled_no_perms_start_video_call": "У вас нет разрешения для запуска видеозвонка",
         "disabled_no_perms_start_voice_call": "У вас нет разрешения для запуска звонка",
         "disabled_ongoing_call": "Текущий звонок",

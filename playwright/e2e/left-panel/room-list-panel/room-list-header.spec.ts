@@ -35,8 +35,8 @@ test.describe("Header section of the room list", () => {
 
         await expect(page.getByRole("menu")).toMatchScreenshot("room-list-header-compose-menu.png");
 
-        // New message should open the direct messages dialog
-        await page.getByRole("menuitem", { name: "New message" }).click();
+        // Start chat should open the direct messages dialog
+        await page.getByRole("menuitem", { name: "Start chat" }).click();
         await expect(page.getByRole("heading", { name: "Direct Messages" })).toBeVisible();
         await app.closeDialog();
 

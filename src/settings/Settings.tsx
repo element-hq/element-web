@@ -205,6 +205,7 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
+    "feature_share_history_on_invite": IFeature;
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -499,6 +500,29 @@ export const SETTINGS: Settings = {
         controller: new DeviceIsolationModeController(),
         displayName: _td("labs|exclude_insecure_devices"),
         description: _td("labs|exclude_insecure_devices_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_share_history_on_invite": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        displayName: _td("labs|share_history_on_invite"),
+        description: () => (
+            <>
+                {_t("labs|share_history_on_invite_description")}
+                <div className="mx_SettingsFlag_microcopy">
+                    {_t(
+                        "settings|warning",
+                        {},
+                        {
+                            w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
+                            description: _t("labs|share_history_on_invite_warning"),
+                        },
+                    )}
+                </div>
+            </>
+        ),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

@@ -999,8 +999,7 @@
         "toggle_attribution": "تغییر دادن اسناد"
     },
     "member_list": {
-        "filter_placeholder": "فیلتر کردن اعضای اتاق",
-        "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
+        "filter_placeholder": "فیلتر کردن اعضای اتاق"
     },
     "member_list_back_action_label": "اعضای اتاق",
     "message_edit_dialog_title": "ویرایش پیام",

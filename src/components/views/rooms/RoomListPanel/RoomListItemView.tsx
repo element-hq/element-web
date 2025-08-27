@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useCallback, useRef, useState } from "react";
+import React, { type JSX, memo, useCallback, useEffect, useRef, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
@@ -14,7 +14,6 @@ import { Flex } from "../../../../shared-components/utils/Flex";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
-import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 import { RoomListItemContextMenuView } from "./RoomListItemContextMenuView";
 
 interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
@@ -26,6 +25,26 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
      * Whether the room is selected
      */
     isSelected: boolean;
+    /**
+     * Whether the room is focused
+     */
+    isFocused: boolean;
+    /**
+     * A callback that indicates the item has received focus
+     */
+    onFocus: (e: React.FocusEvent) => void;
+    /**
+     * The index of the room in the list
+     */
+    roomIndex: number;
+    /**
+     * The total number of rooms in the list
+     */
+    roomCount: number;
+    /**
+     * Whether the list is currently scrolling
+     */
+    listIsScrolling: boolean;
 }
 
 /**
@@ -34,18 +53,20 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
 export const RoomListItemView = memo(function RoomListItemView({
     room,
     isSelected,
+    isFocused,
+    onFocus,
+    roomIndex: index,
+    roomCount: count,
+    listIsScrolling,
     ...props
 }: RoomListItemViewProps): JSX.Element {
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const [onFocus, isActive, ref] = useRovingTabIndex(buttonRef);
-
+    const ref = useRef<HTMLButtonElement>(null);
     const vm = useRoomListItemViewModel(room);
-
-    const [isHover, setIsHoverWithDelay] = useIsHover();
+    const [isHover, setHover] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     // The compound menu in RoomListItemMenuView needs to be rendered when the hover menu is shown
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
-    const showHoverDecoration = isMenuOpen || isHover;
+    const showHoverDecoration = isMenuOpen || isFocused || isHover;
     const showHoverMenu = showHoverDecoration && vm.showHoverMenu;
 
     const closeMenu = useCallback(() => {
@@ -54,8 +75,15 @@ export const RoomListItemView = memo(function RoomListItemView({
         setTimeout(() => setIsMenuOpen(false), 10);
     }, []);
 
+    useEffect(() => {
+        if (isFocused) {
+            ref.current?.focus({ preventScroll: true, focusVisible: true });
+        }
+    }, [isFocused]);
+
     const content = (
-        <button
+        <Flex
+            as="button"
             ref={ref}
             className={classNames("mx_RoomListItemView", {
                 mx_RoomListItemView_hover: showHoverDecoration,
@@ -63,66 +91,66 @@ export const RoomListItemView = memo(function RoomListItemView({
                 mx_RoomListItemView_selected: isSelected,
                 mx_RoomListItemView_bold: vm.isBold,
             })}
+            gap="var(--cpd-space-3x)"
+            align="center"
             type="button"
+            role="option"
+            aria-posinset={index + 1}
+            aria-setsize={count}
             aria-selected={isSelected}
             aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
-            onMouseOver={() => setIsHoverWithDelay(true)}
-            onMouseOut={() => setIsHoverWithDelay(false)}
-            onFocus={() => {
-                setIsHoverWithDelay(true);
-                onFocus();
-            }}
-            // Adding a timeout because when tabbing to go to the more options and notification menu, the focus moves out of the button
-            // The blur makes the button lose the hover state and these menu are not shown
-            // We delay the blur event to give time to the focus to move to the menu
-            onBlur={() => setIsHoverWithDelay(false, 10)}
-            tabIndex={isActive ? 0 : -1}
+            onFocus={onFocus}
+            onMouseOver={() => setHover(true)}
+            onMouseOut={() => setHover(false)}
+            onBlur={() => setHover(false)}
+            tabIndex={isFocused ? 0 : -1}
             {...props}
         >
-            {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
-            <Flex className="mx_RoomListItemView_container" gap="var(--cpd-space-3x)" align="center">
-                <RoomAvatarView room={room} />
-                <Flex
-                    className="mx_RoomListItemView_content"
-                    gap="var(--cpd-space-2x)"
-                    align="center"
-                    justify="space-between"
-                >
-                    {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <div className="mx_RoomListItemView_text">
-                        <div className="mx_RoomListItemView_roomName" title={vm.name}>
-                            {vm.name}
-                        </div>
-                        {vm.messagePreview && (
-                            <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
-                                {vm.messagePreview}
-                            </div>
-                        )}
+            <RoomAvatarView room={room} />
+            <Flex
+                className="mx_RoomListItemView_content"
+                gap="var(--cpd-space-2x)"
+                align="center"
+                justify="space-between"
+            >
+                {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                <div className="mx_RoomListItemView_text">
+                    <div className="mx_RoomListItemView_roomName" title={vm.name}>
+                        {vm.name}
                     </div>
-                    {showHoverMenu ? (
-                        <RoomListItemMenuView
-                            room={room}
-                            setMenuOpen={(isOpen) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
-                        />
-                    ) : (
-                        <>
-                            {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                            {vm.showNotificationDecoration && (
-                                <NotificationDecoration
-                                    notificationState={vm.notificationState}
-                                    aria-hidden={true}
-                                    hasVideoCall={vm.hasParticipantInCall}
-                                />
-                            )}
-                        </>
+                    {vm.messagePreview && (
+                        <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
+                            {vm.messagePreview}
+                        </div>
                     )}
-                </Flex>
+                </div>
+                {showHoverMenu ? (
+                    <RoomListItemMenuView
+                        room={room}
+                        setMenuOpen={(isOpen) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
+                    />
+                ) : (
+                    <>
+                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
+                        {vm.showNotificationDecoration && (
+                            <NotificationDecoration
+                                notificationState={vm.notificationState}
+                                aria-hidden={true}
+                                hasVideoCall={vm.hasParticipantInCall}
+                            />
+                        )}
+                    </>
+                )}
             </Flex>
-        </button>
+        </Flex>
     );
 
-    if (!vm.showContextMenu) return content;
+    // Rendering multiple context menus can causes crashes in radix upstream,
+    // See https://github.com/radix-ui/primitives/issues/2717.
+    // We also don't need the context menu while scrolling so can improve scroll performance
+    // by not rendering it.
+    if (!vm.showContextMenu || listIsScrolling) return content;
 
     return (
         <RoomListItemContextMenuView
@@ -140,33 +168,3 @@ export const RoomListItemView = memo(function RoomListItemView({
         </RoomListItemContextMenuView>
     );
 });
-
-/**
- * Custom hook to manage the hover state of the room list item
- * If the timeout is set, it will set the hover state after the timeout
- * If the timeout is not set, it will set the hover state immediately
- * When the set method is called, it will clear any existing timeout
- *
- * @returns {boolean} isHover - The hover state
- */
-function useIsHover(): [boolean, (value: boolean, timeout?: number) => void] {
-    const [isHover, setIsHover] = useState(false);
-    // Store the timeout ID
-    const timeoutRef = useRef<number | undefined>(undefined);
-
-    const setIsHoverWithDelay = useCallback((value: boolean, timeout?: number): void => {
-        // Clear the timeout if it exists
-        clearTimeout(timeoutRef.current);
-
-        // No delay, set the value immediately
-        if (timeout === undefined) {
-            setIsHover(value);
-            return;
-        }
-
-        // Set a timeout to set the value after the delay
-        timeoutRef.current = setTimeout(() => setIsHover(value), timeout);
-    }, []);
-
-    return [isHover, setIsHoverWithDelay];
-}
