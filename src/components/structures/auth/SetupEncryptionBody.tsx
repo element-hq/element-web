@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -19,6 +20,10 @@ import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
+import { EncryptionCard } from "../../views/settings/encryption/EncryptionCard";
+import { EncryptionCardButtons } from "../../views/settings/encryption/EncryptionCardButtons";
+import { EncryptionCardEmphasisedContent } from "../../views/settings/encryption/EncryptionCardEmphasisedContent";
+import ExternalLink from "../../views/elements/ExternalLink";
 
 interface IProps {
     onFinished: () => void;
@@ -179,27 +184,27 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 }
 
                 return (
-                    <div>
-                        <p>{_t("encryption|verification|verification_description")}</p>
-
-                        <div className="mx_CompleteSecurity_actionRow">
+                    <EncryptionCard
+                        title={_t("encryption|verification|confirm_identity_title")}
+                        Icon={LockIcon}
+                        className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
+                    >
+                        <EncryptionCardEmphasisedContent>
+                            <span>{_t("encryption|verification|verification_description")}</span>
+                            <span>
+                                <ExternalLink href="https://element.io/help#encryption-device-verification">
+                                    {_t("action|learn_more")}
+                                </ExternalLink>
+                            </span>
+                        </EncryptionCardEmphasisedContent>
+                        <EncryptionCardButtons>
                             {verifyButton}
                             {useRecoveryKeyButton}
-                        </div>
-                        <div className="mx_SetupEncryptionBody_reset">
-                            {_t("encryption|reset_all_button", undefined, {
-                                a: (sub) => (
-                                    <AccessibleButton
-                                        kind="link_inline"
-                                        className="mx_SetupEncryptionBody_reset_link"
-                                        onClick={this.onResetClick}
-                                    >
-                                        {sub}
-                                    </AccessibleButton>
-                                ),
-                            })}
-                        </div>
-                    </div>
+                            <AccessibleButton kind="secondary" onClick={this.onResetClick}>
+                                {_t("encryption|verification|cant_confirm")}
+                            </AccessibleButton>
+                        </EncryptionCardButtons>
+                    </EncryptionCard>
                 );
             }
         } else if (phase === Phase.Done) {
