@@ -36,13 +36,13 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         expectedBackupVersion = res.expectedBackupVersion;
     });
 
-    // Click the "Verify with another device" button, and have the bot client auto-accept it.
+    // Click the "Use another device" button, and have the bot client auto-accept it.
     async function initiateAliceVerificationRequest(page: Page): Promise<JSHandle<VerificationRequest>> {
         // alice bot waits for verification request
         const promiseVerificationRequest = waitForVerificationRequest(aliceBotClient);
 
-        // Click on "Verify with another device"
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with another device" }).click();
+        // Click on "Use another device"
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Use another device" }).click();
 
         // alice bot responds yes to verification request from alice
         return promiseVerificationRequest;
@@ -203,7 +203,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
     /** Helper for the three tests above which verify by recovery key */
     async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
-        await page.getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
+        await page.getByRole("button", { name: "Use recovery key" }).click();
 
         // Enter the recovery key
         const dialog = page.locator(".mx_Dialog");

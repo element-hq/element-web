@@ -218,9 +218,9 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
 
     // if a securityKey was given, verify the new device
     if (securityKey !== undefined) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Use recovery key" }).click();
 
-        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
+        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "Use recovery key" });
         // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
         // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
         // for a recovery key straight away. We click the button if it's there so this works in both cases.
@@ -262,7 +262,7 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
 export async function verifySession(app: ElementAppPage, securityKey: string) {
     const settings = await app.settings.openUserSettings("Encryption");
     await settings.getByRole("button", { name: "Verify this device" }).click();
-    await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
+    await app.page.getByRole("button", { name: "Use recovery key" }).click();
     await app.page.locator(".mx_Dialog").getByTitle("Recovery key").fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();

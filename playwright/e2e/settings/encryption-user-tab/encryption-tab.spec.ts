@@ -160,15 +160,15 @@ test.describe("Encryption tab", () => {
 
             // We will reset our identity
             await settings.getByRole("button", { name: "Verify this device" }).click();
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // First try cancelling and restarting
             await page.getByRole("button", { name: "Cancel" }).click();
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Then click outside the dialog and restart
             await page.locator("li").filter({ hasText: "Encryption" }).click({ force: true });
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Finally we actually continue
             await page.getByRole("button", { name: "Continue" }).click();
