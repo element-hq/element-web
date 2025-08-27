@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
         "poll_button_no_perms_title": "Autorisation requise",
         "replying_title": "Répond",
+        "room_unencrypted": "Les messages dans ce salon ne sont pas chiffrés de bout en bout",
         "room_upgraded_link": "La discussion continue ici.",
         "room_upgraded_notice": "Ce salon a été remplacé et n’est plus actif.",
         "send_button_title": "Envoyer le message",
@@ -1366,6 +1367,10 @@
         "name_email_mxid_share_space": "Invitez quelqu’un grâce à son nom, adresse e-mail, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
         "name_mxid_share_room": "Invitez quelqu’un à partir de son nom, pseudo (comme <userId/>) ou <a>partagez ce salon</a>.",
         "name_mxid_share_space": "Invitez quelqu’un grâce à son nom, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
+        "progress": {
+            "dont_close": "Ne fermez pas l\"application tant que l'opération est en cours",
+            "preparing": "Préparation des invitations..."
+        },
         "recents_section": "Conversations récentes",
         "room_failed_partial": "Nous avons envoyé les invitations, mais les personnes ci-dessous n’ont pas pu être invitées à rejoindre <RoomName/>",
         "room_failed_partial_title": "Certaines invitations n’ont pas pu être envoyées",
@@ -1916,6 +1921,7 @@
         "thread_list": {
             "context_menu_label": "Options des fils de discussion"
         },
+        "title": "Panneau droit",
         "video_room_chat": {
             "title": "Conversation privée"
         }
@@ -3964,7 +3970,6 @@
         "dialpad": "Pavé numérique",
         "disable_camera": "Désactiver la caméra",
         "disable_microphone": "Désactiver le microphone",
-        "disabled_no_one_here": "Il n’y a personne à appeler ici",
         "disabled_no_perms_start_video_call": "Vous n’avez pas la permission de démarrer un appel vidéo",
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",

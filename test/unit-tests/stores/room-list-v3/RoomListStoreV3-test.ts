@@ -460,7 +460,7 @@ describe("RoomListStoreV3", () => {
                 store.on(LISTS_UPDATE_EVENT, fn);
 
                 // The rooms which belong to the space should not be shown
-                const result = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
+                const result = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result).not.toContain(id);
                 }
@@ -469,7 +469,7 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
                 SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
                 expect(fn).toHaveBeenCalled();
-                const result2 = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
+                const result2 = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result2).toContain(id);
                 }
@@ -492,7 +492,7 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]).rooms;
                 expect(result).toHaveLength(3);
                 for (const i of [8, 27, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -527,7 +527,7 @@ describe("RoomListStoreV3", () => {
                 expect(fn).toHaveBeenCalled();
 
                 // Sorted, filtered rooms should be 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]).rooms;
                 expect(result).toHaveLength(2);
                 for (const i of [8, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -552,7 +552,7 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
                 expect(result).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(result).toContain(rooms[i]);
@@ -569,7 +569,7 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Since there's no unread yet, we expect zero results
-                let result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                let result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
                 expect(result).toHaveLength(0);
 
                 // Mock so that room at index 8 is marked as unread
@@ -584,7 +584,7 @@ describe("RoomListStoreV3", () => {
                 );
 
                 // Now we expect room at index 8 to show as unread
-                result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
             });
@@ -607,14 +607,14 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const peopleRooms = store.getSortedRoomsInActiveSpace([FilterKey.PeopleFilter]);
+                const peopleRooms = store.getSortedRoomsInActiveSpace([FilterKey.PeopleFilter]).rooms;
                 expect(peopleRooms).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(peopleRooms).toContain(rooms[i]);
                 }
 
                 // Rest are normal rooms
-                const nonDms = store.getSortedRoomsInActiveSpace([FilterKey.RoomsFilter]);
+                const nonDms = store.getSortedRoomsInActiveSpace([FilterKey.RoomsFilter]).rooms;
                 expect(nonDms).toHaveLength(3);
                 for (const i of [6, 13, 75]) {
                     expect(nonDms).toContain(rooms[i]);
@@ -638,7 +638,7 @@ describe("RoomListStoreV3", () => {
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
 
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms;
                 expect(result).toHaveLength(5);
                 for (const room of invitedRooms) {
                     expect(result).toContain(room);
@@ -663,7 +663,7 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.MentionsFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.MentionsFilter]).rooms;
                 expect(result).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(result).toContain(rooms[i]);
@@ -685,7 +685,7 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.LowPriorityFilter]);
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.LowPriorityFilter]).rooms;
                 expect(result).toHaveLength(3);
                 for (const i of [8, 27, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -713,7 +713,10 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should give us only room at 8 since that's the only room which matches both filters
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter, FilterKey.FavouriteFilter]);
+                const result = store.getSortedRoomsInActiveSpace([
+                    FilterKey.UnreadFilter,
+                    FilterKey.FavouriteFilter,
+                ]).rooms;
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
             });

@@ -531,12 +531,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
             if (!this.props.e2eStatus) {
                 leftIcon = (
                     <div className="mx_MessageComposer_e2eIconWrapper">
-                        <LockOffIcon
-                            width={12}
-                            height={12}
-                            color="var(--cpd-color-icon-info-primary)"
-                            className="mx_E2EIcon mx_MessageComposer_e2eIcon"
-                        />
+                        <Tooltip label={_t("composer|room_unencrypted")}>
+                            <LockOffIcon
+                                aria-label={_t("composer|room_unencrypted")}
+                                width={12}
+                                height={12}
+                                color="var(--cpd-color-icon-info-primary)"
+                                className="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                            />
+                        </Tooltip>
                     </div>
                 );
             } else if (this.props.e2eStatus !== E2EStatus.Normal) {

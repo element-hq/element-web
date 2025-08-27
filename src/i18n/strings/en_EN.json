@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
         "poll_button_no_perms_title": "Permission Required",
         "replying_title": "Replying",
+        "room_unencrypted": "Messages in this room are not end-to-end encrypted",
         "room_upgraded_link": "The conversation continues here.",
         "room_upgraded_notice": "This room has been replaced and is no longer active.",
         "send_button_title": "Send message",
@@ -1366,6 +1367,10 @@
         "name_email_mxid_share_space": "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.",
         "name_mxid_share_room": "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
         "name_mxid_share_space": "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.",
+        "progress": {
+            "dont_close": "Do not close the app until finished.",
+            "preparing": "Preparing invitations..."
+        },
         "recents_section": "Recent Conversations",
         "room_failed_partial": "We sent the others, but the below people couldn't be invited to <RoomName/>",
         "room_failed_partial_title": "Some invites couldn't be sent",
@@ -1538,7 +1543,7 @@
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
-        "sliding_sync_description": "Under active development, cannot be disabled.",
+        "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Log out and back in to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
@@ -1917,6 +1922,7 @@
         "thread_list": {
             "context_menu_label": "Thread options"
         },
+        "title": "Right panel",
         "video_room_chat": {
             "title": "Chat"
         }

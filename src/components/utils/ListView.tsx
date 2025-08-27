@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
 
+import { isModifiedKeyEvent, Key } from "../../Keyboard";
 /**
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
@@ -30,16 +31,11 @@ export interface IListViewProps<Item, Context>
     items: Item[];
 
     /**
-     * Callback function called when an item is selected (via Enter/Space key).
-     * @param item - The selected item from the items array
-     */
-    onSelectItem: (item: Item) => void;
-
-    /**
      * Function that renders each list item as a JSX element.
      * @param index - The index of the item in the list
      * @param item - The data item to render
      * @param context - The context object containing the focused key and any additional data
+     * @param onFocus - A callback that is required to be called when the item component receives focus
      * @returns JSX element representing the rendered item
      */
     getItemComponent: (
@@ -68,6 +64,14 @@ export interface IListViewProps<Item, Context>
      * @return The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
+    /**
+     * Callback function to handle key down events on the list container.
+     * ListView handles keyboard navigation for focus(up, down, home, end, pageUp, pageDown)
+     * and stops propagation otherwise the event bubbles and this callback is called for the use of the parent.
+     * @param e - The keyboard event
+     * @returns
+     */
+    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 /**
@@ -79,7 +83,7 @@ export interface IListViewProps<Item, Context>
  */
 export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, onSelectItem, getItemComponent, isItemFocusable, getItemKey, context, ...virtuosoProps } = props;
+    const { items, getItemComponent, isItemFocusable, getItemKey, context, onKeyDown, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
@@ -131,7 +135,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
                 isScrollingToItem.current = true;
-                virtuosoHandleRef?.current?.scrollIntoView({
+                virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
@@ -174,44 +178,44 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
      * Supports Arrow keys, Home, End, Page Up/Down, Enter, and Space.
      */
     const keyDownCallback = useCallback(
-        (e: React.KeyboardEvent) => {
-            if (!e) return; // Guard against null/undefined events
-
+        (e: React.KeyboardEvent<HTMLDivElement>) => {
             const currentIndex = tabIndexKey ? keyToIndexMap.get(tabIndexKey) : undefined;
-
             let handled = false;
-            if (e.code === "ArrowUp" && currentIndex !== undefined) {
-                scrollToItem(currentIndex - 1, false);
-                handled = true;
-            } else if (e.code === "ArrowDown" && currentIndex !== undefined) {
-                scrollToItem(currentIndex + 1, true);
-                handled = true;
-            } else if ((e.code === "Enter" || e.code === "Space") && currentIndex !== undefined) {
-                const item = items[currentIndex];
-                onSelectItem(item);
-                handled = true;
-            } else if (e.code === "Home") {
-                scrollToIndex(0);
-                handled = true;
-            } else if (e.code === "End") {
-                scrollToIndex(items.length - 1);
-                handled = true;
-            } else if (e.code === "PageDown" && visibleRange && currentIndex !== undefined) {
-                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
-                handled = true;
-            } else if (e.code === "PageUp" && visibleRange && currentIndex !== undefined) {
-                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
-                handled = true;
+
+            // Guard against null/undefined events and modified keys which we don't want to handle here but do
+            // at the settings level shortcuts(E.g. Select next room, etc )
+            if (e || !isModifiedKeyEvent(e)) {
+                if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
+                    scrollToItem(currentIndex - 1, false);
+                    handled = true;
+                } else if (e.code === Key.ARROW_DOWN && currentIndex !== undefined) {
+                    scrollToItem(currentIndex + 1, true);
+                    handled = true;
+                } else if (e.code === Key.HOME) {
+                    scrollToIndex(0);
+                    handled = true;
+                } else if (e.code === Key.END) {
+                    scrollToIndex(items.length - 1);
+                    handled = true;
+                } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
+                    const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                    scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
+                    handled = true;
+                } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
+                    const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                    scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
+                    handled = true;
+                }
             }
 
             if (handled) {
                 e.stopPropagation();
                 e.preventDefault();
+            } else {
+                onKeyDown?.(e);
             }
         },
-        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onSelectItem],
+        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onKeyDown],
     );
 
     /**
@@ -261,8 +265,12 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         [keyToIndexMap, visibleRange, scrollToIndex, tabIndexKey],
     );
 
-    const onBlur = useCallback((): void => {
-        setIsFocused(false);
+    const onBlur = useCallback((event: React.FocusEvent<HTMLDivElement>): void => {
+        // Only set isFocused to false if the focus is moving outside the list
+        // This prevents the list from losing focus when interacting with menus inside it
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsFocused(false);
+        }
     }, []);
 
     const listContext: ListContext<Context> = {
@@ -274,8 +282,8 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     return (
         <Virtuoso
             tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
-            scrollerRef={scrollerRef}
             ref={virtuosoHandleRef}
+            scrollerRef={scrollerRef}
             onKeyDown={keyDownCallback}
             context={listContext}
             rangeChanged={setVisibleRange}

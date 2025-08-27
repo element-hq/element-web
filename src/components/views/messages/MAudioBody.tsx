@@ -74,6 +74,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public componentWillUnmount(): void {
         this.state.playback?.destroy();
+        this.state.audioPlayerVm?.dispose();
     }
 
     protected get showFileBody(): boolean {
