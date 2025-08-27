@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type KeyBackupInfo, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
+import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -17,7 +19,7 @@ import Modal from "../../../Modal";
 import VerificationRequestDialog from "../../views/dialogs/VerificationRequestDialog";
 import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStore";
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
-import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
+import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
 import { EncryptionCard } from "../../views/settings/encryption/EncryptionCard";
@@ -109,8 +111,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         store.returnAfterSkip();
     };
 
-    private onCantConfirmClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
+    private onCantConfirmClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         Modal.createDialog(ResetIdentityDialog, {
             onReset: () => {
@@ -152,18 +153,20 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             let verifyButton;
             if (store.hasDevicesToVerifyAgainst) {
                 verifyButton = (
-                    <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
-                        {_t("encryption|verification|verify_using_device")}
-                    </AccessibleButton>
+                    <Button kind="primary" onClick={this.onVerifyClick}>
+                        <DevicesIcon /> {_t("encryption|verification|verify_using_device")}
+                    </Button>
                 );
             }
 
             let useRecoveryKeyButton;
             if (store.keyInfo) {
                 useRecoveryKeyButton = (
-                    <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
+                    <Button kind="primary" onClick={this.onUsePassphraseClick}>
                         {_t("encryption|verification|verify_using_key")}
-                    </AccessibleButton>
+                    </Button>
+                );
+            }
                 );
             }
 
@@ -184,9 +187,9 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     <EncryptionCardButtons>
                         {verifyButton}
                         {useRecoveryKeyButton}
-                        <AccessibleButton kind="secondary" onClick={this.onCantConfirmClick}>
+                        <Button kind="secondary" onClick={this.onCantConfirmClick}>
                             {_t("encryption|verification|cant_confirm")}
-                        </AccessibleButton>
+                        </Button>
                     </EncryptionCardButtons>
                 </EncryptionCard>
             );
