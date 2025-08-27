@@ -26,9 +26,20 @@ import { EncryptionCard } from "../../views/settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../views/settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../../views/settings/encryption/EncryptionCardEmphasisedContent";
 import ExternalLink from "../../views/elements/ExternalLink";
+import dispatcher from "../../../dispatcher/dispatcher";
 
 interface IProps {
     onFinished: () => void;
+    /**
+     * Allow the user to log out, rather than setting up encryption.
+     *
+     * This is only used when this component is shown when the user is initially
+     * prompted to set up encryption, before the user is shown the main chat
+     * interface.
+     *
+     * Defaults to `false` if omitted.
+     */
+    allowLogout?: boolean;
 }
 
 interface IState {
@@ -124,6 +135,10 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     };
 
+    private onSignOutClick = (): void => {
+        dispatcher.dispatch({ action: "logout" });
+    };
+
     private onDoneClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         store.done();
@@ -167,6 +182,13 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     </Button>
                 );
             }
+
+            let signOutButton;
+            if (this.props.allowLogout) {
+                signOutButton = (
+                    <Button kind="tertiary" onClick={this.onSignOutClick}>
+                        {_t("action|sign_out")}
+                    </Button>
                 );
             }
 
@@ -190,6 +212,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <Button kind="secondary" onClick={this.onCantConfirmClick}>
                             {_t("encryption|verification|cant_confirm")}
                         </Button>
+                        {signOutButton}
                     </EncryptionCardButtons>
                 </EncryptionCard>
             );

@@ -106,7 +106,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                         {skipButton}
                     </h1>
                     <div className="mx_CompleteSecurity_body">
-                        <SetupEncryptionBody onFinished={this.props.onFinished} />
+                        <SetupEncryptionBody onFinished={this.props.onFinished} allowLogout={true} />
                     </div>
                 </CompleteSecurityBody>
             </AuthPage>
