@@ -45,7 +45,7 @@ export const useParticipants = (call: Call | null): Map<RoomMember, Set<string>>
     return useTypedEventEmitterState(
         call ?? undefined,
         CallEvent.Participants,
-        useCallback((state) => state ?? call?.participants ?? new Map(), [call]),
+        useCallback((state) => state ?? call?.participants ?? [], [call]),
     );
 };
 
