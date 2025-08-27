@@ -343,7 +343,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.replacingEventId) {
             body = (
-                <div dir="auto" className="mx_EventTile_annotated" id={this.props.id}>
+                <div dir="auto" className="mx_EventTile_annotated">
                     {body}
                     {this.renderEditedMarker()}
                 </div>
@@ -351,7 +351,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (this.props.isSeeingThroughMessageHiddenForModeration) {
             body = (
-                <div dir="auto" className="mx_EventTile_annotated" id={this.props.id}>
+                <div dir="auto" className="mx_EventTile_annotated">
                     {body}
                     {this.renderPendingModerationMarker()}
                 </div>
@@ -359,15 +359,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
 
         if (this.props.highlightLink) {
-            body = (
-                <a href={this.props.highlightLink} id={this.props.id}>
-                    {body}
-                </a>
-            );
+            body = <a href={this.props.highlightLink}>{body}</a>;
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
             body = (
                 <AccessibleButton
-                    id={this.props.id}
                     kind="link_inline"
                     onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
                 >
@@ -380,7 +375,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
             widgets = (
                 <LinkPreviewGroup
-                    id={this.props.id}
                     links={this.state.links}
                     mxEvent={this.props.mxEvent}
                     onCancelClick={this.onCancelClick}
