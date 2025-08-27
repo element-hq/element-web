@@ -13,6 +13,7 @@ exports[`LogoutDialog Prompts user to go to settings if there is a backup on the
     class="mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -100,6 +101,7 @@ exports[`LogoutDialog Prompts user to go to settings if there is no backup on th
     class="mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -187,6 +189,7 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
     class="mx_QuestionDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
