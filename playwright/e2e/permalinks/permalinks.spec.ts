@@ -100,3 +100,51 @@ test.describe("permalinks", () => {
         });
     });
 });
+
+test.describe("triple-click message selection", () => {
+    test.use({
+        displayName: "Alice",
+    });
+
+    test("should select entire message line when triple-clicking on message with pills", async ({
+        page,
+        app,
+        user,
+        bot,
+    }) => {
+        await bot.prepareClient();
+
+        const roomId = await app.client.createRoom({ name: "Test Room" });
+        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await app.viewRoomByName("Test Room");
+
+        // Send a message with user and room pills
+        await app.client.sendMessage(
+            roomId,
+            `Testing triple-click message selection. ` +
+                `User: ${permalinkPrefix}${bot.credentials.userId}, ` +
+                `Room: ${permalinkPrefix}${roomId}, ` +
+                `Message: ${permalinkPrefix}${roomId}/$dummy-event, ` +
+                `and @room mention.`,
+        );
+
+        const timeline = page.locator(".mx_RoomView_timeline");
+        const messageTile = timeline.locator(".mx_EventTile").last();
+
+        // Triple-click on the message body to select its entire content
+        const messageBody = messageTile.locator(".mx_EventTile_body");
+        await messageBody.click({ clickCount: 3 });
+
+        // Get the expected text content of the message, including pills
+        const expectedText = await messageBody.innerText();
+
+        // Get the currently selected text from the page
+        const selectedText = await page.evaluate(() => {
+            const selection = window.getSelection();
+            return selection ? selection.toString().trim() : "";
+        });
+
+        // Verify that the selected text exactly matches the message content
+        expect(selectedText).toBe(expectedText);
+    });
+});
