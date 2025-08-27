@@ -184,7 +184,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
             // Guard against null/undefined events and modified keys which we don't want to handle here but do
             // at the settings level shortcuts(E.g. Select next room, etc )
-            if (e || !isModifiedKeyEvent(e)) {
+            if (e && !isModifiedKeyEvent(e)) {
                 if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
                     scrollToItem(currentIndex - 1, false);
                     handled = true;
