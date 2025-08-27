@@ -136,7 +136,7 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("button", { name: "Delete key storage" }).click();
 
-            await expect(page.getByRole("checkbox", { name: "Allow key storage" })).not.toBeChecked();
+            await expect(page.getByRole("switch", { name: "Allow key storage" })).not.toBeChecked();
 
             for (const prom of deleteRequestPromises) {
                 const request = await prom;
