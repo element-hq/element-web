@@ -114,6 +114,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     private onResetClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
+        const store = SetupEncryptionStore.sharedInstance();
         Modal.createDialog(ResetIdentityDialog, {
             onReset: () => {
                 // The user completed the reset process - close this dialog
@@ -121,7 +122,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 const store = SetupEncryptionStore.sharedInstance();
                 store.done();
             },
-            variant: "confirm",
+            variant: store.lostKeys() ? "no_verification_method" : "confirm",
         });
     };
 
