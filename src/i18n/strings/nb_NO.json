@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Du har ikke tillatelse til å starte avstemninger i dette rommet.",
         "poll_button_no_perms_title": "Tillatelse kreves",
         "replying_title": "Svarer på",
+        "room_unencrypted": "Meldinger i dette rommet er ikke ende-til-ende krypterte",
         "room_upgraded_link": "Samtalen fortsetter her.",
         "room_upgraded_notice": "Dette rommet har blitt erstattet og er ikke lenger aktivt.",
         "send_button_title": "Send melding",
