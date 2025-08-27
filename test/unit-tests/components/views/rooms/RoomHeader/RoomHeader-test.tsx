@@ -52,7 +52,6 @@ import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
 import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
-import * as UseCall from "../../../../../../src/hooks/useCall";
 import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
@@ -97,8 +96,9 @@ describe("RoomHeader", () => {
         setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
         jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
         
-        // Mock useCall to return a Call object with stable participants to prevent React dependency errors
-        jest.spyOn(UseCall, 'useCall').mockReturnValue(createMockCall());
+        // Mock CallStore.instance.getCall to return a Call object with stable participants
+        // This prevents React dependency errors without disrupting hook execution order
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall());
     });
 
     afterEach(() => {
@@ -558,8 +558,8 @@ describe("RoomHeader", () => {
 
         it("join button is shown if there is an ongoing call", async () => {
             mockRoomMembers(room, 3);
-            // Mock a call with 3 participants instead of mocking useParticipantCount
-            jest.spyOn(UseCall, 'useCall').mockReturnValue(createMockCall(ROOM_ID, 3));
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
@@ -567,8 +567,8 @@ describe("RoomHeader", () => {
 
         it("join button is disabled if there is an other ongoing call", async () => {
             mockRoomMembers(room, 3);
-            // Mock a call with 3 participants instead of mocking useParticipantCount
-            jest.spyOn(UseCall, 'useCall').mockReturnValue(createMockCall(ROOM_ID, 3));
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             jest.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
             );
@@ -588,8 +588,8 @@ describe("RoomHeader", () => {
 
         it("close lobby button is shown if there is an ongoing call but we are viewing the lobby", async () => {
             mockRoomMembers(room, 3);
-            // Mock a call with 3 participants instead of mocking useParticipantCount
-            jest.spyOn(UseCall, 'useCall').mockReturnValue(createMockCall(ROOM_ID, 3));
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
             render(<RoomHeader room={room} />, getWrapper());
