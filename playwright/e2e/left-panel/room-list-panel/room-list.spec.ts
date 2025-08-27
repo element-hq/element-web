@@ -193,6 +193,9 @@ test.describe("Room list", () => {
 
                 await roomListView.getByRole("option", { name: "Open room room20" }).click();
 
+                // Make sure the room with the unread is visible before we press the keyboard action to select it
+                await expect(roomListView.getByRole("option", { name: "1 notification" })).toBeVisible();
+
                 await page.keyboard.press("Alt+Shift+ArrowDown");
 
                 await expect(page.getByRole("heading", { name: "1 notification", level: 1 })).toBeVisible();
