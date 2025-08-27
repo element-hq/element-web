@@ -165,20 +165,20 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             } else {
                 const store = SetupEncryptionStore.sharedInstance();
 
-                let useRecoveryKeyButton;
-                if (store.keyInfo) {
-                    useRecoveryKeyButton = (
-                        <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
-                            {_t("encryption|verification|verify_using_key")}
-                        </AccessibleButton>
-                    );
-                }
-
                 let verifyButton;
                 if (store.hasDevicesToVerifyAgainst) {
                     verifyButton = (
                         <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
                             {_t("encryption|verification|verify_using_device")}
+                        </AccessibleButton>
+                    );
+                }
+
+                let useRecoveryKeyButton;
+                if (store.keyInfo) {
+                    useRecoveryKeyButton = (
+                        <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
+                            {_t("encryption|verification|verify_using_key")}
                         </AccessibleButton>
                     );
                 }
