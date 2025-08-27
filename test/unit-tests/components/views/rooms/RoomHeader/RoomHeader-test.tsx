@@ -554,7 +554,9 @@ describe("RoomHeader", () => {
         });
 
         it("join button is shown if there is an ongoing call", async () => {
-            mockRoomMembers(room, 3);
+            const members = mockRoomMembers(room, 3);
+            const participants = mockParticipants(members);
+            jest.spyOn(UseCall, "useParticipants").mockReturnValue(participants);
             jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join");
@@ -562,7 +564,9 @@ describe("RoomHeader", () => {
         });
 
         it("join button is disabled if there is an other ongoing call", async () => {
-            mockRoomMembers(room, 3);
+            const members = mockRoomMembers(room, 3);
+            const participants = mockParticipants(members);
+            jest.spyOn(UseCall, "useParticipants").mockReturnValue(participants);
             jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
             jest.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
@@ -582,7 +586,9 @@ describe("RoomHeader", () => {
         });
 
         it("close lobby button is shown if there is an ongoing call but we are viewing the lobby", async () => {
-            mockRoomMembers(room, 3);
+            const members = mockRoomMembers(room, 3);
+            const participants = mockParticipants(members);
+            jest.spyOn(UseCall, "useParticipants").mockReturnValue(participants);
             jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
@@ -792,20 +798,32 @@ describe("RoomHeader", () => {
 /**
  *
  * @param count the number of users to create
+ * @returns the created members
  */
 function mockRoomMembers(room: Room, count: number) {
     const members = Array(count)
         .fill(0)
-        .map((_, index) => ({
-            userId: `@user-${index}:example.org`,
-            name: `Member ${index}`,
-            rawDisplayName: `Member ${index}`,
-            roomId: room.roomId,
-            membership: KnownMembership.Join,
-            getAvatarUrl: () => `mxc://avatar.url/user-${index}.png`,
-            getMxcAvatarUrl: () => `mxc://avatar.url/user-${index}.png`,
-        }));
+        .map((_, index) => {
+            const userId = `@user-${index}:example.org`;
+            const member = new RoomMember(room.roomId, userId);
+            member.name = `Member ${index}`;
+            member.rawDisplayName = `Member ${index}`;
+            member.membership = KnownMembership.Join;
+            member.getAvatarUrl = () => `mxc://avatar.url/user-${index}.png`;
+            member.getMxcAvatarUrl = () => `mxc://avatar.url/user-${index}.png`;
+            return member;
+        });
 
     room.currentState.setJoinedMemberCount(members.length);
     room.getJoinedMembers = jest.fn().mockReturnValue(members);
+    return members;
+}
+
+/**
+ * Creates a participants map from room members
+ * @param members the room members to convert to participants
+ * @returns Map of participants with device sets
+ */
+function mockParticipants(members: RoomMember[]): Map<RoomMember, Set<string>> {
+    return new Map(members.map((member, index) => [member, new Set([`device${index + 1}`])]));
 }
