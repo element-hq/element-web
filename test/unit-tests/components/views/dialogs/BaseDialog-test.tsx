@@ -16,6 +16,7 @@ describe("BaseDialog", () => {
         const onFinished = jest.fn();
         render(<BaseDialog onFinished={onFinished} />);
         await userEvent.keyboard("{Escape}");
+        await userEvent.keyboard("{Escape}");
         expect(onFinished).toHaveBeenCalled();
     });
 });
