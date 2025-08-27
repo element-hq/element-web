@@ -34,6 +34,7 @@ import {
     type UserVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
+import { uniqueId } from "lodash";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -918,7 +919,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
-        const id = `mx_eventTile_${this.props.mxEvent.getId()!}`;
+        const id = uniqueId();
+
         const {
             hasRenderer,
             isBubbleMessage,
