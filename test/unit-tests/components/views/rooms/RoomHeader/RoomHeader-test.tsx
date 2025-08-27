@@ -96,9 +96,9 @@ describe("RoomHeader", () => {
         setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
         jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
         
-        // Mock CallStore.instance.getCall to return a Call object with stable participants
-        // This prevents React dependency errors without disrupting hook execution order
-        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall());
+        // Mock CallStore.instance.getCall to return null by default
+        // Individual tests can override this when they need a specific Call object
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
     });
 
     afterEach(() => {
