@@ -33,7 +33,6 @@ interface IState {
     phase?: Phase;
     verificationRequest: VerificationRequest | null;
     backupInfo: KeyBackupInfo | null;
-    lostKeys: boolean;
 }
 
 export default class SetupEncryptionBody extends React.Component<IProps, IState> {
@@ -48,7 +47,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             // Because of the latter, it lives in the state.
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
-            lostKeys: store.lostKeys(),
         };
     }
 
@@ -67,7 +65,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             phase: store.phase,
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
-            lostKeys: store.lostKeys(),
         });
     };
 
@@ -112,7 +109,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         store.returnAfterSkip();
     };
 
-    private onResetClick = (ev: ButtonEvent): void => {
+    private onCantConfirmClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         const store = SetupEncryptionStore.sharedInstance();
         Modal.createDialog(ResetIdentityDialog, {
@@ -137,7 +134,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-        const { phase, lostKeys } = this.state;
+        const { phase } = this.state;
 
         if (this.state.verificationRequest && cli.getUser(this.state.verificationRequest.otherUserId)) {
             return (
@@ -150,63 +147,49 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 />
             );
         } else if (phase === Phase.Intro) {
-            if (lostKeys) {
-                return (
-                    <div>
-                        <p>{_t("encryption|verification|no_key_or_device")}</p>
+            const store = SetupEncryptionStore.sharedInstance();
 
-                        <div className="mx_CompleteSecurity_actionRow">
-                            <AccessibleButton kind="primary" onClick={this.onResetClick}>
-                                {_t("encryption|verification|reset_proceed_prompt")}
-                            </AccessibleButton>
-                        </div>
-                    </div>
-                );
-            } else {
-                const store = SetupEncryptionStore.sharedInstance();
-
-                let verifyButton;
-                if (store.hasDevicesToVerifyAgainst) {
-                    verifyButton = (
-                        <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
-                            {_t("encryption|verification|verify_using_device")}
-                        </AccessibleButton>
-                    );
-                }
-
-                let useRecoveryKeyButton;
-                if (store.keyInfo) {
-                    useRecoveryKeyButton = (
-                        <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
-                            {_t("encryption|verification|verify_using_key")}
-                        </AccessibleButton>
-                    );
-                }
-
-                return (
-                    <EncryptionCard
-                        title={_t("encryption|verification|confirm_identity_title")}
-                        Icon={LockIcon}
-                        className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
-                    >
-                        <EncryptionCardEmphasisedContent>
-                            <span>{_t("encryption|verification|verification_description")}</span>
-                            <span>
-                                <ExternalLink href="https://element.io/help#encryption-device-verification">
-                                    {_t("action|learn_more")}
-                                </ExternalLink>
-                            </span>
-                        </EncryptionCardEmphasisedContent>
-                        <EncryptionCardButtons>
-                            {verifyButton}
-                            {useRecoveryKeyButton}
-                            <AccessibleButton kind="secondary" onClick={this.onResetClick}>
-                                {_t("encryption|verification|cant_confirm")}
-                            </AccessibleButton>
-                        </EncryptionCardButtons>
-                    </EncryptionCard>
+            let verifyButton;
+            if (store.hasDevicesToVerifyAgainst) {
+                verifyButton = (
+                    <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
+                        {_t("encryption|verification|verify_using_device")}
+                    </AccessibleButton>
                 );
             }
+
+            let useRecoveryKeyButton;
+            if (store.keyInfo) {
+                useRecoveryKeyButton = (
+                    <AccessibleButton kind="primary" onClick={this.onUsePassphraseClick}>
+                        {_t("encryption|verification|verify_using_key")}
+                    </AccessibleButton>
+                );
+            }
+
+            return (
+                <EncryptionCard
+                    title={_t("encryption|verification|confirm_identity_title")}
+                    Icon={LockIcon}
+                    className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
+                >
+                    <EncryptionCardEmphasisedContent>
+                        <span>{_t("encryption|verification|verification_description")}</span>
+                        <span>
+                            <ExternalLink href="https://element.io/help#encryption-device-verification">
+                                {_t("action|learn_more")}
+                            </ExternalLink>
+                        </span>
+                    </EncryptionCardEmphasisedContent>
+                    <EncryptionCardButtons>
+                        {verifyButton}
+                        {useRecoveryKeyButton}
+                        <AccessibleButton kind="secondary" onClick={this.onCantConfirmClick}>
+                            {_t("encryption|verification|cant_confirm")}
+                        </AccessibleButton>
+                    </EncryptionCardButtons>
+                </EncryptionCard>
+            );
         } else if (phase === Phase.Done) {
             let message: JSX.Element;
             if (this.state.backupInfo) {
