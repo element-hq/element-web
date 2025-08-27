@@ -42,10 +42,11 @@ export const useConnectionState = (call: Call | null): ConnectionState =>
     );
 
 export const useParticipants = (call: Call | null): Map<RoomMember, Set<string>> => {
+    const participants = call?.participants;
     return useTypedEventEmitterState(
         call ?? undefined,
         CallEvent.Participants,
-        useCallback((state) => state ?? call?.participants ?? new Map(), [call]),
+        useCallback((state) => state ?? participants ?? new Map(), [participants]),
     );
 };
 
