@@ -175,7 +175,7 @@ describe("SpaceWatcher", () => {
 
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
         expect(filter!["space"]).toBe(MetaSpace.Orphans);
-    })
+    });
 
     it("updates filter correctly for space -> space transition", async () => {
         await setShowAllRooms(false);
