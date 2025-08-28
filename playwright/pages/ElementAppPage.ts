@@ -70,14 +70,13 @@ export class ElementAppPage {
 
     /**
      * Opens the given room by name. The room must be visible in the
-     * room list, but the room list may be folded horizontally, and the
-     * room may contain unread messages.
+     * room list and the room may contain unread messages.
      *
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
-        // We get the room list by test-id which is a listbox and get the option by name
-        return this.page.getByTestId("room-list").getByRole("option", { name: name }).click();
+        // We get the room list by test-id which is a listbox and matching title=name
+        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
     }
 
     /**
