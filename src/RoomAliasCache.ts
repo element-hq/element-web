@@ -6,8 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-
 type CacheResult = { roomId: string; viaServers: string[] };
 
 /**
@@ -28,24 +26,4 @@ export function storeRoomAliasInCache(alias: string, roomId: string, viaServers:
 
 export function getCachedRoomIdForAlias(alias: string): CacheResult | undefined {
     return cache.get(alias);
-}
-
-export async function getOrFetchCachedRoomIdForAlias(
-    client: MatrixClient,
-    alias: string,
-): Promise<CacheResult | undefined> {
-    if (cache.has(alias)) {
-        // If we already have it cached, don't overwrite it
-        return cache.get(alias);
-    }
-
-    try {
-        const { room_id: roomId, servers: viaServers } = await client.getRoomIdForAlias(alias);
-        const result = { roomId, viaServers };
-        cache.set(alias, result);
-        return result;
-    } catch (e) {
-        console.error(`Failed to resolve room alias ${alias}`, e);
-        return undefined;
-    }
 }
