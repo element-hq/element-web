@@ -438,6 +438,7 @@ export class RoomViewStore extends EventEmitter {
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
+                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
                 });
             }
 
