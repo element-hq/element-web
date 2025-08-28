@@ -9,7 +9,7 @@ import { type NavigationApi as INavigationApi } from "@element-hq/element-web-mo
 
 import { navigateToPermalink } from "../utils/permalinks/navigator.ts";
 import { parsePermalink } from "../utils/permalinks/Permalinks.ts";
-import { getCachedRoomIDForAlias } from "../RoomAliasCache.ts";
+import { getOrFetchCachedRoomIdForAlias } from "../RoomAliasCache.ts";
 import { MatrixClientPeg } from "../MatrixClientPeg.ts";
 import dispatcher from "../dispatcher/dispatcher.ts";
 import { Action } from "../dispatcher/actions.ts";
@@ -22,14 +22,17 @@ export class NavigationApi implements INavigationApi {
         const parts = parsePermalink(link);
         if (parts?.roomIdOrAlias && join) {
             let roomId: string | undefined = parts.roomIdOrAlias;
+            let viaServers = parts.viaServers;
             if (roomId.startsWith("#")) {
-                roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);
-                if (!roomId) {
-                    // alias resolution failed
-                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(parts.roomIdOrAlias);
-                    roomId = result.room_id;
-                }
+                const result = await getOrFetchCachedRoomIdForAlias(MatrixClientPeg.safeGet(), roomId);
+                roomId = result?.roomId;
+                if (!viaServers?.length) viaServers = result?.viaServers ?? null; // use provided servers first, if available
             }
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: roomId,
+                via_servers: viaServers,
+            });
 
             if (roomId) {
                 dispatcher.dispatch({

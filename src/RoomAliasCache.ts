@@ -6,6 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+
+type CacheResult = { roomId: string; viaServers: string[] };
+
 /**
  * This is meant to be a cache of room alias to room ID so that moving between
  * rooms happens smoothly (for example using browser back / forward buttons).
@@ -16,12 +20,32 @@ Please see LICENSE files in the repository root for full details.
  * A similar thing could also be achieved via `pushState` with a state object,
  * but keeping it separate like this seems easier in case we do want to extend.
  */
-const aliasToIDMap = new Map<string, string>();
+const cache = new Map<string, CacheResult>();
 
-export function storeRoomAliasInCache(alias: string, id: string): void {
-    aliasToIDMap.set(alias, id);
+export function storeRoomAliasInCache(alias: string, roomId: string, viaServers: string[]): void {
+    cache.set(alias, { roomId, viaServers });
 }
 
-export function getCachedRoomIDForAlias(alias: string): string | undefined {
-    return aliasToIDMap.get(alias);
+export function getCachedRoomIdForAlias(alias: string): CacheResult | undefined {
+    return cache.get(alias);
+}
+
+export async function getOrFetchCachedRoomIdForAlias(
+    client: MatrixClient,
+    alias: string,
+): Promise<CacheResult | undefined> {
+    if (cache.has(alias)) {
+        // If we already have it cached, don't overwrite it
+        return cache.get(alias);
+    }
+
+    try {
+        const { room_id: roomId, servers: viaServers } = await client.getRoomIdForAlias(alias);
+        const result = { roomId, viaServers };
+        cache.set(alias, result);
+        return result;
+    } catch (e) {
+        console.error(`Failed to resolve room alias ${alias}`, e);
+        return undefined;
+    }
 }
