@@ -475,18 +475,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         window.addEventListener("resize", this.onWindowResized);
 
         // Once we start loading the MatrixClient, we can't stop, even if MatrixChat gets unmounted (as it does
-        // in React's Strict Mode). So, if this MatrixChat was previously mounted, bail out before we start loading
-        // the session.
-        if (this.sessionLoadStarted) {
-            return;
-        }
-
-        this.sessionLoadStarted = true;
-        if (!checkSessionLockFree()) {
-            // another instance holds the lock; confirm its theft before proceeding
-            setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
-        } else {
-            this.startInitSession();
+        // in React's Strict Mode). So, start loading the session now, but only if this MatrixChat was not previously
+        // mounted.
+        if (!this.sessionLoadStarted) {
+            this.sessionLoadStarted = true;
+            if (!checkSessionLockFree()) {
+                // another instance holds the lock; confirm its theft before proceeding
+                setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+            } else {
+                this.startInitSession();
+            }
         }
     }
 
