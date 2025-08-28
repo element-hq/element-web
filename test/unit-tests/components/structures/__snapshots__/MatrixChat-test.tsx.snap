@@ -388,6 +388,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
@@ -444,6 +445,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"

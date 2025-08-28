@@ -151,7 +151,7 @@ describe("CallEvent", () => {
             }),
         );
         defaultDispatcher.unregister(dispatcherRef);
-        await act(() => call.start());
+        act(() => call.setConnectionState(ConnectionState.Connected));
 
         // Test that the leave button works
         fireEvent.click(screen.getByRole("button", { name: "Leave" }));

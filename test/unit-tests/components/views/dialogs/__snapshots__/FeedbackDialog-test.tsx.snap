@@ -13,6 +13,7 @@ exports[`FeedbackDialog should respect feedback config 1`] = `
     class="mx_QuestionDialog mx_FeedbackDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
