@@ -557,7 +557,7 @@ export class RoomViewStore extends EventEmitter {
                 canAskToJoin: payload.canAskToJoin,
             });
 
-            if (payload.canAskToJoin) {
+            if (payload.canAskToJoin && err instanceof MatrixError && err.httpStatus === 403) {
                 this.dis?.dispatch({ action: Action.PromptAskToJoin });
             }
         }
