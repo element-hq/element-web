@@ -28,6 +28,21 @@ describe("<RoomListItemView />", () => {
     let defaultValue: RoomListItemViewState;
     let matrixClient: MatrixClient;
     let room: Room;
+
+    const renderRoomListItem = (props: Partial<React.ComponentProps<typeof RoomListItemView>> = {}) => {
+        const defaultProps = {
+            room,
+            isSelected: false,
+            isFocused: false,
+            onFocus: jest.fn(),
+            roomIndex: 0,
+            roomCount: 1,
+            listIsScrolling: false,
+        };
+
+        return render(<RoomListItemView {...defaultProps} {...props} />, withClientContextRenderOptions(matrixClient));
+    };
+
     beforeEach(() => {
         matrixClient = stubClient();
         room = mkRoom(matrixClient, "room1");
@@ -60,7 +75,10 @@ describe("<RoomListItemView />", () => {
 
     test("should render a room item", () => {
         const onClick = jest.fn();
-        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} isSelected={false} />);
+        const { asFragment } = renderRoomListItem({
+            onClick,
+            roomCount: 0,
+        });
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -68,15 +86,17 @@ describe("<RoomListItemView />", () => {
         defaultValue.messagePreview = "The message looks like this";
 
         const onClick = jest.fn();
-        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} isSelected={false} />);
+        const { asFragment } = renderRoomListItem({
+            onClick,
+        });
         expect(asFragment()).toMatchSnapshot();
     });
 
     test("should call openRoom when clicked", async () => {
         const user = userEvent.setup();
-        render(<RoomListItemView room={room} isSelected={false} />);
+        renderRoomListItem();
 
-        await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
+        await user.click(screen.getByRole("option", { name: `Open room ${room.name}` }));
         expect(defaultValue.openRoom).toHaveBeenCalled();
     });
 
@@ -84,8 +104,9 @@ describe("<RoomListItemView />", () => {
         mocked(useRoomListItemViewModel).mockReturnValue({ ...defaultValue, showHoverMenu: true });
 
         const user = userEvent.setup();
-        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        renderRoomListItem();
+
+        const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
         expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
 
         await user.hover(listItem);
@@ -93,19 +114,34 @@ describe("<RoomListItemView />", () => {
     });
 
     test("should hover decoration if focused", async () => {
-        const user = userEvent.setup();
-        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
-        await user.click(listItem);
-        expect(listItem).toHaveClass("mx_RoomListItemView_hover");
+        const { rerender } = renderRoomListItem({
+            isFocused: true,
+        });
 
-        await user.tab();
-        await waitFor(() => expect(listItem).not.toHaveClass("mx_RoomListItemView_hover"));
+        const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
+        expect(listItem).toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover");
+
+        rerender(
+            <RoomListItemView
+                room={room}
+                isSelected={false}
+                isFocused={false}
+                onFocus={jest.fn()}
+                roomIndex={0}
+                roomCount={1}
+                listIsScrolling={false}
+            />,
+        );
+
+        await waitFor(() => expect(listItem).not.toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover"));
     });
 
     test("should be selected if isSelected=true", async () => {
-        const { asFragment } = render(<RoomListItemView room={room} isSelected={true} />);
-        expect(screen.queryByRole("button", { name: `Open room ${room.name}` })).toHaveAttribute(
+        const { asFragment } = renderRoomListItem({
+            isSelected: true,
+        });
+
+        expect(screen.queryByRole("option", { name: `Open room ${room.name}` })).toHaveAttribute(
             "aria-selected",
             "true",
         );
@@ -118,7 +154,8 @@ describe("<RoomListItemView />", () => {
             showNotificationDecoration: true,
         });
 
-        const { asFragment } = render(<RoomListItemView room={room} isSelected={false} />);
+        const { asFragment } = renderRoomListItem();
+
         expect(screen.getByTestId("notification-decoration")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
     });
@@ -131,8 +168,9 @@ describe("<RoomListItemView />", () => {
             showNotificationDecoration: true,
         });
 
-        render(<RoomListItemView room={room} isSelected={false} />);
-        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        renderRoomListItem();
+
+        const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
         await user.hover(listItem);
 
         expect(screen.queryByRole("notification-decoration")).toBeNull();
@@ -146,12 +184,35 @@ describe("<RoomListItemView />", () => {
             showContextMenu: true,
         });
 
-        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
-        const button = screen.getByRole("button", { name: `Open room ${room.name}` });
+        renderRoomListItem();
+
+        const button = screen.getByRole("option", { name: `Open room ${room.name}` });
         await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
         await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
         // Menu should close
         await user.keyboard("{Escape}");
         expect(screen.queryByRole("menu")).toBeNull();
+    });
+
+    test("should not render context menu when list is scrolling", async () => {
+        const user = userEvent.setup();
+
+        mocked(useRoomListItemViewModel).mockReturnValue({
+            ...defaultValue,
+            showContextMenu: true,
+        });
+
+        renderRoomListItem({
+            listIsScrolling: true,
+        });
+
+        const button = screen.getByRole("option", { name: `Open room ${room.name}` });
+        await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
+
+        // Context menu should not appear when scrolling
+        expect(screen.queryByRole("menu")).toBeNull();
+
+        // But the room item itself should still be rendered
+        expect(button).toBeInTheDocument();
     });
 });

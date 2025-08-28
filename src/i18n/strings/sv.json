@@ -1366,6 +1366,10 @@
         "name_email_mxid_share_space": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>), eller <a>dela det här rummet</a>.",
         "name_mxid_share_room": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
         "name_mxid_share_space": "Bjud in någon med deras namn eller användarnamn (som <userId/>), eller <a>dela det här utrymmet</a>.",
+        "progress": {
+            "dont_close": "Stäng inte appen förrän det är klart.",
+            "preparing": "Förbereder inbjudningar …"
+        },
         "recents_section": "Senaste konversationerna",
         "room_failed_partial": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
         "room_failed_partial_title": "Vissa inbjudningar kunde inte skickas",
@@ -1763,6 +1767,7 @@
     },
     "power_level": {
         "admin": "Administratör",
+        "creator": "Ägare",
         "custom": "Anpassad (%(level)s)",
         "custom_level": "Anpassad nivå",
         "default": "Standard",
@@ -1915,6 +1920,7 @@
         "thread_list": {
             "context_menu_label": "Trådalternativ"
         },
+        "title": "Högerpanel",
         "video_room_chat": {
             "title": "Chatt"
         }

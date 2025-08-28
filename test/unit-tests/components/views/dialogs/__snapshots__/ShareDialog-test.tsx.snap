@@ -13,6 +13,7 @@ exports[`ShareDialog should not render the QR code if disabled 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -143,6 +144,7 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -229,6 +231,7 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -402,6 +405,7 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -574,6 +578,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -719,6 +724,7 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
     class="mx_ShareDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"

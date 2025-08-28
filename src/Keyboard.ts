@@ -79,3 +79,12 @@ export function isOnlyCtrlOrCmdKeyEvent(ev: React.KeyboardEvent | KeyboardEvent)
         return ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
     }
 }
+
+/**
+ * Checks if the given keyboard event is a modified key event (i.e., if any modifier keys are active).
+ * @param ev The keyboard event to check
+ * @returns True if the event is a modified key event, false otherwise
+ */
+export function isModifiedKeyEvent(ev: React.KeyboardEvent | KeyboardEvent): boolean {
+    return ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey;
+}
