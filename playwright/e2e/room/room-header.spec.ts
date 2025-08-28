@@ -13,7 +13,6 @@ import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Room Header", () => {
-    
     test.use({
         displayName: "Sakura",
         config: {

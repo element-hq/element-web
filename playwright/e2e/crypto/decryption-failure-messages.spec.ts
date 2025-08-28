@@ -143,10 +143,7 @@ test.describe("Cryptography", function () {
                 );
 
                 // Alice accepts the invite
-                await expect(
-                    page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
-                ).toHaveCount(1);
-                await page.getByRole("treeitem", { name: "Test room" }).click();
+                await page.getByRole("option", { name: "Test room" }).click();
                 await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
                 // Bob sends an encrypted event and an undecryptable event
@@ -280,10 +277,7 @@ test.describe("Cryptography", function () {
                 );
 
                 // Alice accepts the invite
-                await expect(
-                    page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
-                ).toHaveCount(1);
-                await page.getByRole("treeitem", { name: "Test room" }).click();
+                await page.getByRole("option", { name: "Test room" }).click();
                 await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
                 // wait until we're joined and see the timeline
