@@ -72,10 +72,10 @@ export class LandmarkNavigation {
 const landmarkToDomElementMap: Record<Landmark, () => HTMLElement | null | undefined> = {
     [Landmark.ACTIVE_SPACE_BUTTON]: () => document.querySelector<HTMLElement>(".mx_SpaceButton_active"),
 
-    [Landmark.ROOM_SEARCH]: () => document.querySelector<HTMLElement>(".mx_RoomSearch"),
+    [Landmark.ROOM_SEARCH]: () => document.querySelector<HTMLElement>(".mx_RoomListSearch_search"),
     [Landmark.ROOM_LIST]: () =>
-        document.querySelector<HTMLElement>(".mx_RoomTile_selected") ||
-        document.querySelector<HTMLElement>(".mx_RoomTile"),
+        document.querySelector<HTMLElement>(".mx_RoomListItemView_selected") ||
+        document.querySelector<HTMLElement>(".mx_RoomListItemView"),
 
     [Landmark.MESSAGE_COMPOSER_OR_HOME]: () => {
         const isComposerOpen = !!document.querySelector(".mx_MessageComposer");
