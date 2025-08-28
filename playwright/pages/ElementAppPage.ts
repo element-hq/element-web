@@ -76,24 +76,8 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
-        // We look for the room inside the room list, which is a tree called Rooms.
-        //
-        // There are 3 cases:
-        // - the room list is folded:
-        //     then the aria-label on the room tile is the name (with nothing extra)
-        // - the room list is unfolder and the room has messages:
-        //     then the aria-label contains the unread count, but the title of the
-        //     div inside the titleContainer equals the room name
-        // - the room list is unfolded and the room has no messages:
-        //     then the aria-label is the name and so is the title of a div
-        //
-        // So by matching EITHER title=name OR aria-label=name we find this exact
-        // room in all three cases.
-        return this.page
-            .getByRole("tree", { name: "Rooms" })
-            .locator(`[title="${name}"],[aria-label="${name}"]`)
-            .first()
-            .click();
+        // We get the room list by test-id which is a listbox and get the option by name
+        return this.page.getByTestId("room-list").getByRole("option", { name: name }).click();
     }
 
     public async viewRoomById(roomId: string): Promise<void> {
