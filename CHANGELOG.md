@@ -1,3 +1,28 @@
+Changes in [1.11.110](https://github.com/element-hq/element-web/releases/tag/v1.11.110) (2025-08-27)
+====================================================================================================
+## ✨ Features
+
+* Hide recovery key when re-entering it while creating or changing it ([#30499](https://github.com/element-hq/element-web/pull/30499)). Contributed by @andybalaam.
+* Add `?no_universal_links=true` to OIDC url so EX doesn't try to handle it ([#29439](https://github.com/element-hq/element-web/pull/29439)). Contributed by @t3chguy.
+* Show a blue lock for unencrypted rooms and hide the grey shield for encrypted rooms ([#30440](https://github.com/element-hq/element-web/pull/30440)). Contributed by @langleyd.
+* Add support for Module API 1.4 ([#30185](https://github.com/element-hq/element-web/pull/30185)). Contributed by @t3chguy.
+* MVVM - Introduce some helpers for snapshot management ([#30398](https://github.com/element-hq/element-web/pull/30398)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* A11y: move focus to right panel when opened ([#30553](https://github.com/element-hq/element-web/pull/30553)). Contributed by @florianduros.
+* Fix e2e warning icon should be white ([#30539](https://github.com/element-hq/element-web/pull/30539)). Contributed by @florianduros.
+* Remove NoOneHere disabled reason. ([#30524](https://github.com/element-hq/element-web/pull/30524)). Contributed by @toger5.
+* Fix downloading files with authenticated media API ([#30520](https://github.com/element-hq/element-web/pull/30520)). Contributed by @t3chguy.
+* Fix call permissions check confusion around element call ([#30521](https://github.com/element-hq/element-web/pull/30521)). Contributed by @t3chguy.
+* Fix line wrap around emoji verification ([#30523](https://github.com/element-hq/element-web/pull/30523)). Contributed by @t3chguy.
+* Don't highlight redacted events ([#30519](https://github.com/element-hq/element-web/pull/30519)). Contributed by @t3chguy.
+* Fix matrix.to links not being handled in the app ([#30522](https://github.com/element-hq/element-web/pull/30522)). Contributed by @t3chguy.
+* Fix issue of new room list taking up the full width ([#30459](https://github.com/element-hq/element-web/pull/30459)). Contributed by @langleyd.
+* Fix widget persistence in React development mode ([#30509](https://github.com/element-hq/element-web/pull/30509)). Contributed by @robintown.
+* Fix widget initialization in React development mode ([#30463](https://github.com/element-hq/element-web/pull/30463)). Contributed by @robintown.
+
+
 Changes in [1.11.109](https://github.com/element-hq/element-web/releases/tag/v1.11.109) (2025-08-11)
 ====================================================================================================
 This release supports the upcoming v12 ("hydra") Matrix room version and is necessary to view and participate in these rooms.
