@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "@sentry/browser";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import React, { type ReactNode } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../../languageHandler";
@@ -29,7 +30,7 @@ export interface BanButtonState {
 }
 /**
  * The view model for the room ban button used in the UserInfoAdminToolsContainer
- * @param {RoomAdminToolsProps} props - the object containing the necceray props for banButton the view model
+ * @param {RoomAdminToolsProps} props - the object containing the necessary props for banButton the view model
  * @param {Room} props.room - the room to ban/unban the user in
  * @param {RoomMember} props.member - the member to ban/unban
  * @param {boolean} props.isUpdating - whether the operation is currently in progress
@@ -67,7 +68,14 @@ export const useBanButtonViewModel = (props: RoomAdminToolsProps): BanButtonStat
                 : _t("user_info|ban_room_confirm_title", { roomName: room.name }),
             askReason: !isBanned,
             danger: !isBanned,
+            children: [] as ReactNode,
         };
+
+        const msc4333Config = cli.msc4333Moderation.getModerationConfigFor(props.room.roomId);
+        if (msc4333Config) {
+            commonProps["children"] = [<p key={1}>Test</p>];
+        }
+        console.log(msc4333Config);
 
         let finished: Promise<[success?: boolean, reason?: string, rooms?: Room[]]>;
 
