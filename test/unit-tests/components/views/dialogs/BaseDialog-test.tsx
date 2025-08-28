@@ -21,7 +21,6 @@ describe("BaseDialog", () => {
         const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
         dialog?.focus();
         await userEvent.keyboard("{Escape}");
-        await userEvent.keyboard("{Escape}");
         expect(onFinished).toHaveBeenCalled();
     });
 });
