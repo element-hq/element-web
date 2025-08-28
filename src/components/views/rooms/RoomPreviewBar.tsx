@@ -559,7 +559,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                         />
                     );
                 }
-                inviteContext = <RoomPreviewContext inviterMember={inviteMember} />
+                inviteContext = <RoomPreviewContext inviterMember={inviteMember} />;
 
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("action|decline");
