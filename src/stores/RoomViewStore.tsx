@@ -517,12 +517,13 @@ export class RoomViewStore extends EventEmitter {
             joining: true,
         });
 
-        // take a copy of roomAlias & roomId as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId } = this.state;
+        // take a copy of roomAlias, roomId & viaServers as they may change by the time the join is complete
+        const { roomAlias, roomId = payload.roomId, viaServers = [] } = this.state;
+        // prefer the room alias if we have one as it allows joining over federation even with no viaServers
         const address = roomAlias || roomId!;
 
         const joinOpts: IJoinRoomOpts = {
-            viaServers: this.state.viaServers || [],
+            viaServers,
             ...(payload.opts ?? {}),
         };
         if (SettingsStore.getValue("feature_share_history_on_invite")) {
