@@ -21,6 +21,15 @@ jobs:
               env:
                   IMAGE: ghcr.io/element-hq/synapse:develop
 
+            - name: Update MAS image
+              run: |
+                  docker pull "$IMAGE"
+                  INSPECT=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")
+                  DIGEST=${INSPECT#*@}
+                  sed -i "s/const TAG.*/const TAG = \"main@$DIGEST\";/" playwright/testcontainers/mas.ts
+              env:
+                  IMAGE: ghcr.io/element-hq/matrix-authentication-service:main
+
             - name: Create Pull Request
               id: cpr
               uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7

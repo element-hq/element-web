@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Du har ikke tillatelse til å starte avstemninger i dette rommet.",
         "poll_button_no_perms_title": "Tillatelse kreves",
         "replying_title": "Svarer på",
+        "room_unencrypted": "Meldinger i dette rommet er ikke ende-til-ende krypterte",
         "room_upgraded_link": "Samtalen fortsetter her.",
         "room_upgraded_notice": "Dette rommet har blitt erstattet og er ikke lenger aktivt.",
         "send_button_title": "Send melding",
@@ -1366,6 +1367,10 @@
         "name_email_mxid_share_space": "Inviter noen ved å bruke navn, e-postadresse, brukernavn (lik <userId/>) eller <a> del dette området</a>.",
         "name_mxid_share_room": "Inviter noen ved å bruke navnet, brukernavnet (som <userId/>) eller <a>del dette rommet</a>.",
         "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt, brukernavnet (lik <userId/>) eller <a> dele dette området</a>.",
+        "progress": {
+            "dont_close": "Ikke lukk appen før den er ferdig.",
+            "preparing": "Forbereder invitasjoner..."
+        },
         "recents_section": "Nylige samtaler",
         "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
         "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",

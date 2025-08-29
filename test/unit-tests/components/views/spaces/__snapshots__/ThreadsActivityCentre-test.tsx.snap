@@ -4,7 +4,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 <div
   aria-labelledby="radix-«r2f»"
   aria-orientation="vertical"
-  class="_menu_19sse_8"
+  class="_menu_1glhz_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -17,7 +17,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
     id="«r2n»"
   >
     Threads activity
@@ -230,7 +230,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     <div
       aria-labelledby="radix-«ro»"
       aria-orientation="vertical"
-      class="_menu_19sse_8"
+      class="_menu_1glhz_8"
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
@@ -243,7 +243,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
       tabindex="-1"
     >
       <h3
-        class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
+        class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
         id="«r10»"
       >
         Threads activity
@@ -273,7 +273,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
   aria-labelledby="radix-«r33»"
   aria-orientation="vertical"
-  class="_menu_19sse_8"
+  class="_menu_1glhz_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -286,7 +286,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
     id="«r3b»"
   >
     Threads activity
@@ -307,7 +307,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
 <div
   aria-labelledby="radix-«r3c»"
   aria-orientation="vertical"
-  class="_menu_19sse_8"
+  class="_menu_1glhz_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -320,7 +320,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
     id="«r3k»"
   >
     Threads activity

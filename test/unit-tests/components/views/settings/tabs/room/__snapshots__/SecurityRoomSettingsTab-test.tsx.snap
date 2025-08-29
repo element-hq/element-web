@@ -117,6 +117,7 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
   class="mx_ErrorDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
@@ -159,6 +160,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
