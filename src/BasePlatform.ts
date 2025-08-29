@@ -514,10 +514,7 @@ export default abstract class BasePlatform {
      * Platforms that support session locking should override this method.
      * @returns {Promise<boolean>} True if the session is lock-free, false otherwise.
      */
-    public async checkSessionLockFree(): Promise<boolean> {
-        return false;
-    }
-
+    public abstract checkSessionLockFree(): Promise<boolean>;
     /**
      * Attempts to acquire a session lock for this instance.
      * If another instance is detected, calls the provided callback.
@@ -525,7 +522,5 @@ export default abstract class BasePlatform {
      * @param _onNewInstance Callback to invoke if a new instance is detected.
      * @returns {Promise<boolean>} True if the lock was acquired, false otherwise.
      */
-    public async getSessionLock(_onNewInstance: () => Promise<void>): Promise<boolean> {
-        return false;
-    }
+    public abstract getSessionLock(_onNewInstance: () => Promise<void>): Promise<boolean>;
 }
