@@ -422,8 +422,8 @@ describe("RoomViewStore", function () {
     });
 
     describe("Action.JoinRoom", () => {
-        it("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails", async () => {
-            const err = new MatrixError();
+        it("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails with 403", async () => {
+            const err = new MatrixError({}, 403);
 
             jest.spyOn(dis, "dispatch");
             jest.spyOn(mockClient, "joinRoom").mockRejectedValueOnce(err);
