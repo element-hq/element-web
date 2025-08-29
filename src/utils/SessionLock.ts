@@ -69,12 +69,6 @@ export const SESSION_LOCK_CONSTANTS = {
  * @returns true if any instance is currently active
  */
 export function checkSessionLockFree(): boolean {
-    // Element Desktop uses single instance locks, so we are guaranteed to be the only instance running.
-    if (window.electron) {
-        logger.log("Session lock disabled - running in Electron.");
-        return true;
-    }
-
     const prefixedLogger = logger.getChild(`checkSessionLockFree`);
 
     const lastPingTime = window.localStorage.getItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_PING);
@@ -117,12 +111,6 @@ export function checkSessionLockFree(): boolean {
  *     (in which `onNewInstance` will have been called)
  */
 export async function getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
-    // Element Desktop uses single instance locks, so we are guaranteed to be the only instance running.
-    if (window.electron) {
-        logger.log("Session lock disabled - running in Electron.");
-        return true;
-    }
-
     /** unique ID for this session */
     const sessionIdentifier = uuidv4();
 
