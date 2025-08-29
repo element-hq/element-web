@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-import { type MatrixClient, RoomMember, type Room, type User, type Device } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type RoomMember, type Room, type User, type Device } from "matrix-js-sdk/src/matrix";
 import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import Modal from "../../../Modal";
@@ -20,7 +20,6 @@ import { type ButtonEvent } from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -105,16 +104,6 @@ export const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsConte
     return member.powerLevel < levelToSend;
 };
 
-const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
-    return useAsyncMemo<boolean>(
-        async () => {
-            return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
-        },
-        [cli],
-        false,
-    );
-};
-
 export interface IRoomPermissions {
     modifyLevelMax: number;
     canEdit: boolean;
@@ -196,13 +185,6 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
 
     return devices;
 };
-
-function useHasCrossSigningKeys(cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined {
-    return useAsyncMemo(async () => {
-        if (!canVerify) return undefined;
-        return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
-    }, [cli, member, canVerify]);
-}
 
 export type Member = User | RoomMember;
 

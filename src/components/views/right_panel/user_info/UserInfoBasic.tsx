@@ -50,7 +50,7 @@ export const UserInfoBasic: React.FC<{
 
     if (room && (member as RoomMember).roomId) {
         // hide the Roles section for DMs as it doesn't make sense there
-        if (vm.isRoomDMForMember) {
+        if (!vm.isRoomDMForMember) {
             memberDetails = (
                 <PowerLevelSection user={member as RoomMember} room={room} roomPermissions={vm.roomPermissions} />
             );

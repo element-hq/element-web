@@ -13,12 +13,11 @@ import { BlockIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { _t } from "../../../../languageHandler";
 import { useUserInfoIgnoreButtonViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoIgnoreButtonViewModel";
 
-
 export const IgnoreToggleButton: React.FC<{
     member: User | RoomMember;
 }> = ({ member }) => {
     const vm = useUserInfoIgnoreButtonViewModel(member);
-    
+
     return (
         <MenuItem
             role="button"

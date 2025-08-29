@@ -5,88 +5,108 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { act } from "react";
-import userEvent from "@testing-library/user-event";
-import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { type Mocked, mocked } from "jest-mock";
-import { type MatrixClient, type Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
-import { render, screen } from "jest-matrix-react";
+import React from "react";
+import { mocked } from "jest-mock";
+import { type MatrixClient, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { logRoles, render, screen } from "jest-matrix-react";
 
-import { ShareDialog } from "../../../../../../src/components/views/dialogs/ShareDialog";
+import { createTestClient, mkStubRoom } from "../../../../../test-utils";
+import {
+    type UserInfoBasicState,
+    useUserInfoBasicViewModel,
+} from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
+import { UserInfoBasic } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasic";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { Action } from "../../../../../../src/dispatcher/actions";
-import Modal from "../../../../../../src/Modal";
-import { startDmOnFirstMessage, DirectoryMember } from "../../../../../../src/utils/direct-messages";
-import MultiInviter from "../../../../../../src/utils/MultiInviter";
-import { clearAllModals, flushPromises } from "../../../../../test-utils";
-import { UserOptionsSection } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasic";
-import dis from "../../../../../../src/dispatcher/dispatcher";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 
-jest.mock("../../../../../src/dispatcher/dispatcher");
+const defaultRoomPermissions = {
+    canEdit: true,
+    canInvite: true,
+    modifyLevelMax: -1,
+};
+jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel", () => ({
+    useUserInfoBasicViewModel: jest.fn(),
+    useRoomPermissions: () => defaultRoomPermissions,
+}));
 
-const defaultRoomId = "!fkfk";
-const defaultUserId = "@user:example.com";
-const defaultUser = new User(defaultUserId);
+describe("<UserInfoBasic />", () => {
+    const defaultValue: UserInfoBasicState = {
+        powerLevels: {},
+        roomPermissions: defaultRoomPermissions,
+        pendingUpdateCount: 0,
+        isMe: false,
+        isRoomDMForMember: false,
+        showDeactivateButton: true,
+        onSynapseDeactivate: jest.fn(),
+        startUpdating: jest.fn(),
+        stopUpdating: jest.fn(),
+    };
 
-let mockRoom: Mocked<Room>;
-let mockClient: Mocked<MatrixClient>;
-let mockCrypto: Mocked<CryptoApi>;
+    const defaultRoomId = "!fkfk";
+    const defaultUserId = "@user:example.com";
 
-beforeEach(() => {
-    mockRoom = mocked({
-        roomId: defaultRoomId,
-        getType: jest.fn().mockReturnValue(undefined),
-        isSpaceRoom: jest.fn().mockReturnValue(false),
-        getMember: jest.fn().mockReturnValue(undefined),
-        getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
-        name: "test room",
-        on: jest.fn(),
-        off: jest.fn(),
-        currentState: {
-            getStateEvents: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-        },
-        getEventReadUpTo: jest.fn(),
-    } as unknown as Room);
+    const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
+    let defaultRoom: Room;
 
-    mockCrypto = mocked({
-        getDeviceVerificationStatus: jest.fn(),
-        getUserDeviceInfo: jest.fn(),
-        userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
-        getUserVerificationStatus: jest.fn(),
-        isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-    } as unknown as CryptoApi);
+    let defaultProps: { member: User | RoomMember; room: Room };
+    let matrixClient: MatrixClient;
 
-    mockClient = mocked({
-        getUser: jest.fn(),
-        isGuest: jest.fn().mockReturnValue(false),
-        isUserIgnored: jest.fn(),
-        getIgnoredUsers: jest.fn(),
-        setIgnoredUsers: jest.fn(),
-        getUserId: jest.fn(),
-        getSafeUserId: jest.fn(),
-        getDomain: jest.fn(),
-        on: jest.fn(),
-        off: jest.fn(),
-        isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-        doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-        doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-        getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
-        mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-        removeListener: jest.fn(),
-        currentState: {
-            on: jest.fn(),
-        },
-        getRoom: jest.fn(),
-        credentials: {},
-        setPowerLevel: jest.fn(),
-        getCrypto: jest.fn().mockReturnValue(mockCrypto),
-    } as unknown as MatrixClient);
+    const renderComponent = (props = defaultProps) => {
+        return render(
+            <MatrixClientContext.Provider value={matrixClient}>
+                <UserInfoBasic {...props} />
+            </MatrixClientContext.Provider>,
+        );
+    };
+    beforeEach(() => {
+        matrixClient = createTestClient();
+        defaultRoom = mkStubRoom(defaultRoomId, defaultRoomId, matrixClient);
+        defaultProps = {
+            member: defaultMember,
+            room: defaultRoom,
+        };
+    });
 
-    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-    jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+    it("should display the defaut values", () => {
+        mocked(useUserInfoBasicViewModel).mockReturnValue(defaultValue);
+        const { container } = renderComponent();
+        logRoles(container);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should not show ignore button if user is me", () => {
+        const state: UserInfoBasicState = { ...defaultValue, isMe: true };
+        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        renderComponent();
+
+        const ignoreButton = screen.queryByRole("button", { name: "Ignore" });
+        expect(ignoreButton).not.toBeInTheDocument();
+    });
+
+    it("should not show deactivate button", () => {
+        const state: UserInfoBasicState = { ...defaultValue, showDeactivateButton: false };
+        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        renderComponent();
+
+        const deactivateButton = screen.queryByRole("button", { name: "Deactivate user" });
+        expect(deactivateButton).not.toBeInTheDocument();
+    });
+
+    it("should not show powerlevels selector for dm", () => {
+        const state: UserInfoBasicState = { ...defaultValue, isRoomDMForMember: true };
+        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        const { container } = renderComponent();
+
+        logRoles(container);
+        const powserlevel = screen.queryByRole("option", { name: "Default" });
+        expect(powserlevel).not.toBeInTheDocument();
+    });
+
+    it("should show spinner if pending update is > 0", () => {
+        const state: UserInfoBasicState = { ...defaultValue, pendingUpdateCount: 2 };
+        mocked(useUserInfoBasicViewModel).mockReturnValue(state);
+        renderComponent();
+
+        const spinner = screen.getByTestId("spinner");
+        expect(spinner).toBeInTheDocument();
+    });
 });
-
-describe("<UserInfoBasic />", () => {});

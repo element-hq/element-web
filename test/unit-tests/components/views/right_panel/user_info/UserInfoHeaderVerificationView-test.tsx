@@ -12,10 +12,10 @@ import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, waitFor, screen } from "jest-matrix-react";
 import React from "react";
 
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { UserInfoHeaderVerificationView } from "../../../../../src/components/views/right_panel/user_info/UserInfoHeaderVerificationView";
-import { createTestClient } from "../../../../test-utils";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { UserInfoHeaderVerificationView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderVerificationView";
+import { createTestClient } from "../../../../../test-utils";
 
 describe("<UserInfoHeaderVerificationView />", () => {
     const defaultRoomId = "!fkfk";

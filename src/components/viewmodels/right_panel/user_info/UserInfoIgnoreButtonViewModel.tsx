@@ -13,14 +13,12 @@ import Modal from "../../../../Modal";
 import QuestionDialog from "../../../views/dialogs/QuestionDialog";
 import { useTypedEventEmitter } from "../../../../hooks/useEventEmitter";
 
-
 export interface UserInfoPowerLevelState {
     ignoreButtonClick: (ev: Event) => void;
     isIgnored: boolean;
 }
 
 export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): UserInfoPowerLevelState => {
-
     const cli = useContext(MatrixClientContext);
 
     const unignore = useCallback(() => {
@@ -71,7 +69,7 @@ export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): Use
         } else {
             ignore();
         }
-    }
+    };
 
     return {
         ignoreButtonClick,

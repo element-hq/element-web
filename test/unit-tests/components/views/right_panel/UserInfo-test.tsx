@@ -20,22 +20,16 @@ import {
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
 
-import UserInfo, {
-    disambiguateDevices,
-    getPowerLevels
-} from "../../../../../src/components/views/right_panel/UserInfo";
+import UserInfo, { disambiguateDevices } from "../../../../../src/components/views/right_panel/UserInfo";
+import { getPowerLevels } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import MultiInviter from "../../../../../src/utils/MultiInviter";
 import Modal from "../../../../../src/Modal";
-import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
 import { clearAllModals, flushPromises } from "../../../../test-utils";
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 
 jest.mock("../../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../../src/utils/direct-messages"),
@@ -436,7 +430,6 @@ describe("<UserInfo />", () => {
         });
     });
 });
-
 
 describe("disambiguateDevices", () => {
     it("does not add ambiguous key to unique names", () => {

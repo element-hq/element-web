@@ -24,13 +24,20 @@ import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPa
 import { useRoomPermissions } from "./UserInfoBasicViewModel";
 
 export interface UserInfoBasicOptionsState {
+    // boolean to display/hide invite button
     showInviteButton: boolean;
+    // boolean to display/hide insert pill button
     showInsertPillButton: boolean | "";
+    // boolean to display/hide read receipt button
     readReceiptButtonDisabled: boolean;
+    // Method called when a insert pill button is clicked
     onInsertPillButton: () => void;
+    // Method called when a read receipt button is clicked
     onReadReceiptButton: () => void;
+    // Method called when a share user button is clicked
     onShareUserClick: () => void;
-    onInviteUserButton: (evt: Event) => void;
+    // Method called when a invite button is clicked
+    onInviteUserButton: (evt: Event) => Promise<void>;
 }
 
 export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMember): UserInfoBasicOptionsState => {
@@ -41,14 +48,18 @@ export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMe
             ? member.roomId
             : SdkContextClass.instance.roomViewStore.getRoomId();
 
+    // Those permissions are updated when a change is done on the room current state and the selected user
     const roomPermissions = useRoomPermissions(cli, room, member as RoomMember);
 
     const isSpace = room?.isSpaceRoom();
 
+    // read receipt button stay disable for a room space or if all events where read (null)
     const readReceiptButtonDisabled = isSpace || !room?.getEventReadUpTo(member.userId);
 
+    // always show exempt when room is a space
     const showInsertPillButton = member instanceof RoomMember && member.roomId && !isSpace;
 
+    // show invite button only if current user has the permission to invite and the selected user membership is LEAVE
     const showInviteButton =
         member instanceof RoomMember &&
         roomPermissions.canInvite &&

@@ -12,14 +12,14 @@ import { Device, RoomMember } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import React from "react";
 
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { UserInfoHeaderView } from "../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
-import { createTestClient } from "../../../../test-utils";
-import { useUserfoHeaderViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { UserInfoHeaderView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
+import { createTestClient } from "../../../../../test-utils";
+import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 
 // Mock the viewmodel hooks
-jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
+jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
     useUserfoHeaderViewModel: jest.fn().mockReturnValue({
         onMemberAvatarClick: jest.fn(),
         precenseInfo: {

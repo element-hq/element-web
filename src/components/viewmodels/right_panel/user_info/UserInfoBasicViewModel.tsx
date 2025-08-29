@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     EventType,
     type RoomMember,
@@ -24,17 +24,24 @@ import Modal from "../../../../Modal";
 import ErrorDialog from "../../../views/dialogs/ErrorDialog";
 import { _t } from "../../../../languageHandler";
 import { type IRoomPermissions } from "../../../views/right_panel/UserInfo";
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import QuestionDialog from "../../../views/dialogs/QuestionDialog";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 
 export interface UserInfoBasicState {
+    // current room powerlevels
     powerLevels: IPowerLevelsContent;
+    // getting user permissions in this room
     roomPermissions: IRoomPermissions;
+    // numbers of operation in progress > 0
     pendingUpdateCount: number;
+    // true if user is me
     isMe: boolean;
+    // true if room is a DM for the user
     isRoomDMForMember: boolean;
+    // Boolean to hide or show the deactivate button
     showDeactivateButton: boolean;
+    // Method called when a deactivate user action is triggered
     onSynapseDeactivate: () => void;
     startUpdating: () => void;
     stopUpdating: () => void;
@@ -119,7 +126,7 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room): IPowerLevelsC
 };
 
 export const useUserInfoBasicViewModel = (room: Room, member: User | RoomMember): UserInfoBasicState => {
-    const cli = useContext(MatrixClientContext);
+    const cli = useMatrixClientContext();
 
     const powerLevels = useRoomPowerLevels(cli, room);
     // Load whether or not we are a Synapse Admin
@@ -133,8 +140,8 @@ export const useUserInfoBasicViewModel = (room: Room, member: User | RoomMember)
     // selected member is current user
     const isMe = member.userId === cli.getUserId();
 
-    // hide the Roles section for DMs as it doesn't make sense there
-    const isRoomDMForMember = !DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId);
+    // is needed to hide the Roles section for DMs as it doesn't make sense there
+    const isRoomDMForMember = !!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId);
 
     // used to check if user can deactivate another member
     const isMemberSameDomain = member.userId.endsWith(`:${cli.getDomain()}`);
