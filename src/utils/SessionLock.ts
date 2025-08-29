@@ -63,9 +63,6 @@ export const SESSION_LOCK_CONSTANTS = {
 /**
  * See if any instances are currently running
  *
- * If called while running in an Electron instance, the session lock is bypassed entirely and this method will always
- * return true.
- *
  * @returns true if any instance is currently active
  */
 export function checkSessionLockFree(): boolean {
@@ -101,8 +98,6 @@ export function checkSessionLockFree(): boolean {
  *
  * Once we are the sole instance, sets a background job going to service a lock. Then, if another instance starts up,
  * `onNewInstance` is called: it should shut the app down to make sure we aren't doing any more work.
- *
- * If called while running in an Electron instance, the session lock is bypassed entirely.
  *
  * @param onNewInstance - callback to handle another instance starting up. NOTE: this may be called before
  *     `getSessionLock` returns if the lock is stolen before we get a chance to start.
