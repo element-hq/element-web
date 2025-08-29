@@ -130,7 +130,6 @@ import { NotificationLevel } from "../../stores/notifications/NotificationLevel"
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
-import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
@@ -314,7 +313,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private async initSession(): Promise<void> {
         // The Rust Crypto SDK will break if two Element instances try to use the same datastore at once, so
         // make sure we are the only Element instance in town (on this browser/domain).
-        if (!(await getSessionLock(() => this.onSessionLockStolen()))) {
+        if (!(await PlatformPeg.get()?.getSessionLock(() => this.onSessionLockStolen()))) {
             // we failed to get the lock. onSessionLockStolen should already have been called, so nothing left to do.
             return;
         }
@@ -479,7 +478,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // mounted.
         if (!this.sessionLoadStarted) {
             this.sessionLoadStarted = true;
-            if (!checkSessionLockFree()) {
+            if (!PlatformPeg.get()?.checkSessionLockFree()) {
                 // another instance holds the lock; confirm its theft before proceeding
                 setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
             } else {
