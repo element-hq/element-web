@@ -43,6 +43,7 @@ import { type IApp } from "../../../src/utils/WidgetUtils-types";
 import { CallStore } from "../../../src/stores/CallStore";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
+import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
 
 jest.mock("../../../src/Modal");
 
@@ -208,6 +209,22 @@ describe("RoomViewStore", function () {
         dis.dispatch({ action: Action.JoinRoom });
         await untilDispatch(Action.JoinRoomReady, dis);
         expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { viaServers: [] });
+        expect(roomViewStore.isJoining()).toBe(true);
+    });
+
+    it("can be used to view a room by alias with auto_join", async () => {
+        const alias = "#alias12345:server";
+        storeRoomAliasInCache(alias, roomId, ["server1"]);
+        dis.dispatch({ action: Action.ViewRoom, room_alias: alias, auto_join: true }, true);
+        await expect(untilDispatch(Action.ViewRoom, dis)).resolves.toEqual(
+            expect.objectContaining({
+                action: Action.ViewRoom,
+                room_id: roomId,
+                auto_join: true,
+            }),
+        );
+        await untilDispatch(Action.JoinRoomReady, dis);
+        expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { viaServers: ["server1"] });
         expect(roomViewStore.isJoining()).toBe(true);
     });
 
