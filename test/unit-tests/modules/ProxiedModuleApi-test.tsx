@@ -24,6 +24,7 @@ import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import * as navigator from "../../../src/utils/permalinks/navigator.ts";
 
 describe("ProxiedApiModule", () => {
     afterEach(() => {
@@ -359,6 +360,32 @@ describe("ProxiedApiModule", () => {
 
             api.moveAppToContainer(app, Container.Top, roomId);
             expect(WidgetLayoutStore.instance.moveToContainer).toHaveBeenCalledWith(room, app, Container.Top);
+        });
+    });
+
+    describe("navigatePermalink", () => {
+        const api = new ProxiedModuleApi();
+
+        it("should call navigateToPermalink with the correct parameters", async () => {
+            const link = "https://matrix.to/#/!roomId:server.com";
+            const spy = jest.spyOn(navigator, "navigateToPermalink");
+
+            await api.navigatePermalink(link);
+            expect(spy).toHaveBeenCalledWith(link);
+        });
+
+        it("should set auto_join to true when join=true", async () => {
+            const link = "https://matrix.to/#/#alias:server.com";
+            const spy = jest.spyOn(defaultDispatcher, "dispatch");
+
+            await api.navigatePermalink(link, true);
+            expect(spy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_alias: "#alias:server.com",
+                    auto_join: true,
+                }),
+            );
         });
     });
 });
