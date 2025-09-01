@@ -11,6 +11,7 @@ import MatrixClientBackedController from "./MatrixClientBackedController";
 import { type WatchManager } from "../WatchManager";
 import SettingsStore from "../SettingsStore";
 import { type SettingKey } from "../Settings.tsx";
+import { _t, type TranslationKey } from "../../languageHandler.tsx";
 
 /**
  * Disables a given setting if the server unstable feature it requires is not supported
@@ -33,7 +34,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         private readonly watchers: WatchManager,
         private readonly unstableFeatureGroups: string[][],
         private readonly stableVersion?: string,
-        private readonly disabledMessage?: string,
+        private readonly disabledMessage?: TranslationKey,
         private readonly forcedValue: any = false,
     ) {
         super();
@@ -96,7 +97,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
 
     public get settingDisabled(): boolean | string {
         if (this.disabled) {
-            return this.disabledMessage ?? true;
+            return this.disabledMessage ? _t(this.disabledMessage) : true;
         }
         return false;
     }
