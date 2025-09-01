@@ -35,10 +35,11 @@ jest.mock("matrix-encrypt-attachment", () => ({
 }));
 
 describe("<MImageBody/>", () => {
-    const userId = "@user:server";
+    const ourUserId = "@user:server";
+    const senderUserId = "@other_use:server";
     const deviceId = "DEADB33F";
     const cli = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
+        ...mockClientMethodsUser(ourUserId),
         ...mockClientMethodsServer(),
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
@@ -62,7 +63,7 @@ describe("<MImageBody/>", () => {
     const encryptedMediaEvent = new MatrixEvent({
         event_id: "$foo:bar",
         room_id: "!room:server",
-        sender: userId,
+        sender: senderUserId,
         type: EventType.RoomMessage,
         content: {
             body: "alt for a test image",
@@ -201,7 +202,7 @@ describe("<MImageBody/>", () => {
 
         const event = new MatrixEvent({
             room_id: "!room:server",
-            sender: userId,
+            sender: senderUserId,
             type: EventType.RoomMessage,
             content: {
                 body: "alt for a test image",
@@ -254,7 +255,7 @@ describe("<MImageBody/>", () => {
 
         const event = new MatrixEvent({
             room_id: "!room:server",
-            sender: userId,
+            sender: senderUserId,
             type: EventType.RoomMessage,
             content: {
                 body: "alt for a test image",
@@ -281,7 +282,7 @@ describe("<MImageBody/>", () => {
     it("should show banner on hover", async () => {
         const event = new MatrixEvent({
             room_id: "!room:server",
-            sender: userId,
+            sender: senderUserId,
             type: EventType.RoomMessage,
             content: {
                 body: "alt for a test image",

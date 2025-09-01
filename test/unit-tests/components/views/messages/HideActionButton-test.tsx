@@ -74,13 +74,6 @@ describe("HideActionButton", () => {
         render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
         expect(screen.queryByRole("button")).toBeNull();
     });
-    it("should hide button when event is not hideable", async () => {
-        mockSetting(MediaPreviewValue.Off, {});
-        // Make it so that the event comes from us, and therefore is always visible and never hideable.
-        cli.getUserId.mockReturnValue(event.getSender()!);
-        render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
-        expect(screen.queryByRole("button")).toBeNull();
-    });
     it("should store event as hidden when clicked", async () => {
         const spy = jest.spyOn(SettingsStore, "setValue");
         render(<HideActionButton mxEvent={event} />, withClientContextRenderOptions(cli));
