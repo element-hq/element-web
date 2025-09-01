@@ -124,6 +124,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomName).raw,
+            );
+            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
@@ -141,11 +144,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
             const clientDeviceId = MatrixClientPeg.safeGet().getDeviceId();
             if (clientDeviceId !== null) {
                 // For the session membership type compliant with MSC4143
+                // Note MSC4143 still uses the org.matrix.msc3401 unstable prefix
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
                         "org.matrix.msc3401.call.member",
                         `_${clientUserId}_${clientDeviceId}`,
+                    ).raw,
+                );
+                this.allowedCapabilities.add(
+                    WidgetEventCapability.forStateEvent(
+                        EventDirection.Send,
+                        "org.matrix.msc3401.call.member",
+                        `_${clientUserId}_${clientDeviceId}_m.call`,
                     ).raw,
                 );
                 // Version with no leading underscore, for room versions whose auth rules allow it
@@ -154,6 +165,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         EventDirection.Send,
                         "org.matrix.msc3401.call.member",
                         `${clientUserId}_${clientDeviceId}`,
+                    ).raw,
+                );
+                this.allowedCapabilities.add(
+                    WidgetEventCapability.forStateEvent(
+                        EventDirection.Send,
+                        "org.matrix.msc3401.call.member",
+                        `${clientUserId}_${clientDeviceId}_m.call`,
                     ).raw,
                 );
             }
@@ -165,6 +183,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
+            const sendRoomEvents = [EventType.CallNotify, EventType.RTCNotification];
             const sendRecvRoomEvents = [
                 "io.element.call.encryption_keys",
                 "org.matrix.rageshake_request",
@@ -172,10 +191,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 EventType.RoomRedaction,
                 "io.element.call.reaction",
             ];
-            for (const eventType of sendRecvRoomEvents) {
+            for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
+            for (const eventType of sendRecvRoomEvents)
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
-            }
 
             const sendRecvToDevice = [
                 EventType.CallInvite,
@@ -498,9 +517,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (results.length >= limit) break;
             if (since !== undefined && ev.getId() === since) break;
 
-            if (ev.getType() !== eventType || ev.isState()) continue;
+            if (ev.getType() !== eventType) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (ev.getStateKey() !== undefined && stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
             results.push(ev);
         }
 
@@ -557,19 +576,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
+        const { finished } = Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
-
-            onFinished: async (confirm): Promise<void> => {
-                if (!confirm) {
-                    return observer.update({ state: OpenIDRequestState.Blocked });
-                }
-
-                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
-            },
         });
+        const [confirm] = await finished;
+        if (!confirm) {
+            observer.update({ state: OpenIDRequestState.Blocked });
+        } else {
+            observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
+        }
     }
 
     public async navigate(uri: string): Promise<void> {

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent } from "react";
+import React from "react";
 import { type Room, type RoomState, RoomStateEvent, RoomMember, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
@@ -15,7 +15,7 @@ import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
+import RoomSummaryCardView from "../views/right_panel/RoomSummaryCardView";
 import WidgetCard from "../views/right_panel/WidgetCard";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
@@ -34,6 +34,7 @@ import { Action } from "../../dispatcher/actions";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import { _t } from "../../languageHandler";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -49,8 +50,9 @@ interface RoomlessProps extends BaseProps {
 interface RoomProps extends BaseProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
+    searchTerm?: string;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -63,6 +65,7 @@ interface IState {
 export default class RightPanel extends React.Component<Props, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
+    private ref = React.createRef<HTMLDivElement>();
 
     public constructor(props: Props) {
         super(props);
@@ -81,6 +84,7 @@ export default class RightPanel extends React.Component<Props, IState> {
     public componentDidMount(): void {
         this.context.on(RoomStateEvent.Members, this.onRoomStateMember);
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.ref.current?.focus();
     }
 
     public componentWillUnmount(): void {
@@ -118,7 +122,13 @@ export default class RightPanel extends React.Component<Props, IState> {
     };
 
     private onRightPanelStoreUpdate = (): void => {
-        this.setState({ ...(RightPanel.getDerivedStateFromProps(this.props) as IState) });
+        const oldPhase = this.state.phase;
+        const newState = RightPanel.getDerivedStateFromProps(this.props) as IState;
+        this.setState({ ...newState });
+
+        if (oldPhase !== newState.phase) {
+            this.ref.current?.focus();
+        }
     };
 
     private onClose = (): void => {
@@ -254,12 +264,13 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.RoomSummary:
                 if (!!this.props.room) {
                     card = (
-                        <RoomSummaryCard
+                        <RoomSummaryCardView
                             room={this.props.room}
                             // whenever RightPanel is passed a room it is passed a permalinkcreator
                             permalinkCreator={this.props.permalinkCreator!}
                             onSearchChange={this.props.onSearchChange}
                             onSearchCancel={this.props.onSearchCancel}
+                            searchTerm={this.props.searchTerm}
                             focusRoomSearch={cardState?.focusRoomSearch}
                         />
                     );
@@ -280,7 +291,14 @@ export default class RightPanel extends React.Component<Props, IState> {
         }
 
         return (
-            <aside className="mx_RightPanel" id="mx_RightPanel">
+            <aside
+                aria-label={_t("right_panel|title")}
+                ref={this.ref}
+                className="mx_RightPanel"
+                id="mx_RightPanel"
+                data-testid="right-panel"
+                tabIndex={-1}
+            >
                 {card}
             </aside>
         );

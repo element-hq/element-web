@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserInfoHeaderView /> renders custom user identifiers in the header 1`] = `
+<div>
+  <div
+    class="mx_UserInfo_avatar"
+  >
+    <div
+      class="mx_UserInfo_avatar_transition"
+    >
+      <div
+        class="mx_UserInfo_avatar_transition_child"
+      >
+        <button
+          aria-label="Profile picture"
+          aria-live="off"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
+          role="button"
+          style="--cpd-avatar-size: 120px;"
+          title="@user:example.com"
+        >
+          u
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="mx_UserInfo_container mx_UserInfo_header"
+  >
+    <div
+      class="flex mx_UserInfo_profile"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <h1
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        dir="auto"
+      >
+        <div
+          class="flex mx_UserInfo_profile_name"
+          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+        >
+          @user:example.com
+        </div>
+      </h1>
+      <p
+        class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 mx_UserInfo_profile_mxid"
+      >
+        <div
+          class="mx_CopyableText"
+        >
+          customUserIdentifier
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </p>
+    </div>
+    <div
+      class="flex mx_UserInfo_verification"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <svg
+        class="_icon_11k6c_18"
+        fill="currentColor"
+        height="1em"
+        style="width: 24px; height: 24px;"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;

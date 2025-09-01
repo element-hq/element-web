@@ -163,8 +163,7 @@
             "megolm_export": "Eksportuoti raktus rankiniu būdu",
             "setup_key_backup_title": "Jūs prarasite prieigą prie savo užšifruotų žinučių",
             "setup_secure_backup_description_1": "Užšifruotos žinutės yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turi raktus šioms žinutėms perskaityti.",
-            "skip_key_backup": "Man nereikalingos užšifruotos žinutės",
-            "use_key_backup": "Pradėti naudoti atsarginę raktų kopiją"
+            "skip_key_backup": "Man nereikalingos užšifruotos žinutės"
         },
         "misconfigured_body": "Paprašykite savo %(brand)s administratoriaus patikrinti ar <a>jūsų konfigūracijoje</a> nėra neteisingų arba pasikartojančių įrašų.",
         "misconfigured_title": "Jūsų %(brand)s yra neteisingai sukonfigūruotas",
@@ -499,23 +498,12 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "invalid_security_key": "Klaidingas Saugumo Raktas",
-                "recovery_key_is_correct": "Atrodo gerai!",
-                "wrong_file_type": "Netinkamas failo tipas",
                 "wrong_security_key": "Netinkamas Saugumo Raktas"
             },
-            "reset_title": "Iš naujo nustatyti viską",
-            "reset_warning_1": "Taip darykite tik tuo atveju, jei neturite kito prietaiso, kuriuo galėtumėte užbaigti patikrinimą.",
-            "reset_warning_2": "Jei viską nustatysite iš naujo, paleisite iš naujo be patikimų seansų, be patikimų vartotojų ir galbūt negalėsite matyti ankstesnių žinučių.",
             "restoring": "Raktų atkūrimas iš atsarginės kopijos",
-            "security_key_title": "Saugumo Raktas",
-            "security_phrase_incorrect_error": "Nepavyksta pasiekti slaptosios saugyklos. Prašome patvirtinti kad teisingai įvedėte Saugumo Frazę.",
-            "security_phrase_title": "Slaptafrazė",
-            "use_security_key_prompt": "Naudokite Saugumo Raktą kad tęsti."
+            "security_key_title": "Saugumo Raktas"
         },
         "bootstrap_title": "Raktų nustatymas",
-        "cancel_entering_passphrase_description": "Ar tikrai norite atšaukti slaptafrazės įvedimą?",
-        "cancel_entering_passphrase_title": "Atšaukti slaptafrazės įvedimą?",
         "confirm_encryption_setup_body": "Paspauskite mygtuką žemiau, kad patvirtintumėte šifravimo nustatymą.",
         "confirm_encryption_setup_title": "Patvirtinti šifravimo sąranką",
         "cross_signing_room_normal": "Šis kambarys visapusiškai užšifruotas",
@@ -548,7 +536,6 @@
             "warning": "Jei jūs nepašalinote paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "reset_all_button": "Pamiršote arba praradote visus atkūrimo metodus? <a>Iš naujo nustatyti viską</a>",
-        "set_up_toast_description": "Apsisaugokite nuo prieigos prie šifruotų žinučių ir duomenų praradimo",
         "set_up_toast_title": "Nustatyti Saugią Atsarginę Kopiją",
         "setup_secure_backup": {
             "explainer": "Prieš atsijungdami sukurkite atsarginę savo raktų kopiją, kad išvengtumėte jų praradimo."
@@ -898,8 +885,7 @@
         "rotate_left": "Pasukti Kairėn"
     },
     "member_list": {
-        "filter_placeholder": "Filtruoti kambario dalyvius",
-        "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
+        "filter_placeholder": "Filtruoti kambario dalyvius"
     },
     "member_list_back_action_label": "Kambario nariai",
     "message_edit_dialog_title": "Žinutės redagavimai",
@@ -1484,16 +1470,12 @@
             "remove_email_prompt": "Pašalinti %(email)s?",
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"
         },
-        "image_thumbnails": "Rodyti vaizdų peržiūras/miniatiūras",
         "inline_url_previews_default": "Įjungti URL nuorodų peržiūras kaip numatytasias",
         "inline_url_previews_room": "Įjungti URL nuorodų peržiūras kaip numatytasias šiame kambaryje esantiems dalyviams",
         "inline_url_previews_room_account": "Įjungti URL nuorodų peržiūras šiame kambaryje (įtakoja tik jus)",
         "insert_trailing_colon_mentions": "Įterpti dvitaškį po naudotojo paminėjimų žinutės pradžioje",
         "jump_to_bottom_on_send": "Peršokti į laiko juostos apačią, kai siunčiate žinutę",
         "key_backup": {
-            "backup_in_progress": "Kuriama jūsų raktų atsarginė kopija (pirmas atsarginės kopijos sukūrimas gali užtrukti kelias minutes).",
-            "cannot_create_backup": "Nepavyko sukurti atsarginės raktų kopijos",
-            "create_title": "Sukurti atsarginę raktų kopiją",
             "setup_secure_backup": {
                 "confirm_security_phrase": "Patvirtinkite savo Saugumo Frazę",
                 "enter_phrase_title": "Įveskite Slaptafrazę",
@@ -1583,7 +1565,6 @@
             "ignore_users_empty": "Nėra ignoruojamų naudotojų.",
             "ignore_users_section": "Ignoruojami vartotojai",
             "key_backup_algorithm": "Algoritmas:",
-            "key_backup_connect": "Prijungti šį seansą prie Atsarginės Raktų Kopijos",
             "message_search_disabled": "Šifruotas žinutes saugiai talpinkite lokaliai, kad jos būtų rodomos paieškos rezultatuose.",
             "message_search_enabled": {
                 "one": "Saugiai talpinkite užšifruotas žinutes vietoje, kad jos būtų rodomos paieškos rezultatuose, naudojant %(size)s žinutėms iš %(rooms)s kambario saugoti.",
@@ -1749,6 +1730,7 @@
         "upgraderoom": "Atnaujina kambarį į naują versiją",
         "upgraderoom_permission_error": "Jūs neturite reikalingų leidimų naudoti šią komandą.",
         "usage": "Naudojimas",
+        "verify": "Patvirtina vartotojo, seanso ir pubkey daugiadalę duomenų struktūrą",
         "whois": "Parodo informaciją apie vartotoją"
     },
     "space": {
@@ -1950,9 +1932,12 @@
             "unknown": "%(senderDisplayName)s pakeitė prisijungimo taisyklę į %(rule)s"
         },
         "m.room.member": {
+            "accepted_3pid_invite": "%(targetName)s priėmė kvietimą, skirtą %(displayName)s",
+            "accepted_invite": "%(targetName)s priėmė kvietimą",
             "ban": "%(senderName)s užblokavo %(targetName)s",
             "change_avatar": "%(senderName)s pakeitė savo profilio nuotrauką",
             "change_name": "%(oldDisplayName)s pasikeitė savo rodomą vardą į %(displayName)s",
+            "invite": "%(senderName)s pakvietė %(targetName)s",
             "join": "%(targetName)s prisijungė prie kambario",
             "kick": "%(senderName)s pašalino %(targetName)s",
             "kick_reason": "%(senderName)s pašalino %(targetName)s: %(reason)s",

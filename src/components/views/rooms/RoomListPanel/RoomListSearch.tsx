@@ -20,7 +20,7 @@ import { MetaSpace } from "../../../../stores/spaces";
 import { Action } from "../../../../dispatcher/actions";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../../LegacyCallHandler";
 
@@ -55,13 +55,12 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                 onClick={() => defaultDispatcher.fire(Action.OpenSpotlight)}
             >
                 <Flex as="span" justify="space-between">
-                    {_t("action|search")}
+                    <span className="mx_RoomListSearch_search_text">{_t("action|search")}</span>
                     <kbd>{IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}</kbd>
                 </Flex>
             </Button>
             {displayDialButton && (
                 <Button
-                    className="mx_RoomListSearch_button"
                     kind="secondary"
                     size="sm"
                     Icon={DialPadIcon}
@@ -74,7 +73,6 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
             )}
             {displayExploreButton && (
                 <Button
-                    className="mx_RoomListSearch_button"
                     kind="secondary"
                     size="sm"
                     Icon={ExploreIcon}

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type AccountDataEvents, ClientEvent, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 import { isEqual } from "lodash";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
@@ -162,7 +161,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         // Attach a deferred *before* setting the account data to ensure we catch any requests
         // which race between different lines.
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent): void => {
             if (event.getType() !== eventType || !isEqual(event.getContent<AccountDataEvents[K]>()[field], value))
                 return;
@@ -204,6 +203,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 return this.setAccountData(ANALYTICS_EVENT_TYPE, "pseudonymousAnalyticsOptIn", newValue);
             case "mediaPreviewConfig":
                 // Handled in MediaPreviewConfigController.
+                return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
                 return;
             default:
                 return this.setAccountData(DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);

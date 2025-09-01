@@ -27,7 +27,7 @@ Element has several tiers of support for different environments:
 - Best effort
     - Definition:
         - Issues **accepted**, regressions **do not block** the release
-        - The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        - The wider Element Products (including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
         - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
     - Last major release of Firefox ESR and Chrome/Edge Extended Stable
 - Community Supported
@@ -126,7 +126,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 1. Install the prerequisites: `yarn install`.
     - If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
-      environment](#setting-up-a-dev-environment) below). Alternatively, you
+      environment](./developer_guide.md#setting-up-a-dev-environment) below). Alternatively, you
       can use <https://develop.element.io> - the continuous integration release of
       the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and

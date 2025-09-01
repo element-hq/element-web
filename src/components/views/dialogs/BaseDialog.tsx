@@ -23,12 +23,24 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
-    // Whether the dialog should have a 'close' button that will
-    // cause the dialog to be cancelled. This should only be set
-    // to false if there is nothing the app can sensibly do if the
-    // dialog is cancelled, eg. "We can't restore your session and
-    // the app cannot work". Default: true.
+    /**
+     * Whether the dialog should have a 'close' button and a keyDown handler which
+     * will intercept 'Escape'.
+     *
+     * This should only be set to `false` if there is nothing the app can sensibly do if the
+     * dialog is cancelled, eg. "We can't restore your session and
+     * the app cannot work".
+     *
+     * Default: `true`.
+     */
     "hasCancel"?: boolean;
+
+    /**
+     * Callback that will be called when the 'close' button is clicked or 'Escape' is pressed.
+     *
+     * Not used if `hasCancel` is false.
+     */
+    "onFinished"?: () => void;
 
     // called when a key is pressed
     "onKeyDown"?: (e: KeyboardEvent | React.KeyboardEvent) => void;
@@ -66,7 +78,6 @@ interface IProps {
 
     // optional Posthog ScreenName to supply during the lifetime of this dialog
     "screenName"?: ScreenName;
-    onFinished(): void;
 }
 
 /*
@@ -103,13 +114,13 @@ export default class BaseDialog extends React.Component<IProps> {
 
                 e.stopPropagation();
                 e.preventDefault();
-                this.props.onFinished();
+                this.props.onFinished?.();
                 break;
         }
     };
 
     private onCancelClick = (): void => {
-        this.props.onFinished();
+        this.props.onFinished?.();
     };
 
     public render(): React.ReactNode {
@@ -134,6 +145,9 @@ export default class BaseDialog extends React.Component<IProps> {
         const lockProps: Record<string, any> = {
             "onKeyDown": this.onKeyDown,
             "role": "dialog",
+            // Allow the dialog to be keyboard focusable
+            // So the escape key handling works in more cases (say you select the header)
+            "tabIndex": -1,
             // This should point to a node describing the dialog.
             // If we were about to completely follow this recommendation we'd need to
             // make all the components relying on BaseDialog to be aware of it.

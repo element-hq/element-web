@@ -8,7 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td, type TranslationKey } from "../languageHandler";
+// Import i18n.tsx instead of languageHandler to avoid circular deps
+import { _td, type TranslationKey } from "../shared-components/utils/i18n";
 import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
 import { type IBaseSetting } from "../settings/Settings";
 import { type KeyCombo } from "../KeyBindingsManager";
@@ -145,6 +146,7 @@ export enum KeyBindingAction {
     ArrowDown = "KeyBinding.arrowDown",
     Tab = "KeyBinding.tab",
     Comma = "KeyBinding.comma",
+    Save = "KeyBinding.save",
 
     /** Toggle visibility of hidden events */
     ToggleHiddenEventVisibility = "KeyBinding.toggleHiddenEventVisibility",
@@ -268,6 +270,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ArrowRight,
             KeyBindingAction.ArrowDown,
             KeyBindingAction.Comma,
+            KeyBindingAction.Save,
         ],
     },
     [CategoryName.NAVIGATION]: {
@@ -521,7 +524,8 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.GoToHome]: {
         default: {
             ctrlKey: true,
-            altKey: true,
+            altKey: !IS_MAC,
+            shiftKey: IS_MAC,
             key: Key.H,
         },
         displayName: _td("keyboard|go_home_view"),
@@ -586,7 +590,7 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         default: {
             ctrlKey: true,
             shiftKey: true,
-            key: Key.H,
+            key: Key.J,
         },
         displayName: _td("keyboard|toggle_hidden_events"),
     },
@@ -618,6 +622,13 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
             shiftKey: IS_MAC,
         },
         displayName: _td("keyboard|composer_redo"),
+    },
+    [KeyBindingAction.Save]: {
+        default: {
+            key: Key.S,
+            ctrlOrCmdKey: true,
+        },
+        displayName: _td("keyboard|save"),
     },
     [KeyBindingAction.PreviousVisitedRoomOrSpace]: {
         default: {

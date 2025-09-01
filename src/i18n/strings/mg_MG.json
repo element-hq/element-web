@@ -219,8 +219,7 @@
             "setup_key_backup_title": "Ho very ny fidirana amin'ny hafatrao voasakana",
             "setup_secure_backup_description_1": "Ny hafatra voarakitra dia arovana aminy fanafenana farany mankany amin'ny farany. Ianao sy ny mpandray (ireo) ihany no manana ny fanalahidy hamakiana ireo hafatra ireo.",
             "setup_secure_backup_description_2": "Rehefa mivoaka ianao dia ho voafafa amin'ity fitaovana ity ireo fanalahidy ireo, izay midika fa tsy ho afaka hamaky hafatra voafono ianao raha tsy manana ny fanalahidin'izy ireo amin'ny fitaovanao hafa, na averinao any aminy mpizara.",
-            "skip_key_backup": "Tsy tiako ny hafatra voarakotra",
-            "use_key_backup": "Manomboka mampiasa fanalahidin'ny fitahirizana"
+            "skip_key_backup": "Tsy tiako ny hafatra voarakotra"
         },
         "misconfigured_body": "Anontanio ny anao%(brand)s admin hanamarina<a> ny config</a> hoany fidirana diso na dika mitovy.",
         "misconfigured_title": "ny%(brand)s dia diso fanitsiana",
@@ -790,26 +789,13 @@
     "empty_room_was_name": "Efitra banga (dia%(oldName)s )",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ampidiro ny fehezan-teny fiarovana anao na<button> ampiasao ny Security Key</button> hanohy.",
             "key_validation_text": {
-                "invalid_security_key": "Fanalahidy fiarovana tsy mety",
-                "recovery_key_is_correct": "Toa tsara!",
-                "wrong_file_type": "Karazana rakitra diso",
                 "wrong_security_key": "Fanalahidin'ny fiarovana diso"
             },
-            "reset_title": "Avereno ny zava-drehetra",
-            "reset_warning_1": "Ataovy izany raha tsy manana fitaovana hafa hamitana ny fanamarinana ianao.",
-            "reset_warning_2": "Raha averinao daholo ny zava-drehetra dia hanomboka tsy misy fivoriana azo itokisana, tsy misy mpampiasa azo itokisana, ary mety tsy hahita hafatra taloha.",
             "restoring": "Famerenana ny fanalahidy avy amin'ny vakorakitra",
-            "security_key_title": "Kitendry fiarovana",
-            "security_phrase_incorrect_error": "Tsy afaka miditra amin'ny fitahirizana miafina. Azafady, hamarino fa nampiditra ny fehezan-teny fiarovana marina ianao.",
-            "security_phrase_title": "Andian-teny fiarovana",
-            "separator": "%(securityKey)sna%(recoveryFile)s",
-            "use_security_key_prompt": "Ampiasao ny lakilen'ny fiarovana anao hanohizana."
+            "security_key_title": "Kitendry fiarovana"
         },
         "bootstrap_title": "Fametrahana fanalahidy",
-        "cancel_entering_passphrase_description": "Tena te-hanafoana ny fampidirana fehezanteny ve ianao?",
-        "cancel_entering_passphrase_title": "Hanafoana ny fidirana amin'ny teny miafina ?",
         "confirm_encryption_setup_body": "Kitiho ny bokotra etsy ambany hanamafisana ny fametrahana encryption.",
         "confirm_encryption_setup_title": "Hamafiso ny fanamboarana fanafenana",
         "cross_signing_room_normal": "Ity efitrano ity dia misy encryption avy hatrany",
@@ -847,7 +833,6 @@
             "warning": "Raha tsy nesorinao ny fomba fanarenana, dia mety hanandrana hiditra aminy kaontinao ny mpanafika. Hanova ny tenimiafiny kaontinao ary mametraha fomba fanarenana vaovao avy hatrany ao amin'ny fanitsiana."
         },
         "reset_all_button": "Adino na very ny fomba fanarenana rehetra?<a> Avereno daholo</a>",
-        "set_up_toast_description": "Arovy aminy fahaverezany fidirana amin'ny hafatra sy angon-drakitra voatahiry",
         "set_up_toast_title": "Hanitsy angona voaharo",
         "setup_secure_backup": {
             "explainer": "Amboary ny fanalahidinao alohany hivoahana mba tsy ho very."
@@ -865,7 +850,6 @@
             "accepting": "Manaiky…",
             "after_new_login": {
                 "device_verified": "Voamarina ny fitaovana",
-                "reset_confirmation": "Avereno tokoa ny fanalahidiny fanamarinana?",
                 "skip_verification": "Alefaso ny fanamarinana amin'izao fotoana izao",
                 "unable_to_verify": "Tsy afaka manamarina ity fitaovana ity",
                 "verify_this_device": "Hamarino ity fitaovana ity"
@@ -935,8 +919,6 @@
             "verify_emoji_prompt": "Hamarino amin'ny fampitahana emoji tokana.",
             "verify_emoji_prompt_qr": "Raha tsy azonao atao ny mijery ny kaody etsy ambony dia hamarino amin'ny fampitahana emoji tokana.",
             "verify_later": "Hamariniko avy eo",
-            "verify_reset_warning_1": "Tsy azo atao ny mamerina ny fanalahidiny fanamarinanao. Aoriany famerenanao dia tsy ho afaka miditra amin'ny hafatra miafina taloha ianao, ary izay namana nanamarina anao teo aloha dia hahita fampitandremana momba ny fiarovana mandra-panamarinanao azy ireo indray.",
-            "verify_reset_warning_2": "Tohizo ihany azafady raha azonao antoka fa very daholo ny fitaovanao hafa rehetra sy ny Key Security.",
             "verify_using_device": "Hamarino amin'ny fitaovana hafa",
             "verify_using_key": "Hamarino aminy fanalahidiny voaharo",
             "verify_using_key_or_phrase": "Hamarino amin'ny fanalahidy na rakin-tsoratra voaharo",
@@ -1464,8 +1446,7 @@
     },
     "member_list": {
         "filter_placeholder": "Sivanina ny mpikambana ao amin'ny efitrano",
-        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao",
-        "power_label": "%(userName)s(hery%(powerLevelNumber)s )"
+        "invite_button_no_perms_tooltip": "Tsy manana alalana hanasana mpampiasa ianao"
     },
     "member_list_back_action_label": "Mpikambana ao amin'ny efitrano",
     "message_edit_dialog_title": "Fanovana hafatra",
@@ -2302,18 +2283,12 @@
             "remove_msisdn_prompt": "Esory%(phone)s ?",
             "spell_check_locale_placeholder": "Misafidiana toerana iray"
         },
-        "image_thumbnails": "Asehoy ny topi-maso/sary kely hoan'ny sary",
         "inline_url_previews_default": "Alefaso ny fijerena URL an-tserasera aminy alàlan'ny default",
         "inline_url_previews_room": "Alefaso amin'ny alàlany ara-pototra hoany mpandray anjara amin'ity efitrano ity ny fijerena URL",
         "inline_url_previews_room_account": "Alefaso ny fijerena URL ho an'ity efitrano ity (miantraika aminao ihany)",
         "insert_trailing_colon_mentions": "Ampidiro tsangambato aoriana aorian'ny fiteny mpampiasa eo am-piandohany hafatra",
         "jump_to_bottom_on_send": "Mankanesa any amin'ny farany fandaharam-potoana rehefa mandefa hafatra ianao",
         "key_backup": {
-            "backup_in_progress": "Averina averina ny fanalahidinao (mety haharitra minitra vitsivitsy ny vakorakitra voalohany).",
-            "backup_starting": "Manomboka vakorakitra…",
-            "backup_success": "Fahombiazana!",
-            "cannot_create_backup": "Tsy afaka mamorona fanalahidin'ny vakorakitra",
-            "create_title": "Mamorona fanalahidin'ny Vakorakitra ",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Averina averina amin'ity fitaovana ity izao ny fanalahidinao.",
                 "backup_setup_success_title": "Nahomby ny fiarovana vakorakitra",
@@ -2448,7 +2423,6 @@
             "ignore_users_empty": "Tsy manana mpampiasa tsy noraharahiana ianao.",
             "ignore_users_section": "Ireo mpampiasa tsy noraharahiana",
             "key_backup_algorithm": "Algorithm:",
-            "key_backup_connect": "Ampifandraiso amin'ny fanalahidin'ny vakorakitra ity fivoriana ity",
             "message_search_disable_warning": "Raha kilemaina, dia tsy hiseho aminy valiny fikarohana ny hafatra avy aminy efitrano misy miafina.",
             "message_search_disabled": "Ampidiro ao an-toerana ny hafatra miafina mba hiseho aminy valiny fikarohana.",
             "message_search_enabled": {
@@ -2818,7 +2792,6 @@
         "heading_without_query": "Hitady ny",
         "join_button_text": "anjara%(roomAddress)s",
         "keyboard_scroll_hint": "Ampiasao<arrows/> ny horonan-taratasy",
-        "message_search_section_title": "Fikarohana hafa",
         "other_rooms_in_space": "Efitrano hafa ao%(spaceName)s",
         "public_rooms_label": "Efitranom-bahoaka",
         "public_spaces_label": "Toeram-bahoaka",
@@ -2828,7 +2801,6 @@
         "result_may_be_hidden_privacy_warning": "Mety hafenina hoany fiainana manokana ny valiny sasany",
         "result_may_be_hidden_warning": "Mety hafenina ny valiny sasany",
         "search_dialog": "Fikarohana Dialog",
-        "search_messages_hint": "Raha hikaroka hafatra dia tadiavo ity kisary ity eo an-tampon'ny efitrano iray<icon/>",
         "spaces_title": "Toerana misy anao",
         "start_group_chat_button": "Manomboha resaka vondrona"
     },
@@ -3477,7 +3449,6 @@
         "dialpad": "Fehizoro nomerika",
         "disable_camera": "Vonoy ny fakantsary",
         "disable_microphone": "Tapaina ny mikrô finday",
-        "disabled_no_one_here": "Tsy misy olona azo antsoina eto",
         "disabled_no_perms_start_video_call": "Tsy manana alalana hanombohana antso an-tsary ianao",
         "disabled_no_perms_start_voice_call": "Tsy manana alalana hanombohana antso an-tariby ianao",
         "disabled_ongoing_call": "Antso mitohy",

@@ -56,24 +56,24 @@ describe("<ThemeChoicePanel />", () => {
         describe("system theme", () => {
             it("should disable Match system theme", async () => {
                 render(<ThemeChoicePanel />);
-                expect(screen.getByRole("checkbox", { name: "Match system theme" })).not.toBeChecked();
+                expect(screen.getByRole("switch", { name: "Match system theme" })).not.toBeChecked();
             });
 
             it("should enable Match system theme", async () => {
                 await enableSystemTheme(true);
 
                 render(<ThemeChoicePanel />);
-                expect(screen.getByRole("checkbox", { name: "Match system theme" })).toBeChecked();
+                expect(screen.getByRole("switch", { name: "Match system theme" })).toBeChecked();
             });
 
             it("should change the system theme when clicked", async () => {
                 jest.spyOn(SettingsStore, "setValue");
 
                 render(<ThemeChoicePanel />);
-                act(() => screen.getByRole("checkbox", { name: "Match system theme" }).click());
+                act(() => screen.getByRole("switch", { name: "Match system theme" }).click());
 
                 // The system theme should be enabled
-                expect(screen.getByRole("checkbox", { name: "Match system theme" })).toBeChecked();
+                expect(screen.getByRole("switch", { name: "Match system theme" })).toBeChecked();
                 expect(SettingsStore.setValue).toHaveBeenCalledWith("use_system_theme", null, "device", true);
             });
         });

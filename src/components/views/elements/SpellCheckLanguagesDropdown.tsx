@@ -10,7 +10,6 @@ import React, { type ReactElement } from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
-import SettingsStore from "../../../settings/SettingsStore";
 import { _t, getUserLanguage } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import { type NonEmptyArray } from "../../../@types/common";
@@ -53,8 +52,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         const plaf = PlatformPeg.get();
         if (plaf) {
             const languageNames = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
-            plaf
-                .getAvailableSpellCheckLanguages()
+            plaf.getAvailableSpellCheckLanguages()
                 ?.then((languages) => {
                     languages.sort(function (a, b) {
                         if (a < b) return -1;
@@ -105,17 +103,6 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
             return <div key={language.value}>{language.label}</div>;
         }) as NonEmptyArray<ReactElement & { key: string }>;
 
-        // default value here too, otherwise we need to handle null / undefined;
-        // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-        let value: string | undefined;
-        if (language) {
-            value = this.props.value || language;
-        } else {
-            language = navigator.language || navigator.userLanguage;
-            value = this.props.value || language;
-        }
-
         return (
             <Dropdown
                 id="mx_LanguageDropdown"
@@ -123,7 +110,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                 onOptionChange={this.props.onOptionChange}
                 onSearchChange={this.onSearchChange}
                 searchEnabled={true}
-                value={value}
+                value={this.props.value}
                 label={_t("language_dropdown_label")}
                 placeholder={_t("settings|general|spell_check_locale_placeholder")}
             >

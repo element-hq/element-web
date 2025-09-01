@@ -14,10 +14,11 @@
         "outDir": "./lib",
         "declaration": true,
         "jsx": "react",
-        "lib": ["es2022", "dom", "dom.iterable"],
+        "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
         "strict": true,
         "paths": {
-            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"]
+            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
+            "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
         }
     },
     "include": [
@@ -26,7 +27,8 @@
         "./src/**/*.tsx",
         "./test/**/*.ts",
         "./test/**/*.tsx",
-        "./scripts/*.ts"
+        "./scripts/*.ts",
+        "./declaration.d.ts"
     ],
     "ts-node": {
         "files": true,

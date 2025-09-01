@@ -25,8 +25,8 @@ import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStore
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler.tsx";
-import { Flex } from "../../../utils/Flex.tsx";
-import { Box } from "../../../utils/Box.tsx";
+import { Flex } from "../../../../shared-components/utils/Flex";
+import { Box } from "../../../../shared-components/utils/Box";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
@@ -178,7 +178,10 @@ export default function RoomHeader({
                                 aria-label={label}
                                 children={children}
                                 className="mx_RoomHeader_videoCallOption"
-                                onClick={(ev) => videoCallClick(ev, option)}
+                                onClick={(ev) => {
+                                    setMenuOpen(false);
+                                    videoCallClick(ev, option);
+                                }}
                                 Icon={VideoCallIcon}
                                 onSelect={() => {} /* Dummy handler since we want the click event.*/}
                             />
@@ -283,7 +286,8 @@ export default function RoomHeader({
                                         <PublicIcon
                                             width="16px"
                                             height="16px"
-                                            className="mx_RoomHeader_icon text-secondary"
+                                            className="mx_RoomHeader_icon"
+                                            color="var(--cpd-color-icon-info-primary)"
                                             aria-label={_t("common|public_room")}
                                         />
                                     </Tooltip>

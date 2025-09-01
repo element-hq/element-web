@@ -9,18 +9,19 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
+import { act, waitFor } from "jest-matrix-react";
 
 import { type Command, Commands, getCommand } from "../../src/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
-import SettingsStore from "../../src/settings/SettingsStore";
 import { SdkContextClass } from "../../src/contexts/SDKContext";
-import Modal from "../../src/Modal";
+import Modal, { type ComponentType, type IHandle } from "../../src/Modal";
 import WidgetUtils from "../../src/utils/WidgetUtils";
 import { WidgetType } from "../../src/widgets/WidgetType";
 import { warnSelfDemote } from "../../src/components/views/right_panel/UserInfo";
 import dispatcher from "../../src/dispatcher/dispatcher";
-import { SettingLevel } from "../../src/settings/SettingLevel";
+import QuestionDialog from "../../src/components/views/dialogs/QuestionDialog";
+import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
 
 jest.mock("../../src/components/views/right_panel/UserInfo");
 
@@ -124,12 +125,7 @@ describe("SlashCommands", () => {
             setCurrentRoom();
         });
 
-        it("should be disabled by default", () => {
-            expect(command.isEnabled(client)).toBe(false);
-        });
-
-        it("should be enabled for developerMode", () => {
-            SettingsStore.setValue("developerMode", null, SettingLevel.DEVICE, true);
+        it("should be enabled by default", () => {
             expect(command.isEnabled(client)).toBe(true);
         });
     });
@@ -250,6 +246,56 @@ describe("SlashCommands", () => {
             return expect(
                 command.run(client, roomId, null, "this is a test message").promise,
             ).resolves.toMatchSnapshot();
+        });
+    });
+
+    describe("/verify", () => {
+        it("should return usage if no args", () => {
+            const command = findCommand("verify")!;
+            expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
+        });
+
+        it("should attempt manual verification after confirmation", async () => {
+            // Given we say yes to prompt
+            const spy = jest.spyOn(Modal, "createDialog");
+            spy.mockReturnValue({ finished: Promise.resolve([true]) } as unknown as IHandle<ComponentType>);
+
+            // When we run the command
+            const command = findCommand("verify")!;
+            await act(() => command.run(client, roomId, null, "mydeviceid myfingerprint"));
+
+            // Then the prompt is displayed
+            expect(spy).toHaveBeenCalledWith(
+                QuestionDialog,
+                expect.objectContaining({ title: "Caution: manual device verification" }),
+            );
+
+            // And then we attempt the verification
+            await waitFor(() =>
+                expect(spy).toHaveBeenCalledWith(
+                    ErrorDialog,
+                    expect.objectContaining({ title: "Verification failed" }),
+                ),
+            );
+        });
+
+        it("should not do manual verification if cancelled", async () => {
+            // Given we say no to prompt
+            const spy = jest.spyOn(Modal, "createDialog");
+            spy.mockReturnValue({ finished: Promise.resolve([false]) } as unknown as IHandle<ComponentType>);
+
+            // When we run the command
+            const command = findCommand("verify")!;
+            command.run(client, roomId, null, "mydeviceid myfingerprint");
+
+            // Then the prompt is displayed
+            expect(spy).toHaveBeenCalledWith(
+                QuestionDialog,
+                expect.objectContaining({ title: "Caution: manual device verification" }),
+            );
+
+            // But nothing else happens
+            expect(spy).not.toHaveBeenCalledWith(ErrorDialog, expect.anything());
         });
     });
 

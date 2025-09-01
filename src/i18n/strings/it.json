@@ -221,8 +221,7 @@
             "setup_key_backup_title": "Perderai l'accesso ai tuoi messaggi cifrati",
             "setup_secure_backup_description_1": "I messaggi cifrati sono resi sicuri con una crittografia end-to-end. Solo tu e il/i destinatario/i avete le chiavi per leggere questi messaggi.",
             "setup_secure_backup_description_2": "Quando ti disconnetti queste chiavi verranno eliminate dal dispositivo, quindi non potrai leggere i messaggi cifrati a meno che tu non abbia le chiavi su altri dispositivi, o salvate in backup sul server.",
-            "skip_key_backup": "Non voglio i miei messaggi cifrati",
-            "use_key_backup": "Inizia ad usare il backup chiavi"
+            "skip_key_backup": "Non voglio i miei messaggi cifrati"
         },
         "misconfigured_body": "Chiedi al tuo amministratore di %(brand)s di controllare <a>la tua configurazione</a> per voci non valide o doppie.",
         "misconfigured_title": "Il tuo %(brand)s è configurato male",
@@ -794,26 +793,13 @@
     "empty_room_was_name": "Stanza vuota (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Inserisci la tua frase di sicurezza o <button>usa la tua chiave di sicurezza</button> per continuare.",
             "key_validation_text": {
-                "invalid_security_key": "Chiave di sicurezza non valida",
-                "recovery_key_is_correct": "Sembra giusta!",
-                "wrong_file_type": "Tipo di file errato",
                 "wrong_security_key": "Chiave di sicurezza sbagliata"
             },
-            "reset_title": "Reimposta tutto",
-            "reset_warning_1": "Fallo solo se non hai altri dispositivi con cui completare la verifica.",
-            "reset_warning_2": "Se reimposti tutto, ricomincerai senza sessioni fidate, senza utenti fidati e potresti non riuscire a vedere i messaggi passati.",
             "restoring": "Ripristino delle chiavi dal backup",
-            "security_key_title": "Chiave di sicurezza",
-            "security_phrase_incorrect_error": "Impossibile accedere all'archivio segreto. Verifica di avere inserito la password di sicurezza giusta.",
-            "security_phrase_title": "Frase di sicurezza",
-            "separator": "%(securityKey)s o %(recoveryFile)s",
-            "use_security_key_prompt": "Usa la tua chiave di sicurezza per continuare."
+            "security_key_title": "Chiave di sicurezza"
         },
         "bootstrap_title": "Configurazione chiavi",
-        "cancel_entering_passphrase_description": "Sei sicuro di volere annullare l'inserimento della frase?",
-        "cancel_entering_passphrase_title": "Annullare l'inserimento della password?",
         "confirm_encryption_setup_body": "Clicca il pulsante sotto per confermare l'impostazione della crittografia.",
         "confirm_encryption_setup_title": "Conferma impostazione crittografia",
         "cross_signing_room_normal": "Questa stanza è cifrata end-to-end",
@@ -851,7 +837,6 @@
             "warning": "Se non hai rimosso il metodo di ripristino, è possibile che un aggressore stia cercando di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "reset_all_button": "Hai dimenticato o perso tutti i metodi di recupero? <a>Reimposta tutto</a>",
-        "set_up_toast_description": "Proteggiti dalla perdita dei messaggi e dati crittografati",
         "set_up_toast_title": "Imposta il Backup Sicuro",
         "setup_secure_backup": {
             "explainer": "Fai una copia delle tue chiavi prima di disconnetterti per evitare di perderle."
@@ -869,7 +854,6 @@
             "accepting": "Accettazione…",
             "after_new_login": {
                 "device_verified": "Dispositivo verificato",
-                "reset_confirmation": "Reimpostare le chiavi di verifica?",
                 "skip_verification": "Salta la verifica per adesso",
                 "unable_to_verify": "Impossibile verificare questo dispositivo",
                 "verify_this_device": "Verifica questo dispositivo"
@@ -939,8 +923,6 @@
             "verify_emoji_prompt": "Verifica confrontando emoji specifici.",
             "verify_emoji_prompt_qr": "Se non riesci a scansionare il codice sopra, verifica confrontando emoji specifiche.",
             "verify_later": "Verificherò dopo",
-            "verify_reset_warning_1": "La reimpostazione delle chiavi di verifica non può essere annullata. Dopo averlo fatto, non avrai accesso ai vecchi messaggi cifrati, e gli amici che ti avevano verificato in precedenza vedranno avvisi di sicurezza fino a quando non ti ri-verifichi con loro.",
-            "verify_reset_warning_2": "Procedi solo se sei sicuro di avere perso tutti gli altri tuoi dispositivi e la chiave di sicurezza.",
             "verify_using_device": "Verifica con un altro dispositivo",
             "verify_using_key": "Verifica con chiave di sicurezza",
             "verify_using_key_or_phrase": "Verifica con chiave di sicurezza o frase",
@@ -1479,8 +1461,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
-        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti"
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
@@ -2318,18 +2299,12 @@
             "remove_msisdn_prompt": "Rimuovere %(phone)s?",
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
-        "image_thumbnails": "Mostra anteprime/miniature per le immagini",
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
         "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
         "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
         "insert_trailing_colon_mentions": "Inserisci dei due punti dopo le citazioni degli utenti all'inizio di un messaggio",
         "jump_to_bottom_on_send": "Salta in fondo alla linea temporale quando invii un messaggio",
         "key_backup": {
-            "backup_in_progress": "Il backup delle chiavi è in corso (il primo backup potrebbe richiedere qualche minuto).",
-            "backup_starting": "Avvio del backup…",
-            "backup_success": "Completato!",
-            "cannot_create_backup": "Impossibile creare backup della chiave",
-            "create_title": "Crea backup chiavi",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Viene ora fatto il backup delle tue chiavi da questo dispositivo.",
                 "backup_setup_success_title": "Backup Sicuro completato",
@@ -2464,7 +2439,6 @@
             "ignore_users_empty": "Non hai utenti ignorati.",
             "ignore_users_section": "Utenti ignorati",
             "key_backup_algorithm": "Algoritmo:",
-            "key_backup_connect": "Connetti questa sessione al backup chiavi",
             "message_search_disable_warning": "Se disattivato, i messaggi delle stanze cifrate non appariranno nei risultati di ricerca.",
             "message_search_disabled": "Tieni in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca.",
             "message_search_enabled": {
@@ -2727,6 +2701,7 @@
         "upgraderoom": "Aggiorna una stanza ad una nuova versione",
         "upgraderoom_permission_error": "Non hai l'autorizzazione necessaria per usare questo comando.",
         "usage": "Utilizzo",
+        "verify": "Verifica un utente, una sessione e una tupla pubblica",
         "view": "Visualizza la stanza con l'indirizzo dato",
         "whois": "Mostra le informazioni di un utente"
     },
@@ -2834,7 +2809,6 @@
         "heading_without_query": "Cerca",
         "join_button_text": "Entra in %(roomAddress)s",
         "keyboard_scroll_hint": "Usa <arrows/> per scorrere",
-        "message_search_section_title": "Altre ricerche",
         "other_rooms_in_space": "Altre stanze in %(spaceName)s",
         "public_rooms_label": "Stanze pubbliche",
         "public_spaces_label": "Spazi pubblici",
@@ -2844,7 +2818,6 @@
         "result_may_be_hidden_privacy_warning": "Alcuni risultati potrebbero essere nascosti per privacy",
         "result_may_be_hidden_warning": "Alcuni risultati potrebbero essere nascosti",
         "search_dialog": "Finestra di ricerca",
-        "search_messages_hint": "Per cercare messaggi, trova questa icona in cima ad una stanza <icon/>",
         "spaces_title": "Spazi in cui sei",
         "start_group_chat_button": "Inizia una conversazione di gruppo"
     },
@@ -3495,7 +3468,6 @@
         "dialpad": "Tastierino",
         "disable_camera": "Spegni la fotocamera",
         "disable_microphone": "Spegni il microfono",
-        "disabled_no_one_here": "Non c'è nessuno da chiamare qui",
         "disabled_no_perms_start_video_call": "Non hai il permesso di avviare videochiamate",
         "disabled_no_perms_start_voice_call": "Non hai il permesso di avviare chiamate",
         "disabled_ongoing_call": "Chiamata in corso",

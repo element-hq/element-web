@@ -16,6 +16,7 @@ import BugReportDialog, {
 } from "../../../../../src/components/views/dialogs/BugReportDialog";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { type ConsoleLogger } from "../../../../../src/rageshake/rageshake";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 const BUG_REPORT_URL = "https://example.org/submit";
 
@@ -26,10 +27,21 @@ describe("BugReportDialog", () => {
         return render(<BugReportDialog onFinished={onFinished} />);
     }
 
+    let prevLogger: ConsoleLogger;
     beforeEach(() => {
         jest.resetAllMocks();
         SdkConfig.put({
             bug_report_endpoint_url: BUG_REPORT_URL,
+        });
+
+        const originalGetValue = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, ...args) => {
+            // These settings rely on a controller that creates an AudioContext in
+            // order to test whether the setting can be enabled. For the sake of this test, disable that.
+            if (settingName === "notificationsEnabled" || settingName === "notificationBodyEnabled") {
+                return true;
+            }
+            return originalGetValue(settingName, ...args);
         });
 
         const mockConsoleLogger = {
@@ -37,24 +49,15 @@ describe("BugReportDialog", () => {
             consume: jest.fn(),
             warn: jest.fn(),
         } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
 
-        // @ts-ignore - mock the console logger
+        prevLogger = global.mx_rage_logger;
         global.mx_rage_logger = mockConsoleLogger;
-
-        // @ts-ignore
-        mockConsoleLogger.flush.mockReturnValue([
-            {
-                id: "instance-0",
-                line: "line 1",
-            },
-            {
-                id: "instance-1",
-                line: "line 2",
-            },
-        ]);
     });
 
     afterEach(() => {
+        global.mx_rage_logger = prevLogger;
+        jest.restoreAllMocks();
         SdkConfig.reset();
         fetchMock.restore();
     });

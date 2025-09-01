@@ -18,7 +18,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog, { type IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
-import { upgradeRoom } from "../../../utils/RoomUpgrade";
+import { type RoomUpgradeProgress, upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import dis from "../../../dispatcher/dispatcher";
@@ -36,6 +36,9 @@ export interface JoinRuleSettingsProps {
     onError(error: unknown): void;
     beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
     aliasWarning?: ReactNode;
+    disabledOptions?: Set<JoinRule>;
+    hiddenOptions?: Set<JoinRule>;
+    recommendedOption?: JoinRule;
 }
 
 const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
@@ -45,6 +48,9 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     onError,
     beforeChange,
     closeSettingsFn,
+    disabledOptions,
+    hiddenOptions,
+    recommendedOption,
 }) => {
     const cli = room.client;
 
@@ -114,7 +120,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                 opts: IFinishedOpts,
                 fn: (progressText: string, progress: number, total: number) => void,
             ): Promise<void> => {
-                const roomId = await upgradeRoom(room, targetVersion, opts.invite, true, true, true, (progress) => {
+                const progressCallback = (progress: RoomUpgradeProgress): void => {
                     const total = 2 + progress.updateSpacesTotal + progress.inviteUsersTotal;
                     if (!progress.roomUpgraded) {
                         fn(_t("room_settings|security|join_rule_upgrade_upgrading_room"), 0, total);
@@ -145,9 +151,22 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                             total,
                         );
                     }
-                });
+                };
+                const roomId = await upgradeRoom(
+                    room,
+                    targetVersion,
+                    opts.invite,
+                    true,
+                    true,
+                    true,
+                    progressCallback,
 
-                closeSettingsFn();
+                    // We want to keep the RoomUpgradeDialog open during the upgrade, so don't replace it with the
+                    // invite progress dialog.
+                    /* inhibitInviteProgressDialog: */ true,
+                );
+
+                closeSettingsFn?.();
 
                 // switch to the new room in the background
                 dis.dispatch<ViewRoomPayload>({
@@ -170,18 +189,26 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             {_t("room_settings|security|join_rule_upgrade_required")}
         </span>
     );
+    const withRecommendLabel = (label: string, rule: JoinRule): React.ReactNode =>
+        rule === recommendedOption ? (
+            <>
+                {label} (<span className="mx_JoinRuleSettings_recommended">{_t("common|recommended")}</span>)
+            </>
+        ) : (
+            label
+        );
 
     const definitions: IDefinition<JoinRule>[] = [
         {
             value: JoinRule.Invite,
-            label: _t("room_settings|security|join_rule_invite"),
+            label: withRecommendLabel(_t("room_settings|security|join_rule_invite"), JoinRule.Invite),
             description: _t("room_settings|security|join_rule_invite_description"),
             checked:
                 joinRule === JoinRule.Invite || (joinRule === JoinRule.Restricted && !restrictedAllowRoomIds?.length),
         },
         {
             value: JoinRule.Public,
-            label: _t("common|public"),
+            label: withRecommendLabel(_t("common|public"), JoinRule.Public),
             description: (
                 <>
                     {_t("room_settings|security|join_rule_public_description")}
@@ -292,7 +319,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             value: JoinRule.Restricted,
             label: (
                 <>
-                    {_t("room_settings|security|join_rule_restricted")}
+                    {withRecommendLabel(_t("room_settings|security|join_rule_restricted"), JoinRule.Restricted)}
                     {preferredRestrictionVersion && upgradeRequiredPill}
                 </>
             ),
@@ -303,11 +330,11 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     }
 
     if (askToJoinEnabled && (roomSupportsKnock || preferredKnockVersion)) {
-        definitions.push({
+        definitions.splice(Math.max(0, definitions.length - 1), 0, {
             value: JoinRule.Knock,
             label: (
                 <>
-                    {_t("room_settings|security|join_rule_knock")}
+                    {withRecommendLabel(_t("room_settings|security|join_rule_knock"), JoinRule.Knock)}
                     {preferredKnockVersion && upgradeRequiredPill}
                 </>
             ),
@@ -397,7 +424,9 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             name="joinRule"
             value={joinRule}
             onChange={onChange}
-            definitions={definitions}
+            definitions={definitions
+                .map((d) => (disabledOptions?.has(d.value) ? { ...d, disabled: true } : d))
+                .filter((d) => !hiddenOptions?.has(d.value))}
             disabled={disabled}
             className="mx_JoinRuleSettings_radioButton"
         />

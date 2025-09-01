@@ -15,6 +15,7 @@ import {
     useRoomListHeaderViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
 import { RoomListHeaderView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListHeaderView";
+import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel", () => ({
     useRoomListHeaderViewModel: jest.fn(),
@@ -29,6 +30,8 @@ describe("<RoomListHeaderView />", () => {
         canCreateVideoRoom: true,
         canInviteInSpace: true,
         canAccessSpaceSettings: true,
+        sort: jest.fn(),
+        activeSortOption: SortOption.Activity,
         createRoom: jest.fn(),
         createVideoRoom: jest.fn(),
         createChatRoom: jest.fn(),
@@ -40,6 +43,13 @@ describe("<RoomListHeaderView />", () => {
 
     afterEach(() => {
         jest.resetAllMocks();
+    });
+
+    it("should render 'room options' button", async () => {
+        mocked(useRoomListHeaderViewModel).mockReturnValue(defaultValue);
+        const { asFragment } = render(<RoomListHeaderView />);
+        expect(screen.getByRole("button", { name: "Room Options" })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("compose menu", () => {
@@ -59,7 +69,7 @@ describe("<RoomListHeaderView />", () => {
             expect(screen.queryByRole("button", { name: "Add" })).toBeNull();
             expect(asFragment()).toMatchSnapshot();
 
-            await user.click(screen.getByRole("button", { name: "New message" }));
+            await user.click(screen.getByRole("button", { name: "Start chat" }));
             expect(defaultValue.createChatRoom).toHaveBeenCalled();
         });
 
@@ -70,7 +80,7 @@ describe("<RoomListHeaderView />", () => {
             const openMenu = screen.getByRole("button", { name: "Add" });
             await user.click(openMenu);
 
-            await user.click(screen.getByRole("menuitem", { name: "New message" }));
+            await user.click(screen.getByRole("menuitem", { name: "Start chat" }));
             expect(defaultValue.createChatRoom).toHaveBeenCalled();
 
             await user.click(openMenu);

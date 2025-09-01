@@ -26,7 +26,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
-import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
@@ -41,8 +40,11 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
-import { ElementCall } from "../models/Call";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
+import ModuleApi from "../modules/Api";
+import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
+import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
+import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -66,17 +68,21 @@ export interface EventTileTypeProps
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
+    showHiddenEvents: boolean;
 }
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
-type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
+type Factory<X = FactoryProps> = (ref: React.RefObject<any> | undefined, props: X) => JSX.Element;
 
 export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
+export const TextualEventFactory: Factory = (ref, props) => {
+    const vm = new TextualEventViewModel(props);
+    return <TextualEventView vm={vm} />;
+};
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
 
@@ -116,7 +122,7 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomGuestAccess, TextualEventFactory],
 ]);
 
-for (const evType of ElementCall.CALL_EVENT_TYPE.names) {
+for (const evType of ElementCallEventType.names) {
     STATE_EVENT_TILE_TYPES.set(evType, CallEventFactory);
 }
 
@@ -251,13 +257,19 @@ export function pickFactory(
 export function renderTile(
     renderType: TimelineRenderingType,
     props: EventTileTypeProps,
-    showHiddenEvents: boolean,
     cli?: MatrixClient,
 ): Optional<JSX.Element> {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
-    const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory) return undefined;
+    const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents);
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
+    }
 
     // Note that we split off the ones we actually care about here just to be sure that we're
     // not going to accidentally send things we shouldn't from lazy callers. Eg: EventTile's
@@ -278,42 +290,57 @@ export function renderTile(
         isSeeingThroughMessageHiddenForModeration,
         timestamp,
         inhibitInteraction,
+        showHiddenEvents,
     } = props;
 
     switch (renderType) {
         case TimelineRenderingType.File:
         case TimelineRenderingType.Notification:
         case TimelineRenderingType.Thread:
-            // We only want a subset of props, so we don't end up causing issues for downstream components.
-            return factory(props.ref, {
-                mxEvent,
-                highlights,
-                highlightLink,
-                showUrlPreview,
-                editState,
-                replacingEventId,
-                getRelationsForEvent,
-                isSeeingThroughMessageHiddenForModeration,
-                permalinkCreator,
-                inhibitInteraction,
-            });
+            return ModuleApi.customComponents.renderMessage(
+                {
+                    mxEvent: props.mxEvent,
+                },
+                (origProps) =>
+                    factory(props.ref, {
+                        // We only want a subset of props, so we don't end up causing issues for downstream components.
+                        mxEvent,
+                        highlights,
+                        highlightLink,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                        editState,
+                        replacingEventId,
+                        getRelationsForEvent,
+                        isSeeingThroughMessageHiddenForModeration,
+                        permalinkCreator,
+                        inhibitInteraction,
+                        showHiddenEvents,
+                    }),
+            );
         default:
-            // NEARLY ALL THE OPTIONS!
-            return factory(ref, {
-                mxEvent,
-                forExport,
-                replacingEventId,
-                editState,
-                highlights,
-                highlightLink,
-                showUrlPreview,
-                permalinkCreator,
-                callEventGrouper,
-                getRelationsForEvent,
-                isSeeingThroughMessageHiddenForModeration,
-                timestamp,
-                inhibitInteraction,
-            });
+            return ModuleApi.customComponents.renderMessage(
+                {
+                    mxEvent: props.mxEvent,
+                },
+                (origProps) =>
+                    factory(ref, {
+                        // NEARLY ALL THE OPTIONS!
+                        mxEvent,
+                        forExport,
+                        replacingEventId,
+                        editState,
+                        highlights,
+                        highlightLink,
+                        showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                        permalinkCreator,
+                        callEventGrouper,
+                        getRelationsForEvent,
+                        isSeeingThroughMessageHiddenForModeration,
+                        timestamp,
+                        inhibitInteraction,
+                        showHiddenEvents,
+                    }),
+            );
     }
 }
 
@@ -332,7 +359,14 @@ export function renderReplyTile(
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
-    if (!factory) return undefined;
+    if (!factory) {
+        // If we don't have a factory for this event, attempt
+        // to find a custom component that can render it.
+        // Will return null if no custom component can render it.
+        return ModuleApi.customComponents.renderMessage({
+            mxEvent: props.mxEvent,
+        });
+    }
 
     // See renderTile() for why we split off so much
     const {
@@ -350,19 +384,26 @@ export function renderReplyTile(
         permalinkCreator,
     } = props;
 
-    return factory(ref, {
-        mxEvent,
-        highlights,
-        highlightLink,
-        showUrlPreview,
-        overrideBodyTypes,
-        overrideEventTypes,
-        replacingEventId,
-        maxImageHeight,
-        getRelationsForEvent,
-        isSeeingThroughMessageHiddenForModeration,
-        permalinkCreator,
-    });
+    return ModuleApi.customComponents.renderMessage(
+        {
+            mxEvent: props.mxEvent,
+        },
+        (origProps) =>
+            factory(ref, {
+                mxEvent,
+                highlights,
+                highlightLink,
+                showUrlPreview: origProps?.showUrlPreview ?? showUrlPreview,
+                overrideBodyTypes,
+                overrideEventTypes,
+                replacingEventId,
+                maxImageHeight,
+                getRelationsForEvent,
+                isSeeingThroughMessageHiddenForModeration,
+                permalinkCreator,
+                showHiddenEvents,
+            }),
+    );
 }
 
 // XXX: this'll eventually be dynamic based on the fields once we have extensible event types
@@ -386,6 +427,12 @@ export function haveRendererForEvent(
         return false;
     }
 
+    // Check to see if we have any hints for this message, which indicates
+    // there is a custom renderer for the event.
+    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
+        return true;
+    }
+
     // No tile for replacement events since they update the original tile
     if (mxEvent.isRelation(RelationType.Replace)) return false;
 
@@ -397,9 +444,7 @@ export function haveRendererForEvent(
         const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
         const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
         return Boolean(predecessor);
-    } else if (
-        ElementCall.CALL_EVENT_TYPE.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))
-    ) {
+    } else if (ElementCallEventType.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
         const intent = mxEvent.getContent()["m.intent"];
         const newlyStarted = Object.keys(mxEvent.getPrevContent()).length === 0;
         // Only interested in events that mark the start of a non-room call

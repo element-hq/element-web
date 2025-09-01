@@ -11,7 +11,6 @@ import React, { type ReactElement } from "react";
 import classNames from "classnames";
 
 import * as languageHandler from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
@@ -29,7 +28,7 @@ function languageMatchesSearchQuery(query: string, language: Languages[0]): bool
 interface IProps {
     className?: string;
     onOptionChange: (language: string) => void;
-    value?: string;
+    value: string;
     disabled?: boolean;
 }
 
@@ -103,17 +102,6 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             return <div key={language.value}>{language.labelInTargetLanguage}</div>;
         }) as NonEmptyArray<ReactElement & { key: string }>;
 
-        // default value here too, otherwise we need to handle null / undefined
-        // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-        let value: string | undefined;
-        if (language) {
-            value = this.props.value || language;
-        } else {
-            language = navigator.language || navigator.userLanguage;
-            value = this.props.value || language;
-        }
-
         return (
             <Dropdown
                 id="mx_LanguageDropdown"
@@ -121,7 +109,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
                 onOptionChange={this.props.onOptionChange}
                 onSearchChange={this.onSearchChange}
                 searchEnabled={true}
-                value={value}
+                value={this.props.value}
                 label={_t("language_dropdown_label")}
                 disabled={this.props.disabled}
             >

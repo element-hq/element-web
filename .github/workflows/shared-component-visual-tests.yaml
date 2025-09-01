@@ -1,0 +1,70 @@
+name: Shared Component Visual Tests
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+permissions: {} # No permissions required
+
+jobs:
+    testStorybook:
+        name: "Run Visual Tests"
+        runs-on: ubuntu-24.04
+        permissions:
+            actions: read
+            issues: read
+            pull-requests: read
+        steps:
+            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              with:
+                  persist-credentials: false
+                  repository: element-hq/element-web
+
+            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+              with:
+                  cache: "yarn"
+                  node-version: "lts/*"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Get installed Playwright version
+              id: playwright
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+
+            - name: Cache playwright binaries
+              uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
+              id: playwright-cache
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
+
+            - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: "yarn playwright install --with-deps --only-shell"
+
+            - name: Build Element Web resources
+              # Needed to prepare language files
+              run: "yarn build:res"
+
+            - name: Build storybook dependencies
+              # When the first test is ran, it will fail because the dependencies are not yet built.
+              # This step is to ensure that the dependencies are built before running the tests.
+              run: "yarn test:storybook:ci"
+              continue-on-error: true
+
+            - name: Run Visual tests
+              run: "yarn test:storybook:ci"
+
+            - name: Upload received images & diffs
+              if: always()
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              with:
+                  name: received-images
+                  path: playwright/shared-component-received

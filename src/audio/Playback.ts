@@ -9,14 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../utils/numbers";
+import { clamp } from "../shared-components/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 
@@ -158,42 +157,27 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             // 5mb
             logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
-            const deferred = defer<unknown>();
+            const deferred = Promise.withResolvers<unknown>();
             this.element.onloadeddata = deferred.resolve;
             this.element.onerror = deferred.reject;
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
             await deferred.promise; // make sure the audio element is ready for us
         } else {
-            // Safari compat: promise API not supported on this function
-            this.audioBuf = await new Promise((resolve, reject) => {
-                this.context.decodeAudioData(
-                    this.buf,
-                    (b) => resolve(b),
-                    async (e): Promise<void> => {
-                        try {
-                            // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
-                            // very well.
-                            logger.error("Error decoding recording: ", e);
-                            logger.warn("Trying to re-encode to WAV instead...");
+            try {
+                this.audioBuf = await this.context.decodeAudioData(this.buf);
+            } catch (e) {
+                logger.error("Error decoding recording:", e);
+                logger.warn("Trying to re-encode to WAV instead...");
 
-                            const wav = await decodeOgg(this.buf);
-
-                            // noinspection ES6MissingAwait - not needed when using callbacks
-                            this.context.decodeAudioData(
-                                wav,
-                                (b) => resolve(b),
-                                (e) => {
-                                    logger.error("Still failed to decode recording: ", e);
-                                    reject(e);
-                                },
-                            );
-                        } catch (e) {
-                            logger.error("Caught decoding error:", e);
-                            reject(e);
-                        }
-                    },
-                );
-            });
+                try {
+                    // This error handler is largely for Safari, which doesn't support Opus/Ogg very well.
+                    const wav = await decodeOgg(this.buf);
+                    this.audioBuf = await this.context.decodeAudioData(wav);
+                } catch (e) {
+                    logger.error("Error decoding recording:", e);
+                    throw e;
+                }
+            }
 
             // Update the waveform to the real waveform once we have channel data to use. We don't
             // exactly trust the user-provided waveform to be accurate...

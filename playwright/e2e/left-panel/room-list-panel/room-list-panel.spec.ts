@@ -19,7 +19,7 @@ test.describe("Room list panel", () => {
      * @param page
      */
     function getRoomListView(page: Page) {
-        return page.getByTestId("room-list-panel");
+        return page.getByRole("navigation", { name: "Room list" });
     }
 
     test.beforeEach(async ({ page, app, user }) => {
@@ -30,12 +30,21 @@ test.describe("Room list panel", () => {
         for (let i = 0; i < 20; i++) {
             await app.client.createRoom({ name: `room${i}` });
         }
+
+        // focus the user menu to avoid to have hover decoration
+        await page.getByRole("button", { name: "User menu" }).focus();
     });
 
     test("should render the room list panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const roomListView = getRoomListView(page);
         // Wait for the last room to be visible
-        await expect(roomListView.getByRole("gridcell", { name: "Open room room19" })).toBeVisible();
+        await expect(roomListView.getByRole("option", { name: "Open room room19" })).toBeVisible();
         await expect(roomListView).toMatchScreenshot("room-list-panel.png");
+    });
+
+    test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
+        await page.setViewportSize({ width: 575, height: 600 });
+        const roomListPanel = getRoomListView(page);
+        await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
     });
 });

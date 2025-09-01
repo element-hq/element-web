@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ManualDeviceKeyVerificationDialog should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_QuestionDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Verify session
+      </h1>
+    </div>
+    <div
+      class="mx_Dialog_content"
+      id="mx_Dialog_content"
+    >
+      <div>
+        <p>
+          Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!
+        </p>
+        <div
+          class="mx_DeviceVerifyDialog_cryptoSection"
+        >
+          <div
+            class="mx_Field mx_Field_input mx_TextInputDialog_input"
+          >
+            <input
+              id="mx_Field_1"
+              label="Device ID"
+              placeholder="Device ID"
+              type="text"
+              value="XYZ"
+            />
+            <label
+              for="mx_Field_1"
+            >
+              Device ID
+            </label>
+          </div>
+          <div
+            class="mx_Field mx_Field_input mx_TextInputDialog_input"
+          >
+            <input
+              id="mx_Field_2"
+              label="Fingerprint (session key)"
+              placeholder="Fingerprint (session key)"
+              type="text"
+              value="ABCDEFGH"
+            />
+            <label
+              for="mx_Field_2"
+            >
+              Fingerprint (session key)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Verify session
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

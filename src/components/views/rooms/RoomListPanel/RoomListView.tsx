@@ -17,12 +17,19 @@ import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
  */
 export function RoomListView(): JSX.Element {
     const vm = useRoomListViewModel();
-    const isRoomListEmpty = vm.rooms.length === 0;
-
+    const isRoomListEmpty = vm.roomsResult.rooms.length === 0;
+    let listBody;
+    if (vm.isLoadingRooms) {
+        listBody = <div className="mx_RoomListSkeleton" />;
+    } else if (isRoomListEmpty) {
+        listBody = <EmptyRoomList vm={vm} />;
+    } else {
+        listBody = <RoomList vm={vm} />;
+    }
     return (
         <>
             <RoomListPrimaryFilters vm={vm} />
-            {isRoomListEmpty ? <EmptyRoomList vm={vm} /> : <RoomList vm={vm} />}
+            {listBody}
         </>
     );
 }

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { type UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
@@ -16,7 +16,6 @@ import { asyncSome } from "../../../../utils/arrays";
 import { getUserDeviceIds } from "../../../../utils/crypto/deviceInfo";
 import { type RoomMember } from "../../../../models/rooms/RoomMember";
 import { _t, _td, type TranslationKey } from "../../../../languageHandler";
-import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
 
 interface MemberTileViewModelProps {
@@ -28,16 +27,17 @@ export interface MemberTileViewState extends MemberTileViewModelProps {
     e2eStatus?: E2EStatus;
     name: string;
     onClick: () => void;
-    title?: string;
     userLabel?: string;
 }
 
 export enum PowerStatus {
+    Creator = "creator",
     Admin = "admin",
     Moderator = "moderator",
 }
 
 const PowerLabel: Record<PowerStatus, TranslationKey> = {
+    [PowerStatus.Creator]: _td("power_level|creator"),
     [PowerStatus.Admin]: _td("power_level|admin"),
     [PowerStatus.Moderator]: _td("power_level|moderator"),
 };
@@ -117,6 +117,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
     const name = props.member.name;
 
     const powerStatusMap = new Map([
+        [Infinity, PowerStatus.Creator],
         [100, PowerStatus.Admin],
         [50, PowerStatus.Moderator],
     ]);
@@ -130,15 +131,6 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
         }
     }
 
-    const title = useMemo(() => {
-        return _t("member_list|power_label", {
-            userName: UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
-                roomId: member.roomId,
-            }),
-            powerLevelNumber: member.powerLevel,
-        }).trim();
-    }, [member.powerLevel, member.roomId, member.userId]);
-
     let userLabel;
     const powerStatus = powerStatusMap.get(powerLevel);
     if (powerStatus) {
@@ -149,7 +141,6 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
     }
 
     return {
-        title,
         member,
         name,
         onClick,

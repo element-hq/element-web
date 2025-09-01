@@ -13,8 +13,6 @@ import {
     type RoomListViewState,
     useRoomListViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
-import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 import { RoomListView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListView";
 import { mkRoom, stubClient } from "../../../../../test-utils";
 
@@ -24,23 +22,28 @@ jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListViewMode
 
 describe("<RoomListView />", () => {
     const defaultValue: RoomListViewState = {
-        rooms: [],
+        isLoadingRooms: false,
+        roomsResult: { spaceId: "home", rooms: [] },
         primaryFilters: [],
-        activateSecondaryFilter: jest.fn().mockReturnValue({}),
-        activeSecondaryFilter: SecondaryFilters.AllActivity,
-        sort: jest.fn(),
-        activeSortOption: SortOption.Activity,
         createRoom: jest.fn(),
         createChatRoom: jest.fn(),
         canCreateRoom: true,
-        toggleMessagePreview: jest.fn(),
-        shouldShowMessagePreview: false,
         activeIndex: undefined,
     };
     const matrixClient = stubClient();
 
     afterEach(() => {
         jest.resetAllMocks();
+    });
+
+    it("should render the loading room list", () => {
+        mocked(useRoomListViewModel).mockReturnValue({
+            ...defaultValue,
+            isLoadingRooms: true,
+        });
+
+        const roomList = render(<RoomListView />);
+        expect(roomList.container.querySelector(".mx_RoomListSkeleton")).not.toBeNull();
     });
 
     it("should render an empty room list", () => {
@@ -53,10 +56,10 @@ describe("<RoomListView />", () => {
     it("should render a room list", () => {
         mocked(useRoomListViewModel).mockReturnValue({
             ...defaultValue,
-            rooms: [mkRoom(matrixClient, "testing room")],
+            roomsResult: { spaceId: "home", rooms: [mkRoom(matrixClient, "testing room")] },
         });
 
         render(<RoomListView />);
-        expect(screen.getByRole("grid", { name: "Room list" })).toBeInTheDocument();
+        expect(screen.getByRole("listbox", { name: "Room list" })).toBeInTheDocument();
     });
 });

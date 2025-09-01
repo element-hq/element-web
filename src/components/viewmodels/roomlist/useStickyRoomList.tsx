@@ -14,6 +14,7 @@ import { Action } from "../../../dispatcher/actions";
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Optional } from "matrix-events-sdk";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
 
 function getIndexByRoomId(rooms: Room[], roomId: Optional<string>): number | undefined {
     const index = rooms.findIndex((room) => room.roomId === roomId);
@@ -67,11 +68,11 @@ function getRoomsWithStickyRoom(
     return { newIndex: oldIndex, newRooms };
 }
 
-interface StickyRoomListResult {
+export interface StickyRoomListResult {
     /**
-     * List of rooms with sticky active room.
+     * The rooms result with the active sticky room applied
      */
-    rooms: Room[];
+    roomsResult: RoomsResult;
     /**
      * Index of the active room in the room list.
      */
@@ -85,10 +86,10 @@ interface StickyRoomListResult {
  * @param rooms list of rooms
  * @see {@link StickyRoomListResult} details what this hook returns..
  */
-export function useStickyRoomList(rooms: Room[]): StickyRoomListResult {
-    const [listState, setListState] = useState<{ index: number | undefined; roomsWithStickyRoom: Room[] }>({
-        index: undefined,
-        roomsWithStickyRoom: rooms,
+export function useStickyRoomList(roomsResult: RoomsResult): StickyRoomListResult {
+    const [listState, setListState] = useState<StickyRoomListResult>({
+        activeIndex: getIndexByRoomId(roomsResult.rooms, SdkContextClass.instance.roomViewStore.getRoomId()),
+        roomsResult: roomsResult,
     });
 
     const currentSpaceRef = useRef(SpaceStore.instance.activeSpace);
@@ -97,13 +98,18 @@ export function useStickyRoomList(rooms: Room[]): StickyRoomListResult {
         (newRoomId: string | null, isRoomChange: boolean = false) => {
             setListState((current) => {
                 const activeRoomId = newRoomId ?? SdkContextClass.instance.roomViewStore.getRoomId();
-                const newActiveIndex = getIndexByRoomId(rooms, activeRoomId);
-                const oldIndex = current.index;
-                const { newIndex, newRooms } = getRoomsWithStickyRoom(rooms, oldIndex, newActiveIndex, isRoomChange);
-                return { index: newIndex, roomsWithStickyRoom: newRooms };
+                const newActiveIndex = getIndexByRoomId(roomsResult.rooms, activeRoomId);
+                const oldIndex = current.activeIndex;
+                const { newIndex, newRooms } = getRoomsWithStickyRoom(
+                    roomsResult.rooms,
+                    oldIndex,
+                    newActiveIndex,
+                    isRoomChange,
+                );
+                return { activeIndex: newIndex, roomsResult: { ...roomsResult, rooms: newRooms } };
             });
         },
-        [rooms],
+        [roomsResult],
     );
 
     // Re-calculate the index when the active room has changed.
@@ -115,20 +121,19 @@ export function useStickyRoomList(rooms: Room[]): StickyRoomListResult {
     useEffect(() => {
         let newRoomId: string | null = null;
         let isRoomChange = false;
-        const newSpace = SpaceStore.instance.activeSpace;
-        if (currentSpaceRef.current !== newSpace) {
+        if (currentSpaceRef.current !== roomsResult.spaceId) {
             /*
             If the space has changed, we check if we can immediately set the active
             index to the last opened room in that space. Otherwise, we might see a
             flicker because of the delay between the space change event and
             active room change dispatch.
             */
-            newRoomId = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpace);
+            newRoomId = SpaceStore.instance.getLastSelectedRoomIdForSpace(roomsResult.spaceId);
             isRoomChange = true;
-            currentSpaceRef.current = newSpace;
+            currentSpaceRef.current = roomsResult.spaceId;
         }
         updateRoomsAndIndex(newRoomId, isRoomChange);
-    }, [rooms, updateRoomsAndIndex]);
+    }, [roomsResult, updateRoomsAndIndex]);
 
-    return { activeIndex: listState.index, rooms: listState.roomsWithStickyRoom };
+    return listState;
 }

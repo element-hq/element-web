@@ -14,13 +14,15 @@ import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
 import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/preferences";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
 } from "../../../viewmodels/roomlist/RoomListHeaderViewModel";
+import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
 
 /**
  * The header view for the room list
@@ -42,14 +44,17 @@ export function RoomListHeaderView(): JSX.Element {
                 <h1 title={vm.title}>{vm.title}</h1>
                 {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
             </Flex>
-            {/* If we don't display the compose menu, it means that the user can only send DM */}
-            {vm.displayComposeMenu ? (
-                <ComposeMenu vm={vm} />
-            ) : (
-                <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
-                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
-                </IconButton>
-            )}
+            <Flex align="center" gap="var(--cpd-space-2x)">
+                <RoomListOptionsMenu vm={vm} />
+                {/* If we don't display the compose menu, it means that the user can only send DM */}
+                {vm.displayComposeMenu ? (
+                    <ComposeMenu vm={vm} />
+                ) : (
+                    <IconButton aria-label={_t("action|start_chat")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
+                        <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                    </IconButton>
+                )}
+            </Flex>
         </Flex>
     );
 }
@@ -139,12 +144,7 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
                 </IconButton>
             }
         >
-            <MenuItem
-                Icon={UserAddIcon}
-                label={_t("action|new_message")}
-                onSelect={vm.createChatRoom}
-                hideChevron={true}
-            />
+            <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={vm.createChatRoom} hideChevron={true} />
             {vm.canCreateRoom && (
                 <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={vm.createRoom} hideChevron={true} />
             )}

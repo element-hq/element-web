@@ -60,6 +60,7 @@ import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
+import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 
 export { CommandCategories, Command };
 
@@ -147,7 +148,7 @@ export const Commands = [
         command: "upgraderoom",
         args: "<new_version>",
         description: _td("slash_command|upgraderoom"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli) && SettingsStore.getValue("developerMode"),
+        isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 const room = cli.getRoom(roomId);
@@ -661,6 +662,36 @@ export const Commands = [
             }
         },
         category: CommandCategories.admin,
+        renderingTypes: [TimelineRenderingType.Room],
+    }),
+    new Command({
+        command: "verify",
+        args: "<device-id> <device-fingerprint>",
+        description: _td("slash_command|verify"),
+        runFn: function (cli, _roomId, _threadId, args) {
+            if (args) {
+                const matches = args.match(/^(\S+) +(\S+)$/);
+                if (matches) {
+                    const deviceId = matches[1];
+                    const fingerprint = matches[2];
+
+                    const { finished } = Modal.createDialog(QuestionDialog, {
+                        title: _t("slash_command|manual_device_verification_confirm_title"),
+                        description: _t("slash_command|manual_device_verification_confirm_description"),
+                        button: _t("action|verify"),
+                        danger: true,
+                    });
+
+                    return success(
+                        finished.then(([confirmed]) => {
+                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                        }),
+                    );
+                }
+            }
+            return reject(this.getUsage());
+        },
+        category: CommandCategories.advanced,
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({

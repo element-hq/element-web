@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
@@ -99,7 +98,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
         await this.client.setRoomAccountData(roomId, eventType, content);
 
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent, room: Room): void => {
             if (room.roomId !== roomId || event.getType() !== eventType) return;
             if (field !== null && event.getContent()[field] !== value) return;
@@ -122,6 +121,9 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
                 return this.setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, null, newValue);
             case "mediaPreviewConfig":
                 // Handled in MediaPreviewConfigController.
+                return;
+            case "inviteRules":
+                // Handled in InviteRulesConfigController.
                 return;
             default:
                 return this.setRoomAccountData(roomId, DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);

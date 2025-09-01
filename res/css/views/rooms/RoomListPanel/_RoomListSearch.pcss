@@ -12,15 +12,16 @@
     border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-bg-subtle-primary);
     padding: 0 var(--cpd-space-3x);
 
-    svg {
-        fill: var(--cpd-color-icon-secondary);
-    }
-
     .mx_RoomListSearch_search {
         /* The search button should take all the remaining space */
         flex: 1;
         font: var(--cpd-font-body-md-regular);
         color: var(--cpd-color-text-secondary);
+        min-width: 0;
+
+        svg {
+            fill: var(--cpd-color-icon-secondary);
+        }
 
         span {
             flex: 1;
@@ -28,12 +29,17 @@
             kbd {
                 font-family: inherit;
             }
-        }
-    }
 
-    .mx_RoomListSearch_button:hover {
-        svg {
-            fill: var(--cpd-color-icon-primary);
+            /* Shrink and truncate the search text */
+            white-space: nowrap;
+            overflow: hidden;
+            .mx_RoomListSearch_search_text {
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: start;
+            }
         }
     }
 }

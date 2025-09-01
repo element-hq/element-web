@@ -24,6 +24,49 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
 </DocumentFragment>
 `;
 
+exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomAvatarView"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_1qbcf_41"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="This is a low priority room"
+      aria-labelledby="«r0»"
+      class="mx_RoomAvatarView_icon"
+      color="var(--cpd-color-icon-tertiary)"
+      fill="currentColor"
+      height="16px"
+      viewBox="0 0 24 24"
+      width="16px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4.5a1 1 0 0 1 1 1v10.586l4.293-4.293a1 1 0 0 1 1.414 1.414l-6 6a1 1 0 0 1-1.414 0l-6-6a1 1 0 1 1 1.414-1.414L11 16.086V5.5a1 1 0 0 1 1-1"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
 <DocumentFragment>
   <div
@@ -50,8 +93,9 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is public"
+      aria-labelledby="«rc»"
       class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
+      color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
       height="16px"
       viewBox="0 0 24 24"
@@ -92,6 +136,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is a video room"
+      aria-labelledby="«r6»"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -115,7 +160,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -133,21 +178,8 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
       />
     </span>
     <svg
-      aria-label="This room is a video room"
-      class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
-      fill="currentColor"
-      height="16px"
-      viewBox="0 0 24 24"
-      width="16px"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-      />
-    </svg>
-    <svg
       aria-label="Away"
+      aria-labelledby="«r14»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
@@ -184,7 +216,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -202,21 +234,8 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
       />
     </span>
     <svg
-      aria-label="This room is a video room"
-      class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
-      fill="currentColor"
-      height="16px"
-      viewBox="0 0 24 24"
-      width="16px"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-      />
-    </svg>
-    <svg
       aria-label="Busy"
+      aria-labelledby="«ru»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -255,7 +274,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -273,21 +292,8 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
       />
     </span>
     <svg
-      aria-label="This room is a video room"
-      class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
-      fill="currentColor"
-      height="16px"
-      viewBox="0 0 24 24"
-      width="16px"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-      />
-    </svg>
-    <svg
       aria-label="Offline"
+      aria-labelledby="«ro»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -326,7 +332,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -344,21 +350,8 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
       />
     </span>
     <svg
-      aria-label="This room is a video room"
-      class="mx_RoomAvatarView_icon"
-      color="var(--cpd-color-icon-tertiary)"
-      fill="currentColor"
-      height="16px"
-      viewBox="0 0 24 24"
-      width="16px"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-      />
-    </svg>
-    <svg
       aria-label="Online"
+      aria-labelledby="«ri»"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"

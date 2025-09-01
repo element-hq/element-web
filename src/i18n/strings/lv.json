@@ -224,8 +224,7 @@
             "setup_key_backup_title": "Tu zaudēsi piekļuvi savām šifrētajām ziņām",
             "setup_secure_backup_description_1": "Šifrētas ziņas tiek nodrošinātas ar pilnīgu šifrēšanu. Tikai Tev un saņēmējam(iem) ir atslēgas šo ziņojumu lasīšanai.",
             "setup_secure_backup_description_2": "Kad Tu atteiksies, šīs atslēgas tiks izdzēstas no šīs ierīces, kas nozīmē, ka Tu nevarēsi lasīt šifrētas ziņas, līdz Tev būs to atslēgas citās ierīcēs vai serverī izveidosi to rezerves kopiju.",
-            "skip_key_backup": "Es nevēlos savas šifrētās ziņas",
-            "use_key_backup": "Sākt izmantot atslēgu rezerves kopiju veidošanu"
+            "skip_key_backup": "Es nevēlos savas šifrētās ziņas"
         },
         "misconfigured_body": "Jāvaicā savam %(brand)s pārvaldniekam pārbaudīt, vai <a>konfigurācijā</a> ir nepareizu vai atkārtojošos ierakstu",
         "misconfigured_title": "%(brand)s ir nepareizi konfigurēts",
@@ -833,26 +832,13 @@
     "empty_room_was_name": "Tukša istaba (bija %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Ievadiet savu drošības frāzi vai <button>izmantojiet savu drošības atslēgu</button>, lai turpinātu.",
             "key_validation_text": {
-                "invalid_security_key": "Kļūdaina drošības atslēga",
-                "recovery_key_is_correct": "Izskatās labi!",
-                "wrong_file_type": "Nepareizs datnes veids",
                 "wrong_security_key": "Nepareiza drošības atslēga"
             },
-            "reset_title": "Atiestatīt visu",
-            "reset_warning_1": "Dariet to tikai tad, ja jums nav citas ierīces, ar kuru pabeigt verifikāciju.",
-            "reset_warning_2": "Ja viss tiks attiestatīts, tiks atkal uzsākts bez uzticamām sesijām un lietotājiem un varētu nebūt iespējams redzēt iepriekšējās ziņas.",
             "restoring": "Atslēgu atjaunošana no rezerves kopijas",
-            "security_key_title": "Drošības atslēga",
-            "security_phrase_incorrect_error": "Nebija iespējams piekļūt slepenajai krātuvei. Lūgums pārliecināties, ka ir ievadīta pareiza drošības vārdkopa.",
-            "security_phrase_title": "Slepenā frāze",
-            "separator": "%(securityKey)s vai %(recoveryFile)s",
-            "use_security_key_prompt": "Izmantojiet savu drošības atslēgu, lai turpinātu."
+            "security_key_title": "Drošības atslēga"
         },
         "bootstrap_title": "Atslēgu iestatīšana",
-        "cancel_entering_passphrase_description": "Vai tiešām atcelt paroles vārdkopas ievadīšanu?",
-        "cancel_entering_passphrase_title": "Atcelt frāzveida paroles ievadi?",
         "confirm_encryption_setup_body": "Noklikšķiniet uz tālāk esošās pogas, lai apstiprinātu šifrēšanas iestatīšanu.",
         "confirm_encryption_setup_title": "Apstiprināt šifrēšanas iestatīšanu",
         "cross_signing_room_normal": "Šajā istabā tiek veikta pilnīga šifrēšana",
@@ -890,7 +876,6 @@
             "warning": "Ja nenoņēmi atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
         "reset_all_button": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
-        "set_up_toast_description": "Pasargājieties pret piekļuves zaudēšanu šifrētām ziņām un datiem",
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
         "setup_secure_backup": {
             "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas."
@@ -908,7 +893,6 @@
             "accepting": "Apstiprina…",
             "after_new_login": {
                 "device_verified": "Ierīce ir verificēta",
-                "reset_confirmation": "Vai tiešām atiestatīt verifikācijas atslēgas?",
                 "skip_verification": "Pagaidām izlaist verifikāciju",
                 "unable_to_verify": "Neizdevās verificēt šo ierīci",
                 "verify_this_device": "Verificēt šo ierīci"
@@ -979,8 +963,6 @@
             "verify_emoji_prompt": "Apliecināt ar vienreizēju emocijzīmu salīdzināšanu.",
             "verify_emoji_prompt_qr": "Ja nevar nolasīt augstāk esošo kodu, var apliecināt ar vienreizēju emocijzīmju salīdzināšanu.",
             "verify_later": "Es verificēšu vēlāk",
-            "verify_reset_warning_1": "Verifikācijas atslēgu atiestatīšanu nevar atsaukt. Pēc atiestatīšanas jūs nevarēsit piekļūt vecām šifrētām ziņām, un visi draugi, kas jūs iepriekš ir verificējuši, redzēs drošības brīdinājumus, līdz veiksit atkārtotu verifikāciju.",
-            "verify_reset_warning_2": "Lūdzu, turpiniet tikai tad, ja esat pārliecināts, ka esat zaudējis visas pārējās ierīces un drošības atslēgu.",
             "verify_using_device": "Verificēt ar citu ierīci",
             "verify_using_key": "Verificēt ar drošības atslēgu",
             "verify_using_key_or_phrase": "Verificēt, izmantojot drošības atslēgu vai frāzi",
@@ -1416,8 +1398,7 @@
     },
     "member_list": {
         "filter_placeholder": "Atfiltrēt istabas dalībniekus",
-        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus",
-        "power_label": "%(userName)s (tiesību līmenis %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus"
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",
@@ -2235,18 +2216,12 @@
             "remove_msisdn_prompt": "Dzēst %(phone)s?",
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
-        "image_thumbnails": "Rādīt attēlu priekšskatījumus/sīktēlus",
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
         "insert_trailing_colon_mentions": "Jāievieto beigu kols pēc lietotāja pieminēšanas ziņas sākumā",
         "jump_to_bottom_on_send": "Nosūtot ziņu, pāriet uz laika skalas beigām",
         "key_backup": {
-            "backup_in_progress": "Jūsu atslēgas tiek dublētas (pirmā dublēšana var ilgt dažas minūtes).",
-            "backup_starting": "Sāk dublējumu...",
-            "backup_success": "Veiksmīgi!",
-            "cannot_create_backup": "Nevar izveidot atslēgu rezerves kopiju",
-            "create_title": "Izveidot atslēgu rezerves kopiju",
             "setup_secure_backup": {
                 "backup_setup_success_description": "Tagad jūsu atslēgas tiek dublētas no šīs ierīces.",
                 "backup_setup_success_title": "Droša dublējuma izveide ir veiksmīga",
@@ -2381,7 +2356,6 @@
             "ignore_users_empty": "Nav vērā neņemtu lietotāju.",
             "ignore_users_section": "Vērā neņemtie lietotāji",
             "key_backup_algorithm": "Algoritms:",
-            "key_backup_connect": "Savienojiet šo sesiju ar atslēgu dublēšanu",
             "message_search_disable_warning": "Ja šī opcija ir atspējota, ziņas no šifrētām istabām neparādīsies meklēšanas rezultātos.",
             "message_search_disabled": "Drošā veidā saglabājiet lokālajā kešatmiņā šifrētās ziņas, lai tās parādītos meklēšanas rezultātos.",
             "message_search_enabled": {
@@ -2658,6 +2632,7 @@
         "upgraderoom": "Atjaunina istabu uz jaunu versiju",
         "upgraderoom_permission_error": "Nav šīs komandas izmantošanai nepieciešamo atļauju.",
         "usage": "Lietojums",
+        "verify": "Verificē lietotāju, sesiju un publiskās atslēgas",
         "view": "Skata istabu ar norādīto adresi",
         "whois": "Parāda lietotāja informāciju"
     },
@@ -2766,7 +2741,6 @@
         "heading_with_query": "Izmantot \"%(query)s\" meklēšanai",
         "heading_without_query": "Meklēt",
         "keyboard_scroll_hint": "Lietojiet <arrows/> ritināšanai",
-        "message_search_section_title": "Citi meklējumi",
         "other_rooms_in_space": "Citas istabas %(spaceName)s",
         "public_rooms_label": "Publiskas istabas",
         "public_spaces_label": "Publiskās telpas",
@@ -2775,7 +2749,6 @@
         "remove_filter": "Noņemt meklēšanas filtru %(filter)s",
         "result_may_be_hidden_privacy_warning": "Daži rezultāti var būt slēpti dēļ privātuma",
         "result_may_be_hidden_warning": "Atsevišķi rezultāti var būt slēpti",
-        "search_messages_hint": "Lai meklētu ziņas, istabas augšpusē meklējiet šo ikonu <icon/>",
         "spaces_title": "Telpas, kurās atrodaties",
         "start_group_chat_button": "Uzsākt grupas tērzēšanu"
     },
@@ -3438,7 +3411,6 @@
         "dialpad": "Cipartastatūra",
         "disable_camera": "Izslēgt kameru",
         "disable_microphone": "Izslēgt mikrofonu",
-        "disabled_no_one_here": "Šeit nav neviena, kam piezvanīt",
         "disabled_no_perms_start_video_call": "Jums nav atļaujas sākt videozvanus",
         "disabled_no_perms_start_voice_call": "Jums nav atļaujas sākt balss zvanus",
         "disabled_ongoing_call": "Notiek zvans",

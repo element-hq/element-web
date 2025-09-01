@@ -71,6 +71,13 @@ type ElectronChannel =
     | "serverSupportedVersions";
 
 declare global {
+    // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
+    // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
+    // The overload for clear{Interval,Timeout} is resolved as expected.
+    // We use `ReturnType<typeof setTimeout>` in the code to be agnostic of if this definition gets loaded.
+    function setInterval(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
+    function setTimeout(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
+
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixLogger: typeof logger;
@@ -82,18 +89,9 @@ declare global {
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
-        // Needed for Safari, unknown to TypeScript
-        webkitAudioContext: typeof AudioContext;
-
         // https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
         // we only ever check for its existence, so we can ignore its actual type
         MSStream?: unknown;
-
-        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-869224737
-        // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
-        OffscreenCanvas?: {
-            new (width: number, height: number): OffscreenCanvas;
-        };
 
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
@@ -137,8 +135,20 @@ declare global {
     }
 
     interface Electron {
+        // Legacy
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
+        // Initialisation
+        initialise(): Promise<{
+            protocol: string;
+            sessionId: string;
+            supportsBadgeOverlay: boolean;
+            config: IConfigOptions;
+            supportedSettings: Record<string, boolean>;
+        }>;
+        // Settings
+        setSettingValue(settingName: string, value: any): Promise<void>;
+        getSettingValue(settingName: string): Promise<any>;
     }
 
     interface DesktopCapturerSource {
@@ -156,29 +166,8 @@ declare global {
         fetchWindowIcons?: boolean;
     }
 
-    interface Document {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitExitFullscreen(): Promise<void>;
-        msExitFullscreen(): Promise<void>;
-        readonly webkitFullscreenElement: Element | null;
-        readonly msFullscreenElement: Element | null;
-    }
-
-    interface Navigator {
-        userLanguage?: string;
-    }
-
     interface StorageEstimate {
         usageDetails?: { [key: string]: number };
-    }
-
-    interface Element {
-        // Safari & IE11 only have this prefixed: we used prefixed versions
-        // previously so let's continue to support them for now
-        webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
-        msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
-        // scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
@@ -237,13 +226,6 @@ declare global {
     var mx_rage_initStoragePromise: Promise<void>;
     // eslint-disable-next-line no-var, camelcase
     var mx_rage_store: IndexedDBLogStore;
-}
-
-// add method which is missing from the node typing
-declare module "url" {
-    interface Url {
-        format(): string;
-    }
 }
 
 /* eslint-enable @typescript-eslint/naming-convention */

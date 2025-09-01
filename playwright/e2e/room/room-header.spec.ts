@@ -37,11 +37,8 @@ test.describe("Room Header", () => {
             await expect(header.locator(".mx_FacePile")).toBeVisible();
 
             // There should be both a voice and a video call button
-            // but they'll be disabled
-            const callButtons = header.getByRole("button", { name: "There's no one here to call" });
-            await expect(callButtons).toHaveCount(2);
-            await expect(callButtons.first()).toBeVisible();
-            await expect(callButtons.last()).toBeVisible();
+            await expect(header.getByRole("button", { name: "Video call" })).toBeVisible();
+            await expect(header.getByRole("button", { name: "Voice call" })).toBeVisible();
 
             await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
             await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();

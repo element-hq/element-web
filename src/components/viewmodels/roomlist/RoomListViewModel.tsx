@@ -8,9 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
-import { type SortOption, useSorter } from "./useSorter";
-import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
+import { type PrimaryFilter, useFilteredRooms } from "./useFilteredRooms";
 import { createRoom as createRoomFunc, hasCreateRoomRights } from "./utils";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
@@ -20,12 +18,18 @@ import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useStickyRoomList } from "./useStickyRoomList";
 import { useRoomListNavigation } from "./useRoomListNavigation";
+import { type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
 
 export interface RoomListViewState {
     /**
-     * A list of rooms to be displayed in the left panel.
+     * Whether the list of rooms is being loaded.
      */
-    rooms: Room[];
+    isLoadingRooms: boolean;
+
+    /**
+     * The room results to be displayed (along with the spaceId and filter keys at the time of query)
+     */
+    roomsResult: RoomsResult;
 
     /**
      * Create a chat room
@@ -57,36 +61,6 @@ export interface RoomListViewState {
     activePrimaryFilter?: PrimaryFilter;
 
     /**
-     * A function to activate a given secondary filter.
-     */
-    activateSecondaryFilter: (filter: SecondaryFilters) => void;
-
-    /**
-     * The currently active secondary filter.
-     */
-    activeSecondaryFilter: SecondaryFilters;
-
-    /**
-     * Change the sort order of the room-list.
-     */
-    sort: (option: SortOption) => void;
-
-    /**
-     * The currently active sort option.
-     */
-    activeSortOption: SortOption;
-
-    /**
-     * Whether message previews must be shown or not.
-     */
-    shouldShowMessagePreview: boolean;
-
-    /**
-     * A function to turn on/off message previews.
-     */
-    toggleMessagePreview: () => void;
-
-    /**
      * The index of the active room in the room list.
      */
     activeIndex: number | undefined;
@@ -98,16 +72,10 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
-    const {
-        primaryFilters,
-        activePrimaryFilter,
-        rooms: filteredRooms,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
-    } = useFilteredRooms();
-    const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
+    const { isLoadingRooms, primaryFilters, activePrimaryFilter, roomsResult: filteredRooms } = useFilteredRooms();
+    const { activeIndex, roomsResult } = useStickyRoomList(filteredRooms);
 
-    useRoomListNavigation(rooms);
+    useRoomListNavigation(roomsResult.rooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
@@ -116,25 +84,17 @@ export function useRoomListViewModel(): RoomListViewState {
     );
     const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
 
-    const { activeSortOption, sort } = useSorter();
-    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
-
     const createChatRoom = useCallback(() => dispatcher.fire(Action.CreateChat), []);
     const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
-        rooms,
+        isLoadingRooms,
+        roomsResult,
         canCreateRoom,
         createRoom,
         createChatRoom,
         primaryFilters,
         activePrimaryFilter,
-        activateSecondaryFilter,
-        activeSecondaryFilter,
-        activeSortOption,
-        sort,
-        shouldShowMessagePreview,
-        toggleMessagePreview,
         activeIndex,
     };
 }

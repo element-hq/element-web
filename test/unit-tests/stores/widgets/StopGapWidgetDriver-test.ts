@@ -92,19 +92,26 @@ describe("StopGapWidgetDriver", () => {
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
             "org.matrix.msc2762.timeline:!1:example.org",
+            "org.matrix.msc2762.send.event:org.matrix.msc4075.call.notify",
+            "org.matrix.msc2762.send.event:org.matrix.msc4075.rtc.notification",
             "org.matrix.msc2762.send.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.send.event:m.reaction",
             "org.matrix.msc2762.receive.event:m.reaction",
             "org.matrix.msc2762.send.event:m.room.redaction",
             "org.matrix.msc2762.receive.event:m.room.redaction",
+            "org.matrix.msc2762.send.event:io.element.call.reaction",
+            "org.matrix.msc2762.receive.event:io.element.call.reaction",
             "org.matrix.msc2762.receive.state_event:m.room.create",
+            "org.matrix.msc2762.receive.state_event:m.room.name",
             "org.matrix.msc2762.receive.state_event:m.room.member",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
             `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#_@alice:example.org_${client.deviceId}`,
             `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org_${client.deviceId}`,
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#_@alice:example.org_${client.deviceId}_m.call`,
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org_${client.deviceId}_m.call`,
             "org.matrix.msc3819.send.to_device:m.call.invite",
             "org.matrix.msc3819.receive.to_device:m.call.invite",
             "org.matrix.msc3819.send.to_device:m.call.candidates",
@@ -708,6 +715,7 @@ describe("StopGapWidgetDriver", () => {
             id: "$event-id2",
             type: "org.example.foo",
             user: "@alice:example.org",
+            skey: "",
             content: { hello: "world" },
             room: "!1:example.org",
         });
@@ -724,6 +732,12 @@ describe("StopGapWidgetDriver", () => {
             expect(
                 await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, undefined, 10, undefined),
             ).toEqual([event2, event1].map((e) => e.getEffectiveEvent()));
+        });
+
+        it("reads state events", async () => {
+            expect(
+                await driver.readRoomTimeline("!1:example.org", "org.example.foo", undefined, "", 10, undefined),
+            ).toEqual([event2.getEffectiveEvent()]);
         });
 
         it("reads up to a limit", async () => {

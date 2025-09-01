@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    type ChangeEvent,
     type ComponentProps,
     createRef,
     type ReactElement,
@@ -133,6 +132,7 @@ import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
+import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -315,8 +315,8 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 <RoomHeader room={room} />
-                <main className="mx_RoomView_body" ref={props.roomView}>
-                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} />
+                <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
+                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} room={room} />
                     <div className="mx_RoomView_timeline">
                         <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={props.resizeNotifier}>
                             {encryptionTile}
@@ -369,6 +369,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
+
+    // The userId from which we received this invite.
+    // Only populated if the membership of our user is invite.
+    private inviter?: string;
 
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
@@ -1244,6 +1248,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.View3pidInvite:
                 onView3pidInvite(payload, RightPanelStore.instance);
                 break;
+            case Action.FocusMessageSearch:
+                if ((payload as FocusMessageSearchPayload).initialText) {
+                    this.onSearch(payload.initialText);
+                }
+                break;
         }
     };
 
@@ -1345,6 +1354,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room): void => {
         if (this.unmounted) return;
+
+        // Store the inviter so that we can know who invited us to this room even if
+        // the membership event changes.
+        this.inviter = this.getInviterFromRoom(room);
+
         // Attach a widget store listener only when we get a room
         this.context.widgetLayoutStore.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
 
@@ -1724,8 +1738,20 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
+    private getInviterFromRoom(room: Room): string | undefined {
+        const ownUserId = this.context.client?.getSafeUserId();
+        if (!ownUserId) return;
+
+        const myMember = room.getMember(ownUserId);
+        const memberEvent = myMember?.events.member;
+        const senderId = memberEvent?.getSender();
+
+        if (memberEvent?.getContent().membership === KnownMembership.Invite) return senderId;
+    }
+
     private onDeclineAndBlockButtonClicked = async (): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
+
         const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(DeclineAndBlockInviteDialog, {
             roomName: this.state.room.name,
         }).finished;
@@ -1740,15 +1766,24 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const actions: Promise<unknown>[] = [];
 
         if (ignoreUser) {
-            const myMember = this.state.room.getMember(this.context.client!.getSafeUserId());
-            const inviteEvent = myMember!.events.member;
-            const ignoredUsers = this.context.client.getIgnoredUsers();
-            ignoredUsers.push(inviteEvent!.getSender()!); // de-duped internally in the js-sdk
-            actions.push(this.context.client.setIgnoredUsers(ignoredUsers));
+            const doIgnore = async (): Promise<void> => {
+                const ownUserId = this.context.client!.getSafeUserId();
+                if (!this.inviter || this.inviter === ownUserId) {
+                    // This is unlikely to happen since we cache the inviter as early as possible.
+                    // However, we still do this check here to be double sure.
+                    throw new CannotDetermineUserError(
+                        "Cannot determine which user to ignore since the member event has changed.",
+                    );
+                }
+                const ignoredUsers = this.context.client!.getIgnoredUsers();
+                ignoredUsers.push(this.inviter); // de-duped internally in the js-sdk
+                await this.context.client!.setIgnoredUsers(ignoredUsers);
+            };
+            actions.push(doIgnore());
         }
 
         if (reportRoom !== false) {
-            actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom));
+            actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom!));
         }
 
         actions.push(this.context.client.leave(this.state.room.roomId));
@@ -1761,7 +1796,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } catch (error) {
             logger.error(`Failed to reject invite: ${error}`);
 
-            const msg = error instanceof Error ? error.message : JSON.stringify(error);
+            let msg: string = "";
+            if (error instanceof CannotDetermineUserError) {
+                msg = _t("room|failed_determine_user");
+            } else if (error instanceof Error) {
+                msg = error.message;
+            } else {
+                msg = JSON.stringify(error);
+            }
             Modal.createDialog(ErrorDialog, {
                 title: _t("room|failed_reject_invite"),
                 description: msg,
@@ -1778,6 +1820,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
         try {
+            this.setState({
+                rejecting: true,
+            });
             await this.context.client.leave(this.state.room.roomId);
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
@@ -1806,8 +1851,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         defaultDispatcher.fire(Action.ViewRoomDirectory);
     };
 
-    private onSearchChange = debounce((e: ChangeEvent): void => {
-        const term = (e.target as HTMLInputElement).value;
+    private onSearchChange = debounce((term: string): void => {
         this.onSearch(term);
     }, 300);
 
@@ -2487,6 +2531,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 e2eStatus={this.state.e2eStatus}
                 onSearchChange={this.onSearchChange}
                 onSearchCancel={this.onCancelSearchClick}
+                searchTerm={this.state.search?.term ?? ""}
             />
         ) : undefined;
 
@@ -2519,7 +2564,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses}>
-                            <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
+                            <FileDropTarget
+                                parent={this.roomView.current}
+                                onFileDrop={this.onFileDrop}
+                                room={this.state.room}
+                            />
                             {topUnreadMessagesBar}
                             {jumpToBottom}
                             {messagePanel}
@@ -2606,4 +2655,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </ScopedRoomContextProvider>
         );
     }
+}
+
+class CannotDetermineUserError extends Error {
+    public name = "CannotDetermineUserError";
 }

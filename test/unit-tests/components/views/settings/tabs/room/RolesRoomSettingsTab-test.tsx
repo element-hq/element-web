@@ -18,14 +18,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
-import { defer } from "matrix-js-sdk/src/utils";
 import userEvent from "@testing-library/user-event";
 
 import RolesRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { ElementCall } from "../../../../../../../src/models/Call";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../../../src/call-types";
 
 describe("RolesRoomSettingsTab", () => {
     const userId = "@alice:server.org";
@@ -117,7 +116,7 @@ describe("RolesRoomSettingsTab", () => {
                     expect(getJoinCallSelectedOption(tab)?.textContent).toBe("Default");
                     expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
                         events: {
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                            [ElementCallMemberEventType.name]: 0,
                         },
                     });
                 });
@@ -138,7 +137,7 @@ describe("RolesRoomSettingsTab", () => {
                     expect(getStartCallSelectedOption(tab)?.textContent).toBe("Default");
                     expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
                         events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: 0,
+                            [ElementCallEventType.name]: 0,
                         },
                     });
                 });
@@ -209,7 +208,7 @@ describe("RolesRoomSettingsTab", () => {
     });
 
     it("should roll back power level change on error", async () => {
-        const deferred = defer<ISendEventResponse>();
+        const deferred = Promise.withResolvers<ISendEventResponse>();
         mocked(cli.sendStateEvent).mockReturnValue(deferred.promise);
         mocked(cli.getRoom).mockReturnValue(room);
         // @ts-ignore - mocked doesn't support overloads properly

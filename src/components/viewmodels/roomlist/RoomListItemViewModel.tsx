@@ -16,17 +16,24 @@ import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useEventEmitter, useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { type ConnectionState } from "../../../models/Call";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 export interface RoomListItemViewState {
     /**
      * The name of the room.
      */
     name: string;
+    /**
+     * Whether the context menu should be shown.
+     */
+    showContextMenu: boolean;
     /**
      * Whether the hover menu should be shown.
      */
@@ -61,6 +68,11 @@ export interface RoomListItemViewState {
      */
     hasParticipantInCall: boolean;
     /**
+     * Pre-rendered and translated preview for the latest message in the room, or undefined
+     * if no preview should be shown.
+     */
+    messagePreview: string | undefined;
+    /**
      * Whether the notification decoration should be shown.
      */
     showNotificationDecoration: boolean;
@@ -92,12 +104,19 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         setNotificationValues(getNotificationValues(notificationState));
     });
 
-    // We don't want to show the hover menu if
+    // If the notification reference change due to room change, update the values
+    useEffect(() => {
+        setNotificationValues(getNotificationValues(notificationState));
+    }, [notificationState]);
+
+    // We don't want to show the menus if
     // - there is an invitation for this room
-    // - the user doesn't have access to both notification and more options menus
+    // - the user doesn't have access to notification and more options menus
+    const showContextMenu = !invited && hasAccessToOptionsMenu(room);
     const showHoverMenu =
-        !invited &&
-        (hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
+        !invited && (showContextMenu || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived));
+
+    const messagePreview = useRoomMessagePreview(room);
 
     // Video room
     const isVideoRoom = room.isElementVideoRoom() || room.isCallRoom();
@@ -122,6 +141,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     return {
         name,
         notificationState,
+        showContextMenu,
         showHoverMenu,
         openRoom,
         a11yLabel,
@@ -129,6 +149,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         isVideoRoom,
         callConnectionState,
         hasParticipantInCall,
+        messagePreview,
         showNotificationDecoration,
     };
 }
@@ -184,4 +205,37 @@ function getA11yLabel(roomName: string, notificationState: RoomNotificationState
     } else {
         return _t("room_list|room|open_room", { roomName });
     }
+}
+
+function useRoomMessagePreview(room: Room): string | undefined {
+    const { shouldShowMessagePreview } = useMessagePreviewToggle();
+    const [previewText, setPreviewText] = useState<string | undefined>(undefined);
+
+    const updatePreview = useCallback(async () => {
+        if (!shouldShowMessagePreview) {
+            setPreviewText(undefined);
+            return;
+        }
+
+        const roomIsDM = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
+        // For the tag, we only care about whether the room is a DM or not as we don't show
+        // display names in previewsd for DMs, so anything else we just say is 'untagged'
+        // (even though it could actually be have other tags: we don't care about them).
+        const messagePreview = await MessagePreviewStore.instance.getPreviewForRoom(
+            room,
+            roomIsDM ? DefaultTagID.DM : DefaultTagID.Untagged,
+        );
+        setPreviewText(messagePreview?.text);
+    }, [room, shouldShowMessagePreview]);
+
+    // MessagePreviewStore and the other AsyncStores need to be converted to TypedEventEmitter
+    useEventEmitter(MessagePreviewStore.instance, MessagePreviewStore.getPreviewChangedEventName(room), () => {
+        updatePreview();
+    });
+
+    useEffect(() => {
+        updatePreview();
+    }, [updatePreview]);
+
+    return previewText;
 }

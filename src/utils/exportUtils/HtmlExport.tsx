@@ -13,7 +13,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -162,7 +161,7 @@ export default class HTMLExporter extends Exporter {
                     <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                         <div class="mx_MatrixChat">
                         <main class="mx_RoomView">
-                            <div class="mx_Flex mx_RoomHeader light-panel">
+                            <div class="mx_RoomHeader light-panel">
                                 ${roomAvatar}
                                 <div class="mx_RoomHeader_infoWrapper">
                                     <div
@@ -302,7 +301,7 @@ export default class HTMLExporter extends Exporter {
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
         // We have to wait for the component to be rendered before we can get the markup
         // so pass a deferred as a ref to the component.
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const EventTile = this.getEventTile(mxEv, continuation, deferred.resolve);
         let eventTileMarkup: string;
 

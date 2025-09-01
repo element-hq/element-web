@@ -7,11 +7,11 @@
 
 import React, { type JSX, type PropsWithChildren } from "react";
 import { Button } from "@vector-im/compound-web";
-import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";
@@ -53,7 +53,37 @@ export function EmptyRoomList({ vm }: EmptyRoomListProps): JSX.Element | undefin
                 />
             );
         case FilterKey.UnreadFilter:
-            return <UnreadPlaceholder filter={vm.activePrimaryFilter} />;
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_unread")}
+                    action={_t("room_list|empty|show_chats")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
+        case FilterKey.InvitesFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_invites")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
+        case FilterKey.MentionsFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_mentions")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
+        case FilterKey.LowPriorityFilter:
+            return (
+                <ActionPlaceholder
+                    title={_t("room_list|empty|no_lowpriority")}
+                    action={_t("room_list|empty|show_activity")}
+                    filter={vm.activePrimaryFilter}
+                />
+            );
         default:
             return undefined;
     }
@@ -118,8 +148,8 @@ function DefaultPlaceholder({ vm }: DefaultPlaceholderProps): JSX.Element {
                 direction="column"
                 gap="var(--cpd-space-4x)"
             >
-                <Button size="sm" kind="secondary" Icon={UserAddIcon} onClick={vm.createChatRoom}>
-                    {_t("action|new_message")}
+                <Button size="sm" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
+                    {_t("action|start_chat")}
                 </Button>
                 {vm.canCreateRoom && (
                     <Button size="sm" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
@@ -131,18 +161,21 @@ function DefaultPlaceholder({ vm }: DefaultPlaceholderProps): JSX.Element {
     );
 }
 
-interface UnreadPlaceholderProps {
+interface ActionPlaceholderProps {
     filter: PrimaryFilter;
+    title: string;
+    action: string;
 }
 
 /**
- * The empty state for the room list when the unread filter is active
+ * A placeholder for the room list when a filter is active
+ * The user can take action to toggle the filter
  */
-function UnreadPlaceholder({ filter }: UnreadPlaceholderProps): JSX.Element {
+function ActionPlaceholder({ filter, title, action }: ActionPlaceholderProps): JSX.Element {
     return (
-        <GenericPlaceholder title={_t("room_list|empty|no_unread")}>
+        <GenericPlaceholder title={title}>
             <Button kind="tertiary" onClick={filter.toggle}>
-                {_t("room_list|empty|show_chats")}
+                {action}
             </Button>
         </GenericPlaceholder>
     );

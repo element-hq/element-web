@@ -13,9 +13,9 @@ import {
     Field,
     IconButton,
     Label,
+    PasswordControl,
     Root,
     Text,
-    TextControl,
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
@@ -29,6 +29,7 @@ import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydra
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
+import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 
 /**
  * The possible states of the component.
@@ -131,6 +132,10 @@ export function ChangeRecoveryKey({
                                 });
                                 await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                             });
+
+                            // Record the fact that the user explicitly enabled recovery.
+                            await matrixClient.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: true });
+
                             onFinish();
                         } catch (e) {
                             logErrorAndShowErrorDialog("Failed to set up secret storage", e);
@@ -345,7 +350,11 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
                 <Label>{_t("settings|encryption|recovery|enter_recovery_key")}</Label>
 
-                <TextControl required={true} />
+                <PasswordControl
+                    required={true}
+                    title={_t("settings|encryption|recovery|enter_recovery_key")}
+                    className="mx_KeyForm_password mx_no_textinput"
+                />
                 {isKeyInvalidAndFilled && (
                     <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
                 )}

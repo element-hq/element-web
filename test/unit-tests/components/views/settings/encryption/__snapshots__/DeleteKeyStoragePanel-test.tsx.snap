@@ -7,7 +7,8 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
   >
     <button
       aria-label="Back"
-      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      class="_icon-button_1pz9o_8"
+      data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
@@ -83,7 +84,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       </h2>
     </div>
     <div
-      class="mx_Flex mx_EncryptionCard_emphasisedContent"
+      class="flex mx_EncryptionCard_emphasisedContent"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:

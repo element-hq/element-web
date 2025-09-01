@@ -209,8 +209,7 @@
             "setup_key_backup_title": "Je zal de toegang tot je versleutelde berichten verliezen",
             "setup_secure_backup_description_1": "Versleutelde berichten zijn beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en jij hebben de sleutels om deze berichten te lezen.",
             "setup_secure_backup_description_2": "Wanneer je jezelf afmeldt, worden deze sleutels van dit apparaat verwijderd, wat betekent dat je geen versleutelde berichten kunt lezen, tenzij je de sleutels ervoor op je andere apparaten hebt of er een back-up van hebt gemaakt op de server.",
-            "skip_key_backup": "Ik wil mijn versleutelde berichten niet",
-            "use_key_backup": "Begin sleutelback-up te gebruiken"
+            "skip_key_backup": "Ik wil mijn versleutelde berichten niet"
         },
         "misconfigured_body": "Vraag jouw %(brand)s-beheerder <a>je configuratie</a> na te kijken op onjuiste of dubbele items.",
         "misconfigured_title": "Je %(brand)s is onjuist geconfigureerd",
@@ -692,26 +691,13 @@
     "empty_room_was_name": "Lege ruimte (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Voer uw veiligheidswachtwoord in of <button>gebruik uw veiligheidssleutel</button> om door te gaan.",
             "key_validation_text": {
-                "invalid_security_key": "Ongeldige veiligheidssleutel",
-                "recovery_key_is_correct": "Ziet er goed uit!",
-                "wrong_file_type": "Verkeerd bestandstype",
                 "wrong_security_key": "Verkeerde veiligheidssleutel"
             },
-            "reset_title": "Alles opnieuw instellen",
-            "reset_warning_1": "Doe dit alleen als u geen ander apparaat hebt om de verificatie mee uit te voeren.",
-            "reset_warning_2": "Als u alles reset zult u opnieuw opstarten zonder vertrouwde sessies, zonder vertrouwde personen, en zult u misschien geen oude berichten meer kunnen zien.",
             "restoring": "Sleutels herstellen vanaf back-up",
-            "security_key_title": "Veiligheidssleutel",
-            "security_phrase_incorrect_error": "Geen toegang tot geheime opslag. Controleer of u het juiste veiligheidswachtwoord hebt ingevoerd.",
-            "security_phrase_title": "Veiligheidswachtwoord",
-            "separator": "%(securityKey)s of %(recoveryFile)s",
-            "use_security_key_prompt": "Gebruik uw veiligheidssleutel om verder te gaan."
+            "security_key_title": "Veiligheidssleutel"
         },
         "bootstrap_title": "Sleutelconfiguratie",
-        "cancel_entering_passphrase_description": "Weet je zeker, dat je het invoeren van je wachtwoord wilt afbreken?",
-        "cancel_entering_passphrase_title": "Wachtwoord annuleren?",
         "confirm_encryption_setup_body": "Klik op de knop hieronder om het instellen van de versleuting te bevestigen.",
         "confirm_encryption_setup_title": "Bevestig versleuting instelling",
         "cross_signing_room_normal": "Deze kamer is eind-tot-eind-versleuteld",
@@ -746,7 +732,6 @@
             "warning": "Als je de herstelmethode niet hebt verwijderd, is het mogelijk dat er een aanvaller toegang tot jouw account probeert te verkrijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
         "reset_all_button": "Alles vergeten en alle herstelmethoden verloren? <a>Alles opnieuw instellen</a>",
-        "set_up_toast_description": "Beveiliging tegen verlies van toegang tot versleutelde berichten en gegevens",
         "set_up_toast_title": "Beveiligde back-up instellen",
         "setup_secure_backup": {
             "explainer": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen."
@@ -764,7 +749,6 @@
             "accepting": "Toestaan…",
             "after_new_login": {
                 "device_verified": "Apparaat geverifieerd",
-                "reset_confirmation": "Echt je verificatiesleutels resetten?",
                 "skip_verification": "Verificatie voorlopig overslaan",
                 "unable_to_verify": "Kan dit apparaat niet verifiëren",
                 "verify_this_device": "Verifieer dit apparaat"
@@ -826,7 +810,6 @@
             "verify_emoji_prompt": "Verifieer door unieke emoji te vergelijken.",
             "verify_emoji_prompt_qr": "Als je bovenstaande code niet kan scannen, verifieer dan door unieke emoji te vergelijken.",
             "verify_later": "Ik verifieer het later",
-            "verify_reset_warning_1": "Het resetten van je verificatiesleutels kan niet ongedaan worden gemaakt. Na het resetten heb je geen toegang meer tot oude versleutelde berichten, en vrienden die je eerder hebben geverifieerd zullen veiligheidswaarschuwingen zien totdat je opnieuw bij hen geverifieert bent.",
             "verify_using_device": "Verifieer met andere apparaat",
             "verify_using_key": "Verifieer met veiligheidssleutel",
             "verify_using_key_or_phrase": "Verifieer met veiligheidssleutel of -wachtwoord",
@@ -1273,8 +1256,7 @@
         "toggle_attribution": "Attributie in-/uitschakelen"
     },
     "member_list": {
-        "filter_placeholder": "Kamerleden filteren",
-        "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
+        "filter_placeholder": "Kamerleden filteren"
     },
     "member_list_back_action_label": "Kamerleden",
     "message_edit_dialog_title": "Berichtbewerkingen",
@@ -1988,17 +1970,12 @@
             "remove_msisdn_prompt": "%(phone)s verwijderen?",
             "spell_check_locale_placeholder": "Kies een landinstelling"
         },
-        "image_thumbnails": "Miniaturen voor afbeeldingen tonen",
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
         "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
         "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
         "insert_trailing_colon_mentions": "Voeg een dubbele punt in nadat de persoon het aan het begin van een bericht heeft vermeld",
         "jump_to_bottom_on_send": "Naar de onderkant van de tijdlijn springen wanneer je een bericht verstuurd",
         "key_backup": {
-            "backup_in_progress": "Er wordt een back-up van je sleutels gemaakt (de eerste back-up kan enkele minuten duren).",
-            "backup_success": "Klaar!",
-            "cannot_create_backup": "Kan sleutelback-up niet aanmaken",
-            "create_title": "Sleutelback-up aanmaken",
             "setup_secure_backup": {
                 "cancel_warning": "Als je nu annuleert, kan je versleutelde berichten en gegevens verliezen als je geen toegang meer hebt tot je login.",
                 "confirm_security_phrase": "Bevestig je veiligheidswachtwoord",
@@ -2098,7 +2075,6 @@
             "ignore_users_empty": "Je hebt geen persoon genegeerd.",
             "ignore_users_section": "Genegeerde personen",
             "key_backup_algorithm": "Algoritme:",
-            "key_backup_connect": "Verbind deze sessie met de sleutelback-up",
             "message_search_disable_warning": "Dit moet aan staan om te kunnen zoeken in versleutelde kamers.",
             "message_search_disabled": "Sla versleutelde berichten veilig lokaal op om ze doorzoekbaar te maken.",
             "message_search_enabled": {
@@ -2315,6 +2291,7 @@
         "upgraderoom": "Upgrade deze kamer naar een nieuwere versie",
         "upgraderoom_permission_error": "Je beschikt niet over de vereiste machtigingen om deze opdracht uit te voeren.",
         "usage": "Gebruik",
+        "verify": "Verifieert de combinatie van persoon, sessie en publieke sleutel",
         "whois": "Geeft informatie weer over een persoon"
     },
     "space": {
@@ -2418,7 +2395,6 @@
         "heading_without_query": "Zoeken naar",
         "join_button_text": "%(roomAddress)s toetreden",
         "keyboard_scroll_hint": "Gebruik <arrows/> om te scrollen",
-        "message_search_section_title": "Andere zoekopdrachten",
         "other_rooms_in_space": "Andere kamers in %(spaceName)s",
         "public_rooms_label": "Publieke kamers",
         "recent_searches_section_title": "Recente zoekopdrachten",
@@ -2427,7 +2403,6 @@
         "result_may_be_hidden_privacy_warning": "Sommige resultaten kunnen om privacyredenen verborgen zijn",
         "result_may_be_hidden_warning": "Sommige resultaten zijn mogelijk verborgen",
         "search_dialog": "Dialoogvenster Zoeken",
-        "search_messages_hint": "Om berichten te zoeken, zoek naar dit icoon bovenaan een kamer <icon/>",
         "spaces_title": "Spaces waar u in zit",
         "start_group_chat_button": "Start een groepsgesprek"
     },
@@ -3037,7 +3012,6 @@
         "dialpad": "Toetsen",
         "disable_camera": "Camera uitschakelen",
         "disable_microphone": "Microfoon dempen",
-        "disabled_no_one_here": "Er is hier niemand om te bellen",
         "disabled_no_perms_start_video_call": "U heeft geen toestemming om videogesprekken te starten",
         "disabled_no_perms_start_voice_call": "U heeft geen toestemming om spraakoproepen te starten",
         "disabled_ongoing_call": "Lopende oproep",

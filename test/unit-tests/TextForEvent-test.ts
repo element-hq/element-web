@@ -26,8 +26,8 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import UserIdentifierCustomisations from "../../src/customisations/UserIdentifier";
-import { ElementCall } from "../../src/models/Call";
 import { getSenderName } from "../../src/utils/event/getSenderName";
+import { ElementCallEventType } from "../../src/call-types";
 
 jest.mock("../../src/settings/SettingsStore");
 jest.mock("../../src/customisations/UserIdentifier", () => ({
@@ -471,7 +471,7 @@ describe("TextForEvent", () => {
             } as unknown as MatrixEvent;
         });
 
-        describe.each(ElementCall.CALL_EVENT_TYPE.names)("eventType=%s", (eventType: string) => {
+        describe.each(ElementCallEventType.names)("eventType=%s", (eventType: string) => {
             beforeEach(() => {
                 mocked(callEvent).getType.mockReturnValue(eventType);
             });

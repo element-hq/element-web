@@ -12,6 +12,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
     class="mx_MessageEditHistoryDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -102,6 +103,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
       </div>
     </div>
     <div
+      aria-describedby="«r2»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -128,6 +130,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
     class="mx_MessageEditHistoryDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -315,6 +318,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
       </div>
     </div>
     <div
+      aria-describedby="«r8»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

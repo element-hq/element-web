@@ -120,8 +120,8 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
                 value={filter}
                 onFilterChange={onFilterChange}
                 tabs={[
-                    { id: "ACTIVE", label: "Active polls" },
-                    { id: "ENDED", label: "Past polls" },
+                    { id: "ACTIVE", label: _t("right_panel|poll|active_heading") },
+                    { id: "ENDED", label: _t("right_panel|poll|past_heading") },
                 ]}
             />
             {!!pollStartEvents.length && (

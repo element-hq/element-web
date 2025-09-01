@@ -72,7 +72,7 @@ export default abstract class BasePlatform {
     protected _favicon?: Favicon;
 
     protected constructor() {
-        dis.register(this.onAction);
+        dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
@@ -85,14 +85,14 @@ export default abstract class BasePlatform {
      */
     public abstract getDefaultDeviceDisplayName(): string;
 
-    protected onAction = (payload: ActionPayload): void => {
+    protected onAction(payload: ActionPayload): void {
         switch (payload.action) {
             case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;
         }
-    };
+    }
 
     // Used primarily for Analytics
     public abstract getHumanReadableName(): string;
@@ -477,6 +477,8 @@ export default abstract class BasePlatform {
         // The redirect URL has to exactly match that registered at the OIDC server, so
         // ensure that the fragment part of the URL is empty.
         url.hash = "";
+        // Set no_universal_links=true to prevent the callback being handled by Element X installed on macOS Apple Silicon
+        url.searchParams.set("no_universal_links", "true");
         return url;
     }
 
@@ -494,15 +496,12 @@ export default abstract class BasePlatform {
     }
 
     private updateFavicon(): void {
-        let bgColor = "#d00";
-        let notif: string | number = this.notificationCount;
+        const notif: string | number = this.notificationCount;
 
         if (this.errorDidOccur) {
-            notif = notif || "×";
-            bgColor = "#f00";
+            this.favicon.badge(notif || "×", { bgColor: "#f00" });
         }
-
-        this.favicon.badge(notif, { bgColor });
+        this.favicon.badge(notif);
     }
 
     /**

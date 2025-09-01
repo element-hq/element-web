@@ -42,7 +42,10 @@ export class Helpers {
      */
     async assertReleaseAnnouncementIsVisible(name: string) {
         await expect(this.getReleaseAnnouncement(name)).toBeVisible();
-        await expect(this.page).toMatchScreenshot(`release-announcement-${name}.png`, { showTooltips: true });
+        await expect(this.page).toMatchScreenshot(`release-announcement-${name}.png`, {
+            showTooltips: true,
+            hideJumpToBottomButton: true,
+        });
     }
 
     /**

@@ -3,7 +3,7 @@
 exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListSearch"
+    class="flex mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -27,10 +27,14 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
         />
       </svg>
       <span
-        class="mx_Flex"
+        class="flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -38,7 +42,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -64,7 +68,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
 exports[`<RoomListSearch /> should display the dial button when the PTSN protocol is not supported 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListSearch"
+    class="flex mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -88,10 +92,14 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
         />
       </svg>
       <span
-        class="mx_Flex"
+        class="flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -99,7 +107,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -120,7 +128,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -146,7 +154,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
 exports[`<RoomListSearch /> should hide the explore button when UIComponent.ExploreRooms is disabled 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListSearch"
+    class="flex mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -170,10 +178,14 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
         />
       </svg>
       <span
-        class="mx_Flex"
+        class="flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>
@@ -186,7 +198,7 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
 exports[`<RoomListSearch /> should hide the explore button when the active space is not MetaSpace.Home 1`] = `
 <DocumentFragment>
   <div
-    class="mx_Flex mx_RoomListSearch"
+    class="flex mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -210,10 +222,14 @@ exports[`<RoomListSearch /> should hide the explore button when the active space
         />
       </svg>
       <span
-        class="mx_Flex"
+        class="flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
-        Search
+        <span
+          class="mx_RoomListSearch_search_text"
+        >
+          Search
+        </span>
         <kbd>
           Ctrl K
         </kbd>

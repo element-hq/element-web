@@ -5,12 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
-import { AutoSizer, List, type ListRowProps } from "react-virtualized";
+import React, { useCallback, useRef, useState, type JSX } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { type ScrollIntoViewLocation } from "react-virtuoso";
+import { isEqual } from "lodash";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
+import { type ListContext, ListView } from "../../../utils/ListView";
+import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
+import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
+import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 
 interface RoomListProps {
     /**
@@ -22,31 +29,96 @@ interface RoomListProps {
 /**
  * A virtualized list of rooms.
  */
-export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Element {
-    const roomRendererMemoized = useCallback(
-        ({ key, index, style }: ListRowProps) => (
-            <RoomListItemView room={rooms[index]} key={key} style={style} isSelected={activeIndex === index} />
-        ),
-        [rooms, activeIndex],
+export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): JSX.Element {
+    const lastSpaceId = useRef<string | undefined>(undefined);
+    const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
+    const roomCount = roomsResult.rooms.length;
+    const [isScrolling, setIsScrolling] = useState(false);
+    const getItemComponent = useCallback(
+        (
+            index: number,
+            item: Room,
+            context: ListContext<{
+                spaceId: string;
+                filterKeys: FilterKey[] | undefined;
+            }>,
+            onFocus: (e: React.FocusEvent) => void,
+        ): JSX.Element => {
+            const itemKey = item.roomId;
+            const isRovingItem = itemKey === context.tabIndexKey;
+            const isFocused = isRovingItem && context.focused;
+            const isSelected = activeIndex === index;
+            return (
+                <RoomListItemView
+                    room={item}
+                    key={itemKey}
+                    isSelected={isSelected}
+                    isFocused={isFocused}
+                    tabIndex={isRovingItem ? 0 : -1}
+                    roomIndex={index}
+                    roomCount={roomCount}
+                    onFocus={onFocus}
+                    listIsScrolling={isScrolling}
+                />
+            );
+        },
+        [activeIndex, roomCount, isScrolling],
     );
 
-    // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
+    const getItemKey = useCallback((item: Room): string => {
+        return item.roomId;
+    }, []);
+
+    const scrollIntoViewOnChange = useCallback(
+        (params: {
+            context: ListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
+        }): ScrollIntoViewLocation | null | undefined | false | void => {
+            const { spaceId, filterKeys } = params.context.context;
+            const shouldScrollIndexIntoView =
+                lastSpaceId.current !== spaceId || !isEqual(lastFilterKeys.current, filterKeys);
+            lastFilterKeys.current = filterKeys;
+            lastSpaceId.current = spaceId;
+
+            if (shouldScrollIndexIntoView) {
+                return {
+                    align: `start`,
+                    index: activeIndex || 0,
+                    behavior: "auto",
+                };
+            }
+            return false;
+        },
+        [activeIndex],
+    );
+
+    const keyDownCallback = useCallback((ev: React.KeyboardEvent) => {
+        const navAction = getKeyBindingsManager().getNavigationAction(ev);
+        if (navAction === KeyBindingAction.NextLandmark || navAction === KeyBindingAction.PreviousLandmark) {
+            LandmarkNavigation.findAndFocusNextLandmark(
+                Landmark.ROOM_LIST,
+                navAction === KeyBindingAction.PreviousLandmark,
+            );
+            ev.stopPropagation();
+            ev.preventDefault();
+            return;
+        }
+    }, []);
+
     return (
-        <div className="mx_RoomList" data-testid="room-list">
-            <AutoSizer>
-                {({ height, width }) => (
-                    <List
-                        aria-label={_t("room_list|list_title")}
-                        className="mx_RoomList_List"
-                        rowRenderer={roomRendererMemoized}
-                        rowCount={rooms.length}
-                        rowHeight={48}
-                        height={height}
-                        width={width}
-                        scrollToIndex={activeIndex ?? 0}
-                    />
-                )}
-            </AutoSizer>
-        </div>
+        <ListView
+            context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
+            scrollIntoViewOnChange={scrollIntoViewOnChange}
+            initialTopMostItemIndex={activeIndex}
+            data-testid="room-list"
+            role="listbox"
+            aria-label={_t("room_list|list_title")}
+            fixedItemHeight={48}
+            items={roomsResult.rooms}
+            getItemComponent={getItemComponent}
+            getItemKey={getItemKey}
+            isItemFocusable={() => true}
+            onKeyDown={keyDownCallback}
+            isScrolling={setIsScrolling}
+        />
     );
 }

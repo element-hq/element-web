@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -16,14 +16,13 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -35,6 +34,7 @@ import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
+import { Action } from "../../dispatcher/actions";
 
 /**
  * These are the filters passed to the room skip list.
@@ -49,6 +49,25 @@ const FILTERS = [
     new LowPriorityFilter(),
 ];
 
+export enum RoomListStoreV3Event {
+    // The event/channel which is called when the room lists have been changed.
+    ListsUpdate = "lists_update",
+    // The event which is called when the room list is loaded.
+    ListsLoaded = "lists_loaded",
+}
+
+// The result object for returning rooms from the store
+export type RoomsResult = {
+    // The ID of the active space queried
+    spaceId: SpaceKey;
+    // The filter queried
+    filterKeys?: FilterKey[];
+    // The resulting list of rooms
+    rooms: Room[];
+};
+
+export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
+export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
  * This is the third such implementation hence the "V3".
@@ -77,6 +96,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Check whether the initial list of rooms has loaded.
+     */
+    public get isLoadingRooms(): boolean {
+        return !this.roomSkipList?.initialized;
+    }
+
+    /**
      * Get a list of sorted rooms.
      */
     public getSortedRooms(): Room[] {
@@ -91,9 +117,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
-    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): Room[] {
-        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys));
-        else return [];
+    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
+        const spaceId = SpaceStore.instance.activeSpace;
+        if (this.roomSkipList?.initialized)
+            return {
+                spaceId: spaceId,
+                filterKeys,
+                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
+            };
+        else return { spaceId: spaceId, filterKeys, rooms: [] };
     }
 
     /**
@@ -127,6 +159,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
+        this.emit(LISTS_LOADED_EVENT);
         this.emit(LISTS_UPDATE_EVENT);
     }
 
@@ -194,14 +227,29 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
-                if (oldMembership === EffectiveMembership.Join && newMembership === EffectiveMembership.Leave) {
+
+                // If the user is kicked, re-insert the room and do nothing more.
+                const ownUserId = this.matrixClient.getSafeUserId();
+                const isKicked = (payload.room as Room).getMember(ownUserId)?.isKicked();
+                if (isKicked) {
+                    this.addRoomAndEmit(payload.room);
+                    return;
+                }
+
+                // If the user has left this room, remove it from the skiplist.
+                if (
+                    (payload.oldMembership === KnownMembership.Invite ||
+                        payload.oldMembership === KnownMembership.Join) &&
+                    payload.membership === KnownMembership.Leave
+                ) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
                     return;
                 }
+
+                // If we're joining an upgraded room, we'll want to make sure we don't proliferate
+                // the dead room in the list.
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                    // If we're joining an upgraded room, we'll want to make sure we don't proliferate
-                    // the dead room in the list.
                     const roomState: RoomState = payload.room.currentState;
                     const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
                     if (predecessor) {
@@ -210,7 +258,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                         else logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
                     }
                 }
-                this.addRoomAndEmit(payload.room);
+
+                this.addRoomAndEmit(payload.room, true);
+                break;
+            }
+
+            case Action.AfterForgetRoom: {
+                const room = payload.room;
+                this.roomSkipList.removeRoom(room);
+                this.emit(LISTS_UPDATE_EVENT);
                 break;
             }
         }
@@ -234,7 +290,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                             logger.warn(`${roomId} was found in DMs but the room is not in the store`);
                             continue;
                         }
-                        this.roomSkipList!.addRoom(room);
+                        this.roomSkipList!.reInsertRoom(room);
                         needsEmit = true;
                     }
                 }
@@ -248,7 +304,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     .map((id) => this.matrixClient?.getRoom(id))
                     .filter((room) => !!room);
                 for (const room of rooms) {
-                    this.roomSkipList!.addRoom(room);
+                    this.roomSkipList!.reInsertRoom(room);
                     needsEmit = true;
                 }
                 break;
@@ -277,10 +333,21 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Add a room to the skiplist and emit an update.
      * @param room The room to add to the skiplist
+     * @param isNewRoom Set this to true if this a new room that the isn't already in the skiplist
      */
-    private addRoomAndEmit(room: Room): void {
+    private addRoomAndEmit(room: Room, isNewRoom = false): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
-        this.roomSkipList.addRoom(room);
+        if (isNewRoom) {
+            if (!VisibilityProvider.instance.isRoomVisible(room)) {
+                logger.info(
+                    `RoomListStoreV3: Refusing to add new room ${room.roomId} because isRoomVisible returned false.`,
+                );
+                return;
+            }
+            this.roomSkipList.addNewRoom(room);
+        } else {
+            this.roomSkipList.reInsertRoom(room);
+        }
         this.emit(LISTS_UPDATE_EVENT);
     }
 

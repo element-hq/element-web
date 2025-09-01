@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ReactNode } from "react";
-import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
@@ -340,7 +340,7 @@ export default class SettingsStore {
     }
 
     /**
-     * Retrieves the reason a setting is disabled if one is assigned.
+     * Retrieves the internationalised reason a setting is disabled if one is assigned.
      * If a setting is not disabled, or no reason is given by the `SettingController`,
      * this will return undefined.
      * @param {string} settingName The setting to look up.
@@ -667,35 +667,25 @@ export default class SettingsStore {
 
         const client = MatrixClientPeg.safeGet();
 
-        const doMigration = async (): Promise<void> => {
-            logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
+        while (!client.isInitialSyncComplete()) {
+            await new Promise((r) => client.once(ClientEvent.Sync, r));
+        }
 
-            const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
+        logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
 
-            for (const room of client.getRooms()) {
-                // We need to use the handler directly because this setting is no longer supported
-                // at this level at all
-                const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
+        const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
 
-                if (val !== undefined) {
-                    await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
-                }
+        for (const room of client.getRooms()) {
+            // We need to use the handler directly because this setting is no longer supported
+            // at this level at all
+            const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
+
+            if (val !== undefined) {
+                await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
             }
+        }
 
-            localStorage.setItem(MIGRATION_DONE_FLAG, "true");
-        };
-
-        const onSync = (state: SyncState): void => {
-            if (state === SyncState.Prepared) {
-                client.removeListener(ClientEvent.Sync, onSync);
-
-                doMigration().catch((e) => {
-                    logger.error("Failed to migrate URL previews in E2EE rooms:", e);
-                });
-            }
-        };
-
-        client.on(ClientEvent.Sync, onSync);
+        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
 
     /**
@@ -718,25 +708,31 @@ export default class SettingsStore {
 
     /**
      * Migrate the setting for visible images to a setting.
+     *
+     * @param isFreshLogin True if the user has just logged in, false if a previous session is being restored.
      */
-    private static migrateMediaControlsToSetting(): void {
-        const MIGRATION_DONE_FLAG = "mx_migrate_media_controls";
-        if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
+    private static async migrateMediaControlsToSetting(isFreshLogin: boolean): Promise<void> {
+        if (isFreshLogin) return;
+        const client = MatrixClientPeg.safeGet();
 
+        while (!client.isInitialSyncComplete()) {
+            await new Promise((r) => client.once(ClientEvent.Sync, r));
+        }
+        // Never migrate if the config already exists.
+        if (client.getAccountData("io.element.msc4278.media_preview_config")) {
+            return;
+        }
         logger.info("Performing one-time settings migration of show images and invite avatars to account data");
         const handler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
         const showImages = handler.getValue("showImages", null);
         const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
 
-        const AccountHandler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
-        if (showImages !== null || showAvatarsOnInvites !== null) {
-            AccountHandler.setValue("mediaPreviewConfig", null, {
+        if (typeof showImages === "boolean" || typeof showAvatarsOnInvites === "boolean") {
+            this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
                 invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
         } // else, we don't set anything and use the server value
-
-        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
 
     /**
@@ -748,7 +744,9 @@ export default class SettingsStore {
         // (so around October 2024).
         // The consequences of missing the migration are only that URL previews will
         // be disabled in E2EE rooms.
-        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin);
+        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin).catch((e) => {
+            logger.error("Failed to migrate URL previews in E2EE rooms:", e);
+        });
 
         // This can be removed once enough users have run a version of Element with
         // this migration.
@@ -760,8 +758,9 @@ export default class SettingsStore {
         // this migration.
         // The consequences of missing the migration are that the previously set
         // media controls for this user will be missing
-        SettingsStore.migrateMediaControlsToSetting();
-
+        SettingsStore.migrateMediaControlsToSetting(isFreshLogin).catch((e) => {
+            logger.error("Failed to migrate media config settings", e);
+        });
         // Dev notes: to add your migration, just add a new `migrateMyFeature` function, call it, and
         // add a comment to note when it can be removed.
         return;
@@ -882,6 +881,21 @@ export default class SettingsStore {
         }
 
         logger.log(`--- END DEBUG`);
+    }
+
+    /**
+     * Export all settings as a JSON object, except for settings
+     * blocked from being exported by `shouldExportToRageshake`.
+     * @returns Settings as a JSON object string.
+     */
+    public static exportForRageshake(): string {
+        const settingMap: Record<string, unknown> = {};
+        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
+            (s) => SETTINGS[s].shouldExportToRageshake !== false,
+        )) {
+            settingMap[settingKey] = SettingsStore.getValue(settingKey);
+        }
+        return JSON.stringify(settingMap);
     }
 
     private static getHandler(settingName: SettingKey, level: SettingLevel): SettingsHandler | null {

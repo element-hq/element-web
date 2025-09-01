@@ -38,6 +38,10 @@ function getPinnedEventIds(room?: Room): string[] {
             .getState(EventTimeline.FORWARDS)
             ?.getStateEvents(EventType.RoomPinnedEvents, "")
             ?.getContent()?.pinned ?? [];
+    if (!Array.isArray(eventIds)) {
+        logger.warn("Encountered invalid pinned events state in room", room?.roomId, eventIds);
+        return [];
+    }
     // Limit the number of pinned events to 100
     return eventIds.slice(0, 100);
 }

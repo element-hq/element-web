@@ -56,7 +56,6 @@ const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, 
 
 interface IProps {
     forceReset?: boolean;
-    resetCrossSigning?: boolean;
     onFinished(ok?: boolean): void;
 }
 
@@ -80,11 +79,12 @@ interface IState {
  * If the user already has a key backup, follows a "migration" flow (aka "Upgrade your encryption") which
  * prompts the user to enter their backup decryption password (a Curve25519 private key, possibly derived
  * from a passphrase), and uses that as the (AES) 4S encryption key.
+ *
+ * @deprecated send the user to EncryptionUserSettingsTab instead
  */
 export default class CreateSecretStorageDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         forceReset: false,
-        resetCrossSigning: false,
     };
     private recoveryKey?: GeneratedSecretStorageKey;
     private recoveryKeyNode = createRef<HTMLElement>();
@@ -211,7 +211,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private bootstrapSecretStorage = async (): Promise<void> => {
         const cli = MatrixClientPeg.safeGet();
         const crypto = cli.getCrypto()!;
-        const { forceReset, resetCrossSigning } = this.props;
+        const { forceReset } = this.props;
 
         let backupInfo;
         // First, unless we know we want to do a reset, we see if there is an existing key backup
@@ -246,13 +246,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     createSecretStorageKey: async () => this.recoveryKey!,
                     setupNewSecretStorage: true,
                 });
-                if (resetCrossSigning) {
-                    logger.log("Resetting cross signing");
-                    await crypto.bootstrapCrossSigning({
-                        authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
-                        setupNewCrossSigning: true,
-                    });
-                }
                 logger.log("Resetting key backup");
                 await crypto.resetKeyBackup();
             } else {

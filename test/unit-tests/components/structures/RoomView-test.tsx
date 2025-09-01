@@ -35,7 +35,6 @@ import {
     cleanup,
 } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import {
     stubClient,
@@ -78,6 +77,7 @@ import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUs
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
 import Modal from "../../../../src/Modal.tsx";
+import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -238,6 +238,7 @@ describe("RoomView", () => {
             member.membership = KnownMembership.Invite;
             member.events.member = new MatrixEvent({
                 sender: "@bob:example.org",
+                content: { membership: KnownMembership.Invite },
             });
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
             room.getMember = jest.fn().mockReturnValue(member);
@@ -272,9 +273,44 @@ describe("RoomView", () => {
                 finished: Promise.resolve([true, true, false]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
+            await act(() => fireEvent.click(getByRole("button", { name: "Decline and block" })));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
+        });
+        it("prevents ignoring own user", async () => {
+            const member = new RoomMember(room.roomId, cli.getSafeUserId());
+            member.membership = KnownMembership.Invite;
+            member.events.member = new MatrixEvent({
+                /*
+                It doesn't matter that this is an invite event coming from own user, we just
+                want to simulate a situation where the sender of the membership event somehow
+                ends up being own user.
+                 */
+                sender: cli.getSafeUserId(),
+                content: { membership: KnownMembership.Invite },
+            });
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
+            jest.spyOn(room, "getMember").mockReturnValue(member);
+
+            const { getByRole } = await mountRoomView();
+            cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, true, false]),
+                close: jest.fn(),
+            });
+
+            await act(() => fireEvent.click(getByRole("button", { name: "Decline and block" })));
+
+            // Should show error in a modal dialog
+            await waitFor(() => {
+                expect(Modal.createDialog).toHaveBeenLastCalledWith(ErrorDialog, {
+                    title: "Failed to reject invite",
+                    description: "Cannot determine which user to ignore since the member event has changed.",
+                });
+            });
+
+            // The ignore call should not go through
+            expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
         });
         it("handles declining an invite and reporting the room", async () => {
             const { getByRole } = await mountRoomView();
@@ -368,7 +404,7 @@ describe("RoomView", () => {
     it("should not display the timeline when the room encryption is loading", async () => {
         jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
         jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
-        const deferred = defer<boolean>();
+        const deferred = Promise.withResolvers<boolean>();
         jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(() => deferred.promise);
 
         const { asFragment, container } = await mountRoomView();
@@ -406,7 +442,8 @@ describe("RoomView", () => {
         );
 
         const { container } = await renderRoomView();
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).toBeInTheDocument());
+        // We no longer show the grey shield for encrypted rooms, so it should not be there.
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).not.toBeInTheDocument());
 
         const verificationStatus = new UserVerificationStatus(true, true, false);
         jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
@@ -546,8 +583,8 @@ describe("RoomView", () => {
             ).toBeInTheDocument();
 
             // no message composer
-            expect(screen.queryByText("Send an encrypted message…")).not.toBeInTheDocument();
             expect(screen.queryByText("Send a message…")).not.toBeInTheDocument();
+            expect(screen.queryByText("Send an unencrypted message…")).not.toBeInTheDocument();
         });
     });
 
@@ -608,129 +645,148 @@ describe("RoomView", () => {
         });
     });
 
-    it("should close search results when edit is clicked", async () => {
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+    describe("message search", () => {
+        it("should close search results when edit is clicked", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
 
-        const roomViewRef = createRef<RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
-        // @ts-ignore - triggering a search organically is a lot of work
-        act(() =>
-            roomViewRef.current!.setState({
-                search: {
-                    searchId: 1,
-                    roomId: room.roomId,
-                    term: "search term",
-                    scope: SearchScope.Room,
-                    promise: Promise.resolve({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        content: {
-                                            body: "search term",
-                                            msgtype: "m.text",
+            const roomViewRef = createRef<RoomView>();
+            const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.Room,
+                        promise: Promise.resolve({
+                            results: [
+                                SearchResult.fromJson(
+                                    {
+                                        rank: 1,
+                                        result: {
+                                            content: {
+                                                body: "search term",
+                                                msgtype: "m.text",
+                                            },
+                                            type: "m.room.message",
+                                            event_id: "$eventId",
+                                            sender: cli.getSafeUserId(),
+                                            origin_server_ts: 123456789,
+                                            room_id: room.roomId,
                                         },
-                                        type: "m.room.message",
-                                        event_id: "$eventId",
-                                        sender: cli.getSafeUserId(),
-                                        origin_server_ts: 123456789,
-                                        room_id: room.roomId,
-                                    },
-                                    context: {
-                                        events_before: [],
-                                        events_after: [],
-                                        profile_info: {},
-                                    },
-                                },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
-                        count: 1,
-                    }),
-                    inProgress: false,
-                    count: 1,
-                },
-            }),
-        );
-
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
-        });
-        const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
-
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
-
-        await prom;
-    });
-
-    it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
-        rooms.set(room2.roomId, room2);
-
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
-
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-
-        const roomViewRef = createRef<RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
-        // @ts-ignore - triggering a search organically is a lot of work
-        act(() =>
-            roomViewRef.current!.setState({
-                search: {
-                    searchId: 1,
-                    roomId: room.roomId,
-                    term: "search term",
-                    scope: SearchScope.All,
-                    promise: Promise.resolve({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        content: {
-                                            body: "search term",
-                                            msgtype: "m.text",
+                                        context: {
+                                            events_before: [],
+                                            events_after: [],
+                                            profile_info: {},
                                         },
-                                        type: "m.room.message",
-                                        event_id: "$eventId",
-                                        sender: cli.getSafeUserId(),
-                                        origin_server_ts: 123456789,
-                                        room_id: room2.roomId,
                                     },
-                                    context: {
-                                        events_before: [],
-                                        events_after: [],
-                                        profile_info: {},
-                                    },
-                                },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
+                                    eventMapper,
+                                ),
+                            ],
+                            highlights: [],
+                            count: 1,
+                        }),
+                        inProgress: false,
                         count: 1,
-                    }),
-                    inProgress: false,
-                    count: 1,
-                },
-            }),
-        );
+                    },
+                }),
+            );
 
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            });
+            const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
+
+            await userEvent.hover(getByText("search term"));
+            await userEvent.click(await findByLabelText("Edit"));
+
+            await prom;
         });
-        const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
 
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
+        it("should switch rooms when edit is clicked on a search result for a different room", async () => {
+            const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+            rooms.set(room2.roomId, room2);
 
-        await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+
+            const roomViewRef = createRef<RoomView>();
+            const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+            // @ts-ignore - triggering a search organically is a lot of work
+            act(() =>
+                roomViewRef.current!.setState({
+                    search: {
+                        searchId: 1,
+                        roomId: room.roomId,
+                        term: "search term",
+                        scope: SearchScope.All,
+                        promise: Promise.resolve({
+                            results: [
+                                SearchResult.fromJson(
+                                    {
+                                        rank: 1,
+                                        result: {
+                                            content: {
+                                                body: "search term",
+                                                msgtype: "m.text",
+                                            },
+                                            type: "m.room.message",
+                                            event_id: "$eventId",
+                                            sender: cli.getSafeUserId(),
+                                            origin_server_ts: 123456789,
+                                            room_id: room2.roomId,
+                                        },
+                                        context: {
+                                            events_before: [],
+                                            events_after: [],
+                                            profile_info: {},
+                                        },
+                                    },
+                                    eventMapper,
+                                ),
+                            ],
+                            highlights: [],
+                            count: 1,
+                        }),
+                        inProgress: false,
+                        count: 1,
+                    },
+                }),
+            );
+
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+            });
+            const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
+
+            await userEvent.hover(getByText("search term"));
+            await userEvent.click(await findByLabelText("Edit"));
+
+            await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
+        });
+
+        it("should pre-fill search field on FocusMessageSearch dispatch", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            const { findByPlaceholderText } = await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            act(() =>
+                defaultDispatcher.dispatch({
+                    action: Action.FocusMessageSearch,
+                    initialText: "search term",
+                }),
+            );
+
+            await expect(findByPlaceholderText("Search messages…")).resolves.toHaveValue("search term");
+        });
     });
 
     it("fires Action.RoomLoaded", async () => {

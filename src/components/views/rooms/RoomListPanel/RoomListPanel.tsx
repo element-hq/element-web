@@ -12,7 +12,8 @@ import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListHeaderView } from "./RoomListHeaderView";
 import { RoomListView } from "./RoomListView";
-import { Flex } from "../../../utils/Flex";
+import { Flex } from "../../../../shared-components/utils/Flex";
+import { _t } from "../../../../languageHandler";
 
 type RoomListPanelProps = {
     /**
@@ -30,11 +31,11 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
 
     return (
         <Flex
-            as="section"
+            as="nav"
             className="mx_RoomListPanel"
-            data-testid="room-list-panel"
             direction="column"
             align="stretch"
+            aria-label={_t("room_list|list_title")}
         >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView />

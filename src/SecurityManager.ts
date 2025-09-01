@@ -19,7 +19,6 @@ import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import { ModuleRunner } from "./modules/ModuleRunner";
-import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -48,17 +47,6 @@ export class AccessCancelledError extends Error {
     public constructor() {
         super("Secret storage access canceled");
     }
-}
-
-async function confirmToDismiss(): Promise<boolean> {
-    const [sure] = await Modal.createDialog(QuestionDialog, {
-        title: _t("encryption|cancel_entering_passphrase_title"),
-        description: _t("encryption|cancel_entering_passphrase_description"),
-        danger: false,
-        button: _t("action|go_back"),
-        cancelButton: _t("action|cancel"),
-    }).finished;
-    return !sure;
 }
 
 function makeInputToKey(
@@ -134,17 +122,6 @@ async function getSecretStorageKey(
                 return MatrixClientPeg.safeGet().secretStorage.checkKey(key, keyInfo);
             },
         },
-        /* className= */ undefined,
-        /* isPriorityModal= */ false,
-        /* isStaticModal= */ false,
-        /* options= */ {
-            onBeforeClose: async (reason): Promise<boolean> => {
-                if (reason === "backgroundClick") {
-                    return confirmToDismiss();
-                }
-                return true;
-            },
-        },
     );
     const [keyParams] = await finished;
     if (!keyParams) {
@@ -199,10 +176,11 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
 }
 
 export interface AccessSecretStorageOpts {
-    /** Reset secret storage even if it's already set up. */
+    /**
+     * Reset secret storage even if it's already set up.
+     * @deprecated send the user to the Encryption settings tab to reset secret storage
+     */
     forceReset?: boolean;
-    /** Create new cross-signing keys. Only applicable if `forceReset` is `true`. */
-    resetCrossSigning?: boolean;
 }
 
 /**
@@ -212,8 +190,8 @@ export interface AccessSecretStorageOpts {
  * provided function.
  *
  * Bootstrapping secret storage may take one of these paths:
- * 1. Create secret storage from a passphrase and store cross-signing keys
- *    in secret storage.
+ * 1. (Only if `opts.forceReset` is set) create secret storage from a passphrase
+ *    and store cross-signing keys in secret storage.
  * 2. Access existing secret storage by requesting passphrase and accessing
  *    cross-signing keys as needed.
  * 3. All keys are loaded and there's nothing to do.
@@ -221,6 +199,8 @@ export interface AccessSecretStorageOpts {
  * Additionally, the secret storage keys are cached during the scope of this function
  * to ensure the user is prompted only once for their secret storage
  * passphrase. The cache is then cleared once the provided function completes.
+ *
+ * Throws an error if secret storage is not set up (and `opts.forceReset` is not set)
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
@@ -242,16 +222,8 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
             throw new Error("End-to-end encryption is disabled - unable to access secret storage.");
         }
 
-        let createNew = false;
         if (opts.forceReset) {
             logger.debug("accessSecretStorage: resetting 4S");
-            createNew = true;
-        } else if (!(await cli.secretStorage.hasKey())) {
-            logger.debug("accessSecretStorage: no 4S key configured, creating a new one");
-            createNew = true;
-        }
-
-        if (createNew) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createDialog(
@@ -274,6 +246,9 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
             if (!confirmed) {
                 throw new Error("Secret storage creation canceled");
             }
+        } else if (!(await cli.secretStorage.hasKey())) {
+            logger.debug("accessSecretStorage: no 4S key configured");
+            throw new Error("Secret storage has not been created yet.");
         } else {
             logger.debug("accessSecretStorage: bootstrapCrossSigning");
             await crypto.bootstrapCrossSigning({

@@ -58,107 +58,108 @@ test.describe("Cryptography", function () {
             await app.client.network.setupRoute();
         });
 
-        test("should show the correct shield on e2e events", async ({
-            page,
-            app,
-            bot: bob,
-            homeserver,
-        }, workerInfo) => {
-            // Bob has a second, not cross-signed, device
-            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+        test(
+            "should show the correct shield on e2e events",
+            { tag: "@screenshot" },
+            async ({ page, app, bot: bob, homeserver }, workerInfo) => {
+                // Bob has a second, not cross-signed, device
+                const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
 
-            // Dismiss the toast nagging us to set up recovery otherwise it gets in the way of clicking the room list
-            await page.getByRole("button", { name: "Not now" }).click();
+                // Dismiss the toasts nagging us, otherwise they get in the way of clicking the room list
+                await page.getByRole("button", { name: "Dismiss" }).click();
+                await page.getByRole("button", { name: "Yes, dismiss" }).click();
 
-            await bob.sendEvent(testRoomId, null, "m.room.encrypted", {
-                algorithm: "m.megolm.v1.aes-sha2",
-                ciphertext: "the bird is in the hand",
-            });
+                await bob.sendEvent(testRoomId, null, "m.room.encrypted", {
+                    algorithm: "m.megolm.v1.aes-sha2",
+                    ciphertext: "the bird is in the hand",
+                });
 
-            const last = page.locator(".mx_EventTile_last");
-            await expect(last).toContainText("Unable to decrypt message");
-            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
-            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_decryption_failure/);
-            await lastE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                "This message could not be decrypted",
-            );
+                const last = page.locator(".mx_EventTile_last");
+                await expect(last).toContainText("Unable to decrypt message");
+                const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_decryption_failure/);
+                await lastE2eIcon.focus();
+                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                    "This message could not be decrypted",
+                );
 
-            /* Should show a red padlock for an unencrypted message in an e2e room */
-            await bob.evaluate(
-                (cli, testRoomId) =>
-                    cli.http.authedRequest(
-                        window.matrixcs.Method.Put,
-                        `/rooms/${encodeURIComponent(testRoomId)}/send/m.room.message/test_txn_1`,
-                        undefined,
-                        {
-                            msgtype: "m.text",
-                            body: "test unencrypted",
-                        },
-                    ),
-                testRoomId,
-            );
+                /* Should show a red padlock for an unencrypted message in an e2e room */
+                await bob.evaluate(
+                    (cli, testRoomId) =>
+                        cli.http.authedRequest(
+                            window.matrixcs.Method.Put,
+                            `/rooms/${encodeURIComponent(testRoomId)}/send/m.room.message/test_txn_1`,
+                            undefined,
+                            {
+                                msgtype: "m.text",
+                                body: "test unencrypted",
+                            },
+                        ),
+                    testRoomId,
+                );
 
-            await expect(last).toContainText("test unencrypted");
-            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText("Not encrypted");
+                await expect(last).toContainText("test unencrypted");
+                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-warning.png");
+                await lastE2eIcon.focus();
+                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText("Not encrypted");
 
-            /* Should show no padlock for an unverified user */
-            // bob sends a valid event
-            await bob.sendMessage(testRoomId, "test encrypted 1");
+                /* Should show no padlock for an unverified user */
+                // bob sends a valid event
+                await bob.sendMessage(testRoomId, "test encrypted 1");
 
-            // the message should appear, decrypted, with no warning, but also no "verified"
-            const lastTile = page.locator(".mx_EventTile_last");
-            const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
-            await expect(lastTile).toContainText("test encrypted 1");
-            // no e2e icon
-            await expect(lastTileE2eIcon).not.toBeVisible();
+                // the message should appear, decrypted, with no warning, but also no "verified"
+                const lastTile = page.locator(".mx_EventTile_last");
+                const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
+                await expect(lastTile).toContainText("test encrypted 1");
+                // no e2e icon
+                await expect(lastTileE2eIcon).not.toBeVisible();
 
-            /* Now verify Bob */
-            await verify(app, bob);
+                /* Now verify Bob */
+                await verify(app, bob);
 
-            /* Existing message should be updated when user is verified. */
-            await expect(last).toContainText("test encrypted 1");
-            // still no e2e icon
-            await expect(last.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+                /* Existing message should be updated when user is verified. */
+                await expect(last).toContainText("test encrypted 1");
+                // still no e2e icon
+                await expect(last.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
 
-            /* should show no padlock, and be verified, for a message from a verified device */
-            await bob.sendMessage(testRoomId, "test encrypted 2");
+                /* should show no padlock, and be verified, for a message from a verified device */
+                await bob.sendMessage(testRoomId, "test encrypted 2");
 
-            await expect(lastTile).toContainText("test encrypted 2");
-            // no e2e icon
-            await expect(lastTileE2eIcon).not.toBeVisible();
+                await expect(lastTile).toContainText("test encrypted 2");
+                // no e2e icon
+                await expect(lastTileE2eIcon).not.toBeVisible();
 
-            /* should show red padlock for a message from an unverified device */
-            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
-            await expect(lastTile).toContainText("test encrypted from unverified");
-            await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastTileE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
-                "Encrypted by a device not verified by its owner.",
-            );
+                /* should show red padlock for a message from an unverified device */
+                await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
+                await expect(lastTile).toContainText("test encrypted from unverified");
+                await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+                await lastTileE2eIcon.focus();
+                await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
+                    "Encrypted by a device not verified by its owner.",
+                );
 
-            /* Should show a red padlock for a message from an unverified device.
-             * Rust crypto remembers the verification state of the sending device, so it will know that the device was
-             * unverified, even if it gets deleted. */
-            // bob deletes his second device
-            await bobSecondDevice.evaluate((cli) => cli.logout(true));
+                /* Should show a red padlock for a message from an unverified device.
+                 * Rust crypto remembers the verification state of the sending device, so it will know that the device was
+                 * unverified, even if it gets deleted. */
+                // bob deletes his second device
+                await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
-            // wait for the logout to propagate.
-            await waitForDevices(app, bob.credentials.userId, 1);
+                // wait for the logout to propagate.
+                await waitForDevices(app, bob.credentials.userId, 1);
 
-            // close and reopen the room, to get the shield to update.
-            await app.viewRoomByName("Bob");
-            await app.viewRoomByName("TestRoom");
+                // close and reopen the room, to get the shield to update.
+                await app.viewRoomByName("Bob");
+                await app.viewRoomByName("TestRoom");
 
-            await expect(last).toContainText("test encrypted from unverified");
-            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                "Encrypted by a device not verified by its owner.",
-            );
-        });
+                await expect(last).toContainText("test encrypted from unverified");
+                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+                await lastE2eIcon.focus();
+                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                    "Encrypted by a device not verified by its owner.",
+                );
+            },
+        );
 
         test("Should show a grey padlock for a key restored from backup", async ({
             page,

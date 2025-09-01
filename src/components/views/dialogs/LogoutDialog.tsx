@@ -13,9 +13,11 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
+import { type OpenToTabPayload } from "../../../dispatcher/payloads/OpenToTabPayload";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "../../../components/views/dialogs/UserTab";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import RestoreKeyBackupDialog from "./security/RestoreKeyBackupDialog";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import Spinner from "../elements/Spinner";
@@ -138,26 +140,12 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     };
 
     private onSetRecoveryMethodClick = (): void => {
-        if (this.state.backupStatus === BackupStatus.SERVER_BACKUP_BUT_DISABLED) {
-            // A key backup exists for this account, but the creating device is not
-            // verified, so restore the backup which will give us the keys from it and
-            // allow us to trust it (ie. upload keys to it)
-            Modal.createDialog(
-                RestoreKeyBackupDialog,
-                undefined,
-                undefined,
-                /* priority = */ false,
-                /* static = */ true,
-            );
-        } else {
-            Modal.createDialog(
-                lazy(() => import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog")),
-                undefined,
-                undefined,
-                /* priority = */ false,
-                /* static = */ true,
-            );
-        }
+        // Open the user settings dialog to the encryption tab and start the flow to reset encryption
+        const payload: OpenToTabPayload = {
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Encryption,
+        };
+        dis.dispatch(payload);
 
         // close dialog
         this.props.onFinished(true);
@@ -190,22 +178,13 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             </div>
         );
 
-        let setupButtonCaption;
-        if (this.state.backupStatus === BackupStatus.SERVER_BACKUP_BUT_DISABLED) {
-            setupButtonCaption = _t("settings|security|key_backup_connect");
-        } else {
-            // if there's an error fetching the backup info, we'll just assume there's
-            // no backup for the purpose of the button caption
-            setupButtonCaption = _t("auth|logout_dialog|use_key_backup");
-        }
-
         const dialogContent = (
             <div>
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     {description}
                 </div>
                 <DialogButtons
-                    primaryButton={setupButtonCaption}
+                    primaryButton={_t("common|go_to_settings")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onSetRecoveryMethodClick}
                     focus={true}

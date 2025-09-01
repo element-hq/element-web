@@ -22,6 +22,7 @@ import {
 } from "./utils";
 import { type Bot } from "../../pages/bot";
 import { Toasts } from "../../pages/toasts.ts";
+import type { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
@@ -47,31 +48,38 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         return promiseVerificationRequest;
     }
 
-    test("Verify device with SAS during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, credentials);
+    test(
+        "Verify device with SAS during login",
+        { tag: "@screenshot" },
+        async ({ page, app, credentials, homeserver }) => {
+            await logIntoElement(page, credentials);
 
-        // Launch the verification request between alice and the bot
-        const verificationRequest = await initiateAliceVerificationRequest(page);
+            // Launch the verification request between alice and the bot
+            const verificationRequest = await initiateAliceVerificationRequest(page);
 
-        // Handle emoji SAS verification
-        const infoDialog = page.locator(".mx_InfoDialog");
-        // the bot chooses to do an emoji verification
-        const verifier = await verificationRequest.evaluateHandle((request) => request.startVerification("m.sas.v1"));
+            // Handle emoji SAS verification
+            const infoDialog = page.locator(".mx_InfoDialog");
+            // the bot chooses to do an emoji verification
+            const verifier = await verificationRequest.evaluateHandle((request) =>
+                request.startVerification("m.sas.v1"),
+            );
 
-        // Handle emoji request and check that emojis are matching
-        await doTwoWaySasVerification(page, verifier);
+            // Handle emoji request and check that emojis are matching
+            await doTwoWaySasVerification(page, verifier);
 
-        await infoDialog.getByRole("button", { name: "They match" }).click();
-        await infoDialog.getByRole("button", { name: "Got it" }).click();
+            await infoDialog.getByRole("button", { name: "They match" }).click();
+            await expect(page.locator(".mx_E2EIcon_verified")).toMatchScreenshot("device-verified-e2eIcon.png");
+            await infoDialog.getByRole("button", { name: "Got it" }).click();
 
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
+            // Check that our device is now cross-signed
+            await checkDeviceIsCrossSigned(app);
 
-        // Check that the current device is connected to key backup
-        // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen.
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
-    });
+            // Check that the current device is connected to key backup
+            // For now we don't check that the backup key is in cache because it's a bit flaky,
+            // as we need to wait for the secret gossiping to happen.
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
+        },
+    );
 
     // Regression test for https://github.com/element-hq/element-web/issues/29110
     test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
@@ -116,6 +124,10 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         const toasts = new Toasts(page);
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
+
+        // There may still be a `/sendToDevice/m.secret.request` in flight, which will later throw an error and cause
+        // a *subsequent* test to fail. Tell playwright to ignore any errors resulting from in-flight routes.
+        await page.unrouteAll({ behavior: "ignoreErrors" });
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
@@ -163,39 +175,44 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, credentials);
-
-        // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
-
-        // Fill the passphrase
-        const dialog = page.locator(".mx_Dialog");
-        await dialog.locator("input").fill("new passphrase");
-        await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
-
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
-
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
-
-        // Check that the current device is connected to key backup
-        // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
+        await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase");
     });
 
     test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+
+        await logIntoElement(page, credentials);
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
+
+    test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+
         await logIntoElement(page, credentials);
 
-        // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
+        /* Dismiss "Verify this device" */
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
 
-        // Fill the recovery key
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
+
+    /** Helper for the three tests above which verify by recovery key */
+    async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
+        await page.getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
+
+        // Enter the recovery key
         const dialog = page.locator(".mx_Dialog");
-        await dialog.getByRole("button", { name: "use your Recovery Key" }).click();
-        const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
-        await dialog.locator("#mx_securityKey").fill(aliceRecoveryKey.encodedPrivateKey);
-        await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
+        // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
+        // (cf https://github.com/element-hq/element-web/issues/30089)
+        await dialog.getByTitle("Recovery key").pressSequentially(recoveryKey);
+        await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
 
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
+        await page.getByRole("button", { name: "Done" }).click();
 
         // Check that our device is now cross-signed
         await checkDeviceIsCrossSigned(app);
@@ -203,7 +220,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
-    });
+    }
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
         await logIntoElement(page, credentials);

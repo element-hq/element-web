@@ -12,7 +12,6 @@ import { RoomMember, User, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
-import type React from "react";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { type Rendered, renderMemberList } from "./common";
@@ -21,14 +20,6 @@ jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-type Children = (args: { height: number; width: number }) => React.JSX.Element;
-jest.mock("react-virtualized", () => {
-    const ReactVirtualized = jest.requireActual("react-virtualized");
-    return {
-        ...ReactVirtualized,
-        AutoSizer: ({ children }: { children: Children }) => children({ height: 1000, width: 1000 }),
-    };
-});
 jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(1500);
 jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(1500);
 

@@ -215,8 +215,7 @@
             "setup_key_backup_title": "您將會失去您的加密訊息",
             "setup_secure_backup_description_1": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
             "setup_secure_backup_description_2": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
-            "skip_key_backup": "我不要我的加密訊息了",
-            "use_key_backup": "開始使用金鑰備份"
+            "skip_key_backup": "我不要我的加密訊息了"
         },
         "misconfigured_body": "請要求您的 %(brand)s 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
         "misconfigured_title": "您的 %(brand)s 沒有設定好",
@@ -784,26 +783,13 @@
     "empty_room_was_name": "空的聊天室（曾為 %(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
             "key_validation_text": {
-                "invalid_security_key": "無效的安全金鑰",
-                "recovery_key_is_correct": "看起來真棒！",
-                "wrong_file_type": "錯誤的檔案類型",
                 "wrong_security_key": "錯誤的安全金鑰"
             },
-            "reset_title": "重設所有東西",
-            "reset_warning_1": "當您沒有其他裝置可以完成驗證時，才執行此動作。",
-            "reset_warning_2": "如果您重設所有東西，您將會在沒有受信任的工作階段、沒有受信任的使用者的情況下重新啟動，且可能會看不到過去的訊息。",
             "restoring": "從備份還原金鑰",
-            "security_key_title": "安全金鑰",
-            "security_phrase_incorrect_error": "無法存取祕密儲存空間。請確認您輸入了正確的安全密語。",
-            "security_phrase_title": "安全密語",
-            "separator": "%(securityKey)s 或 %(recoveryFile)s",
-            "use_security_key_prompt": "使用您的安全金鑰以繼續。"
+            "security_key_title": "安全金鑰"
         },
         "bootstrap_title": "正在產生金鑰",
-        "cancel_entering_passphrase_description": "您確定要取消輸入安全密語嗎？",
-        "cancel_entering_passphrase_title": "取消輸入安全密語？",
         "confirm_encryption_setup_body": "點擊下方按鈕以確認設定加密。",
         "confirm_encryption_setup_title": "確認加密設定",
         "cross_signing_room_normal": "此聊天室已端對端加密",
@@ -838,7 +824,6 @@
             "warning": "如果您沒有移除復原方法，攻擊者可能會試圖存取您的帳號。請立刻在設定中變更您帳號的密碼並設定新的復原方式。"
         },
         "reset_all_button": "忘記或遺失了所有復原方法？<a>重設全部</a>",
-        "set_up_toast_description": "避免失去對加密訊息與資料的存取權",
         "set_up_toast_title": "設定安全備份",
         "setup_secure_backup": {
             "explainer": "請在登出前備份您的金鑰，以免遺失。"
@@ -856,7 +841,6 @@
             "accepting": "正在接受…",
             "after_new_login": {
                 "device_verified": "裝置已驗證",
-                "reset_confirmation": "真的要重設驗證金鑰？",
                 "skip_verification": "暫時略過驗證",
                 "unable_to_verify": "無法驗證此裝置",
                 "verify_this_device": "驗證此裝置"
@@ -926,8 +910,6 @@
             "verify_emoji_prompt": "透過比對獨特的表情符號來進行驗證。",
             "verify_emoji_prompt_qr": "如果您無法掃描上面的條碼，請透過比較獨特的表情符號驗證。",
             "verify_later": "我稍後驗證",
-            "verify_reset_warning_1": "重設您的驗證金鑰將無法復原。重設後，您將無法存取舊的加密訊息，之前任何驗證過您的朋友也會看到安全警告，直到您重新驗證。",
-            "verify_reset_warning_2": "請僅在您確定遺失了您其他所有裝置與安全金鑰時才繼續。",
             "verify_using_device": "用另一台裝置驗證",
             "verify_using_key": "使用安全金鑰進行驗證",
             "verify_using_key_or_phrase": "使用安全金鑰或密語進行驗證",
@@ -1445,8 +1427,7 @@
     },
     "member_list": {
         "filter_placeholder": "過濾聊天室成員",
-        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者",
-        "power_label": "%(userName)s（權限等級 %(powerLevelNumber)s）"
+        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者"
     },
     "member_list_back_action_label": "聊天室成員",
     "message_edit_dialog_title": "訊息編輯紀錄",
@@ -2255,18 +2236,12 @@
             "remove_msisdn_prompt": "移除 %(phone)s？",
             "spell_check_locale_placeholder": "選擇語系"
         },
-        "image_thumbnails": "顯示圖片的預覽／縮圖",
         "inline_url_previews_default": "預設啟用行內網址預覽",
         "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
         "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
         "insert_trailing_colon_mentions": "在使用者於訊息開頭提及之後插入跟隨冒號",
         "jump_to_bottom_on_send": "傳送訊息時，跳到時間軸底部",
         "key_backup": {
-            "backup_in_progress": "您的金鑰正在備份（第一次備份會花費數分鐘）。",
-            "backup_starting": "正在開始備份…",
-            "backup_success": "成功！",
-            "cannot_create_backup": "無法建立金鑰備份",
-            "create_title": "建立金鑰備份",
             "setup_secure_backup": {
                 "backup_setup_success_description": "您已備份此裝置的金鑰。",
                 "backup_setup_success_title": "安全備份成功",
@@ -2401,7 +2376,6 @@
             "ignore_users_empty": "您沒有忽略的使用者。",
             "ignore_users_section": "忽略使用者",
             "key_backup_algorithm": "演算法：",
-            "key_backup_connect": "將此工作階段連結至金鑰備份",
             "message_search_disable_warning": "若停用，從加密聊天室傳來的訊息將不會出現在搜尋結果中。",
             "message_search_disabled": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
             "message_search_enabled": {
@@ -2660,6 +2634,7 @@
         "upgraderoom": "升級聊天室到新版本",
         "upgraderoom_permission_error": "您沒有使用此指令的必要權限。",
         "usage": "使用方法",
+        "verify": "驗證使用者、工作階段與公開金鑰組合",
         "view": "檢視指定聊天室的地址",
         "whois": "顯示關於使用者的資訊"
     },
@@ -2766,7 +2741,6 @@
         "heading_without_query": "搜尋",
         "join_button_text": "加入 %(roomAddress)s",
         "keyboard_scroll_hint": "使用 <arrows/> 捲動",
-        "message_search_section_title": "其他搜尋",
         "other_rooms_in_space": "其他在 %(spaceName)s 中的聊天室",
         "public_rooms_label": "公開聊天室",
         "recent_searches_section_title": "近期搜尋",
@@ -2775,7 +2749,6 @@
         "result_may_be_hidden_privacy_warning": "出於隱私考量，可能會隱藏一些結果",
         "result_may_be_hidden_warning": "某些結果可能會被隱藏",
         "search_dialog": "搜尋對話方塊",
-        "search_messages_hint": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
         "spaces_title": "您所在的聊天空間",
         "start_group_chat_button": "開始群組聊天"
     },
@@ -3416,7 +3389,6 @@
         "dialpad": "撥號鍵盤",
         "disable_camera": "關閉相機",
         "disable_microphone": "麥克風靜音",
-        "disabled_no_one_here": "這裡沒有人可以通話",
         "disabled_no_perms_start_video_call": "您沒有權限開始視訊通話",
         "disabled_no_perms_start_voice_call": "您無權限開始語音通話",
         "disabled_ongoing_call": "正在進行通話",

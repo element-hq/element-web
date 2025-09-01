@@ -30,6 +30,11 @@ Please see LICENSE files in the repository root for full details.
         width: 68px;
     }
 
+    &.newUi {
+        background-color: var(--cpd-color-bg-canvas-default);
+        border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+    }
+
     .mx_SpacePanel_toggleCollapse {
         position: absolute;
         width: 18px;
@@ -398,6 +403,11 @@ Please see LICENSE files in the repository root for full details.
         .mx_UserMenu_userAvatar_BaseAvatar {
             display: block;
         }
+    }
+
+    &.newUi .mx_UserMenu {
+        margin-top: var(--cpd-space-4x);
+        border-bottom: none;
     }
 }
 
