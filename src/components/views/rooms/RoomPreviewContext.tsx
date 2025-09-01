@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JoinRule, type RoomMember, type Room, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type RoomMember, type Room, KnownMembership, MatrixError } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, useEffect, useMemo, useState, type FC } from "react";
 import { Button, InlineSpinner } from "@vector-im/compound-web";
 import { CheckCircleIcon, InfoIcon, WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -54,11 +54,50 @@ function useGetUserSafety(inviterMember: RoomMember | null): {
         userFirstSeen?: { title: string; description: string; score: InviteScore };
         userBanned?: string;
         userKicked?: string;
+        isLocalTrustedServer?: boolean;
     };
 } {
     const client = useMatrixClientContext();
     const [joinedTo, setJoinedTo] = useState<{ title: string; description: string; score: InviteScore }>();
     const [roomCount, setRoomCount] = useState<number>();
+    const [isLocalTrustedServer, setIsLocalTrustedServer] = useState<boolean>();
+
+
+    useEffect(() => {
+        if (!inviterMember?.userId) {
+            return;
+        }
+        const inviterDomain = inviterMember.userId.replace(/^.*?:/, "");
+        if (inviterDomain !== client.getDomain()) {
+            setIsLocalTrustedServer(false);
+        }
+
+        (async () => {
+            // Try auth metadata first for OIDC
+            try {
+                const metadata = await client.getAuthMetadata();
+                const openReg = metadata.prompt_values_supported?.includes("create")
+                setIsLocalTrustedServer(!openReg);
+            } catch {
+                // OIDC not configured, fall through.
+            }
+            try {
+                await client.registerRequest({});
+                setIsLocalTrustedServer(false);
+            } catch (ex) {
+                if (ex instanceof MatrixError && ex.errcode === "M_FORBIDDEN") {
+                    // We only accept M_FORBIDDEN for checking if the server is closed, for safety.
+                    setIsLocalTrustedServer(true);
+                    return;
+                }
+                setIsLocalTrustedServer(false);
+            }
+        })();
+
+        return () => {
+            setIsLocalTrustedServer(false);
+        };
+    }, [client, inviterMember]);
 
     useEffect(() => {
         if (!inviterMember?.userId) {
@@ -212,7 +251,7 @@ function useGetUserSafety(inviterMember: RoomMember | null): {
     }, [client, inviterMember]);
 
     const score = useMemo<InviteScore | null>(() => {
-        if (!roomCount) {
+        if (roomCount === undefined) {
             return null;
         }
         if (roomCount === 0 || userBanned || userKicked) {
@@ -232,6 +271,7 @@ function useGetUserSafety(inviterMember: RoomMember | null): {
             userBanned,
             userKicked,
             userFirstSeen,
+            isLocalTrustedServer,
         },
     };
 }
@@ -249,10 +289,11 @@ export const RoomPreviewContext: FC<{ inviterMember: RoomMember | null }> = ({ i
         );
     }
 
-    const { roomCount, joinedTo, userBanned, userKicked, userFirstSeen } = details;
+    const { roomCount, joinedTo, userBanned, userKicked, userFirstSeen, isLocalTrustedServer } = details;
     return (
         <ul className="mx_RoomPreviewContext">
-            {roomCount === 0 && <SafetyDetailItem title="You have no shared rooms" score={InviteScore.Unsafe} />}
+            {isLocalTrustedServer && <SafetyDetailItem title="You are on the same server" description={learnMoreOpen ? "You share the same server as this user, and registration is disabled." : undefined} score={InviteScore.Safe} />}
+            {roomCount === 0 && <SafetyDetailItem title="You have no shared rooms" description={learnMoreOpen ? "You have no rooms in common with this user. This may be a spam invite." : undefined} score={InviteScore.Unsafe} />}
             {userBanned && (
                 <SafetyDetailItem
                     score={InviteScore.Unsafe}
