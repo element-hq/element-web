@@ -27,7 +27,7 @@ interface IProps {
 export const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
     const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent);
 
-    if (!mediaIsVisible || !setVisible) {
+    if (!mediaIsVisible) {
         return;
     }
 
