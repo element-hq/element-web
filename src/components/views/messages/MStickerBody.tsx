@@ -19,8 +19,8 @@ class MStickerBodyInner extends MImageBodyInner {
     // Mostly empty to prevent default behaviour of MImageBody
     protected onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
-        if (!this.props.mediaVisible) {
-            this.props.setMediaVisible?.(true);
+        if (this.props.mediaVisible) {
+            this.props.setMediaVisible(true);
         }
     };
 

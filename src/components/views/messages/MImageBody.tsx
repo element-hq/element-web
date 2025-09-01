@@ -66,7 +66,7 @@ interface IProps extends IBodyProps {
      * Set the visibility of the media event.
      * @param visible Should the event be visible.
      */
-    setMediaVisible?: (visible: boolean) => void;
+    setMediaVisible: (visible: boolean) => void;
 }
 
 /**

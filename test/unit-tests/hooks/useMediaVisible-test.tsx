@@ -65,9 +65,8 @@ describe("useMediaVisible", () => {
 
     it("should always show media sent by us", () => {
         mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
-        const [visible, setVisible] = render({ sender: matrixClient.getUserId()! }).result.current;
+        const [visible] = render({ sender: matrixClient.getUserId()! }).result.current;
         expect(visible).toEqual(true);
-        expect(setVisible).toBeUndefined();
     });
 
     it.each([[JoinRule.Invite], [JoinRule.Knock], [JoinRule.Restricted]])(

@@ -28,11 +28,10 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
  * @param The event that contains the media. If not provided, the global rule is used.
  *
  * @returns Returns a tuple of:
- *          A boolean describing the hidden status. This is always true if the event was sent by us.
- *          A function to show or hide the event. This is `undefined` if the event was sent by us (visiblity cannot be changed).
- *
+ *          A boolean describing the hidden status.
+ *          A function to show or hide the event.
  */
-export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] | [true] {
+export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] {
     const eventId = mxEvent?.getId();
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", mxEvent?.getRoomId());
     const client = useMatrixClientContext();
@@ -49,16 +48,15 @@ export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: bool
         [eventId, eventVisibility],
     );
 
-    if (mxEvent?.getSender() === client.getUserId()) {
-        return [true];
-    }
-
     const roomIsPrivate = joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
 
     const explicitEventVisiblity = eventId ? eventVisibility[eventId] : undefined;
     // Always prefer the explicit per-event user preference here.
     if (explicitEventVisiblity !== undefined) {
         return [explicitEventVisiblity, setMediaVisible];
+    } else if (mxEvent?.getSender() === client.getUserId()) {
+        // If this event is ours and we've not set an explicit visibility, default to on.
+        return [true, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.Off) {
         return [false, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.On) {
