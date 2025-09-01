@@ -12,7 +12,9 @@ import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import DisambiguatedProfile from "./DisambiguatedProfile";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
-
+import ModuleApi from "../../../modules/Api";
+import { CustomComponentsApi } from "../../../modules/customComponentApi";
+import { MessageProfileComponentProps } from "@element-hq/element-web-module-api";
 interface IProps {
     mxEvent: MatrixEvent;
     onClick?(): void;
@@ -24,17 +26,25 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         userId: mxEvent.getSender(),
         member: mxEvent.sender,
     });
+    
+    if (mxEvent.getContent().msgtype === MsgType.Emote) {
+        return <></>;
+    }
+    const moduleRenderer = ModuleApi.customComponents.messageProfileRenderer;
+    const renderFn = (moduleProps: MessageProfileComponentProps) => <DisambiguatedProfile
+        fallbackName={moduleProps.mxEvent.sender ?? ""}
+        onClick={moduleProps.onClick}
+        member={moduleProps.member}
+        colored={true}
+        emphasizeDisplayName={true}
+        withTooltip={withTooltip}
+    />;
 
-    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfile
-            fallbackName={mxEvent.getSender() ?? ""}
-            onClick={onClick}
-            member={member}
-            colored={true}
-            emphasizeDisplayName={true}
-            withTooltip={withTooltip}
-        />
-    ) : (
-        <></>
-    );
+    const modProps = {
+        onClick,
+        mxEvent: CustomComponentsApi.getModuleMatrixEvent(mxEvent)!,
+        member: member || undefined,
+    };
+
+    return moduleRenderer ? moduleRenderer(modProps, renderFn) : renderFn(modProps);
 }
