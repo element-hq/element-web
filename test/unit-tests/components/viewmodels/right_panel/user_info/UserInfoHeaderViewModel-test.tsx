@@ -12,7 +12,7 @@ import { renderHook } from "jest-matrix-react";
 
 import { withClientContextRenderOptions } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { useUserInfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 import * as UseTimezone from "../../../../../../src/hooks/useUserTimezone";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import Modal from "../../../../../../src/Modal";
@@ -88,7 +88,7 @@ describe("useUserInfoHeaderViewModel", () => {
     });
 
     const renderUserInfoHeaderViewModelHook = (props = defaultProps) => {
-        return renderHook(() => useUserfoHeaderViewModel(props), withClientContextRenderOptions(mockClient));
+        return renderHook(() => useUserInfoHeaderViewModel(props), withClientContextRenderOptions(mockClient));
     };
     it("should give user timezone info", () => {
         const defaultTZ = { timezone: "FR", friendly: "fr" };

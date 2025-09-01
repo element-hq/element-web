@@ -33,11 +33,11 @@ export interface UserInfoHeaderState {
      */
     onMemberAvatarClick: () => void;
     /**
-     * Object containing information about the precense of the selected user
+     * Object containing information about the presence of the selected user
      */
-    precenseInfo: PresenceInfo;
+    presenceInfo: PresenceInfo;
     /**
-     * Boolean that show or hide the precense information
+     * Boolean that show or hide the presence information
      */
     showPresence: boolean;
     /**
@@ -59,12 +59,12 @@ interface UserInfoHeaderViewModelProps {
  * props
  * @see {@link UserInfoHeaderState} for more information about what this view model returns.
  */
-export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewModelProps): UserInfoHeaderState {
+export function useUserInfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewModelProps): UserInfoHeaderState {
     const cli = useContext(MatrixClientContext);
 
     let showPresence = true;
 
-    const precenseInfo: PresenceInfo = {
+    const presenceInfo: PresenceInfo = {
         lastActiveAgo: undefined,
         currentlyActive: undefined,
         state: undefined,
@@ -96,9 +96,9 @@ export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewM
     }, [member]);
 
     if (member instanceof RoomMember && member.user) {
-        precenseInfo.state = member.user.presence;
-        precenseInfo.lastActiveAgo = member.user.lastActiveAgo;
-        precenseInfo.currentlyActive = member.user.currentlyActive;
+        presenceInfo.state = member.user.presence;
+        presenceInfo.lastActiveAgo = member.user.lastActiveAgo;
+        presenceInfo.currentlyActive = member.user.currentlyActive;
     }
 
     if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
@@ -108,7 +108,7 @@ export function useUserfoHeaderViewModel({ member, roomId }: UserInfoHeaderViewM
     return {
         onMemberAvatarClick,
         showPresence,
-        precenseInfo,
+        presenceInfo,
         timezoneInfo,
         userIdentifier,
     };

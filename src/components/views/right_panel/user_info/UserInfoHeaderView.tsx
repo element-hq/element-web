@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { type User, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Heading, Tooltip, Text } from "@vector-im/compound-web";
 
-import { useUserfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { useUserInfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 import MemberAvatar from "../../avatars/MemberAvatar";
 import { Container, type Member, type IDevice } from "../UserInfo";
 import { Flex } from "../../../../shared-components/utils/Flex";
@@ -30,7 +30,7 @@ export const UserInfoHeaderView: React.FC<UserInfoHeaderViewProps> = ({
     roomId,
     hideVerificationSection,
 }) => {
-    const vm = useUserfoHeaderViewModel({ member, roomId });
+    const vm = useUserInfoHeaderViewModel({ member, roomId });
     const avatarUrl = (member as User).avatarUrl;
     const displayName = (member as RoomMember).rawDisplayName;
 
@@ -39,9 +39,9 @@ export const UserInfoHeaderView: React.FC<UserInfoHeaderViewProps> = ({
     if (vm.showPresence) {
         presenceLabel = (
             <PresenceLabel
-                activeAgo={vm.precenseInfo.lastActiveAgo}
-                currentlyActive={vm.precenseInfo.currentlyActive}
-                presenceState={vm.precenseInfo.state}
+                activeAgo={vm.presenceInfo.lastActiveAgo}
+                currentlyActive={vm.presenceInfo.currentlyActive}
+                presenceState={vm.presenceInfo.state}
                 className="mx_UserInfo_profileStatus"
                 coloured
             />

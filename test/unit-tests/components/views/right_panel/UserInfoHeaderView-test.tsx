@@ -16,13 +16,13 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { UserInfoHeaderView } from "../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
 import { createTestClient } from "../../../../test-utils";
-import { useUserfoHeaderViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { useUserInfoHeaderViewModel } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
-    useUserfoHeaderViewModel: jest.fn().mockReturnValue({
+    useUserInfoHeaderViewModel: jest.fn().mockReturnValue({
         onMemberAvatarClick: jest.fn(),
-        precenseInfo: {
+        presenceInfo: {
             lastActiveAgo: undefined,
             currentlyActive: undefined,
             state: undefined,
@@ -114,9 +114,9 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should not render verification view if hideVerificationSection is true", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
+        mocked(useUserInfoHeaderViewModel).mockReturnValue({
             onMemberAvatarClick: jest.fn(),
-            precenseInfo: {
+            presenceInfo: {
                 lastActiveAgo: undefined,
                 currentlyActive: undefined,
                 state: undefined,
@@ -133,9 +133,9 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should render timezone if it exist", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
+        mocked(useUserInfoHeaderViewModel).mockReturnValue({
             onMemberAvatarClick: jest.fn(),
-            precenseInfo: {
+            presenceInfo: {
                 lastActiveAgo: undefined,
                 currentlyActive: undefined,
                 state: undefined,
@@ -153,9 +153,9 @@ describe("<UserInfoHeaderView />", () => {
     });
 
     it("should render correct presence label", () => {
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
+        mocked(useUserInfoHeaderViewModel).mockReturnValue({
             onMemberAvatarClick: jest.fn(),
-            precenseInfo: {
+            presenceInfo: {
                 lastActiveAgo: 0,
                 currentlyActive: true,
                 state: "online",
@@ -171,9 +171,9 @@ describe("<UserInfoHeaderView />", () => {
 
     it("should be able to click on member avatar", () => {
         const onMemberAvatarClick = jest.fn();
-        mocked(useUserfoHeaderViewModel).mockReturnValue({
+        mocked(useUserInfoHeaderViewModel).mockReturnValue({
             onMemberAvatarClick,
-            precenseInfo: {
+            presenceInfo: {
                 lastActiveAgo: undefined,
                 currentlyActive: undefined,
                 state: undefined,
