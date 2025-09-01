@@ -2,6 +2,7 @@
 
 ## Checklist
 
+- [ ] I have read through [review guidelines](../docs/review.md) and [CONTRIBUTING.md](../CONTRIBUTING.md).
 - [ ] Tests written for new code (and old code if feasible).
 - [ ] New or updated `public`/`exported` symbols have accurate [TSDoc](https://tsdoc.org/) documentation.
 - [ ] Linter and other CI checks pass.
