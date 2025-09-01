@@ -95,7 +95,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
     protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
-            if (!this.props.mediaVisible && this.props.setMediaVisible) {
+            if (!this.props.mediaVisible) {
                 this.props.setMediaVisible(true);
                 return;
             }
