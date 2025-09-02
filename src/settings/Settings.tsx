@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 // Import i18n.tsx instead of languageHandler to avoid circular deps
@@ -844,7 +844,7 @@ export const SETTINGS: Settings = {
         controller: new ServerSupportUnstableFeatureController(
             "userTimezonePublish",
             defaultWatchManager,
-            [[UNSTABLE_MSC4133_EXTENDED_PROFILES]],
+            [[UNSTABLE_MSC4133_EXTENDED_PROFILES], [STABLE_MSC4133_EXTENDED_PROFILES]],
             undefined,
             _td("labs|extended_profiles_msc_support"),
         ),
