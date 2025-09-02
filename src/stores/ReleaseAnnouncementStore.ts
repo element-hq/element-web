@@ -17,7 +17,13 @@ import { Features } from "../settings/Settings";
 /**
  * The features are shown in the array order.
  */
-const FEATURES = ["pinningMessageList"] as const;
+const FEATURES = [
+    "newRoomList_intro",
+    "newRoomList_sort",
+    "newRoomList_filter",
+    "newRoomList_settings",
+    "pinningMessageList",
+] as const;
 /**
  * All the features that can be shown in the release announcements.
  */

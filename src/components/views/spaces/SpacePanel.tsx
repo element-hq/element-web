@@ -68,6 +68,7 @@ import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
+import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -431,7 +432,15 @@ const SpacePanel: React.FC = () => {
                         </Droppable>
 
                         <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
-
+                        <ReleaseAnnouncement
+                            feature="newRoomList_settings"
+                            header={_t("room_list|release_announcement|settings|title")}
+                            description={_t("room_list|release_announcement|settings|description")}
+                            closeLabel={_t("room_list|release_announcement|done")}
+                            placement="right"
+                        >
+                            <span />
+                        </ReleaseAnnouncement>
                         <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </nav>
                 </DragDropContext>
