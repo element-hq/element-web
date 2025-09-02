@@ -52,8 +52,8 @@ export class ElementAppPage {
      * Open room creation dialog.
      */
     public async openCreateRoomDialog(): Promise<Locator> {
-        await this.page.getByRole("button", { name: "Add room", exact: true }).click();
-        await this.page.getByRole("menuitem", { name: "New room", exact: true }).click();
+        await this.page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await this.page.getByRole("menuitem", { name: "New room" }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }
 
