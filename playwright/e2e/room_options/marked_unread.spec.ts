@@ -48,7 +48,7 @@ test.describe("Mark as Unread", () => {
 
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
         await roomTile.hover();
-        roomTile.getByRole("button", { name: "More Options" }).click();
+        await roomTile.getByRole("button", { name: "More Options" }).click();
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
         // focus the user menu to avoid to have hover decoration

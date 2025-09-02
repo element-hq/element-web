@@ -267,7 +267,7 @@ test.describe("Spotlight", () => {
         // Assert DM exists by checking for the first message and the room being in the room list
         await expect(page.locator(".mx_EventTile_body").filter({ hasText: "Hey!" })).toBeAttached({ timeout: 3000 });
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials.displayName}` })
+            page.getByTestId("room-list").getByRole("option", { name: `Open room ${bot2.credentials.displayName}` }),
         ).toBeVisible();
 
         // Invite BotBob into existing DM with ByteBot
@@ -282,7 +282,7 @@ test.describe("Spotlight", () => {
         await app.client.inviteUser(dmRooms[0], bot1.credentials.userId);
         await expect(roomHeaderName(page).first()).toContainText(groupDmName);
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` })
+            page.getByTestId("room-list").getByRole("option", { name: `Open room ${groupDmName}` }),
         ).toBeVisible();
 
         // Search for BotBob by id, should return group DM and user

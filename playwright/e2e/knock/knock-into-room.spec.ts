@@ -263,7 +263,9 @@ test.describe("Knock Into Room", () => {
 
         // Room should stay in Rooms and have red badge when knock is denied
         await expect(
-            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity with 1 unread mention." }),
+            page
+                .getByTestId("room-list")
+                .getByRole("option", { name: "Open room Cybersecurity with 1 unread mention." }),
         ).toBeVisible();
 
         await expect(roomPreviewBar.getByRole("heading", { name: "You have been denied access" })).toBeVisible();

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk/src/matrix";
 
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -237,8 +237,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 }
                 // If the user has left this room, remove it from the skiplist.
                 if (
-                    (oldMembership === EffectiveMembership.Invite ||
-                       oldMembership === EffectiveMembership.Join) &&
+                    (oldMembership === EffectiveMembership.Invite || oldMembership === EffectiveMembership.Join) &&
                     newMembership === EffectiveMembership.Leave
                 ) {
                     this.roomSkipList.removeRoom(payload.room);
