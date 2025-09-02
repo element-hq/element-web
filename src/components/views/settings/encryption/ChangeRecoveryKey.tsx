@@ -337,6 +337,10 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
+                if (isKeyChangeInProgress) {
+                    // Don't allow repeated attempts.
+                    return;
+                }
                 setIsKeyChangeInProgress(true);
                 onSubmit().finally(() => {
                     setIsKeyChangeInProgress(false);

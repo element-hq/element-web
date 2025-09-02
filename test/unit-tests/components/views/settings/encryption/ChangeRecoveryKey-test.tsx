@@ -141,6 +141,31 @@ describe("<ChangeRecoveryKey />", () => {
                 new Error("can't bootstrap"),
             );
         });
+
+        it("should disallow repeated attempts to change the recovery key", async () => {
+            const mockFn = mocked(matrixClient.getCrypto()!).bootstrapSecretStorage.mockImplementation(() => {
+                // Pretend to do some work.
+                return new Promise((r) => setTimeout(r, 200));
+            });
+
+            const user = userEvent.setup();
+            renderComponent(false);
+
+            // Display the recovery key to save
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
+            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = screen.getByRole("button", { name: "Finish set up" });
+            const input = screen.getByTitle("Enter recovery key");
+            await userEvent.type(input, "encoded private key");
+            await user.click(finishButton);
+            await user.click(finishButton);
+            await user.click(finishButton);
+            expect(mockFn).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("flow to change the recovery key", () => {
