@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { FormEvent, type JSX, type MouseEventHandler, useState } from "react";
+import React, { type JSX, type MouseEventHandler, useState } from "react";
 import {
     Breadcrumb,
     Button,
