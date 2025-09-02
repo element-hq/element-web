@@ -9,33 +9,31 @@ import { type NavigationApi as INavigationApi } from "@element-hq/element-web-mo
 
 import { navigateToPermalink } from "../utils/permalinks/navigator.ts";
 import { parsePermalink } from "../utils/permalinks/Permalinks.ts";
-import { getCachedRoomIDForAlias } from "../RoomAliasCache.ts";
-import { MatrixClientPeg } from "../MatrixClientPeg.ts";
 import dispatcher from "../dispatcher/dispatcher.ts";
 import { Action } from "../dispatcher/actions.ts";
-import SettingsStore from "../settings/SettingsStore.ts";
+import type { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload.ts";
 
 export class NavigationApi implements INavigationApi {
     public async toMatrixToLink(link: string, join = false): Promise<void> {
         navigateToPermalink(link);
 
         const parts = parsePermalink(link);
-        if (parts?.roomIdOrAlias && join) {
-            let roomId: string | undefined = parts.roomIdOrAlias;
-            if (roomId.startsWith("#")) {
-                roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);
-                if (!roomId) {
-                    // alias resolution failed
-                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(parts.roomIdOrAlias);
-                    roomId = result.room_id;
-                }
-            }
-
-            if (roomId) {
-                dispatcher.dispatch({
-                    action: Action.JoinRoom,
-                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
-                    roomId,
+        if (parts?.roomIdOrAlias) {
+            if (parts.roomIdOrAlias.startsWith("#")) {
+                dispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_alias: parts.roomIdOrAlias,
+                    via_servers: parts.viaServers ?? undefined,
+                    auto_join: join,
+                    metricsTrigger: undefined,
+                });
+            } else {
+                dispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: parts.roomIdOrAlias,
+                    via_servers: parts.viaServers ?? undefined,
+                    auto_join: join,
+                    metricsTrigger: undefined,
                 });
             }
         }
