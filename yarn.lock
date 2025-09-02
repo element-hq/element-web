@@ -4343,9 +4343,9 @@
     htmlparser2 "^8.0.0"
 
 "@types/sdp-transform@^2.4.10":
-  version "2.4.10"
-  resolved "https://registry.yarnpkg.com/@types/sdp-transform/-/sdp-transform-2.4.10.tgz#f4e60fbc97f66527f221a3ae092be7c465c55f56"
-  integrity sha512-999diMTpgQGt+dj+tAEQNvBAJYkOip83NJn1RruqNmqeLYNZpQnUX/YrugR+ekXvdJ9pdkZtYg1jiM3mG3NhRg==
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/@types/sdp-transform/-/sdp-transform-2.15.0.tgz#f59a33ec631374794c2affc4c63ef60613285983"
+  integrity sha512-ikIFF0EaYt/2XetIYYVeMj6SB52oVXFasJUXDzWHgzNJS5ep2Pbsu7f8f3Za+dEie8HQtt3Zr9mHYBpWT0XgxQ==
 
 "@types/seedrandom@^3.0.8":
   version "3.0.8"
@@ -4697,7 +4697,6 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.0.0.tgz#a07975ee46307fc31c2ec64a216b6be2b3b27fb3"
   integrity sha512-Jk0NsLPCvdcuZi6an1cfyf4MDcIuoPlvja5ZWgJcORyGQZV1eLMHPYKShq9gj+EYk/BXZoPvQ1d6/T+/LSCNPA==
 
-
 "@vector-im/compound-web@^8.1.2":
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.2.1.tgz#e16ce566c836e6c0fa3318128e57fda0a4542514"
@@ -4713,7 +4712,7 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.39.0-a6238e517f23a2f3025d9c65445914771c63b163-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
 
 "@vector-im/matrix-wysiwyg@2.39.0":
