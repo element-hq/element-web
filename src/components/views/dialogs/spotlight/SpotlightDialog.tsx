@@ -53,7 +53,7 @@ import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { PosthogAnalytics } from "../../../../PosthogAnalytics";
-import { getCachedRoomIDForAlias } from "../../../../RoomAliasCache";
+import { getCachedRoomIdForAlias } from "../../../../RoomAliasCache";
 import { showStartChatInviteDialog } from "../../../../RoomInvite";
 import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
@@ -912,7 +912,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         if (
             trimmedQuery.startsWith("#") &&
             trimmedQuery.includes(":") &&
-            (!getCachedRoomIDForAlias(trimmedQuery) || !cli.getRoom(getCachedRoomIDForAlias(trimmedQuery)))
+            (!getCachedRoomIdForAlias(trimmedQuery) || !cli.getRoom(getCachedRoomIdForAlias(trimmedQuery)!.roomId))
         ) {
             joinRoomSection = (
                 <div className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches" role="group">

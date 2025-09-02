@@ -151,7 +151,7 @@ interface Props extends ReplacerOptions {
 const EventContentBody = memo(
     ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ref, ...options }: Props) => {
         const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
-        const [mediaIsVisible] = useMediaVisible(mxEvent?.getId(), mxEvent?.getRoomId());
+        const [mediaIsVisible] = useMediaVisible(mxEvent);
 
         const replacer = useReplacer(content, mxEvent, options);
         const linkifyOptions = useMemo(
