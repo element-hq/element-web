@@ -176,11 +176,11 @@ describe("<ChangeRecoveryKey />", () => {
             await userEvent.type(input, "encoded private key");
 
             await waitFor(() => {
-                expect(finishButton.getAttribute("aria-disabled")).not.toEqual("true");
+               expect(finishButton).not.toBeDisabled();
             });
 
             await user.click(finishButton);
-            await waitFor(() =>  expect(mockFn).toHaveBeenCalledTimes(1));
+            await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1));
         });
     });
 
