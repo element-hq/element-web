@@ -2069,8 +2069,9 @@
         "pinned_message_banner": {
             "button_close_list": "Lukk liste",
             "button_view_all": "Vis alle",
-            "description": "Dette rommet har festede meldinger. Klikk for å se dem.",
-            "go_to_message": "Vis den festede meldingen i tidslinjen.",
+            "description": "Festede meldinger",
+            "go_to_newest_message": "Se den festede meldingen i tidslinjen og den nyeste festede meldingen her",
+            "go_to_next_message": "Se den festede meldingen i tidslinjen og den nest eldste festede meldingen her",
             "title": "<bold>%(index)s av %(length)s</bold> festede meldinger"
         },
         "read_topic": "Klikk for å lese emnet",

@@ -917,6 +917,7 @@
             },
             "privacy_warning": "Pastikan tidak ada yang bisa melihat layar ini!",
             "restoring": "Memulihkan kunci-kunci dari cadangan",
+            "security_key_label": "Kunci pemulihan",
             "security_key_title": "Konfirmasi kunci pemulihan Anda"
         },
         "bootstrap_title": "Menyiapkan kunci",
@@ -1362,6 +1363,10 @@
         "name_email_mxid_share_space": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
         "name_mxid_share_room": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
         "name_mxid_share_space": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
+        "progress": {
+            "dont_close": "Jangan tutup aplikasi sampai selesai.",
+            "preparing": "Menyiapkan undangan..."
+        },
         "recents_section": "Obrolan Terkini",
         "room_failed_partial": "Kami telah mengirim yang lainnya, tetapi orang berikut ini tidak dapat diundang ke <RoomName/>",
         "room_failed_partial_title": "Beberapa undangan tidak dapat dikirim",
@@ -1758,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Admin",
+        "creator": "Pemilik",
         "custom": "Kustom (%(level)s)",
         "custom_level": "Tingkat kustom",
         "default": "Bawaan",
@@ -1909,6 +1915,7 @@
         "thread_list": {
             "context_menu_label": "Opsi utasan"
         },
+        "title": "Panel kanan",
         "video_room_chat": {
             "title": "Obrolan"
         }
@@ -2055,7 +2062,6 @@
             "button_close_list": "Tutup daftar",
             "button_view_all": "Lihat semua",
             "description": "Ruangan ini memiliki pesan yang disematkan. Klik untuk melihatnya.",
-            "go_to_message": "Lihat pesan yang disematkan di lini masa.",
             "title": "<bold>%(index)s dari %(length)s</bold> Pesan yang disematkan"
         },
         "read_topic": "Klik untuk membaca topik",
@@ -3389,6 +3395,7 @@
             "unable_to_find": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya."
         },
         "m.audio": {
+            "audio_player": "Pemutar audio",
             "error_downloading_audio": "Terjadi kesalahan mengunduh audio",
             "error_processing_audio": "Terjadi kesalahan mengolah pesan suara",
             "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara",

@@ -1999,7 +1999,6 @@
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
             "description": "Esta sala tem mensagens afixadas. Clica para as veres.",
-            "go_to_message": "Visualiza a mensagem fixada na linha do tempo.",
             "title": "<bold>%(index)s de %(length)s</bold> Mensagens fixadas"
         },
         "read_topic": "Clica para ler o tópico",

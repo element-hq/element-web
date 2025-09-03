@@ -2073,7 +2073,6 @@
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",
             "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
-            "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
             "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
         },
         "read_topic": "Kliknij, aby przeczytać temat",
