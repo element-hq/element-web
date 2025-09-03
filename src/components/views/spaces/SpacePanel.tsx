@@ -432,15 +432,7 @@ const SpacePanel: React.FC = () => {
                         </Droppable>
 
                         <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
-                        <ReleaseAnnouncement
-                            feature="newRoomList_settings"
-                            header={_t("room_list|release_announcement|settings|title")}
-                            description={_t("room_list|release_announcement|settings|description")}
-                            closeLabel={_t("room_list|release_announcement|done")}
-                            placement="right"
-                        >
-                            <div />
-                        </ReleaseAnnouncement>
+
                         <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </nav>
                 </DragDropContext>
