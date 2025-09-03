@@ -344,7 +344,9 @@ test.describe("Threads", () => {
 
             await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
 
-            await (await app.openMessageComposerOptions(true)).getByRole("menuitem", { name: "Voice Message" }).click();
+            const composerOptions = await app.openMessageComposerOptions(true);
+            await page.waitForTimeout(1000);
+            await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
             await page.waitForTimeout(3000);
             await app.getComposer(true).getByRole("button", { name: "Send voice message" }).click();
             await expect(page.locator(".mx_ThreadView .mx_MVoiceMessageBody")).toHaveCount(1);
