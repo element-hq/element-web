@@ -136,7 +136,7 @@ describe("<ChangeRecoveryKey />", () => {
             await userEvent.type(input, "encoded private key");
 
             await waitFor(() => {
-               expect(finishButton).not.toBeDisabled();
+                expect(finishButton).not.toBeDisabled();
             });
 
             jest.spyOn(Modal, "createDialog");
@@ -176,7 +176,7 @@ describe("<ChangeRecoveryKey />", () => {
             await userEvent.type(input, "encoded private key");
 
             await waitFor(() => {
-               expect(finishButton).not.toBeDisabled();
+                expect(finishButton).not.toBeDisabled();
             });
 
             await user.click(finishButton);
