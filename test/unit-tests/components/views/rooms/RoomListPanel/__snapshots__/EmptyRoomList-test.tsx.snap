@@ -10,7 +10,7 @@ exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] =
     <span
       class="mx_EmptyRoomList_GenericPlaceholder_title"
     >
-      You don't have favourite chat yet
+      You don't have favourite chats yet
     </span>
     <span
       class="mx_EmptyRoomList_GenericPlaceholder_description"
