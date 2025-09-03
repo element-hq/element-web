@@ -2110,7 +2110,6 @@
             "button_close_list": "Cau'r rhestr",
             "button_view_all": "Gweld popeth",
             "description": "Mae negeseuon wedi'u pinio yn yr ystafell hon. Cliciwch i'w gweld.",
-            "go_to_message": "Gweld y neges sydd wedi'i phinnio yn y llinell amser.",
             "title": "<bold>%(index)s o %(length)s</bold> Neges wedi'u pinio"
         },
         "read_topic": "Cliciwch i ddarllen y pwnc",
