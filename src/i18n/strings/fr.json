@@ -2068,8 +2068,9 @@
         "pinned_message_banner": {
             "button_close_list": "Fermer la liste",
             "button_view_all": "Voir tout",
-            "description": "Ce salon contient des messages épinglés. Cliquez pour les consulter.",
-            "go_to_message": "Afficher le message épinglé dans la discussion.",
+            "description": "Messages épinglés",
+            "go_to_newest_message": "Afficher le message épinglé dans la discussion et le plus récent ici",
+            "go_to_next_message": "Afficher le message épinglé dans la discussion et le plus ancien suivant ici",
             "title": "<bold>%(index)s de %(length)s</bold> messages épinglés"
         },
         "read_topic": "Cliquer pour lire le sujet",
@@ -3512,7 +3513,7 @@
             "unknown": "%(senderDisplayName)s a changé l’accès des visiteurs en %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s a rendu l’historique visible à tous les membres du salon, depuis le moment où ils ont été invités.",
+            "invited": "%(senderName)s a changé un paramètre : désormais les nouveaux membres pourront voir l'historique de conversation du salon à partir du moment où ils ont été invités.",
             "joined": "%(senderName)s a rendu l’historique visible à tous les membres du salon, à partir de leur arrivée.",
             "shared": "%(senderName)s a rendu l’historique visible à tous les membres du salon.",
             "unknown": "%(senderName)s a rendu l’historique visible à inconnu (%(visibility)s).",

@@ -1658,9 +1658,6 @@
         "not_found_title": "Αυτό το δωμάτιο ή ο χώρος δεν υπάρχει.",
         "not_found_title_name": "Το %(roomName)s δεν υπάρχει.",
         "peek_join_prompt": "Κάνετε προεπισκόπηση στο %(roomName)s. Θέλετε να συμμετάσχετε;",
-        "pinned_message_banner": {
-            "go_to_message": "Εμφάνιση καρφιτσωμένου μηνύματος στο χρονολόγιο."
-        },
         "rejoin_button": "Επανασύνδεση",
         "status_bar": {
             "delete_all": "Διαγραφή όλων",

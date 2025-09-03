@@ -1997,7 +1997,6 @@
             "button_close_list": "Listeyi kapat",
             "button_view_all": "Tümünü görüntüle",
             "description": "Bu odada sabitlenmiş mesajlar var. Görüntülemek için tıklayın.",
-            "go_to_message": "Sabitlenmiş mesajı zaman çizelgesinde görüntüle.",
             "title": "<bold>%(index)s / %(length)s</bold> Sabitlenmiş mesajlar"
         },
         "read_topic": "Başlığı okumak için tıklayın",

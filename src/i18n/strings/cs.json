@@ -2073,7 +2073,6 @@
             "button_close_list": "Zavřít seznam",
             "button_view_all": "Zobrazit vše",
             "description": "Tato místnost má připnuté zprávy. Kliknutím je zobrazíte.",
-            "go_to_message": "Zobrazit připnutou zprávu na časové ose.",
             "title": "<bold>%(index)sz%(length)s</bold> Připnuté zprávy"
         },
         "read_topic": "Klikněte pro přečtení tématu",

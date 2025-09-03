@@ -1026,7 +1026,7 @@
                 "text": "Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!",
                 "wrong_fingerprint": "Unable to verify device '%(deviceId)s' - the supplied fingerprint '%(fingerprint)s' does not match the device fingerprint, '%(fprint)s'"
             },
-            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
+            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your cryptographic identity.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
             "prompt_encrypted": "Verify all users in a room to ensure it's secure.",
@@ -2132,7 +2132,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chat yet",
+            "no_favourites": "You don't have favourite chats yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
             "no_lowpriority": "You don't have any low priority rooms",
@@ -3514,7 +3514,7 @@
             "unknown": "%(senderDisplayName)s changed guest access to %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s made future room history visible to all room members, from the point they are invited.",
+            "invited": "%(senderName)s made future room history visible to new room members, from the point they are invited.",
             "joined": "%(senderName)s made future room history visible to all room members, from the point they joined.",
             "shared": "%(senderName)s made future room history visible to all room members.",
             "unknown": "%(senderName)s made future room history visible to unknown (%(visibility)s).",
