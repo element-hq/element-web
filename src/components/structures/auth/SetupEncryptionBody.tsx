@@ -31,9 +31,9 @@ import dispatcher from "../../../dispatcher/dispatcher";
 interface IProps {
     onFinished: () => void;
     /**
-     * Allow the user to log out, rather than setting up encryption.
+     * Offer the user an option to log out, instead of setting up encryption.
      *
-     * This is only used when this component is shown when the user is initially
+     * This is used when this component is shown when the user is initially
      * prompted to set up encryption, before the user is shown the main chat
      * interface.
      *

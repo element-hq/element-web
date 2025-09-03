@@ -15,7 +15,7 @@ import AuthFooter from "./AuthFooter";
 
 interface IProps {
     /**
-     * An additional class to apply to the modal wrapper.
+     * A CSS class to apply to the modal wrapper, in addition to the default `mx_AuthPage_modal`.
      */
     modalClass?: string;
 }
