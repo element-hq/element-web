@@ -53,7 +53,7 @@ export function RoomListHeaderView(): JSX.Element {
                     closeLabel={_t("room_list|release_announcement|next")}
                     placement="bottom"
                 >
-                    <div>
+                    <div className="mx_ReleaseAnnouncementAnchor">
                         <RoomListOptionsMenu vm={vm} />
                     </div>
                 </ReleaseAnnouncement>
@@ -65,7 +65,7 @@ export function RoomListHeaderView(): JSX.Element {
                     description={_t("room_list|release_announcement|intro|description")}
                     closeLabel={_t("room_list|release_announcement|next")}
                 >
-                    <div>
+                    <div className="mx_ReleaseAnnouncementAnchor">
                         {vm.displayComposeMenu ? (
                             <ComposeMenu vm={vm} />
                         ) : (

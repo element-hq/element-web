@@ -439,7 +439,7 @@ const SpacePanel: React.FC = () => {
                             closeLabel={_t("room_list|release_announcement|done")}
                             placement="right"
                         >
-                            <span />
+                            <div />
                         </ReleaseAnnouncement>
                         <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </nav>
