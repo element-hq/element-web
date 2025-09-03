@@ -2186,7 +2186,7 @@
             },
             "next": "Next",
             "settings": {
-                "description": "To show or hide message previews, go to All settings > General > Room list",
+                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
                 "title": "Some settings have moved"
             },
             "sort": {
