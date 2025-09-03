@@ -15,7 +15,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="«rm»"
+        aria-labelledby="«re»"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -210,7 +210,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <input
               aria-hidden="true"
               class="_input_19o42_24"
-              id="«rr»"
+              id="«rj»"
               role="switch"
               type="checkbox"
             />
@@ -345,55 +345,50 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             />
           </svg>
         </button>
-        <div
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <button
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          data-kind="primary"
+          role="menuitem"
         >
-          <button
-            class="_item_dyt4i_8 _interactive_dyt4i_26"
-            data-kind="primary"
-            role="menuitem"
+          <svg
+            aria-hidden="true"
+            class="_icon_dyt4i_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              aria-hidden="true"
-              class="_icon_dyt4i_50"
-              fill="currentColor"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
-            >
-              Pinned messages
-            </span>
-            <svg
-              aria-hidden="true"
-              class="_nav-hint_dyt4i_59"
-              fill="currentColor"
-              height="24"
-              viewBox="8 0 8 24"
-              width="8"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              0
-            </span>
-          </button>
-        </div>
+            <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_dyt4i_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            0
+          </span>
+        </button>
         <button
           class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
@@ -1025,55 +1020,50 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
         </button>
-        <div
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <button
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          data-kind="primary"
+          role="menuitem"
         >
-          <button
-            class="_item_dyt4i_8 _interactive_dyt4i_26"
-            data-kind="primary"
-            role="menuitem"
+          <svg
+            aria-hidden="true"
+            class="_icon_dyt4i_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              aria-hidden="true"
-              class="_icon_dyt4i_50"
-              fill="currentColor"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
-            >
-              Pinned messages
-            </span>
-            <svg
-              aria-hidden="true"
-              class="_nav-hint_dyt4i_59"
-              fill="currentColor"
-              height="24"
-              viewBox="8 0 8 24"
-              width="8"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              0
-            </span>
-          </button>
-        </div>
+            <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_dyt4i_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            0
+          </span>
+        </button>
         <button
           class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
@@ -1413,7 +1403,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="«rb»"
+        aria-labelledby="«r7»"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -1608,7 +1598,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <input
               aria-hidden="true"
               class="_input_19o42_24"
-              id="«rg»"
+              id="«rc»"
               role="switch"
               type="checkbox"
             />
@@ -1743,55 +1733,50 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
         </button>
-        <div
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <button
+          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          data-kind="primary"
+          role="menuitem"
         >
-          <button
-            class="_item_dyt4i_8 _interactive_dyt4i_26"
-            data-kind="primary"
-            role="menuitem"
+          <svg
+            aria-hidden="true"
+            class="_icon_dyt4i_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              aria-hidden="true"
-              class="_icon_dyt4i_50"
-              fill="currentColor"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
-            >
-              Pinned messages
-            </span>
-            <svg
-              aria-hidden="true"
-              class="_nav-hint_dyt4i_59"
-              fill="currentColor"
-              height="24"
-              viewBox="8 0 8 24"
-              width="8"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-              />
-            </svg>
-            <span
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
-            >
-              0
-            </span>
-          </button>
-        </div>
+            <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_dyt4i_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+          >
+            0
+          </span>
+        </button>
         <button
           class="_item_dyt4i_8 _interactive_dyt4i_26"
           data-kind="primary"
