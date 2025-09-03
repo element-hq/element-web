@@ -180,6 +180,9 @@ describe("<ChangeRecoveryKey />", () => {
             });
 
             await user.click(finishButton);
+            await user.click(finishButton);
+            await user.click(finishButton);
+
             await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1));
         });
     });
