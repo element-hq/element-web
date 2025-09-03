@@ -189,14 +189,14 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     <div
       class="_tooltip_6ode6_8 _invisible_6ode6_21"
       data-floating-ui-focusable=""
-      style="position: absolute; left: 0px; top: 0px; transform: translate(6px, 5px);"
+      style="position: absolute; left: 0px; top: 0px; transform: translate(-6px, 5px);"
       tabindex="-1"
     >
       <svg
         aria-hidden="true"
         class="_arrow_6ode6_33"
         height="10"
-        style="position: absolute; pointer-events: none; right: calc(100% - 0px); transform: rotate(90deg); top: -1px;"
+        style="position: absolute; pointer-events: none; transform: rotate(-90deg); left: calc(100% - 0px); top: -1px;"
         viewBox="0 0 10 10"
         width="10"
       >
