@@ -11,7 +11,7 @@ permissions: {}
 jobs:
     sonarqube:
         name: 🩻 SonarQube
-        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group' && !contains(github.event.pull_request.labels,'Z-Skip-Sonar')
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group' && !contains(github.event.pull_request.labels.*.name,'Z-Skip-Sonar')
         uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
         permissions:
             actions: read
