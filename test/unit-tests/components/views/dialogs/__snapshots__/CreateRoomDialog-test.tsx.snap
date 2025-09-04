@@ -1,0 +1,352 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CreateRoomDialog /> for a private room should create a private room 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_CreateRoomDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Create a private room
+      </h1>
+    </div>
+    <form>
+      <div
+        class="mx_Dialog_content"
+      >
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
+        >
+          <input
+            id="mx_Field_21"
+            label="Name"
+            placeholder="Name"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_21"
+          >
+            Name
+          </label>
+        </div>
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_topic"
+        >
+          <input
+            id="mx_Field_22"
+            label="Topic (optional)"
+            placeholder="Topic (optional)"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_22"
+          >
+            Topic (optional)
+          </label>
+        </div>
+        <div
+          class="mx_Dropdown mx_JoinRuleDropdown"
+        >
+          <div
+            aria-describedby="mx_JoinRuleDropdown_value"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Room visibility"
+            aria-owns="mx_JoinRuleDropdown_input"
+            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_Dropdown_option"
+              id="mx_JoinRuleDropdown_value"
+            >
+              <div
+                class="mx_JoinRuleDropdown_invite"
+              >
+                Private room (invite only)
+              </div>
+            </div>
+            <span
+              class="mx_Dropdown_arrow"
+            />
+          </div>
+        </div>
+        <p>
+          Only people invited will be able to find and join this room. You can change this at any time from room settings.
+        </p>
+        <div
+          class="mx_SettingsFlag mx_CreateRoomDialog_e2eSwitch"
+        >
+          <span
+            class="mx_SettingsFlag_label"
+          >
+            <div
+              id="mx_LabelledToggleSwitch_«r4m»"
+            >
+              Enable end-to-end encryption
+            </div>
+          </span>
+          <div
+            aria-checked="true"
+            aria-disabled="false"
+            aria-labelledby="mx_LabelledToggleSwitch_«r4m»"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <p>
+          You can't disable this later. Bridges & most bots won't work yet.
+        </p>
+        <details
+          class="mx_CreateRoomDialog_details"
+        >
+          <summary
+            class="mx_CreateRoomDialog_details_summary"
+          >
+            Show advanced
+          </summary>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_«r4n»"
+              >
+                Block anyone not part of server.org from ever joining this room.
+              </div>
+            </span>
+            <div
+              aria-checked="false"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_«r4n»"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <p>
+            You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
+          </p>
+        </details>
+      </div>
+    </form>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Create room
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`<CreateRoomDialog /> for a private room should render not the advanced options when UI.advancedSettings is disabled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_CreateRoomDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Create a private room
+      </h1>
+    </div>
+    <form>
+      <div
+        class="mx_Dialog_content"
+      >
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
+        >
+          <input
+            id="mx_Field_23"
+            label="Name"
+            placeholder="Name"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_23"
+          >
+            Name
+          </label>
+        </div>
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_topic"
+        >
+          <input
+            id="mx_Field_24"
+            label="Topic (optional)"
+            placeholder="Topic (optional)"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_24"
+          >
+            Topic (optional)
+          </label>
+        </div>
+        <div
+          class="mx_Dropdown mx_JoinRuleDropdown"
+        >
+          <div
+            aria-describedby="mx_JoinRuleDropdown_value"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Room visibility"
+            aria-owns="mx_JoinRuleDropdown_input"
+            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_Dropdown_option"
+              id="mx_JoinRuleDropdown_value"
+            >
+              <div
+                class="mx_JoinRuleDropdown_invite"
+              >
+                Private room (invite only)
+              </div>
+            </div>
+            <span
+              class="mx_Dropdown_arrow"
+            />
+          </div>
+        </div>
+        <p>
+          Only people invited will be able to find and join this room. You can change this at any time from room settings.
+        </p>
+        <div
+          class="mx_SettingsFlag mx_CreateRoomDialog_e2eSwitch"
+        >
+          <span
+            class="mx_SettingsFlag_label"
+          >
+            <div
+              id="mx_LabelledToggleSwitch_«r54»"
+            >
+              Enable end-to-end encryption
+            </div>
+          </span>
+          <div
+            aria-checked="true"
+            aria-disabled="false"
+            aria-labelledby="mx_LabelledToggleSwitch_«r54»"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <p>
+          You can't disable this later. Bridges & most bots won't work yet.
+        </p>
+      </div>
+    </form>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Create room
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
