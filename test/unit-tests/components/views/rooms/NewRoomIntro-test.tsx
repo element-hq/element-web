@@ -9,16 +9,24 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
-import { filterConsole, mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../../test-utils";
+import {
+    filterConsole,
+    mkEvent,
+    mkRoomMemberJoinEvent,
+    mkThirdPartyInviteEvent,
+    stubClient,
+} from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
 import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
     render(
@@ -37,9 +45,13 @@ describe("NewRoomIntro", () => {
 
     filterConsole("Room !room:example.com does not have an m.room.create event");
 
-    beforeAll(() => {
+    beforeEach(() => {
         client = stubClient();
         DMRoomMap.makeShared(client);
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     describe("for a DM Room", () => {
@@ -86,6 +98,64 @@ describe("NewRoomIntro", () => {
         it("should render the expected intro", () => {
             const expected = `Send your first message to invite test_room to chat`;
             screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
+        });
+    });
+
+    describe("topic", () => {
+        let room: Room;
+
+        beforeEach(() => {
+            room = new Room(roomId, client, userId);
+            room.getLiveTimeline()
+                .getState(EventTimeline.FORWARDS)
+                ?.setStateEvents([mkRoomMemberJoinEvent(client.getSafeUserId(), room.roomId)]);
+            jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
+        });
+
+        function addTopicToRoom(topic: string) {
+            const topicEvent = mkEvent({
+                type: "m.room.topic",
+                room: roomId,
+                user: userId,
+                content: {
+                    topic,
+                },
+                ts: 123,
+                event: true,
+            });
+
+            room.addLiveEvents([topicEvent], { addToState: true });
+        }
+
+        it("should render the topic", () => {
+            addTopicToRoom("Test topic");
+            renderNewRoomIntro(client, room);
+            screen.getByText("Test topic");
+        });
+
+        it("should render a link in the topic", () => {
+            addTopicToRoom("This is a link: https://matrix.org/");
+            renderNewRoomIntro(client, room);
+            expect(screen.getByTestId("topic")).toMatchSnapshot();
+        });
+
+        it("should be able to add a topic", () => {
+            addTopicToRoom("Test topic");
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "maySendStateEvent").mockReturnValue(
+                true,
+            );
+            const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
+
+            renderNewRoomIntro(client, room);
+            screen.getByRole("button", { name: "edit" }).click();
+            expect(spyDispatcher).toHaveBeenCalledWith(
+                {
+                    action: "open_room_settings",
+                    room_id: room.roomId,
+                },
+                true,
+            );
         });
     });
 });
