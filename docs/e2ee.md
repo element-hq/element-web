@@ -49,7 +49,7 @@ Support for the configuration options `secure_backup_required` and `secure_backu
 in the `/.well-known/matrix/client` config has been removed.
 
 Setting up recovery is now always recommended to all users by showing a one-off toast and a
-permanent red dot on the *Encryption* tab in the *Settings* dialog. When creating a new
+permanent red dot on the _Encryption_ tab in the _Settings_ dialog. When creating a new
 recovery key, the UI only supports auto-generated keys. Using an existing (custom) passphrase
 still works, but is not exposed in the UI when setting up recovery.
 
