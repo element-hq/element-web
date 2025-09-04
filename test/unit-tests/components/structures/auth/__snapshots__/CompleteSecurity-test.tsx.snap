@@ -10,12 +10,8 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
       style="position: relative;"
     >
       <div
-        class="mx_AuthPage_modalBlur"
-        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
-      />
-      <div
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+        style="display: flex; z-index: 1; border-radius: 8px;"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"
@@ -180,12 +176,8 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
       style="position: relative;"
     >
       <div
-        class="mx_AuthPage_modalBlur"
-        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
-      />
-      <div
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+        style="display: flex; z-index: 1; border-radius: 8px;"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"

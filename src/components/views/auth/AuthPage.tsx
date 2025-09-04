@@ -15,9 +15,12 @@ import AuthFooter from "./AuthFooter";
 
 interface IProps {
     /**
-     * A CSS class to apply to the modal wrapper, in addition to the default `mx_AuthPage_modal`.
+     * Whether to add a blurred shadow around the modal.
+     *
+     * If the modal component provides its own shadow or blurring, this can be
+     * disabled.  Defaults to `true`.
      */
-    modalClass?: string;
+    addBlur?: boolean;
 }
 
 export default class AuthPage extends React.PureComponent<React.PropsWithChildren<IProps>> {
@@ -70,12 +73,22 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             borderRadius: "8px",
         };
 
-        const modalClasses = classNames("mx_AuthPage_modal", this.props.modalClass);
+        let modalBlur;
+        if (this.props.addBlur !== false) {
+            modalBlur = <div className="mx_AuthPage_modalBlur" style={blurStyle} />;
+        } else {
+            delete modalContentStyle.background;
+        }
+
+        const modalClasses = classNames({
+            mx_AuthPage_modal: true,
+            mx_AuthPage_modal_noBlur: this.props.addBlur === false,
+        });
 
         return (
             <div className="mx_AuthPage" style={pageStyle}>
                 <div className={modalClasses} style={modalStyle}>
-                    <div className="mx_AuthPage_modalBlur" style={blurStyle} />
+                    {modalBlur}
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
                         {this.props.children}
                     </div>

@@ -95,7 +95,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         }
 
         return (
-            <AuthPage modalClass="mx_AuthPage_modal_noBlur">
+            <AuthPage addBlur={false}>
                 <Glass className="mx_Dialog_border">
                     <CompleteSecurityBody>
                         <h1 className="mx_CompleteSecurity_header">
