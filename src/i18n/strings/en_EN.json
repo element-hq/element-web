@@ -1998,7 +1998,9 @@
         "inaccessible_subtitle_1": "Try again later, or ask a room or space admin to check if you have access.",
         "inaccessible_subtitle_2": "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
         "intro": {
+            "display_topic": "Topic: <topic/>",
             "dm_caption": "Only the two of you are in this conversation, unless either of you invites anyone to join.",
+            "edit_topic": "Topic: <topic/> (<a>edit</a>)",
             "enable_encryption_prompt": "Enable encryption in settings.",
             "encrypted_3pid_dm_pending_join": "Once everyone has joined, you’ll be able to chat",
             "no_avatar_label": "Add a photo, so people can easily spot your room.",
@@ -2008,8 +2010,6 @@
             "send_message_start_dm": "Send your first message to invite <displayName/> to chat",
             "start_of_dm_history": "This is the beginning of your direct message history with <displayName/>.",
             "start_of_room": "This is the start of <roomName/>.",
-            "topic": "Topic: %(topic)s ",
-            "topic_edit": "Topic: %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "End-to-end encryption isn't enabled",
             "user_created": "%(displayName)s created this room.",
             "you_created": "You created this room."
