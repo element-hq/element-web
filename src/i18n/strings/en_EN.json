@@ -1877,11 +1877,6 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Find all pinned messages here. Rollover any message and select “Pin” to add it.",
-                "title": "All new pinned messages"
-            },
             "reply_thread": "Reply to a <link>thread message</link>",
             "unpin_all": {
                 "button": "Unpin all messages",
@@ -2179,6 +2174,26 @@
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "release_announcement": {
+            "done": "Done",
+            "filter": {
+                "description": "Filter your chats with a single click. Expand to view more filters.",
+                "title": "New quick filters"
+            },
+            "intro": {
+                "description": "The chats list has been updated to be more clear and simple to use.",
+                "title": "Chats has a new look!"
+            },
+            "next": "Next",
+            "settings": {
+                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
+                "title": "Some settings have moved"
+            },
+            "sort": {
+                "description": "Change the ordering of your chats from most recent to A-Z",
+                "title": "Sort your chats"
+            }
         },
         "room": {
             "more_options": "More Options",
