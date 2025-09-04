@@ -14,23 +14,20 @@ entrypoint_log() {
 mkdir -p /tmp/element-web-config
 cp /app/config*.json /tmp/element-web-config/
 
-# If the module directory exists
-if [ -d "/modules" ]; then
-    # ...and the module directory has modules in it
-    if [ "$( ls -A '/modules' )" ]; then
-        cd /modules
-        for MODULE in *
-        do
-            # If the module has a package.json, use its main field as the entrypoint
-            ENTRYPOINT="index.js"
-            if [ -f "/modules/$MODULE/package.json" ]; then
-                ENTRYPOINT=$(jq -r '.main' "/modules/$MODULE/package.json")
-            fi
+# If the module directory exists AND the module directory has modules in it
+if [ -d "/modules" ] && [ "$( ls -A '/modules' )" ]; then
+    cd /modules
+    for MODULE in *
+    do
+        # If the module has a package.json, use its main field as the entrypoint
+        ENTRYPOINT="index.js"
+        if [ -f "/modules/$MODULE/package.json" ]; then
+            ENTRYPOINT=$(jq -r '.main' "/modules/$MODULE/package.json")
+        fi
 
-            entrypoint_log "Loading module $MODULE with entrypoint $ENTRYPOINT"
+        entrypoint_log "Loading module $MODULE with entrypoint $ENTRYPOINT"
 
-            # Append the module to the config
-            jq ".modules += [\"/modules/$MODULE/$ENTRYPOINT\"]" /tmp/element-web-config/config.json | sponge /tmp/element-web-config/config.json
-        done
-    fi
+        # Append the module to the config
+        jq ".modules += [\"/modules/$MODULE/$ENTRYPOINT\"]" /tmp/element-web-config/config.json | sponge /tmp/element-web-config/config.json
+    done
 fi
