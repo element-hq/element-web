@@ -172,7 +172,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             if (store.hasDevicesToVerifyAgainst) {
                 verifyButton = (
                     <Button kind="primary" onClick={this.onVerifyClick}>
-                        <DevicesIcon /> {_t("encryption|verification|verify_using_device")}
+                        <DevicesIcon /> {_t("encryption|verification|use_another_device")}
                     </Button>
                 );
             }
@@ -181,7 +181,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             if (store.keyInfo) {
                 useRecoveryKeyButton = (
                     <Button kind="primary" onClick={this.onUsePassphraseClick}>
-                        {_t("encryption|verification|verify_using_key")}
+                        {_t("encryption|verification|use_recovery_key")}
                     </Button>
                 );
             }
@@ -202,7 +202,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
                 >
                     <EncryptionCardEmphasisedContent>
-                        <span>{_t("encryption|verification|verification_description")}</span>
+                        <span>{_t("encryption|verification|confirm_identity_description")}</span>
                         <span>
                             <ExternalLink href="https://element.io/help#encryption-device-verification">
                                 {_t("action|learn_more")}
