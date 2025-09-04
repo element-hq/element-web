@@ -138,7 +138,6 @@ const NewRoomIntro: React.FC = () => {
                             {sub}
                         </AccessibleButton>
                     ),
-                    //
                     b: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
                 },
             );
