@@ -45,8 +45,8 @@ recovery so that you can access history on your new devices as well as retain ac
 
 ## Removal of old settings
 
-The configuration options `secure_backup_required` and `secure_backup_setup_methods`
-in the `/.well-known/matrix/client` config have been deprecated, and are no longer applicable.
+Support for the configuration options `secure_backup_required` and `secure_backup_setup_methods`
+in the `/.well-known/matrix/client` config has been removed.
 
 Setting up recovery is now always recommended to all users by showing a one-off toast and a
 permanent red dot on the *Encryption* tab in the *Settings* dialog. When creating a new
