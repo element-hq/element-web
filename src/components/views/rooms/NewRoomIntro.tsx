@@ -128,7 +128,7 @@ const NewRoomIntro: React.FC = () => {
         let topicText;
         if (canAddTopic && topic) {
             topicText = _t(
-                "room|intro|topic_edit",
+                "room|intro|edit_topic",
                 {},
                 {
                     a: (sub) => (
@@ -141,7 +141,7 @@ const NewRoomIntro: React.FC = () => {
             );
         } else if (topic) {
             topicText = _t(
-                "room|intro|topic",
+                "room|intro|display_topic",
                 {},
                 { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
             );
