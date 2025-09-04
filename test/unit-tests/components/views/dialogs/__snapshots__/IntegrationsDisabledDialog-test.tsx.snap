@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfirmUserActionDialog renders 1`] = `
+exports[`<IntegrationsDisabledDialog /> should render as expected 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
@@ -8,9 +8,8 @@ exports[`ConfirmUserActionDialog renders 1`] = `
     tabindex="0"
   />
   <div
-    aria-describedby="mx_Dialog_content"
     aria-labelledby="mx_BaseDialog_title"
-    class="mx_ConfirmUserActionDialog mx_Dialog_fixedWidth"
+    class="mx_IntegrationsDisabledDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
     tabindex="-1"
@@ -22,42 +21,15 @@ exports[`ConfirmUserActionDialog renders 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Ban this 
+        Integrations are disabled
       </h1>
     </div>
     <div
-      class="mx_Dialog_content"
-      id="mx_Dialog_content"
+      class="mx_IntegrationsDisabledDialog_content"
     >
-      <div
-        class="mx_ConfirmUserActionDialog_user"
-      >
-        <div
-          class="mx_ConfirmUserActionDialog_avatar"
-        >
-          <span
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="3"
-            data-testid="avatar-img"
-            data-type="round"
-            role="presentation"
-            style="--cpd-avatar-size: 48px;"
-            title="@user:test.com"
-          >
-            u
-          </span>
-        </div>
-        <div
-          class="mx_ConfirmUserActionDialog_name"
-        >
-          @user:test.com
-        </div>
-        <div
-          class="mx_ConfirmUserActionDialog_userId"
-        >
-          @user:test.com
-        </div>
-      </div>
+      <p>
+        Enable 'Manage integrations' in Settings to do this.
+      </p>
     </div>
     <div
       class="mx_Dialog_buttons"
@@ -69,14 +41,14 @@ exports[`ConfirmUserActionDialog renders 1`] = `
           data-testid="dialog-cancel-button"
           type="button"
         >
-          Cancel
+          OK
         </button>
         <button
           class="mx_Dialog_primary"
           data-testid="dialog-primary-button"
           type="button"
         >
-          Ban
+          Settings
         </button>
       </span>
     </div>

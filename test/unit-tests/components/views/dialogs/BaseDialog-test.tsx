@@ -14,7 +14,12 @@ import BaseDialog from "../../../../../src/components/views/dialogs/BaseDialog.t
 describe("BaseDialog", () => {
     it("calls onFinished when Escape is pressed", async () => {
         const onFinished = jest.fn();
-        render(<BaseDialog onFinished={onFinished} />);
+        const { container } = render(<BaseDialog onFinished={onFinished} />);
+        // Autolock's autofocus in the empty dialog is focusing on the close button and bringing up the tooltip
+        // So we either need to call escape twice(one for the tooltip and one for the dialog) or focus
+        // on the dialog first.
+        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        dialog?.focus();
         await userEvent.keyboard("{Escape}");
         expect(onFinished).toHaveBeenCalled();
     });

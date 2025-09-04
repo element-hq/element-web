@@ -12,6 +12,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -112,6 +113,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -211,6 +213,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -283,6 +286,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       </div>
     </div>
     <div
+      aria-describedby="«r2»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -309,6 +313,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when Recovery key 
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -374,6 +379,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when passphrase is
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -439,6 +445,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -478,6 +485,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
       </div>
     </div>
     <div
+      aria-describedby="«rk»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -504,6 +512,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
     class="mx_RestoreKeyBackupDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -543,6 +552,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
       </div>
     </div>
     <div
+      aria-describedby="«rq»"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

@@ -646,12 +646,12 @@
         "mode_plain": "Skrýt formátování",
         "mode_rich_text": "Zobrazit formátování",
         "no_perms_notice": "Nemáte oprávnění zveřejňovat příspěvky v této místnosti",
-        "placeholder": "Odeslat zprávu…",
-        "placeholder_encrypted": "Odeslat šifrovanou zprávu…",
-        "placeholder_reply": "Odpovědět…",
-        "placeholder_reply_encrypted": "Odeslat šifrovanou odpověď…",
-        "placeholder_thread": "Odpovědět na vlákno…",
-        "placeholder_thread_encrypted": "Odpovědět na zašifrované vlákno…",
+        "placeholder": "Odeslat nešifrovanou zprávu…",
+        "placeholder_encrypted": "Odeslat zprávu...",
+        "placeholder_reply": "Odeslat nešifrovanou odpověď…",
+        "placeholder_reply_encrypted": "Odeslat odpověď…",
+        "placeholder_thread": "Odpovědět v nešifrovaném vláknu…",
+        "placeholder_thread_encrypted": "Odpovědět ve vláknu…",
         "poll_button": "Hlasování",
         "poll_button_no_perms_description": "Nemáte oprávnění zahajovat hlasování v této místnosti.",
         "poll_button_no_perms_title": "Vyžaduje oprávnění",
@@ -922,7 +922,8 @@
             },
             "privacy_warning": "Ujistěte se, že tuto obrazovku nikdo nevidí!",
             "restoring": "Obnovení klíčů ze zálohy",
-            "security_key_title": "Klíč pro obnovení"
+            "security_key_label": "Klíč pro obnovení",
+            "security_key_title": "Zadejte klíč pro obnovení"
         },
         "bootstrap_title": "Příprava klíčů",
         "confirm_encryption_setup_body": "Kliknutím na tlačítko níže potvrďte nastavení šifrování.",
@@ -1367,6 +1368,10 @@
         "name_email_mxid_share_space": "Pozvěte někoho pomocí jeho jména, e-mailové adresy, uživatelského jména (například <userId/>) nebo <a>sdílejte tento prostor</a>.",
         "name_mxid_share_room": "Pozvěte někoho pomocí svého jména, uživatelského jména (například <userId />) nebo <a>sdílejte tuto místnost</a>.",
         "name_mxid_share_space": "Pozvěte někoho pomocí jeho jména, uživatelského jména (například <userId/>) nebo <a>sdílejte tento prostor</a>.",
+        "progress": {
+            "dont_close": "Nezavírejte aplikaci, dokud neskončíte.",
+            "preparing": "Příprava pozvánek..."
+        },
         "recents_section": "Nedávné konverzace",
         "room_failed_partial": "Poslali jsme ostatním, ale níže uvedení lidé nemohli být pozváni do <RoomName/>",
         "room_failed_partial_title": "Některé pozvánky nebylo možné odeslat",
@@ -1535,6 +1540,9 @@
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
         "report_to_moderators_description": "V místnostech, které podporují moderování, můžete pomocí tlačítka \"Nahlásit\" nahlásit zneužití moderátorům místnosti.",
+        "share_history_on_invite": "Sdílet šifrovanou historii s novými členy",
+        "share_history_on_invite_description": "Při pozvání uživatele do šifrované místnosti, u které je viditelnost historie nastavena na „sdílená“, sdílet šifrovanou historii s tímto uživatelem a přijmout šifrovanou historii, když jste pozváni do takové místnosti.",
+        "share_history_on_invite_warning": "Tato funkce je EXPERIMENTÁLNÍ a nejsou v ní implementována všechna bezpečnostní opatření. Neaktivujte ji na produkčních účtech.",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "sliding_sync_disabled_notice": "Pro vypnutí se odhlaste a znovu přihlaste",
@@ -1657,6 +1665,7 @@
         "filter_placeholder": "Najít člena místnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnění zvát uživatele",
         "invited_label": "Pozván",
+        "list_title": "Seznam členů",
         "no_matches": "Žádné shody"
     },
     "member_list_back_action_label": "Členové místnosti",
@@ -1761,6 +1770,7 @@
     },
     "power_level": {
         "admin": "Správce",
+        "creator": "Vlastník",
         "custom": "Vlastní (%(level)s)",
         "custom_level": "Vlastní úroveň",
         "default": "Výchozí",
@@ -1914,6 +1924,7 @@
         "thread_list": {
             "context_menu_label": "Možnosti vláken"
         },
+        "title": "Pravý panel",
         "video_room_chat": {
             "title": "Chatovat"
         }
@@ -2062,7 +2073,6 @@
             "button_close_list": "Zavřít seznam",
             "button_view_all": "Zobrazit vše",
             "description": "Tato místnost má připnuté zprávy. Kliknutím je zobrazíte.",
-            "go_to_message": "Zobrazit připnutou zprávu na časové ose.",
             "title": "<bold>%(index)sz%(length)s</bold> Připnuté zprávy"
         },
         "read_topic": "Klikněte pro přečtení tématu",
@@ -3400,6 +3410,7 @@
             "unable_to_find": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít."
         },
         "m.audio": {
+            "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "error_processing_audio": "Došlo k chybě při zpracovávání hlasové zprávy",
             "error_processing_voice_message": "Chyba při zpracování hlasové zprávy",

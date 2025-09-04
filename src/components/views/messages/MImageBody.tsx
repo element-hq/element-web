@@ -686,7 +686,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
 // Wrap MImageBody component so we can use a hook here.
 const MImageBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
     return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

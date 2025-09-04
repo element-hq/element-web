@@ -32,6 +32,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     type?: RoomType;
@@ -89,6 +90,7 @@ interface IState {
 
 export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private readonly askToJoinEnabled: boolean;
+    private readonly advancedSettingsEnabled: boolean;
     private readonly supportsRestricted: boolean;
     private nameField = createRef<Field>();
     private aliasField = createRef<RoomAliasField>();
@@ -97,6 +99,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         super(props);
 
         this.askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
+        this.advancedSettingsEnabled = SettingsStore.getValue(UIFeature.AdvancedSettings);
+
         this.supportsRestricted = !!this.props.parentSpace;
 
         let joinRule = JoinRule.Invite;
@@ -434,20 +438,23 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         {visibilitySection}
                         {e2eeSection}
                         {aliasField}
-                        <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
-                            <summary className="mx_CreateRoomDialog_details_summary">
-                                {this.state.detailsOpen ? _t("action|hide_advanced") : _t("action|show_advanced")}
-                            </summary>
-                            <SettingsToggleInput
-                                name="unfederated"
-                                label={_t("create_room|unfederated", {
-                                    serverName: MatrixClientPeg.safeGet().getDomain(),
-                                })}
-                                onChange={this.onNoFederateChange}
-                                checked={this.state.noFederate}
-                                helpMessage={federateLabel}
-                            />
-                        </details>
+                        {this.advancedSettingsEnabled && (
+                            <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
+                                <summary className="mx_CreateRoomDialog_details_summary">
+                                    {this.state.detailsOpen ? _t("action|hide_advanced") : _t("action|show_advanced")}
+                                </summary>
+                                <SettingsToggleInput
+                                    name="unfederated"
+                                    label={_t("create_room|unfederated", {
+                                        serverName: MatrixClientPeg.safeGet().getDomain(),
+                                    })}
+                                    onChange={this.onNoFederateChange}
+                                    checked={this.state.noFederate}
+                                    helpMessage={federateLabel}
+                                />
+                                z<p>{federateLabel}</p>
+                            </details>
+                        )}
                     </div>
                 </Form.Root>
                 <DialogButtons

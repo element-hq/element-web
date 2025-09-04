@@ -2068,7 +2068,6 @@
             "button_close_list": "Stäng listan",
             "button_view_all": "Visa alla",
             "description": "Det här rummet har fästa meddelanden. Klicka för att se dem.",
-            "go_to_message": "Visa det fästa meddelandet på tidslinjen.",
             "title": "<bold>%(index)s av %(length)s</bold> fästa meddelanden"
         },
         "read_topic": "Klicka för att läsa ämne",

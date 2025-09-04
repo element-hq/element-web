@@ -1749,7 +1749,6 @@
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
             "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne.",
-            "go_to_message": "Näytä kiinnitetty viesti aikajanalla.",
             "title": "<bold>%(index)s/%(length)s</bold> kiinnitettyä viestiä"
         },
         "read_topic": "Lue aihe napsauttamalla",

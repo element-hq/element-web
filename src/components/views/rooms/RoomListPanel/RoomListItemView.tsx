@@ -41,6 +41,10 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
      * The total number of rooms in the list
      */
     roomCount: number;
+    /**
+     * Whether the list is currently scrolling
+     */
+    listIsScrolling: boolean;
 }
 
 /**
@@ -53,6 +57,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     onFocus,
     roomIndex: index,
     roomCount: count,
+    listIsScrolling,
     ...props
 }: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
@@ -141,7 +146,11 @@ export const RoomListItemView = memo(function RoomListItemView({
         </Flex>
     );
 
-    if (!vm.showContextMenu) return content;
+    // Rendering multiple context menus can causes crashes in radix upstream,
+    // See https://github.com/radix-ui/primitives/issues/2717.
+    // We also don't need the context menu while scrolling so can improve scroll performance
+    // by not rendering it.
+    if (!vm.showContextMenu || listIsScrolling) return content;
 
     return (
         <RoomListItemContextMenuView

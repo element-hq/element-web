@@ -383,7 +383,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_message_19upo_85 _help-message_19upo_91"
                       id="radix-«rd»"
                     >
-                      labs|extended_profiles_msc_support
+                      Requires your server to support MSC4133
                     </span>
                   </div>
                 </div>
@@ -452,7 +452,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_message_19upo_85 _help-message_19upo_91"
                       id="radix-«rg»"
                     >
-                      settings|send_read_receipts_unsupported
+                      Your server doesn't support disabling sending read receipts.
                     </span>
                   </div>
                 </div>

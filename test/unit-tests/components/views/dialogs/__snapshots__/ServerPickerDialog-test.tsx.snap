@@ -13,6 +13,7 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
     class="mx_ServerPickerDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"

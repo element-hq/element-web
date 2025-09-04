@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { act, renderHook, waitFor } from "jest-matrix-react";
-import { JoinRule, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, MatrixEvent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { useMediaVisible } from "../../../src/hooks/useMediaVisible";
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../test-utils";
@@ -22,8 +22,18 @@ describe("useMediaVisible", () => {
     let room: Room;
     const mediaPreviewConfig: MediaPreviewConfig = MediaPreviewConfigController.default;
 
-    function render() {
-        return renderHook(() => useMediaVisible(EVENT_ID, ROOM_ID), withClientContextRenderOptions(matrixClient));
+    function render({ sender }: { sender?: string } = {}) {
+        return renderHook(
+            () =>
+                useMediaVisible(
+                    new MatrixEvent({
+                        event_id: EVENT_ID,
+                        room_id: ROOM_ID,
+                        sender,
+                    }),
+                ),
+            withClientContextRenderOptions(matrixClient),
+        );
     }
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -42,53 +52,62 @@ describe("useMediaVisible", () => {
         jest.restoreAllMocks();
     });
 
-    it("should display media by default", async () => {
-        const { result } = render();
-        expect(result.current[0]).toEqual(true);
+    it("should display media by default", () => {
+        const [visible] = render().result.current;
+        expect(visible).toEqual(true);
     });
 
-    it("should hide media when media previews are Off", async () => {
+    it("should hide media when media previews are Off", () => {
         mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
-        const { result } = render();
-        expect(result.current[0]).toEqual(false);
+        const [visible] = render().result.current;
+        expect(visible).toEqual(false);
+    });
+
+    it("should always show media sent by us", () => {
+        mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
+        const [visible] = render({ sender: matrixClient.getUserId()! }).result.current;
+        expect(visible).toEqual(true);
     });
 
     it.each([[JoinRule.Invite], [JoinRule.Knock], [JoinRule.Restricted]])(
         "should display media when media previews are Private and the join rule is %s",
-        async (rule) => {
+        (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
             room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
-            const { result } = render();
-            expect(result.current[0]).toEqual(true);
+            const [visible] = render().result.current;
+            expect(visible).toEqual(true);
         },
     );
 
     it.each([[JoinRule.Public], ["anything_else"]])(
         "should hide media when media previews are Private and the join rule is %s",
-        async (rule) => {
+        (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
             room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
-            const { result } = render();
-            expect(result.current[0]).toEqual(false);
+            const [visible] = render().result.current;
+            expect(visible).toEqual(false);
         },
     );
 
     it("should hide media after function is called", async () => {
         const { result } = render();
         expect(result.current[0]).toEqual(true);
+        expect(result.current[1]).toBeDefined();
         act(() => {
-            result.current[1](false);
+            result.current[1]!(false);
         });
         await waitFor(() => {
             expect(result.current[0]).toEqual(false);
         });
     });
+
     it("should show media after function is called", async () => {
         mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
         const { result } = render();
         expect(result.current[0]).toEqual(false);
+        expect(result.current[1]).toBeDefined();
         act(() => {
-            result.current[1](true);
+            result.current[1]!(true);
         });
         await waitFor(() => {
             expect(result.current[0]).toEqual(true);

@@ -110,12 +110,12 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should listen to release announcement data changes in the store", async () => {
         const secondStore = new ReleaseAnnouncementStore();
-        expect(secondStore.getReleaseAnnouncement()).toBe("pinningMessageList");
+        expect(secondStore.getReleaseAnnouncement()).toBe("newRoomList_intro");
 
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe(null);
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe(null);
+        expect(await promise).toBe("newRoomList_sort");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomList_sort");
     });
 });
