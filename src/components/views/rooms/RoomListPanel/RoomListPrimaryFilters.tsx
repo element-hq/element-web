@@ -52,7 +52,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
             )}
             <Flex
                 id={id}
-                as="ul"
+                as="div"
                 role="listbox"
                 aria-label={_t("room_list|primary_filters")}
                 align="center"
@@ -61,11 +61,9 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                 ref={ref}
             >
                 {filters.map((filter, i) => (
-                    <li role="option" aria-selected={filter.active} key={i}>
-                        <ChatFilter selected={filter.active} onClick={() => filter.toggle()}>
-                            {filter.name}
-                        </ChatFilter>
-                    </li>
+                    <ChatFilter key={i} role="option" selected={filter.active} onClick={() => filter.toggle()}>
+                        {filter.name}
+                    </ChatFilter>
                 ))}
             </Flex>
         </Flex>
