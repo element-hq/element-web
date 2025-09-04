@@ -2,7 +2,6 @@ import { KnipConfig } from "knip";
 
 export default {
     entry: [
-        "src/vector/index.ts",
         "src/serviceworker/index.ts",
         "src/workers/*.worker.ts",
         "src/utils/exportUtils/exportJS.js",
@@ -12,8 +11,6 @@ export default {
         "res/decoder-ring/**",
         "res/jitsi_external_api.min.js",
         "docs/**",
-        // Used by jest
-        "__mocks__/maplibre-gl.js",
     ],
     project: ["**/*.{js,ts,jsx,tsx}"],
     ignore: [
@@ -53,6 +50,7 @@ export default {
     ignoreBinaries: [
         // Used in scripts & workflows
         "jq",
+        "wait-on",
     ],
     ignoreExportsUsedInFile: true,
 } satisfies KnipConfig;

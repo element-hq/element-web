@@ -51,7 +51,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
+import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -237,6 +237,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private fontWatcher?: FontWatcher;
     private readonly stores: SdkContextClass;
     private loadSessionAbortController = new AbortController();
+
+    private sessionLoadStarted = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -470,15 +472,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.fontWatcher.start();
 
         initSentry(SdkConfig.get("sentry"));
-
-        if (!checkSessionLockFree()) {
-            // another instance holds the lock; confirm its theft before proceeding
-            setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
-        } else {
-            this.startInitSession();
-        }
-
         window.addEventListener("resize", this.onWindowResized);
+
+        // Once we start loading the MatrixClient, we can't stop, even if MatrixChat gets unmounted (as it does
+        // in React's Strict Mode). So, start loading the session now, but only if this MatrixChat was not previously
+        // mounted.
+        if (!this.sessionLoadStarted) {
+            this.sessionLoadStarted = true;
+            if (!checkSessionLockFree()) {
+                // another instance holds the lock; confirm its theft before proceeding
+                setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+            } else {
+                this.startInitSession();
+            }
+        }
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -1019,7 +1026,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 presentedId = theAlias;
                 // Store display alias of the presented room in cache to speed future
                 // navigation.
-                storeRoomAliasInCache(theAlias, room.roomId);
+                storeRoomAliasInCache(theAlias, room.roomId, calculateRoomVia(room));
             }
 
             // Store this as the ID of the last room accessed. This is so that we can

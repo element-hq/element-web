@@ -661,6 +661,7 @@
         "poll_button_no_perms_description": "Nemáte povolenie spúšťať ankety v tejto miestnosti.",
         "poll_button_no_perms_title": "Vyžaduje sa povolenie",
         "replying_title": "Odpoveď",
+        "room_unencrypted": "Správy v tejto miestnosti nie sú end-to-end šifrované",
         "room_upgraded_link": "Konverzácia pokračuje tu.",
         "room_upgraded_notice": "Táto miestnosť bola nahradená a nie je viac aktívna.",
         "send_button_title": "Odoslať správu",
@@ -2096,7 +2097,6 @@
             "button_close_list": "Zatvoriť zoznam",
             "button_view_all": "Zobraziť všetko",
             "description": "Táto miestnosť má pripnuté správy. Kliknutím ich zobrazíte.",
-            "go_to_message": "Zobraziť pripnuté správy na časovej osi.",
             "title": "<bold>%(index)s z %(length)s</bold> pripnutých správ"
         },
         "read_topic": "Kliknutím si prečítate tému",

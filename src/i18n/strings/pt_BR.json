@@ -1916,6 +1916,7 @@
         "thread_list": {
             "context_menu_label": "Opções de tópico"
         },
+        "title": "Painel direito",
         "video_room_chat": {
             "title": "Bate-papo"
         }
@@ -2063,7 +2064,6 @@
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
             "description": "Esta sala tem mensagens fixadas. Clique para visualizá-las.",
-            "go_to_message": "Veja a mensagem fixada no histórico.",
             "title": "<bold>%(index)s de %(length)s </bold> mensagens fixadas"
         },
         "read_topic": "Clique para ler o tópico",

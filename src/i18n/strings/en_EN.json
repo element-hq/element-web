@@ -1874,11 +1874,6 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Find all pinned messages here. Rollover any message and select “Pin” to add it.",
-                "title": "All new pinned messages"
-            },
             "reply_thread": "Reply to a <link>thread message</link>",
             "unpin_all": {
                 "button": "Unpin all messages",
@@ -2066,8 +2061,9 @@
         "pinned_message_banner": {
             "button_close_list": "Close list",
             "button_view_all": "View all",
-            "description": "This room has pinned messages. Click to view them.",
-            "go_to_message": "View the pinned message in the timeline.",
+            "description": "Pinned messages",
+            "go_to_newest_message": "View the pinned message in the timeline and the newest pinned message here",
+            "go_to_next_message": "View the pinned message in the timeline and the next oldest pinned message here",
             "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
         },
         "read_topic": "Click to read topic",
@@ -2128,7 +2124,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chat yet",
+            "no_favourites": "You don't have favourite chats yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
             "no_lowpriority": "You don't have any low priority rooms",
@@ -2175,6 +2171,26 @@
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "release_announcement": {
+            "done": "Done",
+            "filter": {
+                "description": "Filter your chats with a single click. Expand to view more filters.",
+                "title": "New quick filters"
+            },
+            "intro": {
+                "description": "The chats list has been updated to be more clear and simple to use.",
+                "title": "Chats has a new look!"
+            },
+            "next": "Next",
+            "settings": {
+                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
+                "title": "Some settings have moved"
+            },
+            "sort": {
+                "description": "Change the ordering of your chats from most recent to A-Z",
+                "title": "Sort your chats"
+            }
         },
         "room": {
             "more_options": "More Options",

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useState } from "react";
+import React, { type JSX, useCallback, useId, useState } from "react";
 import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Menu, MenuItem, Separator, Tooltip } from "@vector-im/compound-web";
 import ViewIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
@@ -67,6 +67,7 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
 
     const isInThread = Boolean(event.threadRootId);
     const displayThreadInfo = !event.isThreadRoot && isInThread;
+    const id = useId();
 
     return (
         <div className="mx_PinnedEventTile" role="listitem">
@@ -85,9 +86,10 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
                             {event.sender?.name || sender}
                         </span>
                     </Tooltip>
-                    <PinMenu event={event} room={room} permalinkCreator={permalinkCreator} />
+                    <PinMenu event={event} room={room} permalinkCreator={permalinkCreator} contentId={id} />
                 </div>
                 <MessageEvent
+                    id={id}
                     mxEvent={event}
                     maxImageHeight={150}
                     permalinkCreator={permalinkCreator}
@@ -131,12 +133,17 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
 /**
  * Properties for {@link PinMenu}.
  */
-interface PinMenuProps extends PinnedEventTileProps {}
+interface PinMenuProps extends PinnedEventTileProps {
+    /**
+     * HTML ID of the pinned message content.
+     */
+    contentId: string;
+}
 
 /**
  * A popover menu with actions on the pinned event
  */
-function PinMenu({ event, room, permalinkCreator }: PinMenuProps): JSX.Element {
+function PinMenu({ event, room, permalinkCreator, contentId }: PinMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const matrixClient = useMatrixClientContext();
 
@@ -217,7 +224,11 @@ function PinMenu({ event, room, permalinkCreator }: PinMenuProps): JSX.Element {
             side="right"
             align="start"
             trigger={
-                <IconButton size="24px" aria-label={_t("right_panel|pinned_messages|menu")}>
+                <IconButton
+                    size="24px"
+                    aria-label={_t("right_panel|pinned_messages|menu")}
+                    aria-describedby={contentId}
+                >
                     <TriggerIcon />
                 </IconButton>
             }

@@ -240,6 +240,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
+                          id="1"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -366,6 +367,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
+                          id="2"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -492,6 +494,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
+                          id="3"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -561,6 +564,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         class="_input_19o42_24"
                         id="radix-«ru»"
                         name="compactLayout"
+                        role="switch"
                         title=""
                         type="checkbox"
                       />

@@ -664,24 +664,24 @@ describe("TextForEvent", () => {
             ["the legacy key", { topic: "My topic" }, { result: '@a changed the topic to "My topic".' }],
             [
                 "the legacy key with an empty m.topic key",
-                { "topic": "My topic", "m.topic": [] },
+                { "topic": "My topic", "m.topic": { "m.text": [] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key",
-                { "topic": "Ignore this", "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": "Ignore this", "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key and the legacy key undefined",
-                { "topic": undefined, "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": undefined, "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             ["the legacy key undefined", { topic: undefined }, { result: "@a removed the topic." }],
             ["the legacy key empty string", { topic: "" }, { result: "@a removed the topic." }],
             [
                 "both the legacy and new keys removed",
-                { "topic": undefined, "m.topic": [] },
+                { "topic": undefined, "m.topic": { "m.text": [] } },
                 { result: "@a removed the topic." },
             ],
         ];

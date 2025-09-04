@@ -13,6 +13,7 @@ import { JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/mat
 import CreateRoomDialog from "../../../../../src/components/views/dialogs/CreateRoomDialog";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../../src/settings/UIFeature";
 
 describe("<CreateRoomDialog />", () => {
     const userId = "@alice:server.org";
@@ -181,8 +182,9 @@ describe("<CreateRoomDialog />", () => {
 
         it("should create a private room", async () => {
             const onFinished = jest.fn();
-            getComponent({ onFinished });
+            const { asFragment } = getComponent({ onFinished });
             await flushPromises();
+            expect(asFragment()).toMatchSnapshot();
 
             const roomName = "Test Room Name";
             fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
@@ -198,6 +200,15 @@ describe("<CreateRoomDialog />", () => {
                 parentSpace: undefined,
                 roomType: undefined,
             });
+        });
+
+        it("should render not the advanced options when UI.advancedSettings is disabled", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting !== UIFeature.AdvancedSettings,
+            );
+            const { asFragment } = getComponent();
+            await flushPromises();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 
