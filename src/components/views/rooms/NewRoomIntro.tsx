@@ -129,23 +129,21 @@ const NewRoomIntro: React.FC = () => {
         if (canAddTopic && topic) {
             topicText = _t(
                 "room|intro|topic_edit",
-                // The result of topicToHtml can't be used here because it will be displayed as [object Object] even if we pass it as the sub to Linkify
-                // Instead we use a dummy value and replace it in the sub
-                { topic: topic.text },
+                {},
                 {
                     a: (sub) => (
                         <AccessibleButton element="a" kind="link_inline" onClick={onTopicClick}>
                             {sub}
                         </AccessibleButton>
                     ),
-                    b: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
+                    topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
                 },
             );
         } else if (topic) {
             topicText = _t(
                 "room|intro|topic",
-                { topic: topic.text },
-                { a: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
+                {},
+                { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
             );
         } else if (canAddTopic) {
             topicText = _t(

@@ -2008,8 +2008,8 @@
             "send_message_start_dm": "Send your first message to invite <displayName/> to chat",
             "start_of_dm_history": "This is the beginning of your direct message history with <displayName/>.",
             "start_of_room": "This is the start of <roomName/>.",
-            "topic": "Topic: <a>%(topic)s</a>",
-            "topic_edit": "Topic: <b>%(topic)s</b> (<a>edit</a>)",
+            "topic": "Topic: <topic/>",
+            "topic_edit": "Topic: <topic/> (<a>edit</a>)",
             "unencrypted_warning": "End-to-end encryption isn't enabled",
             "user_created": "%(displayName)s created this room.",
             "you_created": "You created this room."
