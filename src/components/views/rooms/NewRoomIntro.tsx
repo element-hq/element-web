@@ -252,7 +252,7 @@ const NewRoomIntro: React.FC = () => {
                         },
                     )}
                 </p>
-                <p>{topicText}</p>
+                <p data-testid="topic">{topicText}</p>
                 {buttons}
             </React.Fragment>
         );
