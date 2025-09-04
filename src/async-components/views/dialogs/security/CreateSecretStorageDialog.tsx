@@ -25,11 +25,7 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import {
-    getSecureBackupSetupMethods,
-    isSecureBackupRequired,
-    SecureBackupSetupMethod,
-} from "../../../../utils/WellKnownUtils";
+import { isSecureBackupRequired } from "../../../../utils/WellKnownUtils";
 import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
@@ -38,6 +34,11 @@ import InteractiveAuthDialog from "../../../../components/views/dialogs/Interact
 import { type IValidationResult } from "../../../../components/views/elements/Validation";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration";
+
+enum SecureBackupSetupMethod {
+    Key = "key",
+    Passphrase = "passphrase",
+}
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
@@ -95,14 +96,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
 
         const cli = MatrixClientPeg.safeGet();
 
-        let passPhraseKeySelected: SecureBackupSetupMethod;
-        const setupMethods = getSecureBackupSetupMethods(cli);
-        if (setupMethods.includes(SecureBackupSetupMethod.Key)) {
-            passPhraseKeySelected = SecureBackupSetupMethod.Key;
-        } else {
-            passPhraseKeySelected = SecureBackupSetupMethod.Passphrase;
-        }
-
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
 
@@ -115,7 +108,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             downloaded: false,
             setPassphrase: false,
             canSkip: !isSecureBackupRequired(cli),
-            passPhraseKeySelected,
+            passPhraseKeySelected: SecureBackupSetupMethod.Key,
         };
     }
 
@@ -391,11 +384,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private renderPhaseChooseKeyPassphrase(): JSX.Element {
-        const setupMethods = getSecureBackupSetupMethods(MatrixClientPeg.safeGet());
-        const optionKey = setupMethods.includes(SecureBackupSetupMethod.Key) ? this.renderOptionKey() : null;
-        const optionPassphrase = setupMethods.includes(SecureBackupSetupMethod.Passphrase)
-            ? this.renderOptionPassphrase()
-            : null;
+        const optionKey = this.renderOptionKey();
+        const optionPassphrase = this.renderOptionPassphrase();
 
         return (
             <form onSubmit={this.onChooseKeyPassphraseFormSubmit}>
