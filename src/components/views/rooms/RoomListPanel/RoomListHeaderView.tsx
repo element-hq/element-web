@@ -23,6 +23,7 @@ import {
     useRoomListHeaderViewModel,
 } from "../../../viewmodels/roomlist/RoomListHeaderViewModel";
 import { RoomListOptionsMenu } from "./RoomListOptionsMenu";
+import { ReleaseAnnouncement } from "../../../structures/ReleaseAnnouncement";
 
 /**
  * The header view for the room list
@@ -45,15 +46,38 @@ export function RoomListHeaderView(): JSX.Element {
                 {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
             </Flex>
             <Flex align="center" gap="var(--cpd-space-2x)">
-                <RoomListOptionsMenu vm={vm} />
+                <ReleaseAnnouncement
+                    feature="newRoomList_sort"
+                    header={_t("room_list|release_announcement|sort|title")}
+                    description={_t("room_list|release_announcement|sort|description")}
+                    closeLabel={_t("room_list|release_announcement|next")}
+                    placement="bottom"
+                >
+                    <div className="mx_RoomListHeaderView_ReleaseAnnouncementAnchor">
+                        <RoomListOptionsMenu vm={vm} />
+                    </div>
+                </ReleaseAnnouncement>
+
                 {/* If we don't display the compose menu, it means that the user can only send DM */}
-                {vm.displayComposeMenu ? (
-                    <ComposeMenu vm={vm} />
-                ) : (
-                    <IconButton aria-label={_t("action|start_chat")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
-                        <ComposeIcon color="var(--cpd-color-icon-secondary)" />
-                    </IconButton>
-                )}
+                <ReleaseAnnouncement
+                    feature="newRoomList_intro"
+                    header={_t("room_list|release_announcement|intro|title")}
+                    description={_t("room_list|release_announcement|intro|description")}
+                    closeLabel={_t("room_list|release_announcement|next")}
+                >
+                    <div className="mx_RoomListHeaderView_ReleaseAnnouncementAnchor">
+                        {vm.displayComposeMenu ? (
+                            <ComposeMenu vm={vm} />
+                        ) : (
+                            <IconButton
+                                aria-label={_t("action|start_chat")}
+                                onClick={(e) => vm.createChatRoom(e.nativeEvent)}
+                            >
+                                <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                            </IconButton>
+                        )}
+                    </div>
+                </ReleaseAnnouncement>
             </Flex>
         </Flex>
     );

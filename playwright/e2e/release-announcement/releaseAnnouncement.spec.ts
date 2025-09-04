@@ -22,25 +22,25 @@ test.describe("Release announcement", () => {
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
+        labsFlags: ["feature_new_room_list"],
     });
 
     test(
-        "should display the pinned messages release announcement",
+        "should display the new room list release announcement",
         { tag: "@screenshot" },
         async ({ page, app, room, util }) => {
-            await app.toggleRoomInfoPanel();
-
-            const name = "All new pinned messages";
+            const name = "Chats has a new look!";
 
             // The release announcement should be displayed
             await util.assertReleaseAnnouncementIsVisible(name);
             // Hide the release announcement
-            await util.markReleaseAnnouncementAsRead(name);
+            const dialog = util.getReleaseAnnouncement(name);
+            await dialog.getByRole("button", { name: "Next" }).click();
+
             await util.assertReleaseAnnouncementIsNotVisible(name);
 
             await page.reload();
-            await app.toggleRoomInfoPanel();
-            await expect(page.getByRole("menuitem", { name: "Pinned messages" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Room options" })).toBeVisible();
             // Check that once the release announcement has been marked as viewed, it does not appear again
             await util.assertReleaseAnnouncementIsNotVisible(name);
         },

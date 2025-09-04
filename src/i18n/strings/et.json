@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas.",
         "poll_button_no_perms_title": "Vaja on täiendavaid õigusi",
         "replying_title": "Vastan",
+        "room_unencrypted": "Selle jututoa sõnumid pole läbivalt krüptitud",
         "room_upgraded_link": "Vestlus jätkub siin.",
         "room_upgraded_notice": "See jututuba on asendatud teise jututoaga ning ei ole enam kasutusel.",
         "send_button_title": "Saada sõnum",
@@ -1366,6 +1367,10 @@
         "name_email_mxid_share_space": "Kutsu teist osapoolt tema nime, e-posti aadressi, kasutajanime (nagu <userId/>) alusel või <a>jaga seda kogukonnakeskust</a>.",
         "name_mxid_share_room": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
         "name_mxid_share_space": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda kogukonnakeskust</a>.",
+        "progress": {
+            "dont_close": "Palun ära sulge vaadet enne kui tegevus pole lõppenud.",
+            "preparing": "Valmistan kutseid ette..."
+        },
         "recents_section": "Hiljutised vestlused",
         "room_failed_partial": "Teised kasutajad said kutse, kuid allpool toodud kasutajatele ei õnnestunud saata kutset <RoomName/> jututuppa",
         "room_failed_partial_title": "Mõnede kutsete saatmine ei õnnestunud",
@@ -2065,7 +2070,6 @@
             "button_close_list": "Sulge loend",
             "button_view_all": "Vaata kõiki",
             "description": "Selles jututoas on esiletõstetud sõnumeid. Nende vaatamiseks klõpsi.",
-            "go_to_message": "Vaata esiletõstetud sõnumit ajajoonel.",
             "title": "<bold>%(index)s of %(length)s</bold> Esiletõstetud sõnumid"
         },
         "read_topic": "Teema lugemiseks klõpsi",
