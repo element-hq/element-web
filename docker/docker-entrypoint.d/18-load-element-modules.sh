@@ -4,6 +4,10 @@
 
 set -e
 
+# Ensures an empty list when a glob expression doesn't match (see /modules for loop)
+# See https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#index-shopt
+shopt -s nullglob
+
 entrypoint_log() {
     if [ -z "${NGINX_ENTRYPOINT_QUIET_LOGS:-}" ]; then
         echo "$@"
