@@ -25,7 +25,6 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import { isSecureBackupRequired } from "../../../../utils/WellKnownUtils";
 import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
@@ -69,7 +68,6 @@ interface IState {
     downloaded: boolean;
     setPassphrase: boolean;
 
-    canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
 }
@@ -94,8 +92,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public constructor(props: IProps) {
         super(props);
 
-        const cli = MatrixClientPeg.safeGet();
-
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
 
@@ -107,7 +103,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             copied: false,
             downloaded: false,
             setPassphrase: false,
-            canSkip: !isSecureBackupRequired(cli),
             passPhraseKeySelected: SecureBackupSetupMethod.Key,
         };
     }
@@ -400,7 +395,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     primaryButton={_t("action|continue")}
                     onPrimaryButtonClick={this.onChooseKeyPassphraseFormSubmit}
                     onCancel={this.onCancelClick}
-                    hasCancel={this.state.canSkip}
                 />
             </form>
         );
@@ -591,7 +585,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     <DialogButtons
                         primaryButton={_t("action|retry")}
                         onPrimaryButtonClick={this.onLoadRetryClick}
-                        hasCancel={this.state.canSkip}
                         onCancel={this.onCancel}
                     />
                 </div>
@@ -662,7 +655,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                         <DialogButtons
                             primaryButton={_t("action|retry")}
                             onPrimaryButtonClick={this.bootstrapSecretStorage}
-                            hasCancel={this.state.canSkip}
                             onCancel={this.onCancel}
                         />
                     </div>

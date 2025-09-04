@@ -30,7 +30,6 @@ export interface IE2EEWellKnown {
      * Disables the option to enable encryption in room settings for all new and existing rooms
      */
     force_disable?: boolean;
-    secure_backup_required?: boolean;
 }
 
 export interface ITileServerWellKnown {
@@ -72,8 +71,4 @@ export function getEmbeddedPagesWellKnown(matrixClient: MatrixClient | undefined
 
 export function embeddedPagesFromWellKnown(clientWellKnown?: IClientWellKnown): IEmbeddedPagesWellKnown {
     return clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY];
-}
-
-export function isSecureBackupRequired(matrixClient: MatrixClient): boolean {
-    return getE2EEWellKnown(matrixClient)?.["secure_backup_required"] === true;
 }
