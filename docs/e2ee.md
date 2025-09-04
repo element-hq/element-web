@@ -43,7 +43,7 @@ this behaviour will be overridden.
 By default, Element strongly encourages (but does not require) users to set up
 recovery so that you can access history on your new devices as well as retain access to your message history and cryptographic identity when you lose all of your devices.
 
-## Deprecation notice
+## Removal of old settings
 
 The configuration options `secure_backup_required` and `secure_backup_setup_methods`
 in the `/.well-known/matrix/client` config have been deprecated, and are no longer applicable.
