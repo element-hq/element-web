@@ -297,8 +297,8 @@ export class GroupedArray<K, T> {
     }
 }
 
-export const concat = (...arrays: Uint8Array[]): Uint8Array => {
-    return arrays.reduce((concatenatedSoFar: Uint8Array, toBeConcatenated: Uint8Array) => {
+export const concat = (...arrays: Uint8Array<ArrayBuffer>[]): Uint8Array<ArrayBuffer> => {
+    return arrays.reduce((concatenatedSoFar: Uint8Array<ArrayBuffer>, toBeConcatenated: Uint8Array<ArrayBuffer>) => {
         const concatenated = new Uint8Array(concatenatedSoFar.length + toBeConcatenated.length);
         concatenated.set(concatenatedSoFar, 0);
         concatenated.set(toBeConcatenated, concatenatedSoFar.length);
