@@ -17,9 +17,6 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import { stubClient } from "../../../../test-utils";
 import { populateThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { Features } from "../../../../../src/settings/Settings.tsx";
 
 describe("ThreadsActivityCentre", () => {
     const getTACButton = () => {
