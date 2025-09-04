@@ -191,6 +191,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
+            role="img"
             style="--cpd-avatar-size: 24px;"
           >
             <img
@@ -231,6 +232,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
+            role="img"
             style="--cpd-avatar-size: 24px;"
           >
             <img
