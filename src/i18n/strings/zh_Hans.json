@@ -1593,8 +1593,6 @@
             "send_message_start_dm": "发送你的第一条消息邀请<displayName/>来聊天",
             "start_of_dm_history": "这是你与<displayName/>的私聊历史的开端。",
             "start_of_room": "这里是 <roomName/> 的开始。",
-            "topic": "话题：%(topic)s ",
-            "topic_edit": "话题：%(topic)s（<a>编辑</a>）",
             "unencrypted_warning": "未启用端到端加密",
             "user_created": "%(displayName)s 创建了此房间。",
             "you_created": "你创建了此房间。"

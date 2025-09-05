@@ -1663,8 +1663,6 @@
             "send_message_start_dm": "Dërgoni mesazhin tuaj të parë për të ftuar në fjalosje <displayName/>",
             "start_of_dm_history": "Ky është fillimi i historikut të mesazheve tuaja të drejtpërdrejta me <displayName/>.",
             "start_of_room": "Ky është fillimi i <roomName/>.",
-            "topic": "Temë: %(topic)s ",
-            "topic_edit": "Temë: %(topic)s (<a>përpunojeni</a>)",
             "unencrypted_warning": "Fshehtëzimi skaj-më-skaj s’është i aktivizuar",
             "user_created": "%(displayName)s krijoi këtë dhomë.",
             "you_created": "Krijuat këtë dhomë."

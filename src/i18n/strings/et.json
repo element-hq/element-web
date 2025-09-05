@@ -1866,7 +1866,7 @@
         "extensions_empty_title": "Paranda oma tõhusust lisatarvikute, vidinate, võrgusildade ja robotite lisamise abil",
         "files_button": "Failid",
         "pinned_messages": {
-            "empty_description": "Siia lisamiseks vali sõnumi ning vajuta nuppu „%(pinAction)s“",
+            "empty_description": "Siia lisamiseks vali sõnum ning vajuta nuppu „%(pinAction)s“",
             "empty_title": "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile",
             "header": {
                 "one": "1 esiletõstetud sõnum",
@@ -1877,11 +1877,6 @@
                 "other": "Sa saad esile tõsta kuni %(count)s vidinat"
             },
             "menu": "Ava menüü",
-            "release_announcement": {
-                "close": "Sobib",
-                "description": "Leiad kõik esiletõstetud sõnumid siit. Uute sõnumite siia lisamiseks liigu vajaliku sõnumi kohale ja vali „Tõsta esile“.",
-                "title": "Kõik uued esiletõstetud sõnumid"
-            },
             "reply_thread": "Vasta <link>jutulõngas</link>",
             "unpin_all": {
                 "button": "Eemalda kõik esiletõstetud sõnumid",
@@ -2003,7 +1998,9 @@
         "inaccessible_subtitle_1": "Proovi hiljem uuesti või küsi jututoa või kogukonna haldurilt, kas sul on ligipääs olemas.",
         "inaccessible_subtitle_2": "Astumisel jututuppa või liitumisel kogukonnaga tekkis viga %(errcode)s. Kui sa arvad, et sellise põhjusega viga ei tohiks tekkida, siis palun <issueLink>koosta veateade</issueLink>.",
         "intro": {
+            "display_topic": "Teema: <topic/>",
             "dm_caption": "Kuni kumbki teist kolmandaid osapooli liituma ei kutsu, olete siin vestluses vaid teie kahekesi.",
+            "edit_topic": "Teema: <topic/> (<a>muuda</a>)",
             "enable_encryption_prompt": "Võta seadistustes krüptimine kasutusele.",
             "encrypted_3pid_dm_pending_join": "Te saate vestelda, kui kõik on liitunud",
             "no_avatar_label": "Selleks, et teised märkaks sinu jututuba lihtsamini, palun lisa üks pilt.",
@@ -2013,8 +2010,6 @@
             "send_message_start_dm": "Saada oma esimene sõnum kutsudes <displayName/> vestlusesse",
             "start_of_dm_history": "See on sinu ja kasutaja <displayName/> otsesuhtluse ajaloo algus.",
             "start_of_room": "See on <roomName/> jututoa algus.",
-            "topic": "Teema: %(topic)s ",
-            "topic_edit": "Teema: %(topic)s (<a>muudetud</a>)",
             "unencrypted_warning": "Läbiv krüptimine pole kasutusel",
             "user_created": "%(displayName)s lõi selle jututoa.",
             "you_created": "Sa lõid selle jututoa."
@@ -2069,8 +2064,10 @@
         "pinned_message_banner": {
             "button_close_list": "Sulge loend",
             "button_view_all": "Vaata kõiki",
-            "description": "Selles jututoas on esiletõstetud sõnumeid. Nende vaatamiseks klõpsi.",
-            "title": "<bold>%(index)s of %(length)s</bold> Esiletõstetud sõnumid"
+            "description": "Esiletõstetud sõnumid",
+            "go_to_newest_message": "Vaata siin ajajoonel esiletõstetud sõnumit ja viimast esiletõstetud sõnumit",
+            "go_to_next_message": "Vaata siin ajajoonel esiletõstetud sõnumit ja eelviimast esiletõstetud sõnumit",
+            "title": "<bold>%(index)s / %(length)s</bold> esiletõstetud sõnumit"
         },
         "read_topic": "Teema lugemiseks klõpsi",
         "rejecting": "Hülgan kutset…",
@@ -2177,6 +2174,26 @@
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
+        },
+        "release_announcement": {
+            "done": "Valmis",
+            "filter": {
+                "description": "Filtreeri oma vestlusi ühe klõpsuga. Lisafiltrite nägemiseks laienda vaadet.",
+                "title": "Uued kiirfiltrid"
+            },
+            "intro": {
+                "description": "Vestluste loend on uuendatud, et see oleks selgem ja hõlpsamini kasutatav.",
+                "title": "Vestlustel on uus välimus!"
+            },
+            "next": "Edasi",
+            "settings": {
+                "description": "Sõnumite eelvaate näitamiseks või peitmiseks ava „Kõik seadistused“ > „Eelistused“ > „Jututubade loend“",
+                "title": "Mõned seadistused on nüüd uues kohas"
+            },
+            "sort": {
+                "description": "Vestlusi võid järjestada ajalises või tähestikulises järjekorras",
+                "title": "Järjesta oma vestlusi"
+            }
         },
         "room": {
             "more_options": "Täiendavad seadistused",
@@ -3512,7 +3529,7 @@
             "unknown": "%(senderDisplayName)s muutis külaliste ligipääsureeglid alljärgnevaks - %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s määras, et jututoa tulevane ajalugu on nähtav kõikidele selle liikmetele nende kutsumise hetkest.",
+            "invited": "%(senderName)s määras, et jututoa ajalugu on nähtav kõikidele selle liikmetele nende kutsumise hetkest.",
             "joined": "%(senderName)s määras, et jututoa tulevane ajalugu on nähtav kõikidele selle liikmetele nende liitumise hetkest.",
             "shared": "%(senderName)s määras, et jututoa tulevane ajalugu on nähtav kõikidele selle liikmetele.",
             "unknown": "%(senderName)s seadistas, et jututoa tulevase ajaloo nähtavuse olek on (%(visibility)s).",
@@ -3557,12 +3574,12 @@
             "set": "%(senderDisplayName)s muutis jututoa nimeks %(roomName)s."
         },
         "m.room.pinned_events": {
-            "changed": "%(senderName)s muutis selle jututoa klammerdatud sõnumeid.",
-            "changed_link": "%(senderName)s muutis selle jututoa <a>klammerdatud sõnumeid</a>.",
-            "pinned": "%(senderName)s klammerdas siin jututoas ühe sõnumi. Vaata kõiki klammerdatud sõnumeid.",
-            "pinned_link": "%(senderName)s klammerdas siin jututoas <a>ühe sõnumi</a>. Vaata kõiki <b>klammerdatud sõnumeid</b>.",
-            "unpinned": "%(senderName)s eemaldas siin jututoas klammerduse ühelt sõnumilt. Vaata kõiki klammerdatud sõnumeid.",
-            "unpinned_link": "%(senderName)s eemaldas siin jututoas klammerduse <a>ühelt sõnumilt</a>. Vaata kõiki <b>klammerdatud sõnumeid</b>."
+            "changed": "%(senderName)s muutis selle jututoa esiletõstetud sõnumeid.",
+            "changed_link": "%(senderName)s muutis selle jututoa <a>esiletõstetud sõnumeid</a>.",
+            "pinned": "%(senderName)s tõstis siin jututoas ühe sõnumi esile. Vaata kõiki esiletõstetud sõnumeid.",
+            "pinned_link": "%(senderName)s tõstis siin jututoas <a>ühe sõnumi</a> esile. Vaata kõiki <b>esiletõstetud sõnumeid</b>.",
+            "unpinned": "%(senderName)s eemaldas siin jututoas esiletõstmise ühelt sõnumilt. Vaata kõiki esiletõstetud sõnumeid.",
+            "unpinned_link": "%(senderName)s eemaldas siin jututoas esiletõstmise <a>ühelt sõnumilt</a>. Vaata kõiki <b>esiletõstetud sõnumeid</b>."
         },
         "m.room.power_levels": {
             "changed": "%(senderName)s muutis õiguseid: %(powerLevelDiffText)s.",

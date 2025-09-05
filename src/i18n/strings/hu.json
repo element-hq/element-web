@@ -1865,11 +1865,6 @@
                 "Csak %(count)s kisalkalmazást tud kitűzni": "other"
             },
             "menu": "Menü megnyitása",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Itt találja az összes kitűzött üzenetet. Húzza az egérmutatót bármely üzenetre, és válassza a „Kitűz” lehetőséget a hozzáadáshoz.",
-                "title": "Minden új kitűzött üzenet"
-            },
             "reply_thread": "Válasz egy <link>üzenetszálra</link>",
             "unpin_all": {
                 "button": "Az összes üzenet rögzítésének feloldása",
@@ -1999,8 +1994,6 @@
             "send_message_start_dm": "Küldj egy üzenetet ahhoz, hogy meghívd <displayName/> felhasználót",
             "start_of_dm_history": "Ez a közvetlen beszélgetés kezdete <displayName/> felhasználóval.",
             "start_of_room": "Ez a(z) <roomName/> kezdete.",
-            "topic": "Téma: %(topic)s ",
-            "topic_edit": "Téma: %(topic)s (<a>szerkesztés</a>)",
             "unencrypted_warning": "A végpontok közti titkosítás nincs engedélyezve",
             "user_created": "%(displayName)s készítette ezt a szobát.",
             "you_created": "Te készítetted ezt a szobát."
