@@ -1228,8 +1228,6 @@
             "send_message_start_dm": "שילחו את ההודעה הראשונה שלכם להזמין את <displayName/> לצ'אט",
             "start_of_dm_history": "זו ההתחלה של היסטוריית ההודעות הישירות שלך עם <displayName/>.",
             "start_of_room": "זוהי התחלת השיחה בחדר <roomName/>.",
-            "topic": "נושאים: %(topic)s ",
-            "topic_edit": "נושאים: %(topic)s (<a>עריכה</a>)",
             "user_created": "%(displayName)s יצר את החדר הזה.",
             "you_created": "אתם יצרתם את החדר הזה."
         },

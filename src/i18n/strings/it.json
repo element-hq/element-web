@@ -1775,8 +1775,6 @@
             "send_message_start_dm": "Invia il primo messaggio per invitare <displayName/> a parlare",
             "start_of_dm_history": "Questo è l'inizio della tua cronologia di messaggi diretti con <displayName/>.",
             "start_of_room": "Questo è l'inizio di <roomName/>.",
-            "topic": "Argomento: %(topic)s ",
-            "topic_edit": "Argomento: %(topic)s (<a>modifica</a>)",
             "unencrypted_warning": "La crittografia end-to-end non è attiva",
             "user_created": "%(displayName)s ha creato questa stanza.",
             "you_created": "Hai creato questa stanza."

@@ -1442,8 +1442,6 @@
             "send_message_start_dm": "Sendu fyrstu skilaboðin þín til að bjóða <displayName/> að spjalla",
             "start_of_dm_history": "Þetta er upphaf ferils beinna skilaboða með <displayName/>.",
             "start_of_room": "Þetta er upphafið á <roomName/>.",
-            "topic": "Umfjöllunarefni: %(topic)s ",
-            "topic_edit": "Umfjöllunarefni: %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "Enda-í-enda dulritun er ekki virkjuð",
             "user_created": "%(displayName)s bjó til þessa spjallrás.",
             "you_created": "Þú bjóst til þessa spjallrás."

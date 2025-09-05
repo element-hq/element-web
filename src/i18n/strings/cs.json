@@ -1879,11 +1879,6 @@
                 "other": "Můžete připnout až %(count)s widgetů"
             },
             "menu": "Otevřít menu",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Všechny připnuté zprávy najdete zde. Přejděte na libovolnou zprávu a výběrem možnosti \"Připnout\" ji přidejte.",
-                "title": "Všechny nové připnuté zprávy"
-            },
             "reply_thread": "Odpověď na <link>vlákno zprávy</link>",
             "unpin_all": {
                 "button": "Odepnout všechny zprávy",
@@ -2016,8 +2011,6 @@
             "send_message_start_dm": "Odesláním první zprávy pozvete <displayName/> do chatu",
             "start_of_dm_history": "Toto je začátek historie vašich přímých zpráv s uživatelem <displayName />.",
             "start_of_room": "Toto je začátek místnosti <roomName/>.",
-            "topic": "Téma: %(topic)s ",
-            "topic_edit": "Téma: %(topic)s (<a>upravit</a>)",
             "unencrypted_warning": "Koncové šifrování není povoleno",
             "user_created": "%(displayName)s vytvořil tuto místnost.",
             "you_created": "Vytvořili jste tuto místnost."

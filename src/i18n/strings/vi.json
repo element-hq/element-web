@@ -1576,8 +1576,6 @@
             "send_message_start_dm": "Gửi tin nhắn đầu tiên để mời <displayName/> vào cuộc trò chuyện",
             "start_of_dm_history": "Đây là phần bắt đầu của lịch sử tin nhắn trực tiếp của bạn với <displayName/>.",
             "start_of_room": "Đây là phần bắt đầu của <roomName/>.",
-            "topic": "Chủ đề: %(topic)s ",
-            "topic_edit": "Chủ đề: %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "Mã hóa đầu-cuối chưa được bật",
             "user_created": "%(displayName)s đã tạo phòng này.",
             "you_created": "Bạn đã tạo phòng này."
