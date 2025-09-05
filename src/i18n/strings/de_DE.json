@@ -1876,11 +1876,6 @@
                 "other": "Du kannst nur %(count)s Widgets anheften"
             },
             "menu": "Menü öffnen",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Hier findest du alle fixierten Nachrichten. Wähle fixieren an einer Nachricht, um sie hier einzufügen.",
-                "title": "Alle neuen angehefteten Nachrichten"
-            },
             "reply_thread": "Auf <link>Nachricht im Thread</link> antworten",
             "unpin_all": {
                 "button": "Alle Nachrichten loslösen",
@@ -2002,7 +1997,9 @@
         "inaccessible_subtitle_1": "Versuche es später erneut oder bitte einen Chat- oder Space-Admin um Erlaubnis für Zugriff.",
         "inaccessible_subtitle_2": "%(errcode)s wurde während des Betretens zurückgegeben. Wenn du denkst, dass diese Meldung nicht korrekt ist, <issueLink>reiche bitte einen Fehlerbericht ein</issueLink>.",
         "intro": {
+            "display_topic": "Thema: <topic/>",
             "dm_caption": "Nur ihr beide nehmt an dieser Konversation teil, es sei denn, ihr ladet jemanden ein.",
+            "edit_topic": "Thema: <topic/> (<a>bearbeiten</a>)",
             "enable_encryption_prompt": "Aktiviere Verschlüsselung in den Einstellungen.",
             "encrypted_3pid_dm_pending_join": "Sobald alle den Chat betreten hat, könnt ihr euch unterhalten",
             "no_avatar_label": "Füge ein Bild hinzu, damit andere deinen Chat besser erkennen können.",
@@ -2012,8 +2009,6 @@
             "send_message_start_dm": "Schreibe deine erste Nachricht, um <displayName/> zur Unterhaltung einzuladen",
             "start_of_dm_history": "Dies ist der Beginn deiner Direktnachrichten mit <displayName/>.",
             "start_of_room": "Dies ist der Beginn von <roomName/>.",
-            "topic": "Thema: %(topic)s ",
-            "topic_edit": "Thema: %(topic)s (<a>ändern</a>)",
             "unencrypted_warning": "Ende-zu-Ende-Verschlüsselung ist deaktiviert",
             "user_created": "%(displayName)s hat diesen Chat erstellt.",
             "you_created": "Du hast diesen Chat erstellt."
@@ -2068,7 +2063,9 @@
         "pinned_message_banner": {
             "button_close_list": "Liste schließen",
             "button_view_all": "Alle anzeigen",
-            "description": "Dieser Chat hat fixierte Nachrichten. Klicke hier, um sie anzusehen.",
+            "description": "Fixierte Nachrichten",
+            "go_to_newest_message": "Schau die fixierte Nachricht im Nachrichtenverlauf an und die neueste fixierte Nachricht hier an.",
+            "go_to_next_message": "Schau dir die fixierte Nachricht im Nachrichtenverlauf an und die nächst ältere Nachricht hier an",
             "title": "<bold>%(index)s of %(length)s</bold> Fixierte Nachrichten"
         },
         "read_topic": "Klicke, um das Thema zu lesen",
@@ -2176,6 +2173,26 @@
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Chat",
             "other": "Entferne Nachrichten in %(count)s Chats"
+        },
+        "release_announcement": {
+            "done": "Fertig",
+            "filter": {
+                "description": "Filter deine Chats mit nur einem Klick. Klappe aus, um mehr Filter zu sehen.",
+                "title": "Neue Schnellfilter"
+            },
+            "intro": {
+                "description": "Die Chatliste wurde aktualisiert, um übersichtlicher und nutzerfreundlicher zu sein.",
+                "title": "Chats hat jetzt ein neues Design!"
+            },
+            "next": "Weiter",
+            "settings": {
+                "description": "Um die Vorschau von Nachrichten anzuzeigen oder auszublenden, geh zu „Alle Einstellungen“ &gt; „Einstellungen“ &gt; „Chatliste“.",
+                "title": "Einige Einstellungen wurden verschoben"
+            },
+            "sort": {
+                "description": "Ändere die Reihenfolge deiner Chats von „Neueste zuerst“ zu „A-Z“.",
+                "title": "Sortiere deine Chats"
+            }
         },
         "room": {
             "more_options": "Weitere Optionen",

@@ -1898,11 +1898,6 @@
                 "other": "Môžete pripnúť iba %(count)s widgetov"
             },
             "menu": "Otvoriť ponuku",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Všetky pripnuté správy nájdete tu. Prejdite na ľubovoľnú správu a výberom možnosti \"Pripnúť\" ju pridajte.",
-                "title": "Všetky nové pripnuté správy"
-            },
             "reply_thread": "Odpoveď na <link>vlákno správy</link>",
             "unpin_all": {
                 "button": "Zrušiť pripnutie všetkých správ",
@@ -2040,8 +2035,6 @@
             "send_message_start_dm": "Odošlite svoju prvú správu a pozvite <displayName/> do konverzácie",
             "start_of_dm_history": "Toto je začiatok histórie vašich priamych správ s používateľom <displayName/>.",
             "start_of_room": "Toto je začiatok miestnosti <roomName/>.",
-            "topic": "Téma: %(topic)s ",
-            "topic_edit": "Téma: %(topic)s (<a>upraviť</a>)",
             "unencrypted_warning": "End-to-end šifrovanie nie je zapnuté",
             "user_created": "%(displayName)s vytvoril túto miestnosť.",
             "you_created": "Túto miestnosť ste vytvorili vy."

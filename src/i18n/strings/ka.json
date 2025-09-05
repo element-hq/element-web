@@ -1286,8 +1286,6 @@
             "send_message_start_dm": "გაგზავნეთ თქვენი პირველი შეტყობინება მოსაწვევად<displayName/> სასაუბროდ",
             "start_of_dm_history": "ეს არის თქვენი პირდაპირი შეტყობინებების ისტორიის დასაწყისი<displayName/> .",
             "start_of_room": "ეს არის დასაწყისი<roomName/> .",
-            "topic": "თემა: %(topic)s",
-            "topic_edit": "თემა:%(topic)s (<a> რედაქტირება</a> )",
             "unencrypted_warning": "ბოლოდან ბოლომდე დაშიფვრა არ არის ჩართული",
             "user_created": "%(displayName)sშექმნა ეს ოთახი.",
             "you_created": "თქვენ შექმენით ეს ოთახი."
