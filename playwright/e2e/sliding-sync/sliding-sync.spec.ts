@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Page, type Request } from "@playwright/test";
+import { type Locator, type Page, type Request } from "@playwright/test";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -38,7 +38,7 @@ const test = base.extend<{
 
 test.describe("Sliding Sync", () => {
     const checkOrder = async (wantOrder: string[], page: Page) => {
-        await expect(page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile_title")).toHaveText(wantOrder);
+        await expect(page.getByTestId("room-list").locator(".mx_RoomListItemView_text")).toHaveText(wantOrder);
     };
 
     const bumpRoom = async (roomId: string, app: ElementAppPage) => {
@@ -49,6 +49,18 @@ test.describe("Sliding Sync", () => {
             msgtype: "m.text",
         });
     };
+
+    function getPrimaryFilters(page: Page): Locator {
+        return page.getByTestId("primary-filters");
+    }
+
+    function getRoomOptionsMenu(page: Page): Locator {
+        return page.getByRole("button", { name: "Room Options" });
+    }
+
+    function getFilterExpandButton(page: Page): Locator {
+        return getPrimaryFilters(page).getByRole("button", { name: "Expand filter list" });
+    }
 
     test.use({
         config: {
@@ -69,20 +81,15 @@ test.describe("Sliding Sync", () => {
         // create rooms and check room names are correct
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
             await app.client.createRoom({ name: fruit });
-            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
+            await expect(page.getByRole("option", { name: `Open room ${fruit}` })).toBeVisible();
         }
-
+        const roomList = page.getByTestId("room-list");
         // Check count, 3 fruits + 1 testRoom = 4
-        await expect(page.locator(".mx_RoomSublist_tiles").getByRole("treeitem")).toHaveCount(4);
+        await expect(roomList.getByRole("option")).toHaveCount(4);
         await checkOrder(["Orange", "Pineapple", "Apple", "Test Room"], page);
 
-        const locator = page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomSublist_headerContainer");
-        await locator.hover();
-        await locator.getByRole("button", { name: "List options" }).click();
-
-        // force click as the radio button's size is zero
-        await page.getByRole("menuitemradio", { name: "A-Z" }).dispatchEvent("click");
-        await expect(page.locator(".mx_StyledRadioButton_checked").getByText("A-Z")).toBeVisible();
+        await getRoomOptionsMenu(page).click();
+        await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
@@ -93,11 +100,11 @@ test.describe("Sliding Sync", () => {
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
             const id = await app.client.createRoom({ name: fruit });
             roomIds.push(id);
-            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
+            await expect(page.getByRole("option", { name: `Open room ${fruit}` })).toBeVisible();
         }
 
         // Select the Test Room
-        await page.getByRole("treeitem", { name: "Test Room" }).click();
+        await page.getByRole("option", { name: "Open room Test Room" }).click();
         const [apple, pineapple, orange] = roomIds;
         await checkOrder(["Orange", "Pineapple", "Apple", "Test Room"], page);
         await bumpRoom(apple, app);
@@ -116,7 +123,7 @@ test.describe("Sliding Sync", () => {
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
             const id = await app.client.createRoom({ name: fruit });
             roomIds.push(id);
-            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
+            await expect(page.getByRole("option", { name: `Open room ${fruit}` })).toBeVisible();
         }
 
         // Given a list of Orange, Pineapple, Apple - if Pineapple is active and a message is sent in Apple, the list should
@@ -124,7 +131,7 @@ test.describe("Sliding Sync", () => {
         // be Apple, Orange Pineapple - only when you click on a different room do things reshuffle.
 
         // Select the Pineapple room
-        await page.getByRole("treeitem", { name: "Pineapple" }).click();
+        await page.getByRole("option", { name: "Open room Pineapple" }).click();
         await checkOrder(["Orange", "Pineapple", "Apple", "Test Room"], page);
 
         // Move Apple
@@ -132,7 +139,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Pineapple", "Orange", "Test Room"], page);
 
         // Select the Test Room
-        await page.getByRole("treeitem", { name: "Test Room" }).click();
+        await page.getByRole("option", { name: "Open room Test Room" }).click();
 
         // the rooms reshuffle to match reality
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
@@ -142,25 +149,20 @@ test.describe("Sliding Sync", () => {
         // send a message in the test room: unread notification count should increment
         await bob.sendMessage(testRoom.roomId, "Hello World");
 
-        const treeItemLocator1 = page.getByRole("treeitem", { name: "Test Room 1 unread message." });
-        await expect(treeItemLocator1.locator(".mx_NotificationBadge_count")).toHaveText("1");
-        // await expect(page.locator(".mx_NotificationBadge")).not.toHaveClass("mx_NotificationBadge_highlighted");
-        await expect(treeItemLocator1.locator(".mx_NotificationBadge")).not.toHaveClass(
-            /mx_NotificationBadge_highlighted/,
-        );
+        const itemLocator1 = page.getByRole("option", { name: "Open room David Langley with 1 unread message." });
+        await expect(itemLocator1.getByTestId("notification-decoration")).toHaveText("1");
 
         // send an @mention: highlight count (red) should be 2.
         await bob.sendMessage(testRoom.roomId, `Hello ${user.displayName}`);
-        const treeItemLocator2 = page.getByRole("treeitem", {
-            name: "Test Room 2 unread messages including mentions.",
+        const itemLocator2 = page.getByRole("treeitem", {
+            name: "Open room Test Room 2 unread messages including mentions.",
         });
-        await expect(treeItemLocator2.locator(".mx_NotificationBadge_count")).toHaveText("2");
-        await expect(treeItemLocator2.locator(".mx_NotificationBadge")).toHaveClass(/mx_NotificationBadge_highlighted/);
+        await expect(itemLocator2.getByTestId("notification-decoration")).toHaveText("2");
 
         // click on the room, the notif counts should disappear
-        await page.getByRole("treeitem", { name: "Test Room 2 unread messages including mentions." }).click();
+        await page.getByRole("option", { name: "Open room Test Room 2 unread messages including mentions." }).click();
         await expect(
-            page.getByRole("treeitem", { name: "Test Room" }).locator("mx_NotificationBadge_count"),
+            page.getByRole("option", { name: "Open room Test Room" }).getByTestId("notification-decoration"),
         ).not.toBeAttached();
     });
 
@@ -175,7 +177,9 @@ test.describe("Sliding Sync", () => {
         // wait for this message to arrive, tell by the room list resorting
         await checkOrder(["Test Room", "Dummy"], page);
 
-        await expect(page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge")).toBeAttached();
+        await expect(
+            page.getByRole("option", { name: "Open room Test Room" }).getByTestId("notification-decoration"),
+        ).toBeAttached();
     });
 
     test("should update user settings promptly", async ({ page, app }) => {
@@ -193,7 +197,7 @@ test.describe("Sliding Sync", () => {
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
             const id = await app.client.createRoom({ name: fruit });
             roomIds.push(id);
-            await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
+            await expect(page.getByRole("option", { name: `Open room ${fruit}` })).toBeVisible();
         }
         const [roomAId, roomPId] = roomIds;
 
@@ -206,7 +210,7 @@ test.describe("Sliding Sync", () => {
         // Select the Test Room and wait for playwright to get the request
         const [request] = await Promise.all([
             page.waitForRequest(matchRoomSubRequest(roomAId)),
-            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
+            page.getByRole("option", { name: "Open room Apple", exact: true }).click(),
         ]);
         const roomSubscriptions = request.postDataJSON().room_subscriptions;
         expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
@@ -214,7 +218,7 @@ test.describe("Sliding Sync", () => {
         // Switch to another room and wait for playwright to get the request
         await Promise.all([
             page.waitForRequest(matchRoomSubRequest(roomPId)),
-            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
+            page.getByRole("option", { name: "Open room Pineapple", exact: true }).click(),
         ]);
     });
 
@@ -240,34 +244,29 @@ test.describe("Sliding Sync", () => {
             { roomNames, clientUserId },
         );
 
-        await expect(
-            page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
-        ).toHaveCount(3);
+        await getFilterExpandButton(page).click();
+        const primaryFilters = getPrimaryFilters(page);
+        await primaryFilters.getByRole("option", { name: "Invites" }).click();
+
+        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(3);
 
         // Select the room to join
-        await page.getByRole("treeitem", { name: "Room to Join" }).click();
+        await page.getByRole("option", { name: "Open room Room to Join" }).click();
 
         // Accept the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await checkOrder(["Room to Join", "Test Room"], page);
+        await checkOrder(["Room to Rescind", "Room to Reject"], page);
 
         // Select the room to reject
-        await page.getByRole("treeitem", { name: "Room to Reject" }).click();
+        await page.getByRole("option", { name: "Open room Room to Reject" }).click();
 
         // Decline the invite
         await page.locator(".mx_RoomView").getByRole("button", { name: "Decline", exact: true }).click();
 
-        await expect(
-            page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
-        ).toHaveCount(2);
+        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(1);
 
-        // check the lists are correct
-        await checkOrder(["Room to Join", "Test Room"], page);
-
-        const titleLocator = page.getByRole("group", { name: "Invites" }).locator(".mx_RoomTile_title");
-        await expect(titleLocator).toHaveCount(1);
-        await expect(titleLocator).toHaveText("Room to Rescind");
+        await expect(page.getByRole("option", { name: "Open room Room to Rescind" })).toBeVisible();
 
         // now rescind the invite
         await bot.evaluate(
@@ -277,10 +276,14 @@ test.describe("Sliding Sync", () => {
             { roomRescind, clientUserId },
         );
 
+        await page.getByRole("option", { name: "Open room Room to Rescind" }).click();
+
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Forget this room", exact: true }).click();
+
+        await primaryFilters.getByRole("option", { name: "Invites" }).click();
+
         // Wait for the rescind to take effect and check the joined list once more
-        await expect(
-            page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
-        ).toHaveCount(2);
+        await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(2);
 
         await checkOrder(["Room to Join", "Test Room"], page);
     });
@@ -293,19 +296,27 @@ test.describe("Sliding Sync", () => {
         await app.client.evaluate(async (client, roomId) => {
             await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
-        await expect(page.getByRole("group", { name: "Favourites" }).getByText("Favourite DM")).toBeVisible();
-        await expect(page.getByRole("group", { name: "People" }).getByText("Favourite DM")).not.toBeAttached();
+
+        await getFilterExpandButton(page).click();
+        const primaryFilters = getPrimaryFilters(page);
+        await primaryFilters.getByRole("option", { name: "Favourites" }).click();
+
+        await expect(page.getByRole("option", { name: "Favourite DM" })).toBeVisible();
+
+        await primaryFilters.getByRole("option", { name: "People" }).click();
+
+        await expect(page.getByRole("option", { name: "Favourite DM" })).not.toBeAttached();
     });
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
     test("should clear the reply to field when swapping rooms", async ({ page, app, testRoom }) => {
         await app.client.createRoom({ name: "Other Room" });
-        await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
+        await expect(page.getByRole("option", { name: "Open room Other Room" })).toBeVisible();
         await app.client.sendMessage(testRoom.roomId, "Hello world");
 
         // select the room
-        await page.getByRole("treeitem", { name: "Test Room" }).click();
+        await page.getByRole("option", { name: "Open room Test Room" }).click();
 
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
@@ -318,13 +329,13 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
 
         // now click Other Room
-        await page.getByRole("treeitem", { name: "Other Room" }).click();
+        await page.getByRole("option", { name: "Open room Other Room" }).click();
 
         // ensure the reply-to disappears
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
         // click back
-        await page.getByRole("treeitem", { name: "Test Room" }).click();
+        await page.getByRole("option", { name: "Open room Test Room" }).click();
 
         // ensure the reply-to reappears
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
@@ -338,7 +349,7 @@ test.describe("Sliding Sync", () => {
         await app.client.sendMessage(testRoom.roomId, "Reply to me");
 
         // select the room
-        await page.getByRole("treeitem", { name: "Test Room" }).click();
+        await page.getByRole("option", { name: "Open room Test Room" }).click();
         await expect(page.locator(".mx_ReplyPreview")).not.toBeAttached();
 
         // click reply-to on the Reply to me message
