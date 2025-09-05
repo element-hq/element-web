@@ -7,56 +7,41 @@ exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
     data-testid="primary-filters"
     style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
-    <ul
+    <div
       aria-label="Room list filters"
       class="flex"
       id="«r0»"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >
-      <li
+      <button
         aria-hidden="false"
         aria-selected="false"
+        class="_chat-filter_5qdp0_8"
         role="option"
+        tabindex="0"
       >
-        <button
-          aria-selected="false"
-          class="_chat-filter_5qdp0_8"
-          role="button"
-          tabindex="0"
-        >
-          People
-        </button>
-      </li>
-      <li
+        People
+      </button>
+      <button
         aria-hidden="false"
         aria-selected="true"
+        class="_chat-filter_5qdp0_8"
         role="option"
+        tabindex="0"
       >
-        <button
-          aria-selected="true"
-          class="_chat-filter_5qdp0_8"
-          role="button"
-          tabindex="0"
-        >
-          Rooms
-        </button>
-      </li>
-      <li
+        Rooms
+      </button>
+      <button
         aria-hidden="false"
         aria-selected="false"
+        class="_chat-filter_5qdp0_8"
         role="option"
+        tabindex="0"
       >
-        <button
-          aria-selected="false"
-          class="_chat-filter_5qdp0_8"
-          role="button"
-          tabindex="0"
-        >
-          Unreads
-        </button>
-      </li>
-    </ul>
+        Unreads
+      </button>
+    </div>
   </div>
 </DocumentFragment>
 `;
