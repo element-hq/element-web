@@ -19,7 +19,7 @@ interface IProps {
     width?: number;
     labelInvite: string;
     labelKnock?: string;
-    labelPublic: string;
+    labelPublic?: string;
     labelRestricted?: string; // if omitted then this option will be hidden, e.g if unsupported
     onChange(value: JoinRule): void;
 }
@@ -38,10 +38,17 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         <div key={JoinRule.Invite} className="mx_JoinRuleDropdown_invite">
             {labelInvite}
         </div>,
-        <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
-            {labelPublic}
-        </div>,
     ] as NonEmptyArray<ReactElement & { key: string }>;
+
+    if (labelPublic) {
+        options.push(
+            (
+            <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
+                {labelPublic}
+            </div>
+            ) as ReactElement & { key: string },
+        );
+    }
 
     if (labelKnock) {
         options.unshift(
@@ -64,6 +71,11 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         );
     }
 
+    if (options.length === 1) {
+        // If we only support private rooms, don't show any options.
+        return null;
+    }
+
     return (
         <Dropdown
             id="mx_JoinRuleDropdown"
@@ -72,6 +84,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
             menuWidth={width}
             value={value}
             label={label}
+            disabled={options.length === 1}
         >
             {options}
         </Dropdown>
