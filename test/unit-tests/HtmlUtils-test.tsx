@@ -87,6 +87,8 @@ describe("bodyToHtml", () => {
     });
 
     it("should linkify and hightlight parts of links in plaintext message highlighting", () => {
+        getMockClientWithEventEmitter({});
+
         const html = bodyToHtml(
             {
                 body: "foo http://link.example/test/path bar",
