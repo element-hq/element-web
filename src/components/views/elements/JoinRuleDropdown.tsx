@@ -71,11 +71,6 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         );
     }
 
-    if (options.length === 1) {
-        // If we only support private rooms, don't show any options.
-        return null;
-    }
-
     return (
         <Dropdown
             id="mx_JoinRuleDropdown"
