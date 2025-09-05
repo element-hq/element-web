@@ -65,27 +65,6 @@ export function applyReplacerOnString(
     });
 }
 
-/**
- * Converts a Replacer function to a render function for linkify-react
- * So that we can use the same replacer functions for both
- * @param replacer The replacer function to convert
- */
-export function replacerToRenderFunction(replacer: Replacer): Opts["render"] {
-    if (!replacer) return;
-    return ({ tagName, attributes, content }) => {
-        const domNode = new Element(tagName, attributes, [new Text(content)], "tag" as Element["type"]);
-        const result = replacer(domNode, 0);
-        if (result) return result;
-
-        // This is cribbed from the default render function in linkify-react
-        if (attributes.class) {
-            attributes.className = attributes.class;
-            delete attributes.class;
-        }
-        return React.createElement(tagName, attributes, content);
-    };
-}
-
 interface Parameters {
     isHtml: boolean;
     replace: Replacer;

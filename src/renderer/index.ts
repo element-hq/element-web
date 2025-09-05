@@ -11,7 +11,6 @@ export { spoilerRenderer } from "./spoiler";
 export { codeBlockRenderer } from "./code-block";
 export {
     applyReplacerOnString,
-    replacerToRenderFunction,
     combineRenderers,
     type RendererMap,
     type Replacer,
