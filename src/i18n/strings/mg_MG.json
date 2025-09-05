@@ -1759,8 +1759,6 @@
             "send_message_start_dm": "Alefaso ny hafatrao voalohany hanasana<displayName/> hifampiresaka",
             "start_of_dm_history": "Ity no fiandohan'ny tantarany hafatra mivantana nataonao<displayName/> .",
             "start_of_room": "Izany no fiandohan'ny<roomName/> .",
-            "topic": "Lohahevitra:%(les sujets",
-            "topic_edit": "Lohahevitra:%(topic)s (<a> Ovay</a> )",
             "unencrypted_warning": "Tsy azo atao ny mandefa ny kaody faran'ny farany",
             "user_created": "%(displayName)snamorona ity efitrano ity.",
             "you_created": "Ianao no namorona ity efitrano ity."

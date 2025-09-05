@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewRoomIntro topic should render a link in the topic 1`] = `
+<p
+  data-testid="topic"
+>
+  <span>
+    Topic: 
+    <span
+      dir="auto"
+    >
+      This is a link: 
+      <a
+        class="linkified"
+        href="https://matrix.org/"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        https://matrix.org/
+      </a>
+    </span>
+  </span>
+</p>
+`;

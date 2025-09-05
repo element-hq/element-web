@@ -1618,8 +1618,6 @@
             "send_message_start_dm": "最初のメッセージを送信すると、<displayName/>を会話に招待",
             "start_of_dm_history": "ここがあなたと<displayName/>のダイレクトメッセージの履歴の先頭です。",
             "start_of_room": "ここが<roomName/>の先頭です。",
-            "topic": "トピック：%(topic)s ",
-            "topic_edit": "トピック：%(topic)s（<a>編集</a>）",
             "unencrypted_warning": "エンドツーエンド暗号化が有効になっていません",
             "user_created": "%(displayName)sがこのルームを作成しました。",
             "you_created": "このルームを作成しました。"

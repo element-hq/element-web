@@ -342,7 +342,7 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
 
 // Wrap MVideoBody component so we can use a hook here.
 const MVideoBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
     return <MVideoBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

@@ -1880,11 +1880,6 @@
                 "other": "Możesz przypiąć do %(count)s widżetów"
             },
             "menu": "Otwórz menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Wszystkie przypięte wiadomości są tutaj. Najedź na dowolną wiadomość i wybierz „Przypnij”, aby dodać.",
-                "title": "Wszystkie nowe przypięte wiadomości"
-            },
             "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
             "unpin_all": {
                 "button": "Odepnij wszystkie wiadomości",
@@ -2016,8 +2011,6 @@
             "send_message_start_dm": "Wyślij pierwszą wiadomość, aby zaprosić <displayName/> do rozmowy",
             "start_of_dm_history": "Oto początek Twojej historii wiadomości prywatnych z <displayName/>.",
             "start_of_room": "Oto początek <roomName/>.",
-            "topic": "Temat: %(topic)s ",
-            "topic_edit": "Temat: %(topic)s (<a>edytuj</a>)",
             "unencrypted_warning": "Szyfrowanie end-to-end nie jest włączone",
             "user_created": "%(displayName)s utworzył ten pokój.",
             "you_created": "Utworzyłeś ten pokój."
@@ -2073,7 +2066,6 @@
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",
             "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
-            "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
             "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
         },
         "read_topic": "Kliknij, aby przeczytać temat",
