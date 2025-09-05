@@ -1163,8 +1163,6 @@
             "room_invite": "فقط به این اتاق دعوت کنید",
             "start_of_dm_history": "این ابتدای تاریخچه پیام مستقیم شما با <displayName/> است.",
             "start_of_room": "این شروع <roomName/> است.",
-            "topic": "موضوع: %(topic)s ",
-            "topic_edit": "موضوع: %(topic)s (<a>ویرایش</a>)",
             "user_created": "%(displayName)s این اتاق را ایجاد کرده است.",
             "you_created": "شما این اتاق را ایجاد کردید."
         },

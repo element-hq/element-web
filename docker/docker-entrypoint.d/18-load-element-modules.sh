@@ -14,10 +14,9 @@ entrypoint_log() {
 mkdir -p /tmp/element-web-config
 cp /app/config*.json /tmp/element-web-config/
 
-# If there are modules to be loaded
-if [ -d "/modules" ]; then
+# If the module directory exists AND the module directory has modules in it
+if [ -d "/modules" ] && [ "$( ls -A '/modules' )" ]; then
     cd /modules
-
     for MODULE in *
     do
         # If the module has a package.json, use its main field as the entrypoint

@@ -1503,8 +1503,6 @@
             "send_message_start_dm": "Stuur je eerste bericht om <displayName/> uit te nodigen om te chatten",
             "start_of_dm_history": "Dit is het begin van je direct gesprek met <displayName/>.",
             "start_of_room": "Dit is het begin van <roomName/>.",
-            "topic": "Onderwerp: %(topic)s ",
-            "topic_edit": "Onderwerp: %(topic)s (<a>bewerken</a>)",
             "unencrypted_warning": "Eind-tot-eind-versleuteling is uitgeschakeld",
             "user_created": "%(displayName)s heeft deze kamer aangemaakt.",
             "you_created": "Jij hebt deze kamer gemaakt."

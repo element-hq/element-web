@@ -1280,8 +1280,6 @@
             "room_invite": "Inviti nur al ĉi tiu ĉambro",
             "start_of_dm_history": "Jen la komenco de historio de viaj rektaj mesaĝoj kun <displayName/>.",
             "start_of_room": "Jen la komenco de <roomName/>.",
-            "topic": "Temo: %(topic)s ",
-            "topic_edit": "Temo: %(topic)s (<a>redakti</a>)",
             "unencrypted_warning": "Tutvoja ĉifrado ne estas ŝaltita",
             "user_created": "%(displayName)s kreis ĉi tiun ĉambron.",
             "you_created": "Vi kreis ĉi tiun ĉambron."

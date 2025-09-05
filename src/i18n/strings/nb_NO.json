@@ -1877,11 +1877,6 @@
                 "other": "Du kan bare feste opptil %(count)s widgets"
             },
             "menu": "Åpne meny",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Her finner du alle festede meldinger. Hold musepekeren over en melding og velg \"Fest\" for å legge den til.",
-                "title": "Alle nye festede meldinger"
-            },
             "reply_thread": "Svar på en <link> trådmelding </link>",
             "unpin_all": {
                 "button": "Løsne alle meldinger",
@@ -2013,8 +2008,6 @@
             "send_message_start_dm": "Send din første melding for å invitere <displayName/> til chat",
             "start_of_dm_history": "Dette er begynnelsen på direktemeldingshistorikken din med <displayName/>.",
             "start_of_room": "Dette er starten på <roomName/>.",
-            "topic": "Emne: %(topic)s ",
-            "topic_edit": "Emne: %(topic)s (<a>rediger</a>)",
             "unencrypted_warning": "Ende-til-ende-kryptering er ikke aktivert",
             "user_created": "%(displayName)s opprettet dette rommet.",
             "you_created": "Du opprettet dette rommet."
@@ -2069,8 +2062,9 @@
         "pinned_message_banner": {
             "button_close_list": "Lukk liste",
             "button_view_all": "Vis alle",
-            "description": "Dette rommet har festede meldinger. Klikk for å se dem.",
-            "go_to_message": "Vis den festede meldingen i tidslinjen.",
+            "description": "Festede meldinger",
+            "go_to_newest_message": "Se den festede meldingen i tidslinjen og den nyeste festede meldingen her",
+            "go_to_next_message": "Se den festede meldingen i tidslinjen og den nest eldste festede meldingen her",
             "title": "<bold>%(index)s av %(length)s</bold> festede meldinger"
         },
         "read_topic": "Klikk for å lese emnet",

@@ -51,7 +51,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
+import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -1026,7 +1026,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 presentedId = theAlias;
                 // Store display alias of the presented room in cache to speed future
                 // navigation.
-                storeRoomAliasInCache(theAlias, room.roomId);
+                storeRoomAliasInCache(theAlias, room.roomId, calculateRoomVia(room));
             }
 
             // Store this as the ID of the last room accessed. This is so that we can

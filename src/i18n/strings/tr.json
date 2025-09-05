@@ -1806,11 +1806,6 @@
                 "other": "En fazla %(count)s widget'ı sabitleyebilirsiniz"
             },
             "menu": "Menüyü aç",
-            "release_announcement": {
-                "close": "Tamam",
-                "description": "Sabitlenmiş tüm mesajları burada bulabilirsiniz. Herhangi bir mesajın üzerine gelin ve eklemek için \"Sabitle\"yi seçin.",
-                "title": "Tüm yeni sabitlenmiş mesajlar"
-            },
             "reply_thread": "<link>Mesaj dizisinde</link> yanıtla",
             "unpin_all": {
                 "button": "Tüm mesajların sabitlemesini kaldır",
@@ -1940,8 +1935,6 @@
             "send_message_start_dm": "<displayName/> adlı kişiyi sohbete davet etmek için ilk mesajınızı gönderin",
             "start_of_dm_history": "Bu <displayName/> ile olan direkt mesaj geçmişinizin başlangıcıdır.",
             "start_of_room": "Bu <roomName/> odasının başlangıcıdır.",
-            "topic": "Konu: %(topic)s ",
-            "topic_edit": "Konu: %(topic)s (<a>düzenle</a>)",
             "unencrypted_warning": "Uçtan uca şifreleme etkin değil",
             "user_created": "%(displayName)s bu odayı oluşturdu.",
             "you_created": "Bu odayı oluşturdunuz."
@@ -1997,7 +1990,6 @@
             "button_close_list": "Listeyi kapat",
             "button_view_all": "Tümünü görüntüle",
             "description": "Bu odada sabitlenmiş mesajlar var. Görüntülemek için tıklayın.",
-            "go_to_message": "Sabitlenmiş mesajı zaman çizelgesinde görüntüle.",
             "title": "<bold>%(index)s / %(length)s</bold> Sabitlenmiş mesajlar"
         },
         "read_topic": "Başlığı okumak için tıklayın",

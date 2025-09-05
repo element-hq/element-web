@@ -1871,11 +1871,6 @@
                 "other": "Você pode fixar até %(count)s widgets"
             },
             "menu": "Abrir menu",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Encontre todas as mensagens fixadas aqui. Passe o mouse sobre qualquer mensagem e selecione “Fixar” para adicioná-la.",
-                "title": "Todas as novas mensagens fixadas"
-            },
             "reply_thread": "Responder a uma mensagem de <link>discussão</link>",
             "unpin_all": {
                 "button": "Desfixar todas as mensagens",
@@ -1916,6 +1911,7 @@
         "thread_list": {
             "context_menu_label": "Opções de tópico"
         },
+        "title": "Painel direito",
         "video_room_chat": {
             "title": "Bate-papo"
         }
@@ -2006,8 +2002,6 @@
             "send_message_start_dm": "Envie sua primeira mensagem para convidar <displayName/> para conversar",
             "start_of_dm_history": "Este é o início do seu histórico da conversa com <displayName/>.",
             "start_of_room": "Este é o início de <roomName/>.",
-            "topic": "Descrição: %(topic)s ",
-            "topic_edit": "Descrição: %(topic)s (<a>editar</a>)",
             "unencrypted_warning": "Criptografia de ponta-a-ponta não está habilitada",
             "user_created": "%(displayName)s criou esta sala.",
             "you_created": "Você criou esta sala."
@@ -2063,7 +2057,6 @@
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
             "description": "Esta sala tem mensagens fixadas. Clique para visualizá-las.",
-            "go_to_message": "Veja a mensagem fixada no histórico.",
             "title": "<bold>%(index)s de %(length)s </bold> mensagens fixadas"
         },
         "read_topic": "Clique para ler o tópico",

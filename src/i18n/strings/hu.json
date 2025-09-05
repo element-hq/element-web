@@ -652,6 +652,7 @@
         "poll_button_no_perms_description": "Nincs joga szavazást kezdeményezni ebben a szobában.",
         "poll_button_no_perms_title": "Jogosultság szükséges",
         "replying_title": "Válasz",
+        "room_unencrypted": "A szobában lévő üzenetek nincsenek végponttól végpontig titkosítva",
         "room_upgraded_link": "A beszélgetés itt folytatódik.",
         "room_upgraded_notice": "Ezt a szobát lecseréltük és nem aktív többé.",
         "send_button_title": "Üzenet küldése",
@@ -1358,6 +1359,10 @@
         "name_email_mxid_share_space": "Hívjon meg valakit a nevét, e-mail-címét vagy felhasználónevét (például <userId/>) megadva, vagy <a>ossza meg ezt a teret</a>.",
         "name_mxid_share_room": "Hívjon meg valakit a nevét vagy felhasználónevét (például <userId/>) megadva, vagy <a>ossza meg ezt a szobát</a>.",
         "name_mxid_share_space": "Hívjon meg valakit a nevét vagy felhasználónevét (például <userId/>) megadva, vagy <a>ossza meg ezt a teret</a>.",
+        "progress": {
+            "dont_close": "Ne zárja be az alkalmazást, amíg be nem fejezte.",
+            "preparing": "Meghívók előkészítése…"
+        },
         "recents_section": "Legújabb beszélgetések",
         "room_failed_partial": "Az alábbi embereket nem sikerül meghívni ide: <RoomName/>, de a többi meghívó elküldve",
         "room_failed_partial_title": "Néhány meghívót nem sikerült elküldeni",
@@ -1860,11 +1865,6 @@
                 "Csak %(count)s kisalkalmazást tud kitűzni": "other"
             },
             "menu": "Menü megnyitása",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Itt találja az összes kitűzött üzenetet. Húzza az egérmutatót bármely üzenetre, és válassza a „Kitűz” lehetőséget a hozzáadáshoz.",
-                "title": "Minden új kitűzött üzenet"
-            },
             "reply_thread": "Válasz egy <link>üzenetszálra</link>",
             "unpin_all": {
                 "button": "Az összes üzenet rögzítésének feloldása",
@@ -1994,8 +1994,6 @@
             "send_message_start_dm": "Küldj egy üzenetet ahhoz, hogy meghívd <displayName/> felhasználót",
             "start_of_dm_history": "Ez a közvetlen beszélgetés kezdete <displayName/> felhasználóval.",
             "start_of_room": "Ez a(z) <roomName/> kezdete.",
-            "topic": "Téma: %(topic)s ",
-            "topic_edit": "Téma: %(topic)s (<a>szerkesztés</a>)",
             "unencrypted_warning": "A végpontok közti titkosítás nincs engedélyezve",
             "user_created": "%(displayName)s készítette ezt a szobát.",
             "you_created": "Te készítetted ezt a szobát."
@@ -2051,7 +2049,6 @@
             "button_close_list": "A lista bezárása",
             "button_view_all": "Összes megtekintése",
             "description": "Ez a szoba rögzített üzeneteket tartalmaz. Kattintson ide a megtekintésükhöz.",
-            "go_to_message": "Tekintse meg a rögzített üzenetet az idővonalon.",
             "title": "<bold>%(index)s. / %(length)s </bold> rögzített üzenet"
         },
         "read_topic": "Kattintson a téma elolvasásához",
