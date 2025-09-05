@@ -82,7 +82,10 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     logger.info("User requested enabling key backup");
                     let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
                     if (currentKeyBackup) {
-                        logger.info(`Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`, currentKeyBackup.trustInfo);
+                        logger.info(
+                            `Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`,
+                            currentKeyBackup.trustInfo,
+                        );
                         // Check if the current key backup can be used. Either of these properties causes the key backup to be used.
                         if (currentKeyBackup?.trustInfo.trusted || currentKeyBackup.trustInfo.matchesDecryptionKey) {
                             logger.info("Existing key backup can be used");
