@@ -43,9 +43,9 @@ const JoinRuleDropdown: React.FC<IProps> = ({
     if (labelPublic) {
         options.push(
             (
-            <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
-                {labelPublic}
-            </div>
+                <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
+                    {labelPublic}
+                </div>
             ) as ReactElement & { key: string },
         );
     }
