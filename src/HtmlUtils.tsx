@@ -323,13 +323,13 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
 
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
-        sanitizeParams = {...sanitizeParams}
-        sanitizeParams.allowedClasses ??= {}
+        sanitizeParams = { ...sanitizeParams };
+        sanitizeParams.allowedClasses ??= {};
         if (typeof sanitizeParams.allowedClasses.a === "boolean") {
             // All classes are already allowed for "a"
         } else {
-            sanitizeParams.allowedClasses.a ??= []
-            sanitizeParams.allowedClasses.a.push("linkified")
+            sanitizeParams.allowedClasses.a ??= [];
+            sanitizeParams.allowedClasses.a.push("linkified");
         }
     }
 

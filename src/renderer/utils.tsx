@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type DOMNode, Element, type HTMLReactParserOptions, Text } from "html-react-parser";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import { type Opts } from "linkifyjs";
 
 /**
  * The type of a parent node of an element, normally exported by domhandler but that is not a direct dependency of ours
