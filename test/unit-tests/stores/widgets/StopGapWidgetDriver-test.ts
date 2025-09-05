@@ -135,10 +135,10 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc4157.send.delayed_event",
             "org.matrix.msc4157.update_delayed_event",
             // RTC decline events
-            "org.matrix.msc4310.send.event:org.matrix.msc4310.rtc.decline",
-            "org.matrix.msc4310.receive.event:org.matrix.msc4310.rtc.decline",
-            "org.matrix.msc4310.send.event:m.rtc.decline",
-            "org.matrix.msc4310.receive.event:org.m.rtc.decline",
+            "org.matrix.msc2762.send.event:org.matrix.msc4310.rtc.decline",
+            "org.matrix.msc2762.receive.event:org.matrix.msc4310.rtc.decline",
+            "org.matrix.msc2762.send.event:m.rtc.decline",
+            "org.matrix.msc2762.receive.event:m.rtc.decline",
         ]);
 
         const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
