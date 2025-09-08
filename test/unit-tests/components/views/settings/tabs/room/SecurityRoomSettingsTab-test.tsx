@@ -17,6 +17,7 @@ import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientC
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { clearAllModals, flushPromises, stubClient } from "../../../../../../test-utils";
 import { filterBoolean } from "../../../../../../../src/utils/arrays";
+import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 describe("<SecurityRoomSettingsTab />", () => {
     const userId = "@alice:server.org";
@@ -118,6 +119,88 @@ describe("<SecurityRoomSettingsTab />", () => {
                 EventType.RoomJoinRules,
                 {
                     join_rule: JoinRule.Public,
+                },
+                "",
+            );
+        });
+
+        it("handles changing room to private with world_readable history visiblity", async () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public, undefined, HistoryVisibility.WorldReadable);
+
+            getComponent(room);
+
+            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+
+            await flushPromises();
+
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                room.roomId,
+                EventType.RoomHistoryVisibility,
+                {
+                    history_visibility: HistoryVisibility.Shared,
+                },
+                "",
+            );
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                room.roomId,
+                EventType.RoomJoinRules,
+                {
+                    join_rule: JoinRule.Invite,
+                },
+                "",
+            );
+        });
+
+        it("doesn't change room to private when user lacks permissions for history visibility", async () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public, undefined, HistoryVisibility.WorldReadable);
+            room.currentState.setStateEvents([
+                new MatrixEvent({
+                    type: EventType.RoomPowerLevels,
+                    content: {
+                        users: { [userId]: 50 },
+                        state_default: 50,
+                        events: {
+                            [EventType.RoomJoinRules]: 50,
+                            [EventType.RoomHistoryVisibility]: 100,
+                        },
+                    } as RoomPowerLevelsEventContent,
+                    sender: userId,
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ]);
+
+            getComponent(room);
+            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+            await flushPromises();
+            // Ensure we don't make any changes
+            expect(client.sendStateEvent).not.toHaveBeenCalled();
+        });
+
+        it("doesn't change room to private when history visibility change fails", async () => {
+            client.sendStateEvent.mockRejectedValue("Failed");
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public, undefined, HistoryVisibility.WorldReadable);
+
+            getComponent(room);
+            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+            await flushPromises();
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                room.roomId,
+                EventType.RoomHistoryVisibility,
+                {
+                    history_visibility: HistoryVisibility.Shared,
+                },
+                "",
+            );
+            // Ensure we don't make any changes
+            expect(client.sendStateEvent).not.toHaveBeenCalledWith(
+                room.roomId,
+                EventType.RoomJoinRules,
+                {
+                    join_rule: JoinRule.Invite,
                 },
                 "",
             );
