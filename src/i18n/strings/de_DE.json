@@ -717,6 +717,7 @@
         "personal_space_description": "Ein privater Space zum Organisieren deiner Räume",
         "private_description": "Nur für Eingeladene – optimal für dich selbst oder Teams",
         "private_heading": "Dein privater Space",
+        "private_only_heading": "Dein Space",
         "private_personal_description": "Stelle sicher, dass die richtigen Personen Zugriff auf %(name)s haben",
         "private_personal_heading": "Für wen ist dieser Space gedacht?",
         "private_space": "Für mich und meine Kollegen",
@@ -1105,6 +1106,7 @@
         "tls": "Verbindung zum Heim-Server fehlgeschlagen – bitte überprüfe die Internetverbindung und stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und dass Anfragen nicht durch eine Browser-Erweiterung blockiert werden.",
         "unknown": "Unbekannter Fehler",
         "unknown_error_code": "Unbekannter Fehlercode",
+        "update_history_visibility": "Die Sichtbarkeit des Nachrichtenverlaufs konnte nicht geändert werden",
         "update_power_level": "Ändern der Berechtigungsstufe fehlgeschlagen"
     },
     "error_app_open_in_another_tab": "Wechsle zu einem anderen Tab um mit %(brand)s zu verbinden. Dieser Tab kann jetzt geschlossen werden.",
@@ -2327,7 +2329,11 @@
             "users_default": "Standard-Rolle"
         },
         "security": {
-            "enable_encryption_confirm_description": "Sobald aktiviert, kann die Verschlüsselung für einen Raum nicht mehr deaktiviert werden. Nachrichten in einem verschlüsselten Raum können nur noch von Teilnehmern, aber nicht mehr vom Server gelesen werden. Einige Bots und Brücken werden vielleicht nicht mehr funktionieren. <a>Erfahre mehr über Verschlüsselung.</a>",
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "Du hast keine Berechtigung, die Sichtbarkeit des Nachrichtenverlaufs des Chats zu ändern. Das ist gefährlich, weil es nicht angemeldeten Nutzern ermöglichen könnte, Nachrichten zu lesen.",
+                "title": "Chat kann nicht \"privat\" gemacht werden"
+            },
+            "enable_encryption_confirm_description": "Die Verschlüsselung für einen Chat kann nicht mehr deaktiviert werden sobald sie aktiv ist. Nachrichten in einem verschlüsselten Chat können nur noch von Mitgliedern, aber nicht mehr vom Server gelesen werden. Einige Bots und Brücken werden vielleicht nicht mehr funktionieren. <a>Erfahre mehr über Verschlüsselung.</a>",
             "enable_encryption_confirm_title": "Verschlüsselung aktivieren?",
             "enable_encryption_public_room_confirm_description_1": "<b>Verschlüsselung ist für öffentliche Räume nicht empfohlen.</b> Jeder kann öffentliche Räume finden und betreten, also kann auch jeder die Nachrichten lesen. Du wirst keine der Vorteile von Verschlüsselung erhalten und kannst sie später auch nicht mehr deaktivieren. Nachrichten in öffentlichen Räumen zu verschlüsseln, wird das empfangen und senden verlangsamen.",
             "enable_encryption_public_room_confirm_description_2": "Um dieses Problem zu vermeiden, <a>erstelle einen neuen verschlüsselten Raum</a> für deine Konversation.",
@@ -2344,7 +2350,7 @@
             "history_visibility_joined": "Mitglieder (ab Betreten)",
             "history_visibility_legend": "Wer kann den bisherigen Verlauf lesen?",
             "history_visibility_shared": "Mitglieder",
-            "history_visibility_warning": "Änderungen an der Sichtbarkeit des Verlaufs gelten nur für zukünftige Nachrichten. Die Sichtbarkeit des existierenden Verlaufs bleibt unverändert.",
+            "history_visibility_warning": "Die Sichtbarkeit des existierenden Nachrichtenverlaufs bleibt unverändert.",
             "history_visibility_world_readable": "Alle",
             "join_rule_description": "Entscheide, wer %(roomName)s betreten kann.",
             "join_rule_invite": "Privat (Betreten mit Einladung)",
@@ -2386,11 +2392,12 @@
                 "one": "Space aktualisieren …",
                 "other": "Spaces aktualisieren … (%(progress)s von %(count)s)"
             },
-            "join_rule_upgrade_upgrading_room": "Raum wird aktualisiert",
-            "public_without_alias_warning": "Um den Raum zu verlinken, füge bitte eine Adresse hinzu.",
-            "publish_room": "Diesen Raum im Raumverzeichnis veröffentlichen.",
-            "publish_space": "Diesen Space im Raumverzeichnis veröffentlichen.",
-            "strict_encryption": "Senden Sie Nachrichten nur an verifizierte Benutzer.",
+            "join_rule_upgrade_upgrading_room": "Chat-Version wird aktualisiert",
+            "join_rule_world_readable_description": "Wenn du änderst, wer dem Chat beitreten darf, ändert sich auch, wer zukünftige Nachrichten sehen kann.",
+            "public_without_alias_warning": "Um den Chat zu verlinken, füge bitte eine Adresse hinzu.",
+            "publish_room": "Veröffentliche diesen Chat im Chat Verzeichnis.",
+            "publish_space": "Veröffentliche diesen Space im Chat Verzeichnis.",
+            "strict_encryption": "Erlaube Nachrichtenversand nur an verifizierte Nutzer.",
             "title": "Sicherheit"
         },
         "title": "Raumeinstellungen - %(roomName)s",

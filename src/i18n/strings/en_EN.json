@@ -3520,7 +3520,7 @@
             "unknown": "%(senderDisplayName)s changed guest access to %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s made future room history visible to all room members, from the point they are invited.",
+            "invited": "%(senderName)s made future room history visible to new room members, from the point they are invited.",
             "joined": "%(senderName)s made future room history visible to all room members, from the point they joined.",
             "shared": "%(senderName)s made future room history visible to all room members.",
             "unknown": "%(senderName)s made future room history visible to unknown (%(visibility)s).",
