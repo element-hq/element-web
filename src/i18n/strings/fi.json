@@ -1582,11 +1582,6 @@
                 "other": "Voit kiinnittää enintään %(count)s sovelmaa"
             },
             "menu": "Avaa valikko",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Kiinnitetyt viestit löytyvät täältä. Mene minkä tahansa viestin päälle ja valitse \"Kiinnitä\" lisätäksesi viestin tänne.",
-                "title": "Kiinnitetyt viestit"
-            },
             "unpin_all": {
                 "button": "Poista kaikkien viestien kiinnitys",
                 "title": "Poistetaanko kaikkien viestien kiinnitys?"
@@ -1697,8 +1692,6 @@
             "send_message_start_dm": "Kutsu <displayName/> keskusteluun kirjoittamalla ensimmäinen viesti",
             "start_of_dm_history": "Tästä alkaa yksityisviestihistoriasi käyttäjän <displayName/> kanssa.",
             "start_of_room": "Tästä alkaa <roomName/>.",
-            "topic": "Aihe: %(topic)s ",
-            "topic_edit": "Aihe: %(topic)s (<a>muokkaa</a>)",
             "unencrypted_warning": "Päästä päähän -salaus ei ole käytössä",
             "user_created": "%(displayName)s loi tämän huoneen.",
             "you_created": "Loit tämän huoneen."
@@ -1749,7 +1742,6 @@
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
             "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne.",
-            "go_to_message": "Näytä kiinnitetty viesti aikajanalla.",
             "title": "<bold>%(index)s/%(length)s</bold> kiinnitettyä viestiä"
         },
         "read_topic": "Lue aihe napsauttamalla",

@@ -1875,11 +1875,6 @@
                 "other": "Du kan bara fästa upp till %(count)s widgets"
             },
             "menu": "Öppna menyn",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Du hittar alla fästa meddelanden här. För muspekaren över ett meddelande och välj \"Fäst\" för att lägga till det.",
-                "title": "Alla nya fästa meddelanden"
-            },
             "reply_thread": "Svara på ett <link> trådmeddelande </link>",
             "unpin_all": {
                 "button": "Lossa alla meddelanden",
@@ -2011,8 +2006,6 @@
             "send_message_start_dm": "Skicka ditt första meddelande för att bjuda in <displayName/> att chatta",
             "start_of_dm_history": "Det här är början på din direktmeddelandehistorik med <displayName/>.",
             "start_of_room": "Det här är början på <roomName/>.",
-            "topic": "Ämne: %(topic)s ",
-            "topic_edit": "Ämne: %(topic)s (<a>redigera</a>)",
             "unencrypted_warning": "Totalsträckskryptering är inte aktiverat",
             "user_created": "%(displayName)s skapade det här rummet.",
             "you_created": "Du skapade det här rummet."
@@ -2068,7 +2061,6 @@
             "button_close_list": "Stäng listan",
             "button_view_all": "Visa alla",
             "description": "Det här rummet har fästa meddelanden. Klicka för att se dem.",
-            "go_to_message": "Visa det fästa meddelandet på tidslinjen.",
             "title": "<bold>%(index)s av %(length)s</bold> fästa meddelanden"
         },
         "read_topic": "Klicka för att läsa ämne",

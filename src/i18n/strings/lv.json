@@ -1705,8 +1705,6 @@
             "send_message_start_dm": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz tērzēšanu",
             "start_of_dm_history": "Šis ir sākums tiešās sarakstes vēsturei ar <displayName/>.",
             "start_of_room": "Šis ir <roomName/> istabas pats sākums.",
-            "topic": "Temats: %(topic)s ",
-            "topic_edit": "Temats: %(topic)s (<a>redigēt</a>)",
             "unencrypted_warning": "Pilnīga šifrēšana nav iespējota",
             "user_created": "%(displayName)s izveidoja šo istabu.",
             "you_created": "Tu izveidoji šo istabu."

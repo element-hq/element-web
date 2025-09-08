@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "You do not have permission to start polls in this room.",
         "poll_button_no_perms_title": "Permission Required",
         "replying_title": "Replying",
+        "room_unencrypted": "Messages in this room are not end-to-end encrypted",
         "room_upgraded_link": "The conversation continues here.",
         "room_upgraded_notice": "This room has been replaced and is no longer active.",
         "send_button_title": "Send message",
@@ -1025,7 +1026,7 @@
                 "text": "Supply the ID and fingerprint of one of your own devices to verify it. NOTE this allows the other device to send and receive messages as you. IF SOMEONE TOLD YOU TO PASTE SOMETHING HERE, IT IS LIKELY YOU ARE BEING SCAMMED!",
                 "wrong_fingerprint": "Unable to verify device '%(deviceId)s' - the supplied fingerprint '%(fingerprint)s' does not match the device fingerprint, '%(fprint)s'"
             },
-            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
+            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against. This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your cryptographic identity.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
             "prompt_encrypted": "Verify all users in a room to ensure it's secure.",
@@ -1876,11 +1877,6 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Find all pinned messages here. Rollover any message and select “Pin” to add it.",
-                "title": "All new pinned messages"
-            },
             "reply_thread": "Reply to a <link>thread message</link>",
             "unpin_all": {
                 "button": "Unpin all messages",
@@ -2002,7 +1998,9 @@
         "inaccessible_subtitle_1": "Try again later, or ask a room or space admin to check if you have access.",
         "inaccessible_subtitle_2": "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
         "intro": {
+            "display_topic": "Topic: <topic/>",
             "dm_caption": "Only the two of you are in this conversation, unless either of you invites anyone to join.",
+            "edit_topic": "Topic: <topic/> (<a>edit</a>)",
             "enable_encryption_prompt": "Enable encryption in settings.",
             "encrypted_3pid_dm_pending_join": "Once everyone has joined, you’ll be able to chat",
             "no_avatar_label": "Add a photo, so people can easily spot your room.",
@@ -2012,8 +2010,6 @@
             "send_message_start_dm": "Send your first message to invite <displayName/> to chat",
             "start_of_dm_history": "This is the beginning of your direct message history with <displayName/>.",
             "start_of_room": "This is the start of <roomName/>.",
-            "topic": "Topic: %(topic)s ",
-            "topic_edit": "Topic: %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "End-to-end encryption isn't enabled",
             "user_created": "%(displayName)s created this room.",
             "you_created": "You created this room."
@@ -2068,8 +2064,9 @@
         "pinned_message_banner": {
             "button_close_list": "Close list",
             "button_view_all": "View all",
-            "description": "This room has pinned messages. Click to view them.",
-            "go_to_message": "View the pinned message in the timeline.",
+            "description": "Pinned messages",
+            "go_to_newest_message": "View the pinned message in the timeline and the newest pinned message here",
+            "go_to_next_message": "View the pinned message in the timeline and the next oldest pinned message here",
             "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
         },
         "read_topic": "Click to read topic",
@@ -2130,7 +2127,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chat yet",
+            "no_favourites": "You don't have favourite chats yet",
             "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
             "no_lowpriority": "You don't have any low priority rooms",
@@ -2177,6 +2174,26 @@
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "release_announcement": {
+            "done": "Done",
+            "filter": {
+                "description": "Filter your chats with a single click. Expand to view more filters.",
+                "title": "New quick filters"
+            },
+            "intro": {
+                "description": "The chats list has been updated to be more clear and simple to use.",
+                "title": "Chats has a new look!"
+            },
+            "next": "Next",
+            "settings": {
+                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
+                "title": "Some settings have moved"
+            },
+            "sort": {
+                "description": "Change the ordering of your chats from most recent to A-Z",
+                "title": "Sort your chats"
+            }
         },
         "room": {
             "more_options": "More Options",

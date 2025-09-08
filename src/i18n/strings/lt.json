@@ -1051,8 +1051,6 @@
             "send_message_start_dm": "Siųskite pirmąją žinutę kad pakviestumėte <displayName/> į pokalbį",
             "start_of_dm_history": "Tai yra jūsų tiesioginių žinučių su <displayName/> istorijos pradžia.",
             "start_of_room": "Tai yra <roomName/> pradžia.",
-            "topic": "Tema: %(topic)s ",
-            "topic_edit": "Tema: %(topic)s (<a>redaguoti</a>)",
             "unencrypted_warning": "Visapusis šifravimas nėra įjungtas",
             "user_created": "%(displayName)s sukūrė šį kambarį.",
             "you_created": "Jūs sukūrėte šį kambarį."

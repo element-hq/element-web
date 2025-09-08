@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
         "poll_button_no_perms_title": "Autorisation requise",
         "replying_title": "Répond",
+        "room_unencrypted": "Les messages dans ce salon ne sont pas chiffrés de bout en bout",
         "room_upgraded_link": "La discussion continue ici.",
         "room_upgraded_notice": "Ce salon a été remplacé et n’est plus actif.",
         "send_button_title": "Envoyer le message",
@@ -1366,6 +1367,10 @@
         "name_email_mxid_share_space": "Invitez quelqu’un grâce à son nom, adresse e-mail, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
         "name_mxid_share_room": "Invitez quelqu’un à partir de son nom, pseudo (comme <userId/>) ou <a>partagez ce salon</a>.",
         "name_mxid_share_space": "Invitez quelqu’un grâce à son nom, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
+        "progress": {
+            "dont_close": "Ne fermez pas l\"application tant que l'opération est en cours",
+            "preparing": "Préparation des invitations..."
+        },
         "recents_section": "Conversations récentes",
         "room_failed_partial": "Nous avons envoyé les invitations, mais les personnes ci-dessous n’ont pas pu être invitées à rejoindre <RoomName/>",
         "room_failed_partial_title": "Certaines invitations n’ont pas pu être envoyées",
@@ -1871,11 +1876,6 @@
                 "other": "Vous ne pouvez épingler que jusqu’à %(count)s widgets"
             },
             "menu": "Ouvrir le menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Retrouvez tous les messages épinglés ici. Survolez n'importe quel message et sélectionnez « Épingler » pour l'ajouter.",
-                "title": "Tous les nouveaux messages épinglés"
-            },
             "reply_thread": "Répondre à un un <link>message de fil de discussion</link>",
             "unpin_all": {
                 "button": "Désépingler tous les messages",
@@ -1997,7 +1997,9 @@
         "inaccessible_subtitle_1": "Réessayez plus tard ou demandez à l’administrateur du salon ou de l’espace si vous y avez accès.",
         "inaccessible_subtitle_2": "%(errcode)s a été retourné en essayant d’accéder au salon. Si vous pensez que vous ne devriez pas voir ce message, veuillez <issueLink>soumettre un rapport d’anomalie</issueLink>.",
         "intro": {
+            "display_topic": "Sujet: <topic/>",
             "dm_caption": "Vous n’êtes que tous les deux dans cette conversation, à moins que l’un de vous invite quelqu’un à vous rejoindre.",
+            "edit_topic": "Sujet: <topic/> (<a>modifier</a> )",
             "enable_encryption_prompt": "Activer le chiffrement dans les paramètres.",
             "encrypted_3pid_dm_pending_join": "Quand tout le monde sera présent, vous pourrez discuter",
             "no_avatar_label": "Ajoutez une photo afin que les gens repèrent facilement votre salon.",
@@ -2007,8 +2009,6 @@
             "send_message_start_dm": "Envoyez votre premier message pour inviter <displayName/> à discuter",
             "start_of_dm_history": "C’est le début de l’historique de votre conversation privée avec <displayName/>.",
             "start_of_room": "C’est le début de <roomName/>.",
-            "topic": "Sujet : %(topic)s ",
-            "topic_edit": "Sujet : %(topic)s (<a>modifier</a>)",
             "unencrypted_warning": "Le chiffrement de bout en bout n’est pas activé",
             "user_created": "%(displayName)s a créé ce salon.",
             "you_created": "Vous avez créé ce salon."
@@ -2063,8 +2063,9 @@
         "pinned_message_banner": {
             "button_close_list": "Fermer la liste",
             "button_view_all": "Voir tout",
-            "description": "Ce salon contient des messages épinglés. Cliquez pour les consulter.",
-            "go_to_message": "Afficher le message épinglé dans la discussion.",
+            "description": "Messages épinglés",
+            "go_to_newest_message": "Afficher le message épinglé dans la discussion et le plus récent ici",
+            "go_to_next_message": "Afficher le message épinglé dans la discussion et le plus ancien suivant ici",
             "title": "<bold>%(index)s de %(length)s</bold> messages épinglés"
         },
         "read_topic": "Cliquer pour lire le sujet",
@@ -2172,6 +2173,26 @@
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
+        },
+        "release_announcement": {
+            "done": "Terminé",
+            "filter": {
+                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
+                "title": "Nouveaux filtres"
+            },
+            "intro": {
+                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
+                "title": "Les discussions ont une nouvelle apparence !"
+            },
+            "next": "Suivant",
+            "settings": {
+                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
+                "title": "Certains paramètres ont été déplacés"
+            },
+            "sort": {
+                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
+                "title": "Triez vos discussions"
+            }
         },
         "room": {
             "more_options": "Plus d’options",
@@ -3507,7 +3528,7 @@
             "unknown": "%(senderDisplayName)s a changé l’accès des visiteurs en %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s a rendu l’historique visible à tous les membres du salon, depuis le moment où ils ont été invités.",
+            "invited": "%(senderName)s a changé un paramètre : désormais les nouveaux membres pourront voir l'historique de conversation du salon à partir du moment où ils ont été invités.",
             "joined": "%(senderName)s a rendu l’historique visible à tous les membres du salon, à partir de leur arrivée.",
             "shared": "%(senderName)s a rendu l’historique visible à tous les membres du salon.",
             "unknown": "%(senderName)s a rendu l’historique visible à inconnu (%(visibility)s).",

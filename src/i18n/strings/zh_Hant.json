@@ -1726,8 +1726,6 @@
             "send_message_start_dm": "傳送您的第一則訊息以邀請 <displayName/> 來聊天",
             "start_of_dm_history": "這是您與 <displayName/> 私人訊息紀錄的開頭。",
             "start_of_room": "這是 <roomName/> 的開頭。",
-            "topic": "主題：%(topic)s ",
-            "topic_edit": "主題：%(topic)s（<a>編輯</a>）",
             "unencrypted_warning": "端對端加密未啟用",
             "user_created": "%(displayName)s 建立了此聊天室。",
             "you_created": "您建立了此聊天室。"

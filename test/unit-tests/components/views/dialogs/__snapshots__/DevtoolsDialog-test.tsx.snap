@@ -12,6 +12,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     class="mx_QuestionDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -33,6 +34,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Room ID: !id
       <div
+        aria-describedby="«r2»"
         aria-label="Copy"
         class="mx_AccessibleButton mx_CopyableText_copyButton"
         role="button"
@@ -46,9 +48,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
       class="mx_DevTools_content"
     >
       <div>
-        <h3>
+        <h2
+          class="mx_DevTools_toolHeading"
+        >
           Room
-        </h3>
+        </h2>
         <button
           class="mx_DevTools_button"
         >
@@ -81,9 +85,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </button>
       </div>
       <div>
-        <h3>
+        <h2
+          class="mx_DevTools_toolHeading"
+        >
           Other
-        </h3>
+        </h2>
         <button
           class="mx_DevTools_button"
         >
@@ -106,9 +112,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </button>
       </div>
       <div>
-        <h3>
+        <h2
+          class="mx_DevTools_toolHeading"
+        >
           Options
-        </h3>
+        </h2>
         <div
           class="mx_SettingsFlag"
         >
