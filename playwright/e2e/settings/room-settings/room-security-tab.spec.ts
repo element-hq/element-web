@@ -12,7 +12,6 @@ import { test, expect } from "../../../element-web-test";
 
 test.describe("Roles & Permissions room settings tab", () => {
     const roomName = "Test room";
-    let roomId: string;
 
     test.use({
         displayName: "Alice",
@@ -21,7 +20,7 @@ test.describe("Roles & Permissions room settings tab", () => {
     let settings: Locator;
 
     test.beforeEach(async ({ user, app }) => {
-        roomId = await app.client.createRoom({
+        await app.client.createRoom({
             name: roomName,
             power_level_content_override: {
                 events: {
@@ -82,7 +81,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         },
     );
 
-    test.only(
+    test(
         "should disallow changing from public to private if the user cannot alter history",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
