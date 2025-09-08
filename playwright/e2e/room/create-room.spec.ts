@@ -81,8 +81,6 @@ test.describe("Create Room", () => {
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
             await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
-            // Change room to public
-            await dialog.getByRole("button", { name: "Room visibility" }).click();
             // Fill room address
             await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-non-public");
 
