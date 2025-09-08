@@ -81,8 +81,6 @@ test.describe("Create Room", () => {
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
             await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
-            // Fill room address
-            await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-non-public");
 
             axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
@@ -92,7 +90,7 @@ test.describe("Create Room", () => {
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
 
-            await expect(page).toHaveURL(new RegExp(`/#/room/#test-create-room-non-public:${user.homeServer}`));
+            await expect(page).toHaveURL(new RegExp(`/#/room/!.+`));
             const header = page.locator(".mx_RoomHeader");
             await expect(header).toContainText(name);
         });
