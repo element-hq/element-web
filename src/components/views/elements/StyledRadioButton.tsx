@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type Ref } from "react";
+import React, { FC, useId, type Ref } from "react";
 import classnames from "classnames";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -18,53 +18,60 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     childrenInLabel?: boolean;
 }
 
-export default class StyledRadioButton extends React.PureComponent<IProps> {
-    public static readonly defaultProps = {
-        className: "",
-        childrenInLabel: true,
-    };
+const StyledRadioButton: FC<IProps> = ({
+    children,
+    className,
+    disabled,
+    outlined,
+    childrenInLabel,
+    inputRef,
+    id,
+    ...otherProps
+}) => {
+    const defaultId = useId();
+    id = id ?? defaultId;
+    const _className = classnames("mx_StyledRadioButton", className, {
+        mx_StyledRadioButton_disabled: disabled,
+        mx_StyledRadioButton_enabled: !disabled,
+        mx_StyledRadioButton_checked: otherProps.checked,
+        mx_StyledRadioButton_outlined: outlined,
+    });
+    const radioButton = (
+        <React.Fragment>
+            <input
+                id={id}
+                // Pass through the ref - used for keyboard shortcut access to some buttons
+                ref={inputRef}
+                type="radio"
+                disabled={disabled}
+                {...otherProps}
+            />
+            {/* Used to render the radio button circle */}
+            <div>
+                <div />
+            </div>
+        </React.Fragment>
+    );
 
-    public render(): React.ReactNode {
-        const { children, className, disabled, outlined, childrenInLabel, inputRef, ...otherProps } = this.props;
-        const _className = classnames("mx_StyledRadioButton", className, {
-            mx_StyledRadioButton_disabled: disabled,
-            mx_StyledRadioButton_enabled: !disabled,
-            mx_StyledRadioButton_checked: this.props.checked,
-            mx_StyledRadioButton_outlined: outlined,
-        });
-
-        const radioButton = (
-            <React.Fragment>
-                <input
-                    // Pass through the ref - used for keyboard shortcut access to some buttons
-                    ref={inputRef}
-                    type="radio"
-                    disabled={disabled}
-                    {...otherProps}
-                />
-                {/* Used to render the radio button circle */}
-                <div>
-                    <div />
-                </div>
-            </React.Fragment>
+    if (childrenInLabel) {
+        return (
+            <label className={_className} htmlFor={id}>
+                {radioButton}
+                <div className="mx_StyledRadioButton_content">{children}</div>
+                <div className="mx_StyledRadioButton_spacer" />
+            </label>
         );
-
-        if (childrenInLabel) {
-            return (
-                <label className={_className}>
-                    {radioButton}
-                    <div className="mx_StyledRadioButton_content">{children}</div>
-                    <div className="mx_StyledRadioButton_spacer" />
+    } else {
+        return (
+            <div className={_className}>
+                <div className="mx_StyledRadioButton_innerLabel">{radioButton}</div>
+                <label className="mx_StyledRadioButton_content" htmlFor={id}>
+                    {children}
                 </label>
-            );
-        } else {
-            return (
-                <div className={_className}>
-                    <label className="mx_StyledRadioButton_innerLabel">{radioButton}</label>
-                    <div className="mx_StyledRadioButton_content">{children}</div>
-                    <div className="mx_StyledRadioButton_spacer" />
-                </div>
-            );
-        }
+                <div className="mx_StyledRadioButton_spacer" />
+            </div>
+        );
     }
-}
+};
+
+export default StyledRadioButton;
