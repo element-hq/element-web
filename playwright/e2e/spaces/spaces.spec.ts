@@ -11,6 +11,7 @@ import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { UIFeature } from "../../../src/settings/UIFeature";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -375,5 +376,54 @@ test.describe("Spaces", () => {
         });
         await app.viewSpaceByName("Root Space");
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
+    });
+
+    test.describe("Should hide public spaces option if not allowed", () => {
+        test.use({
+            config: {
+                setting_defaults: {
+                    [UIFeature.AllowCreatingPublicSpaces]: false,
+                },
+            },
+        });
+
+        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
+            const menu = await openSpaceCreateMenu(page);
+            await menu
+                .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
+                .setInputFiles("playwright/sample-files/riot.png");
+            await menu.getByRole("textbox", { name: "Name" }).fill("This is a private space");
+            await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
+            await menu
+                .getByRole("textbox", { name: "Description" })
+                .fill("This is a private space because we can't make public ones");
+            await menu.getByRole("button", { name: "Create" }).click();
+
+            await page.getByRole("button", { name: "Me and my teammates" }).click();
+
+            // Create the default General & Random rooms, as well as a custom "Projects" room
+            await expect(page.getByPlaceholder("General")).toBeVisible();
+            await expect(page.getByPlaceholder("Random")).toBeVisible();
+            await page.getByPlaceholder("Support").fill("Projects");
+            await page.getByRole("button", { name: "Continue" }).click();
+            await page.getByRole("button", { name: "Skip for now" }).click();
+
+            // Assert rooms exist in the room list
+            const roomList = page.getByRole("tree", { name: "Rooms" });
+            await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
+            await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
+            await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
+
+            // Assert rooms exist in the space explorer
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "General" }),
+            ).toBeVisible();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "Random" }),
+            ).toBeVisible();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "Projects" }),
+            ).toBeVisible();
+        });
     });
 });
