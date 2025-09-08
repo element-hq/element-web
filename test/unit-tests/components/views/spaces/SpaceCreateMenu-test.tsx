@@ -10,7 +10,7 @@ import React from "react";
 import { render, cleanup } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { MatrixError } from "matrix-js-sdk";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 import { type MockedObject } from "jest-mock";
 
 import SpaceCreateMenu from "../../../../../src/components/views/spaces/SpaceCreateMenu";
