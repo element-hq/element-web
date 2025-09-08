@@ -16,23 +16,28 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("<CreateRoomDialog />", () => {
     const userId = "@alice:server.org";
-    const mockClient = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        getDomain: jest.fn().mockReturnValue("server.org"),
-        getClientWellKnown: jest.fn(),
-        doesServerForceEncryptionForPreset: jest.fn(),
-        // make every alias available
-        getRoomIdForAlias: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" })),
-    });
 
     const getE2eeEnableToggleInputElement = () => screen.getByLabelText("Enable end-to-end encryption");
     // labelled toggle switch doesn't set the disabled attribute, only aria-disabled
     const getE2eeEnableToggleIsDisabled = () =>
         getE2eeEnableToggleInputElement().getAttribute("aria-disabled") === "true";
 
+    let mockClient: ReturnType<typeof getMockClientWithEventEmitter>;
     beforeEach(() => {
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            getDomain: jest.fn().mockReturnValue("server.org"),
+            getClientWellKnown: jest.fn(),
+            doesServerForceEncryptionForPreset: jest.fn(),
+            // make every alias available
+            getRoomIdForAlias: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" })),
+        });
         mockClient.doesServerForceEncryptionForPreset.mockResolvedValue(false);
         mockClient.getClientWellKnown.mockReturnValue({});
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     const getComponent = (props = {}) => render(<CreateRoomDialog onFinished={jest.fn()} {...props} />);

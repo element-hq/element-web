@@ -718,6 +718,7 @@
         "personal_space_description": "A private space to organise your rooms",
         "private_description": "Invite only, best for yourself or teams",
         "private_heading": "Your private space",
+        "private_only_heading": "Your space",
         "private_personal_description": "Make sure the right people have access to %(name)s",
         "private_personal_heading": "Who are you working with?",
         "private_space": "Me and my teammates",
