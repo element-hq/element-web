@@ -11,13 +11,13 @@ import { fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import { EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { mocked } from "jest-mock";
+import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import SecurityRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/SecurityRoomSettingsTab";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { clearAllModals, flushPromises, stubClient } from "../../../../../../test-utils";
 import { filterBoolean } from "../../../../../../../src/utils/arrays";
-import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 describe("<SecurityRoomSettingsTab />", () => {
     const userId = "@alice:server.org";
