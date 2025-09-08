@@ -6,9 +6,9 @@
  */
 
 import { type Locator } from "@playwright/test";
+import { EventType } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../../element-web-test";
-import { EventType } from "matrix-js-sdk/src/matrix";
 
 test.describe("Roles & Permissions room settings tab", () => {
     const roomName = "Test room";
@@ -21,11 +21,16 @@ test.describe("Roles & Permissions room settings tab", () => {
     let settings: Locator;
 
     test.beforeEach(async ({ user, app }) => {
-        roomId = await app.client.createRoom({ name: roomName, power_level_content_override: { events: {
-            // Set the join rules as lower than the history vis to test an edge case.
-            [EventType.RoomJoinRules]: 80,
-            [EventType.RoomHistoryVisibility]: 100,
-        } }});
+        roomId = await app.client.createRoom({
+            name: roomName,
+            power_level_content_override: {
+                events: {
+                    // Set the join rules as lower than the history vis to test an edge case.
+                    [EventType.RoomJoinRules]: 80,
+                    [EventType.RoomHistoryVisibility]: 100,
+                },
+            },
+        });
         await app.viewRoomByName(roomName);
         settings = await app.settings.openRoomSettings("Security & Privacy");
     });
@@ -77,7 +82,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         },
     );
 
-        test.only(
+    test.only(
         "should disallow changing from public to private if the user cannot alter history",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
@@ -107,9 +112,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             const errorDialog = page.getByRole("heading", { name: "Cannot make room private" });
             await expect(errorDialog).toBeVisible();
             await errorDialog.getByLabel("OK");
-            await expect(
-                settingsGroupHistory.getByText("Anyone"),
-            ).toBeChecked();
+            await expect(settingsGroupHistory.getByText("Anyone")).toBeChecked();
         },
     );
 });
