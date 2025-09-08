@@ -64,10 +64,10 @@ const StyledRadioButton: FC<IProps> = ({
     } else {
         return (
             <div className={_className}>
-                <div className="mx_StyledRadioButton_innerLabel">{radioButton}</div>
-                <label className="mx_StyledRadioButton_content" htmlFor={id}>
+                <label className="mx_StyledRadioButton_innerLabel" htmlFor={id}>{radioButton}</label>
+                <div className="mx_StyledRadioButton_content">
                     {children}
-                </label>
+                </div>
                 <div className="mx_StyledRadioButton_spacer" />
             </div>
         );

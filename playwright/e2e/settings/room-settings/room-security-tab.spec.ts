@@ -6,7 +6,6 @@
  */
 
 import { type Locator } from "@playwright/test";
-import { EventType } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../../element-web-test";
 
@@ -25,8 +24,8 @@ test.describe("Roles & Permissions room settings tab", () => {
             power_level_content_override: {
                 events: {
                     // Set the join rules as lower than the history vis to test an edge case.
-                    [EventType.RoomJoinRules]: 80,
-                    [EventType.RoomHistoryVisibility]: 100,
+                    ["m.room.join_rules"]: 80,
+                    ["m.room.history_visibility"]: 100,
                 },
             },
         });
