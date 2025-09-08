@@ -94,11 +94,16 @@ test.describe("Roles & Permissions room settings tab", () => {
 
             // De-op ourselves
             await app.settings.switchTab("Roles & Permissions");
+
+            // Wait for the permissions list to be visible
+            await expect(settings.getByRole("heading", { name: "Permissions"})).toBeVisible();
+
             const ourComboBox = settings.getByRole("combobox", { name: user.userId });
             await ourComboBox.selectOption("Custom level");
             const ourPl = settings.getByRole("spinbutton", { name: user.userId });
             await ourPl.fill("80");
-            await ourPl.blur(); // Applies on blur
+            await ourPl.blur(); // Shows a warning on
+
             // Accept the de-op
             await page.getByRole("button", { name: "Continue" }).click();
             await settings.getByRole("button", { name: "Apply", disabled: false }).click();
