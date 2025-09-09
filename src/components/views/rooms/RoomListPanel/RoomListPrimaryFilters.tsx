@@ -36,6 +36,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
             data-testid="primary-filters"
             gap="var(--cpd-space-3x)"
             direction="row-reverse"
+            justify="space-between"
         >
             {displayChevron && (
                 <IconButton
