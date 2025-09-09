@@ -33,7 +33,6 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
-import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 
@@ -55,7 +54,6 @@ export const getPlatformCallTypeProps = (
             return {
                 label: _t("voip|element_call"),
                 analyticsName: "WebVoipOptionElementCall",
-                children: <BetaPill />,
             };
         case PlatformCallType.JitsiCall:
             return {
