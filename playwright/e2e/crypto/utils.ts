@@ -206,32 +206,36 @@ export async function checkDeviceIsConnectedKeyBackup(
 
 /**
  * Fill in the login form in element with the given creds.
- *
- * If a `securityKey` is given, verifies the new device using the key.
  */
-export async function logIntoElement(page: Page, credentials: Credentials, securityKey?: string) {
+export async function logIntoElement(page: Page, credentials: Credentials) {
     await page.goto("/#/login");
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
     await page.getByPlaceholder("Password").fill(credentials.password);
     await page.getByRole("button", { name: "Sign in" }).click();
+}
 
-    // if a securityKey was given, verify the new device
-    if (securityKey !== undefined) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
+/**
+ * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
+ * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ */
+export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
+    await logIntoElement(page, credentials);
 
-        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
-        // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
-        // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
-        // for a recovery key straight away. We click the button if it's there so this works in both cases.
-        if (await useSecurityKey.isVisible()) {
-            await useSecurityKey.click();
-        }
-        // Fill in the recovery key
-        await page.locator(".mx_Dialog").getByTitle("Recovery key").fill(securityKey);
-        await page.getByRole("button", { name: "Continue", disabled: false }).click();
-        await page.getByRole("button", { name: "Done" }).click();
+    await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
+
+    const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
+    // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
+    // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
+    // for a recovery key straight away. We click the button if it's there so this works in both cases.
+    if (await useSecurityKey.isVisible()) {
+        await useSecurityKey.click();
     }
+
+    // Fill in the recovery key
+    await page.locator(".mx_Dialog").getByTitle("Recovery key").fill(recoveryKey);
+    await page.getByRole("button", { name: "Continue", disabled: false }).click();
+    await page.getByRole("button", { name: "Done" }).click();
 }
 
 /**

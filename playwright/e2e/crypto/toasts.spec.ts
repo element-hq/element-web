@@ -8,7 +8,7 @@
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 import { test, expect } from "../../element-web-test";
-import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement } from "./utils";
+import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElementAndVerify } from "./utils";
 import { type Bot } from "../../pages/bot";
 
 test.describe("Key storage out of sync toast", () => {
@@ -18,7 +18,7 @@ test.describe("Key storage out of sync toast", () => {
         const res = await createBot(page, homeserver, credentials);
         recoveryKey = res.recoveryKey;
 
-        await logIntoElement(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         await deleteCachedSecrets(page);
 
@@ -65,7 +65,7 @@ test.describe("'Turn on key storage' toast", () => {
         const recoveryKey = res.recoveryKey;
         botClient = res.botClient;
 
-        await logIntoElement(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page.getByRole("button", { name: "Add room" }).click();
