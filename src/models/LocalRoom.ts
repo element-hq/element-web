@@ -58,6 +58,10 @@ export class LocalRoom extends Room {
         return this.state === LocalRoomState.ERROR;
     }
 
+    /**
+     * Check if encryption is enabled in this room.
+     * True if the room has any encryption state event
+     */
     public isEncryptionEnabled(): boolean {
         // check the local room state
         const encryptionState = this.getLiveTimeline()
