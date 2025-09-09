@@ -257,6 +257,7 @@ interface LocalRoomViewProps {
     roomView: RefObject<HTMLElement | null>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
+    e2eStatus?: E2EStatus;
 }
 
 /**
@@ -304,6 +305,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     } else {
         composer = (
             <MessageComposer
+                e2eStatus={props.e2eStatus}
                 room={props.localRoom}
                 resizeNotifier={props.resizeNotifier}
                 permalinkCreator={props.permalinkCreator}
@@ -1397,9 +1399,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private async getIsRoomEncrypted(roomId = this.state.roomId): Promise<boolean> {
-        const crypto = this.context.client?.getCrypto();
-        if (!crypto || !roomId) return false;
+        if (!roomId) return false;
 
+        const room = this.context.client?.getRoom(roomId);
+        if (room instanceof LocalRoom) {
+            // For local room check the state.
+            // The crypto check fails because the eventId is not valid (it is a local id)
+            return (room as LocalRoom).isEncryptionEnabled();
+        }
+
+        const crypto = this.context.client?.getCrypto();
+        if (!crypto) return false;
         return await crypto.isEncryptionEnabledInRoom(roomId);
     }
 
@@ -2061,6 +2071,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return (
             <ScopedRoomContextProvider {...this.state}>
                 <LocalRoomView
+                    e2eStatus={this.state.e2eStatus}
                     localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
