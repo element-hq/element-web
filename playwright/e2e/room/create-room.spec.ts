@@ -54,6 +54,9 @@ test.describe("Create Room", () => {
 
         await expect(page.getByText("Encryption enabled")).toBeVisible();
         await expect(page.getByText("Send your first message to")).toBeVisible();
+
+        const composer = page.getByRole("region", { name: "Message composer" });
+        await expect(composer.getByRole("textbox", { name: "Send a message…" })).toBeVisible();
     });
 
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
