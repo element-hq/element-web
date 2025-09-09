@@ -63,7 +63,7 @@ describe("<RoomListPrimaryFilters />", () => {
         render(<RoomListPrimaryFilters vm={vm} />);
 
         // Click on an inactive filter
-        await user.click(screen.getByRole("button", { name: "People" }));
+        await user.click(screen.getByRole("option", { name: "People" }));
 
         // Check that the toggle function was called
         expect(filterToggleMocks[0]).toHaveBeenCalledTimes(1);
