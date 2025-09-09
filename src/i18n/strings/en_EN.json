@@ -3987,6 +3987,7 @@
         "connection_lost": "Connectivity to the server has been lost",
         "connection_lost_description": "You cannot place calls without a connection to the server.",
         "consulting": "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
+        "decline_call": "voip|decline_call",
         "default_device": "Default Device",
         "dial": "Dial",
         "dialpad": "Dialpad",

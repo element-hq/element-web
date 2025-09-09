@@ -7,9 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useEffect, useState } from "react";
-import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import { logger } from "matrix-js-sdk/src/logger";
+import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -32,7 +34,20 @@ import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 
-export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
+export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
+    `call_${notificationEventId}_${roomId}`;
+
+export const getNotificationEventSendTs = (event: MatrixEvent): number => {
+    const content = event.getContent() as Partial<IRTCNotificationContent>;
+    const sendTs = content.sender_ts;
+    if (sendTs && Math.abs(sendTs - event.getTs()) <= 15000) {
+        logger.warn(
+            "Received RTCNotification event. With large sender_ts origin_server_ts offset -> using origin_server_ts",
+        );
+        return event.getTs();
+    }
+    return sendTs ?? event.getTs();
+};
 const MAX_RING_TIME_MS = 90 * 1000;
 
 interface JoinCallButtonWithCallProps {
@@ -62,12 +77,51 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
     );
 }
 
-interface Props {
-    notifyEvent: MatrixEvent;
+interface DeclineCallButtonWithNotificationEventProps {
+    notificationEvent: MatrixEvent;
+    room?: Room;
+    onDeclined: (e: ButtonEvent) => void;
 }
 
-export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
-    const roomId = notifyEvent.getRoomId()!;
+function DeclineCallButtonWithNotificationEvent({
+    notificationEvent,
+    room,
+    onDeclined,
+}: DeclineCallButtonWithNotificationEventProps): JSX.Element {
+    const [declining, setDeclining] = useState(false);
+    const onClick = useCallback(
+        async (e: ButtonEvent) => {
+            e.stopPropagation();
+            setDeclining(true);
+            await room?.client.sendRtcDecline(room.roomId, notificationEvent.getContent().call_id);
+            onDeclined(e);
+        },
+        [notificationEvent, onDeclined, room?.client, room?.roomId],
+    );
+    return (
+        <Tooltip description={_t("voip|decline_call")}>
+            <Button
+                className="mx_IncomingCallToast_joinButton"
+                onClick={onClick}
+                kind="primary"
+                disabled={declining}
+                Icon={VideoCallIcon}
+                size="sm"
+            >
+                {_t("action|decline")}
+            </Button>
+        </Tooltip>
+    );
+}
+
+interface Props {
+    notificationEvent: MatrixEvent;
+}
+
+export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
+    const roomId = notificationEvent.getRoomId()!;
+    // Use a partial type so ts still helps us to not miss any type checks.
+    const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
     const room = MatrixClientPeg.safeGet().getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
     const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));
@@ -77,33 +131,35 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
     // Start ringing if not already.
     useEffect(() => {
-        const isRingToast = (notifyEvent.getContent() as unknown as { notify_type: string })["notify_type"] == "ring";
+        const isRingToast = notificationContent.notification_type == "ring";
         if (isRingToast && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
             LegacyCallHandler.instance.play(AudioID.Ring);
         }
-    }, [notifyEvent]);
+    }, [notificationContent.notification_type]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
-        ToastStore.sharedInstance().dismissToast(
-            getIncomingCallToastKey(notifyEvent.getContent().call_id ?? "", roomId),
-        );
+        if (!notificationEvent.getId()) {
+            logger.warn("Could not get eventId for RTCNotification event");
+            return;
+        }
+        ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(notificationEvent.getId()!, roomId));
         LegacyCallHandler.instance.pause(AudioID.Ring);
-    }, [notifyEvent, roomId]);
+    }, [notificationEvent, roomId]);
 
     // Dismiss if session got ended remotely.
     const onCall = useCallback(
         (call: Call, callRoomId: string): void => {
-            const roomId = notifyEvent.getRoomId();
+            const roomId = notificationEvent.getRoomId();
             if (!roomId && roomId !== callRoomId) return;
             if (call === null || call.participants.size === 0) {
                 dismissToast();
             }
         },
-        [dismissToast, notifyEvent],
+        [dismissToast, notificationEvent],
     );
 
-    // Dismiss if antother device from this user joins.
+    // Dismiss if another device from this user joins.
     const onParticipantChange = useCallback(
         (participants: Map<RoomMember, Set<string>>, prevParticipants: Map<RoomMember, Set<string>>) => {
             if (Array.from(participants.keys()).some((p) => p.userId == room?.client.getUserId())) {
@@ -115,7 +171,8 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
 
     // Dismiss on timeout.
     useEffect(() => {
-        const timeout = setTimeout(dismissToast, MAX_RING_TIME_MS);
+        const lifetime = notificationContent.lifetime ?? MAX_RING_TIME_MS;
+        const timeout = setTimeout(dismissToast, getNotificationEventSendTs(notificationEvent) + lifetime - Date.now());
         return () => clearTimeout(timeout);
     });
 
@@ -185,11 +242,18 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
                             />
                         )}
                     </div>
-                    <JoinCallButtonWithCall
-                        onClick={onJoinClick}
-                        call={call}
-                        disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
-                    />
+                    <div className="mx_IncomingCallToast_buttons">
+                        <DeclineCallButtonWithNotificationEvent
+                            notificationEvent={notificationEvent}
+                            room={room}
+                            onDeclined={onCloseClick}
+                        />
+                        <JoinCallButtonWithCall
+                            onClick={onJoinClick}
+                            call={call}
+                            disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
+                        />
+                    </div>
                 </div>
                 <AccessibleButton
                     className="mx_IncomingCallToast_closeButton"
