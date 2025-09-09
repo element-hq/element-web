@@ -91,7 +91,6 @@
         "maximise": "Maksimalkan",
         "mention": "Sebutkan",
         "minimise": "Minimalkan",
-        "new_message": "Pesan baru",
         "new_room": "Ruangan baru",
         "new_video_room": "Ruangan video baru",
         "next": "Lanjut",
@@ -643,12 +642,12 @@
         "mode_plain": "Sembunyikan format",
         "mode_rich_text": "Tampilkan formatting",
         "no_perms_notice": "Anda tidak memiliki izin untuk mengirim ke ruangan ini",
-        "placeholder": "Kirim sebuah pesan…",
-        "placeholder_encrypted": "Kirim sebuah pesan terenkripsi…",
-        "placeholder_reply": "Kirim sebuah balasan…",
-        "placeholder_reply_encrypted": "Kirim sebuah balasan terenkripsi…",
-        "placeholder_thread": "Balas ke utasan…",
-        "placeholder_thread_encrypted": "Balas ke utasan yang terenkripsi…",
+        "placeholder": "Kirim pesan tidak terenkripsi…",
+        "placeholder_encrypted": "Kirim pesan…",
+        "placeholder_reply": "Kirim balasan tidak terenkripsi…",
+        "placeholder_reply_encrypted": "Kirim balasan…",
+        "placeholder_thread": "Balas utas tidak terenkripsi…",
+        "placeholder_thread_encrypted": "Balas utas…",
         "poll_button": "Pemungutan suara",
         "poll_button_no_perms_description": "Anda tidak memiliki izin untuk memulai sebuah poll di ruangan ini.",
         "poll_button_no_perms_title": "Izin Dibutuhkan",
@@ -860,6 +859,7 @@
             "elementCallUrl": "URL Element Call"
         },
         "settings_explorer": "Penelusur pengaturan",
+        "show_empty_content_events": "Tampilkan peristiwa dengan isi kosong",
         "show_hidden_events": "Tampilkan peristiwa tersembunyi di lini masa",
         "spaces": {
             "one": "<space>",
@@ -917,7 +917,8 @@
             },
             "privacy_warning": "Pastikan tidak ada yang bisa melihat layar ini!",
             "restoring": "Memulihkan kunci-kunci dari cadangan",
-            "security_key_title": "Kunci pemulihan"
+            "security_key_label": "Kunci pemulihan",
+            "security_key_title": "Konfirmasi kunci pemulihan Anda"
         },
         "bootstrap_title": "Menyiapkan kunci",
         "confirm_encryption_setup_body": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
@@ -930,6 +931,7 @@
         "cross_signing_user_warning": "Pengguna ini belum memverifikasi semua sesinya.",
         "enter_recovery_key": "Masukkan kunci pemulihan",
         "event_shield_reason_authenticity_not_guaranteed": "Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.",
+        "event_shield_reason_mismatched_sender": "Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya.",
         "event_shield_reason_mismatched_sender_key": "Terenkripsi oleh sesi yang belum diverifikasi",
         "event_shield_reason_unknown_device": "Dienkripsi oleh perangkat yang tidak dikenal atau dihapus.",
         "event_shield_reason_unsigned_device": "Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya.",
@@ -1361,6 +1363,10 @@
         "name_email_mxid_share_space": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
         "name_mxid_share_room": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
         "name_mxid_share_space": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
+        "progress": {
+            "dont_close": "Jangan tutup aplikasi sampai selesai.",
+            "preparing": "Menyiapkan undangan..."
+        },
         "recents_section": "Obrolan Terkini",
         "room_failed_partial": "Kami telah mengirim yang lainnya, tetapi orang berikut ini tidak dapat diundang ke <RoomName/>",
         "room_failed_partial_title": "Beberapa undangan tidak dapat dikirim",
@@ -1447,6 +1453,7 @@
         "room_list_navigate_down": "Pergi ke bawah di daftar ruangan",
         "room_list_navigate_up": "Pergi ke atas di daftar ruangan",
         "room_list_select_room": "Pilih ruangan dari daftar ruangan",
+        "save": "Simpan",
         "scroll_down_timeline": "Gulir ke bawah di lini masa",
         "scroll_up_timeline": "Gulir ke atas di lini masa",
         "search": "Cari (harus diaktifkan)",
@@ -1528,6 +1535,9 @@
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
+        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
+        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
+        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1648,8 +1658,8 @@
         "filter_placeholder": "Saring anggota ruangan",
         "invite_button_no_perms_tooltip": "Anda tidak memiliki izin untuk mengundang pengguna",
         "invited_label": "Diundang",
-        "no_matches": "Tidak ada kecocokan",
-        "power_label": "%(userName)s (tingkat daya %(powerLevelNumber)s)"
+        "list_title": "Daftar anggota",
+        "no_matches": "Tidak ada kecocokan"
     },
     "member_list_back_action_label": "Anggota ruangan",
     "message_edit_dialog_title": "Editan pesan",
@@ -1753,6 +1763,7 @@
     },
     "power_level": {
         "admin": "Admin",
+        "creator": "Pemilik",
         "custom": "Kustom (%(level)s)",
         "custom_level": "Tingkat kustom",
         "default": "Bawaan",
@@ -1859,11 +1870,6 @@
                 "other": "Anda hanya dapat memasang pin sampai %(count)s widget"
             },
             "menu": "Buka menu",
-            "release_announcement": {
-                "close": "Oke",
-                "description": "Temukan semua pesan yang disematkan di sini. Arahkan pesan apa pun dan pilih “Sematkan” untuk menambahkannya.",
-                "title": "Semua pesan baru yang disematkan"
-            },
             "reply_thread": "Balas ke <link>pesan dalam utas</link>",
             "unpin_all": {
                 "button": "Lepas sematan semua pesan",
@@ -1904,6 +1910,7 @@
         "thread_list": {
             "context_menu_label": "Opsi utasan"
         },
+        "title": "Panel kanan",
         "video_room_chat": {
             "title": "Obrolan"
         }
@@ -1993,8 +2000,6 @@
             "send_message_start_dm": "Kirim pesan pertama Anda untuk mengundang <displayName/> ke obrolan",
             "start_of_dm_history": "Ini adalah awal dari pesan langsung Anda dengan <displayName/>.",
             "start_of_room": "Ini adalah awal dari <roomName/>.",
-            "topic": "Topik: %(topic)s ",
-            "topic_edit": "Topik %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "Enkripsi ujung ke ujung tidak diaktifkan",
             "user_created": "%(displayName)s membuat ruangan ini.",
             "you_created": "Anda membuat ruangan ini."
@@ -2050,7 +2055,6 @@
             "button_close_list": "Tutup daftar",
             "button_view_all": "Lihat semua",
             "description": "Ruangan ini memiliki pesan yang disematkan. Klik untuk melihatnya.",
-            "go_to_message": "Lihat pesan yang disematkan di lini masa.",
             "title": "<bold>%(index)s dari %(length)s</bold> Pesan yang disematkan"
         },
         "read_topic": "Klik untuk membaca topik",
@@ -3362,6 +3366,7 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",
@@ -3383,6 +3388,7 @@
             "unable_to_find": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya."
         },
         "m.audio": {
+            "audio_player": "Pemutar audio",
             "error_downloading_audio": "Terjadi kesalahan mengunduh audio",
             "error_processing_audio": "Terjadi kesalahan mengolah pesan suara",
             "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara",
@@ -3948,7 +3954,6 @@
         "dialpad": "Tombol Penyetel",
         "disable_camera": "Matikan kamera",
         "disable_microphone": "Bisukan mikrofon",
-        "disabled_no_one_here": "Tidak ada siapa pun di sini untuk dipanggil",
         "disabled_no_perms_start_video_call": "Anda tidak memiliki izin untuk memulai panggilan video",
         "disabled_no_perms_start_voice_call": "Anda tidak memiliki izin untuk memulai panggilan suara",
         "disabled_ongoing_call": "Panggilan sedang berlangsung",

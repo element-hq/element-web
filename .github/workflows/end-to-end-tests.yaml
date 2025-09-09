@@ -50,7 +50,7 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
               with:
                   repository: element-hq/element-web
 
@@ -129,13 +129,13 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
               with:
                   name: webapp
                   path: webapp
@@ -154,7 +154,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+              uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -201,7 +201,7 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
               if: inputs.skip != true
               with:
                   persist-credentials: false
@@ -219,7 +219,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports

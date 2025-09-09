@@ -1367,8 +1367,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtrar miembros de la sala",
-        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios",
-        "power_label": "%(userName)s (nivel de permisos %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios"
     },
     "member_list_back_action_label": "Miembros de la sala",
     "message_edit_dialog_title": "Ediciones del mensaje",
@@ -1640,8 +1639,6 @@
             "send_message_start_dm": "Envía tu primer mensaje para invitar a <displayName/> a la conversación",
             "start_of_dm_history": "Este es el inicio de tu historial de mensajes directos con <displayName/>.",
             "start_of_room": "Aquí empieza <roomName/>.",
-            "topic": "Asunto: %(topic)s ",
-            "topic_edit": "Asunto: %(topic)s (<a>cambiar</a>)",
             "unencrypted_warning": "El cifrado de extremo a extremo no está activado",
             "user_created": "%(displayName)s creó esta sala.",
             "you_created": "Creaste esta sala."
@@ -2672,6 +2669,7 @@
         },
         "creation_summary_dm": "%(creator)s creó este mensaje directo.",
         "creation_summary_room": "Sala creada y configurada por %(creator)s.",
+        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Última vez editado: %(date)s. Haz clic para ver los cambios.",
@@ -3212,7 +3210,6 @@
         "dialpad": "Teclado numérico",
         "disable_camera": "Apagar cámara",
         "disable_microphone": "Silenciar micrófono",
-        "disabled_no_one_here": "No hay nadie a quien llamar aquí",
         "disabled_no_perms_start_video_call": "No tienes permiso para empezar videollamadas",
         "disabled_no_perms_start_voice_call": "No tienes permiso para iniciar llamadas de voz",
         "disabled_ongoing_call": "Llamada en curso",

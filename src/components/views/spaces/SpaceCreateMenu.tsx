@@ -45,6 +45,8 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Filter } from "../dialogs/spotlight/Filter";
 import { type OpenSpotlightPayload } from "../../../dispatcher/payloads/OpenSpotlightPayload.ts";
+import { useSettingValue } from "../../../hooks/useSettings.ts";
+import { UIFeature } from "../../../settings/UIFeature.ts";
 
 export const createSpace = async (
     client: MatrixClient,
@@ -212,7 +214,10 @@ const SpaceCreateMenu: React.FC<{
     onFinished(): void;
 }> = ({ onFinished }) => {
     const cli = useMatrixClientContext();
-    const [visibility, setVisibility] = useState<Visibility | null>(null);
+    const settingAllowPublicSpaces = useSettingValue(UIFeature.AllowCreatingPublicSpaces);
+    const [visibility, setVisibility] = useState<Visibility | null>(
+        settingAllowPublicSpaces === false ? Visibility.Private : null,
+    );
     const [busy, setBusy] = useState<boolean>(false);
 
     const [name, setName] = useState("");
@@ -303,16 +308,20 @@ const SpaceCreateMenu: React.FC<{
     } else {
         body = (
             <React.Fragment>
-                <AccessibleButton
-                    className="mx_SpaceCreateMenu_back"
-                    onClick={() => setVisibility(null)}
-                    title={_t("action|go_back")}
-                />
+                {settingAllowPublicSpaces && (
+                    <AccessibleButton
+                        className="mx_SpaceCreateMenu_back"
+                        onClick={() => setVisibility(null)}
+                        title={_t("action|go_back")}
+                    />
+                )}
 
                 <h2>
                     {visibility === Visibility.Public
                         ? _t("create_space|public_heading")
-                        : _t("create_space|private_heading")}
+                        : settingAllowPublicSpaces
+                          ? _t("create_space|private_heading")
+                          : _t("create_space|private_only_heading")}
                 </h2>
                 <p>
                     {_t("create_space|add_details_prompt")} {_t("create_space|add_details_prompt_2")}

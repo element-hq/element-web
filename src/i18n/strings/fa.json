@@ -999,8 +999,7 @@
         "toggle_attribution": "تغییر دادن اسناد"
     },
     "member_list": {
-        "filter_placeholder": "فیلتر کردن اعضای اتاق",
-        "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
+        "filter_placeholder": "فیلتر کردن اعضای اتاق"
     },
     "member_list_back_action_label": "اعضای اتاق",
     "message_edit_dialog_title": "ویرایش پیام",
@@ -1164,8 +1163,6 @@
             "room_invite": "فقط به این اتاق دعوت کنید",
             "start_of_dm_history": "این ابتدای تاریخچه پیام مستقیم شما با <displayName/> است.",
             "start_of_room": "این شروع <roomName/> است.",
-            "topic": "موضوع: %(topic)s ",
-            "topic_edit": "موضوع: %(topic)s (<a>ویرایش</a>)",
             "user_created": "%(displayName)s این اتاق را ایجاد کرده است.",
             "you_created": "شما این اتاق را ایجاد کردید."
         },

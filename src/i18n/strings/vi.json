@@ -1314,8 +1314,7 @@
     },
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
-        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
-        "power_label": "%(userName)s (chỉ số %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác"
     },
     "member_list_back_action_label": "Thành viên phòng",
     "message_edit_dialog_title": "Chỉnh sửa tin nhắn",
@@ -1577,8 +1576,6 @@
             "send_message_start_dm": "Gửi tin nhắn đầu tiên để mời <displayName/> vào cuộc trò chuyện",
             "start_of_dm_history": "Đây là phần bắt đầu của lịch sử tin nhắn trực tiếp của bạn với <displayName/>.",
             "start_of_room": "Đây là phần bắt đầu của <roomName/>.",
-            "topic": "Chủ đề: %(topic)s ",
-            "topic_edit": "Chủ đề: %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "Mã hóa đầu-cuối chưa được bật",
             "user_created": "%(displayName)s đã tạo phòng này.",
             "you_created": "Bạn đã tạo phòng này."
@@ -2623,6 +2620,7 @@
         },
         "creation_summary_dm": "%(creator)s đã tạo DM này.",
         "creation_summary_room": "%(creator)s đã tạo và định cấu hình phòng.",
+        "download_action_decrypting": "Đang giải mã",
         "download_action_downloading": "Đang tải xuống",
         "edits": {
             "tooltip_label": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa.",
@@ -3142,7 +3140,6 @@
         "dialpad": "Bàn phím số",
         "disable_camera": "Tắt máy ghi hình",
         "disable_microphone": "Tắt âm micrô",
-        "disabled_no_one_here": "Không có ai ở đây để gọi",
         "disabled_no_perms_start_video_call": "Bạn không có quyền để bắt đầu cuộc gọi truyền hình",
         "disabled_no_perms_start_voice_call": "Bạn không có quyền để bắt đầu cuộc gọi",
         "disabled_ongoing_call": "Cuộc gọi hiện thời",

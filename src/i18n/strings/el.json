@@ -1370,8 +1370,7 @@
         "share_type_prompt": "Τι τύπο τοποθεσίας θέλετε να μοιραστείτε;"
     },
     "member_list": {
-        "filter_placeholder": "Φιλτράρισμα μελών",
-        "power_label": "%(userName)s (δύναμη %(powerLevelNumber)s)"
+        "filter_placeholder": "Φιλτράρισμα μελών"
     },
     "member_list_back_action_label": "Μέλη δωματίου",
     "message_edit_dialog_title": "Επεξεργασίες μηνυμάτων",
@@ -1620,8 +1619,6 @@
             "room_invite": "Προσκαλέστε μόνο σε αυτό το δωμάτιο",
             "start_of_dm_history": "Αυτή είναι η αρχή του ιστορικού των άμεσων μηνυμάτων σας με <displayName/>.",
             "start_of_room": "Αυτή είναι η αρχή του <roomName/>.",
-            "topic": "Θέμα: %(topic)s ",
-            "topic_edit": "Θέμα: %(topic)s (<a>επεξεργασία</a>)",
             "unencrypted_warning": "Η κρυπτογράφηση από άκρο σε άκρο δεν είναι ενεργοποιημένη",
             "user_created": "%(displayName)s δημιούργησε αυτό το δωμάτιο.",
             "you_created": "Δημιουργήσατε αυτό το δωμάτιο."
@@ -1659,9 +1656,6 @@
         "not_found_title": "Αυτό το δωμάτιο ή ο χώρος δεν υπάρχει.",
         "not_found_title_name": "Το %(roomName)s δεν υπάρχει.",
         "peek_join_prompt": "Κάνετε προεπισκόπηση στο %(roomName)s. Θέλετε να συμμετάσχετε;",
-        "pinned_message_banner": {
-            "go_to_message": "Εμφάνιση καρφιτσωμένου μηνύματος στο χρονολόγιο."
-        },
         "rejoin_button": "Επανασύνδεση",
         "status_bar": {
             "delete_all": "Διαγραφή όλων",
@@ -2688,6 +2682,7 @@
         },
         "creation_summary_dm": "Ο/η %(creator)s δημιούργησε αυτό το απευθείας μήνυμα.",
         "creation_summary_room": "Ο/η %(creator)s δημιούργησε και διαμόρφωσε το δωμάτιο.",
+        "download_action_decrypting": "Αποκρυπτογράφηση",
         "download_action_downloading": "Γίνεται λήψη",
         "edits": {
             "tooltip_label": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις.",
@@ -3220,7 +3215,6 @@
         "dialpad": "Πληκτρολόγιο κλήσης",
         "disable_camera": "Απενεργοποίηση κάμερας",
         "disable_microphone": "Σίγαση μικροφώνου",
-        "disabled_no_one_here": "Δεν υπάρχει κανείς εδώ για να καλέσετε",
         "disabled_no_perms_start_video_call": "Δεν έχετε δικαίωμα έναρξης βιντεοκλήσεων",
         "disabled_no_perms_start_voice_call": "Δεν έχετε δικαίωμα έναρξης φωνητικών κλήσεων",
         "disabled_ongoing_call": "Κλήση σε εξέλιξη",

@@ -1286,8 +1286,6 @@
             "send_message_start_dm": "გაგზავნეთ თქვენი პირველი შეტყობინება მოსაწვევად<displayName/> სასაუბროდ",
             "start_of_dm_history": "ეს არის თქვენი პირდაპირი შეტყობინებების ისტორიის დასაწყისი<displayName/> .",
             "start_of_room": "ეს არის დასაწყისი<roomName/> .",
-            "topic": "თემა: %(topic)s",
-            "topic_edit": "თემა:%(topic)s (<a> რედაქტირება</a> )",
             "unencrypted_warning": "ბოლოდან ბოლომდე დაშიფვრა არ არის ჩართული",
             "user_created": "%(displayName)sშექმნა ეს ოთახი.",
             "you_created": "თქვენ შექმენით ეს ოთახი."
@@ -2262,6 +2260,7 @@
         "creation_summary_dm": "%(creator)sშექმნა ეს DM.",
         "creation_summary_room": "%(creator)sოთახის შექმნა და კონფიგურაცია.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
+        "download_action_decrypting": "გაშიფვრა",
         "download_action_downloading": "ჩამოტვირთვა",
         "edits": {
             "tooltip_label": "რედაქტირებულია%(date)s . დააწკაპუნეთ რედაქტირების სანახავად.",
@@ -2725,7 +2724,6 @@
         "dialpad": "ციფერბლატი",
         "disable_camera": "გამორთეთ კამერა",
         "disable_microphone": "მიკროფონის დადუმება",
-        "disabled_no_one_here": "აქ არავინ არის დასარეკი",
         "disabled_no_perms_start_video_call": "თქვენ არ გაქვთ ვიდეოზარების დაწყების ნებართვა",
         "disabled_no_perms_start_voice_call": "თქვენ არ გაქვთ ხმოვანი ზარების დაწყების ნებართვა",
         "disabled_ongoing_call": "მიმდინარე ზარი",

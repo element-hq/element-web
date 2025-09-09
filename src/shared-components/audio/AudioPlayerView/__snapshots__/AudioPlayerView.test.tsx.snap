@@ -1,0 +1,369 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AudioPlayerView renders the audio player in default state 1`] = `
+<div>
+  <div
+    aria-label="Audio player"
+    class="mx_MediaBody mediaBody audioPlayer"
+    role="region"
+    tabindex="0"
+  >
+    <div
+      class="flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Play"
+        aria-labelledby="«r0»"
+        class="_icon-button_1pz9o_8 button"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="-1"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        class="flex mediaInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="mediaName"
+          data-testid="audio-player-name"
+        >
+          Sample Audio
+        </span>
+        <div
+          class="flex byline"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+        >
+          <time
+            class="mx_Clock"
+            datetime="PT5M"
+          >
+            05:00
+          </time>
+          (3.42 KB)
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex"
+      data-testid="audio-player-seek"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <input
+        aria-label="Audio seek bar"
+        class="seekBar"
+        max="100"
+        min="0"
+        step="1"
+        style="--fillTo: 0.3;"
+        tabindex="-1"
+        type="range"
+        value="30"
+      />
+      <time
+        class="mx_Clock clock"
+        datetime="PT2M"
+        role="timer"
+      >
+        02:00
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AudioPlayerView renders the audio player in error state 1`] = `
+<div>
+  <div
+    aria-label="Audio player"
+    class="mx_MediaBody mediaBody audioPlayer"
+    role="region"
+    tabindex="0"
+  >
+    <div
+      class="flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Play"
+        aria-labelledby="«ri»"
+        class="_icon-button_1pz9o_8 button"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="-1"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        class="flex mediaInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="mediaName"
+          data-testid="audio-player-name"
+        >
+          Sample Audio
+        </span>
+        <div
+          class="flex byline"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+        >
+          <time
+            class="mx_Clock"
+            datetime="PT5M"
+          >
+            05:00
+          </time>
+          (3.42 KB)
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex"
+      data-testid="audio-player-seek"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <input
+        aria-label="Audio seek bar"
+        class="seekBar"
+        max="100"
+        min="0"
+        step="1"
+        style="--fillTo: 0.3;"
+        tabindex="-1"
+        type="range"
+        value="30"
+      />
+      <time
+        class="mx_Clock clock"
+        datetime="PT2M"
+        role="timer"
+      >
+        02:00
+      </time>
+    </div>
+  </div>
+  <span
+    class="error"
+  >
+    Error downloading audio
+  </span>
+</div>
+`;
+
+exports[`AudioPlayerView renders the audio player without media name 1`] = `
+<div>
+  <div
+    aria-label="Audio player"
+    class="mx_MediaBody mediaBody audioPlayer"
+    role="region"
+    tabindex="0"
+  >
+    <div
+      class="flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Play"
+        aria-labelledby="«r6»"
+        class="_icon-button_1pz9o_8 button"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="-1"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        class="flex mediaInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="mediaName"
+          data-testid="audio-player-name"
+        >
+          Unnamed audio
+        </span>
+        <div
+          class="flex byline"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+        >
+          <time
+            class="mx_Clock"
+            datetime="PT5M"
+          >
+            05:00
+          </time>
+          (3.42 KB)
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex"
+      data-testid="audio-player-seek"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <input
+        aria-label="Audio seek bar"
+        class="seekBar"
+        max="100"
+        min="0"
+        step="1"
+        style="--fillTo: 0.3;"
+        tabindex="-1"
+        type="range"
+        value="30"
+      />
+      <time
+        class="mx_Clock clock"
+        datetime="PT2M"
+        role="timer"
+      >
+        02:00
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`AudioPlayerView renders the audio player without size 1`] = `
+<div>
+  <div
+    aria-label="Audio player"
+    class="mx_MediaBody mediaBody audioPlayer"
+    role="region"
+    tabindex="0"
+  >
+    <div
+      class="flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-disabled="false"
+        aria-label="Play"
+        aria-labelledby="«rc»"
+        class="_icon-button_1pz9o_8 button"
+        data-kind="primary"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="-1"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        class="flex mediaInfo"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <span
+          class="mediaName"
+          data-testid="audio-player-name"
+        >
+          Sample Audio
+        </span>
+        <div
+          class="flex byline"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+        >
+          <time
+            class="mx_Clock"
+            datetime="PT5M"
+          >
+            05:00
+          </time>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex"
+      data-testid="audio-player-seek"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <input
+        aria-label="Audio seek bar"
+        class="seekBar"
+        max="100"
+        min="0"
+        step="1"
+        style="--fillTo: 0.3;"
+        tabindex="-1"
+        type="range"
+        value="30"
+      />
+      <time
+        class="mx_Clock clock"
+        datetime="PT2M"
+        role="timer"
+      >
+        02:00
+      </time>
+    </div>
+  </div>
+</div>
+`;

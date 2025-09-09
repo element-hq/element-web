@@ -145,6 +145,9 @@ export default class BaseDialog extends React.Component<IProps> {
         const lockProps: Record<string, any> = {
             "onKeyDown": this.onKeyDown,
             "role": "dialog",
+            // Allow the dialog to be keyboard focusable
+            // So the escape key handling works in more cases (say you select the header)
+            "tabIndex": -1,
             // This should point to a node describing the dialog.
             // If we were about to completely follow this recommendation we'd need to
             // make all the components relying on BaseDialog to be aware of it.

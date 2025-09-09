@@ -1461,8 +1461,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
-        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti"
     },
     "member_list_back_action_label": "Membri stanza",
     "message_edit_dialog_title": "Modifiche del messaggio",
@@ -1776,8 +1775,6 @@
             "send_message_start_dm": "Invia il primo messaggio per invitare <displayName/> a parlare",
             "start_of_dm_history": "Questo è l'inizio della tua cronologia di messaggi diretti con <displayName/>.",
             "start_of_room": "Questo è l'inizio di <roomName/>.",
-            "topic": "Argomento: %(topic)s ",
-            "topic_edit": "Argomento: %(topic)s (<a>modifica</a>)",
             "unencrypted_warning": "La crittografia end-to-end non è attiva",
             "user_created": "%(displayName)s ha creato questa stanza.",
             "you_created": "Hai creato questa stanza."
@@ -2906,6 +2903,7 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
@@ -3468,7 +3466,6 @@
         "dialpad": "Tastierino",
         "disable_camera": "Spegni la fotocamera",
         "disable_microphone": "Spegni il microfono",
-        "disabled_no_one_here": "Non c'è nessuno da chiamare qui",
         "disabled_no_perms_start_video_call": "Non hai il permesso di avviare videochiamate",
         "disabled_no_perms_start_voice_call": "Non hai il permesso di avviare chiamate",
         "disabled_ongoing_call": "Chiamata in corso",

@@ -224,6 +224,7 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
           class="_input_19o42_24"
           id="radix-«r6»"
           name="neverSendEncrypted"
+          role="switch"
           title=""
           type="checkbox"
         />

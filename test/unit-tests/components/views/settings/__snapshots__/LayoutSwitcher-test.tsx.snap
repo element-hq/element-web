@@ -97,6 +97,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
+                  id="4"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -223,6 +224,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
+                  id="5"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -349,6 +351,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
+                  id="6"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -418,6 +421,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 class="_input_19o42_24"
                 id="radix-«rr»"
                 name="compactLayout"
+                role="switch"
                 title=""
                 type="checkbox"
               />

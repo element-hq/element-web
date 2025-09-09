@@ -26,8 +26,8 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import UserIdentifierCustomisations from "../../src/customisations/UserIdentifier";
-import { ElementCall } from "../../src/models/Call";
 import { getSenderName } from "../../src/utils/event/getSenderName";
+import { ElementCallEventType } from "../../src/call-types";
 
 jest.mock("../../src/settings/SettingsStore");
 jest.mock("../../src/customisations/UserIdentifier", () => ({
@@ -471,7 +471,7 @@ describe("TextForEvent", () => {
             } as unknown as MatrixEvent;
         });
 
-        describe.each(ElementCall.CALL_EVENT_TYPE.names)("eventType=%s", (eventType: string) => {
+        describe.each(ElementCallEventType.names)("eventType=%s", (eventType: string) => {
             beforeEach(() => {
                 mocked(callEvent).getType.mockReturnValue(eventType);
             });
@@ -664,24 +664,24 @@ describe("TextForEvent", () => {
             ["the legacy key", { topic: "My topic" }, { result: '@a changed the topic to "My topic".' }],
             [
                 "the legacy key with an empty m.topic key",
-                { "topic": "My topic", "m.topic": [] },
+                { "topic": "My topic", "m.topic": { "m.text": [] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key",
-                { "topic": "Ignore this", "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": "Ignore this", "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key and the legacy key undefined",
-                { "topic": undefined, "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": undefined, "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             ["the legacy key undefined", { topic: undefined }, { result: "@a removed the topic." }],
             ["the legacy key empty string", { topic: "" }, { result: "@a removed the topic." }],
             [
                 "both the legacy and new keys removed",
-                { "topic": undefined, "m.topic": [] },
+                { "topic": undefined, "m.topic": { "m.text": [] } },
                 { result: "@a removed the topic." },
             ],
         ];

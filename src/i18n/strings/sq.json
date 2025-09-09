@@ -1372,8 +1372,7 @@
     },
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
-        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
+        "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues"
     },
     "member_list_back_action_label": "Anëtarë dhome",
     "message_edit_dialog_title": "Përpunime mesazhi",
@@ -1664,8 +1663,6 @@
             "send_message_start_dm": "Dërgoni mesazhin tuaj të parë për të ftuar në fjalosje <displayName/>",
             "start_of_dm_history": "Ky është fillimi i historikut të mesazheve tuaja të drejtpërdrejta me <displayName/>.",
             "start_of_room": "Ky është fillimi i <roomName/>.",
-            "topic": "Temë: %(topic)s ",
-            "topic_edit": "Temë: %(topic)s (<a>përpunojeni</a>)",
             "unencrypted_warning": "Fshehtëzimi skaj-më-skaj s’është i aktivizuar",
             "user_created": "%(displayName)s krijoi këtë dhomë.",
             "you_created": "Krijuat këtë dhomë."
@@ -2711,6 +2708,7 @@
         },
         "creation_summary_dm": "%(creator)s krijoi këtë DM.",
         "creation_summary_room": "%(creator)s krijoi dhe formësoi dhomën.",
+        "download_action_decrypting": "Po shfshehtëzohet",
         "download_action_downloading": "Shkarkim",
         "edits": {
             "tooltip_label": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
@@ -3253,7 +3251,6 @@
         "dialpad": "Butona numrash",
         "disable_camera": "Çaktivizo kamerën",
         "disable_microphone": "Heshtoje mikrofonin",
-        "disabled_no_one_here": "Këtu s’ka kënd që të thirret",
         "disabled_no_perms_start_video_call": "S’keni leje të nisni thirrje me video",
         "disabled_no_perms_start_voice_call": "S’keni leje të nisni thirrje me zë",
         "disabled_ongoing_call": "Thirrje në kryerje e sipër",

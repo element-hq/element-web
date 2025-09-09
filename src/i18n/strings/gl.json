@@ -1245,8 +1245,7 @@
         "toggle_attribution": "Cambiar atribución"
     },
     "member_list": {
-        "filter_placeholder": "Filtrar os participantes da conversa",
-        "power_label": "%(userName)s (permiso %(powerLevelNumber)s)"
+        "filter_placeholder": "Filtrar os participantes da conversa"
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edicións da mensaxe",
@@ -1493,8 +1492,6 @@
             "send_message_start_dm": "Envía a túa primeira mensaxe para convidar a <displayName/> ao chat",
             "start_of_dm_history": "Este é o comezo do teu historial de conversa con <displayName/>.",
             "start_of_room": "Este é o comezo de <roomName/>.",
-            "topic": "Asunto: %(topic)s ",
-            "topic_edit": "Asunto: %(topic)s (<a>editar</a>)",
             "unencrypted_warning": "Non está activado o cifrado de extremo-a-extremo",
             "user_created": "%(displayName)s creou esta sala.",
             "you_created": "Creaches esta sala."
@@ -2435,6 +2432,7 @@
         },
         "creation_summary_dm": "%(creator)s creou esta MD.",
         "creation_summary_room": "%(creator)s creou e configurou a sala.",
+        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Editada o %(date)s. Preme para ver edicións.",

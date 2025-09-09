@@ -1398,8 +1398,7 @@
     },
     "member_list": {
         "filter_placeholder": "Atfiltrēt istabas dalībniekus",
-        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus",
-        "power_label": "%(userName)s (tiesību līmenis %(powerLevelNumber)s)"
+        "invite_button_no_perms_tooltip": "Jums nav atļaujas uzaicināt lietotājus"
     },
     "member_list_back_action_label": "Istabas dalībnieki",
     "message_edit_dialog_title": "Ziņas labojumi",
@@ -1706,8 +1705,6 @@
             "send_message_start_dm": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz tērzēšanu",
             "start_of_dm_history": "Šis ir sākums tiešās sarakstes vēsturei ar <displayName/>.",
             "start_of_room": "Šis ir <roomName/> istabas pats sākums.",
-            "topic": "Temats: %(topic)s ",
-            "topic_edit": "Temats: %(topic)s (<a>redigēt</a>)",
             "unencrypted_warning": "Pilnīga šifrēšana nav iespējota",
             "user_created": "%(displayName)s izveidoja šo istabu.",
             "you_created": "Tu izveidoji šo istabu."
@@ -2836,6 +2833,7 @@
             "historical_event_unverified_device": "Ir jāapliecina šī ierīce, lai piekļūtu senākām ziņām."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",
         "edits": {
             "tooltip_label": "Labots %(date)s. Klikšķināt, lai skatītu labojumus.",
@@ -3411,7 +3409,6 @@
         "dialpad": "Cipartastatūra",
         "disable_camera": "Izslēgt kameru",
         "disable_microphone": "Izslēgt mikrofonu",
-        "disabled_no_one_here": "Šeit nav neviena, kam piezvanīt",
         "disabled_no_perms_start_video_call": "Jums nav atļaujas sākt videozvanus",
         "disabled_no_perms_start_voice_call": "Jums nav atļaujas sākt balss zvanus",
         "disabled_ongoing_call": "Notiek zvans",

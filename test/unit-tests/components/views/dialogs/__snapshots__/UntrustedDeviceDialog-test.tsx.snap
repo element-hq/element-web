@@ -12,6 +12,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of a
     class="mx_UntrustedDeviceDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -22,6 +23,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of a
       >
         <div
           class="mx_E2EIcon mx_E2EIcon_warning"
+          data-testid="e2e-icon"
           style="width: 24px; height: 24px;"
         >
           <div
@@ -90,6 +92,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of t
     class="mx_UntrustedDeviceDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -100,6 +103,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of t
       >
         <div
           class="mx_E2EIcon mx_E2EIcon_warning"
+          data-testid="e2e-icon"
           style="width: 24px; height: 24px;"
         >
           <div

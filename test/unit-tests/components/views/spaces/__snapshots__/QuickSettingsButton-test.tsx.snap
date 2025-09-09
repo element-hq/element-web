@@ -3,7 +3,8 @@
 exports[`QuickSettingsButton should render the quick settings button in expanded mode 1`] = `
 <DocumentFragment>
   <div
-    aria-expanded="true"
+    aria-expanded="false"
+    aria-haspopup="dialog"
     aria-label="Quick settings"
     class="mx_AccessibleButton mx_QuickSettingsButton expanded"
     role="button"

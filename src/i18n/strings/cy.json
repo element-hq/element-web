@@ -97,7 +97,6 @@
         "maximise": "Mwyhau",
         "mention": "Crybwyll",
         "minimise": "Lleihau",
-        "new_message": "Neges newydd",
         "new_room": "Ystafell newydd",
         "new_video_room": "Ystafell fideo newydd",
         "next": "Nesaf",
@@ -1691,8 +1690,7 @@
         "filter_placeholder": "Hidlo aelodau'r ystafell",
         "invite_button_no_perms_tooltip": "Nid oes gennych ganiatâd i wahodd defnyddwyr",
         "invited_label": "Gwahoddwyd",
-        "no_matches": "Dim cyfatebiaeth",
-        "power_label": "%(userName)s (power %(powerLevelNumber)s)"
+        "no_matches": "Dim cyfatebiaeth"
     },
     "member_list_back_action_label": "Aelodau'r ystafell",
     "message_edit_dialog_title": "Golygiadau neges",
@@ -1920,11 +1918,6 @@
                 "other": "Dim ond hyd at %(count)s teclyn y gallwch eu pinio"
             },
             "menu": "Agor dewislen",
-            "release_announcement": {
-                "close": "Iawn",
-                "description": "Dewch o hyd i'r holl negeseuon sydd wedi'u pinio yma. Rhedwch y cyrchwr dros unrhyw neges a dewiswch \"Pinio\" i'w hychwanegu.",
-                "title": "Pob neges newydd wedi'u pinio"
-            },
             "reply_thread": "Ymateb i a <link>neges edefyn</link>",
             "unpin_all": {
                 "button": "Dad-binio pob neges",
@@ -2055,8 +2048,6 @@
             "send_message_start_dm": "Anfonwch eich neges gyntaf i wahodd <displayName/> i sgwrsio",
             "start_of_dm_history": "Dyma ddechrau eich hanes neges uniongyrchol gyda <displayName/>.",
             "start_of_room": "Dyma ddechrau <roomName/>.",
-            "topic": "Pwnc: %(topic)s ",
-            "topic_edit": "Pwnc: %(topic)s ( <a>golygu</a> )",
             "unencrypted_warning": "Nid yw amgryptio pen-i-ben wedi'i alluogi",
             "user_created": "Creodd %(displayName)s yr ystafell hon.",
             "you_created": "Chi sydd wedi creu'r ystafell hon."
@@ -2112,7 +2103,6 @@
             "button_close_list": "Cau'r rhestr",
             "button_view_all": "Gweld popeth",
             "description": "Mae negeseuon wedi'u pinio yn yr ystafell hon. Cliciwch i'w gweld.",
-            "go_to_message": "Gweld y neges sydd wedi'i phinnio yn y llinell amser.",
             "title": "<bold>%(index)s o %(length)s</bold> Neges wedi'u pinio"
         },
         "read_topic": "Cliciwch i ddarllen y pwnc",
@@ -3341,6 +3331,7 @@
             "unable_to_decrypt": "Methu dadgryptio'r neges"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Dadgryptio",
         "download_action_downloading": "Yn llwytho i lawr",
         "download_failed": "Methodd y llwytho i lawr",
         "download_failed_description": "Bu gwall wrth lawrlwytho'r ffeil hon",
@@ -3798,7 +3789,6 @@
         "dialpad": "Pad Deialu",
         "disable_camera": "Diffoddwch y camera",
         "disable_microphone": "Tewi meicroffon",
-        "disabled_no_one_here": "Nid oes neb yma i alw",
         "disabled_no_perms_start_video_call": "Nid oes gennych ganiatâd i ddechrau galwadau fideo",
         "disabled_no_perms_start_voice_call": "Nid oes gennych ganiatâd i ddechrau galwadau llais",
         "disabled_ongoing_call": "Galwad cyfredol",

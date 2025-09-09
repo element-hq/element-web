@@ -14,6 +14,8 @@ import { mocked } from "jest-mock";
 import { ChangeRecoveryKey } from "../../../../../../src/components/views/settings/encryption/ChangeRecoveryKey";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { copyPlaintext } from "../../../../../../src/utils/strings";
+import Modal from "../../../../../../src/Modal";
+import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
 
 jest.mock("../../../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
@@ -96,7 +98,7 @@ describe("<ChangeRecoveryKey />", () => {
             const finishButton = screen.getByRole("button", { name: "Finish set up" });
             expect(finishButton).toHaveAttribute("aria-disabled", "true");
 
-            const input = screen.getByRole("textbox");
+            const input = screen.getByTitle("Enter recovery key");
             // If the user enters an incorrect recovery key, the finish button should be disabled
             // and we display an error message
             await userEvent.type(input, "wrong recovery key");
@@ -120,26 +122,68 @@ describe("<ChangeRecoveryKey />", () => {
             mocked(matrixClient.getCrypto()!).bootstrapSecretStorage.mockRejectedValue(new Error("can't bootstrap"));
 
             const user = userEvent.setup();
-            renderComponent(false);
+            const { getByRole, getByText, getByTitle } = renderComponent(false);
 
             // Display the recovery key to save
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
             // Display the form to confirm the recovery key
-            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
 
-            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+            await waitFor(() => expect(getByText("Enter your recovery key to confirm")).toBeInTheDocument());
 
-            const finishButton = screen.getByRole("button", { name: "Finish set up" });
-            const input = screen.getByRole("textbox");
+            const finishButton = getByRole("button", { name: "Finish set up" });
+            const input = getByTitle("Enter recovery key");
             await userEvent.type(input, "encoded private key");
+
+            await waitFor(() => {
+                expect(finishButton).not.toBeDisabled();
+            });
+
+            jest.spyOn(Modal, "createDialog");
+
             await user.click(finishButton);
 
-            await screen.findByText("Failed to set up secret storage");
-            await screen.findByText("Error: can't bootstrap");
+            expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                title: "Failed to set up secret storage",
+                description: "Error: can't bootstrap",
+            });
+            await waitFor(() => user.click(getByRole("button", { name: "OK" })));
+
             expect(consoleErrorSpy).toHaveBeenCalledWith(
                 "Failed to set up secret storage:",
                 new Error("can't bootstrap"),
             );
+        });
+
+        it("should disallow repeated attempts to change the recovery key", async () => {
+            const mockFn = mocked(matrixClient.getCrypto()!).bootstrapSecretStorage.mockImplementation(() => {
+                // Pretend to do some work.
+                return new Promise((r) => setTimeout(r, 200));
+            });
+
+            const user = userEvent.setup();
+            const { getByRole, getByText, getByTitle } = renderComponent(false);
+
+            // Display the recovery key to save
+            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(getByRole("button", { name: "Continue" })));
+
+            await waitFor(() => expect(getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = getByRole("button", { name: "Finish set up" });
+            const input = getByTitle("Enter recovery key");
+            await userEvent.type(input, "encoded private key");
+
+            await waitFor(() => {
+                expect(finishButton).not.toBeDisabled();
+            });
+
+            await user.click(finishButton);
+            await user.click(finishButton);
+            await user.click(finishButton);
+
+            await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1));
         });
     });
 

@@ -82,7 +82,6 @@
         "maximise": "Suurenna",
         "mention": "Mainitse",
         "minimise": "Pienennä",
-        "new_message": "Uusi viesti",
         "new_room": "Uusi huone",
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
@@ -1400,8 +1399,7 @@
         },
         "filter_placeholder": "Suodata huoneen jäseniä",
         "invite_button_no_perms_tooltip": "Sinulla ei ole lupaa kutsua käyttäjiä",
-        "invited_label": "Kutsuttu",
-        "power_label": "%(userName)s (oikeustaso %(powerLevelNumber)s)"
+        "invited_label": "Kutsuttu"
     },
     "member_list_back_action_label": "Huoneen jäsenet",
     "message_edit_dialog_title": "Viestin muokkaukset",
@@ -1584,11 +1582,6 @@
                 "other": "Voit kiinnittää enintään %(count)s sovelmaa"
             },
             "menu": "Avaa valikko",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Kiinnitetyt viestit löytyvät täältä. Mene minkä tahansa viestin päälle ja valitse \"Kiinnitä\" lisätäksesi viestin tänne.",
-                "title": "Kiinnitetyt viestit"
-            },
             "unpin_all": {
                 "button": "Poista kaikkien viestien kiinnitys",
                 "title": "Poistetaanko kaikkien viestien kiinnitys?"
@@ -1699,8 +1692,6 @@
             "send_message_start_dm": "Kutsu <displayName/> keskusteluun kirjoittamalla ensimmäinen viesti",
             "start_of_dm_history": "Tästä alkaa yksityisviestihistoriasi käyttäjän <displayName/> kanssa.",
             "start_of_room": "Tästä alkaa <roomName/>.",
-            "topic": "Aihe: %(topic)s ",
-            "topic_edit": "Aihe: %(topic)s (<a>muokkaa</a>)",
             "unencrypted_warning": "Päästä päähän -salaus ei ole käytössä",
             "user_created": "%(displayName)s loi tämän huoneen.",
             "you_created": "Loit tämän huoneen."
@@ -1751,7 +1742,6 @@
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
             "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne.",
-            "go_to_message": "Näytä kiinnitetty viesti aikajanalla.",
             "title": "<bold>%(index)s/%(length)s</bold> kiinnitettyä viestiä"
         },
         "read_topic": "Lue aihe napsauttamalla",
@@ -2890,6 +2880,7 @@
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "download_failed": "Lataus epäonnistui",
         "download_failed_description": "Tiedostoa ladattaessa tapahtui virhe",
@@ -3425,7 +3416,6 @@
         "dialpad": "Numeronäppäimistö",
         "disable_camera": "Sammuta kamera",
         "disable_microphone": "Mykistä mikrofoni",
-        "disabled_no_one_here": "Täällä ei ole ketään, jolle voisi soittaa",
         "disabled_no_perms_start_video_call": "Sinulla ei ole oikeutta aloittaa videopuheluita",
         "disabled_no_perms_start_voice_call": "Sinulla ei ole oikeutta aloittaa äänipuheluita",
         "disabled_ongoing_call": "Käynnissä oleva puhelu",

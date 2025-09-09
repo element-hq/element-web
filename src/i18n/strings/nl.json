@@ -1256,8 +1256,7 @@
         "toggle_attribution": "Attributie in-/uitschakelen"
     },
     "member_list": {
-        "filter_placeholder": "Kamerleden filteren",
-        "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
+        "filter_placeholder": "Kamerleden filteren"
     },
     "member_list_back_action_label": "Kamerleden",
     "message_edit_dialog_title": "Berichtbewerkingen",
@@ -1504,8 +1503,6 @@
             "send_message_start_dm": "Stuur je eerste bericht om <displayName/> uit te nodigen om te chatten",
             "start_of_dm_history": "Dit is het begin van je direct gesprek met <displayName/>.",
             "start_of_room": "Dit is het begin van <roomName/>.",
-            "topic": "Onderwerp: %(topic)s ",
-            "topic_edit": "Onderwerp: %(topic)s (<a>bewerken</a>)",
             "unencrypted_warning": "Eind-tot-eind-versleuteling is uitgeschakeld",
             "user_created": "%(displayName)s heeft deze kamer aangemaakt.",
             "you_created": "Jij hebt deze kamer gemaakt."
@@ -2484,6 +2481,7 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
+        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
@@ -3012,7 +3010,6 @@
         "dialpad": "Toetsen",
         "disable_camera": "Camera uitschakelen",
         "disable_microphone": "Microfoon dempen",
-        "disabled_no_one_here": "Er is hier niemand om te bellen",
         "disabled_no_perms_start_video_call": "U heeft geen toestemming om videogesprekken te starten",
         "disabled_no_perms_start_voice_call": "U heeft geen toestemming om spraakoproepen te starten",
         "disabled_ongoing_call": "Lopende oproep",

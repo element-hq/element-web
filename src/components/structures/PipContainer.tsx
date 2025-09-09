@@ -245,6 +245,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
                     secondaryCall={this.state.secondaryCall}
                     pipMode={pipMode}
                     onResize={onResize}
+                    sidebarShown={false}
                 />
             ));
         }

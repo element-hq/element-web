@@ -1360,8 +1360,7 @@
         "toggle_attribution": "属性を切り替える"
     },
     "member_list": {
-        "filter_placeholder": "ルームのメンバーを絞り込む",
-        "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
+        "filter_placeholder": "ルームのメンバーを絞り込む"
     },
     "member_list_back_action_label": "ルームのメンバー",
     "message_edit_dialog_title": "メッセージの編集履歴",
@@ -1619,8 +1618,6 @@
             "send_message_start_dm": "最初のメッセージを送信すると、<displayName/>を会話に招待",
             "start_of_dm_history": "ここがあなたと<displayName/>のダイレクトメッセージの履歴の先頭です。",
             "start_of_room": "ここが<roomName/>の先頭です。",
-            "topic": "トピック：%(topic)s ",
-            "topic_edit": "トピック：%(topic)s（<a>編集</a>）",
             "unencrypted_warning": "エンドツーエンド暗号化が有効になっていません",
             "user_created": "%(displayName)sがこのルームを作成しました。",
             "you_created": "このルームを作成しました。"
@@ -2649,6 +2646,7 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
+        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",
@@ -3188,7 +3186,6 @@
         "dialpad": "ダイヤルパッド",
         "disable_camera": "カメラを無効にする",
         "disable_microphone": "マイクをミュート",
-        "disabled_no_one_here": "ここには通話できる人はいません",
         "disabled_no_perms_start_video_call": "ビデオ通話を開始する権限がありません",
         "disabled_no_perms_start_voice_call": "音声通話を開始する権限がありません",
         "disabled_ongoing_call": "通話中",

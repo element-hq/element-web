@@ -80,7 +80,6 @@
         "maximise": "Maksimize",
         "mention": "Sizden bahsediyor",
         "minimise": "Minimize",
-        "new_message": "Yeni mesaj",
         "new_room": "Yeni oda",
         "new_video_room": "Yeni video odası",
         "next": "İleri",
@@ -1601,8 +1600,7 @@
         "filter_placeholder": "Oda üyelerini Filtrele",
         "invite_button_no_perms_tooltip": "Kullanıcıları davet etme izniniz yok",
         "invited_label": "Davet Edildi",
-        "no_matches": "Eşleşme yok",
-        "power_label": "%(userName)s (güç %(powerLevelNumber)s)"
+        "no_matches": "Eşleşme yok"
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
@@ -1808,11 +1806,6 @@
                 "other": "En fazla %(count)s widget'ı sabitleyebilirsiniz"
             },
             "menu": "Menüyü aç",
-            "release_announcement": {
-                "close": "Tamam",
-                "description": "Sabitlenmiş tüm mesajları burada bulabilirsiniz. Herhangi bir mesajın üzerine gelin ve eklemek için \"Sabitle\"yi seçin.",
-                "title": "Tüm yeni sabitlenmiş mesajlar"
-            },
             "reply_thread": "<link>Mesaj dizisinde</link> yanıtla",
             "unpin_all": {
                 "button": "Tüm mesajların sabitlemesini kaldır",
@@ -1942,8 +1935,6 @@
             "send_message_start_dm": "<displayName/> adlı kişiyi sohbete davet etmek için ilk mesajınızı gönderin",
             "start_of_dm_history": "Bu <displayName/> ile olan direkt mesaj geçmişinizin başlangıcıdır.",
             "start_of_room": "Bu <roomName/> odasının başlangıcıdır.",
-            "topic": "Konu: %(topic)s ",
-            "topic_edit": "Konu: %(topic)s (<a>düzenle</a>)",
             "unencrypted_warning": "Uçtan uca şifreleme etkin değil",
             "user_created": "%(displayName)s bu odayı oluşturdu.",
             "you_created": "Bu odayı oluşturdunuz."
@@ -1999,7 +1990,6 @@
             "button_close_list": "Listeyi kapat",
             "button_view_all": "Tümünü görüntüle",
             "description": "Bu odada sabitlenmiş mesajlar var. Görüntülemek için tıklayın.",
-            "go_to_message": "Sabitlenmiş mesajı zaman çizelgesinde görüntüle.",
             "title": "<bold>%(index)s / %(length)s</bold> Sabitlenmiş mesajlar"
         },
         "read_topic": "Başlığı okumak için tıklayın",
@@ -3237,6 +3227,7 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",
@@ -3817,7 +3808,6 @@
         "dialpad": "Tuş takımı",
         "disable_camera": "Kamerayı kapat",
         "disable_microphone": "Mikrofonu sessize al",
-        "disabled_no_one_here": "Burada arayacak kimse yok.",
         "disabled_no_perms_start_video_call": "Görüntülü arama başlatmak için izniniz yok",
         "disabled_no_perms_start_voice_call": "Sesli arama başlatmak için izniniz yok",
         "disabled_ongoing_call": "Devam eden çağrı",

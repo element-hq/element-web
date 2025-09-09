@@ -461,11 +461,11 @@ test.describe("Timeline", () => {
                 // Send a emote
                 await page
                     .locator(".mx_RoomView_body")
-                    .getByRole("textbox", { name: "Send a message…" })
+                    .getByRole("textbox", { name: "Send an unencrypted message…" })
                     .fill("/me says hello to Mr. Bot");
                 await page
                     .locator(".mx_RoomView_body")
-                    .getByRole("textbox", { name: "Send a message…" })
+                    .getByRole("textbox", { name: "Send an unencrypted message…" })
                     .press("Enter");
                 // Check inline start margin of its avatar
                 // Here --right-padding is for the avatar on the message line
@@ -908,23 +908,37 @@ test.describe("Timeline", () => {
             });
         });
 
-        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
-            await app.viewRoomById(room.roomId);
-            await sendImage(app.client, room.roomId, NEW_AVATAR);
-            await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
-            await expect(imgTile).toBeVisible();
-            await imgTile.hover();
-            await page.getByRole("button", { name: "Hide" }).click();
+        test(
+            "should be able to hide an image",
+            { tag: "@screenshot" },
+            async ({ page, app, homeserver, room, context }) => {
+                await app.viewRoomById(room.roomId);
 
-            // Check that the image is now hidden.
-            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
-        });
+                const bot = new Bot(page, homeserver, {});
+                await bot.prepareClient();
+                await app.client.inviteUser(room.roomId, bot.credentials.userId);
 
-        test("should be able to hide a video", async ({ page, app, room, context }) => {
+                await sendImage(bot, room.roomId, NEW_AVATAR);
+                await app.timeline.scrollToBottom();
+                const imgTile = page.locator(".mx_MImageBody").first();
+                await expect(imgTile).toBeVisible();
+                await imgTile.hover();
+                await page.getByRole("button", { name: "Hide" }).click();
+
+                // Check that the image is now hidden.
+                await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
+            },
+        );
+
+        test("should be able to hide a video", async ({ page, app, homeserver, room, context }) => {
             await app.viewRoomById(room.roomId);
-            const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
-            await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+
+            const bot = new Bot(page, homeserver, {});
+            await bot.prepareClient();
+            await app.client.inviteUser(room.roomId, bot.credentials.userId);
+
+            const upload = await bot.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
+            await bot.sendEvent(room.roomId, null, "m.room.message" as EventType, {
                 msgtype: "m.video" as MsgType,
                 body: "bbb.webm",
                 url: upload.content_uri,

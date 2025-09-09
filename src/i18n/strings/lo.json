@@ -1460,8 +1460,6 @@
             "room_invite": "ເຊີນເຂົ້າຫ້ອງນີ້ເທົ່ານັ້ນ",
             "start_of_dm_history": "ຈຸດເລີ່ມຕົ້ນຂອງປະຫວັດຂໍ້ຄວາມໂດຍກົງຂອງທ່ານກັບ <displayName/>.",
             "start_of_room": "ນີ້ແມ່ນຈຸດເລີ່ມຕົ້ນຂອງ <roomName/>.",
-            "topic": "ຫົວຂໍ້: %(topic)s ",
-            "topic_edit": "ຫົວຂໍ້: %(topic)s (<a>ແກ້ໄຂ</a>)",
             "unencrypted_warning": "ບໍ່ໄດ້ເປີດໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງ",
             "user_created": "%(displayName)s ສ້າງຫ້ອງນີ້.",
             "you_created": "ທ່ານສ້າງຫ້ອງນີ້."
@@ -2342,6 +2340,7 @@
         },
         "creation_summary_dm": "%(creator)s ສ້າງ DM ນີ້.",
         "creation_summary_room": "%(creator)s ສ້າງ ແລະ ກຳນົດຄ່າຫ້ອງ.",
+        "download_action_decrypting": "ການຖອດລະຫັດ",
         "download_action_downloading": "ກຳລັງດາວໂຫຼດ",
         "edits": {
             "tooltip_label": "ແກ້ໄຂເມື່ອ %(date)s. ກົດເພື່ອເບິ່ງການແກ້ໄຂ.",

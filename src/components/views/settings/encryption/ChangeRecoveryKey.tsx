@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type FormEventHandler, type JSX, type MouseEventHandler, useState } from "react";
+import React, { type JSX, type MouseEventHandler, useState } from "react";
 import {
     Breadcrumb,
     Button,
@@ -13,9 +13,9 @@ import {
     Field,
     IconButton,
     Label,
+    PasswordControl,
     Root,
     Text,
-    TextControl,
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
@@ -310,7 +310,7 @@ interface KeyFormProps {
     /**
      * Called when the form is submitted.
      */
-    onSubmit: FormEventHandler;
+    onSubmit: () => Promise<void>;
     /**
      * The recovery key to confirm.
      */
@@ -329,6 +329,7 @@ interface KeyFormProps {
 function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: KeyFormProps): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
+    const [isKeyChangeInProgress, setIsKeyChangeInProgress] = useState<boolean>(false);
     const isKeyInvalidAndFilled = isKeyValid === false;
 
     return (
@@ -336,7 +337,14 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
-                onSubmit(evt);
+                if (isKeyChangeInProgress) {
+                    // Don't allow repeated attempts.
+                    return;
+                }
+                setIsKeyChangeInProgress(true);
+                onSubmit().finally(() => {
+                    setIsKeyChangeInProgress(false);
+                });
             }}
             onChange={async (evt) => {
                 evt.preventDefault();
@@ -350,13 +358,17 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
                 <Label>{_t("settings|encryption|recovery|enter_recovery_key")}</Label>
 
-                <TextControl required={true} />
+                <PasswordControl
+                    required={true}
+                    title={_t("settings|encryption|recovery|enter_recovery_key")}
+                    className="mx_KeyForm_password mx_no_textinput"
+                />
                 {isKeyInvalidAndFilled && (
                     <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
                 )}
             </Field>
             <EncryptionCardButtons>
-                <Button disabled={!isKeyValid}>{submitButtonLabel}</Button>
+                <Button disabled={!isKeyValid || isKeyChangeInProgress}>{submitButtonLabel}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>

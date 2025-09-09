@@ -81,7 +81,6 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
-        "new_message": "Nova mensagem",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
@@ -1603,8 +1602,7 @@
         "filter_placeholder": "Filtrar integrantes da sala",
         "invite_button_no_perms_tooltip": "Não tens permissão para convidar utilizadores",
         "invited_label": "Convidado",
-        "no_matches": "Sem correspondências",
-        "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
+        "no_matches": "Sem correspondências"
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições de mensagens",
@@ -1810,11 +1808,6 @@
                 "other": "Só podes fixar até %(count)s widgets"
             },
             "menu": "Abrir o menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Encontra todas as mensagens fixadas aqui. Passa o cursor sobre qualquer mensagem e seleciona \"Fixar\" para a adicionar.",
-                "title": "Todas as novas mensagens afixadas"
-            },
             "reply_thread": "Responde a uma <link> mensagem do tópico</link>",
             "unpin_all": {
                 "button": "Desafixa todas as mensagens",
@@ -1944,8 +1937,6 @@
             "send_message_start_dm": "Envia a tua primeira mensagem para convidar <displayName/> para conversar",
             "start_of_dm_history": "Este é o início do teu histórico de mensagens directas com <displayName/>.",
             "start_of_room": "Este é o início de <roomName/>.",
-            "topic": "Tópico: %(topic)s",
-            "topic_edit": "Tópico: %(topic)s (<a>edita</a>)",
             "unencrypted_warning": "A encriptação de ponta a ponta não está ativada",
             "user_created": "%(displayName)s criou esta sala.",
             "you_created": "Tu criaste esta sala."
@@ -2001,7 +1992,6 @@
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
             "description": "Esta sala tem mensagens afixadas. Clica para as veres.",
-            "go_to_message": "Visualiza a mensagem fixada na linha do tempo.",
             "title": "<bold>%(index)s de %(length)s</bold> Mensagens fixadas"
         },
         "read_topic": "Clica para ler o tópico",
@@ -3267,6 +3257,7 @@
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
+        "download_action_decrypting": "Descriptografando",
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",
@@ -3852,7 +3843,6 @@
         "dialpad": "Teclado de discagem",
         "disable_camera": "Desliga a câmara",
         "disable_microphone": "Silenciar Microfone",
-        "disabled_no_one_here": "Não há ninguém aqui para ligar",
         "disabled_no_perms_start_video_call": "Não tens autorização para iniciar chamadas de vídeo",
         "disabled_no_perms_start_voice_call": "Não tens autorização para iniciar chamadas de voz",
         "disabled_ongoing_call": "Chamada em curso",

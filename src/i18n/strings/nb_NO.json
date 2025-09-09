@@ -93,7 +93,6 @@
         "maximise": "Maksimer",
         "mention": "Nevn",
         "minimise": "Minimer",
-        "new_message": "Ny melding",
         "new_room": "Nytt rom",
         "new_video_room": "Nytt videorom",
         "next": "Neste",
@@ -645,16 +644,17 @@
         "mode_plain": "Skjul formatering",
         "mode_rich_text": "Vis formatering",
         "no_perms_notice": "Du har ikke tillatelse til å legge ut innlegg i dette rommet",
-        "placeholder": "Send en melding …",
-        "placeholder_encrypted": "Send en kryptert beskjed …",
-        "placeholder_reply": "Send et svar …",
-        "placeholder_reply_encrypted": "Send et kryptert svar …",
-        "placeholder_thread": "Svar på tråden...",
-        "placeholder_thread_encrypted": "Svar på kryptert tråd...",
+        "placeholder": "Send en ukryptert melding …",
+        "placeholder_encrypted": "Send en melding…",
+        "placeholder_reply": "Send et ukryptert svar …",
+        "placeholder_reply_encrypted": "Send et svar …",
+        "placeholder_thread": "Svar på ukryptert tråd…",
+        "placeholder_thread_encrypted": "Svar på tråd...",
         "poll_button": "Avstemning",
         "poll_button_no_perms_description": "Du har ikke tillatelse til å starte avstemninger i dette rommet.",
         "poll_button_no_perms_title": "Tillatelse kreves",
         "replying_title": "Svarer på",
+        "room_unencrypted": "Meldinger i dette rommet er ikke ende-til-ende krypterte",
         "room_upgraded_link": "Samtalen fortsetter her.",
         "room_upgraded_notice": "Dette rommet har blitt erstattet og er ikke lenger aktivt.",
         "send_button_title": "Send melding",
@@ -863,6 +863,7 @@
             "elementCallUrl": "Element Call URL"
         },
         "settings_explorer": "Utforsker for innstillinger",
+        "show_empty_content_events": "Vis hendelser med tomt innhold",
         "show_hidden_events": "Vis skjulte hendelser i tidslinjen",
         "spaces": {
             "one": "<space>",
@@ -920,7 +921,8 @@
             },
             "privacy_warning": "Sørg for at ingen kan se denne skjermen!",
             "restoring": "Gjenoppretter nøkler fra sikkerhetskopi",
-            "security_key_title": "Gjenopprettingsnøkkel"
+            "security_key_label": "Gjenopprettingsnøkkel",
+            "security_key_title": "Skriv inn din gjenopprettingsnøkkel"
         },
         "bootstrap_title": "Setter opp nøkler",
         "confirm_encryption_setup_body": "Klikk på knappen nedenfor for å bekrefte konfigureringen av kryptering.",
@@ -933,6 +935,7 @@
         "cross_signing_user_warning": "Denne brukeren har ikke bekreftet alle sesjonene sine.",
         "enter_recovery_key": "Skriv inn gjenopprettingsnøkkel",
         "event_shield_reason_authenticity_not_guaranteed": "Autentisiteten av denne krypterte meldingen kan ikke garanteres på denne enheten.",
+        "event_shield_reason_mismatched_sender": "Avsenderen av hendelsen samsvarer ikke med eieren av enheten som sendte den.",
         "event_shield_reason_mismatched_sender_key": "Kryptert av en uverifisert sesjon",
         "event_shield_reason_unknown_device": "Kryptert av en ukjent eller slettet enhet.",
         "event_shield_reason_unsigned_device": "Kryptert med en enhet som ikke er verifisert av eieren.",
@@ -1364,6 +1367,10 @@
         "name_email_mxid_share_space": "Inviter noen ved å bruke navn, e-postadresse, brukernavn (lik <userId/>) eller <a> del dette området</a>.",
         "name_mxid_share_room": "Inviter noen ved å bruke navnet, brukernavnet (som <userId/>) eller <a>del dette rommet</a>.",
         "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt, brukernavnet (lik <userId/>) eller <a> dele dette området</a>.",
+        "progress": {
+            "dont_close": "Ikke lukk appen før den er ferdig.",
+            "preparing": "Forbereder invitasjoner..."
+        },
         "recents_section": "Nylige samtaler",
         "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
         "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",
@@ -1532,6 +1539,9 @@
         "render_reaction_images_description": "Noen ganger omtalt som \"egendefinerte emojier\".",
         "report_to_moderators": "Rapporter til moderatorene",
         "report_to_moderators_description": "I rom som støtter moderering, kan du bruke \"Rapporter\"-knappen for å rapportere misbruk til rommoderatorene.",
+        "share_history_on_invite": "Del kryptert historikk med nye medlemmer",
+        "share_history_on_invite_description": "Når du inviterer en bruker til et kryptert rom som har historikkvisibilitet satt til «delt», deler du kryptert historikk med den brukeren, og aksepterer kryptert historikk når du blir invitert til et slikt rom.",
+        "share_history_on_invite_warning": "Denne funksjonen er EKSPERIMENTELL, og ikke alle sikkerhetstiltak er implementert. Ikke aktiver på produksjonskontoer.",
         "sliding_sync": "Sliding Sync modus",
         "sliding_sync_description": "Under aktiv utvikling, kan ikke deaktiveres.",
         "sliding_sync_disabled_notice": "Logg ut og inn igjen for å deaktivere",
@@ -1653,8 +1663,8 @@
         "filter_placeholder": "Filtrer rommets medlemmer",
         "invite_button_no_perms_tooltip": "Du har ikke tillatelse til å invitere brukere",
         "invited_label": "Invitert",
-        "no_matches": "Ingen treff",
-        "power_label": "%(userName)s (styrkenivå %(powerLevelNumber)s)"
+        "list_title": "Medlemsliste",
+        "no_matches": "Ingen treff"
     },
     "member_list_back_action_label": "Medlemmer av rommet",
     "message_edit_dialog_title": "Meldingsredigeringer",
@@ -1758,6 +1768,7 @@
     },
     "power_level": {
         "admin": "Administrator",
+        "creator": "Eier",
         "custom": "Egendefinert (%(level)s)",
         "custom_level": "Tilpasset nivå",
         "default": "Standard",
@@ -1866,11 +1877,6 @@
                 "other": "Du kan bare feste opptil %(count)s widgets"
             },
             "menu": "Åpne meny",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Her finner du alle festede meldinger. Hold musepekeren over en melding og velg \"Fest\" for å legge den til.",
-                "title": "Alle nye festede meldinger"
-            },
             "reply_thread": "Svar på en <link> trådmelding </link>",
             "unpin_all": {
                 "button": "Løsne alle meldinger",
@@ -1911,6 +1917,7 @@
         "thread_list": {
             "context_menu_label": "Trådalternativer"
         },
+        "title": "Høyre panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -2001,8 +2008,6 @@
             "send_message_start_dm": "Send din første melding for å invitere <displayName/> til chat",
             "start_of_dm_history": "Dette er begynnelsen på direktemeldingshistorikken din med <displayName/>.",
             "start_of_room": "Dette er starten på <roomName/>.",
-            "topic": "Emne: %(topic)s ",
-            "topic_edit": "Emne: %(topic)s (<a>rediger</a>)",
             "unencrypted_warning": "Ende-til-ende-kryptering er ikke aktivert",
             "user_created": "%(displayName)s opprettet dette rommet.",
             "you_created": "Du opprettet dette rommet."
@@ -2057,8 +2062,9 @@
         "pinned_message_banner": {
             "button_close_list": "Lukk liste",
             "button_view_all": "Vis alle",
-            "description": "Dette rommet har festede meldinger. Klikk for å se dem.",
-            "go_to_message": "Vis den festede meldingen i tidslinjen.",
+            "description": "Festede meldinger",
+            "go_to_newest_message": "Se den festede meldingen i tidslinjen og den nyeste festede meldingen her",
+            "go_to_next_message": "Se den festede meldingen i tidslinjen og den nest eldste festede meldingen her",
             "title": "<bold>%(index)s av %(length)s</bold> festede meldinger"
         },
         "read_topic": "Klikk for å lese emnet",
@@ -3370,6 +3376,7 @@
             "unable_to_decrypt": "Kan ikke dekryptere meldingen"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
+        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Laster ned",
         "download_failed": "Nedlasting mislyktes",
         "download_failed_description": "Det oppstod en feil under nedlasting av denne filen",
@@ -3391,6 +3398,7 @@
             "unable_to_find": "Prøvde å laste inn et bestemt punkt i dette rommets tidslinje, men klarte ikke å finne det."
         },
         "m.audio": {
+            "audio_player": "Lydavspiller",
             "error_downloading_audio": "Feil ved nedlasting av lyd",
             "error_processing_audio": "Feil ved prosessering av lydmelding",
             "error_processing_voice_message": "Feil ved prosessering av talemelding",
@@ -3953,7 +3961,6 @@
         "dialpad": "Nummerpanel",
         "disable_camera": "Stopp kameraet",
         "disable_microphone": "Demp mikrofonen",
-        "disabled_no_one_here": "Det er ingen her å ringe",
         "disabled_no_perms_start_video_call": "Du har ikke tillatelse til å starte videosamtaler",
         "disabled_no_perms_start_voice_call": "Du har ikke tillatelse til å starte taleanrop",
         "disabled_ongoing_call": "Pågående samtale",

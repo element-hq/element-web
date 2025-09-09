@@ -26,7 +26,6 @@ import {
     getAllByLabelText,
     getByLabelText,
     getByText,
-    queryAllByLabelText,
     queryByLabelText,
     render,
     type RenderOptions,
@@ -48,16 +47,16 @@ import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../../../src/stores/CallStore";
-import { type Call, ElementCall } from "../../../../../../src/models/Call";
+import { type Call } from "../../../../../../src/models/Call";
 import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
 import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
-import * as UseCall from "../../../../../../src/hooks/useCall";
 import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
+import { ElementCallMemberEventType } from "../../../../../../src/call-types";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -96,6 +95,10 @@ describe("RoomHeader", () => {
 
         setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
         jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
+
+        // Mock CallStore.instance.getCall to return null by default
+        // Individual tests can override this when they need a specific Call object
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
     });
 
     afterEach(() => {
@@ -326,14 +329,6 @@ describe("RoomHeader", () => {
             SdkConfig.reset();
         });
 
-        it("you can't call if you're alone", () => {
-            mockRoomMembers(room, 1);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "There's no one here to call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
         it("you can call when you're two in the room", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 2);
@@ -488,71 +483,6 @@ describe("RoomHeader", () => {
             }
         });
 
-        it("can't call if you have no friends and cannot invite friends", () => {
-            mockRoomMembers(room, 1);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "There's no one here to call")) {
-                expect(button).toHaveAttribute("aria-disabled", "true");
-            }
-        });
-
-        it("can call if you have no friends but can invite friends", () => {
-            mockRoomMembers(room, 1);
-            // go through all the different `canInvite` and `getJoinRule` combinations
-
-            // check where we can't do anything but can upgrade
-            jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(true);
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
-            SdkConfig.add({
-                element_call: {
-                    guest_spa_url: "https://guest_spa_url.com",
-                },
-            });
-            const { container: containerNoInviteNotPublicCanUpgradeAccess } = render(
-                <RoomHeader room={room} />,
-                getWrapper(),
-            );
-            expect(
-                queryAllByLabelText(containerNoInviteNotPublicCanUpgradeAccess, "There's no one here to call"),
-            ).toHaveLength(0);
-
-            // dont allow upgrading anymore and go through the other combinations
-            jest.spyOn(room.currentState, "maySendStateEvent").mockReturnValue(false);
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
-            SdkConfig.add({
-                element_call: {
-                    guest_spa_url: "https://guest_spa_url.com",
-                },
-            });
-            const { container: containerNoInviteNotPublic } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryAllByLabelText(containerNoInviteNotPublic, "There's no one here to call")).toHaveLength(2);
-
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
-            jest.spyOn(room, "canInvite").mockReturnValue(false);
-            const { container: containerNoInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryAllByLabelText(containerNoInvitePublic, "There's no one here to call")).toHaveLength(2);
-
-            jest.spyOn(room, "canInvite").mockReturnValue(true);
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
-            const { container: containerInviteNotPublic } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryAllByLabelText(containerInviteNotPublic, "There's no one here to call")).toHaveLength(2);
-
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
-            jest.spyOn(room, "canInvite").mockReturnValue(true);
-            const { container: containerInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryAllByLabelText(containerInvitePublic, "There's no one here to call")).toHaveLength(0);
-
-            // Clear guest_spa_url
-            SdkConfig.reset();
-            // last we can allow everything but without guest_spa_url nothing will work
-            const { container: containerAllAllowedButNoGuestSpaUrl } = render(<RoomHeader room={room} />, getWrapper());
-            expect(
-                queryAllByLabelText(containerAllAllowedButNoGuestSpaUrl, "There's no one here to call"),
-            ).toHaveLength(2);
-        });
-
         it("calls using legacy or jitsi", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 2);
@@ -599,7 +529,7 @@ describe("RoomHeader", () => {
             mockRoomMembers(room, 3);
 
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
-                if (key === ElementCall.MEMBER_EVENT_TYPE.name) return true;
+                if (key === ElementCallMemberEventType.name) return true;
                 return false;
             });
 
@@ -628,7 +558,8 @@ describe("RoomHeader", () => {
 
         it("join button is shown if there is an ongoing call", async () => {
             mockRoomMembers(room, 3);
-            jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
@@ -636,7 +567,8 @@ describe("RoomHeader", () => {
 
         it("join button is disabled if there is an other ongoing call", async () => {
             mockRoomMembers(room, 3);
-            jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             jest.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
             );
@@ -656,7 +588,8 @@ describe("RoomHeader", () => {
 
         it("close lobby button is shown if there is an ongoing call but we are viewing the lobby", async () => {
             mockRoomMembers(room, 3);
-            jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
             render(<RoomHeader room={room} />, getWrapper());
@@ -861,6 +794,34 @@ describe("RoomHeader", () => {
         expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ action: "open_room_settings" }));
     });
 });
+
+/**
+ * Creates a mock Call object with stable participants to prevent React dependency errors
+ */
+function createMockCall(roomId: string = "!1:example.org", participantCount: number = 0): Call {
+    const participants = new Map();
+
+    // Create mock participants with devices
+    for (let i = 0; i < participantCount; i++) {
+        const mockMember = {
+            userId: `@user-${i}:example.org`,
+            name: `Member ${i}`,
+        } as RoomMember;
+
+        const deviceSet = new Set([`device-${i}`]);
+        participants.set(mockMember, deviceSet);
+    }
+
+    return {
+        roomId,
+        participants,
+        widget: { id: "test-widget" },
+        connectionState: "disconnected",
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+    } as unknown as Call;
+}
 
 /**
  *

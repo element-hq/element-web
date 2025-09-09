@@ -1088,8 +1088,7 @@
         "share_type_prompt": "Kiel vi volas kunhavigi vian lokon?"
     },
     "member_list": {
-        "filter_placeholder": "Filtri ĉambranojn",
-        "power_label": "%(userName)s (povnivelo je %(powerLevelNumber)s)"
+        "filter_placeholder": "Filtri ĉambranojn"
     },
     "message_edit_dialog_title": "Redaktoj de mesaĝoj",
     "mobile_guide": {
@@ -1281,8 +1280,6 @@
             "room_invite": "Inviti nur al ĉi tiu ĉambro",
             "start_of_dm_history": "Jen la komenco de historio de viaj rektaj mesaĝoj kun <displayName/>.",
             "start_of_room": "Jen la komenco de <roomName/>.",
-            "topic": "Temo: %(topic)s ",
-            "topic_edit": "Temo: %(topic)s (<a>redakti</a>)",
             "unencrypted_warning": "Tutvoja ĉifrado ne estas ŝaltita",
             "user_created": "%(displayName)s kreis ĉi tiun ĉambron.",
             "you_created": "Vi kreis ĉi tiun ĉambron."
@@ -2091,6 +2088,7 @@
         },
         "creation_summary_dm": "%(creator)s kreis ĉi tiun individuan ĉambron.",
         "creation_summary_room": "%(creator)s kreis kaj agordis la ĉambron.",
+        "download_action_decrypting": "Malĉifrante",
         "edits": {
             "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
             "tooltip_sub": "Klaku por vidi redaktojn",

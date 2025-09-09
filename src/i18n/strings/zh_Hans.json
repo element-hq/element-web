@@ -1337,8 +1337,7 @@
         "toggle_attribution": "切换属性"
     },
     "member_list": {
-        "filter_placeholder": "过滤房间成员",
-        "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
+        "filter_placeholder": "过滤房间成员"
     },
     "member_list_back_action_label": "房间成员",
     "message_edit_dialog_title": "消息编辑历史",
@@ -1594,8 +1593,6 @@
             "send_message_start_dm": "发送你的第一条消息邀请<displayName/>来聊天",
             "start_of_dm_history": "这是你与<displayName/>的私聊历史的开端。",
             "start_of_room": "这里是 <roomName/> 的开始。",
-            "topic": "话题：%(topic)s ",
-            "topic_edit": "话题：%(topic)s（<a>编辑</a>）",
             "unencrypted_warning": "未启用端到端加密",
             "user_created": "%(displayName)s 创建了此房间。",
             "you_created": "你创建了此房间。"
@@ -2589,6 +2586,7 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
+        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -3112,7 +3110,6 @@
         "dialpad": "拨号盘",
         "disable_camera": "关闭相机",
         "disable_microphone": "静音麦克风",
-        "disabled_no_one_here": "这里没有人可以打电话",
         "disabled_no_perms_start_video_call": "你没有权限开始视频通话",
         "disabled_no_perms_start_voice_call": "你没有权限开始语音通话",
         "disabled_ongoing_call": "正在进行的通话",

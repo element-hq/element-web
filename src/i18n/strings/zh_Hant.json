@@ -1427,8 +1427,7 @@
     },
     "member_list": {
         "filter_placeholder": "過濾聊天室成員",
-        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者",
-        "power_label": "%(userName)s（權限等級 %(powerLevelNumber)s）"
+        "invite_button_no_perms_tooltip": "您沒有權限邀請使用者"
     },
     "member_list_back_action_label": "聊天室成員",
     "message_edit_dialog_title": "訊息編輯紀錄",
@@ -1727,8 +1726,6 @@
             "send_message_start_dm": "傳送您的第一則訊息以邀請 <displayName/> 來聊天",
             "start_of_dm_history": "這是您與 <displayName/> 私人訊息紀錄的開頭。",
             "start_of_room": "這是 <roomName/> 的開頭。",
-            "topic": "主題：%(topic)s ",
-            "topic_edit": "主題：%(topic)s（<a>編輯</a>）",
             "unencrypted_warning": "端對端加密未啟用",
             "user_created": "%(displayName)s 建立了此聊天室。",
             "you_created": "您建立了此聊天室。"
@@ -2833,6 +2830,7 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
+        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",
@@ -3389,7 +3387,6 @@
         "dialpad": "撥號鍵盤",
         "disable_camera": "關閉相機",
         "disable_microphone": "麥克風靜音",
-        "disabled_no_one_here": "這裡沒有人可以通話",
         "disabled_no_perms_start_video_call": "您沒有權限開始視訊通話",
         "disabled_no_perms_start_voice_call": "您無權限開始語音通話",
         "disabled_ongoing_call": "正在進行通話",

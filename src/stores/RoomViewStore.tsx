@@ -26,7 +26,7 @@ import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
-import { getCachedRoomIDForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
+import { getCachedRoomIdForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -438,6 +438,7 @@ export class RoomViewStore extends EventEmitter {
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
+                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
                 });
             }
 
@@ -445,10 +446,16 @@ export class RoomViewStore extends EventEmitter {
                 await setMarkedUnreadState(room, MatrixClientPeg.safeGet(), false);
             }
         } else if (payload.room_alias) {
+            let roomId: string;
+            let viaServers: string[] | undefined;
+
             // Try the room alias to room ID navigation cache first to avoid
             // blocking room navigation on the homeserver.
-            let roomId = getCachedRoomIDForAlias(payload.room_alias);
-            if (!roomId) {
+            const cachedResult = getCachedRoomIdForAlias(payload.room_alias);
+            if (cachedResult) {
+                roomId = cachedResult.roomId;
+                viaServers = cachedResult.viaServers;
+            } else {
                 // Room alias cache miss, so let's ask the homeserver. Resolve the alias
                 // and then do a second dispatch with the room ID acquired.
                 this.setState({
@@ -467,8 +474,9 @@ export class RoomViewStore extends EventEmitter {
                 });
                 try {
                     const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(payload.room_alias);
-                    storeRoomAliasInCache(payload.room_alias, result.room_id);
+                    storeRoomAliasInCache(payload.room_alias, result.room_id, result.servers);
                     roomId = result.room_id;
+                    viaServers = result.servers;
                 } catch (err) {
                     logger.error("RVS failed to get room id for alias: ", err);
                     this.dis?.dispatch<ViewRoomErrorPayload>({
@@ -485,6 +493,7 @@ export class RoomViewStore extends EventEmitter {
             this.dis?.dispatch({
                 ...payload,
                 room_id: roomId,
+                via_servers: viaServers,
             });
         }
     }
@@ -509,18 +518,18 @@ export class RoomViewStore extends EventEmitter {
             joining: true,
         });
 
-        // take a copy of roomAlias & roomId as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId } = this.state;
+        // take a copy of roomAlias, roomId & viaServers as they may change by the time the join is complete
+        const { roomAlias, roomId = payload.roomId, viaServers = [] } = this.state;
+        // prefer the room alias if we have one as it allows joining over federation even with no viaServers
         const address = roomAlias || roomId!;
 
         const joinOpts: IJoinRoomOpts = {
-            viaServers: this.state.viaServers || [],
+            viaServers,
             ...(payload.opts ?? {}),
         };
         if (SettingsStore.getValue("feature_share_history_on_invite")) {
             joinOpts.acceptSharedHistory = true;
         }
-
         try {
             const cli = MatrixClientPeg.safeGet();
             await retry<Room, MatrixError>(
@@ -548,7 +557,7 @@ export class RoomViewStore extends EventEmitter {
                 canAskToJoin: payload.canAskToJoin,
             });
 
-            if (payload.canAskToJoin) {
+            if (payload.canAskToJoin && err instanceof MatrixError && err.httpStatus === 403) {
                 this.dis?.dispatch({ action: Action.PromptAskToJoin });
             }
         }

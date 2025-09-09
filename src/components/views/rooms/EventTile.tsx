@@ -34,6 +34,7 @@ import {
     type UserVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
+import { uniqueId } from "lodash";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -76,13 +77,13 @@ import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
-import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
+import { ElementCallEventType } from "../../../call-types";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -666,6 +667,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.context.timelineRenderingType === TimelineRenderingType.Notification) return false;
         if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
 
+        if (this.props.isRedacted) return false;
+
         const cli = MatrixClientPeg.safeGet();
         const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         // get the actions for the previous version of the event too if it is an edit
@@ -916,6 +919,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
+        const id = uniqueId();
+
         const {
             hasRenderer,
             isBubbleMessage,
@@ -984,7 +989,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent || this.state.contextMenu,
             mx_EventTile_continuation:
-                isContinuation || eventType === EventType.CallInvite || ElementCall.CALL_EVENT_TYPE.matches(eventType),
+                isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
@@ -1037,7 +1042,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         } else if (
             (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File) ||
             eventType === EventType.CallInvite ||
-            ElementCall.CALL_EVENT_TYPE.matches(eventType)
+            ElementCallEventType.matches(eventType)
         ) {
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;
@@ -1140,7 +1145,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
-            pinnedMessageBadge = <PinnedMessageBadge />;
+            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={id} tabIndex={0} />;
         }
 
         let reactionsRow: JSX.Element | undefined;
@@ -1235,7 +1240,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {avatar}
                             {sender}
                         </div>,
-                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {replyChain}
                             {renderTile(TimelineRenderingType.Thread, {
@@ -1423,7 +1428,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         {sender}
                         {ircPadlock}
                         {avatar}
-                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {groupTimestamp}
                             {groupPadlock}

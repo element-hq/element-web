@@ -17,9 +17,6 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import { stubClient } from "../../../../test-utils";
 import { populateThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { Features } from "../../../../../src/settings/Settings.tsx";
 
 describe("ThreadsActivityCentre", () => {
     const getTACButton = () => {
@@ -92,42 +89,9 @@ describe("ThreadsActivityCentre", () => {
         );
     });
 
-    beforeEach(async () => {
-        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, false);
-    });
-
     it("should render the threads activity centre button", async () => {
         renderTAC();
         expect(getTACButton()).toBeInTheDocument();
-    });
-
-    it("should render the release announcement", async () => {
-        // Enable release announcement
-        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
-
-        renderTAC();
-        expect(document.body).toMatchSnapshot();
-    });
-
-    it("should render not display the tooltip when the release announcement is displayed", async () => {
-        // Enable release announcement
-        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
-
-        renderTAC();
-
-        // The tooltip should not be displayed
-        await userEvent.hover(getTACButton());
-        expect(screen.queryByRole("tooltip")).toBeNull();
-    });
-
-    it("should close the release announcement when the TAC button is clicked", async () => {
-        // Enable release announcement
-        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
-
-        renderTAC();
-        await userEvent.click(getTACButton());
-        expect(getTACMenu()).toBeInTheDocument();
-        expect(document.body).toMatchSnapshot();
     });
 
     it("should render the threads activity centre button and the display label", async () => {
