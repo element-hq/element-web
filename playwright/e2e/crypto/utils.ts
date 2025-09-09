@@ -218,6 +218,8 @@ export async function logIntoElement(page: Page, credentials: Credentials) {
 /**
  * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
  * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ *
+ * Afterwards, waits for the application to redirect to the home page.
  */
 export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
     await logIntoElement(page, credentials);
@@ -236,6 +238,10 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
     await page.locator(".mx_Dialog").getByTitle("Recovery key").fill(recoveryKey);
     await page.getByRole("button", { name: "Continue", disabled: false }).click();
     await page.getByRole("button", { name: "Done" }).click();
+
+    // The application should now redirect to `/#/home`. Wait for that to happen, otherwise if a test immediately does
+    // a `viewRoomById` or similar, it could race.
+    await page.waitForURL("/#/home");
 }
 
 /**
