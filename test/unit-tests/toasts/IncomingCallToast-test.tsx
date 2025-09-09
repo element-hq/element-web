@@ -105,7 +105,7 @@ describe("IncomingCallToast", () => {
 
     const renderToast = () => {
         call.event.getContent = () => notifyContent as any;
-        render(<IncomingCallToast notifyEvent={call.event} />);
+        render(<IncomingCallToast notificationEvent={call.event} />);
     };
 
     it("correctly shows all the information", () => {
@@ -131,7 +131,7 @@ describe("IncomingCallToast", () => {
             }) as any;
 
         const playMock = jest.spyOn(LegacyCallHandler.instance, "play");
-        render(<IncomingCallToast notifyEvent={call.event} />);
+        render(<IncomingCallToast notificationEvent={call.event} />);
         expect(playMock).toHaveBeenCalled();
     });
 
