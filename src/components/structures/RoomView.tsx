@@ -133,6 +133,7 @@ import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
+import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1402,15 +1403,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!roomId) return false;
 
         const room = this.context.client?.getRoom(roomId);
-        if (room instanceof LocalRoom) {
-            // For local room check the state.
-            // The crypto check fails because the eventId is not valid (it is a local id)
-            return (room as LocalRoom).isEncryptionEnabled();
-        }
-
         const crypto = this.context.client?.getCrypto();
-        if (!crypto) return false;
-        return await crypto.isEncryptionEnabledInRoom(roomId);
+        if (!room || !crypto) return false;
+
+        return isRoomEncrypted(room, crypto);
     }
 
     private async calculateRecommendedVersion(room: Room): Promise<void> {
