@@ -251,19 +251,28 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private renderJoinRule(): JSX.Element {
         const room = this.props.room;
-
-        let aliasWarning: JSX.Element | undefined;
-        if (room.getJoinRule() === JoinRule.Public && !this.state.hasAliases) {
-            aliasWarning = (
-                <div className="mx_SecurityRoomSettingsTab_warning">
-                    <WarningIcon width={15} height={15} />
-                    <span>{_t("room_settings|security|public_without_alias_warning")}</span>
-                </div>
-            );
-        }
-        const description = _t("room_settings|security|join_rule_description", {
-            roomName: room.name,
-        });
+        const isPublic = room.getJoinRule() === JoinRule.Public;
+        const description = (
+            <>
+                <p>
+                    {_t("room_settings|security|join_rule_description", {
+                        roomName: room.name,
+                    })}
+                </p>
+                {isPublic && this.state.history === HistoryVisibility.WorldReadable && (
+                    <div className="mx_SecurityRoomSettingsTab_warning">
+                        <WarningIcon width={15} height={15} />
+                        <span>{_t("room_settings|security|join_rule_world_readable_description")}</span>
+                    </div>
+                )}
+                {isPublic && !this.state.hasAliases && (
+                    <div className="mx_SecurityRoomSettingsTab_warning">
+                        <WarningIcon width={15} height={15} />
+                        <span>{_t("room_settings|security|public_without_alias_warning")}</span>
+                    </div>
+                )}
+            </>
+        );
 
         let advanced: JSX.Element | undefined;
         if (room.getJoinRule() === JoinRule.Public) {
@@ -290,7 +299,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     onError={this.onJoinRuleChangeError}
                     closeSettingsFn={this.props.closeSettingsFn}
                     promptUpgrade={true}
-                    aliasWarning={aliasWarning}
                 />
                 {advanced}
             </SettingsFieldset>
@@ -340,6 +348,57 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             const { finished } = dialog;
             const [confirm] = await finished;
             if (!confirm) return false;
+        }
+
+        // If the room is going from public to private AND the room is join readable, we want to encourage the user
+        // to change the history visibility.
+        const currentlyPublic = this.props.room.getJoinRule() === JoinRule.Public;
+        if (this.state.history === HistoryVisibility.WorldReadable && currentlyPublic && joinRule !== JoinRule.Public) {
+            const client = this.context;
+            const canChangeHistory = this.props.room.currentState?.mayClientSendStateEvent(
+                EventType.RoomHistoryVisibility,
+                client,
+            );
+
+            // If we can't change the history visibility, then don't allow the join rule transition. This is a unlikely occurance
+            // and if this is the case, a room administator should step in.
+            if (!canChangeHistory) {
+                const dialog = Modal.createDialog(ErrorDialog, {
+                    title: _t(
+                        "room_settings|security|cannot_change_to_private_due_to_missing_history_visiblity_permissions|title",
+                    ),
+                    description: (
+                        <p>
+                            {_t(
+                                "room_settings|security|cannot_change_to_private_due_to_missing_history_visiblity_permissions|description",
+                            )}
+                        </p>
+                    ),
+                });
+                await dialog.finished;
+                return false;
+            }
+
+            // Adjust the history visibility first.
+            try {
+                await this.context.sendStateEvent(
+                    this.props.room.roomId,
+                    EventType.RoomHistoryVisibility,
+                    {
+                        history_visibility: HistoryVisibility.Shared,
+                    },
+                    "",
+                );
+                this.setState({ history: HistoryVisibility.Shared });
+            } catch (ex) {
+                logger.error("Failed to change history visibility", ex);
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("common|error"),
+                    description: _t("error|update_history_visibility"),
+                });
+                // If we fail to update the history visibility
+                return false;
+            }
         }
 
         return true;

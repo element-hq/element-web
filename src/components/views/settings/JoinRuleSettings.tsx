@@ -35,7 +35,6 @@ export interface JoinRuleSettingsProps {
     closeSettingsFn(): void;
     onError(error: unknown): void;
     beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
-    aliasWarning?: ReactNode;
     disabledOptions?: Set<JoinRule>;
     hiddenOptions?: Set<JoinRule>;
     recommendedOption?: JoinRule;
@@ -44,7 +43,6 @@ export interface JoinRuleSettingsProps {
 const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     room,
     promptUpgrade,
-    aliasWarning,
     onError,
     beforeChange,
     closeSettingsFn,
@@ -209,12 +207,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         {
             value: JoinRule.Public,
             label: withRecommendLabel(_t("common|public"), JoinRule.Public),
-            description: (
-                <>
-                    {_t("room_settings|security|join_rule_public_description")}
-                    {aliasWarning}
-                </>
-            ),
+            description: <>{_t("room_settings|security|join_rule_public_description")}</>,
         },
     ];
 

@@ -41,7 +41,7 @@ test.describe("Room list", () => {
             }
         });
 
-        test("should render the room list", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        test("should render the room list", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
             const roomListView = getRoomList(page);
             await expect(roomListView.getByRole("option", { name: "Open room room29" })).toBeVisible();
             await expect(roomListView).toMatchScreenshot("room-list.png");
@@ -54,6 +54,7 @@ test.describe("Room list", () => {
             // scrollListToBottom seems to leave the mouse hovered over the list, move it away.
             await page.getByRole("button", { name: "User menu" }).hover();
 
+            await expect(axe).toHaveNoViolations();
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 

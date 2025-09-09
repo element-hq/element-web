@@ -718,6 +718,7 @@
         "personal_space_description": "A private space to organise your rooms",
         "private_description": "Invite only, best for yourself or teams",
         "private_heading": "Your private space",
+        "private_only_heading": "Your space",
         "private_personal_description": "Make sure the right people have access to %(name)s",
         "private_personal_heading": "Who are you working with?",
         "private_space": "Me and my teammates",
@@ -1127,6 +1128,7 @@
         "tls": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
         "unknown": "Unknown error",
         "unknown_error_code": "unknown error code",
+        "update_history_visibility": "Failed to change history visibility",
         "update_power_level": "Failed to change power level"
     },
     "error_app_open_in_another_tab": "Switch to the other tab to connect to %(brand)s. This tab can now be closed.",
@@ -2384,6 +2386,10 @@
             "users_default": "Default role"
         },
         "security": {
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "You do not have permissions to alter the history visibility of the room. This is dangerous as it could allow unjoined users to read messages.",
+                "title": "Cannot make room private"
+            },
             "enable_encryption_confirm_description": "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
             "enable_encryption_confirm_title": "Enable encryption?",
             "enable_encryption_public_room_confirm_description_1": "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.",
@@ -2401,7 +2407,7 @@
             "history_visibility_joined": "Members only (since they joined)",
             "history_visibility_legend": "Who can read history?",
             "history_visibility_shared": "Members only (since the point in time of selecting this option)",
-            "history_visibility_warning": "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.",
+            "history_visibility_warning": "The visibility of existing history will not be changed.",
             "history_visibility_world_readable": "Anyone",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
@@ -2444,6 +2450,7 @@
                 "other": "Updating spaces... (%(progress)s out of %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Upgrading room",
+            "join_rule_world_readable_description": "Changing who can join the room will change the visibility of future messages too.",
             "public_without_alias_warning": "To link to this room, please add an address.",
             "publish_room": "Make this room visible in the public room directory.",
             "publish_space": "Make this space visible in the public room directory.",
