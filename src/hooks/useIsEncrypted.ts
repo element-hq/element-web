@@ -24,7 +24,7 @@ import { LocalRoom } from "../models/LocalRoom.ts";
 export async function isRoomEncrypted(room: Room, cryptoApi: CryptoApi): Promise<boolean> {
     if (room instanceof LocalRoom) {
         // For local room check the state.
-        // The crypto check fails because the eventId is not valid (it is a local id)
+        // The crypto check fails because the room ID is not valid (it is a local id)
         return (room as LocalRoom).isEncryptionEnabled();
     }
 
