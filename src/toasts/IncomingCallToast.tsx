@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useEffect, useState } from "react";
-import { type Room, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCDeclineContent, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -162,6 +162,24 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         [dismissToast, notificationEvent],
     );
 
+    // Dismiss if session got declined remotely.
+    const onTimelineChange = useCallback(
+        (ev: MatrixEvent) => {
+            const content = ev.getContent() as Partial<IRTCDeclineContent>;
+            const userId = room?.client.getUserId();
+            if (
+                ev.getType() === EventType.RTCDecline &&
+                userId !== undefined &&
+                ev.getSender() === userId && // It is our decline not someone elses
+                content["m.relates_to"] !== undefined &&
+                content["m.relates_to"].event_id === notificationEvent.getId() // The event declines this ringing toast.
+            ) {
+                dismissToast();
+            }
+        },
+        [dismissToast, notificationEvent, room?.client],
+    );
+
     // Dismiss if another device from this user joins.
     const onParticipantChange = useCallback(
         (participants: Map<RoomMember, Set<string>>, prevParticipants: Map<RoomMember, Set<string>>) => {
@@ -222,6 +240,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
 
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
+    useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
 
     return (
         <TooltipProvider>
