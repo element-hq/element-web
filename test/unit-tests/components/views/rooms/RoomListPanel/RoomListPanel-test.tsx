@@ -8,13 +8,24 @@
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import { RoomListPanel } from "../../../../../../src/components/views/rooms/RoomListPanel";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
+import { LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
+}));
+
+jest.mock("../../../../../../src/accessibility/LandmarkNavigation", () => ({
+    LandmarkNavigation: {
+        findAndFocusNextLandmark: jest.fn(),
+    },
+    Landmark: {
+        ROOM_SEARCH: "something",
+    },
 }));
 
 describe("<RoomListPanel />", () => {
@@ -36,5 +47,16 @@ describe("<RoomListPanel />", () => {
         mocked(shouldShowComponent).mockReturnValue(false);
         renderComponent();
         expect(screen.queryByRole("button", { name: "Search Ctrl K" })).toBeNull();
+    });
+
+    it("should move to the next landmark when the shortcut key is pressed", async () => {
+        renderComponent();
+
+        const userEv = userEvent.setup();
+
+        screen.getByRole("navigation", { name: "Room list" }).focus();
+        await userEv.keyboard("{Control>}{F6}{/Control}");
+
+        expect(LandmarkNavigation.findAndFocusNextLandmark).toHaveBeenCalled();
     });
 });
