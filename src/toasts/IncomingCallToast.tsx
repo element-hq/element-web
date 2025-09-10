@@ -13,7 +13,7 @@ import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/vi
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type IRTCDeclineContent, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -165,14 +165,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     // Dismiss if session got declined remotely.
     const onTimelineChange = useCallback(
         (ev: MatrixEvent) => {
-            const content = ev.getContent() as Partial<IRTCDeclineContent>;
             const userId = room?.client.getUserId();
             if (
                 ev.getType() === EventType.RTCDecline &&
                 userId !== undefined &&
                 ev.getSender() === userId && // It is our decline not someone elses
-                content["m.relates_to"] !== undefined &&
-                content["m.relates_to"].event_id === notificationEvent.getId() // The event declines this ringing toast.
+                ev.relationEventId === notificationEvent.getId() // The event declines this ringing toast.
             ) {
                 dismissToast();
             }
