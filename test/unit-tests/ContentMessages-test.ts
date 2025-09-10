@@ -10,6 +10,7 @@ import { mocked } from "jest-mock";
 import {
     type ISendEventResponse,
     type MatrixClient,
+    MatrixError,
     RelationType,
     type UploadResponse,
 } from "matrix-js-sdk/src/matrix";
@@ -20,6 +21,9 @@ import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/Cont
 import { doMaybeLocalRoomAction } from "../../src/utils/local-room";
 import { createTestClient, flushPromises, mkEvent } from "../test-utils";
 import { BlurhashEncoder } from "../../src/BlurhashEncoder";
+import Modal from "../../src/Modal";
+import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
+import { _t } from "../../src/languageHandler";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
 
@@ -290,6 +294,28 @@ describe("ContentMessages", () => {
                     },
                 }),
             );
+        });
+
+        it("handles 413 error", async () => {
+            mocked(client.uploadContent).mockRejectedValue(
+                new MatrixError(
+                    {
+                        errcode: "M_TOO_LARGE",
+                        error: "File size limit exceeded",
+                    },
+                    413,
+                ),
+            );
+            const file = new File([], "fileName", { type: "image/jpeg" });
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+            expect(dialogSpy).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({
+                    description: _t("upload_failed_size", { fileName: "fileName" }),
+                }),
+            );
+            dialogSpy.mockRestore();
         });
     });
 
