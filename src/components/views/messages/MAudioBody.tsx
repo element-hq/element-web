@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX, useEffect, useMemo } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
@@ -27,7 +27,6 @@ import { AudioPlayerView } from "../../../shared-components/audio/AudioPlayerVie
 interface IState {
     error?: boolean;
     playback?: Playback;
-    audioPlayerVm?: AudioPlayerViewModel;
 }
 
 export default class MAudioBody extends React.PureComponent<IBodyProps, IState> {
@@ -63,7 +62,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // We should have a buffer to work with now: let's set it up
         const playback = PlaybackManager.instance.createPlaybackInstance(buffer, waveform);
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
-        this.setState({ playback, audioPlayerVm: new AudioPlayerViewModel({ playback, mediaName: content.body }) });
+        this.setState({ playback });
 
         if (isVoiceMessage(this.props.mxEvent)) {
             PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!).unsortedEnqueue(this.props.mxEvent, playback);
@@ -74,7 +73,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public componentWillUnmount(): void {
         this.state.playback?.destroy();
-        this.state.audioPlayerVm?.dispose();
     }
 
     protected get showFileBody(): boolean {
@@ -116,9 +114,35 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // At this point we should have a playable state
         return (
             <span className="mx_MAudioBody">
-                {this.state.audioPlayerVm && <AudioPlayerView vm={this.state.audioPlayerVm} />}
+                <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
                 {this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />}
             </span>
         );
     }
+}
+
+interface AudioPlayerProps {
+    /**
+     * The playback instance to control audio playback.
+     */
+    playback: Playback;
+    /**
+     * The name of the media being played
+     */
+    mediaName: string;
+}
+
+/**
+ * AudioPlayer component that initializes the AudioPlayerViewModel and renders the AudioPlayerView.
+ */
+function AudioPlayer({ playback, mediaName }: AudioPlayerProps): JSX.Element {
+    const vm = useMemo(() => new AudioPlayerViewModel({ playback, mediaName }), [playback, mediaName]);
+
+    useEffect(() => {
+        return () => {
+            vm.dispose();
+        };
+    }, [vm]);
+
+    return <AudioPlayerView vm={vm} />;
 }
