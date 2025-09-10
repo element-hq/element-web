@@ -20,6 +20,7 @@ import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 
 export enum PlaybackState {
+    Preparing = "preparing", // preparing to decode
     Decoding = "decoding",
     Stopped = "stopped", // no progress on timeline
     Paused = "paused", // some progress on timeline
@@ -145,6 +146,8 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         if (this.state !== PlaybackState.Decoding) {
             return;
         }
+
+        this.state = PlaybackState.Preparing;
 
         // The point where we use an audio element is fairly arbitrary, though we don't want
         // it to be too low. As of writing, voice messages want to show a waveform but audio
