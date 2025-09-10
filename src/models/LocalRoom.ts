@@ -63,12 +63,14 @@ export class LocalRoom extends Room {
      * True if the room has any encryption state event
      */
     public isEncryptionEnabled(): boolean {
-        // check the local room state
-        const encryptionState = this.getLiveTimeline()
-            .getState(Direction.Forward)
-            ?.getStateEvents(EventType.RoomEncryption)[0];
+        const roomState = this.getLiveTimeline().getState(Direction.Forward);
+        if (!roomState) return false;
+
+        const stateEvents = roomState.getStateEvents(EventType.RoomEncryption);
+        if (stateEvents.length === 0) return false;
+
         // if there is an encryption state event, it is encrypted.
         // Regardless of the content/algorithm, we assume it is encrypted.
-        return encryptionState instanceof MatrixEvent;
+        return stateEvents[0] instanceof MatrixEvent;
     }
 }
