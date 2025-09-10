@@ -80,9 +80,9 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
 }
 
 interface DeclineCallButtonWithNotificationEventProps {
-    notificationEvent: MatrixEvent;
-    room?: Room;
     onDeclined: (e: ButtonEvent) => void;
+    notificationEvent: MatrixEvent;
+    room: Room | null;
 }
 
 function DeclineCallButtonWithNotificationEvent({
@@ -142,11 +142,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
-        if (!notificationEvent.getId()) {
+        const notificationId = notificationEvent.getId();
+        if (!notificationId) {
             logger.warn("Could not get eventId for RTCNotification event");
             return;
         }
-        ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(notificationEvent.getId()!, roomId));
+        ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(notificationId, roomId));
         LegacyCallHandler.instance.pause(AudioID.Ring);
     }, [notificationEvent, roomId]);
 
@@ -248,6 +249,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     onClick={(e) => {
                         onJoinClick(e);
                     }}
+                    role="button"
                 >
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}

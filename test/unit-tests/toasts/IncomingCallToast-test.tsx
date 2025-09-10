@@ -19,6 +19,7 @@ import {
     EventType,
     RoomEvent,
     type IRoomTimelineData,
+    type ISendEventResponse,
 } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
@@ -390,6 +391,32 @@ describe("IncomingCallToast", () => {
 
         await waitFor(() =>
             expect(toastStore.dismissToast).not.toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+    });
+
+    it("sends a decline event when clicking the decline button and only dismiss after sending", async () => {
+        (toastStore.dismissToast as Mock).mockReset();
+
+        renderToast();
+
+        const { promise, resolve } = Promise.withResolvers<ISendEventResponse>();
+        client.sendRtcDecline.mockImplementation(() => {
+            return promise;
+        });
+
+        fireEvent.click(screen.getByRole("button", { name: "Decline" }));
+
+        expect(toastStore.dismissToast).not.toHaveBeenCalledWith(
+            getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+        );
+        expect(client.sendRtcDecline).toHaveBeenCalledWith("!1:example.org", "$notificationEventId");
+
+        resolve({ event_id: "$declineEventId" });
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
                 getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
