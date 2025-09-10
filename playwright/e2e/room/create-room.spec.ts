@@ -44,6 +44,21 @@ test.describe("Create Room", () => {
         },
     );
 
+    test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+        await page.getByRole("button", { name: "Add", exact: true }).click();
+        await page.getByText("Start new chat").click();
+
+        await page.getByTestId("invite-dialog-input").fill(user.userId);
+
+        await page.getByRole("button", { name: "Go" }).click();
+
+        await expect(page.getByText("Encryption enabled")).toBeVisible();
+        await expect(page.getByText("Send your first message to")).toBeVisible();
+
+        const composer = page.getByRole("region", { name: "Message composer" });
+        await expect(composer.getByRole("textbox", { name: "Send a message…" })).toBeVisible();
+    });
+
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
 
