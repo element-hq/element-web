@@ -193,8 +193,9 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     );
 
     // Dismiss on clicking join.
+    // If the skip lobby option is undefined, it will use to the shift key state to decide if the lobby is skipped.
     const onJoinClick = useCallback(
-        (e: ButtonEvent): void => {
+        (e: ButtonEvent, skipLobby?: boolean): void => {
             e.stopPropagation();
 
             // The toast will be automatically dismissed by the dispatcher callback above
@@ -202,7 +203,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
-                skipLobby: "shiftKey" in e ? e.shiftKey : false,
+                skipLobby: skipLobby ?? ("shiftKey" in e ? e.shiftKey : false),
                 metricsTrigger: undefined,
             });
         },
@@ -225,7 +226,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     return (
         <TooltipProvider>
             <>
-                <div className="mx_IncomingCallToast_content">
+                <div
+                    className="mx_IncomingCallToast_content"
+                    onClick={(e) => {
+                        onJoinClick(e);
+                    }}
+                >
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
                         {_t("voip|video_call_started")}
@@ -255,7 +261,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                             onDeclined={onCloseClick}
                         />
                         <JoinCallButtonWithCall
-                            onClick={onJoinClick}
+                            onClick={(e) => onJoinClick(e, true)}
                             call={call}
                             disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                         />
