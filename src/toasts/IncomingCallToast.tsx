@@ -10,6 +10,8 @@ import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { type Room, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
@@ -64,11 +66,11 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
     return (
         <Tooltip description={disTooltip ?? _t("voip|video_call")}>
             <Button
-                className="mx_IncomingCallToast_joinButton"
+                className="mx_IncomingCallToast_actionButton"
                 onClick={onClick}
                 disabled={disTooltip != undefined}
                 kind="primary"
-                Icon={VideoCallIcon}
+                Icon={CheckIcon}
                 size="sm"
             >
                 {_t("action|join")}
@@ -101,11 +103,12 @@ function DeclineCallButtonWithNotificationEvent({
     return (
         <Tooltip description={_t("voip|decline_call")}>
             <Button
-                className="mx_IncomingCallToast_joinButton"
+                className="mx_IncomingCallToast_actionButton"
                 onClick={onClick}
                 kind="primary"
+                destructive
                 disabled={declining}
-                Icon={VideoCallIcon}
+                Icon={CrossIcon}
                 size="sm"
             >
                 {_t("action|decline")}
@@ -222,25 +225,28 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     return (
         <TooltipProvider>
             <>
-                <div>
-                    <RoomAvatar room={room ?? undefined} size="24px" />
-                </div>
                 <div className="mx_IncomingCallToast_content">
+                    <div className="mx_IncomingCallToast_message">
+                        <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                        {_t("voip|video_call_started")}
+                    </div>
                     <div className="mx_IncomingCallToast_info">
-                        <span className="mx_IncomingCallToast_room">
-                            {room ? room.name : _t("voip|call_toast_unknown_room")}
-                        </span>
-                        <div className="mx_IncomingCallToast_message">{_t("voip|video_call_started")}</div>
-                        {call ? (
-                            <LiveContentSummaryWithCall call={call} />
-                        ) : (
-                            <LiveContentSummary
-                                type={LiveContentType.Video}
-                                text={_t("common|video")}
-                                active={false}
-                                participantCount={0}
-                            />
-                        )}
+                        <RoomAvatar room={room ?? undefined} size="32px" />
+                        <div>
+                            <span className="mx_IncomingCallToast_room">
+                                {room ? room.name : _t("voip|call_toast_unknown_room")}
+                            </span>
+                            {call ? (
+                                <LiveContentSummaryWithCall call={call} />
+                            ) : (
+                                <LiveContentSummary
+                                    type={LiveContentType.Video}
+                                    text={_t("common|video")}
+                                    active={false}
+                                    participantCount={0}
+                                />
+                            )}
+                        </div>
                     </div>
                     <div className="mx_IncomingCallToast_buttons">
                         <DeclineCallButtonWithNotificationEvent
