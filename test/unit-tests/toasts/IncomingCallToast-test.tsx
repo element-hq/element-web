@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, cleanup, fireEvent, waitFor } from "jest-matrix-react";
-import { mocked, type Mocked } from "jest-mock";
+import { type Mock, mocked, type Mocked } from "jest-mock";
 import {
     Room,
     RoomStateEvent,
@@ -16,9 +16,12 @@ import {
     MatrixEventEvent,
     type MatrixClient,
     type RoomMember,
+    EventType,
+    RoomEvent,
+    type IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
-import { type ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import {
     useMockedCalls,
@@ -27,6 +30,7 @@ import {
     mkRoomMember,
     setupAsyncStoreWithClient,
     resetAsyncStoreWithClient,
+    mkEvent,
 } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
@@ -37,13 +41,15 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ToastStore from "../../../src/stores/ToastStore";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../../src/toasts/IncomingCallToast";
 import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
+import { CallEvent } from "../../../src/models/Call";
 
 describe("IncomingCallToast", () => {
     useMockedCalls();
 
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let notifyContent: ICallNotifyContent;
+    let notificationEvent: MatrixEvent;
+
     let alice: RoomMember;
     let bob: RoomMember;
     let call: MockedCall;
@@ -64,10 +70,23 @@ describe("IncomingCallToast", () => {
         document.body.appendChild(audio);
 
         room = new Room("!1:example.org", client, "@alice:example.org");
-        notifyContent = {
-            call_id: "",
-            getRoomId: () => room.roomId,
-        } as unknown as ICallNotifyContent;
+        const ts = Date.now();
+        const notificationContent = {
+            "notification_type": "notification",
+            "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
+            "m.mentions": { user_ids: [], room: true },
+            "lifetime": 3000,
+            "sender_ts": ts,
+        } as unknown as IRTCNotificationContent;
+        notificationEvent = mkEvent({
+            type: EventType.RTCNotification,
+            user: "@userId:matrix.org",
+            content: notificationContent,
+            room: room.roomId,
+            ts,
+            id: "$notificationEventId",
+            event: true,
+        });
         alice = mkRoomMember(room.roomId, "@alice:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
 
@@ -104,8 +123,12 @@ describe("IncomingCallToast", () => {
     });
 
     const renderToast = () => {
-        call.event.getContent = () => notifyContent as any;
-        render(<IncomingCallToast notificationEvent={call.event} />);
+        call.event.getContent = () =>
+            ({
+                call_id: "",
+                getRoomId: () => room.roomId,
+            }) as any;
+        render(<IncomingCallToast notificationEvent={notificationEvent} />);
     };
 
     it("correctly shows all the information", () => {
@@ -124,14 +147,13 @@ describe("IncomingCallToast", () => {
     });
 
     it("start ringing on ring notify event", () => {
-        call.event.getContent = () =>
-            ({
-                ...notifyContent,
-                notify_type: "ring",
-            }) as any;
+        const oldContent = notificationEvent.getContent() as IRTCNotificationContent;
+        (notificationEvent as unknown as { getContent: () => IRTCNotificationContent }).getContent = () => {
+            return { ...oldContent, notification_type: "ring" } as IRTCNotificationContent;
+        };
 
         const playMock = jest.spyOn(LegacyCallHandler.instance, "play");
-        render(<IncomingCallToast notificationEvent={call.event} />);
+        render(<IncomingCallToast notificationEvent={notificationEvent} />);
         expect(playMock).toHaveBeenCalled();
     });
 
@@ -143,16 +165,18 @@ describe("IncomingCallToast", () => {
         screen.getByText("Video");
 
         screen.getByRole("button", { name: "Join" });
+        screen.getByRole("button", { name: "Decline" });
         screen.getByRole("button", { name: "Close" });
     });
 
-    it("joins the call and closes the toast", async () => {
+    it("opens the lobby and closes the toast when pressing on the toast", async () => {
         renderToast();
 
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
-        fireEvent.click(screen.getByRole("button", { name: "Join" }));
+        // click on the avatar (which is the example used for pressing on any area other than the buttons)
+        fireEvent.click(screen.getByRole("presentation", { name: "" }));
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewRoom,
@@ -163,12 +187,38 @@ describe("IncomingCallToast", () => {
         );
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
 
         defaultDispatcher.unregister(dispatcherRef);
     });
+
+    it("opens the call directly and closes the toast when pressing on the join button", async () => {
+        renderToast();
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+
+        // click on the avatar (which is the example used for pressing on any area other than the buttons)
+        fireEvent.click(screen.getByRole("button", { name: "Join" }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                skipLobby: true,
+                view_call: true,
+            }),
+        );
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+
+        defaultDispatcher.unregister(dispatcherRef);
+    });
+
     it("Dismiss toast if user starts call and skips lobby when using shift key click", async () => {
         renderToast();
 
@@ -186,7 +236,28 @@ describe("IncomingCallToast", () => {
         );
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+
+        defaultDispatcher.unregister(dispatcherRef);
+    });
+
+    it("Dismiss toast if user joins with a remote device", async () => {
+        renderToast();
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+
+        call.emit(
+            CallEvent.Participants,
+            new Map([[mkRoomMember(room.roomId, "@userId:matrix.org"), new Set(["a"])]]),
+            new Map(),
+        );
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
 
@@ -202,7 +273,7 @@ describe("IncomingCallToast", () => {
         fireEvent.click(screen.getByRole("button", { name: "Close" }));
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
 
@@ -220,7 +291,7 @@ describe("IncomingCallToast", () => {
 
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
     });
@@ -233,7 +304,7 @@ describe("IncomingCallToast", () => {
 
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
     });
@@ -244,7 +315,82 @@ describe("IncomingCallToast", () => {
 
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+    });
+
+    it("closes toast when a decline event was received", async () => {
+        (toastStore.dismissToast as Mock).mockReset();
+        renderToast();
+
+        room.emit(
+            RoomEvent.Timeline,
+            mkEvent({
+                user: "@userId:matrix.org",
+                type: EventType.RTCDecline,
+                content: { "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" } },
+                event: true,
+            }),
+            room,
+            undefined,
+            false,
+            {} as unknown as IRoomTimelineData,
+        );
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+    });
+
+    it("does not close toast when a decline event for another user was received", async () => {
+        (toastStore.dismissToast as Mock).mockReset();
+        renderToast();
+
+        room.emit(
+            RoomEvent.Timeline,
+            mkEvent({
+                user: "@userIdNotMe:matrix.org",
+                type: EventType.RTCDecline,
+                content: { "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" } },
+                event: true,
+            }),
+            room,
+            undefined,
+            false,
+            {} as unknown as IRoomTimelineData,
+        );
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).not.toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+    });
+
+    it("does not close toast when a decline event for another notification Event was received", async () => {
+        (toastStore.dismissToast as Mock).mockReset();
+        renderToast();
+
+        room.emit(
+            RoomEvent.Timeline,
+            mkEvent({
+                user: "@userId:matrix.org",
+                type: EventType.RTCDecline,
+                content: { "m.relates_to": { event_id: "$otherNotificationEventRelation", rel_type: "m.reference" } },
+                event: true,
+            }),
+            room,
+            undefined,
+            false,
+            {} as unknown as IRoomTimelineData,
+        );
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).not.toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
     });
