@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 
+import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
@@ -33,7 +34,6 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
-import { BetaPill } from "../../components/views/beta/BetaCard";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 
@@ -55,7 +55,6 @@ export const getPlatformCallTypeProps = (
             return {
                 label: _t("voip|element_call"),
                 analyticsName: "WebVoipOptionElementCall",
-                children: <BetaPill />,
             };
         case PlatformCallType.JitsiCall:
             return {
