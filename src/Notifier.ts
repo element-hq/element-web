@@ -494,8 +494,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             const content = ev.getContent() as IRTCNotificationContent;
             const roomId = ev.getRoomId();
             const eventId = ev.getId();
-            // Check maximum age (<= 15 seconds) of a call notify event that will trigger a ringing notification
 
+            // Check maximum age of a call notification event that will trigger a ringing notification
             if (Date.now() - getNotificationEventSendTs(ev) > content.lifetime) {
                 logger.warn("Received outdated RTCNotification event.");
                 return;

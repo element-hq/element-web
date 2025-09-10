@@ -95,7 +95,7 @@ function DeclineCallButtonWithNotificationEvent({
         async (e: ButtonEvent) => {
             e.stopPropagation();
             setDeclining(true);
-            await room?.client.sendRtcDecline(room.roomId, notificationEvent.getContent().call_id);
+            await room?.client.sendRtcDecline(room.roomId, notificationEvent.getId() ?? "");
             onDeclined(e);
         },
         [notificationEvent, onDeclined, room?.client, room?.roomId],
