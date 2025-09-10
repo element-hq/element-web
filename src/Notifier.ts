@@ -486,7 +486,6 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private performCustomEventHandling(ev: MatrixEvent): void {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(ev.getRoomId());
-        const type = ev.getType();
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
