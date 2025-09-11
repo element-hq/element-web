@@ -17,8 +17,6 @@ import { _t } from "../../../languageHandler";
 import MFileBody from "./MFileBody";
 import { type IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
-import { isVoiceMessage } from "../../../utils/EventUtils";
-import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
@@ -37,7 +35,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public async componentDidMount(): Promise<void> {
         let buffer: ArrayBuffer;
-
         try {
             try {
                 const blob = await this.props.mediaEventHelper!.sourceBlob.value;
@@ -64,12 +61,11 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
 
-        if (isVoiceMessage(this.props.mxEvent)) {
-            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!).unsortedEnqueue(this.props.mxEvent, playback);
-        }
-
-        // Note: the components later on will handle preparing the Playback class for us.
+        this.onMount(playback);
+        // Note: the components later on will handle preparing the Playback class for us
     }
+
+    protected onMount(playback: Playback): void {}
 
     public componentWillUnmount(): void {
         this.state.playback?.destroy();
