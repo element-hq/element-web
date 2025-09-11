@@ -35,6 +35,7 @@ import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
+import LabelledToggleSwitch from "../components/views/elements/LabelledToggleSwitch";
 
 export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
     `call_${notificationEventId}_${roomId}`;
@@ -209,10 +210,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         ),
     );
 
+    const [skipLobbyToggle, setSkipLobbyToggle] = useState(true);
+
     // Dismiss on clicking join.
     // If the skip lobby option is undefined, it will use to the shift key state to decide if the lobby is skipped.
     const onJoinClick = useCallback(
-        (e: ButtonEvent, skipLobby?: boolean): void => {
+        (e: ButtonEvent): void => {
             e.stopPropagation();
 
             // The toast will be automatically dismissed by the dispatcher callback above
@@ -220,11 +223,11 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
-                skipLobby: skipLobby ?? ("shiftKey" in e ? e.shiftKey : false),
+                skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
                 metricsTrigger: undefined,
             });
         },
-        [room],
+        [room, skipLobbyToggle],
     );
 
     // Dismiss on closing toast.
@@ -244,13 +247,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     return (
         <TooltipProvider>
             <>
-                <button
-                    className="mx_IncomingCallToast_content"
-                    onClick={(e) => {
-                        onJoinClick(e);
-                    }}
-                    style={{ background: "none", border: "none" }}
-                >
+                <div className="mx_IncomingCallToast_content">
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
                         {_t("voip|video_call_started")}
@@ -273,6 +270,11 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                             )}
                         </div>
                     </div>
+                    <LabelledToggleSwitch
+                        label={_t("voip|skip_lobby_toggle_option")}
+                        onChange={setSkipLobbyToggle}
+                        value={skipLobbyToggle}
+                    />
                     <div className="mx_IncomingCallToast_buttons">
                         <DeclineCallButtonWithNotificationEvent
                             notificationEvent={notificationEvent}
@@ -280,12 +282,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                             onDeclined={onCloseClick}
                         />
                         <JoinCallButtonWithCall
-                            onClick={(e) => onJoinClick(e, true)}
+                            onClick={onJoinClick}
                             call={call}
                             disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                         />
                     </div>
-                </button>
+                </div>
                 <AccessibleButton
                     className="mx_IncomingCallToast_closeButton"
                     onClick={onCloseClick}

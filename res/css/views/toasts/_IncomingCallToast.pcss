@@ -12,13 +12,13 @@ Please see LICENSE files in the repository root for full details.
     flex-direction: row;
     pointer-events: initial; /* restore pointer events so the user can accept/decline */
 
-    $closeButtonSize: 16px;
+    $closeButtonSize: var(--cpd-space-4x);
 
     .mx_IncomingCallToast_content {
         display: flex;
         flex-direction: column;
-        gap: $spacing-16;
-        padding: $spacing-12;
+        gap: var(--cpd-space-4x);
+        padding: var(--cpd-space-3x);
         width: 100%;
         overflow: hidden;
 
@@ -32,12 +32,12 @@ Please see LICENSE files in the repository root for full details.
             display: flex;
             align-items: center;
 
-            border-radius: $spacing-12;
+            border-radius: var(--cpd-space-3x);
             background-color: var(--cpd-color-gray-200);
-            padding: $spacing-8;
+            padding: var(--cpd-space-2x);
 
             div {
-                margin-left: $spacing-8;
+                margin-left: var(--cpd-space-2x);
                 display: flex;
                 flex-direction: column;
             }
@@ -50,7 +50,7 @@ Please see LICENSE files in the repository root for full details.
                 line-height: $font-24px;
 
                 /* Prevent overlap with the close button */
-                width: calc(100% - $closeButtonSize - 2 * $spacing-4);
+                width: calc(100% - $closeButtonSize - 2 * var(--cpd-space-1x));
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -69,7 +69,7 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_IncomingCallToast_buttons {
             display: flex;
-            gap: $spacing-8;
+            gap: var(--cpd-space-2x);
         }
 
         .mx_IncomingCallToast_actionButton {
@@ -80,9 +80,9 @@ Please see LICENSE files in the repository root for full details.
             box-sizing: border-box;
             min-width: 120px;
 
-            padding: $spacing-4 0;
-            padding-right: $spacing-16;
-            line-height: $font-24px;
+            padding: var(--cpd-space-1x) 0;
+            padding-right: var(--cpd-space-4x);
+            line-height: var(--cpd-space-6x);
         }
     }
 

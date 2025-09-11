@@ -170,31 +170,6 @@ describe("IncomingCallToast", () => {
         screen.getByRole("button", { name: "Close" });
     });
 
-    it("opens the lobby and closes the toast when pressing on the toast", async () => {
-        renderToast();
-
-        const dispatcherSpy = jest.fn();
-        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
-
-        // click on the avatar (which is the example used for pressing on any area other than the buttons)
-        fireEvent.click(screen.getByRole("presentation", { name: "" }));
-        await waitFor(() =>
-            expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                skipLobby: false,
-                view_call: true,
-            }),
-        );
-        await waitFor(() =>
-            expect(toastStore.dismissToast).toHaveBeenCalledWith(
-                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
-            ),
-        );
-
-        defaultDispatcher.unregister(dispatcherRef);
-    });
-
     it("opens the call directly and closes the toast when pressing on the join button", async () => {
         renderToast();
 
@@ -208,6 +183,33 @@ describe("IncomingCallToast", () => {
                 action: Action.ViewRoom,
                 room_id: room.roomId,
                 skipLobby: true,
+                view_call: true,
+            }),
+        );
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
+            ),
+        );
+
+        defaultDispatcher.unregister(dispatcherRef);
+    });
+
+    it("opens the call lobby and closes the toast when configured like that", async () => {
+        renderToast();
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+
+        fireEvent.click(screen.getByRole("switch", {}));
+
+        // click on the avatar (which is the example used for pressing on any area other than the buttons)
+        fireEvent.click(screen.getByRole("button", { name: "Join" }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                skipLobby: false,
                 view_call: true,
             }),
         );
