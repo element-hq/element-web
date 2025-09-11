@@ -605,16 +605,9 @@ export class ElementCall extends Call {
                 if (!oldestMembership) {
                     // We are starting a call
                     params.append("intent", ElementCallIntent.StartCallDM);
-                    // We force skiplobby to be true here as DMs never want to show a lobby.
-                    params.set("skipLobby", "true");
-                    // We force preload to be false, as the default in Element Call is `true` and we're going
-                    // to immediately jump into the call.
-                    params.set("preload", "false");
                 } else if (oldestMembership.sender !== client.getSafeUserId()) {
                     // We are joining a call.
                     params.append("intent", ElementCallIntent.JoinExistingDM);
-                    params.set("skipLobby", "true");
-                    params.set("preload", "false");
                 } // else, don't set an intent.
             }
         }
