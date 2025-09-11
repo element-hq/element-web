@@ -47,7 +47,7 @@ test.describe("Mark as Unread", () => {
         await page.goto("/#/room/" + dummyRoomId);
 
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
-        await roomTile.hover();
+        await roomTile.focus();
         await roomTile.getByRole("button", { name: "More Options" }).click();
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
