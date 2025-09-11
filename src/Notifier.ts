@@ -486,27 +486,13 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private performCustomEventHandling(ev: MatrixEvent): void {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(ev.getRoomId());
-        const type = ev.getType();
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
-        if (EventType.GroupCallMemberPrefix === type && thisUserHasConnectedDevice) {
-            const content = ev.getContent();
-
-            if (typeof content.call_id !== "string") {
-                logger.warn(
-                    "Received malformatted GroupCallMemberPrefix event. Did not contain 'call_id' of type 'string'",
-                );
-                return;
-            }
-            // One of our devices has joined the call, so dismiss it.
-            ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(content.call_id, room.roomId));
-        }
         // Check maximum age (<= 15 seconds) of a call notify event that will trigger a ringing notification
-        else if (EventType.CallNotify === type && (ev.getAge() ?? 0) < 15000 && !thisUserHasConnectedDevice) {
+        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 15000 && !thisUserHasConnectedDevice) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
-
             if (typeof content.call_id !== "string") {
                 logger.warn("Received malformatted CallNotify event. Did not contain 'call_id' of type 'string'");
                 return;

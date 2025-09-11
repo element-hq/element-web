@@ -371,7 +371,6 @@ describe("Notifier", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-            jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
@@ -441,52 +440,6 @@ describe("Notifier", () => {
             mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
             emitCallNotifyEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
-            spyCallMemberships.mockRestore();
-        });
-
-        it("dismisses call notification when another device answers the call", () => {
-            const notifyEvent = emitCallNotifyEvent();
-            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom");
-
-            expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    key: getIncomingCallToastKey(notifyEvent.getContent().call_id ?? "", roomId),
-                    priority: 100,
-                    component: IncomingCallToast,
-                    bodyClassName: "mx_IncomingCallToast",
-                    props: { notifyEvent },
-                }),
-            );
-            // Mock ourselves joining the call.
-            spyCallMemberships.mockReturnValue([
-                new CallMembership(
-                    mkEvent({
-                        event: true,
-                        room: testRoom.roomId,
-                        user: userId,
-                        type: EventType.GroupCallMemberPrefix,
-                        content: {},
-                    }),
-                    {
-                        call_id: "123",
-                        application: "m.call",
-                        focus_active: { type: "livekit" },
-                        foci_preferred: [],
-                        device_id: "DEVICE",
-                    },
-                ),
-            ]);
-            const callEvent = mkEvent({
-                type: EventType.GroupCallMemberPrefix,
-                user: "@alice:foo",
-                room: roomId,
-                content: {
-                    call_id: "abc123",
-                },
-                event: true,
-            });
-            emitLiveEvent(callEvent);
-            expect(ToastStore.sharedInstance().dismissToast).toHaveBeenCalled();
             spyCallMemberships.mockRestore();
         });
 
