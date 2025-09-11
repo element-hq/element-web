@@ -20,7 +20,7 @@ import ThemeWatcher from "./settings/watchers/ThemeWatcher";
  * Shade for background as defined in the compound web implementation
  * https://github.com/vector-im/compound-web/blob/main/src/components/Avatar
  */
-const AVATAR_BG_LIGTH_COLORS = ["#e0f8d9", "#e3f5f8", "#faeefb", "#f1efff", "#ffecf0", "#ffefe4"];
+const AVATAR_BG_LIGHT_COLORS = ["#e0f8d9", "#e3f5f8", "#faeefb", "#f1efff", "#ffecf0", "#ffefe4"];
 const AVATAR_TEXT_LIGHT_COLORS = ["#005f00", "#00548c", "#822198", "#5d26cd", "#9f0850", "#9b2200"];
 
 const AVATAR_BG_DARK_COLORS = ["#002600", "#001b4e", "#37004e", "#22006a", "#450018", "#470000"];
@@ -117,7 +117,7 @@ export function defaultAvatarUrlForString(s: string): string {
     const cssValue = getComputedStyle(document.body).getPropertyValue(cssVariable);
     // Light colors are the default
     const color =
-        cssValue || isDarkTheme() ? AVATAR_BG_DARK_COLORS[colorIndex - 1] : AVATAR_BG_LIGTH_COLORS[colorIndex - 1];
+        cssValue || isDarkTheme() ? AVATAR_BG_DARK_COLORS[colorIndex - 1] : AVATAR_BG_LIGHT_COLORS[colorIndex - 1];
 
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
