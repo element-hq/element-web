@@ -82,7 +82,7 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
 interface DeclineCallButtonWithNotificationEventProps {
     onDeclined: (e: ButtonEvent) => void;
     notificationEvent: MatrixEvent;
-    room: Room | null;
+    room?: Room;
 }
 
 function DeclineCallButtonWithNotificationEvent({
@@ -249,6 +249,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     onClick={(e) => {
                         onJoinClick(e);
                     }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            onJoinClick(e);
+                        }
+                    }}
+                    tabIndex={0}
                     role="button"
                 >
                     <div className="mx_IncomingCallToast_message">
