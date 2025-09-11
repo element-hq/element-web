@@ -568,12 +568,13 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string, intent?: ElementCallIntent): URL {
+    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
         const baseUrl = window.location.href;
         let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
 
         const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
         if (elementCallUrl) url = new URL(elementCallUrl);
+
 
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
@@ -590,16 +591,34 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
-            ...(intent && { intent })
         });
 
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
+            const isDM = RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM);
             params.append(
                 "sendNotificationType",
-                RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM) ? "ring" : "notification",
+                isDM ? "ring" : "notification",
             );
+            if (isDM) {
+                const oldestMembership = client.matrixRTC.getRoomSession(room).getOldestMembership();
+                if (!oldestMembership) {
+                    // We are starting a call
+                    params.append("intent", ElementCallIntent.StartCallDM);
+                    // We force skiplobby to be true here as DMs never want to show a lobby.
+                    params.set("skipLobby", "true");
+                    // We force preload to be false, as the default in Element Call is `true` and we're going
+                    // to immediately jump into the call.
+                    params.set("preload", "false");
+                } else if (oldestMembership.sender !== client.getSafeUserId()) {
+                    // We are joining a call.
+                    params.append("intent", ElementCallIntent.JoinExistingDM);
+                    params.set("skipLobby", "true");
+                    params.set("preload", "false");
+                } // else, don't set an intent.
+            }
         }
+
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
@@ -681,24 +700,9 @@ export class ElementCall extends Call {
             return ecWidget;
         }
 
-        let intent: ElementCallIntent|undefined;
-        const room = client.getRoom(roomId);
-        const functionalMembers = room && getJoinedNonFunctionalMembers(room);
-        const isDm = functionalMembers ? functionalMembers.length === 2 : false;
-        
-        if (room && isDm) {
-            const oldestMembership = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            if (!oldestMembership) {
-                // We are starting a call
-                intent = ElementCallIntent.StartCallDM;
-            } else if (oldestMembership.sender !== client.getSafeUserId()) {
-                intent = ElementCallIntent.JoinExistingDM;
-            } // else, the call is ongoing but it was from us so just handle as normal.
-        }
-
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
-        const url = ElementCall.generateWidgetUrl(client, roomId, intent);
+        const url = ElementCall.generateWidgetUrl(client, roomId);
         const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
