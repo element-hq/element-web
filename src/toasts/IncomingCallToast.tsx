@@ -249,7 +249,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     onClick={(e) => {
                         onJoinClick(e);
                     }}
-                    type="button"
+                    role="button"
                 >
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
