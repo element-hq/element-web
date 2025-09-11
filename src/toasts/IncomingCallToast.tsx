@@ -43,7 +43,7 @@ export const getIncomingCallToastKey = (notificationEventId: string, roomId: str
 export const getNotificationEventSendTs = (event: MatrixEvent): number => {
     const content = event.getContent() as Partial<IRTCNotificationContent>;
     const sendTs = content.sender_ts;
-    if (sendTs && Math.abs(sendTs - event.getTs()) <= 15000) {
+    if (sendTs && Math.abs(sendTs - event.getTs()) >= 15000) {
         logger.warn(
             "Received RTCNotification event. With large sender_ts origin_server_ts offset -> using origin_server_ts",
         );
