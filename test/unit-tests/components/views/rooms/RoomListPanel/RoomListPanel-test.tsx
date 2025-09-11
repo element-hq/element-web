@@ -29,6 +29,8 @@ jest.mock("../../../../../../src/accessibility/LandmarkNavigation", () => ({
     },
 }));
 
+// mock out release announcements as they interfere with what's focused
+// (this can be removed once the new room list announcement is gone)
 jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
 
 describe("<RoomListPanel />", () => {
@@ -57,6 +59,11 @@ describe("<RoomListPanel />", () => {
 
         const userEv = userEvent.setup();
 
+        // Pick something arbitrary and focusable in the room list component and focus it
+        const exploreRooms = screen.getByRole("button", { name: "Explore rooms" });
+        exploreRooms.focus();
+        expect(exploreRooms).toHaveFocus();
+
         screen.getByRole("navigation", { name: "Room list" }).focus();
         await userEv.keyboard("{Control>}{F6}{/Control}");
 
@@ -68,7 +75,7 @@ describe("<RoomListPanel />", () => {
 
         const userEv = userEvent.setup();
 
-        // Pick something arbitrary and focusable and focus it
+        // Pick something arbitrary and focusable in the room list component and focus it
         const exploreRooms = screen.getByRole("button", { name: "Explore rooms" });
         exploreRooms.focus();
         expect(exploreRooms).toHaveFocus();
