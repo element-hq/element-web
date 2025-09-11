@@ -36,6 +36,7 @@ import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import LabelledToggleSwitch from "../components/views/elements/LabelledToggleSwitch";
+import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
 
 export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
     `call_${notificationEventId}_${roomId}`;
@@ -244,6 +245,16 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
 
+    const callLiveContentSummary = call ? (
+        <LiveContentSummaryWithCall call={call} />
+    ) : (
+        <LiveContentSummary
+            type={LiveContentType.Video}
+            text={_t("common|video")}
+            active={false}
+            participantCount={0}
+        />
+    );
     return (
         <TooltipProvider>
             <>
@@ -252,24 +263,11 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
                         {_t("voip|video_call_started")}
                     </div>
-                    <div className="mx_IncomingCallToast_info">
-                        <RoomAvatar room={room ?? undefined} size="32px" />
-                        <div>
-                            <span className="mx_IncomingCallToast_room">
-                                {room ? room.name : _t("voip|call_toast_unknown_room")}
-                            </span>
-                            {call ? (
-                                <LiveContentSummaryWithCall call={call} />
-                            ) : (
-                                <LiveContentSummary
-                                    type={LiveContentType.Video}
-                                    text={_t("common|video")}
-                                    active={false}
-                                    participantCount={0}
-                                />
-                            )}
-                        </div>
-                    </div>
+                    <AvatarWithDetails
+                        avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
+                        details={callLiveContentSummary}
+                        roomName={room ? room.name : _t("voip|call_toast_unknown_room")}
+                    />
                     <LabelledToggleSwitch
                         label={_t("voip|skip_lobby_toggle_option")}
                         onChange={setSkipLobbyToggle}
