@@ -14,6 +14,7 @@ import { RoomListPanel } from "../../../../../../src/components/views/rooms/Room
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
+import { ReleaseAnnouncementStore } from "../../../../../../src/stores/ReleaseAnnouncementStore";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -27,6 +28,8 @@ jest.mock("../../../../../../src/accessibility/LandmarkNavigation", () => ({
         ROOM_SEARCH: "something",
     },
 }));
+
+jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
 
 describe("<RoomListPanel />", () => {
     function renderComponent() {
@@ -58,5 +61,23 @@ describe("<RoomListPanel />", () => {
         await userEv.keyboard("{Control>}{F6}{/Control}");
 
         expect(LandmarkNavigation.findAndFocusNextLandmark).toHaveBeenCalled();
+    });
+
+    it("should not move to the next landmark if room list loses focus", async () => {
+        renderComponent();
+
+        const userEv = userEvent.setup();
+
+        // Pick something arbitrary and focusable and focus it
+        const exploreRooms = screen.getByRole("button", { name: "Explore rooms" });
+        exploreRooms.focus();
+        expect(exploreRooms).toHaveFocus();
+
+        exploreRooms.blur();
+        expect(exploreRooms).not.toHaveFocus();
+
+        await userEv.keyboard("{Control>}{F6}{/Control}");
+
+        expect(LandmarkNavigation.findAndFocusNextLandmark).not.toHaveBeenCalled();
     });
 });
