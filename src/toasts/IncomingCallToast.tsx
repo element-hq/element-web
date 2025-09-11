@@ -244,12 +244,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     return (
         <TooltipProvider>
             <>
-                <div
+                <button
                     className="mx_IncomingCallToast_content"
                     onClick={(e) => {
                         onJoinClick(e);
                     }}
-                    role="button"
+                    style={{ background: "none", border: "none" }}
                 >
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
@@ -285,7 +285,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                             disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                         />
                     </div>
-                </div>
+                </button>
                 <AccessibleButton
                     className="mx_IncomingCallToast_closeButton"
                     onClick={onCloseClick}
