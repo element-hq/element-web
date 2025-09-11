@@ -13,9 +13,9 @@ import { AudioPlayerViewModel } from "../../../src/viewmodels/audio/AudioPlayerV
 import { MockedPlayback } from "../../unit-tests/audio/MockedPlayback";
 
 describe("AudioPlayerViewModel", () => {
-    let playback: MockedPlayback & Playback;
+    let playback: Playback;
     beforeEach(() => {
-        playback = new MockedPlayback(PlaybackState.Decoding, 50, 10) as unknown as MockedPlayback & Playback;
+        playback = new MockedPlayback(PlaybackState.Decoding, 50, 10) as unknown as Playback;
     });
 
     it("should return the snapshot", () => {
