@@ -1870,11 +1870,6 @@
                 "other": "Anda hanya dapat memasang pin sampai %(count)s widget"
             },
             "menu": "Buka menu",
-            "release_announcement": {
-                "close": "Oke",
-                "description": "Temukan semua pesan yang disematkan di sini. Arahkan pesan apa pun dan pilih “Sematkan” untuk menambahkannya.",
-                "title": "Semua pesan baru yang disematkan"
-            },
             "reply_thread": "Balas ke <link>pesan dalam utas</link>",
             "unpin_all": {
                 "button": "Lepas sematan semua pesan",
@@ -2005,8 +2000,6 @@
             "send_message_start_dm": "Kirim pesan pertama Anda untuk mengundang <displayName/> ke obrolan",
             "start_of_dm_history": "Ini adalah awal dari pesan langsung Anda dengan <displayName/>.",
             "start_of_room": "Ini adalah awal dari <roomName/>.",
-            "topic": "Topik: %(topic)s ",
-            "topic_edit": "Topik %(topic)s (<a>edit</a>)",
             "unencrypted_warning": "Enkripsi ujung ke ujung tidak diaktifkan",
             "user_created": "%(displayName)s membuat ruangan ini.",
             "you_created": "Anda membuat ruangan ini."

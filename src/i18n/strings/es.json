@@ -1639,8 +1639,6 @@
             "send_message_start_dm": "Envía tu primer mensaje para invitar a <displayName/> a la conversación",
             "start_of_dm_history": "Este es el inicio de tu historial de mensajes directos con <displayName/>.",
             "start_of_room": "Aquí empieza <roomName/>.",
-            "topic": "Asunto: %(topic)s ",
-            "topic_edit": "Asunto: %(topic)s (<a>cambiar</a>)",
             "unencrypted_warning": "El cifrado de extremo a extremo no está activado",
             "user_created": "%(displayName)s creó esta sala.",
             "you_created": "Creaste esta sala."

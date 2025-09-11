@@ -1876,11 +1876,6 @@
                 "other": "Vous ne pouvez épingler que jusqu’à %(count)s widgets"
             },
             "menu": "Ouvrir le menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Retrouvez tous les messages épinglés ici. Survolez n'importe quel message et sélectionnez « Épingler » pour l'ajouter.",
-                "title": "Tous les nouveaux messages épinglés"
-            },
             "reply_thread": "Répondre à un un <link>message de fil de discussion</link>",
             "unpin_all": {
                 "button": "Désépingler tous les messages",
@@ -2002,7 +1997,9 @@
         "inaccessible_subtitle_1": "Réessayez plus tard ou demandez à l’administrateur du salon ou de l’espace si vous y avez accès.",
         "inaccessible_subtitle_2": "%(errcode)s a été retourné en essayant d’accéder au salon. Si vous pensez que vous ne devriez pas voir ce message, veuillez <issueLink>soumettre un rapport d’anomalie</issueLink>.",
         "intro": {
+            "display_topic": "Sujet: <topic/>",
             "dm_caption": "Vous n’êtes que tous les deux dans cette conversation, à moins que l’un de vous invite quelqu’un à vous rejoindre.",
+            "edit_topic": "Sujet: <topic/> (<a>modifier</a> )",
             "enable_encryption_prompt": "Activer le chiffrement dans les paramètres.",
             "encrypted_3pid_dm_pending_join": "Quand tout le monde sera présent, vous pourrez discuter",
             "no_avatar_label": "Ajoutez une photo afin que les gens repèrent facilement votre salon.",
@@ -2012,8 +2009,6 @@
             "send_message_start_dm": "Envoyez votre premier message pour inviter <displayName/> à discuter",
             "start_of_dm_history": "C’est le début de l’historique de votre conversation privée avec <displayName/>.",
             "start_of_room": "C’est le début de <roomName/>.",
-            "topic": "Sujet : %(topic)s ",
-            "topic_edit": "Sujet : %(topic)s (<a>modifier</a>)",
             "unencrypted_warning": "Le chiffrement de bout en bout n’est pas activé",
             "user_created": "%(displayName)s a créé ce salon.",
             "you_created": "Vous avez créé ce salon."
@@ -2178,6 +2173,26 @@
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
+        },
+        "release_announcement": {
+            "done": "Terminé",
+            "filter": {
+                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
+                "title": "Nouveaux filtres"
+            },
+            "intro": {
+                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
+                "title": "Les discussions ont une nouvelle apparence !"
+            },
+            "next": "Suivant",
+            "settings": {
+                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
+                "title": "Certains paramètres ont été déplacés"
+            },
+            "sort": {
+                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
+                "title": "Triez vos discussions"
+            }
         },
         "room": {
             "more_options": "Plus d’options",

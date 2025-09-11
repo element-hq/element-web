@@ -1918,11 +1918,6 @@
                 "other": "Dim ond hyd at %(count)s teclyn y gallwch eu pinio"
             },
             "menu": "Agor dewislen",
-            "release_announcement": {
-                "close": "Iawn",
-                "description": "Dewch o hyd i'r holl negeseuon sydd wedi'u pinio yma. Rhedwch y cyrchwr dros unrhyw neges a dewiswch \"Pinio\" i'w hychwanegu.",
-                "title": "Pob neges newydd wedi'u pinio"
-            },
             "reply_thread": "Ymateb i a <link>neges edefyn</link>",
             "unpin_all": {
                 "button": "Dad-binio pob neges",
@@ -2053,8 +2048,6 @@
             "send_message_start_dm": "Anfonwch eich neges gyntaf i wahodd <displayName/> i sgwrsio",
             "start_of_dm_history": "Dyma ddechrau eich hanes neges uniongyrchol gyda <displayName/>.",
             "start_of_room": "Dyma ddechrau <roomName/>.",
-            "topic": "Pwnc: %(topic)s ",
-            "topic_edit": "Pwnc: %(topic)s ( <a>golygu</a> )",
             "unencrypted_warning": "Nid yw amgryptio pen-i-ben wedi'i alluogi",
             "user_created": "Creodd %(displayName)s yr ystafell hon.",
             "you_created": "Chi sydd wedi creu'r ystafell hon."

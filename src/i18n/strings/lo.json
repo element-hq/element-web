@@ -1460,8 +1460,6 @@
             "room_invite": "ເຊີນເຂົ້າຫ້ອງນີ້ເທົ່ານັ້ນ",
             "start_of_dm_history": "ຈຸດເລີ່ມຕົ້ນຂອງປະຫວັດຂໍ້ຄວາມໂດຍກົງຂອງທ່ານກັບ <displayName/>.",
             "start_of_room": "ນີ້ແມ່ນຈຸດເລີ່ມຕົ້ນຂອງ <roomName/>.",
-            "topic": "ຫົວຂໍ້: %(topic)s ",
-            "topic_edit": "ຫົວຂໍ້: %(topic)s (<a>ແກ້ໄຂ</a>)",
             "unencrypted_warning": "ບໍ່ໄດ້ເປີດໃຊ້ການເຂົ້າລະຫັດແບບຕົ້ນທາງຮອດປາຍທາງ",
             "user_created": "%(displayName)s ສ້າງຫ້ອງນີ້.",
             "you_created": "ທ່ານສ້າງຫ້ອງນີ້."

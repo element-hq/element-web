@@ -14,7 +14,7 @@ import {
     createSecondBotDevice,
     createSharedRoomWithUser,
     enableKeyBackup,
-    logIntoElement,
+    logIntoElementAndVerify,
     logOutOfElement,
     verify,
     waitForDevices,
@@ -195,7 +195,7 @@ test.describe("Cryptography", function () {
                 window.localStorage.clear();
             });
             await page.reload();
-            await logIntoElement(page, aliceCredentials, securityKey);
+            await logIntoElementAndVerify(page, aliceCredentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);

@@ -112,16 +112,19 @@ describe("EncryptionEvent", () => {
     });
 
     describe("for an encrypted local room", () => {
+        let localRoom: LocalRoom;
+
         beforeEach(() => {
             event.event.content!.algorithm = algorithm;
-            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-            const localRoom = new LocalRoom(roomId, client, client.getUserId()!);
+            // jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            localRoom = new LocalRoom(roomId, client, client.getUserId()!);
+            jest.spyOn(localRoom, "isEncryptionEnabled").mockReturnValue(true);
             mocked(client.getRoom).mockReturnValue(localRoom);
             renderEncryptionEvent(client, event);
         });
 
         it("should show the expected texts", async () => {
-            expect(client.getCrypto()!.isEncryptionEnabledInRoom).toHaveBeenCalledWith(roomId);
+            expect(localRoom.isEncryptionEnabled).toHaveBeenCalled();
             await checkTexts("Encryption enabled", "Messages in this chat will be end-to-end encrypted.");
         });
     });

@@ -93,7 +93,7 @@
         "maximise": "Maximieren",
         "mention": "Erwähnen",
         "minimise": "Minimieren",
-        "new_room": "Neuer Chat",
+        "new_room": "Neue Gruppe",
         "new_video_room": "Neuer Videochat",
         "next": "Weiter",
         "no": "Nein",
@@ -133,7 +133,7 @@
         "sign_out": "Abmelden",
         "skip": "Überspringen",
         "start": "Starte",
-        "start_chat": "Unterhaltung beginnen",
+        "start_chat": "Neuer Chat",
         "start_new_chat": "Neue Direktnachricht",
         "stop": "Beenden",
         "submit": "Absenden",
@@ -1021,7 +1021,7 @@
                 "no_crypto": "Gerät kann nicht verifiziert werden – Verschlüsselung ist nicht aktiviert",
                 "no_device": "Gerät kann nicht verifiziert werden – Gerät „%(deviceId)s“ wurde nicht gefunden.",
                 "no_userid": "Gerät kann nicht verifiziert werden – Nutzer-ID wurde nicht gefunden",
-                "success_description": "Das Gerät (%(deviceId)s) ist jetzt verifiziert.",
+                "success_description": "Das Gerät (%(deviceId)s) ist jetzt verifiziert",
                 "success_title": "Verifizierung erfolgreich",
                 "text": "Gib die Geräte-ID und den Fingerabdruck eines deiner eigenen Geräte zur Verifizierung ein. HINWEIS: Dadurch kann das andere Gerät Nachrichten in deinem Namen senden und empfangen. WENN DICH JEMAND AUFGEFORDERT HAT, HIER ETWAS EINZUFÜGEN, WIRST DU WAHRSCHEINLICH BETROGEN!",
                 "wrong_fingerprint": "Das Gerät „%(deviceId)s” kann nicht verifiziert werden – der angegebene Fingerabdruck „%(fingerprint)s” stimmt nicht mit dem Fingerabdruck des Geräts „%(fprint)s” überein"
@@ -1876,11 +1876,6 @@
                 "other": "Du kannst nur %(count)s Widgets anheften"
             },
             "menu": "Menü öffnen",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Hier findest du alle fixierten Nachrichten. Wähle fixieren an einer Nachricht, um sie hier einzufügen.",
-                "title": "Alle neuen angehefteten Nachrichten"
-            },
             "reply_thread": "Auf <link>Nachricht im Thread</link> antworten",
             "unpin_all": {
                 "button": "Alle Nachrichten loslösen",
@@ -1951,7 +1946,7 @@
             "unfavourite": "Favorisiert"
         },
         "creating_room_text": "Chat mit %(names)s wird erstellt",
-        "dm_invite_action": "Unterhaltung beginnen",
+        "dm_invite_action": "Neue Direktnachricht",
         "dm_invite_subtitle": "<userName/> möchte mit dir schreiben",
         "dm_invite_title": "Möchtest du mit %(user)s schreiben?",
         "drop_file_prompt": "Datei hier loslassen zum hochladen",
@@ -2002,7 +1997,9 @@
         "inaccessible_subtitle_1": "Versuche es später erneut oder bitte einen Chat- oder Space-Admin um Erlaubnis für Zugriff.",
         "inaccessible_subtitle_2": "%(errcode)s wurde während des Betretens zurückgegeben. Wenn du denkst, dass diese Meldung nicht korrekt ist, <issueLink>reiche bitte einen Fehlerbericht ein</issueLink>.",
         "intro": {
+            "display_topic": "Thema: <topic/>",
             "dm_caption": "Nur ihr beide nehmt an dieser Konversation teil, es sei denn, ihr ladet jemanden ein.",
+            "edit_topic": "Thema: <topic/> (<a>bearbeiten</a>)",
             "enable_encryption_prompt": "Aktiviere Verschlüsselung in den Einstellungen.",
             "encrypted_3pid_dm_pending_join": "Sobald alle den Chat betreten hat, könnt ihr euch unterhalten",
             "no_avatar_label": "Füge ein Bild hinzu, damit andere deinen Chat besser erkennen können.",
@@ -2012,8 +2009,6 @@
             "send_message_start_dm": "Schreibe deine erste Nachricht, um <displayName/> zur Unterhaltung einzuladen",
             "start_of_dm_history": "Dies ist der Beginn deiner Direktnachrichten mit <displayName/>.",
             "start_of_room": "Dies ist der Beginn von <roomName/>.",
-            "topic": "Thema: %(topic)s ",
-            "topic_edit": "Thema: %(topic)s (<a>ändern</a>)",
             "unencrypted_warning": "Ende-zu-Ende-Verschlüsselung ist deaktiviert",
             "user_created": "%(displayName)s hat diesen Chat erstellt.",
             "you_created": "Du hast diesen Chat erstellt."
@@ -2068,7 +2063,9 @@
         "pinned_message_banner": {
             "button_close_list": "Liste schließen",
             "button_view_all": "Alle anzeigen",
-            "description": "Dieser Chat hat fixierte Nachrichten. Klicke hier, um sie anzusehen.",
+            "description": "Fixierte Nachrichten",
+            "go_to_newest_message": "Schau die fixierte Nachricht im Nachrichtenverlauf an und die neueste fixierte Nachricht hier an.",
+            "go_to_next_message": "Schau dir die fixierte Nachricht im Nachrichtenverlauf an und die nächst ältere Nachricht hier an",
             "title": "<bold>%(index)s of %(length)s</bold> Fixierte Nachrichten"
         },
         "read_topic": "Klicke, um das Thema zu lesen",
@@ -2176,6 +2173,26 @@
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Chat",
             "other": "Entferne Nachrichten in %(count)s Chats"
+        },
+        "release_announcement": {
+            "done": "Fertig",
+            "filter": {
+                "description": "Filter deine Chats mit nur einem Klick. Klappe aus, um mehr Filter zu sehen.",
+                "title": "Neue Schnellfilter"
+            },
+            "intro": {
+                "description": "Die Chatliste wurde aktualisiert, um übersichtlicher und nutzerfreundlicher zu sein.",
+                "title": "Chats hat jetzt ein neues Design!"
+            },
+            "next": "Weiter",
+            "settings": {
+                "description": "Um die Vorschau von Nachrichten anzuzeigen oder auszublenden, geh zu „Alle Einstellungen“ &gt; „Einstellungen“ &gt; „Chatliste“.",
+                "title": "Einige Einstellungen wurden verschoben"
+            },
+            "sort": {
+                "description": "Ändere die Reihenfolge deiner Chats von „Neueste zuerst“ zu „A-Z“.",
+                "title": "Sortiere deine Chats"
+            }
         },
         "room": {
             "more_options": "Weitere Optionen",
@@ -2536,12 +2553,12 @@
             "dialog_title": "<strong>Einstellungen:</strong> Erscheinungsbild",
             "font_size": "Schriftgröße",
             "font_size_default": "%(fontSize)s (Standard)",
-            "high_contrast": "Hochkontrast",
+            "high_contrast": "Hoher Kontrast",
             "image_size_default": "Standard",
             "image_size_large": "Groß",
-            "layout_bubbles": "Nachrichtenblasen",
+            "layout_bubbles": "Sprechblasen",
             "layout_irc": "IRC (Experimentell)",
-            "match_system_theme": "An Systemdesign anpassen",
+            "match_system_theme": "An Design des Betriebssystems anpassen",
             "timeline_image_size": "Bildgröße im Verlauf"
         },
         "automatic_language_detection_syntax_highlight": "Automatische Spracherkennung für die Syntaxhervorhebung",
@@ -2760,7 +2777,7 @@
             "import_description_2": "Die exportierte Datei ist mit einer Passphrase geschützt. Du kannst die Passphrase hier eingeben, um die Datei zu entschlüsseln.",
             "import_title": "Chat-Schlüssel importieren",
             "phrase_cannot_be_empty": "Passphrase darf nicht leer sein",
-            "phrase_must_match": "Passphrases müssen übereinstimmen",
+            "phrase_must_match": "Passphrasen müssen übereinstimmen",
             "phrase_strong_enough": "Super! Diese Passphrase wirkt stark genug"
         },
         "keyboard": {
@@ -2783,19 +2800,19 @@
         },
         "not_supported": "Der Konto-Provider hat diese Funktion nicht implementiert.",
         "notifications": {
-            "default_setting_description": "Diese Einstellung wird standardmäßig für all deine Chats übernommen.",
+            "default_setting_description": "Gilt für alle Chats auf allen Geräten.",
             "default_setting_section": "Ich möchte benachrichtigt werden für (Standardeinstellung)",
             "desktop_notification_message_preview": "Nachrichtenvorschau in der Desktopbenachrichtigung anzeigen",
             "dialog_title": "<strong>Einstellungen:</strong> Benachrichtigungen",
             "email_description": "E-Mail-Zusammenfassung für verpasste Benachrichtigungen erhalten",
             "email_section": "E-Mail-Zusammenfassung",
             "email_select": "Wähle, an welche E-Mail-Adresse die Zusammenfassungen gesendet werden. Verwalte deine E-Mail-Adressen unter <button>Allgemein</button>.",
-            "enable_audible_notifications_session": "Benachrichtigungstöne in dieser Sitzung",
-            "enable_desktop_notifications_session": "Desktopbenachrichtigungen in dieser Sitzung",
+            "enable_audible_notifications_session": "Akustische Benachrichtigungen für diese Sitzung aktivieren",
+            "enable_desktop_notifications_session": "Desktop-Benachrichtigungen für diese Sitzung aktivieren",
             "enable_email_notifications": "E-Mail-Benachrichtigungen für %(email)s aktivieren",
-            "enable_notifications_account": "Aktiviere Benachrichtigungen für dieses Konto",
+            "enable_notifications_account": "Benachrichtigungen für dieses Konto aktivieren",
             "enable_notifications_account_detail": "Ausschalten, um Benachrichtigungen auf all deinen Geräten und Sitzungen zu deaktivieren",
-            "enable_notifications_device": "Aktiviere Benachrichtigungen für dieses Gerät",
+            "enable_notifications_device": "Benachrichtigungen für dieses Gerät aktivieren",
             "error_loading": "Fehler beim Laden der Benachrichtigungseinstellungen.",
             "error_permissions_denied": "%(brand)s hat keine Berechtigung, Benachrichtigungen zu senden - Bitte überprüfe deine Browsereinstellungen",
             "error_permissions_missing": "%(brand)s hat keine Berechtigung für das Senden von Benachrichtigungen erhalten - Bitte versuche es erneut",
@@ -2817,7 +2834,7 @@
             "notify_mention": "Benachrichtigen, wenn jemand @anzeigename oder %(mxid)s erwähnt",
             "other_section": "Andere Dinge, an denen du interessiert sein könntest:",
             "people_mentions_keywords": "Personen, Erwähnungen und Schlüsselwörter",
-            "play_sound_for_description": "Standardmäßig übernommen für alle Chats auf allen Geräten.",
+            "play_sound_for_description": "Gilt für alle Chats auf allen Geräten.",
             "play_sound_for_section": "Spiele einen Ton für",
             "push_targets": "Benachrichtigungsziele",
             "quick_actions_mark_all_read": "Alle Nachrichten als gelesen markieren",
@@ -2947,7 +2964,7 @@
             "inactive_sessions": "Inaktive Sitzungen",
             "inactive_sessions_explainer_1": "Inaktive Sitzungen sind jene, die du schon seit geraumer Zeit nicht mehr verwendet hast, die aber nach wie vor Verschlüsselungs-Schlüssel erhalten.",
             "inactive_sessions_explainer_2": "Das Entfernen inaktiver Sitzungen verbessert Sicherheit, Leistung und das Erkennen von dubiosen neuen Sitzungen.",
-            "inactive_sessions_list_description": "Erwäge, dich aus alten (%(inactiveAgeDays)s Tage oder mehr), nicht mehr verwendeten Sitzungen abzumelden.",
+            "inactive_sessions_list_description": "Du solltest dich aus alten Sitzungen (%(inactiveAgeDays)s Tage oder mehr) abmelden, wenn du sie nicht mehr benötigst.",
             "ip": "IP-Adresse",
             "last_activity": "Neueste Aktivität",
             "manage": "Diese Sitzung verwalten",
@@ -2971,7 +2988,7 @@
             "rename_form_learn_more_description_1": "Andere Nutzer in Direktnachrichten oder Gruppen können die volle Liste deiner Sitzungen sehen.",
             "rename_form_learn_more_description_2": "Dies gibt ihnen die Gewissheit, dass sie auch wirklich mit dir kommunizieren, allerdings bedeutet es auch, dass sie die Sitzungsnamen sehen können, die du hier eingibst.",
             "security_recommendations": "Sicherheitsempfehlungen",
-            "security_recommendations_description": "Verbessere deine Kontosicherheit, indem du diese Empfehlungen beherzigst.",
+            "security_recommendations_description": "Verbessere mit diesen Empfehlungen deine Kontosicherheit",
             "session_id": "Sitzungs-ID",
             "show_details": "Details anzeigen",
             "sign_in_with_qr": "Neues Gerät verknüpfen",
@@ -3281,7 +3298,7 @@
         "result_may_be_hidden_warning": "Einige Ergebnisse können ausgeblendet sein",
         "search_dialog": "Suchdialog",
         "spaces_title": "Spaces, in denen du Mitglied bist",
-        "start_group_chat_button": "Gruppenunterhaltung beginnen"
+        "start_group_chat_button": "Neue Gruppe"
     },
     "stickers": {
         "empty": "Keine Sticker-Pakete aktiviert",

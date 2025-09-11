@@ -154,8 +154,8 @@ test.describe("Cryptography", function () {
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await startDMWithBob(page, bob);
             // send first message
-            await page.getByRole("textbox", { name: "Send an unencrypted message…" }).fill("Hey!");
-            await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter");
+            await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
+            await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
             await checkDMRoom(page);
             const bobRoomId = await bobJoin(page, bob);
             // We no longer show the grey badge in the composer, check that it is not there.

@@ -85,6 +85,7 @@ interface IState {
 export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private readonly askToJoinEnabled: boolean;
     private readonly advancedSettingsEnabled: boolean;
+    private readonly allowCreatingPublicRooms: boolean;
     private readonly supportsRestricted: boolean;
     private nameField = createRef<Field>();
     private aliasField = createRef<RoomAliasField>();
@@ -94,11 +95,13 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         this.askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
         this.advancedSettingsEnabled = SettingsStore.getValue(UIFeature.AdvancedSettings);
+        this.allowCreatingPublicRooms = SettingsStore.getValue(UIFeature.AllowCreatingPublicRooms);
 
         this.supportsRestricted = !!this.props.parentSpace;
+        const defaultPublic = this.allowCreatingPublicRooms && this.props.defaultPublic;
 
         let joinRule = JoinRule.Invite;
-        if (this.props.defaultPublic) {
+        if (defaultPublic) {
             joinRule = JoinRule.Public;
         } else if (this.supportsRestricted) {
             joinRule = JoinRule.Restricted;
@@ -106,7 +109,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         const cli = MatrixClientPeg.safeGet();
         this.state = {
-            isPublicKnockRoom: this.props.defaultPublic || false,
+            isPublicKnockRoom: defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
             joinRule,
             name: this.props.defaultName || "",
@@ -419,7 +422,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             labelKnock={
                                 this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
                             }
-                            labelPublic={_t("common|public_room")}
+                            labelPublic={this.allowCreatingPublicRooms ? _t("common|public_room") : undefined}
                             labelRestricted={
                                 this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
                             }
