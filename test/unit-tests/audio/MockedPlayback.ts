@@ -16,6 +16,8 @@ import { PlaybackState } from "../../../src/audio/Playback";
  */
 export class MockedPlayback extends EventEmitter {
     public sizeBytes = 8000;
+    private waveformObservable = new SimpleObservable<number[]>();
+    public liveData = new SimpleObservable<number[]>();
 
     public constructor(
         public currentState: PlaybackState,
@@ -36,9 +38,17 @@ export class MockedPlayback extends EventEmitter {
 
     public get clockInfo() {
         return {
-            liveData: new SimpleObservable(),
+            liveData: this.liveData,
             populatePlaceholdersFrom: () => undefined,
         };
+    }
+
+    public get waveform(): number[] {
+        return [];
+    }
+
+    public get waveformData(): SimpleObservable<number[]> {
+        return this.waveformObservable;
     }
 
     public prepare = jest.fn().mockResolvedValue(undefined);
