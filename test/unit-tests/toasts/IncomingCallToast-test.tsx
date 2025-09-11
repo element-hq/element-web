@@ -40,7 +40,11 @@ import { CallStore } from "../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ToastStore from "../../../src/stores/ToastStore";
-import { getIncomingCallToastKey, IncomingCallToast } from "../../../src/toasts/IncomingCallToast";
+import {
+    getIncomingCallToastKey,
+    getNotificationEventSendTs,
+    IncomingCallToast,
+} from "../../../src/toasts/IncomingCallToast";
 import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
 import { CallEvent } from "../../../src/models/Call";
 
@@ -422,5 +426,32 @@ describe("IncomingCallToast", () => {
                 getIncomingCallToastKey(notificationEvent.getId()!, room.roomId),
             ),
         );
+    });
+
+    it("getNotificationEventSendTs returns the correct ts", () => {
+        const eventOriginServerTs = mkEvent({
+            user: "@userId:matrix.org",
+            type: EventType.RTCNotification,
+            content: {
+                "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" },
+                "sender_ts": 222_000,
+            },
+            event: true,
+            ts: 1111,
+        });
+
+        const eventSendTs = mkEvent({
+            user: "@userId:matrix.org",
+            type: EventType.RTCNotification,
+            content: {
+                "m.relates_to": { event_id: notificationEvent.getId()!, rel_type: "m.reference" },
+                "sender_ts": 2222,
+            },
+            event: true,
+            ts: 1111,
+        });
+
+        expect(getNotificationEventSendTs(eventOriginServerTs)).toBe(1111);
+        expect(getNotificationEventSendTs(eventSendTs)).toBe(2222);
     });
 });
