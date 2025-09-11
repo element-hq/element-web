@@ -544,10 +544,10 @@ export class JitsiCall extends Call {
 }
 
 export enum ElementCallIntent {
-    StartCall = 'start_call',
-    JoinExisting = 'join_existing',
-    StartCallDM = 'start_call_dm',
-    JoinExistingDM = 'join_existing_dm',
+    StartCall = "start_call",
+    JoinExisting = "join_existing",
+    StartCallDM = "start_call_dm",
+    JoinExistingDM = "join_existing_dm",
 }
 
 /**
@@ -575,7 +575,6 @@ export class ElementCall extends Call {
         const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
         if (elementCallUrl) url = new URL(elementCallUrl);
 
-
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             confineToRoom: "true", // Only show the call interface for the configured room
@@ -596,10 +595,7 @@ export class ElementCall extends Call {
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM);
-            params.append(
-                "sendNotificationType",
-                isDM ? "ring" : "notification",
-            );
+            params.append("sendNotificationType", isDM ? "ring" : "notification");
             if (isDM) {
                 const oldestMembership = client.matrixRTC.getRoomSession(room).getOldestMembership();
                 if (!oldestMembership) {
@@ -611,7 +607,6 @@ export class ElementCall extends Call {
                 } // else, don't set an intent.
             }
         }
-
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
