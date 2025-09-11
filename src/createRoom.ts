@@ -15,7 +15,7 @@ import {
     RoomCreateTypeField,
     RoomType,
     type ICreateRoomOpts,
-    HistoryVisibility,
+    type HistoryVisibility,
     JoinRule,
     Preset,
     RestrictedAllowType,
