@@ -45,7 +45,6 @@ import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-t
 import SdkConfig from "../SdkConfig.ts";
 import RoomListStore from "../stores/room-list/RoomListStore.ts";
 import { DefaultTagID } from "../stores/room-list/models.ts";
-import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers.ts";
 
 const TIMEOUT_MS = 16000;
 
@@ -568,7 +567,7 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
+    private static generateWidgetUrl(client: MatrixClient, roomId: string, data: {skipLobby?: boolean, returnToLobby?: boolean} = {}): URL {
         const baseUrl = window.location.href;
         let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
 
@@ -579,8 +578,6 @@ export class ElementCall extends Call {
         const params = new URLSearchParams({
             confineToRoom: "true", // Only show the call interface for the configured room
             // Template variables are used, so that this can be configured using the widget data.
-            skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
-            returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
             header: "none", // Hide the header since our room header is enough
             userId: client.getUserId()!,
@@ -591,6 +588,14 @@ export class ElementCall extends Call {
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
         });
+
+        if (typeof data.skipLobby === "boolean") {
+            params.append("skipLobby", data.skipLobby.toString());
+        }
+
+        if (typeof data.returnToLobby === "boolean") {
+            params.append("returnToLobby", data.returnToLobby.toString());
+        }
 
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
@@ -664,7 +669,6 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false
     // When there is already a widget the current widget configuration will be used or can be overwritten
     // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
@@ -690,7 +694,7 @@ export class ElementCall extends Call {
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
-        const url = ElementCall.generateWidgetUrl(client, roomId);
+        const url = ElementCall.generateWidgetUrl(client, roomId, { skipLobby, returnToLobby });
         const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
@@ -703,10 +707,6 @@ export class ElementCall extends Call {
                     client,
                     roomId,
                     {},
-                    {
-                        skipLobby: skipLobby,
-                        returnToLobby: returnToLobby,
-                    },
                 ),
             },
             roomId,
@@ -719,7 +719,7 @@ export class ElementCall extends Call {
         client: MatrixClient,
         roomId: string,
         currentData: IWidgetData,
-        overwriteData: IWidgetData,
+        overwriteData: IWidgetData = {},
     ): IWidgetData {
         let perParticipantE2EE = false;
         if (
