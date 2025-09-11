@@ -30,7 +30,6 @@ describe("<EmbeddedPage />", () => {
         expect(_t).toHaveBeenCalledWith("Explore rooms");
         expect(asFragment()).toMatchSnapshot();
     });
-    
 
     it("should show error if unable to load", async () => {
         mocked(_t).mockReturnValue("Couldn't load page");
