@@ -6,7 +6,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal mx_AuthPage_modal_noBlur"
+      class="mx_AuthPage_modal"
       style="position: relative;"
     >
       <div
@@ -172,7 +172,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal mx_AuthPage_modal_noBlur"
+      class="mx_AuthPage_modal"
       style="position: relative;"
     >
       <div

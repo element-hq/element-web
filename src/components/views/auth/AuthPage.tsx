@@ -69,20 +69,20 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         const modalContentStyle: React.CSSProperties = {
             display: "flex",
             zIndex: 1,
-            background: "rgba(255, 255, 255, 0.59)",
             borderRadius: "8px",
         };
 
         let modalBlur;
         if (this.props.addBlur !== false) {
+            // Blur out the background: add a `div` which covers the content behind the modal,
+            // and blurs it out, and make the modal's background semitransparent.
             modalBlur = <div className="mx_AuthPage_modalBlur" style={blurStyle} />;
-        } else {
-            delete modalContentStyle.background;
+            modalContentStyle.background = "rgba(255, 255, 255, 0.59)";
         }
 
         const modalClasses = classNames({
             mx_AuthPage_modal: true,
-            mx_AuthPage_modal_noBlur: this.props.addBlur === false,
+            mx_AuthPage_modal_blur: this.props.addBlur !== false,
         });
 
         return (
