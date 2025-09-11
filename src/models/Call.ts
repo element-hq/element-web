@@ -716,8 +716,8 @@ export class ElementCall extends Call {
                     roomId,
                     {},
                     {
-                        skipLobby: skipLobby ?? false,
-                        returnToLobby: returnToLobby ?? false,
+                        skipLobby: skipLobby,
+                        returnToLobby: returnToLobby,
                     },
                 ),
             },
