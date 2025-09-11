@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
+import { Button, Label, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -35,7 +35,6 @@ import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import LabelledToggleSwitch from "../components/views/elements/LabelledToggleSwitch";
 import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
 
 export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
@@ -268,11 +267,10 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                         details={callLiveContentSummary}
                         roomName={room ? room.name : _t("voip|call_toast_unknown_room")}
                     />
-                    <LabelledToggleSwitch
-                        label={_t("voip|skip_lobby_toggle_option")}
-                        onChange={setSkipLobbyToggle}
-                        value={skipLobbyToggle}
-                    />
+                    <div className="mx_IncomingCallToast_toggleWithLabel">
+                        <span>{_t("voip|skip_lobby_toggle_option")}</span>
+                        <ToggleInput onChange={(e) => setSkipLobbyToggle(e.target.checked)} checked={skipLobbyToggle} />
+                    </div>
                     <div className="mx_IncomingCallToast_buttons">
                         <DeclineCallButtonWithNotificationEvent
                             notificationEvent={notificationEvent}
