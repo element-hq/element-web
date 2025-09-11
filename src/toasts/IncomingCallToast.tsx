@@ -249,13 +249,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     onClick={(e) => {
                         onJoinClick(e);
                     }}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            onJoinClick(e);
-                        }
-                    }}
-                    tabIndex={0}
-                    role="button"
+                    type="button"
                 >
                     <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
