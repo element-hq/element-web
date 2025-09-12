@@ -9,22 +9,16 @@
     display: flex;
     align-items: center;
 
-    border-radius: var(--cpd-space-3x);
+    border-radius: 12px;
     background-color: var(--cpd-color-gray-200);
     padding: var(--cpd-space-2x);
-
-    div {
-        margin-left: var(--cpd-space-2x);
-        display: flex;
-        flex-direction: column;
-    }
+    gap: var(--cpd-space-2x);
 
     .room {
         display: inline-block;
 
         font-weight: var(--cpd-font-weight-semibold);
         font-size: var(--cpd-font-size-body-md);
-        line-height: var(--cpd-font-size-heading-md);
 
         overflow: hidden;
         text-overflow: ellipsis;
@@ -33,6 +27,5 @@
 
     .details {
         font-size: var(--cpd-font-size-body-sm);
-        line-height: var(--cpd-font-size-body-md);
     }
 }
