@@ -58,8 +58,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
-import RoomListStore from "../../../src/stores/room-list/RoomListStore.ts";
-import { DefaultTagID } from "../../../src/stores/room-list/models.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
 const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
