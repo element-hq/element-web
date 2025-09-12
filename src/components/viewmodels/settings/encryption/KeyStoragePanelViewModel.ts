@@ -98,8 +98,8 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                         logger.info("No existing key backup versions are present, creating new backup");
                     }
 
-                    // If there is no existing key backup on the server, create one.
-                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no existing backup.
+                    // If there is no usable key backup on the server, create one.
+                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
                     if (currentKeyBackup === null) {
                         await crypto.resetKeyBackup();
                         // resetKeyBackup fires this off in the background without waiting, so we need to do it
