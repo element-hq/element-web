@@ -79,7 +79,8 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     return;
                 }
                 if (enable) {
-                    logger.info("User requested enabling key backup");
+                    const childLogger = logger.getChild("[enable key storage]");
+                    childLogger.info("User requested enabling key storage");
                     let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
                     if (currentKeyBackup) {
                         logger.info(
