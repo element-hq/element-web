@@ -72,7 +72,11 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        let body = (await res.text()).replace(/_t\(['"]([\s\S]*?)['"]\)/gm, (match, g1) => this.translate(g1));
+        // Replace '," and HTML encoded variants
+        let body = (await res.text()).replace(
+            /_t\((?:['"]|(?:&#(?:34|27);))([\s\S]*?)(?:['"]|(?:&#(?:34|27);))\)/gm,
+            (match, g1) => this.translate(g1),
+        );
 
         if (this.props.replaceMap) {
             Object.keys(this.props.replaceMap).forEach((key) => {

@@ -15,7 +15,7 @@ import {
     RoomCreateTypeField,
     RoomType,
     type ICreateRoomOpts,
-    HistoryVisibility,
+    type HistoryVisibility,
     JoinRule,
     Preset,
     RestrictedAllowType,
@@ -224,10 +224,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 
     if (opts.parentSpace) {
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        if (!opts.historyVisibility) {
-            opts.historyVisibility =
-                createOpts.preset === Preset.PublicChat ? HistoryVisibility.WorldReadable : HistoryVisibility.Invited;
-        }
 
         if (opts.joinRule === JoinRule.Restricted) {
             createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
