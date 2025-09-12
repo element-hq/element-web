@@ -594,16 +594,24 @@ export class ElementCall extends Call {
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM);
+            const hasCallStarted = client.matrixRTC.getRoomSession(room).getOldestMembership();
             params.append("sendNotificationType", isDM ? "ring" : "notification");
             if (isDM) {
-                const oldestMembership = client.matrixRTC.getRoomSession(room).getOldestMembership();
-                if (!oldestMembership) {
+                if (!hasCallStarted) {
                     // We are starting a call
                     params.append("intent", ElementCallIntent.StartCallDM);
-                } else if (oldestMembership.sender !== client.getSafeUserId()) {
+                } else if (hasCallStarted.sender !== client.getSafeUserId()) {
                     // We are joining a call.
                     params.append("intent", ElementCallIntent.JoinExistingDM);
                 } // else, don't set an intent.
+            } else {
+                if (!hasCallStarted) {
+                    // We are starting a call
+                    params.append("intent", ElementCallIntent.StartCall);
+                } else if (hasCallStarted.sender !== client.getSafeUserId()) {
+                    // We are joining a call.
+                    params.append("intent", ElementCallIntent.JoinExisting);
+                }
             }
         }
 
