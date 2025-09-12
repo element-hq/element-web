@@ -41,7 +41,14 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "../../../src/models/Call";
-import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg, MockEventEmitter } from "../../test-utils";
+import {
+    stubClient,
+    mkEvent,
+    mkRoomMember,
+    setupAsyncStoreWithClient,
+    mockPlatformPeg,
+    MockEventEmitter,
+} from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
@@ -95,10 +102,10 @@ const setUpClientRoomAndStores = (): {
     jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-    
+
     const roomSession = new MockEventEmitter({
         memberships: [],
-        getOldestMembership: jest.fn().mockReturnValue(undefined)
+        getOldestMembership: jest.fn().mockReturnValue(undefined),
     }) as Mocked<MatrixRTCSession>;
 
     client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
