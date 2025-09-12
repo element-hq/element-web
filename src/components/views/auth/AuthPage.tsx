@@ -82,7 +82,7 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
 
         const modalClasses = classNames({
             mx_AuthPage_modal: true,
-            mx_AuthPage_modal_blur: this.props.addBlur !== false,
+            mx_AuthPage_modal_withBlur: this.props.addBlur !== false,
         });
 
         return (
