@@ -1081,10 +1081,10 @@ describe("<MatrixChat />", () => {
                 getComponent();
 
                 // Then we are asked to verify our device
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
 
                 // Sanity: we are not racing with another screen update, so this heading stays visible
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
             });
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
@@ -1100,9 +1100,9 @@ describe("<MatrixChat />", () => {
                 // And MatrixChat is rendered
                 getComponent();
 
-                // When we click "Verify with another device"
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
-                const verify = screen.getByRole("button", { name: "Verify with another device" });
+                // When we click "Use another device"
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                const verify = screen.getByRole("button", { name: "Use another device" });
                 act(() => verify.click());
 
                 // And close the device verification dialog
@@ -1110,7 +1110,7 @@ describe("<MatrixChat />", () => {
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
             });
 
             describe("when query params have a loginToken", () => {
@@ -1153,7 +1153,7 @@ describe("<MatrixChat />", () => {
                     );
 
                     // Then we are not allowed in - we are being asked to verify
-                    await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                    await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
                 });
             });
 
@@ -1397,7 +1397,7 @@ describe("<MatrixChat />", () => {
                 await flushPromises();
 
                 // Complete security begin screen is rendered
-                expect(screen.getByText("Unable to verify this device")).toBeInTheDocument();
+                expect(screen.getByText("Confirm your identity")).toBeInTheDocument();
             });
 
             it("should setup e2e when server supports cross signing", async () => {

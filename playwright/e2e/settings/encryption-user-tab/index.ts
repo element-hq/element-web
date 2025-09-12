@@ -43,7 +43,7 @@ class Helpers {
      */
     async verifyDevice(recoveryKey: GeneratedSecretStorageKey) {
         // Select the security phrase
-        await this.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
+        await this.page.getByRole("button", { name: "Use recovery key" }).click();
         await this.enterRecoveryKey(recoveryKey);
         await this.page.getByRole("button", { name: "Done" }).click();
     }
