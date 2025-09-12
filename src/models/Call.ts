@@ -45,6 +45,7 @@ import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-t
 import SdkConfig from "../SdkConfig.ts";
 import RoomListStore from "../stores/room-list/RoomListStore.ts";
 import { DefaultTagID } from "../stores/room-list/models.ts";
+import DMRoomMap from "../utils/DMRoomMap.ts";
 
 const TIMEOUT_MS = 16000;
 
@@ -593,7 +594,7 @@ export class ElementCall extends Call {
 
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
-            const isDM = RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM);
+            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
             const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
             const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
             if (isDM) {
