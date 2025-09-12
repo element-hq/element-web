@@ -171,13 +171,15 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
             if (
                 ev.getType() === EventType.RTCDecline &&
                 userId !== undefined &&
-                ev.getSender() === userId && // It is our decline not someone elses
-                ev.relationEventId === notificationEvent.getId() // The event declines this ringing toast.
+                ev.getSender() === userId //&& // It is our decline not someone elses
+                // TODO: We don't do this check for now since EX will send a different event relation so this check would not
+                // react to EX declines.
+                // ev.relationEventId === notificationEvent.getId() // The event declines this ringing toast.
             ) {
                 dismissToast();
             }
         },
-        [dismissToast, notificationEvent, room?.client],
+        [dismissToast, room?.client],
     );
 
     // Dismiss if another device from this user joins.
