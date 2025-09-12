@@ -39,8 +39,16 @@ import {
     ConnectionState,
     JitsiCall,
     ElementCall,
+    ElementCallIntent,
 } from "../../../src/models/Call";
-import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg } from "../../test-utils";
+import {
+    stubClient,
+    mkEvent,
+    mkRoomMember,
+    setupAsyncStoreWithClient,
+    mockPlatformPeg,
+    MockEventEmitter,
+} from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
@@ -50,8 +58,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
-import RoomListStore from "../../../src/stores/room-list/RoomListStore.ts";
-import { DefaultTagID } from "../../../src/stores/room-list/models.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
 const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
@@ -65,6 +71,7 @@ const setUpClientRoomAndStores = (): {
     alice: RoomMember;
     bob: RoomMember;
     carol: RoomMember;
+    roomSession: Mocked<MatrixRTCSession>;
 } => {
     stubClient();
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
@@ -93,12 +100,13 @@ const setUpClientRoomAndStores = (): {
     jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-    client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-    client.matrixRTC.getRoomSession.mockImplementation((roomId) => {
-        const session = new EventEmitter() as MatrixRTCSession;
-        session.memberships = [];
-        return session;
-    });
+
+    const roomSession = new MockEventEmitter({
+        memberships: [],
+        getOldestMembership: jest.fn().mockReturnValue(undefined),
+    }) as Mocked<MatrixRTCSession>;
+
+    client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
     client.getRooms.mockReturnValue([room]);
     client.getUserId.mockReturnValue(alice.userId);
     client.getDeviceId.mockReturnValue("alices_device");
@@ -120,7 +128,7 @@ const setUpClientRoomAndStores = (): {
     setupAsyncStoreWithClient(WidgetStore.instance, client);
     setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
-    return { client, room, alice, bob, carol };
+    return { client, room, alice, bob, carol, roomSession };
 };
 
 const cleanUpClientRoomAndStores = (client: MatrixClient, room: Room) => {
@@ -553,14 +561,14 @@ describe("ElementCall", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
-
+    let roomSession: Mocked<MatrixRTCSession>;
     function setRoomMembers(memberIds: string[]) {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
     }
 
     beforeEach(() => {
         jest.useFakeTimers();
-        ({ client, room, alice } = setUpClientRoomAndStores());
+        ({ client, room, alice, roomSession } = setUpClientRoomAndStores());
         SdkConfig.reset();
     });
 
@@ -571,7 +579,16 @@ describe("ElementCall", () => {
     });
 
     describe("get", () => {
-        afterEach(() => Call.get(room)?.destroy());
+        let getUserIdForRoomIdSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            getUserIdForRoomIdSpy = jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId");
+        });
+
+        afterEach(() => {
+            Call.get(room)?.destroy();
+            getUserIdForRoomIdSpy.mockRestore();
+        });
 
         it("finds no calls", () => {
             expect(Call.get(room)).toBeNull();
@@ -600,11 +617,7 @@ describe("ElementCall", () => {
 
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
-            client.matrixRTC.getRoomSession.mockReturnValue({
-                on: (ev: any, fn: any) => {},
-                off: (ev: any, fn: any) => {},
-                memberships: [{ fakeVal: "fake membership" }],
-            } as unknown as MatrixRTCSession);
+            roomSession.memberships.push({} as CallMembership);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
         });
@@ -750,19 +763,50 @@ describe("ElementCall", () => {
             expect(urlParams.get("analyticsID")).toBeFalsy();
         });
 
-        it("requests ringing notifications in DMs", async () => {
-            const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
-            try {
-                tagsSpy.mockReturnValue([DefaultTagID.DM]);
-                ElementCall.create(room);
-                const call = Call.get(room);
-                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+        it("requests ringing notifications and correct intent in DMs", async () => {
+            getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
+                room.roomId === roomId ? "any-user" : undefined,
+            );
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
-                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-                expect(urlParams.get("sendNotificationType")).toBe("ring");
-            } finally {
-                tagsSpy.mockRestore();
-            }
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("sendNotificationType")).toBe("ring");
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
+        });
+
+        it("requests correct intent when answering DMs", async () => {
+            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
+                room.roomId === roomId ? "any-user" : undefined,
+            );
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExistingDM);
+        });
+
+        it("requests correct intent when creating a non-DM call", async () => {
+            roomSession.getOldestMembership.mockReturnValue(undefined);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCall);
+        });
+
+        it("requests correct intent when joining a non-DM call", async () => {
+            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExisting);
         });
 
         it("requests visual notifications in non-DMs", async () => {
