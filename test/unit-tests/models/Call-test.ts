@@ -619,7 +619,7 @@ describe("ElementCall", () => {
 
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
-            roomSession.memberships.push({} as CallMembership)
+            roomSession.memberships.push({} as CallMembership);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
         });
