@@ -45,7 +45,6 @@ import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-t
 import SdkConfig from "../SdkConfig.ts";
 import RoomListStore from "../stores/room-list/RoomListStore.ts";
 import { DefaultTagID } from "../stores/room-list/models.ts";
-import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers.ts";
 
 const TIMEOUT_MS = 16000;
 
