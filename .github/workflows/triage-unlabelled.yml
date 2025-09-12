@@ -22,7 +22,6 @@ jobs:
               with:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
                   skip-update-script: |
                       const isIssue = item.type === 'ISSUE'
                       const status = item.fieldValues['Status']
