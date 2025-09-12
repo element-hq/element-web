@@ -594,23 +594,21 @@ export class ElementCall extends Call {
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.DM);
-            const hasCallStarted = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            params.append("sendNotificationType", isDM ? "ring" : "notification");
+            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
             if (isDM) {
-                if (!hasCallStarted) {
-                    // We are starting a call
-                    params.append("intent", ElementCallIntent.StartCallDM);
-                } else if (hasCallStarted.sender !== client.getSafeUserId()) {
-                    // We are joining a call.
+                params.append("sendNotificationType", "ring");
+                if (hasCallStarted) {
                     params.append("intent", ElementCallIntent.JoinExistingDM);
-                } // else, don't set an intent.
+                } else {
+                    params.append("intent", ElementCallIntent.StartCallDM);
+                }
             } else {
-                if (!hasCallStarted) {
-                    // We are starting a call
-                    params.append("intent", ElementCallIntent.StartCall);
-                } else if (hasCallStarted.sender !== client.getSafeUserId()) {
-                    // We are joining a call.
+                params.append("sendNotificationType", "notification");
+                if (hasCallStarted) {
                     params.append("intent", ElementCallIntent.JoinExisting);
+                } else {
+                    params.append("intent", ElementCallIntent.StartCall);
                 }
             }
         }
@@ -711,8 +709,8 @@ export class ElementCall extends Call {
                     roomId,
                     {},
                     {
-                        skipLobby: skipLobby,
-                        returnToLobby: returnToLobby,
+                        skipLobby: skipLobby ?? false,
+                        returnToLobby: returnToLobby ?? false,
                     },
                 ),
             },
