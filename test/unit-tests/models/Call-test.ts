@@ -564,7 +564,6 @@ describe("ElementCall", () => {
     let room: Room;
     let alice: RoomMember;
     let roomSession: Mocked<MatrixRTCSession>;
-
     function setRoomMembers(memberIds: string[]) {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
     }
@@ -582,7 +581,16 @@ describe("ElementCall", () => {
     });
 
     describe("get", () => {
-        afterEach(() => Call.get(room)?.destroy());
+        let tagsSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
+        });
+
+        afterEach(() => {
+            Call.get(room)?.destroy();
+            tagsSpy.mockRestore();
+        });
 
         it("finds no calls", () => {
             expect(Call.get(room)).toBeNull();
@@ -611,11 +619,7 @@ describe("ElementCall", () => {
 
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
-            client.matrixRTC.getRoomSession.mockReturnValue({
-                on: (ev: any, fn: any) => {},
-                off: (ev: any, fn: any) => {},
-                memberships: [{ fakeVal: "fake membership" }],
-            } as unknown as MatrixRTCSession);
+            roomSession.memberships.push({} as CallMembership)
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
         });
@@ -762,36 +766,47 @@ describe("ElementCall", () => {
         });
 
         it("requests ringing notifications and correct intent in DMs", async () => {
-            const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
-            try {
-                tagsSpy.mockReturnValue([DefaultTagID.DM]);
-                ElementCall.create(room);
-                const call = Call.get(room);
-                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+            tagsSpy.mockReturnValue([DefaultTagID.DM]);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
-                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-                expect(urlParams.get("sendNotificationType")).toBe("ring");
-                expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
-            } finally {
-                tagsSpy.mockRestore();
-            }
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("sendNotificationType")).toBe("ring");
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
         });
 
         it("requests correct intent when answering DMs", async () => {
-            const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
-            try {
-                roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
-                tagsSpy.mockReturnValue([DefaultTagID.DM]);
-                ElementCall.create(room);
-                const call = Call.get(room);
-                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            tagsSpy.mockReturnValue([DefaultTagID.DM]);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
-                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-                expect(urlParams.get("sendNotificationType")).toBe("ring");
-                expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExistingDM);
-            } finally {
-                tagsSpy.mockRestore();
-            }
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExistingDM);
+        });
+
+        it("requests correct intent when creating a non-DM call", async () => {
+            roomSession.getOldestMembership.mockReturnValue(undefined);
+            tagsSpy.mockReturnValue([]);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCall);
+        });
+
+        it("requests correct intent when joining a non-DM call", async () => {
+            roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+            tagsSpy.mockReturnValue([]);
+            ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExisting);
         });
 
         it("requests visual notifications in non-DMs", async () => {
