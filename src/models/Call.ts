@@ -43,8 +43,6 @@ import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
-import RoomListStore from "../stores/room-list/RoomListStore.ts";
-import { DefaultTagID } from "../stores/room-list/models.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
 
 const TIMEOUT_MS = 16000;
