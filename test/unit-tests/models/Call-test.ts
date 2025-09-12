@@ -39,8 +39,9 @@ import {
     ConnectionState,
     JitsiCall,
     ElementCall,
+    ElementCallIntent,
 } from "../../../src/models/Call";
-import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg } from "../../test-utils";
+import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg, MockEventEmitter } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
@@ -65,6 +66,7 @@ const setUpClientRoomAndStores = (): {
     alice: RoomMember;
     bob: RoomMember;
     carol: RoomMember;
+    roomSession: Mocked<MatrixRTCSession>;
 } => {
     stubClient();
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
@@ -93,12 +95,13 @@ const setUpClientRoomAndStores = (): {
     jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-    client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-    client.matrixRTC.getRoomSession.mockImplementation((roomId) => {
-        const session = new EventEmitter() as MatrixRTCSession;
-        session.memberships = [];
-        return session;
-    });
+    
+    const roomSession = new MockEventEmitter({
+        memberships: [],
+        getOldestMembership: jest.fn().mockReturnValue(undefined)
+    }) as Mocked<MatrixRTCSession>;
+
+    client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
     client.getRooms.mockReturnValue([room]);
     client.getUserId.mockReturnValue(alice.userId);
     client.getDeviceId.mockReturnValue("alices_device");
@@ -120,7 +123,7 @@ const setUpClientRoomAndStores = (): {
     setupAsyncStoreWithClient(WidgetStore.instance, client);
     setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
-    return { client, room, alice, bob, carol };
+    return { client, room, alice, bob, carol, roomSession };
 };
 
 const cleanUpClientRoomAndStores = (client: MatrixClient, room: Room) => {
@@ -553,6 +556,7 @@ describe("ElementCall", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
+    let roomSession: Mocked<MatrixRTCSession>;
 
     function setRoomMembers(memberIds: string[]) {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
@@ -560,7 +564,7 @@ describe("ElementCall", () => {
 
     beforeEach(() => {
         jest.useFakeTimers();
-        ({ client, room, alice } = setUpClientRoomAndStores());
+        ({ client, room, alice, roomSession } = setUpClientRoomAndStores());
         SdkConfig.reset();
     });
 
@@ -750,7 +754,7 @@ describe("ElementCall", () => {
             expect(urlParams.get("analyticsID")).toBeFalsy();
         });
 
-        it("requests ringing notifications in DMs", async () => {
+        it("requests ringing notifications and correct intent in DMs", async () => {
             const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
             try {
                 tagsSpy.mockReturnValue([DefaultTagID.DM]);
@@ -760,6 +764,24 @@ describe("ElementCall", () => {
 
                 const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
                 expect(urlParams.get("sendNotificationType")).toBe("ring");
+                expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
+            } finally {
+                tagsSpy.mockRestore();
+            }
+        });
+
+        it("requests correct intent when answering DMs", async () => {
+            const tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
+            try {
+                roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
+                tagsSpy.mockReturnValue([DefaultTagID.DM]);
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("sendNotificationType")).toBe("ring");
+                expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExistingDM);
             } finally {
                 tagsSpy.mockRestore();
             }
