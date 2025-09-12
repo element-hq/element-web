@@ -10,6 +10,7 @@ import React from "react";
 import classNames from "classnames";
 
 import styles from "./AvatarWithDetails.module.css";
+import { Flex } from "../../utils/Flex";
 
 export type AvatarWithDetailsProps<C extends ElementType> = {
     /**
@@ -48,10 +49,10 @@ export function AvatarWithDetails<C extends React.ElementType = "div">({
     return (
         <Component className={classNames(styles.avatarWithDetails, className)} {...props}>
             {avatar}
-            <div>
+            <Flex direction="column">
                 <span className={styles.room}>{roomName}</span>
                 <span className={styles.details}>{details}</span>
-            </div>
+            </Flex>
         </Component>
     );
 }
