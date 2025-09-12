@@ -581,15 +581,15 @@ describe("ElementCall", () => {
     });
 
     describe("get", () => {
-        let tagsSpy: jest.SpyInstance;
+        let getUserIdForRoomIdSpy: jest.SpyInstance;
 
         beforeEach(() => {
-            tagsSpy = jest.spyOn(RoomListStore.instance, "getTagsForRoom");
+            getUserIdForRoomIdSpy = jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId");
         });
 
         afterEach(() => {
             Call.get(room)?.destroy();
-            tagsSpy.mockRestore();
+            getUserIdForRoomIdSpy.mockRestore();
         });
 
         it("finds no calls", () => {
@@ -766,7 +766,9 @@ describe("ElementCall", () => {
         });
 
         it("requests ringing notifications and correct intent in DMs", async () => {
-            tagsSpy.mockReturnValue([DefaultTagID.DM]);
+            getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
+                room.roomId === roomId ? "any-user" : undefined,
+            );
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -778,7 +780,9 @@ describe("ElementCall", () => {
 
         it("requests correct intent when answering DMs", async () => {
             roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
-            tagsSpy.mockReturnValue([DefaultTagID.DM]);
+            getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
+                room.roomId === roomId ? "any-user" : undefined,
+            );
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -789,7 +793,6 @@ describe("ElementCall", () => {
 
         it("requests correct intent when creating a non-DM call", async () => {
             roomSession.getOldestMembership.mockReturnValue(undefined);
-            tagsSpy.mockReturnValue([]);
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -800,7 +803,6 @@ describe("ElementCall", () => {
 
         it("requests correct intent when joining a non-DM call", async () => {
             roomSession.getOldestMembership.mockReturnValue({} as CallMembership);
-            tagsSpy.mockReturnValue([]);
             ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
