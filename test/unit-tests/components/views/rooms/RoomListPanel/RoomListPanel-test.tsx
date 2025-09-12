@@ -39,6 +39,8 @@ describe("<RoomListPanel />", () => {
     }
 
     beforeEach(() => {
+        jest.clearAllMocks();
+
         // By default, we consider shouldShowComponent(UIComponent.FilterContainer) should return true
         mocked(shouldShowComponent).mockReturnValue(true);
     });
