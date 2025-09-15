@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Button, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
@@ -147,13 +147,15 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
     });
     const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
-    // Start ringing if not already.
+    const playInstance = useRef<Promise<void>>(null);
     useEffect(() => {
+        // Start ringing if not already.
+        // This section can race, so we use a ref to keep track of whether we have started trying to play.
         const isRingToast = notificationContent.notification_type == "ring";
-        if (isRingToast && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
-            LegacyCallHandler.instance.play(AudioID.Ring);
+        if (isRingToast && !playInstance.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+            playInstance.current = LegacyCallHandler.instance.play(AudioID.Ring);
         }
-    }, [notificationContent.notification_type]);
+    }, [notificationContent.notification_type, playInstance]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
