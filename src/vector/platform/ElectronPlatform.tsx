@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { uniqueId } from "lodash";
 
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
 import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
@@ -43,6 +44,7 @@ import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
+import GenericToast from "../../components/views/toasts/GenericToast.tsx";
 
 interface SquirrelUpdate {
     releaseNotes: string;
@@ -180,6 +182,25 @@ export default class ElectronPlatform extends BasePlatform {
             const [source] = await finished;
             // getDisplayMedia promise does not return if no dummy is passed here as source
             await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
+        });
+
+        this.electron.on("showToast", (ev, { title, description, priority = 40 }) => {
+            const key = uniqueId("electron_showToast_");
+            const onPrimaryClick = (): void => {
+                ToastStore.sharedInstance().dismissToast(key);
+            };
+
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key,
+                title,
+                props: {
+                    description,
+                    primaryLabel: _t("action|dismiss"),
+                    onPrimaryClick,
+                },
+                component: GenericToast,
+                priority,
+            });
         });
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
