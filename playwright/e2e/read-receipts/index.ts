@@ -428,7 +428,7 @@ class Helpers {
     }
 
     getRoomListTile(label: string) {
-        return this.page.getByRole("treeitem", { name: new RegExp("^" + label) });
+        return this.page.getByRole("option", { name: new RegExp("^Open room " + label) });
     }
 
     /**
@@ -446,8 +446,8 @@ class Helpers {
      */
     async assertRead(room: RoomRef) {
         const tile = this.getRoomListTile(room.name);
-        await expect(tile.locator(".mx_NotificationBadge_dot")).not.toBeVisible();
-        await expect(tile.locator(".mx_NotificationBadge_count")).not.toBeVisible();
+        await expect(tile.getByTestId("notification-decoration")).not.toBeVisible();
+        await expect(tile).not.toHaveAccessibleName(/with \d* unread message/);
     }
 
     /**
@@ -463,15 +463,12 @@ class Helpers {
     /**
      * Assert a given room is marked as unread (via the room list tile)
      * @param room - the name of the room to check
-     * @param count - the numeric count to assert, or if "." specified then a bold/dot (no count) state is asserted
+     * @param count - the numeric count to assert
      */
-    async assertUnread(room: RoomRef, count: number | ".") {
+    async assertUnread(room: RoomRef, count: number) {
         const tile = this.getRoomListTile(room.name);
-        if (count === ".") {
-            await expect(tile.locator(".mx_NotificationBadge_dot")).toBeVisible();
-        } else {
-            await expect(tile.locator(".mx_NotificationBadge_count")).toHaveText(count.toString());
-        }
+        await expect(tile).toBeVisible();
+        await expect(tile).toHaveAccessibleName(/with \d* unread message/);
     }
 
     /**
@@ -487,7 +484,9 @@ class Helpers {
         // .toBeLessThan doesn't have a retry mechanism, so we use .poll
         await expect
             .poll(async () => {
-                return parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10);
+                const accessibleName = await tile.getAttribute("aria-label");
+                const match = accessibleName?.match(/(\d+)\s+unread message/);
+                return match ? parseInt(match[1], 10) : 0;
             })
             .toBeLessThan(lessThan);
     }
