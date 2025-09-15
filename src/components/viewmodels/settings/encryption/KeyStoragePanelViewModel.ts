@@ -79,12 +79,30 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     return;
                 }
                 if (enable) {
-                    // If there is no existing key backup on the server, create one.
-                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no existing backup.
-                    const currentKeyBackup = await crypto.checkKeyBackupAndEnable();
+                    const childLogger = logger.getChild("[enable key storage]");
+                    childLogger.info("User requested enabling key storage");
+                    let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
+                    if (currentKeyBackup) {
+                        logger.info(
+                            `Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`,
+                            currentKeyBackup.trustInfo,
+                        );
+                        // Check if the current key backup can be used. Either of these properties causes the key backup to be used.
+                        if (currentKeyBackup.trustInfo.trusted || currentKeyBackup.trustInfo.matchesDecryptionKey) {
+                            logger.info("Existing key backup can be used");
+                        } else {
+                            logger.warn("Existing key backup cannot be used, creating new backup");
+                            // There aren't any *usable* backups, so we need to create a new one.
+                            currentKeyBackup = null;
+                        }
+                    } else {
+                        logger.info("No existing key backup versions are present, creating new backup");
+                    }
+
+                    // If there is no usable key backup on the server, create one.
+                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
                     if (currentKeyBackup === null) {
                         await crypto.resetKeyBackup();
-
                         // resetKeyBackup fires this off in the background without waiting, so we need to do it
                         // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
                         await crypto.checkKeyBackupAndEnable();
@@ -93,6 +111,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     // Set the flag so that EX no longer thinks the user wants backup disabled
                     await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
                 } else {
+                    logger.info("User requested disabling key backup");
                     // This method will delete the key backup as well as server side recovery keys and other
                     // server-side crypto data.
                     await crypto.disableKeyStorage();
