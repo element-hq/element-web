@@ -596,7 +596,7 @@ export class ElementCall extends Call {
             const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
             const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
             // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
-            // preload by default so we override here. This can be removed when that package 
+            // preload by default so we override here. This can be removed when that package
             // is released and upgraded.
             if (isDM) {
                 params.append("sendNotificationType", "ring");
