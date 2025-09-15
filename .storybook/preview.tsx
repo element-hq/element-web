@@ -100,6 +100,13 @@ const preview: Preview = {
                 method: "alphabetical",
             },
         },
+        a11y: {
+            /*
+             * Configure test behavior
+             * See: https://storybook.js.org/docs/next/writing-tests/accessibility-testing#test-behavior
+             */
+            test: "error",
+        },
     },
 };
 
