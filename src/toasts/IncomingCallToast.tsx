@@ -147,15 +147,16 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
     });
     const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
-    const playInstance = useRef<Promise<void>>(null);
+    const soundHasStarted = useRef<boolean>(false);
     useEffect(() => {
         // Start ringing if not already.
         // This section can race, so we use a ref to keep track of whether we have started trying to play.
         const isRingToast = notificationContent.notification_type == "ring";
-        if (isRingToast && !playInstance.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
-            playInstance.current = LegacyCallHandler.instance.play(AudioID.Ring);
+        if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+            soundHasStarted.current = true;
+            void LegacyCallHandler.instance.play(AudioID.Ring);
         }
-    }, [notificationContent.notification_type, playInstance]);
+    }, [notificationContent.notification_type, soundHasStarted]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
