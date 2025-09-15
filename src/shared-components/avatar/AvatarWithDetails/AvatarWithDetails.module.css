@@ -14,7 +14,7 @@
     padding: var(--cpd-space-2x);
     gap: var(--cpd-space-2x);
 
-    .room {
+    .title {
         display: inline-block;
 
         font-weight: var(--cpd-font-weight-semibold);

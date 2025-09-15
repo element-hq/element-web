@@ -17,7 +17,7 @@ export default {
     args: {
         avatar: <div style={{ width: 40, height: 40, backgroundColor: "#888", borderRadius: "50%" }} />,
         details: "Details about the avatar go here",
-        roomName: "Room Name",
+        title: "Room Name",
     },
 } as Meta<typeof AvatarWithDetails>;
 

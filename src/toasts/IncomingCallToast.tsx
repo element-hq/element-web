@@ -265,7 +265,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     <AvatarWithDetails
                         avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
                         details={callLiveContentSummary}
-                        roomName={room ? room.name : _t("voip|call_toast_unknown_room")}
+                        title={room ? room.name : _t("voip|call_toast_unknown_room")}
                     />
                     <div className="mx_IncomingCallToast_toggleWithLabel">
                         <span>{_t("voip|skip_lobby_toggle_option")}</span>

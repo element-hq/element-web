@@ -22,7 +22,7 @@ export type AvatarWithDetailsProps<C extends ElementType> = {
      * The CSS class name.
      */
     className?: string;
-    roomName: string;
+    title: string;
     avatar: React.ReactNode;
     details: React.ReactNode;
 } & ComponentProps<C>;
@@ -32,7 +32,7 @@ export type AvatarWithDetailsProps<C extends ElementType> = {
  *
  * @example
  * ```tsx
- * <MediaBody as="p" className="custom-class">Media body content</MediaBody>
+ * <AvatarWithDetails title="Room Name" details="10 participants" className="custom-class" />
  * ```
  */
 export function AvatarWithDetails<C extends React.ElementType = "div">({
@@ -40,7 +40,7 @@ export function AvatarWithDetails<C extends React.ElementType = "div">({
     className,
     details,
     avatar,
-    roomName,
+    title,
     ...props
 }: PropsWithChildren<AvatarWithDetailsProps<C>>): JSX.Element {
     const Component = as || "div";
@@ -50,7 +50,7 @@ export function AvatarWithDetails<C extends React.ElementType = "div">({
         <Component className={classNames(styles.avatarWithDetails, className)} {...props}>
             {avatar}
             <Flex direction="column">
-                <span className={styles.room}>{roomName}</span>
+                <span className={styles.title}>{title}</span>
                 <span className={styles.details}>{details}</span>
             </Flex>
         </Component>
