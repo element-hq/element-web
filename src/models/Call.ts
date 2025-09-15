@@ -595,19 +595,26 @@ export class ElementCall extends Call {
             const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
             const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
             const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+            // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
+            // preload by default so we override here. This can be removed when that package
+            // is released and upgraded.
             if (isDM) {
                 params.append("sendNotificationType", "ring");
                 if (hasCallStarted) {
                     params.append("intent", ElementCallIntent.JoinExistingDM);
+                    params.append("preload", "false");
                 } else {
                     params.append("intent", ElementCallIntent.StartCallDM);
+                    params.append("preload", "false");
                 }
             } else {
                 params.append("sendNotificationType", "notification");
                 if (hasCallStarted) {
                     params.append("intent", ElementCallIntent.JoinExisting);
+                    params.append("preload", "false");
                 } else {
                     params.append("intent", ElementCallIntent.StartCall);
+                    params.append("preload", "false");
                 }
             }
         }
