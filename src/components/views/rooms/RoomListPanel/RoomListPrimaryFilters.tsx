@@ -59,6 +59,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                 align="center"
                 gap="var(--cpd-space-2x)"
                 wrap="wrap"
+                className="mx_RoomListPrimaryFilters_list"
                 ref={ref}
             >
                 {filters.map((filter, i) => (
