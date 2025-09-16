@@ -24,7 +24,7 @@ test.describe("PSTN", () => {
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
 
-        await expect(page.locator(".mx_LeftPanel_filterContainer")).toMatchScreenshot("dialpad-trigger.png");
+        await expect(page.locator(".mx_RoomListSearch")).toMatchScreenshot("dialpad-trigger.png");
         await page.getByLabel("Open dial pad").click();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("dialpad.png");
     });

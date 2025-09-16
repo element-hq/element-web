@@ -15,6 +15,11 @@ import { type ElementAppPage } from "../../pages/ElementAppPage";
 test.describe("Room Header", () => {
     test.use({
         displayName: "Sakura",
+        config: {
+            features: {
+                feature_new_room_list: false,
+            },
+        },
     });
 
     test.describe("with feature_notifications enabled", () => {
@@ -23,7 +28,7 @@ test.describe("Room Header", () => {
         });
         test("should render default buttons properly", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room" });
-            await app.viewRoomByName("Test Room");
+            await app.viewRoomByNameOnOldRoomList("Test Room");
 
             const header = page.locator(".mx_RoomHeader");
 
@@ -61,7 +66,7 @@ test.describe("Room Header", () => {
                     "officia deserunt mollit anim id est laborum.";
 
                 await app.client.createRoom({ name: LONG_ROOM_NAME });
-                await app.viewRoomByName(LONG_ROOM_NAME);
+                await app.viewRoomByNameOnOldRoomList(LONG_ROOM_NAME);
 
                 const header = page.locator(".mx_RoomHeader");
                 // Wait until the room name is set
@@ -86,7 +91,7 @@ test.describe("Room Header", () => {
 
         test("should render room header icon correctly", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room", visibility: "public" as Visibility });
-            await app.viewRoomByName("Test Room");
+            await app.viewRoomByNameOnOldRoomList("Test Room");
 
             const header = page.locator(".mx_RoomHeader");
 
@@ -106,7 +111,7 @@ test.describe("Room Header", () => {
 
             await page.getByRole("button", { name: "Create video room" }).click();
 
-            await app.viewRoomByName("Test video room");
+            await app.viewRoomByNameOnOldRoomList("Test video room");
         };
 
         test.describe("and with feature_notifications enabled", () => {

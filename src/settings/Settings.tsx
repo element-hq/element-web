@@ -690,7 +690,7 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|new_room_list"),
         description: _td("labs|under_active_development"),
         isFeature: true,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
     },
     /**
