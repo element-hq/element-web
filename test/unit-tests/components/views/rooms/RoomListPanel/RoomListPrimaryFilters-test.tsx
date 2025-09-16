@@ -135,4 +135,21 @@ describe("<RoomListPrimaryFilters />", () => {
             screen.getByRole("option", { name: "Unreads" }),
         );
     });
+
+    it("should hide the filter is the previous is on the same vertical position", async () => {
+        render(<RoomListPrimaryFilters vm={vm} />);
+        mockFiltersOffsetLeft();
+
+        jest.spyOn(screen.getByRole("option", { name: "People" }), "offsetLeft", "get").mockReturnValue(0);
+        // Rooms is wrapping
+        jest.spyOn(screen.getByRole("option", { name: "Rooms" }), "offsetLeft", "get").mockReturnValue(0);
+
+        // @ts-ignore
+        act(() => resizeCallback([{ target: screen.getByRole("listbox", { name: "Room list filters" }) }]));
+
+        // The Unreads filter is wrapping, it should not be visible
+        expect(screen.queryByRole("option", { name: "Rooms" })).toBeNull();
+        // Now filters are wrapping, so chevron should be visible
+        expect(screen.getByRole("button", { name: "Expand filter list" })).toBeVisible();
+    });
 });
