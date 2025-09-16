@@ -212,7 +212,7 @@ export const showToast = (kind: Kind): void => {
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Encryption,
-                    props: { initialEncryptionState: "change_recovery_key" },
+                    props: { initialEncryptionState: "reset_identity_forgot" },
                 };
                 defaultDispatcher.dispatch(payload);
                 break;

@@ -88,7 +88,7 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Key storage out of sync (store secrets)", () => {
+    describe("Key storage out of sync (secrets are missing from 4S)", () => {
         it("should render the toast", async () => {
             showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
 
@@ -104,7 +104,7 @@ describe("SetupEncryptionToast", () => {
             expect(dis.dispatch).toHaveBeenCalledWith({
                 action: "view_user_settings",
                 initialTabId: "USER_ENCRYPTION_TAB",
-                props: { initialEncryptionState: "change_recovery_key" },
+                props: { initialEncryptionState: "reset_identity_forgot" },
             });
         });
 
