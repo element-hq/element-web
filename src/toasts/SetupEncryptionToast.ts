@@ -197,18 +197,9 @@ export const showToast = (kind: Kind): void => {
                 deviceListener.dismissEncryptionSetup();
                 break;
             }
-            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
-                // Open the user settings dialog to the encryption tab and start the flow to reset encryption
-                const payload: OpenToTabPayload = {
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Encryption,
-                    props: { initialEncryptionState: "reset_identity_forgot" },
-                };
-                defaultDispatcher.dispatch(payload);
-                break;
-            }
+            case Kind.KEY_STORAGE_OUT_OF_SYNC:
             case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
-                // Open the user settings dialog to the encryption tab and start the flow to reset 4S
+                // Open the user settings dialog to the encryption tab and start the flow to reset encryption
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Encryption,
