@@ -159,7 +159,7 @@
         "tar-js": "^0.3.0",
         "temporal-polyfill": "^0.3.0",
         "ua-parser-js": "1.0.40",
-        "uuid": "^11.0.0",
+        "uuid": "^13.0.0",
         "what-input": "^5.2.10"
     },
     "devDependencies": {
@@ -232,7 +232,6 @@
         "@types/semver": "^7.5.8",
         "@types/tar-js": "^0.3.5",
         "@types/ua-parser-js": "^0.7.36",
-        "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^8.19.0",
         "@typescript-eslint/parser": "^8.19.0",
         "babel-jest": "^29.0.0",
