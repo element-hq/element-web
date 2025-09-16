@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { mocked } from "jest-mock";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
@@ -28,7 +29,6 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
 import { Action } from "../../../../src/dispatcher/actions";
-import { mocked } from "jest-mock";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
