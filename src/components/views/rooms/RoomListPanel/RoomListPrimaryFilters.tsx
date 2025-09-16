@@ -103,7 +103,7 @@ function useCollapseFilters<T extends HTMLElement>(
 
                 // If the previous element is on the left element of the current one, it means that the filter is wrapping
                 const previousSibling = child.previousElementSibling as HTMLElement | null;
-                if (previousSibling && child.offsetLeft < previousSibling.offsetLeft) {
+                if (previousSibling && child.offsetLeft <= previousSibling.offsetLeft) {
                     if (!isWrapping) setWrappingIndex(i);
                     isWrapping = true;
                 }
