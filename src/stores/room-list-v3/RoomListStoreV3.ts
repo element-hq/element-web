@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
-import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
 import type { FilterKey } from "./skip-list/filters";
@@ -250,12 +250,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                 // the dead room in the list.
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                    const roomState: RoomState = payload.room.currentState;
-                    const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
-                    if (predecessor) {
-                        const prevRoom = this.matrixClient?.getRoom(predecessor.roomId);
-                        if (prevRoom) this.roomSkipList.removeRoom(prevRoom);
-                        else logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
+                    const room: Room = payload.room;
+                    const roomUpgradeHistory = room.client.getRoomUpgradeHistory(
+                        room.roomId,
+                        true,
+                        this.msc3946ProcessDynamicPredecessor,
+                    );
+                    const predecessors = roomUpgradeHistory.slice(0, roomUpgradeHistory.indexOf(room));
+                    for (const predecessor of predecessors) {
+                        this.roomSkipList.removeRoom(predecessor);
                     }
                 }
 

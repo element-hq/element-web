@@ -28,6 +28,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
 import { Action } from "../../../../src/dispatcher/actions";
+import { mocked } from "jest-mock";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -197,6 +198,9 @@ describe("RoomListStoreV3", () => {
             const oldRoom = rooms[32];
             // Create a new room with a predecessor event that points to oldRoom
             const newRoom = new Room("!foonew:matrix.org", client, client.getSafeUserId(), {});
+            mocked(client.getRoomUpgradeHistory).mockImplementation((roomId) =>
+                roomId === newRoom.roomId ? [oldRoom, newRoom] : [],
+            );
             const createWithPredecessor = new MatrixEvent({
                 type: EventType.RoomCreate,
                 sender: "@foo:foo.org",
@@ -224,6 +228,41 @@ describe("RoomListStoreV3", () => {
             expect(fn).toHaveBeenCalled();
             const roomIds = store.getSortedRooms().map((r) => r.roomId);
             expect(roomIds).not.toContain(oldRoom.roomId);
+            expect(roomIds).toContain(newRoom.roomId);
+        });
+
+        it("should not remove predecessor room based on non-reciprocated relationship", async () => {
+            const { store, rooms, client, dispatcher } = await getRoomListStore();
+            const oldRoom = rooms[32];
+            // Create a new room with a predecessor event that points to oldRoom, but oldRoom does not point back
+            const newRoom = new Room("!nefarious:matrix.org", client, client.getSafeUserId(), {});
+            const createWithPredecessor = new MatrixEvent({
+                type: EventType.RoomCreate,
+                sender: "@foo:foo.org",
+                room_id: newRoom.roomId,
+                content: {
+                    predecessor: { room_id: oldRoom.roomId, event_id: "tombstone_event_id" },
+                },
+                event_id: "$create",
+                state_key: "",
+            });
+            upsertRoomStateEvents(newRoom, [createWithPredecessor]);
+
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(
+                {
+                    action: "MatrixActions.Room.myMembership",
+                    oldMembership: KnownMembership.Invite,
+                    membership: KnownMembership.Join,
+                    room: newRoom,
+                },
+                true,
+            );
+
+            expect(fn).toHaveBeenCalled();
+            const roomIds = store.getSortedRooms().map((r) => r.roomId);
+            expect(roomIds).toContain(oldRoom.roomId);
             expect(roomIds).toContain(newRoom.roomId);
         });
 
