@@ -5,7 +5,7 @@ on:
         types: [unlabeled]
 permissions: {}
 jobs:
-    move_needs_info_issues:
+    move_no_longer_needs_info_issues:
         name: Move no longer X-Needs-Info issues to Triaged
         runs-on: ubuntu-24.04
         if: >
