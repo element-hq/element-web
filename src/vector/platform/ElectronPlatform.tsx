@@ -97,6 +97,7 @@ export default class ElectronPlatform extends BasePlatform {
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
     private config!: IConfigOptions;
     private supportedSettings?: Record<string, boolean>;
+    private clientStartedPromiseWithResolvers = Promise.withResolvers<void>();
 
     public constructor() {
         super();
@@ -184,7 +185,9 @@ export default class ElectronPlatform extends BasePlatform {
             await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        this.electron.on("showToast", (ev, { title, description, priority = 40 }) => {
+        this.electron.on("showToast", async (ev, { title, description, priority = 40 }) => {
+            await this.clientStartedPromiseWithResolvers.promise;
+
             const key = uniqueId("electron_showToast_");
             const onPrimaryClick = (): void => {
                 ToastStore.sharedInstance().dismissToast(key);
@@ -213,6 +216,10 @@ export default class ElectronPlatform extends BasePlatform {
         // Whitelist payload actions, no point sending most across
         if (["call_state"].includes(payload.action)) {
             this.electron.send("app_onAction", payload);
+        }
+
+        if (payload.action === "client_started") {
+            this.clientStartedPromiseWithResolvers.resolve();
         }
     }
 

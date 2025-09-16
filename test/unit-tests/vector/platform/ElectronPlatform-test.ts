@@ -130,14 +130,25 @@ describe("ElectronPlatform", () => {
 
     it("should show a toast when showToast is fired", async () => {
         new ElectronPlatform();
+        dispatcher.dispatch(
+            {
+                action: "client_started",
+            },
+            true,
+        );
         const spy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
 
         const [event, handler] = getElectronEventHandlerCall("showToast")!;
         handler({} as any, { title: "title", description: "description" });
 
         expect(event).toBeTruthy();
-        expect(spy).toHaveBeenCalledWith(
-            expect.objectContaining({ title: "title", props: expect.objectContaining({ description: "description" }) }),
+        await waitFor(() =>
+            expect(spy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    title: "title",
+                    props: expect.objectContaining({ description: "description" }),
+                }),
+            ),
         );
     });
 
