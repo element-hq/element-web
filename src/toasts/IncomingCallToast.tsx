@@ -37,9 +37,23 @@ import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
 
+/**
+ * Get the key for the incoming call toast. A combination of the event ID and room ID.
+ * @param notificationEventId The ID of the notification event.
+ * @param roomId The ID of the room.
+ * @returns The key for the incoming call toast.
+ */
 export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
     `call_${notificationEventId}_${roomId}`;
 
+/**
+ * Get the ts when the notification event was sent.
+ * This can be either the origin_server_ts or a ts the sender of this event claims as
+ * the time they sent it (sender_ts).
+ * The origin_server_ts is the fallback if sender_ts seems wrong.
+ * @param event The RTCNotification event.
+ * @returns The timestamp to use as the expect start time to apply the `lifetime` to.
+ */
 export const getNotificationEventSendTs = (event: MatrixEvent): number => {
     const content = event.getContent() as Partial<IRTCNotificationContent>;
     const sendTs = content.sender_ts;

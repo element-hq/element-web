@@ -22,13 +22,21 @@ export type AvatarWithDetailsProps<C extends ElementType> = {
      * The CSS class name.
      */
     className?: string;
+    /**
+     * The title/label next to the avatar. Usually the user or room name.
+     */
     title: string;
-    avatar: React.ReactNode;
+    /**
+     * A label with details to display under the avatar title.
+     * Commonly used to display the number of participants in a room.
+     */
     details: React.ReactNode;
+    /** The avatar to display. */
+    avatar: React.ReactNode;
 } & ComponentProps<C>;
 
 /**
- * A component to display the body of a media message.
+ * A component to display an avatar with a title next to it in a grey box.
  *
  * @example
  * ```tsx
@@ -45,7 +53,6 @@ export function AvatarWithDetails<C extends React.ElementType = "div">({
 }: PropsWithChildren<AvatarWithDetailsProps<C>>): JSX.Element {
     const Component = as || "div";
 
-    // Keep Mx_MediaBody to support the compatibility with existing timeline and the all the layout
     return (
         <Component className={classNames(styles.avatarWithDetails, className)} {...props}>
             {avatar}

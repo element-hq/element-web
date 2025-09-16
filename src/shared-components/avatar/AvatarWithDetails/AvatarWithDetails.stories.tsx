@@ -6,11 +6,11 @@
  */
 
 import React from "react";
+import { type Meta, type StoryObj } from "@storybook/react-vite/*";
 
 import { AvatarWithDetails } from "./AvatarWithDetails";
-import type { Meta, StoryFn } from "@storybook/react-vite";
 
-export default {
+const meta = {
     title: "Avatar/AvatarWithDetails",
     component: AvatarWithDetails,
     tags: ["autodocs"],
@@ -19,8 +19,8 @@ export default {
         details: "Details about the avatar go here",
         title: "Room Name",
     },
-} as Meta<typeof AvatarWithDetails>;
+} satisfies Meta<typeof AvatarWithDetails>;
 
-const Template: StoryFn<typeof AvatarWithDetails> = (args) => <AvatarWithDetails {...args} />;
-
-export const Default = Template.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+export const Default: Story = {};
