@@ -997,6 +997,7 @@ test.describe("Timeline", () => {
             await viewRoomSendMessageAndSetupReply(page, app, room.roomId);
 
             const composerOptions = await app.openMessageComposerOptions();
+            await page.waitForTimeout(1000);
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
