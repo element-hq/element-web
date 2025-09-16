@@ -29,6 +29,9 @@ test.describe("Release announcement", () => {
         "should display the new room list release announcement",
         { tag: "@screenshot" },
         async ({ page, app, room, util }) => {
+            // dismiss the toast so the announcement appears
+            await page.getByRole("button", { name: "Dismiss" }).click();
+
             const name = "Chats has a new look!";
 
             // The release announcement should be displayed
