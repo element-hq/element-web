@@ -1,3 +1,8 @@
+Changes in [1.11.112](https://github.com/element-hq/element-web/releases/tag/v1.11.112) (2025-09-16)
+====================================================================================================
+Fix [CVE-2025-59161](https://www.cve.org/CVERecord?id=CVE-2025-59161) / [GHSA-m6c8-98f4-75rr](https://github.com/element-hq/element-web/security/advisories/GHSA-m6c8-98f4-75rr)
+
+
 Changes in [1.11.111](https://github.com/element-hq/element-web/releases/tag/v1.11.111) (2025-09-10)
 ====================================================================================================
 ## ✨ Features
