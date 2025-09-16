@@ -16,7 +16,7 @@ exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
     >
       <button
         aria-hidden="false"
-        aria-selected="false"
+        aria-selected="true"
         class="_chat-filter_5qdp0_8"
         role="option"
         tabindex="0"
@@ -25,7 +25,7 @@ exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
       </button>
       <button
         aria-hidden="false"
-        aria-selected="true"
+        aria-selected="false"
         class="_chat-filter_5qdp0_8"
         role="option"
         tabindex="0"
