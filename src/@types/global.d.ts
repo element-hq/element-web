@@ -68,7 +68,8 @@ type ElectronChannel =
     | "openDesktopCapturerSourcePicker"
     | "userAccessToken"
     | "homeserverUrl"
-    | "serverSupportedVersions";
+    | "serverSupportedVersions"
+    | "showToast";
 
 declare global {
     // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
