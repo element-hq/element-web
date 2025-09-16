@@ -40,7 +40,7 @@ export async function leaveRoomBehaviour(
     let leavingAllVersions = true;
     const history = matrixClient.getRoomUpgradeHistory(
         roomId,
-        false,
+        true,
         SettingsStore.getValue("feature_dynamic_room_predecessors"),
     );
     if (history && history.length > 0) {
