@@ -22,7 +22,6 @@ import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
 import ToastStore from "../../../../src/stores/ToastStore.ts";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
