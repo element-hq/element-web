@@ -11,8 +11,10 @@ import { mocked } from "jest-mock";
 import SettingsStore, { type CallbackFn } from "../../../src/settings/SettingsStore";
 import { type Feature, ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 import { type SettingLevel } from "../../../src/settings/SettingLevel";
+import ToastStore from "../../../src/stores/ToastStore";
 
 jest.mock("../../../src/settings/SettingsStore");
+jest.mock("../../../src/stores/ToastStore");
 
 describe("ReleaseAnnouncementStore", () => {
     let releaseAnnouncementStore: ReleaseAnnouncementStore;
@@ -47,6 +49,11 @@ describe("ReleaseAnnouncementStore", () => {
             watchCallbacks.push(callback);
             return "watcherId";
         });
+
+        mocked(ToastStore.sharedInstance).mockReturnValue({
+            on: jest.fn(),
+            getToasts: jest.fn().mockReturnValue([]),
+        } as any);
 
         releaseAnnouncementStore = new ReleaseAnnouncementStore();
     });
@@ -117,5 +124,11 @@ describe("ReleaseAnnouncementStore", () => {
 
         expect(await promise).toBe("newRoomList_sort");
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomList_sort");
+    });
+
+    it("should return null when there are toasts on screen", async () => {
+        mocked(ToastStore.sharedInstance().getToasts).mockReturnValue([{} as any]);
+
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
     });
 });
