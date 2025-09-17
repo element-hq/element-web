@@ -11,7 +11,7 @@ import { useEffect, useState, useRef } from "react";
 import CommandProvider from "../../../../../autocomplete/CommandProvider";
 
 /**
- *  A hook which determines if the given content contains a slash command.
+ * A hook which determines if the given content contains a slash command.
  * @returns true if the content contains a slash command, false otherwise.
  * @param content The content to check for commands.
  * @param room The current room.
