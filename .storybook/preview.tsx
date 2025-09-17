@@ -3,7 +3,7 @@ import { addons } from "storybook/preview-api";
 
 import "../res/css/shared.pcss";
 import "./preview.css";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { FORCE_RE_RENDER } from "storybook/internal/core-events";
 import { setLanguage } from "../src/shared-components/utils/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -61,25 +61,28 @@ const withThemeProvider: Decorator = (Story, context) => {
 
 const LanguageSwitcher: React.FC<{
     language: string;
-}> = ({ language }) => {
+    children: React.ReactNode;
+}> = ({ language, children }) => {
+    const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
+
     useLayoutEffect(() => {
         const changeLanguage = async (language: string) => {
             await setLanguage(language);
             // Force the component to re-render to apply the new language
             addons.getChannel().emit(FORCE_RE_RENDER);
+            setIsLanguageLoaded(true);
         };
         changeLanguage(language);
     }, [language]);
 
-    return null;
+    return isLanguageLoaded && children;
 };
 
 export const withLanguageProvider: Decorator = (Story, context) => {
     return (
-        <>
-            <LanguageSwitcher language={context.globals.language} />
+        <LanguageSwitcher language={context.globals.language}>
             <Story />
-        </>
+        </LanguageSwitcher>
     );
 };
 
