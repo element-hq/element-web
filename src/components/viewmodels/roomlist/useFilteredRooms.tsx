@@ -14,9 +14,11 @@ import RoomListStoreV3, {
     LISTS_UPDATE_EVENT,
     type RoomsResult,
 } from "../../../stores/room-list-v3/RoomListStoreV3";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
+import { useSettingValue } from "../../../hooks/useSettings";
+import type { Room } from "matrix-js-sdk/src/matrix";
 
 /**
  * Provides information about a primary filter.
@@ -99,6 +101,23 @@ export function useFilteredRooms(): FilteredRooms {
         setIsLoadingRooms(false);
     });
 
+    const currentSpace = useEventEmitterState<Room | null>(
+        SpaceStore.instance,
+        UPDATE_SELECTED_SPACE,
+        () => SpaceStore.instance.activeSpaceRoom,
+    );
+    const showPeopleFilter = useSettingValue("Spaces.showPeopleInSpace", currentSpace?.roomId);
+
+    // If the people filter is disabled in the space settings and it is currently active, unset it.
+    useEffect(() => {
+        if (primaryFilter === FilterKey.PeopleFilter && !showPeopleFilter) {
+            setPrimaryFilter(() => {
+                updateRoomsFromStore();
+                return undefined;
+            });
+        }
+    }, [primaryFilter, updateRoomsFromStore, showPeopleFilter]);
+
     /**
      * This tells the view which primary filters are available, how to toggle them
      * and whether a given primary filter is active. @see {@link PrimaryFilter}
@@ -120,10 +139,13 @@ export function useFilteredRooms(): FilteredRooms {
         };
         const filters: PrimaryFilter[] = [];
         for (const [key, name] of filterKeyToNameMap.entries()) {
+            // Don't render the people filter because it is disabled in space settings
+            if (key === FilterKey.PeopleFilter && !showPeopleFilter) continue;
+
             filters.push(createPrimaryFilter(key, _t(name)));
         }
         return filters;
-    }, [primaryFilter, updateRoomsFromStore]);
+    }, [primaryFilter, updateRoomsFromStore, showPeopleFilter]);
 
     const activePrimaryFilter = useMemo(() => primaryFilters.find((filter) => filter.active), [primaryFilters]);
 
