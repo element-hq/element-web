@@ -243,6 +243,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 room_id: room?.roomId,
                 view_call: true,
                 skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
+                voiceOnly: notificationContent.media_hint === "audio",
                 metricsTrigger: undefined,
             });
         },

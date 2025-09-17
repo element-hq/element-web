@@ -545,7 +545,9 @@ export enum ElementCallIntent {
     StartCall = "start_call",
     JoinExisting = "join_existing",
     StartCallDM = "start_call_dm",
+    StartCallDMVoice = "start_call_dm_voice",
     JoinExistingDM = "join_existing_dm",
+    JoinExistingDMVoice = "join_existing_dm_voice",
 }
 
 /**
@@ -566,7 +568,7 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
+    private static generateWidgetUrl(client: MatrixClient, roomId: string, voiceOnly?: boolean): URL {
         const baseUrl = window.location.href;
         let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
 
@@ -601,10 +603,10 @@ export class ElementCall extends Call {
             if (isDM) {
                 params.append("sendNotificationType", "ring");
                 if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExistingDM);
+                    params.append("intent", voiceOnly ? ElementCallIntent.JoinExistingDM : ElementCallIntent.JoinExistingDMVoice);
                     params.append("preload", "false");
                 } else {
-                    params.append("intent", ElementCallIntent.StartCallDM);
+                    params.append("intent", voiceOnly ? ElementCallIntent.StartCallDM: ElementCallIntent.StartCallDMVoice);
                     params.append("preload", "false");
                 }
             } else {
@@ -683,6 +685,7 @@ export class ElementCall extends Call {
         client: MatrixClient,
         skipLobby: boolean | undefined,
         returnToLobby: boolean | undefined,
+        voiceOnly: boolean | undefined,
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
@@ -701,7 +704,7 @@ export class ElementCall extends Call {
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
-        const url = ElementCall.generateWidgetUrl(client, roomId);
+        const url = ElementCall.generateWidgetUrl(client, roomId, voiceOnly);
         const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
@@ -789,8 +792,8 @@ export class ElementCall extends Call {
         return null;
     }
 
-    public static create(room: Room, skipLobby = false): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
+    public static create(room: Room, skipLobby = false, voiceOnly?: boolean): void {
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room), voiceOnly);
     }
 
     public async start(): Promise<void> {

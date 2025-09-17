@@ -113,6 +113,10 @@ interface State {
      * If we want the call to skip the lobby and immediately join
      */
     skipLobby?: boolean;
+    /**
+     * If we want the call to skip the lobby and immediately join
+     */
+    voiceOnly?: boolean;
 
     promptAskToJoin: boolean;
 
@@ -414,6 +418,7 @@ export class RoomViewStore extends EventEmitter {
                 viaServers: payload.via_servers ?? [],
                 wasContextSwitch: payload.context_switch ?? false,
                 skipLobby: payload.skipLobby,
+                voiceOnly: payload.voiceOnly,
                 viewingCall:
                     payload.view_call ??
                     (payload.room_id === this.state.roomId
@@ -740,6 +745,10 @@ export class RoomViewStore extends EventEmitter {
     }
 
     public skipCallLobby(): boolean | undefined {
+        return this.state.skipLobby;
+    }
+
+    public isVoiceOnly(): boolean | undefined {
         return this.state.skipLobby;
     }
 
