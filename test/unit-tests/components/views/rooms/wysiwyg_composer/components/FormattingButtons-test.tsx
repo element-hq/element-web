@@ -19,7 +19,6 @@ import {
 import { FormattingButtons } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
 import { setLanguage } from "../../../../../../../src/languageHandler";
-import { stubTrue } from "lodash";
 
 const mockWysiwyg = {
     bold: jest.fn(),
@@ -196,7 +195,7 @@ describe("FormattingButtons", () => {
         expect(screen.getByLabelText("Indent decrease")).toBeInTheDocument();
     });
 
-    it("Each button should have disabled class when disabled", () => {
+    it("Every button should when disabled the component is disabled", () => {
         renderComponent({ disabled: true });
 
         Object.values(testCases).forEach((testCase) => {
