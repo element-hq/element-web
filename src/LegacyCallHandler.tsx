@@ -390,6 +390,9 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         const [urlPrefix, loop] = audioInfo[audioId];
         const source = await this.backgroundAudio.pickFormatAndPlay(urlPrefix, ["mp3", "ogg"], loop);
+        if (this.playingSources[audioId]) {
+            logger.warn(`${logPrefix} Already playing audio ${audioId}!`);
+        }
         this.playingSources[audioId] = source;
         logger.debug(`${logPrefix} playing audio successfully`);
     }
