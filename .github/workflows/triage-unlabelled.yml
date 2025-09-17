@@ -11,12 +11,6 @@ jobs:
         if: >
             !contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
-            - id: add_to_project
-              uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
-              with:
-                  project-url: ${{ env.PROJECT_URL }}
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
             - id: set_fields
               uses: nipe0324/update-project-v2-item-field@c4af58452d1c5a788c1ea4f20e073fa722ec4a6b #v2.0.2
               with:
