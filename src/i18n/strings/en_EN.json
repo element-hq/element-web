@@ -3237,8 +3237,8 @@
         "mark_suggested": "Mark as suggested",
         "no_search_result_hint": "You may want to try a different search or check for typos.",
         "preferences": {
-            "sections_section": "Sections to show",
-            "show_people_in_space": "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s."
+            "sections_filter": "Filters to show",
+            "show_people_filter_in_space": "Show the People filter and DMs related to this Space."
         },
         "room_filter_placeholder": "Search for rooms",
         "search_children": "Search %(spaceName)s",
