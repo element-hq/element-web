@@ -75,7 +75,7 @@ const LanguageSwitcher: React.FC<{
         changeLanguage(language);
     }, [language]);
 
-    return isLanguageLoaded && children;
+    return isLanguageLoaded ? children : null;
 };
 
 export const withLanguageProvider: Decorator = (Story, context) => {
