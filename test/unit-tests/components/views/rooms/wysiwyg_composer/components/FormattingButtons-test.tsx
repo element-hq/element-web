@@ -19,6 +19,7 @@ import {
 import { FormattingButtons } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
 import { setLanguage } from "../../../../../../../src/languageHandler";
+import { stubTrue } from "lodash";
 
 const mockWysiwyg = {
     bold: jest.fn(),
@@ -193,5 +194,15 @@ describe("FormattingButtons", () => {
 
         expect(screen.getByLabelText("Indent increase")).toBeInTheDocument();
         expect(screen.getByLabelText("Indent decrease")).toBeInTheDocument();
+    });
+
+    it("Each button should have disabled class when disabled", () => {
+        renderComponent({ disabled: true });
+
+        Object.values(testCases).forEach((testCase) => {
+            const { label } = testCase;
+            expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
+            expect(screen.getByLabelText(label)).toBeDisabled();
+        });
     });
 });
