@@ -1,12 +1,11 @@
-import type { ArgTypes, Preview, Decorator } from "@storybook/react-vite";
-import { addons } from "storybook/preview-api";
+import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
 
 import "../res/css/shared.pcss";
 import "./preview.css";
-import React, { useLayoutEffect, useState } from "react";
-import { FORCE_RE_RENDER } from "storybook/internal/core-events";
+import React, { useLayoutEffect } from "react";
 import { setLanguage } from "../src/shared-components/utils/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { StoryContext } from "storybook/internal/csf";
 
 export const globalTypes = {
     theme: {
@@ -59,32 +58,9 @@ const withThemeProvider: Decorator = (Story, context) => {
     );
 };
 
-const LanguageSwitcher: React.FC<{
-    language: string;
-    children: React.ReactNode;
-}> = ({ language, children }) => {
-    const [isLanguageLoaded, setIsLanguageLoaded] = useState(false);
-
-    useLayoutEffect(() => {
-        const changeLanguage = async (language: string) => {
-            await setLanguage(language);
-            // Force the component to re-render to apply the new language
-            addons.getChannel().emit(FORCE_RE_RENDER);
-            setIsLanguageLoaded(true);
-        };
-        changeLanguage(language);
-    }, [language]);
-
-    return isLanguageLoaded ? children : null;
-};
-
-export const withLanguageProvider: Decorator = (Story, context) => {
-    return (
-        <LanguageSwitcher language={context.globals.language}>
-            <Story />
-        </LanguageSwitcher>
-    );
-};
+async function languageLoader(context: StoryContext<ReactRenderer, StrictArgs>): Promise<void> {
+    await setLanguage(context.globals.language);
+}
 
 const withTooltipProvider: Decorator = (Story) => {
     return (
@@ -96,7 +72,7 @@ const withTooltipProvider: Decorator = (Story) => {
 
 const preview: Preview = {
     tags: ["autodocs"],
-    decorators: [withThemeProvider, withLanguageProvider, withTooltipProvider],
+    decorators: [withThemeProvider, withTooltipProvider],
     parameters: {
         options: {
             storySort: {
@@ -111,6 +87,7 @@ const preview: Preview = {
             test: "error",
         },
     },
+    loaders: [languageLoader],
 };
 
 export default preview;
