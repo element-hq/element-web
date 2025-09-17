@@ -151,7 +151,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEffect(() => {
         // This section can race, so we use a ref to keep track of whether we have started trying to play.
         // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
-        // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing. 
+        // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing.
         const isRingToast = notificationContent.notification_type == "ring";
         if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
             // Start ringing if not already.
