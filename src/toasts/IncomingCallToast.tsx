@@ -149,10 +149,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
     const soundHasStarted = useRef<boolean>(false);
     useEffect(() => {
-        // Start ringing if not already.
         // This section can race, so we use a ref to keep track of whether we have started trying to play.
+        // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
+        // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing. 
         const isRingToast = notificationContent.notification_type == "ring";
         if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+            // Start ringing if not already.
             soundHasStarted.current = true;
             void LegacyCallHandler.instance.play(AudioID.Ring);
         }
