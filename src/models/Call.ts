@@ -592,6 +592,7 @@ export class ElementCall extends Call {
             theme: "$org.matrix.msc2873.client_theme",
         });
 
+
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
@@ -603,10 +604,10 @@ export class ElementCall extends Call {
             if (isDM) {
                 params.append("sendNotificationType", "ring");
                 if (hasCallStarted) {
-                    params.append("intent", voiceOnly ? ElementCallIntent.JoinExistingDM : ElementCallIntent.JoinExistingDMVoice);
+                    params.append("intent", voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM);
                     params.append("preload", "false");
                 } else {
-                    params.append("intent", voiceOnly ? ElementCallIntent.StartCallDM: ElementCallIntent.StartCallDMVoice);
+                    params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
                     params.append("preload", "false");
                 }
             } else {
@@ -620,6 +621,7 @@ export class ElementCall extends Call {
                 }
             }
         }
+        console.log("generateWidgetUrl", {voiceOnly, params}, new Error().stack);
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {

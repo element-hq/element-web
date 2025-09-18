@@ -17,7 +17,7 @@ import { Flex } from "../../../shared-components/utils/Flex";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
 
 interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
     /**
