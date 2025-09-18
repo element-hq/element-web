@@ -19,7 +19,7 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useEventEmitter, useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
-import { ElementCallIntent, type ConnectionState } from "../../../models/Call";
+import { type ConnectionState } from "../../../models/Call";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
@@ -146,10 +146,8 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         if (!call || !hasParticipantInCall) {
             return undefined;
         }
-        const url = call.widget.url;
-        // XXX: Super good hacks!
-        return (url.includes(ElementCallIntent.JoinExistingDMVoice) || url.includes(ElementCallIntent.StartCallDMVoice)) ? "voice" : "video";
-    }, [call, hasParticipantInCall]);
+        return call.isVoiceCall ? "voice" : "video";
+    }, [call, call?.isVoiceCall, hasParticipantInCall]);
 
     return {
         name,

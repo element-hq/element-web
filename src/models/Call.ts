@@ -104,6 +104,8 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected readonly widgetUid: string;
     protected readonly room: Room;
 
+    public isVoiceCall = false;
+
     /**
      * The time after which device member state should be considered expired.
      */
@@ -568,7 +570,7 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string, voiceOnly?: boolean): URL {
+    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
         const baseUrl = window.location.href;
         let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
 
@@ -581,6 +583,7 @@ export class ElementCall extends Call {
             // Template variables are used, so that this can be configured using the widget data.
             skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
             returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
+            intent: "$intent",
             perParticipantE2EE: "$perParticipantE2EE",
             header: "none", // Hide the header since our room header is enough
             userId: client.getUserId()!,
@@ -596,32 +599,17 @@ export class ElementCall extends Call {
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
             // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
             // preload by default so we override here. This can be removed when that package
             // is released and upgraded.
             if (isDM) {
                 params.append("sendNotificationType", "ring");
-                if (hasCallStarted) {
-                    params.append("intent", voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
-                    params.append("preload", "false");
-                }
+                params.append("preload", "false");
             } else {
                 params.append("sendNotificationType", "notification");
-                if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExisting);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", ElementCallIntent.StartCall);
-                    params.append("preload", "false");
-                }
+                params.append("preload", "false");
             }
         }
-        console.log("generateWidgetUrl", {voiceOnly, params}, new Error().stack);
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
@@ -700,13 +688,15 @@ export class ElementCall extends Call {
             if (returnToLobby !== undefined) {
                 overwrites.returnToLobby = returnToLobby;
             }
-            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites);
+            console.log("with ecWidget");
+            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites, voiceOnly);
             return ecWidget;
         }
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
-        const url = ElementCall.generateWidgetUrl(client, roomId, voiceOnly);
+        const url = ElementCall.generateWidgetUrl(client, roomId);
+        console.log("addVirtualWidget", new Error().stack);
         const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
@@ -723,6 +713,7 @@ export class ElementCall extends Call {
                         skipLobby: skipLobby ?? false,
                         returnToLobby: returnToLobby ?? false,
                     },
+                    voiceOnly,
                 ),
             },
             roomId,
@@ -731,11 +722,39 @@ export class ElementCall extends Call {
         return createdWidget;
     }
 
+    public static getWidgetIntent(
+        client: MatrixClient,
+        roomId: string,
+        voiceOnly?: boolean
+    ): ElementCallIntent {
+        const room = client.getRoom(roomId);
+        if (room !== null && !isVideoRoom(room)) {
+            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+            if (isDM) {
+                if (hasCallStarted) {
+                    return voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM;
+                } else {
+                    return voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM;
+                }
+            } else {
+                if (hasCallStarted) {
+                    return ElementCallIntent.JoinExisting;
+                } else {
+                    return ElementCallIntent.StartCall;
+                }
+            }
+        }
+        return ElementCallIntent.JoinExisting;
+    }
+
     private static getWidgetData(
         client: MatrixClient,
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
+        voiceOnly?: boolean
     ): IWidgetData {
         let perParticipantE2EE = false;
         if (
@@ -743,6 +762,11 @@ export class ElementCall extends Call {
             !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
         )
             perParticipantE2EE = true;
+
+        let intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
+
+        console.log("getWidgetData", intent, voiceOnly);
+
         return {
             ...currentData,
             ...overwriteData,

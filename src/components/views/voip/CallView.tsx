@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type FC, useContext, useEffect, type AriaRole, useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { type Call, CallEvent } from "../../../models/Call";
+import { type Call, CallEvent, ElementCall } from "../../../models/Call";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
 import { CallStore } from "../../../stores/CallStore";
@@ -40,7 +40,9 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
         // Always update the widget data so that we don't ignore "skipLobby" accidentally.
         call.widget.data ??= {};
         call.widget.data.skipLobby = skipLobby;
-        call.widget.data.voiceOnly = voiceOnly;
+        call.widget.data.intent = ElementCall.getWidgetIntent(room.client, room.roomId, voiceOnly);
+        call.isVoiceCall = voiceOnly ?? false;
+        console.log("set new intent", call.widget.data.intent);
     }, [call.widget, skipLobby, voiceOnly]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
