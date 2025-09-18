@@ -64,6 +64,7 @@ describe("<RoomListItemView />", () => {
             isBold: false,
             isVideoRoom: false,
             callConnectionState: null,
+            callType: "video",
             hasParticipantInCall: false,
             name: room.name,
             showNotificationDecoration: false,

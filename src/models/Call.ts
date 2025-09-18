@@ -785,7 +785,7 @@ export class ElementCall extends Call {
                 room.client,
                 undefined,
                 isVideoRoom(room),
-                voiceOnly,
+                voiceOnly
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }

@@ -27,7 +27,7 @@ interface JoinCallViewProps {
     onClose: () => void;
 }
 
-const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, role, onClose }) => {
+const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, voiceOnly, role, onClose }) => {
     const cli = useContext(MatrixClientContext);
     useTypedEventEmitter(call, CallEvent.Close, onClose);
 
@@ -40,7 +40,8 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
         // Always update the widget data so that we don't ignore "skipLobby" accidentally.
         call.widget.data ??= {};
         call.widget.data.skipLobby = skipLobby;
-    }, [call.widget, skipLobby]);
+        call.widget.data.voiceOnly = voiceOnly;
+    }, [call.widget, skipLobby, voiceOnly]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
         // The stickyPromise has to resolve before the widget actually becomes sticky.

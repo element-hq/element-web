@@ -361,6 +361,7 @@ export class RoomViewStore extends EventEmitter {
 
             if (room && (payload.view_call || isVideoRoom(room))) {
                 let call = CallStore.instance.getCall(payload.room_id);
+                console.log("Has call", call);
                 // Start a call if not already there
                 if (call === null) {
                     ElementCall.create(room, false, payload.voiceOnly);

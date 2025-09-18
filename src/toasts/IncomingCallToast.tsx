@@ -238,6 +238,8 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         (e: ButtonEvent): void => {
             e.stopPropagation();
 
+            console.log("notif content", notificationContent);
+
             // The toast will be automatically dismissed by the dispatcher callback above
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
