@@ -84,7 +84,7 @@ const enum State {
  * @returns the call button attributes for the given room
  */
 export const useRoomCall = (
-    room: Room|LocalRoom,
+    room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
     voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
@@ -281,7 +281,7 @@ export const useRoomCall = (
     // We hide both buttons if:
     // - they require widgets but widgets are disabled
     // - if the Voip feature is disabled.
-    // - The room is not created yet (rendering "send first message view") 
+    // - The room is not created yet (rendering "send first message view")
     if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled || roomDoesNotExist) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;

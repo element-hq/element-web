@@ -61,7 +61,7 @@ export default function RoomHeader({
     additionalButtons,
     oobData,
 }: {
-    room: Room|LocalRoom;
+    room: Room | LocalRoom;
     additionalButtons?: ViewRoomOpts["buttons"];
     oobData?: IOOBData;
 }): JSX.Element {
