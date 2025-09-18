@@ -54,7 +54,7 @@ import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
-import { LocalRoom } from "../../../../models/LocalRoom.ts";
+import { type LocalRoom } from "../../../../models/LocalRoom.ts";
 
 export default function RoomHeader({
     room,
