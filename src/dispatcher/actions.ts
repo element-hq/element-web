@@ -126,11 +126,6 @@ export enum Action {
     ViewRoom = "view_room",
 
     /**
-     * Changes room based on payload parameters, with parameters for a call. Should be used with ViewRoomCallPayload.
-     */
-    ViewRoomCall = "view_room_call",
-
-    /**
      * Changes thread based on payload parameters. Should be used with ThreadPayload.
      */
     ViewThread = "view_thread",
