@@ -96,9 +96,12 @@ const WysiwygAutocomplete = ({
                 return;
             }
             // TODO - handle "community" type
+            case "community": {
+                return; // no-op until we decide how to handle community in the wysiwyg composer
+            }
             default:
                 {
-                    // similar to the cider editor we handle plain text emoji replacement in the default case
+                    // similar to the cider editor we handle emoji and other plain text replacement in the default case
                     handleEmoji(completion.completion);
                 }
                 return;
