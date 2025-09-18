@@ -36,6 +36,7 @@ import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
+import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 /**
  * Get the key for the incoming call toast. A combination of the event ID and room ID.
@@ -274,14 +275,20 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
             participantCount={0}
         />
     );
+
+    const isVoice = notificationContent.media_hint === "audio";
+
     return (
         <TooltipProvider>
             <>
                 <div className="mx_IncomingCallToast_content">
-                    <div className="mx_IncomingCallToast_message">
+                    {isVoice ? <div className="mx_IncomingCallToast_message">
+                        <VoiceCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                        {_t("voip|voice_call_started")}
+                    </div> : <div className="mx_IncomingCallToast_message">
                         <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
                         {_t("voip|video_call_started")}
-                    </div>
+                    </div>}
                     <AvatarWithDetails
                         avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
                         details={callLiveContentSummary}

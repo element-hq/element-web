@@ -100,7 +100,7 @@ import AppsDrawer from "../views/rooms/AppsDrawer";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { ViewRoomCallPayload, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import FileDropTarget from "./FileDropTarget";
@@ -729,7 +729,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onCallClose = (): void => {
         // Stop viewing the call
-        defaultDispatcher.dispatch<ViewRoomPayload>(
+        defaultDispatcher.dispatch<ViewRoomCallPayload>(
             {
                 action: Action.ViewRoom,
                 room_id: this.state.roomId,
@@ -2610,6 +2610,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             room={this.state.room}
                             resizing={this.state.resizing}
                             skipLobby={this.context.roomViewStore.skipCallLobby() ?? false}
+                            voiceOnly={this.context.roomViewStore.isVoiceOnly()}
                             role="main"
                             onClose={this.onCallClose}
                         />

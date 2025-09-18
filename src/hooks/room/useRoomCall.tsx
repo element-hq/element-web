@@ -29,7 +29,7 @@ import { type IApp } from "../../stores/WidgetStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
@@ -140,11 +140,6 @@ export const useRoomCall = (
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
-        if (memberCount <= 2) {
-            options.push(PlatformCallType.LegacyCall);
-        } else if (mayEditWidgets || hasJitsiWidget) {
-            options.push(PlatformCallType.JitsiCall);
-        }
         if (groupCallsEnabled) {
             if (hasGroupCall || mayCreateElementCalls) {
                 options.push(PlatformCallType.ElementCall);
@@ -152,6 +147,11 @@ export const useRoomCall = (
             if (useElementCallExclusively && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
             }
+        }
+        if (memberCount <= 2) {
+            options.push(PlatformCallType.LegacyCall);
+        } else if (mayEditWidgets || hasJitsiWidget) {
+            options.push(PlatformCallType.JitsiCall);
         }
         if (hasGroupCall && WidgetType.CALL.matches(groupCall.widget.type)) {
             // only allow joining the ongoing Element call if there is one.
@@ -273,7 +273,9 @@ export const useRoomCall = (
     }, [isViewingCall, room.roomId]);
 
     // We hide the voice call button if it'd have the same effect as the video call button
-    let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
+    let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || (
+        !callOptions.includes(PlatformCallType.LegacyCall) && !callOptions.includes(PlatformCallType.ElementCall)
+    );
     let hideVideoCallButton = false;
     // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
     if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled) {

@@ -22,6 +22,7 @@ interface JoinCallViewProps {
     resizing: boolean;
     call: Call;
     skipLobby?: boolean;
+    voiceOnly?: boolean;
     role?: AriaRole;
     onClose: () => void;
 }
@@ -70,6 +71,7 @@ interface CallViewProps {
     room: Room;
     resizing: boolean;
     skipLobby?: boolean;
+    voiceOnly?: boolean;
     role?: AriaRole;
     /**
      * Callback for when the user closes the call.
@@ -77,7 +79,7 @@ interface CallViewProps {
     onClose: () => void;
 }
 
-export const CallView: FC<CallViewProps> = ({ room, resizing, skipLobby, role, onClose }) => {
+export const CallView: FC<CallViewProps> = ({ room, resizing, skipLobby, role, onClose, voiceOnly }) => {
     const call = useCall(room.roomId);
 
     return (
@@ -87,6 +89,7 @@ export const CallView: FC<CallViewProps> = ({ room, resizing, skipLobby, role, o
                 resizing={resizing}
                 call={call}
                 skipLobby={skipLobby}
+                voiceOnly={voiceOnly}
                 role={role}
                 onClose={onClose}
             />

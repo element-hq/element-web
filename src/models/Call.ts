@@ -769,7 +769,7 @@ export class ElementCall extends Call {
         this.updateParticipants();
     }
 
-    public static get(room: Room): ElementCall | null {
+    public static get(room: Room, voiceOnly?: boolean): ElementCall | null {
         const apps = WidgetStore.instance.getApps(room.roomId);
         const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
         const session = room.client.matrixRTC.getRoomSession(room);
@@ -785,6 +785,7 @@ export class ElementCall extends Call {
                 room.client,
                 undefined,
                 isVideoRoom(room),
+                voiceOnly,
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }

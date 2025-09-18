@@ -4063,6 +4063,7 @@
         "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
+        "voice_call_started": "Voice call started",
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
