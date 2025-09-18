@@ -5,11 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import { useEffect, useState } from "react";
-import { type MatrixClient, MatrixError, ProfileKeyMSC4175Timezone, ProfileKeyTimezone } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    MatrixError,
+    ProfileKeyMSC4175Timezone,
+    ProfileKeyTimezone,
+} from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { getTwelveHourOptions } from "../DateUtils.ts";
 import { useSettingValue } from "./useSettings.ts";
-import { logger } from "matrix-js-sdk/src/logger";
+
+const log = logger.getChild("useUserTimezone");
 
 /**
  * Fetch a user's delclared timezone through their profile, and return
@@ -28,7 +35,6 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
     const [friendly, setFriendly] = useState<string>();
     const [supported, setSupported] = useState<boolean>();
     const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
-    const log = logger.getChild("useUserTimezone");
 
     useEffect(() => {
         if (!cli || supported !== undefined) {
@@ -92,7 +98,7 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                 log.warn(`Could not render current timezone for ${userId}`, ex);
             }
         })();
-    }, [supported, userId, cli, showTwelveHour]);
+    }, [log, supported, userId, cli, showTwelveHour]);
 
     if (!timezone || !friendly) {
         return null;

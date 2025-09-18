@@ -16,6 +16,7 @@ import {
     ClientEvent,
     PushRuleKind,
     ProfileKeyTimezone,
+    ProfileKeyMSC4175Timezone,
 } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -34,7 +35,6 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
-import { ProfileKeyMSC4175Timezone } from "matrix-js-sdk";
 
 // Create a mock resizer instance that can be shared across tests
 const mockResizerInstance = {
