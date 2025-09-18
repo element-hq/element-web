@@ -15,6 +15,7 @@ import {
     MatrixEvent,
     ClientEvent,
     PushRuleKind,
+    ProfileKeyTimezone,
 } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -33,6 +34,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
+import { ProfileKeyMSC4175Timezone } from "matrix-js-sdk";
 
 // Create a mock resizer instance that can be shared across tests
 const mockResizerInstance = {
@@ -470,30 +472,36 @@ describe("<LoggedInView />", () => {
         it("does not update the timezone when userTimezonePublish is off", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
             expect(mockClient.setExtendedProfileProperty).not.toHaveBeenCalled();
         });
         it("should set the user timezone when userTimezonePublish is enabled", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
         });
 
         it("should set the user timezone when the timezone is changed", async () => {
             const newTimezone = "Europe/Paris";
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
             await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, newTimezone);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", newTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, newTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, newTimezone);
         });
 
         it("should clear the timezone when the publish feature is turned off", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
         });
     });
 
