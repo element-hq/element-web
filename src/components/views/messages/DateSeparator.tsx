@@ -320,7 +320,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         const label = this.getLabel();
 
         let dateHeaderContent: JSX.Element;
-        if (this.state.jumpToDateEnabled) {
+        if (this.state.jumpToDateEnabled && !this.props.forExport) {
             dateHeaderContent = this.renderJumpToDateMenu();
         } else {
             dateHeaderContent = (

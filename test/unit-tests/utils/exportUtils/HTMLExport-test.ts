@@ -30,8 +30,12 @@ import SdkConfig from "../../../../src/SdkConfig";
 import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { mocked } from "jest-mock";
 
 jest.mock("jszip");
+jest.mock("../../../../src/settings/SettingsStore");
+
 
 const EVENT_MESSAGE: IRoomEvent = {
     event_id: "$1",
@@ -674,5 +678,35 @@ describe("HTMLExport", () => {
 
         const file = getMessageFile(exporter);
         expect(await file.text()).toContain(reaction.getContent()["m.relates_to"]?.key);
+    });
+
+    it("should not crash when jump to date flag is enabled", async () => {
+        // Only mock getValue for "feature_jump_to_date", fallback to real implementation otherwise
+        const actualSettingsStore = jest.requireActual("../../../../src/settings/SettingsStore").default;
+        mocked(SettingsStore).getValue.mockImplementation((name: string) => {
+            if (name === "feature_jump_to_date") {
+                return true;
+            }
+            // fallback to real implementation
+            return actualSettingsStore.getValue(name);
+        });
+
+        mockMessages(EVENT_MESSAGE);
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const file = getMessageFile(exporter);
+        expect(file).not.toBeUndefined();
     });
 });
