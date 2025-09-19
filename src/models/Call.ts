@@ -570,6 +570,12 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
+    /**
+     * Generates the correct URL for an Element Call widget.
+     * @param client 
+     * @param roomId 
+     * @returns 
+     */
     private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
         const baseUrl = window.location.href;
         let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
@@ -666,10 +672,19 @@ export class ElementCall extends Call {
         return url;
     }
 
-    // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false
-    // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby).
+
+    /**
+     * Creates a new widget if there isn't any widget of typ Call in this room.
+     * Defaults for creating a new widget are: skipLobby = false
+     * When there is already a widget the current widget configuration will be used or can be overwritten
+     * by passing the according parameters (skipLobby).
+     * @param roomId 
+     * @param client 
+     * @param skipLobby 
+     * @param returnToLobby 
+     * @param voiceOnly 
+     * @returns 
+     */
     private static createOrGetCallWidget(
         roomId: string,
         client: MatrixClient,
@@ -677,6 +692,7 @@ export class ElementCall extends Call {
         returnToLobby: boolean | undefined,
         voiceOnly: boolean | undefined,
     ): IApp {
+        console.log("createOrGetCallWidget", new Error().stack);
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
             // Always update the widget data because even if the widget is already created,
@@ -688,7 +704,6 @@ export class ElementCall extends Call {
             if (returnToLobby !== undefined) {
                 overwrites.returnToLobby = returnToLobby;
             }
-            console.log("with ecWidget");
             ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites, voiceOnly);
             return ecWidget;
         }
@@ -696,7 +711,6 @@ export class ElementCall extends Call {
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
         const url = ElementCall.generateWidgetUrl(client, roomId);
-        console.log("addVirtualWidget", new Error().stack);
         const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
@@ -722,6 +736,13 @@ export class ElementCall extends Call {
         return createdWidget;
     }
 
+    /**
+     * Get the correct intent for a widget, so that Element Call presents the correct
+     * default config.
+     * @param client The matrix client.
+     * @param roomId 
+     * @param voiceOnly Should the call be voice-only, or video (default).
+     */
     public static getWidgetIntent(
         client: MatrixClient,
         roomId: string,
@@ -746,6 +767,7 @@ export class ElementCall extends Call {
                 }
             }
         }
+        // If unknown, default to joining an existing call.
         return ElementCallIntent.JoinExisting;
     }
 
@@ -765,11 +787,10 @@ export class ElementCall extends Call {
 
         let intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
 
-        console.log("getWidgetData", intent, voiceOnly);
-
         return {
             ...currentData,
             ...overwriteData,
+            intent,
             perParticipantE2EE,
         };
     }
