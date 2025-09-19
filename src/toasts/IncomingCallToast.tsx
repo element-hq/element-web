@@ -245,7 +245,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 room_id: room?.roomId,
                 view_call: true,
                 skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
-                voiceOnly: notificationContent.media_hint === "audio",
+                voiceOnly: notificationContent["m.call.intent"] === "audio",
                 metricsTrigger: undefined,
             });
         },
@@ -265,7 +265,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
-    const isVoice = notificationContent.media_hint === "audio";
+    const isVoice = notificationContent["m.call.intent"] === "audio";
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
     const detailsInformation = notificationContent.notification_type === "ring" ?
         <span>{otherUserId}</span> : <LiveContentSummary
