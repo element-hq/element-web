@@ -23,6 +23,7 @@ import {
 import fetchMock from "fetch-mock-jest";
 import escapeHtml from "escape-html";
 import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
+import { mocked } from "jest-mock";
 
 import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
 import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
@@ -31,11 +32,9 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { mocked } from "jest-mock";
 
 jest.mock("jszip");
 jest.mock("../../../../src/settings/SettingsStore");
-
 
 const EVENT_MESSAGE: IRoomEvent = {
     event_id: "$1",
@@ -92,6 +91,7 @@ describe("HTMLExport", () => {
     );
 
     beforeEach(() => {
+        jest.clearAllMocks();
         jest.useFakeTimers();
         jest.setSystemTime(REPEATABLE_DATE);
 
@@ -100,6 +100,13 @@ describe("HTMLExport", () => {
 
         room = new Room("!myroom:example.org", client, "@me:example.org");
         client.getRoom.mockReturnValue(room);
+
+        // Set up a default mock that uses the actual SettingsStore implementation
+        const actualSettingsStore = jest.requireActual("../../../../src/settings/SettingsStore").default;
+        mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
+            // Default to the real implementation
+            return actualSettingsStore.getValue(name, roomId, excludeDefault);
+        });
     });
 
     function mockMessages(...events: IRoomEvent[]): void {
@@ -681,18 +688,18 @@ describe("HTMLExport", () => {
     });
 
     it("should not crash when jump to date flag is enabled", async () => {
-        // Only mock getValue for "feature_jump_to_date", fallback to real implementation otherwise
-        const actualSettingsStore = jest.requireActual("../../../../src/settings/SettingsStore").default;
-        mocked(SettingsStore).getValue.mockImplementation((name: string) => {
+        // Override just the feature flag for this specific test
+        const originalMock = mocked(SettingsStore).getValue.getMockImplementation();
+
+        mocked(SettingsStore).getValue.mockImplementation((name: any, roomId?: any, excludeDefault?: any): any => {
             if (name === "feature_jump_to_date") {
                 return true;
             }
-            // fallback to real implementation
-            return actualSettingsStore.getValue(name);
+            // Fallback to the default mock implementation set in beforeEach
+            return originalMock!(name, roomId, excludeDefault);
         });
 
         mockMessages(EVENT_MESSAGE);
-
         const exporter = new HTMLExporter(
             room,
             ExportType.LastNMessages,
