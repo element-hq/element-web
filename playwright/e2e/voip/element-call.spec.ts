@@ -71,7 +71,7 @@ test.describe("Element Call", () => {
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
-    
+
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
             await expect(frameUrlStr).toBeDefined();
             // Ensure we set the correct parameters for ECall.
