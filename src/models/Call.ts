@@ -593,6 +593,8 @@ export class ElementCall extends Call {
         } else if (isVideoRoom(room)) {
             // Video call rooms always return to the lobby.
             params.append("returnToLobby", "true");
+            // Video call rooms already exist, so just treat as if we're joining a group call.
+            params.append("intent", ElementCallIntent.JoinExisting);
             return;
         }
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
@@ -602,7 +604,6 @@ export class ElementCall extends Call {
         // preload by default so we override here. This can be removed when that package
         // is released and upgraded.
         if (isDM) {
-            params.append("sendNotificationType", "ring");
             if (hasCallStarted) {
                 params.append("intent", ElementCallIntent.JoinExistingDM);
                 params.append("preload", "false");
@@ -611,7 +612,6 @@ export class ElementCall extends Call {
                 params.append("preload", "false");
             }
         } else {
-            params.append("sendNotificationType", "notification");
             if (hasCallStarted) {
                 params.append("intent", ElementCallIntent.JoinExisting);
                 params.append("preload", "false");
