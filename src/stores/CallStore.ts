@@ -46,14 +46,10 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (!this.matrixClient) return;
-        // We assume that the calls present in a room are a function of room
-        // widgets and group calls, so we initialize the room map here and then
-        // update it whenever those change
-        for (const room of this.matrixClient.getRooms()) {
-            this.updateRoom(room);
-        }
         this.matrixClient.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
         this.matrixClient.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
+
+        // Whenever a widget gets updated, we want to recheck the list of calls.
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
 
         // If the room ID of a previously connected call is still in settings at
