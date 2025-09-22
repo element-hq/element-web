@@ -770,7 +770,7 @@ export class ElementCall extends Call {
         this.updateParticipants();
     }
 
-    public static get(room: Room, params: WidgetGenerationParameters): ElementCall | null {
+    public static get(room: Room, params: WidgetGenerationParameters = {}): ElementCall | null {
         const apps = WidgetStore.instance.getApps(room.roomId);
         const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
         const session = room.client.matrixRTC.getRoomSession(room);
