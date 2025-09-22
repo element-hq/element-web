@@ -61,17 +61,19 @@ test.describe("Element Call", () => {
     test.describe("Group Chat", () => {
         test.use({
             room: async ({ page, app, user, bot }, use) => {
-                const roomId = await app.client.createRoom({ name: "TestRoom" });
+                const roomId = await app.client.createRoom({ name: "TestRoom", invite: [user.userId] });
                 await use({ roomId });
             },
         });
         test("should be able to start a video call", async ({ page, user, room, app }) => {
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
+    
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
             await expect(frameUrlStr).toBeDefined();
-
             // Ensure we set the correct parameters for ECall.
             const url = new URL(frameUrlStr);
             const hash = new URLSearchParams(url.hash.slice(1));
@@ -82,11 +84,14 @@ test.describe("Element Call", () => {
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.keyboard.down("Shift");
             await page.getByRole("menuitem", { name: "Element Call" }).click();
             await page.keyboard.up("Shift");
+
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
             await expect(frameUrlStr).toBeDefined();
             const url = new URL(frameUrlStr);
@@ -114,10 +119,13 @@ test.describe("Element Call", () => {
         });
 
         test("should be able to start a video call", async ({ page, user, room, app }) => {
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
+
             await expect(frameUrlStr).toBeDefined();
             const url = new URL(frameUrlStr);
             const hash = new URLSearchParams(url.hash.slice(1));
@@ -128,12 +136,15 @@ test.describe("Element Call", () => {
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, room, app }) => {
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.keyboard.down("Shift");
             await page.getByRole("menuitem", { name: "Element Call" }).click();
             await page.keyboard.up("Shift");
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
+
             await expect(frameUrlStr).toBeDefined();
             const url = new URL(frameUrlStr);
             const hash = new URLSearchParams(url.hash.slice(1));
