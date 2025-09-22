@@ -582,7 +582,7 @@ export class ElementCall extends Call {
      * @param client The current client.
      * @param roomId The room ID for the call.
      */
-    private static appendCallNotifIntent(params: URLSearchParams, client: MatrixClient, roomId: string): void {
+    private static appendRoomParams(params: URLSearchParams, client: MatrixClient, roomId: string): void {
         const room = client.getRoom(roomId);
         if (!room || isVideoRoom(room)) {
             // If the room isn't known, or the room is a video room then skip setting an intent.
@@ -709,7 +709,7 @@ export class ElementCall extends Call {
                 .forEach((font) => params.append("font", font));
         }
         this.appendAnalyticsParams(params, client);
-        this.appendCallNotifIntent(params, client, roomId);
+        this.appendRoomParams(params, client, roomId);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
