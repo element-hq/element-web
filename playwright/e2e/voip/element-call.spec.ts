@@ -19,13 +19,14 @@ function assertCommonCallParameters(
     expect(url.has("widgetId")).toEqual(true);
     expect(url.has("parentUrl")).toEqual(true);
 
-    expect(hash.get("returnToLobby")).toEqual("false");
     expect(hash.get("perParticipantE2EE")).toEqual("false");
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
     expect(hash.get("preload")).toEqual("false");
+
     expect(hash.has("rageshakeSubmitUrl")).toEqual(true);
+    expect(hash.has("returnToLobby")).toEqual(false);
 }
 
 test.describe("Element Call", () => {
