@@ -102,6 +102,9 @@ interface CallEventHandlerMap {
  * These parameters are hints only, and may not be accepted by the implementation.
  */
 export interface WidgetGenerationParameters {
+    /**
+     * Skip showing the lobby screen of a call.
+     */
     skipLobby?: boolean;
 }
 
@@ -584,9 +587,12 @@ export class ElementCall extends Call {
      */
     private static appendRoomParams(params: URLSearchParams, client: MatrixClient, roomId: string): void {
         const room = client.getRoom(roomId);
-        if (!room || isVideoRoom(room)) {
+        if (!room) {
             // If the room isn't known, or the room is a video room then skip setting an intent.
             return;
+        } else if (isVideoRoom(room)) {
+            // Video call rooms always return to the lobby.
+            params.append("returnToLobby", "true");
         }
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
         const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
@@ -668,7 +674,6 @@ export class ElementCall extends Call {
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             // Template variables are used, so that this can be configured using the widget data.
-            returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
@@ -721,17 +726,10 @@ export class ElementCall extends Call {
         roomId: string,
         client: MatrixClient,
         params: WidgetGenerationParameters = {},
-        returnToLobby: boolean | undefined,
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
-            // Always update the widget data because even if the widget is already created,
-            // we might have settings changes that update the widget.
-            const overwrites: IWidgetData = {};
-            if (returnToLobby !== undefined) {
-                overwrites.returnToLobby = returnToLobby;
-            }
-            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites);
+            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {});
             return ecWidget;
         }
 
@@ -746,14 +744,7 @@ export class ElementCall extends Call {
                 type: WidgetType.CALL.preferred,
                 url: url.toString(),
                 waitForIframeLoad: false,
-                data: ElementCall.getWidgetData(
-                    client,
-                    roomId,
-                    {},
-                    {
-                        returnToLobby: returnToLobby ?? false,
-                    },
-                ),
+                data: ElementCall.getWidgetData(client, roomId, {}),
             },
             roomId,
         );
@@ -761,12 +752,7 @@ export class ElementCall extends Call {
         return createdWidget;
     }
 
-    private static getWidgetData(
-        client: MatrixClient,
-        roomId: string,
-        currentData: IWidgetData,
-        overwriteData: IWidgetData,
-    ): IWidgetData {
+    private static getWidgetData(client: MatrixClient, roomId: string, currentData: IWidgetData): IWidgetData {
         let perParticipantE2EE = false;
         if (
             client.getRoom(roomId)?.hasEncryptionStateEvent() &&
@@ -775,13 +761,12 @@ export class ElementCall extends Call {
             perParticipantE2EE = true;
         return {
             ...currentData,
-            ...overwriteData,
             perParticipantE2EE,
         };
     }
 
     private onCallEncryptionSettingsChange(): void {
-        this.widget.data = ElementCall.getWidgetData(this.client, this.roomId, this.widget.data ?? {}, {});
+        this.widget.data = ElementCall.getWidgetData(this.client, this.roomId, this.widget.data ?? {});
     }
 
     private constructor(
@@ -812,12 +797,7 @@ export class ElementCall extends Call {
         // - or this is a call room. Then we also always want to show a call.
         if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
             // create a widget for the case we are joining a running call and don't have on yet.
-            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
-                room.roomId,
-                room.client,
-                params,
-                isVideoRoom(room),
-            );
+            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(room.roomId, room.client, params);
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }
 
@@ -825,7 +805,7 @@ export class ElementCall extends Call {
     }
 
     public static create(room: Room, params: WidgetGenerationParameters = {}): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, params, isVideoRoom(room));
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, params);
     }
 
     public async start(): Promise<void> {
