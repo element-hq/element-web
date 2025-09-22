@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
+
 import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";

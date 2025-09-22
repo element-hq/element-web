@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, Preset } from "matrix-js-sdk/src/matrix";
+import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
@@ -104,10 +104,10 @@ test.describe("Element Call", () => {
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
                     name: "TestRoom",
-                    preset: Preset.TrustedPrivateChat,
+                    preset: "trusted_private_chat" as Preset.TrustedPrivateChat,
                     invite: [bot.credentials.userId],
                 });
-                await app.client.setAccountData(EventType.Direct, {
+                await app.client.setAccountData("m.direct" as EventType.Direct, {
                     [bot.credentials.userId]: [roomId],
                 });
                 await use({ roomId });
