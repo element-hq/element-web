@@ -45,9 +45,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     }
 
     protected async onReady(): Promise<any> {
-        if (!this.matrixClient) return;
-        this.matrixClient.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
-        this.matrixClient.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
+        // Legacy calls only
+        this.matrixClient?.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
+        this.matrixClient?.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
 
         // Whenever a widget gets updated, we want to recheck the list of calls.
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
@@ -79,11 +79,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.calls.clear();
         this._connectedCalls.clear();
 
-        if (this.matrixClient) {
-            this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
-            this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
-            this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
-        }
+        this.matrixClient?.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
+        this.matrixClient?.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
+        this.matrixClient?.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
