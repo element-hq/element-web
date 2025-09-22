@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
+import { type EmptyObject, type GroupCall, type Room } from "matrix-js-sdk/src/matrix";
 
-import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -109,38 +109,43 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
     private updateRoom(room: Room): void {
-        if (!this.calls.has(room.roomId)) {
-            const call = Call.get(room);
-
-            if (call) {
-                const onConnectionState = (state: ConnectionState): void => {
-                    if (state === ConnectionState.Connected) {
-                        this.connectedCalls = new Set([...this.connectedCalls, call]);
-                    } else if (state === ConnectionState.Disconnected) {
-                        this.connectedCalls = new Set([...this.connectedCalls].filter((c) => c !== call));
-                    }
-                };
-                const onDestroy = (): void => {
-                    this.calls.delete(room.roomId);
-                    for (const [event, listener] of this.callListeners.get(call)!) call.off(event, listener);
-                    this.updateRoom(room);
-                };
-
-                call.on(CallEvent.ConnectionState, onConnectionState);
-                call.on(CallEvent.Destroy, onDestroy);
-
-                this.calls.set(room.roomId, call);
-                this.callListeners.set(
-                    call,
-                    new Map<CallEvent, (...args: any[]) => unknown>([
-                        [CallEvent.ConnectionState, onConnectionState],
-                        [CallEvent.Destroy, onDestroy],
-                    ]),
-                );
-            }
-
-            this.emit(CallStoreEvent.Call, call, room.roomId);
+        if (this.calls.has(room.roomId)) {
+            // Room has a call, nothing to do here.
+            return;
         }
+        const call = Call.get(room);
+
+        if (call) {
+            logger.debug(`updateRooms(${room.roomId}) called, binding management hooks`);
+            const onConnectionState = (state: ConnectionState): void => {
+                if (state === ConnectionState.Connected) {
+                    this.connectedCalls = new Set([...this.connectedCalls, call]);
+                } else if (state === ConnectionState.Disconnected) {
+                    this.connectedCalls = new Set([...this.connectedCalls].filter((c) => c !== call));
+                }
+            };
+            const onDestroy = (): void => {
+                this.calls.delete(room.roomId);
+                for (const [event, listener] of this.callListeners.get(call)!) call.off(event, listener);
+                this.updateRoom(room);
+            };
+
+            call.on(CallEvent.ConnectionState, onConnectionState);
+            call.on(CallEvent.Destroy, onDestroy);
+
+            this.calls.set(room.roomId, call);
+            this.callListeners.set(
+                call,
+                new Map<CallEvent, (...args: any[]) => unknown>([
+                    [CallEvent.ConnectionState, onConnectionState],
+                    [CallEvent.Destroy, onDestroy],
+                ]),
+            );
+        } else {
+            logger.debug(`updateRooms(${room.roomId}) called but no Call has been constructed`);
+        }
+
+        this.emit(CallStoreEvent.Call, call, room.roomId);
     }
 
     /**

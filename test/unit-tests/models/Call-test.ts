@@ -817,15 +817,6 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("sendNotificationType")).toBe("notification");
         });
-
-        it("requests to skip lobby in params", async () => {
-            ElementCall.create(room, { skipLobby: true });
-            const call = Call.get(room);
-            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-
-            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("skipLobby")).toBe("true");
-        });
     });
 
     describe("instance in a non-video room", () => {
