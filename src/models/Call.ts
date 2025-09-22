@@ -574,12 +574,72 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string, opts: WidgetGenerationParameters = {}): URL {
-        const baseUrl = window.location.href;
-        let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
+    private static appendCallNotifIntent(params: URLSearchParams, client: MatrixClient, roomId: string): void {
+        const room = client.getRoom(roomId);
+        if (!room || isVideoRoom(room)) {
+            // If the room isn't known, or the room is a video room then skip setting an intent.
+            return;
+        }
+        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+        const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+        // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
+        // preload by default so we override here. This can be removed when that package
+        // is released and upgraded.
+        if (isDM) {
+            params.append("sendNotificationType", "ring");
+            if (hasCallStarted) {
+                params.append("intent", ElementCallIntent.JoinExistingDM);
+                params.append("preload", "false");
+            } else {
+                params.append("intent", ElementCallIntent.StartCallDM);
+                params.append("preload", "false");
+            }
+        } else {
+            params.append("sendNotificationType", "notification");
+            if (hasCallStarted) {
+                params.append("intent", ElementCallIntent.JoinExisting);
+                params.append("preload", "false");
+            } else {
+                params.append("intent", ElementCallIntent.StartCall);
+                params.append("preload", "false");
+            }
+        }
+    }
 
-        const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
-        if (elementCallUrl) url = new URL(elementCallUrl);
+    private static appendPosthogParams(params: URLSearchParams, client: MatrixClient) {
+        const posthogConfig = SdkConfig.get("posthog");
+        if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
+            return;
+        }
+
+        const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE)?.getContent();
+        // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
+        // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
+        // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
+        // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
+        const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn ? accountAnalyticsData?.id : "";
+
+        params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
+        params.append("posthogUserId", analyticsID);
+        params.append("posthogApiHost", posthogConfig.api_host);
+        params.append("posthogApiKey", posthogConfig.project_api_key);
+
+        // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
+        // unlike EW where data is shared upon an intentional user action (rageshake).
+        const sentryConfig = SdkConfig.get("sentry");
+        if (sentryConfig) {
+            params.append("sentryDsn", sentryConfig.dsn);
+            params.append("sentryEnvironment", sentryConfig.environment ?? "");
+        }
+    }
+
+    private static generateWidgetUrl(client: MatrixClient, roomId: string, opts: WidgetGenerationParameters = {}): URL {
+        const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
+        const url = elementCallUrlOverride
+            ? new URL(elementCallUrlOverride)
+            : // this strips hash fragment from baseUrl
+              new URL("./widgets/element-call/index.html#", window.location.href);
 
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
@@ -601,68 +661,15 @@ export class ElementCall extends Call {
             params.set("skipLobby", opts.skipLobby.toString());
         }
 
-        const room = client.getRoom(roomId);
-        if (room !== null && !isVideoRoom(room)) {
-            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-            // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
-            // preload by default so we override here. This can be removed when that package
-            // is released and upgraded.
-            if (isDM) {
-                params.append("sendNotificationType", "ring");
-                if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExistingDM);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", ElementCallIntent.StartCallDM);
-                    params.append("preload", "false");
-                }
-            } else {
-                params.append("sendNotificationType", "notification");
-                if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExisting);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", ElementCallIntent.StartCall);
-                    params.append("preload", "false");
-                }
-            }
-        }
-
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        const posthogConfig = SdkConfig.get("posthog");
-        if (posthogConfig && PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled) {
-            const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE)?.getContent();
-            // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
-            // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
-            // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
-            // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
-            const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn
-                ? accountAnalyticsData?.id
-                : "";
-
-            params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
-            params.append("posthogUserId", analyticsID);
-            params.append("posthogApiHost", posthogConfig.api_host);
-            params.append("posthogApiKey", posthogConfig.project_api_key);
-
-            // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
-            // unlike EW where data is shared upon an intentional user action (rageshake).
-            const sentryConfig = SdkConfig.get("sentry");
-            if (sentryConfig) {
-                params.append("sentryDsn", sentryConfig.dsn);
-                params.append("sentryEnvironment", sentryConfig.environment ?? "");
-            }
-        }
-
         if (SettingsStore.getValue("fallbackICEServerAllowed")) {
             params.append("allowIceFallback", "true");
         }
+
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
             params.append("allowVoipWithNoMedia", "true");
         }
@@ -679,6 +686,8 @@ export class ElementCall extends Call {
                 })
                 .forEach((font) => params.append("font", font));
         }
+        this.appendPosthogParams(params, client);
+        this.appendCallNotifIntent(params, client, roomId);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
