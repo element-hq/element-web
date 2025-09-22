@@ -79,7 +79,7 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("sendNotificationType")).toEqual("notification");
             expect(hash.get("intent")).toEqual("start_call");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
@@ -114,7 +114,7 @@ test.describe("Element Call", () => {
             },
         });
 
-        test("should be able to start a video call", async ({ page, user, bot, room, app }) => {
+        test("should be able to start a video call", async ({ page, user, room, app }) => {
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
@@ -125,10 +125,10 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("sendNotificationType")).toEqual("ring");
             expect(hash.get("intent")).toEqual("start_call_dm");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
-        test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
+        test("should be able to skip lobby by holding down shift", async ({ page, user, room, app }) => {
             await app.viewRoomById(room.roomId);
             await page.getByRole("button", { name: "Video call" }).click();
             await page.keyboard.down("Shift");

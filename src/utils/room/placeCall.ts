@@ -26,7 +26,7 @@ export const placeCall = async (
     room: Room,
     callType: CallType,
     platformCallType: PlatformCallType,
-    skipLobby: boolean,
+    skipLobby: boolean | undefined,
 ): Promise<void> => {
     const { analyticsName } = getPlatformCallTypeProps(platformCallType);
     PosthogTrackers.trackInteraction(analyticsName);

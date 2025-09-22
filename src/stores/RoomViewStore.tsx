@@ -739,10 +739,6 @@ export class RoomViewStore extends EventEmitter {
         return this.state.viewingCall;
     }
 
-    public skipCallLobby(): boolean | undefined {
-        return this.state.skipLobby;
-    }
-
     /**
      * Gets the current state of the 'promptForAskToJoin' property.
      *

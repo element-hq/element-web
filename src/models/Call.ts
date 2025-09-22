@@ -686,9 +686,6 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false
-    // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
         roomId: string,
         client: MatrixClient,
