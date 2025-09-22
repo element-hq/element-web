@@ -17,6 +17,7 @@ import {
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
 import { mocked, type MockedObject, type Mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import {
     mkRoomMember,
@@ -32,7 +33,6 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { OwnBeaconStore } from "../../../../../src/stores/OwnBeaconStore";
-import userEvent from "@testing-library/user-event";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 
