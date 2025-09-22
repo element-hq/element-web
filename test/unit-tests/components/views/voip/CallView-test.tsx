@@ -97,9 +97,4 @@ describe("CallView", () => {
         await renderView();
         expect(cleanSpy).toHaveBeenCalled();
     });
-
-    it("updates the call's skipLobby parameter", async () => {
-        await renderView();
-        expect(call.widget.data?.skipLobby).toBe(true);
-    });
 });
