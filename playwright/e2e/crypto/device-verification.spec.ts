@@ -201,6 +201,30 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
     });
 
+    test("After cancelling verify with another device, I can try again #29882", async ({ page, app, credentials }) => {
+        // Regression test for https://github.com/element-hq/element-web/issues/29882
+
+        // Log in without verifying
+        await logIntoElement(page, credentials);
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
+
+        // Start to verify with "Use another device" but cancel
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await page.getByRole("button", { name: "Use another device" }).click();
+        await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Close dialog" }).click();
+
+        // Start again
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+
+        // We should be offered to use another device again.
+        // (In the bug, we were immediately told that verification has been cancelled.)
+        await expect(page.getByRole("button", { name: "Use another device" })).toBeVisible();
+    });
+
     /** Helper for the three tests above which verify by recovery key */
     async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
         await page.getByRole("button", { name: "Use recovery key" }).click();
