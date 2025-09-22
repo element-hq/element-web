@@ -359,7 +359,7 @@ export class RoomViewStore extends EventEmitter {
                 let call = CallStore.instance.getCall(payload.room_id);
                 // Start a call if not already there
                 if (call === null) {
-                    ElementCall.create(room, false);
+                    ElementCall.create(room, { skipLobby: payload.skipLobby });
                     call = CallStore.instance.getCall(payload.room_id)!;
                 }
                 call.presented = true;

@@ -8,8 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
-import { type MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
-
 import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
@@ -55,7 +53,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         }
         this.matrixClient.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
         this.matrixClient.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
-        this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
 
         // If the room ID of a previously connected call is still in settings at
@@ -89,7 +86,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
             this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
             this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
-            this.matrixClient.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         }
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
@@ -187,7 +183,4 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     };
 
     private onGroupCall = (groupCall: GroupCall): void => this.updateRoom(groupCall.room);
-    private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
-        this.updateRoom(session.room);
-    };
 }
