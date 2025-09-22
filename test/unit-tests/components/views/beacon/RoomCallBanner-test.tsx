@@ -13,8 +13,8 @@ import {
     type MatrixClient,
     type RoomMember,
     RoomStateEvent,
-    Beacon,
-    BeaconIdentifier,
+    type Beacon,
+    type BeaconIdentifier,
 } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
