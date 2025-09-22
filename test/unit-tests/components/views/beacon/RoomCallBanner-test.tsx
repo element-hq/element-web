@@ -13,12 +13,10 @@ import {
     type MatrixClient,
     type RoomMember,
     RoomStateEvent,
-    type Beacon,
-    type BeaconIdentifier,
 } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
-import { mocked, type Mocked } from "jest-mock";
+import { mocked, type MockedObject, type Mocked } from "jest-mock";
 
 import {
     mkRoomMember,
@@ -39,11 +37,8 @@ jest.mock("../../../../../src/stores/OwnBeaconStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const EventEmitter = require("events");
     class MockOwnBeaconStore extends EventEmitter {
-        public getLiveBeaconIdsWithLocationPublishError = jest.fn().mockReturnValue([]);
-        public getBeaconById = jest.fn();
         public getLiveBeaconIds = jest.fn().mockReturnValue([{}]);
-        public readonly beaconUpdateErrors = new Map<BeaconIdentifier, Error>();
-        public readonly beacons = new Map<BeaconIdentifier, Beacon>();
+        public isMonitoringLiveLocation = false;
     }
     return {
         // @ts-ignore
@@ -105,6 +100,7 @@ describe("<RoomCallBanner />", () => {
     describe("call started", () => {
         let call: MockedCall;
         let widget: Widget;
+        let beaconStore: MockedObject<OwnBeaconStore>;
 
         beforeEach(() => {
             MockedCall.create(room, "1");
@@ -118,6 +114,10 @@ describe("<RoomCallBanner />", () => {
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                 stop: () => {},
             } as unknown as ClientWidgetApi);
+            beaconStore = mocked(OwnBeaconStore.instance);
+            beaconStore.getLiveBeaconIds.mockReturnValue([]);
+            // @ts-ignore writing to mock
+            beaconStore.isMonitoringLiveLocation = false;
         });
         afterEach(() => {
             cleanup(); // Unmount before we do any cleanup that might update the component
@@ -143,8 +143,9 @@ describe("<RoomCallBanner />", () => {
         });
 
         it("doesn't show banner if live location is ongoing", async () => {
-            // @ts-ignore writing to readonly variable
-            mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = true;
+            beaconStore.getLiveBeaconIds.mockReturnValue(["abcdef"]);
+            // @ts-ignore Writing to readonly value
+            beaconStore.isMonitoringLiveLocation = true;
             call.setConnectionState(ConnectionState.Disconnected);
             await renderBanner();
             const banner = await screen.queryByText("Video call");
