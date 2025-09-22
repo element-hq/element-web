@@ -32,6 +32,9 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { OwnBeaconStore } from "../../../../../src/stores/OwnBeaconStore";
+import userEvent from "@testing-library/user-event";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
 
 jest.mock("../../../../../src/stores/OwnBeaconStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -48,6 +51,8 @@ jest.mock("../../../../../src/stores/OwnBeaconStore", () => {
         },
     };
 });
+
+jest.mock("../../../../../src/dispatcher/dispatcher");
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -133,6 +138,41 @@ describe("<RoomCallBanner />", () => {
         it("shows Join button if the user has not joined", async () => {
             await renderBanner();
             await screen.findByText("Join");
+        });
+
+        it("joins the call when Join is clicked", async () => {
+            const user = userEvent.setup();
+            const dispatcherSpy = jest.fn();
+            defaultDispatcher.dispatch = dispatcherSpy;
+            await renderBanner();
+            const button = await screen.findByText("Join");
+            await user.click(button);
+
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                skipLobby: undefined,
+                metricsTrigger: undefined,
+            });
+        });
+
+        it("joins the call and skips lobby while shift is held", async () => {
+            const user = userEvent.setup();
+            const dispatcherSpy = jest.fn();
+            defaultDispatcher.dispatch = dispatcherSpy;
+            await renderBanner();
+            const button = await screen.findByText("Join");
+            await user.keyboard("[ShiftLeft>]"); // Press Shift (without releasing it)
+            await user.click(button);
+
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                skipLobby: true,
+                metricsTrigger: undefined,
+            });
         });
 
         it("doesn't show banner if the call is connected", async () => {

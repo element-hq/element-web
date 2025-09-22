@@ -12,7 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
+import defaultDispatcher, { type MatrixDispatcher } from "../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
@@ -80,6 +80,7 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
 
 interface Props {
     roomId: Room["roomId"];
+    dispatcher?: MatrixDispatcher;
 }
 
 const RoomCallBanner: React.FC<Props> = ({ roomId }) => {
