@@ -574,6 +574,14 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
+    /**
+     * Calculate the correct intent (and associated parameters) for an Element Call room. Paarameters
+     * will be applied to the `params` instance.
+     *
+     * @param params Existing URL parameters
+     * @param client The current client.
+     * @param roomId The room ID for the call.
+     */
     private static appendCallNotifIntent(params: URLSearchParams, client: MatrixClient, roomId: string): void {
         const room = client.getRoom(roomId);
         if (!room || isVideoRoom(room)) {
@@ -607,7 +615,14 @@ export class ElementCall extends Call {
         }
     }
 
-    private static appendPosthogParams(params: URLSearchParams, client: MatrixClient) {
+    /**
+     * Calculate the correct analytics parameters for an Element Call room. Paarameters
+     * will be applied to the `params` instance.
+     *
+     * @param params Existing URL parameters
+     * @param client The current client.
+     */
+    private static appendAnalyticsParams(params: URLSearchParams, client: MatrixClient): void {
         const posthogConfig = SdkConfig.get("posthog");
         if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
             return;
@@ -634,6 +649,15 @@ export class ElementCall extends Call {
         }
     }
 
+    /**
+     * Generate the correct Element Call widget URL for creating or joining a call in this room.
+     * Unless `Developer.elementCallUrl` is set, the widget will use the embedded Element Call package.
+     *
+     * @param client
+     * @param roomId
+     * @param opts
+     * @returns
+     */
     private static generateWidgetUrl(client: MatrixClient, roomId: string, opts: WidgetGenerationParameters = {}): URL {
         const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
         const url = elementCallUrlOverride
@@ -686,7 +710,7 @@ export class ElementCall extends Call {
                 })
                 .forEach((font) => params.append("font", font));
         }
-        this.appendPosthogParams(params, client);
+        this.appendAnalyticsParams(params, client);
         this.appendCallNotifIntent(params, client, roomId);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
