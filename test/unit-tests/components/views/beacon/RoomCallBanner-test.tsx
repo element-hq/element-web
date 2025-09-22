@@ -13,6 +13,8 @@ import {
     type MatrixClient,
     type RoomMember,
     RoomStateEvent,
+    Beacon,
+    BeaconIdentifier,
 } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
@@ -31,6 +33,26 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { OwnBeaconStore } from "../../../../../src/stores/OwnBeaconStore";
+
+jest.mock("../../../../../src/stores/OwnBeaconStore", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const EventEmitter = require("events");
+    class MockOwnBeaconStore extends EventEmitter {
+        public getLiveBeaconIdsWithLocationPublishError = jest.fn().mockReturnValue([]);
+        public getBeaconById = jest.fn();
+        public getLiveBeaconIds = jest.fn().mockReturnValue([{}]);
+        public readonly beaconUpdateErrors = new Map<BeaconIdentifier, Error>();
+        public readonly beacons = new Map<BeaconIdentifier, Beacon>();
+    }
+    return {
+        // @ts-ignore
+        ...jest.requireActual("../../../../../src/stores/OwnBeaconStore"),
+        OwnBeaconStore: {
+            instance: new MockOwnBeaconStore() as unknown as OwnBeaconStore,
+        },
+    };
+});
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -63,6 +85,10 @@ describe("<RoomCallBanner />", () => {
 
     afterEach(async () => {
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
+    });
+
+    afterAll(() => {
+        jest.restoreAllMocks();
     });
 
     const renderBanner = async (props = {}): Promise<void> => {
@@ -116,6 +142,15 @@ describe("<RoomCallBanner />", () => {
             expect(banner).toBeFalsy();
         });
 
+        it("doesn't show banner if live location is ongoing", async () => {
+            // @ts-ignore writing to readonly variable
+            mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = true;
+            call.setConnectionState(ConnectionState.Disconnected);
+            await renderBanner();
+            const banner = await screen.queryByText("Video call");
+            expect(banner).toBeFalsy();
+        });
+
         it("doesn't show banner if the call is shown", async () => {
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall");
             mocked(SdkContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
@@ -126,5 +161,4 @@ describe("<RoomCallBanner />", () => {
     });
 
     // TODO: test clicking buttons
-    // TODO: add live location share warning test (should not render if there is an active live location share)
 });
