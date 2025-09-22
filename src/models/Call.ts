@@ -593,6 +593,7 @@ export class ElementCall extends Call {
         } else if (isVideoRoom(room)) {
             // Video call rooms always return to the lobby.
             params.append("returnToLobby", "true");
+            return;
         }
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
         const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
