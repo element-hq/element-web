@@ -535,7 +535,6 @@
             "title": "Atgavimo Metodas Pašalintas",
             "warning": "Jei jūs nepašalinote paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
-        "reset_all_button": "Pamiršote arba praradote visus atkūrimo metodus? <a>Iš naujo nustatyti viską</a>",
         "set_up_toast_title": "Nustatyti Saugią Atsarginę Kopiją",
         "setup_secure_backup": {
             "explainer": "Prieš atsijungdami sukurkite atsarginę savo raktų kopiją, kad išvengtumėte jų praradimo."

@@ -832,7 +832,6 @@
             "title": "Nesorina ny fomba fanarenana",
             "warning": "Raha tsy nesorinao ny fomba fanarenana, dia mety hanandrana hiditra aminy kaontinao ny mpanafika. Hanova ny tenimiafiny kaontinao ary mametraha fomba fanarenana vaovao avy hatrany ao amin'ny fanitsiana."
         },
-        "reset_all_button": "Adino na very ny fomba fanarenana rehetra?<a> Avereno daholo</a>",
         "set_up_toast_title": "Hanitsy angona voaharo",
         "setup_secure_backup": {
             "explainer": "Amboary ny fanalahidinao alohany hivoahana mba tsy ho very."
@@ -851,7 +850,6 @@
             "after_new_login": {
                 "device_verified": "Voamarina ny fitaovana",
                 "skip_verification": "Alefaso ny fanamarinana amin'izao fotoana izao",
-                "unable_to_verify": "Tsy afaka manamarina ity fitaovana ity",
                 "verify_this_device": "Hamarino ity fitaovana ity"
             },
             "cancelled": "Nofoananao ny fanamarinana.",
@@ -871,7 +869,6 @@
             "incoming_sas_dialog_waiting": "Miandry ny mpiara-miasa hanamarina…",
             "incoming_sas_user_dialog_text_1": "Hamarino ity mpampiasa ity mba hanamarihana azy ireo ho azo itokisana. Ny fahatokisana ny mpampiasa dia manome anao fiadanan-tsaina fanampiny rehefa mampiasa hafatra voarakotra amin'ny farany.",
             "incoming_sas_user_dialog_text_2": "Ny fanamarinana ity mpampiasa ity dia hanamarika ny fotoam-pivorian'izy ireo ho atokisana, ary hanamarika ihany koa ny fotoam-pivorianao ho atokisana azy ireo.",
-            "no_key_or_device": "Toa tsy manana fanalahidiny ianao na fitaovana hafa azonao hamarinina. Ity fitaovana ity dia tsy ho afaka miditra aminy hafatra efa misy miafina. Mba hanamarinana ny mombamomba anao amin'ity fitaovana ity dia mila averinao ny fanalahidiny fanamarinanao.",
             "no_support_qr_emoji": "Ny fitaovana ezahinao hohamarinina dia tsy mahazaka ny scan kaody QR na fanamarinana emoji, izany hoe%(brand)s ny manohana. Andramo miaraka aminy mpanjifa hafa.",
             "other_party_cancelled": "Nanafoana ny fanamarinana ny ankilany.",
             "prompt_encrypted": "Hamarino ny mpampiasa rehetra ao amin'ny efitrano iray mba hahazoana antoka fa azo antoka izany.",
@@ -886,7 +883,6 @@
             "request_toast_accept": "Hamarino ny fizorana",
             "request_toast_decline_counter": "Tsy miraharaha (%(counter)s )",
             "request_toast_detail": "<x id =\"0\"/> avy amin'ny <x id =\"18\"/>",
-            "reset_proceed_prompt": "Ankany amin'ny famerenana ny rehetra aminy laoniny",
             "sas_caption_self": "Hamarino ity fitaovana ity amin'ny fanamafisana ity isa manaraka ity dia miseho eo aminy efijery.",
             "sas_caption_user": "Hamarino ity mpampiasa ity aminy fanamafisana ity isa manaraka ity dia miseho eo amin'ny efijery.",
             "sas_description": "Ampitahao ny andiana emoji tokana raha tsy manana fakan-tsary amin'ny fitaovana roa ianao",
@@ -909,7 +905,6 @@
             "unverified_sessions_toast_description": "Avereno jerena mba hahazoana antoka fa azo antoka ny kaontinao",
             "unverified_sessions_toast_reject": "Taty aoriana",
             "unverified_sessions_toast_title": "Manana fivoriana tsy voamarina ianao",
-            "verification_description": "Hamarino ny maha-izy anao mba hidirana aminy hafatra miafina ary porofoy amin'ny hafa ny mombamomba anao.",
             "verification_dialog_title_device": "Hamarino ny fitaovana hafa",
             "verification_dialog_title_user": "Fangatahana fanamarinana",
             "verification_skip_warning": "Raha tsy misy fanamarinana dia tsy afaka miditra aminy hafatrao rehetra ianao ary mety hiseho ho tsy atokisana amin'ny hafa.",
@@ -919,9 +914,6 @@
             "verify_emoji_prompt": "Hamarino amin'ny fampitahana emoji tokana.",
             "verify_emoji_prompt_qr": "Raha tsy azonao atao ny mijery ny kaody etsy ambony dia hamarino amin'ny fampitahana emoji tokana.",
             "verify_later": "Hamariniko avy eo",
-            "verify_using_device": "Hamarino amin'ny fitaovana hafa",
-            "verify_using_key": "Hamarino aminy fanalahidiny voaharo",
-            "verify_using_key_or_phrase": "Hamarino amin'ny fanalahidy na rakin-tsoratra voaharo",
             "waiting_for_user_accept": "Miandry%(displayName)s manaiky…",
             "waiting_other_device": "Miandry anao hanamarina amin'ny fitaovanao hafa…",
             "waiting_other_device_details": "Miandry anao hanamarina amin'ny fitaovanao hafa,%(deviceName)s (%(deviceId)s )…",

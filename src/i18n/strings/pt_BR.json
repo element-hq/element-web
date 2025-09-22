@@ -654,6 +654,7 @@
         "poll_button_no_perms_description": "Você não tem permissão para iniciar enquetes nesta sala.",
         "poll_button_no_perms_title": "Permissão necessária",
         "replying_title": "Em resposta a",
+        "room_unencrypted": "As mensagens nesta sala não estão criptografadas de ponta a ponta.",
         "room_upgraded_link": "A conversa continua aqui.",
         "room_upgraded_notice": "Esta sala foi substituída e não está mais ativa.",
         "send_button_title": "Enviar mensagem",
@@ -717,6 +718,7 @@
         "personal_space_description": "Um espaço privado para organizar suas salas",
         "private_description": "Somente para convidados, melhor para você ou para equipes",
         "private_heading": "O seu espaço privado",
+        "private_only_heading": "Seu espaço",
         "private_personal_description": "Certifique-se de que as pessoas certas tenham acesso a %(name)s",
         "private_personal_heading": "Com quem você está trabalhando?",
         "private_space": "Eu e meus colegas de equipe",
@@ -967,7 +969,6 @@
             "title": "Opção de recuperação removida",
             "warning": "Se você não excluiu a opção de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina imediatamente uma nova opção de recuperação nas Configurações."
         },
-        "reset_all_button": "Esqueceu ou perdeu todos os métodos de recuperação? <a>Redefinir tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_title": "Configurar o backup online",
@@ -990,16 +991,18 @@
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
                 "skip_verification": "Ignorar a verificação por enquanto",
-                "unable_to_verify": "Não foi possível verificar este dispositivo",
                 "verify_this_device": "Verifique este dispositivo"
             },
             "cancelled": "Você cancelou a confirmação.",
             "cancelled_self": "Você cancelou a verificação em seu outro dispositivo.",
             "cancelled_user": "%(displayName)s cancelou a confirmação.",
             "cancelling": "Cancelando…",
+            "cant_confirm": "Não consegue confirmar?",
             "complete_action": "Ok, entendi",
             "complete_description": "Você confirmou este usuário com sucesso.",
             "complete_title": "Confirmado!",
+            "confirm_identity_description": "Verifique este dispositivo para configurar as mensagens seguras",
+            "confirm_identity_title": "Confirme sua identidade",
             "error_starting_description": "Não foi possível iniciar um bate-papo com o outro usuário.",
             "error_starting_title": "Erro ao iniciar a verificação",
             "explainer": "As mensagens com este usuário estão protegidas com a criptografia de ponta a ponta e não podem ser lidas por terceiros.",
@@ -1025,7 +1028,6 @@
                 "text": "Forneça o ID e a impressão digital de um de seus próprios dispositivos para verificá-lo. OBSERVE que isso permite que o outro dispositivo envie e receba mensagens como você. SE ALGUÉM LHE DISSE PARA COLAR ALGO AQUI, É PROVÁVEL QUE VOCÊ ESTEJA SENDO ENGANADO!",
                 "wrong_fingerprint": "Não é possível verificar o dispositivo '%(deviceId)s' - a impressão digital fornecida '%(fingerprint)s' não corresponde à impressão digital do dispositivo, '%(fprint)s'"
             },
-            "no_key_or_device": "Parece que você não tem uma chave de segurança ou qualquer outro dispositivo que possa ser verificado. Este dispositivo não poderá acessar mensagens criptografadas antigas. Para verificar sua identidade neste dispositivo, você precisará redefinir suas chaves de verificação.",
             "no_support_qr_emoji": "O dispositivo que você está tentando verificar não suporta a leitura de um código QR ou verificação de emoji, que é o que %(brand)s suporta. Tente com um cliente diferente.",
             "other_party_cancelled": "Seu contato cancelou a confirmação.",
             "prompt_encrypted": "Verifique todos os usuários em uma sala para se certificar de que ela está segura.",
@@ -1041,7 +1043,6 @@
             "request_toast_accept_user": "Verificar usuário",
             "request_toast_decline_counter": "Ignorar (%(counter)s)",
             "request_toast_detail": "%(deviceId)s de %(ip)s",
-            "reset_proceed_prompt": "Prosseguir com a reposição",
             "sas_caption_self": "Verifique este dispositivo confirmando que o seguinte número aparece em sua tela.",
             "sas_caption_user": "Confirme este usuário, comparando os números a seguir que serão exibidos na sua e na tela dele.",
             "sas_description": "Compare um conjunto único de emojis se você não tem uma câmera em nenhum dos dois aparelhos",
@@ -1064,7 +1065,8 @@
             "unverified_sessions_toast_description": "Revise para assegurar que sua conta está segura",
             "unverified_sessions_toast_reject": "Mais tarde",
             "unverified_sessions_toast_title": "Você tem sessões não verificadas",
-            "verification_description": "Verifique sua identidade para acessar mensagens criptografadas e provar sua identidade para outras pessoas.",
+            "use_another_device": "Usar outro dispositivo",
+            "use_recovery_key": "Usar chave de recuperação",
             "verification_dialog_title_device": "Verifique outro dispositivo",
             "verification_dialog_title_user": "Solicitação de confirmação",
             "verification_skip_warning": "Sem verificar, você não terá acesso a todas as suas mensagens e poderá aparecer como não confiável para outras pessoas.",
@@ -1074,9 +1076,6 @@
             "verify_emoji_prompt": "Confirmar comparando emojis únicos.",
             "verify_emoji_prompt_qr": "Se você não consegue escanear o código acima, confirme comparando emojis únicos.",
             "verify_later": "Vou verificar mais tarde",
-            "verify_using_device": "Verifique com outro dispositivo",
-            "verify_using_key": "Verifique com a chave de segurança",
-            "verify_using_key_or_phrase": "Verificar com chave de segurança ou frase",
             "waiting_for_user_accept": "Aguardando %(displayName)s aceitar…",
             "waiting_other_device": "Aguardando sua verificação em seu outro dispositivo…",
             "waiting_other_device_details": "Esperando que você verifique em seu outro dispositivo, %(deviceName)s (%(deviceId)s)...",
@@ -1126,6 +1125,7 @@
         "tls": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",
         "unknown": "Erro desconhecido",
         "unknown_error_code": "código de erro desconhecido",
+        "update_history_visibility": "Falha ao alterar a visibilidade do histórico",
         "update_power_level": "Não foi possível alterar o nível de permissão"
     },
     "error_app_open_in_another_tab": "Mude para a outra guia para se conectar em %(brand)s. Essa guia agora pode ser fechada.",
@@ -1366,6 +1366,10 @@
         "name_email_mxid_share_space": "Convide alguém a partir do nome, endereço de e-mail, nome de usuário (como <userId/>) ou <a>compartilhe este espaço</a>.",
         "name_mxid_share_room": "Convide alguém a partir do nome ou nome de usuário (por exemplo: <userId/>) ou <a>compartilhe esta sala</a>.",
         "name_mxid_share_space": "Convide alguém a partir do nome, nome de usuário (como <userId/>) ou <a>compartilhe este espaço</a>.",
+        "progress": {
+            "dont_close": "Não feche o aplicativo até terminar.",
+            "preparing": "Preparando convites..."
+        },
         "recents_section": "Conversas recentes",
         "room_failed_partial": "Nós enviamos aos outros, mas as pessoas abaixo não puderam ser convidadas para <RoomName/>",
         "room_failed_partial_title": "Alguns convites não puderam ser enviados",
@@ -1992,7 +1996,9 @@
         "inaccessible_subtitle_1": "Tente novamente mais tarde ou peça a um administrador de sala ou espaço para verificar se você tem acesso.",
         "inaccessible_subtitle_2": "%(errcode)s foi retornado ao tentar acessar a sala ou o espaço. Se você acha que está vendo essa mensagem por engano, <issueLink>envie uma comunicação de bug</issueLink>.",
         "intro": {
+            "display_topic": "Tópico <topic/>",
             "dm_caption": "Apenas vocês dois estão nesta conversa, a menos que algum de vocês convide mais alguém.",
+            "edit_topic": "Tópico:<topic/> (<a> editar</a> )",
             "enable_encryption_prompt": "Ative a criptografia nas configurações.",
             "encrypted_3pid_dm_pending_join": "Depois que todos entrarem, você poderá conversar",
             "no_avatar_label": "Adicione uma imagem para que as pessoas possam identificar facilmente sua sala.",
@@ -2056,7 +2062,9 @@
         "pinned_message_banner": {
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
-            "description": "Esta sala tem mensagens fixadas. Clique para visualizá-las.",
+            "description": "Mensagens fixadas",
+            "go_to_newest_message": "Veja a mensagem fixada na linha do tempo e a mensagem mais recente fixada aqui.",
+            "go_to_next_message": "Veja a mensagem fixada na linha do tempo e a mensagem mais antiga fixada aqui.",
             "title": "<bold>%(index)s de %(length)s </bold> mensagens fixadas"
         },
         "read_topic": "Clique para ler o tópico",
@@ -2164,6 +2172,26 @@
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens em %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
+        },
+        "release_announcement": {
+            "done": "OK",
+            "filter": {
+                "description": "Filtre seus chats com um único clique. Expanda para ver mais filtros.",
+                "title": "Novos filtros rápidos"
+            },
+            "intro": {
+                "description": "A lista de bate-papos foi atualizada pra ficar mais clara e fácil de usar.",
+                "title": "O Chats tem um novo visual!"
+            },
+            "next": "Próximo",
+            "settings": {
+                "description": "Pra mostrar ou esconder as pré-visualizações das mensagens, vai em Todas as configurações > Preferências > Lista de salas",
+                "title": "Algumas configurações foram movidas"
+            },
+            "sort": {
+                "description": "Mude a ordem das suas conversas de mais recente para A-Z.",
+                "title": "Classifique seus bate-papos"
+            }
         },
         "room": {
             "more_options": "Mais opções",
@@ -2354,6 +2382,10 @@
             "users_default": "Cargo padrão"
         },
         "security": {
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "Você não tem permissão para alterar a visibilidade do histórico da sala. Isso é perigoso, pois pode permitir que usuários que não participam da sala leiam as mensagens.",
+                "title": "Não dá pra tornar a sala privada"
+            },
             "enable_encryption_confirm_description": "Uma vez ativada, a criptografia da sala não poderá ser desativada. Mensagens enviadas em uma sala criptografada não podem ser lidas pelo servidor, apenas pelos participantes da sala. Ativar a criptografia poderá impedir que vários bots e integrações funcionem corretamente. <a>Saiba mais sobre criptografia.</a>",
             "enable_encryption_confirm_title": "Ativar criptografia?",
             "enable_encryption_public_room_confirm_description_1": "<b>Não é recomendado adicionar criptografia a salas públicas.</b> Qualquer pessoa pode encontrar e ingressar em salas públicas, para que qualquer pessoa possa ler as mensagens nelas contidas. Você não obterá nenhum dos benefícios da criptografia e não poderá desativá-la mais tarde. Criptografar mensagens em uma sala pública tornará o recebimento e o envio de mensagens mais lento.",
@@ -2371,7 +2403,7 @@
             "history_visibility_joined": "Apenas participantes (desde que entraram na sala)",
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
             "history_visibility_shared": "Apenas participantes (a partir do momento em que esta opção for selecionada)",
-            "history_visibility_warning": "Alterações em quem pode ler o histórico de conversas aplica-se apenas para mensagens futuras nesta sala. A visibilidade do histórico existente não será alterada.",
+            "history_visibility_warning": "A visibilidade do histórico existente não será alterada.",
             "history_visibility_world_readable": "Qualquer pessoa",
             "join_rule_description": "Decida quem pode entrar em %(roomName)s.",
             "join_rule_invite": "Privado (convite apenas)",
@@ -2414,6 +2446,7 @@
                 "other": "Atualizando espaços... (%(progress)s de %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Atualizando sala",
+            "join_rule_world_readable_description": "Mudar quem pode entrar na sala também vai mudar a visibilidade das mensagens futuras.",
             "public_without_alias_warning": "Para criar um link para esta sala, antes adicione um endereço.",
             "publish_room": "Torne esta sala visível no diretório de salas públicas.",
             "publish_space": "Torne este espaço visível no diretório de salas públicas.",
@@ -2552,6 +2585,7 @@
                 "breadcrumb_second_description": "Você perderá qualquer histórico de mensagens armazenado somente no servidor",
                 "breadcrumb_third_description": "Você precisará verificar todos os seus dispositivos e contatos existentes novamente.",
                 "breadcrumb_title": "Tem certeza de que deseja redefinir sua identidade?",
+                "breadcrumb_title_cant_confirm": "Você precisa redefinir sua identidade",
                 "breadcrumb_title_forgot": "Esqueceu sua chave de recuperação? Você precisará redefinir sua identidade.",
                 "breadcrumb_title_sync_failed": "Falha ao sincronizar o armazenamento de chaves. Você precisa redefinir sua identidade.",
                 "breadcrumb_warning": "Faça isso somente se você acreditar que sua conta foi comprometida.",
@@ -3952,6 +3986,7 @@
         "connection_lost": "A conectividade com o servidor foi perdida",
         "connection_lost_description": "Você não pode fazer chamadas sem uma conexão com o servidor.",
         "consulting": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
+        "decline_call": "Recusar",
         "default_device": "Aparelho padrão",
         "dial": "Discar",
         "dialpad": "Teclado de discagem",
@@ -4003,6 +4038,7 @@
         "show_sidebar_button": "Exibir a barra lateral",
         "silence": "Silenciar chamado",
         "silenced": "Notificações silenciadas",
+        "skip_lobby_toggle_option": "Junte-se imediatamente",
         "start_screenshare": "Começar a compartilhar sua tela",
         "stop_screenshare": "Parar de compartilhar sua tela",
         "too_many_calls": "Muitas chamadas",
