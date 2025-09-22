@@ -35,7 +35,8 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
                 action: Action.ViewRoom,
                 room_id: roomId,
                 view_call: true,
-                skipLobby: "shiftKey" in ev ? ev.shiftKey : undefined,
+                // If shift is held down, always skip lobby. Else, use defaults.
+                skipLobby: ("shiftKey" in ev && ev.shiftKey) || undefined,
                 metricsTrigger: undefined,
             });
         },
