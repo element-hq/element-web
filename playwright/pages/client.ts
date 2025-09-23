@@ -470,6 +470,27 @@ export class Client {
     }
 
     /**
+     * Set a power level to one or multiple users.
+     * Will apply changes atop of current power level event.
+     * @param roomId - the room to update power levels in
+     * @param userId - the ID of the user or users to update power levels of
+     * @param powerLevel - the numeric power level to update given users to
+     */
+    public async setPowerLevel(
+        roomId: string,
+        userId: string | string[],
+        powerLevel: number,
+    ): Promise<ISendEventResponse> {
+        const client = await this.prepareClient();
+        return client.evaluate(
+            async (client, { roomId, userId, powerLevel }) => {
+                return client.setPowerLevel(roomId, userId, powerLevel);
+            },
+            { roomId, userId, powerLevel },
+        );
+    }
+
+    /**
      * Leaves the given room.
      * @param roomId ID of the room to leave
      */

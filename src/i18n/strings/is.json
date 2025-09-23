@@ -701,7 +701,6 @@
         "recovery_method_removed": {
             "title": "Endurheimtuaðferð fjarlægð"
         },
-        "reset_all_button": "Gleymdirðu eða týndir öllum aðferðum til endurheimtu? <a>Endurstilla allt</a>",
         "set_up_toast_title": "Setja upp varið öryggisafrit",
         "setup_secure_backup": {
             "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki."
@@ -719,7 +718,6 @@
             "after_new_login": {
                 "device_verified": "Tæki er sannreynt",
                 "skip_verification": "Sleppa sannvottun í bili",
-                "unable_to_verify": "Tókst ekki að sannreyna þetta tæki",
                 "verify_this_device": "Sannreyna þetta tæki"
             },
             "cancelled": "Þú hættir við sannvottun.",
@@ -743,7 +741,6 @@
             "qr_reciprocate_same_shield_device": "Næstum því búið! Sýnir hitt tækið þitt sama skjöldinn?",
             "qr_reciprocate_same_shield_user": "Næstum því búið! Sýnir %(displayName)s sama skjöldinn?",
             "request_toast_detail": "%(deviceId)s frá %(ip)s",
-            "reset_proceed_prompt": "Halda áfram með endurstillingu",
             "sas_caption_self": "Sannreyndu þetta tæki með því að staðfesta eftirfarandi númer sem birtist á skjá þess.",
             "sas_caption_user": "Sannreyndu þennan notanda með því að staðfesta eftirfarandi númer sem birtist á skjánum hans.",
             "sas_description": "Berðu saman einstakar táknmyndir ef ekki er myndavél á tækjunum",
@@ -770,9 +767,6 @@
             "verify_emoji_prompt": "Sannprófaðu með því að bera saman einstakar táknmyndir.",
             "verify_emoji_prompt_qr": "Ef þú getur ekki skannað kóðann hér fyrir ofan, skaltu sannprófa með því að bera saman einstakar táknmyndir.",
             "verify_later": "Ég mun sannreyna síðar",
-            "verify_using_device": "Sannreyna með öðru tæki",
-            "verify_using_key": "Sannreyna með öryggislykli",
-            "verify_using_key_or_phrase": "Sannreyna með öryggisfrasa",
             "waiting_for_user_accept": "Bíð eftir að %(displayName)s samþykki…",
             "waiting_other_device": "Bíð eftir að þú staðfestir á hinu tækinu…",
             "waiting_other_device_details": "Bíð eftir að þú staðfestir á hinu tækinu, %(deviceName)s (%(deviceId)s)…",

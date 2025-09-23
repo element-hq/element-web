@@ -50,11 +50,9 @@ test.describe("Invite dialog", function () {
         await expect(other.locator(".mx_InviteDialog_identityServer")).toBeVisible();
 
         // Assert that the bot id is rendered properly
-        await expect(
-            other.locator(".mx_InviteDialog_tile_nameStack_userId").getByText(bot.credentials.userId),
-        ).toBeVisible();
+        await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
 
-        await other.locator(".mx_InviteDialog_tile_nameStack_name").getByText(botName).click();
+        await other.getByRole("option", { name: botName }).click();
 
         await expect(
             other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
@@ -94,10 +92,8 @@ test.describe("Invite dialog", function () {
 
             await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
 
-            await expect(
-                other.locator(".mx_InviteDialog_tile_nameStack").getByText(bot.credentials.userId),
-            ).toBeVisible();
-            await other.locator(".mx_InviteDialog_tile_nameStack").getByText(botName).click();
+            await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
+            await other.getByRole("option", { name: botName }).click();
 
             await expect(
                 other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),

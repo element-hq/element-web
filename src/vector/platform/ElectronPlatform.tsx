@@ -558,4 +558,12 @@ export default class ElectronPlatform extends BasePlatform {
         }
         return url;
     }
+
+    public checkSessionLockFree(): boolean {
+        return true;
+    }
+
+    public async getSessionLock(_onNewInstance: () => Promise<void>): Promise<boolean> {
+        return true;
+    }
 }

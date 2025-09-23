@@ -10,6 +10,7 @@ import { type MethodLikeKeys, mocked, type MockedObject } from "jest-mock";
 
 import BasePlatform from "../../src/BasePlatform";
 import PlatformPeg from "../../src/PlatformPeg";
+import * as SessionLock from "../../src/utils/SessionLock";
 
 // doesn't implement abstract
 // @ts-ignore
@@ -17,6 +18,14 @@ class MockPlatform extends BasePlatform {
     constructor(platformMocks: Partial<Record<keyof BasePlatform, unknown>>) {
         super();
         Object.assign(this, platformMocks);
+    }
+
+    public checkSessionLockFree(): boolean {
+        return SessionLock.checkSessionLockFree();
+    }
+
+    public async getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
+        return SessionLock.getSessionLock(onNewInstance);
     }
 }
 /**
