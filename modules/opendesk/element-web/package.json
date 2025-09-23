@@ -20,7 +20,7 @@
         "@nordeck/element-web-widget-toggles-module": "^0.1.0",
         "@types/node": "^22.10.7",
         "@types/react": "^19",
-        "@vitejs/plugin-react": "^4.3.4",
+        "@vitejs/plugin-react": "^5.0.0",
         "react": "^19",
         "react-dom": "^19",
         "rollup-plugin-external-globals": "^0.13.0",
