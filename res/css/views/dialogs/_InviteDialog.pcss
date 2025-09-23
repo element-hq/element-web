@@ -179,10 +179,13 @@ Please see LICENSE files in the repository root for full details.
     .mx_InviteDialog_userSections {
         flex-grow: 1;
         padding-inline-end: 0;
+        display: flex;
+        flex-direction: column;
+        margin-top: var(--cpd-space-3x);
+        gap: var(--cpd-space-3x);
 
         .mx_InviteDialog_section {
             padding-bottom: 0;
-            margin-top: $spacing-12;
         }
     }
 }
