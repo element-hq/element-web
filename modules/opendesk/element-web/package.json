@@ -25,7 +25,7 @@
         "react-dom": "^19",
         "rollup-plugin-external-globals": "^0.13.0",
         "typescript": "^5.7.3",
-        "vite": "^6.3.6",
+        "vite": "^7.0.0",
         "vite-plugin-node-polyfills": "^0.23.0"
     }
 }
