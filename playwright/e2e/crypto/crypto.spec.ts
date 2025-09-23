@@ -25,9 +25,7 @@ const startDMWithBob = async (page: Page, bob: Bot) => {
     await page.getByRole("menuitem", { name: "Start chat" }).click();
     await page.getByTestId("invite-dialog-input").fill(bob.credentials.userId);
     await page.getByRole("option", { name: bob.credentials.displayName }).click();
-    await expect(
-        page.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText("Bob"),
-    ).toBeVisible();
+    await expect(page.getByTestId("invite-dialog-input-wrapper").getByText("Bob")).toBeVisible();
     await page.getByRole("button", { name: "Go" }).click();
 };
 
