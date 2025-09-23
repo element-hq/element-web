@@ -270,7 +270,7 @@ export default class WebPlatform extends BasePlatform {
         window.location.reload();
     }
 
-    public async checkSessionLockFree(): Promise<boolean> {
+    public checkSessionLockFree(): boolean {
         return SessionLock.checkSessionLockFree();
     }
 

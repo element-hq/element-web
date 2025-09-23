@@ -512,9 +512,9 @@ export default abstract class BasePlatform {
     /**
      * Checks if the current session is lock-free, i.e., no other instance is holding the session lock.
      * Platforms that support session locking should override this method.
-     * @returns {Promise<boolean>} True if the session is lock-free, false otherwise.
+     * @returns {boolean} True if the session is lock-free, false otherwise.
      */
-    public abstract checkSessionLockFree(): Promise<boolean>;
+    public abstract checkSessionLockFree(): boolean;
     /**
      * Attempts to acquire a session lock for this instance.
      * If another instance is detected, calls the provided callback.

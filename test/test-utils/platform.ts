@@ -20,7 +20,7 @@ class MockPlatform extends BasePlatform {
         Object.assign(this, platformMocks);
     }
 
-    public async checkSessionLockFree(): Promise<boolean> {
+    public checkSessionLockFree(): boolean {
         return SessionLock.checkSessionLockFree();
     }
 
