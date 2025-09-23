@@ -87,6 +87,7 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
                 kind="primary"
                 Icon={CheckIcon}
                 size="sm"
+                data-testId="incoming-call-join-button"
             >
                 {_t("action|join")}
             </Button>
