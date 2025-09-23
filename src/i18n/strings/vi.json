@@ -755,7 +755,6 @@
             "title": "Phương thức Khôi phục đã bị xóa",
             "warning": "Nếu bạn không xóa phương pháp khôi phục, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
-        "reset_all_button": "Quên hoặc mất tất cả các phương pháp khôi phục? Đặt lại tất cả <a>Reset all</a>",
         "set_up_toast_title": "Thiết lập Sao lưu Bảo mật",
         "setup_secure_backup": {
             "explainer": "Sao lưu chìa khóa của bạn trước khi đăng xuất để tránh mất chúng."
@@ -774,7 +773,6 @@
             "after_new_login": {
                 "device_verified": "Thiết bị được xác thực",
                 "skip_verification": "Bỏ qua xác thực ngay bây giờ",
-                "unable_to_verify": "Không thể xác thực thiết bị này",
                 "verify_this_device": "Xác thực thiết bị này"
             },
             "cancelled": "Bạn đã hủy xác thực.",
@@ -794,7 +792,6 @@
             "incoming_sas_dialog_waiting": "Đang đợi bên kia xác nhận…",
             "incoming_sas_user_dialog_text_1": "Xác thực người dùng này để đánh dấu họ là đáng tin cậy. Người dùng đáng tin cậy giúp bạn yên tâm hơn khi sử dụng các tin nhắn được mã hóa end-to-end.",
             "incoming_sas_user_dialog_text_2": "Việc xác thực người dùng này sẽ đánh dấu phiên của họ là đáng tin cậy và cũng đánh dấu phiên của bạn là đáng tin cậy đối với họ.",
-            "no_key_or_device": "Có vẻ như bạn không có Khóa Bảo mật hoặc bất kỳ thiết bị nào bạn có thể xác thực. Thiết bị này sẽ không thể truy cập vào các tin nhắn mã hóa cũ. Để  xác minh danh tính của bạn trên thiết bị này, bạn sẽ cần đặt lại các khóa xác thực của mình.",
             "no_support_qr_emoji": "Thiết bị bạn đang cố xác thực không hỗ trợ quét mã QR hoặc xác minh biểu tượng cảm xúc, đó là những gì %(brand)s hỗ trợ. Hãy thử với một thiết bị đầu cuối khác.",
             "other_party_cancelled": "Người kia đã hủy xác thực.",
             "prompt_encrypted": "Xác thực tất cả người dùng trong một phòng để đảm bảo phòng đó an toàn.",
@@ -809,7 +806,6 @@
             "request_toast_accept": "Xác thực phiên",
             "request_toast_decline_counter": "Ẩn (%(counter)s)",
             "request_toast_detail": "%(deviceId)s từ %(ip)s",
-            "reset_proceed_prompt": "Tiến hành đặt lại",
             "sas_caption_self": "Xác thực thiết bị này bằng việc xác nhận số sau đây xuất hiện trên màn hình của nó.",
             "sas_caption_user": "Xác thực người dùng này bằng cách xác nhận số xuất hiện trên màn hình của họ.",
             "sas_description": "So sánh một bộ biểu tượng cảm xúc độc đáo nếu bạn không có camera trên một trong hai thiết bị",
@@ -832,7 +828,6 @@
             "unverified_sessions_toast_description": "Xem lại để đảm bảo tài khoản của bạn an toàn",
             "unverified_sessions_toast_reject": "Để sau",
             "unverified_sessions_toast_title": "Bạn có các phiên chưa được xác thực",
-            "verification_description": "Xác thực danh tính của bạn để truy cập các tin nhắn được mã hóa và chứng minh danh tính của bạn với người khác.",
             "verification_dialog_title_device": "Xác thực thiết bị khác",
             "verification_dialog_title_user": "Yêu cầu xác thực",
             "verification_skip_warning": "Nếu không xác thực, bạn sẽ không thể truy cập vào tất cả tin nhắn của bạn và có thể hiển thị là không đáng tin cậy với những người khác.",
@@ -842,9 +837,6 @@
             "verify_emoji_prompt": "Xác thực bằng cách so sánh biểu tượng cảm xúc độc đáo.",
             "verify_emoji_prompt_qr": "Nếu bạn không thể quét mã ở trên, hãy xác thực bằng cách so sánh biểu tượng cảm xúc duy nhất.",
             "verify_later": "Tôi sẽ xác thực sau",
-            "verify_using_device": "Xác thực bằng thiết bị khác",
-            "verify_using_key": "Xác thực bằng Khóa Bảo mật",
-            "verify_using_key_or_phrase": "Xác thực bằng Khóa hoặc Chuỗi Bảo mật",
             "waiting_for_user_accept": "Đang chờ %(displayName)s chấp nhận…",
             "waiting_other_device": "Đang chờ bạn xác thực trên thiết bị khác của bạn…",
             "waiting_other_device_details": "Đang chờ bạn xác thực trên thiết bị khác của bạn, %(deviceName)s (%(deviceId)s)…",

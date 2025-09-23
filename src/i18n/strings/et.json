@@ -718,6 +718,7 @@
         "personal_space_description": "Privaatne kogukonnakeskus jututubade koondamiseks",
         "private_description": "Liitumine vaid kutse alusel, sobib sulle ja sinu lähematele kaaslastele",
         "private_heading": "Sinu privaatne kogukonnakeskus",
+        "private_only_heading": "Sinu kogukond",
         "private_personal_description": "Palun kontrolli, et vajalikel inimestel oleks ligipääs siia - %(name)s",
         "private_personal_heading": "Kellega sa koos töötad?",
         "private_space": "Mina ja minu kaasteelised",
@@ -968,7 +969,6 @@
             "title": "Taastemeetod on eemaldatud",
             "warning": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
-        "reset_all_button": "Unustasid või oled kaotanud kõik võimalused ligipääsu taastamiseks? <a>Lähtesta kõik ühe korraga</a>",
         "set_up_recovery": "Seadista krüptovõtmete taastamine",
         "set_up_recovery_toast_description": "Kui peaksid kaotama ligipääsu oma seadmetele, siis siinloodava taastevõtmega saad taastada ligipääsu oma krüptitud sõnumitele.",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
@@ -991,7 +991,6 @@
             "after_new_login": {
                 "device_verified": "Seade on verifitseeritud",
                 "skip_verification": "Jäta verifitseerimine praegu vahele",
-                "unable_to_verify": "Selle seadme verifitseerimine ei õnnestunud",
                 "verify_this_device": "Verifitseeri see seade"
             },
             "cancelled": "Sina tühistasid verifitseerimise.",
@@ -1026,7 +1025,6 @@
                 "text": "Verifitseerimiseks sisesta ühe oma seadme tunnus ja sõrmejälg. Palun arvesta, et see võimaldab muul seadmel saata ja vastu võtta sõnumeid esinedes sinuna. KUI KEEGI PALUS SUL SIIA MIDAGI KOPEERIDA, SIIS ON SEE KAHTLANE JA ILMSELT PROOVITAKSE SIND PETTA!",
                 "wrong_fingerprint": "„%(deviceId)s“ seadme verifitseerimine ei õnnestunud - lisatud sõrmejälg „%(fingerprint)s“ ja seadme sõrmejälg „%(fprint)s“ pole samad"
             },
-            "no_key_or_device": "Tundub, et sul ei ole ei taastevõtit ega muid seadmeid, mida saaksid verifitseerimiseks kasutada. Siin seadmes ei saa lugeda vanu krüptitud sõnumeid. Enda tuvastamiseks selles seadmes pead oma vanad verifitseerimisvõtmed kustutama.",
             "no_support_qr_emoji": "See seade, mida sa tahad verifitseerida ei toeta QR-koodi ega emoji-põhist verifitseerimist, aga just neid %(brand)s oskab kasutada. Proovi mõne muu Matrix'i kliendiga.",
             "other_party_cancelled": "Teine osapool tühistas verifitseerimise.",
             "prompt_encrypted": "Tagamaks, et jututuba on turvaline, verifitseeri kõik selle kasutajad.",
@@ -1042,7 +1040,6 @@
             "request_toast_accept_user": "Verifitseeri kasutaja",
             "request_toast_decline_counter": "Eira (%(counter)s)",
             "request_toast_detail": "%(deviceId)s ip-aadressil %(ip)s",
-            "reset_proceed_prompt": "Jätka kustutamisega",
             "sas_caption_self": "Verifitseeri see seade tehes kindlaks, et järgnev number kuvatakse tema ekraanil.",
             "sas_caption_user": "Verifitseeri see kasutaja tehes kindlaks, et järgnev number kuvatakse tema ekraanil.",
             "sas_description": "Kui sul mõlemas seadmes pole kaamerat, siis võrdle unikaalset emoji'de komplekti",
@@ -1065,7 +1062,6 @@
             "unverified_sessions_toast_description": "Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle",
             "unverified_sessions_toast_reject": "Hiljem",
             "unverified_sessions_toast_title": "Sul on verifitseerimata sessioone",
-            "verification_description": "Tagamaks ligipääsu oma krüptitud sõnumitele ja tõestamaks oma isikut teistele kasutajatale, verifitseeri end. Kui kasutad mobiilirakendust, siis palun ava see enne jätkamist.",
             "verification_dialog_title_device": "Verifitseeri oma teine seade",
             "verification_dialog_title_user": "Verifitseerimispäring",
             "verification_skip_warning": "Ilma verifitseerimiseta sul puudub ligipääs kõikidele oma sõnumitele ning teised ei näe sinu kasutajakontot usaldusväärsena.",
@@ -1075,9 +1071,6 @@
             "verify_emoji_prompt": "Verifitseeri unikaalsete emoji'de võrdlemise teel.",
             "verify_emoji_prompt_qr": "Kui sa ei saa skaneerida eespool kuvatud koodi, siis verifitseeri unikaalsete emoji'de võrdlemise teel.",
             "verify_later": "Ma verifitseerin hiljem",
-            "verify_using_device": "Verifitseeri teise seadmega",
-            "verify_using_key": "Verifitseeri taastevõtmega",
-            "verify_using_key_or_phrase": "Verifitseeri taastevõtme või -fraasiga",
             "waiting_for_user_accept": "Ootan, et %(displayName)s nõustuks…",
             "waiting_other_device": "Ootan, et sa verifitseeriksid oma teises seadmes…",
             "waiting_other_device_details": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…",
@@ -1127,6 +1120,7 @@
         "tls": "Ei sa ühendust koduserveriga. Palun kontrolli, et sinu <a>koduserveri SSL sertifikaat</a> oleks usaldusväärne ning mõni brauseri lisamoodul ei blokeeri päringuid.",
         "unknown": "Teadmata viga",
         "unknown_error_code": "tundmatu veakood",
+        "update_history_visibility": "Ei õnnestunud muuta ajaloo nähtavust",
         "update_power_level": "Õiguste muutmine ei õnnestunud"
     },
     "error_app_open_in_another_tab": "%(brand)s'i kasutamiseks ava teine vahekaart. Selle vahekaardi võid kinni panna.",
@@ -2384,6 +2378,10 @@
             "users_default": "Vaikimisi roll"
         },
         "security": {
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "Sul pole õigusi selle jututoa ajaloo nähtavuse muutmiseks. Kuna võib tekkida olukord, kus ka mitteliitunud kasutajad saavad lugeda sõnumeid, siis on selline tegevus ka ohtlik.",
+                "title": "Ei õnnestu muuta jututuba privaatseks"
+            },
             "enable_encryption_confirm_description": "Kui kord juba kasutusele võetud, siis krüptimist enam hiljem ära lõpetada ei saa. Krüptitud sõnumeid ei saa lugeda ei vaheapealses veebiliikluses ega serveris ja vaid jututoa liikmed saavad neid lugeda. Krüptimise kasutusele võtmine võib takistada nii robotite kui sõnumisildade tööd. <a>Lisateave krüptimise kohta.</a>",
             "enable_encryption_confirm_title": "Kas võtame krüptimise kasutusele?",
             "enable_encryption_public_room_confirm_description_1": "<b>Me ei soovita avalikes jututubades krüptimise kasutamist.</b> Kuna kõik huvilised saavad vabalt leida avalikke jututube ning nendega liituda, siis saavad nad niikuinii ka neis leiduvaid sõnumeid lugeda. Olemuselt puuduvad sellises olukorras krüptimise eelised ning sa ei saa hiljem krüptimist välja lülitada. Avalike jututubade sõnumite krüptimine teeb ka sõnumite saatmise ja vastuvõtmise aeglasemaks.",
@@ -2401,7 +2399,7 @@
             "history_visibility_joined": "Ainult liikmetele (alates liitumisest)",
             "history_visibility_legend": "Kes võivad lugeda ajalugu?",
             "history_visibility_shared": "Ainult liikmetele (alates selle seadistuse kasutuselevõtmisest)",
-            "history_visibility_warning": "Kui muudad seda, kes saavad selle jututoa ajalugu lugeda, siis kehtib see vaid tulevaste sõnumite kohta. Senise ajaloo nähtavus sellega ei muutu.",
+            "history_visibility_warning": "Senise ajaloo nähtavus ei muutu.",
             "history_visibility_world_readable": "Kõik kasutajad",
             "join_rule_description": "Vali, kes saavad liituda %(roomName)s jututoaga.",
             "join_rule_invite": "Privaatne jututuba (eeldab kutset)",
@@ -2444,6 +2442,7 @@
                 "other": "Uuendan kogukonnakeskuseid... (%(progress)s / %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Uuendan jututoa versiooni",
+            "join_rule_world_readable_description": "Kui muudad seda, kes võib jututoaga liituda, siis muutub ka tulevaste sõnumite nähtavus.",
             "public_without_alias_warning": "Sellele jututoale viitamiseks palun lisa talle aadress.",
             "publish_room": "Tee see jututuba nähtavaks avalikus jututubade kataloogis.",
             "publish_space": "Tee see kogukond nähtavaks avalikus jututubade kataloogis.",
