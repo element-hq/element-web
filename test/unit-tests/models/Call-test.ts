@@ -49,7 +49,7 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
-enableCalls();
+const { enabledSettings } = enableCalls();
 
 const setUpWidget = (call: Call): { widget: Widget; messaging: Mocked<ClientWidgetApi> } => {
     call.widget.data = { ...call.widget, skipLobby: true };

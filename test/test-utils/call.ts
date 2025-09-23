@@ -132,13 +132,14 @@ export function useMockedCalls() {
 /**
  * Enables the feature flags required for call tests.
  */
-export function enableCalls(): void {
+export function enableCalls(): { enabledSettings: Set<string> } {
     const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
         if (settingName.startsWith("feature_")) return enabledSettings.has(settingName);
         if (settingName === "activeCallRoomIds") return [];
         return undefined;
     });
+    return { enabledSettings };
 }
 
 export function setUpClientRoomAndStores(): {
