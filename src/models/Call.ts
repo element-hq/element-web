@@ -571,9 +571,9 @@ export class ElementCall extends Call {
 
     /**
      * Generates the correct URL for an Element Call widget.
-     * @param client 
-     * @param roomId 
-     * @returns 
+     * @param client
+     * @param roomId
+     * @returns
      */
     private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
         const baseUrl = window.location.href;
@@ -599,7 +599,6 @@ export class ElementCall extends Call {
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
         });
-
 
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
@@ -671,18 +670,17 @@ export class ElementCall extends Call {
         return url;
     }
 
-
     /**
      * Creates a new widget if there isn't any widget of typ Call in this room.
      * Defaults for creating a new widget are: skipLobby = false
      * When there is already a widget the current widget configuration will be used or can be overwritten
      * by passing the according parameters (skipLobby).
-     * @param roomId 
-     * @param client 
-     * @param skipLobby 
-     * @param returnToLobby 
-     * @param voiceOnly 
-     * @returns 
+     * @param roomId
+     * @param client
+     * @param skipLobby
+     * @param returnToLobby
+     * @param voiceOnly
+     * @returns
      */
     private static createOrGetCallWidget(
         roomId: string,
@@ -737,14 +735,10 @@ export class ElementCall extends Call {
      * Get the correct intent for a widget, so that Element Call presents the correct
      * default config.
      * @param client The matrix client.
-     * @param roomId 
+     * @param roomId
      * @param voiceOnly Should the call be voice-only, or video (default).
      */
-    public static getWidgetIntent(
-        client: MatrixClient,
-        roomId: string,
-        voiceOnly?: boolean
-    ): ElementCallIntent {
+    public static getWidgetIntent(client: MatrixClient, roomId: string, voiceOnly?: boolean): ElementCallIntent {
         const room = client.getRoom(roomId);
         if (room !== null && !isVideoRoom(room)) {
             const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
@@ -773,7 +767,7 @@ export class ElementCall extends Call {
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
-        voiceOnly?: boolean
+        voiceOnly?: boolean,
     ): IWidgetData {
         let perParticipantE2EE = false;
         if (
@@ -829,7 +823,7 @@ export class ElementCall extends Call {
                 room.client,
                 undefined,
                 isVideoRoom(room),
-                voiceOnly
+                voiceOnly,
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }

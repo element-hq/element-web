@@ -41,7 +41,6 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
         call.widget.data ??= {};
         call.widget.data.skipLobby = skipLobby;
         call.widget.data.intent = ElementCall.getWidgetIntent(room.client, room.roomId, voiceOnly);
-        console.log("set new intent", call.widget.data.intent);
     }, [call.widget, skipLobby, voiceOnly]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {

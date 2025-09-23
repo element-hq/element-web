@@ -749,7 +749,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     public isVoiceOnly(): boolean | undefined {
-        return this.state.skipLobby;
+        return this.state.voiceOnly;
     }
 
     /**

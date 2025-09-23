@@ -22,10 +22,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
-import {
-    LiveContentSummary,
-    LiveContentType,
-} from "../components/views/rooms/LiveContentSummary";
+import { LiveContentSummary, LiveContentType } from "../components/views/rooms/LiveContentSummary";
 import { useCall, useJoinCallButtonDisabledTooltip, useParticipantCount } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
@@ -75,7 +72,12 @@ interface JoinCallButtonWithCallProps {
     isRinging: boolean;
 }
 
-function JoinCallButtonWithCall({ onClick, call, disabledTooltip, isRinging }: JoinCallButtonWithCallProps): JSX.Element {
+function JoinCallButtonWithCall({
+    onClick,
+    call,
+    disabledTooltip,
+    isRinging,
+}: JoinCallButtonWithCallProps): JSX.Element {
     let disTooltip = disabledTooltip;
     const disabledBecauseFullTooltip = useJoinCallButtonDisabledTooltip(call);
     disTooltip = disabledTooltip ?? disabledBecauseFullTooltip ?? undefined;
@@ -244,6 +246,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
+                // Voice only calls have no toggle, therefore do not provide an option
                 skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
                 voiceOnly: notificationContent["m.call.intent"] === "audio",
                 metricsTrigger: undefined,
@@ -267,34 +270,47 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
     const isVoice = notificationContent["m.call.intent"] === "audio";
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
-    const detailsInformation = notificationContent.notification_type === "ring" ?
-        <span>{otherUserId}</span> : <LiveContentSummary
-            type={isVoice ? LiveContentType.Voice : LiveContentType.Video}
-            text={isVoice ? _t("common|voice") : _t("common|video")}
-            active={false}
-            participantCount={useParticipantCount(call)}
-        />
+    const detailsInformation =
+        notificationContent.notification_type === "ring" ? (
+            <span>{otherUserId}</span>
+        ) : (
+            <LiveContentSummary
+                type={isVoice ? LiveContentType.Voice : LiveContentType.Video}
+                text={isVoice ? _t("common|voice") : _t("common|video")}
+                active={false}
+                participantCount={useParticipantCount(call)}
+            />
+        );
 
     return (
         <TooltipProvider>
             <>
                 <div className="mx_IncomingCallToast_content">
-                    {isVoice ? <div className="mx_IncomingCallToast_message">
-                        <VoiceCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
-                        {_t("voip|voice_call_incoming")}
-                    </div> : <div className="mx_IncomingCallToast_message">
-                        <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
-                        {_t("voip|video_call_incoming")}
-                    </div>}
+                    {isVoice ? (
+                        <div className="mx_IncomingCallToast_message">
+                            <VoiceCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                            {_t("voip|voice_call_incoming")}
+                        </div>
+                    ) : (
+                        <div className="mx_IncomingCallToast_message">
+                            <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                            {_t("voip|video_call_incoming")}
+                        </div>
+                    )}
                     <AvatarWithDetails
                         avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
                         details={detailsInformation}
                         title={room ? room.name : _t("voip|call_toast_unknown_room")}
                     />
-                    {!isVoice && <div className="mx_IncomingCallToast_toggleWithLabel">
-                        <span>{_t("voip|skip_lobby_toggle_option")}</span>
-                        <ToggleInput onChange={(e) => setSkipLobbyToggle(e.target.checked)} checked={skipLobbyToggle} />
-                    </div>}
+                    {!isVoice && (
+                        <div className="mx_IncomingCallToast_toggleWithLabel">
+                            <span>{_t("voip|skip_lobby_toggle_option")}</span>
+                            <ToggleInput
+                                onChange={(e) => setSkipLobbyToggle(e.target.checked)}
+                                checked={skipLobbyToggle}
+                            />
+                        </div>
+                    )}
                     <div className="mx_IncomingCallToast_buttons">
                         <DeclineCallButtonWithNotificationEvent
                             notificationEvent={notificationEvent}
