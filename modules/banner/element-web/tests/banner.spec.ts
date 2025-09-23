@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { input } from "zod/mini";
+
 import { test as base, expect } from "../../../../playwright/element-web-test.ts";
 import { type ConfigSchema } from "../src/config.ts";
 
@@ -39,7 +41,7 @@ test.describe("Banner", () => {
         // We don't take a screenshot as we don't want to assert Element's styling, only our own
     });
 
-    const configs: ConfigSchema["_input"][] = [
+    const configs: input<ConfigSchema>[] = [
         {
             logo_url: "http://localhost:8080/logo.svg",
             logo_link_url: "https://example.com/portal",

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { z } from "zod";
+import { z } from "zod/mini";
 
 import { StaticConfig } from "../config";
 
@@ -44,7 +44,7 @@ const UniventionCentralNavigation = z.object({
                     /**
                      * It’s usually empty.
                      */
-                    keywords: z.object({}).optional(),
+                    keywords: z.optional(z.object({})),
                 }),
             ),
         }),
