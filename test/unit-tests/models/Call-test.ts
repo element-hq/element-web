@@ -11,12 +11,9 @@ import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 import {
     RoomType,
-    Room,
+    type Room,
     RoomEvent,
     MatrixEvent,
-    RoomStateEvent,
-    PendingEventOrdering,
-    type IContent,
     type MatrixClient,
     type IMyDevice,
     type RoomMember,
@@ -41,15 +38,7 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "../../../src/models/Call";
-import {
-    stubClient,
-    mkEvent,
-    mkRoomMember,
-    setupAsyncStoreWithClient,
-    mockPlatformPeg,
-    MockEventEmitter,
-} from "../../test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
@@ -60,80 +49,7 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
-const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
-jest.spyOn(SettingsStore, "getValue").mockImplementation(
-    (settingName): any => enabledSettings.has(settingName) || undefined,
-);
-
-const setUpClientRoomAndStores = (): {
-    client: Mocked<MatrixClient>;
-    room: Room;
-    alice: RoomMember;
-    bob: RoomMember;
-    carol: RoomMember;
-    roomSession: Mocked<MatrixRTCSession>;
-} => {
-    stubClient();
-    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
-    DMRoomMap.makeShared(client);
-
-    const room = new Room("!1:example.org", client, "@alice:example.org", {
-        pendingEventOrdering: PendingEventOrdering.Detached,
-    });
-
-    const alice = mkRoomMember(room.roomId, "@alice:example.org");
-    const bob = mkRoomMember(room.roomId, "@bob:example.org");
-    const carol = mkRoomMember(room.roomId, "@carol:example.org");
-    jest.spyOn(room, "getMember").mockImplementation((userId) => {
-        switch (userId) {
-            case alice.userId:
-                return alice;
-            case bob.userId:
-                return bob;
-            case carol.userId:
-                return carol;
-            default:
-                return null;
-        }
-    });
-
-    jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-
-    client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-
-    const roomSession = new MockEventEmitter({
-        memberships: [],
-        getOldestMembership: jest.fn().mockReturnValue(undefined),
-    }) as Mocked<MatrixRTCSession>;
-
-    client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
-    client.getRooms.mockReturnValue([room]);
-    client.getUserId.mockReturnValue(alice.userId);
-    client.getDeviceId.mockReturnValue("alices_device");
-    client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
-    client.sendStateEvent.mockImplementation(async (roomId, eventType, content, stateKey = "") => {
-        if (roomId !== room.roomId) throw new Error("Unknown room");
-        const event = mkEvent({
-            event: true,
-            type: eventType,
-            room: roomId,
-            user: alice.userId,
-            skey: stateKey,
-            content: content as IContent,
-        });
-        room.addLiveEvents([event], { addToState: true });
-        return { event_id: event.getId()! };
-    });
-
-    setupAsyncStoreWithClient(WidgetStore.instance, client);
-    setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
-
-    return { client, room, alice, bob, carol, roomSession };
-};
-
-const cleanUpClientRoomAndStores = (client: MatrixClient, room: Room) => {
-    client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
-};
+enableCalls();
 
 const setUpWidget = (call: Call): { widget: Widget; messaging: Mocked<ClientWidgetApi> } => {
     call.widget.data = { ...call.widget, skipLobby: true };
