@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _t } from "../languageHandler";
+import { _t } from "./i18n";
 
 // These are the constants we use for when to break the text
 const MILLISECONDS_RECENT = 15000;
