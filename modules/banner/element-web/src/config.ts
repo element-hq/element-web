@@ -5,9 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { z, ZodSchema, ZodTypeDef } from "zod";
+import { z, ZodMiniType, input } from "zod/mini";
 
 import { Theme } from "./theme.ts";
+
+z.config(z.locales.en());
 
 const StaticConfig = z.object({
     type: z.literal("static"),
@@ -16,7 +18,7 @@ const StaticConfig = z.object({
      * Alternative logo URL to display in the popover menu.
      * Will use the main logo url if omitted.
      */
-    logo_url: z.string().url().optional(),
+    logo_url: z.optional(z.url()),
 
     /**
      * Categories of links to display in the menu.
@@ -35,7 +37,7 @@ const StaticConfig = z.object({
                     /**
                      * The URL to the icon.
                      */
-                    icon_uri: z.string().url(),
+                    icon_uri: z.url(),
                     /**
                      * The label of the link.
                      */
@@ -43,11 +45,11 @@ const StaticConfig = z.object({
                     /**
                      * The destination URL of the link.
                      */
-                    link_url: z.string().url(),
+                    link_url: z.url(),
                     /**
                      * The browsing context in which the browser opens the link.
                      */
-                    target: z.string().optional(),
+                    target: z.optional(z.string()),
                 }),
             ),
         }),
@@ -63,13 +65,13 @@ const UniventionConfig = z.object({
      * Alternative logo URL to display in the popover menu.
      * Will use the main logo url if omitted.
      */
-    logo_url: z.string().url().optional(),
+    logo_url: z.optional(z.url()),
 
     /**
      * Base URL to an Intercom Service
      * https://docs.software-univention.de/intercom-service/latest/architecture.html#endpoints
      */
-    ics_url: z.string().url(),
+    ics_url: z.url(),
 });
 
 export type UniventionConfig = z.infer<typeof UniventionConfig>;
@@ -79,13 +81,13 @@ export const ModuleConfig = z.object({
      * The URL of the portal logo.svg file.
      * @example `https://example.com/logo.svg`
      */
-    logo_url: z.string().url(),
+    logo_url: z.url(),
 
     /**
      * The URL of the portal.
      * @example `https://example.com`
      */
-    logo_link_url: z.string().url(),
+    logo_link_url: z.url(),
 
     /**
      * Configuration for the menu.
@@ -95,17 +97,17 @@ export const ModuleConfig = z.object({
     /**
      * Theme variable overrides, optional.
      */
-    theme: Theme.default({}),
+    theme: z.prefault(Theme, {}),
 });
 
 export type ModuleConfig = z.infer<typeof ModuleConfig>;
 
-export type ConfigSchema = ZodSchema<z.output<typeof ModuleConfig>, ZodTypeDef, z.input<typeof ModuleConfig>>;
+export type ConfigSchema = ZodMiniType<z.output<typeof ModuleConfig>, z.input<typeof ModuleConfig>>;
 
 export const CONFIG_KEY = "io.element.element-web-modules.banner";
 
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
-        [CONFIG_KEY]: ConfigSchema["_input"];
+        [CONFIG_KEY]: input<ConfigSchema>;
     }
 }
