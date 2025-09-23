@@ -470,11 +470,12 @@ export class Client {
     }
 
     /**
-     * Sends a state event into the room.
-     * @param roomId ID of the room to send the event into
-     * @param eventType type of event to send
-     * @param content the event content to send
-     * @param stateKey the state key to use
+     * Set a power level to one or multiple users.
+     * Will apply changes atop of current power level event.
+     * @param roomId - the room to update power levels in
+     * @param userId - the ID of the user or users to update power levels of
+     * @param powerLevel - the numeric power level to update given users to
+
      */
     public async setPowerLevel(
         roomId: string,
