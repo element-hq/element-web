@@ -205,7 +205,7 @@ test.describe("Element Call", () => {
         });
     });
 
-    test.describe.only("DMs", () => {
+    test.describe("DMs", () => {
         test.use({
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
