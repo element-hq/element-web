@@ -359,42 +359,43 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
             ? new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink)
             : null;
 
-        if (isFormattedBody || opts.linkify) {
-            let unsafeBody = formattedBody || escapeHtml(plainBody);
+        if (highlighter) {
+            // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+            // to highlight HTML tags themselves. However, this does mean that we don't highlight textnodes which
+            // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+            // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+            // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
+            sanitizeParams.textFilter = function (safeText) {
+                return highlighter.applyHighlights(safeText, safeHighlights!).join("");
+            };
+        }
 
-            if (highlighter) {
-                // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
-                // to highlight HTML tags themselves. However, this does mean that we don't highlight textnodes which
-                // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
-                // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
-                sanitizeParams.textFilter = function (safeText) {
-                    return highlighter.applyHighlights(safeText, safeHighlights!).join("");
-                };
-            }
+        if (isFormattedBody) {
+            let unsafeBody = formattedBody!;
 
             if (opts.linkify) {
-                unsafeBody = linkifyHtml(unsafeBody!);
+                unsafeBody = linkifyHtml(unsafeBody);
             }
 
-            safeBody = sanitizeHtml(unsafeBody!, sanitizeParams);
+            safeBody = sanitizeHtml(unsafeBody, sanitizeParams);
 
-            if (isFormattedBody) {
-                const phtml = new DOMParser().parseFromString(safeBody, "text/html");
-                const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
-                isHtmlMessage = !isPlainText;
+            const phtml = new DOMParser().parseFromString(safeBody, "text/html");
+            const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
+            isHtmlMessage = !isPlainText;
 
-                if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
-                    [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
-                        e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
-                            throwOnError: false,
-                            displayMode: e.tagName == "DIV",
-                            output: "htmlAndMathml",
-                        });
+            if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
+                [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
+                    e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
+                        throwOnError: false,
+                        displayMode: e.tagName == "DIV",
+                        output: "htmlAndMathml",
                     });
-                    safeBody = phtml.body.innerHTML;
-                }
+                });
+                safeBody = phtml.body.innerHTML;
             }
+        } else if (opts.linkify) {
+            // If we are linkifying plain text, pass the result through sanitizeHtml so that the highlighter configured in sanitizeParams.textFilter gets applied.
+            safeBody = sanitizeHtml(linkifyHtml(escapeHtml(plainBody)), sanitizeParams);
         } else if (highlighter) {
             safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
