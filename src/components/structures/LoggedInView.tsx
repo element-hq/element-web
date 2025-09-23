@@ -67,6 +67,7 @@ import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushR
 import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import ModuleApi from "../../modules/Api.ts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -672,6 +673,10 @@ class LoggedInView extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         let pageElement;
 
+        const moduleRenderer = this.props.page_type
+            ? ModuleApi.navigation.locationRenderers.get(this.props.page_type)
+            : undefined;
+
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 pageElement = (
@@ -699,6 +704,13 @@ class LoggedInView extends React.Component<IProps, IState> {
                     );
                 }
                 break;
+            default: {
+                if (moduleRenderer) {
+                    pageElement = moduleRenderer();
+                } else {
+                    console.warn(`Couldn't render page type "${this.props.page_type}"`);
+                }
+            }
         }
 
         const wrapperClasses = classNames({
@@ -740,20 +752,22 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 )}
                                 <SpacePanel />
                                 {!useNewRoomList && <BackdropPanel backgroundImage={this.state.backgroundImage} />}
-                                <div
-                                    className="mx_LeftPanel_wrapper--user"
-                                    ref={this._resizeContainer}
-                                    data-collapsed={shouldUseMinimizedUI ? true : undefined}
-                                >
-                                    <LeftPanel
-                                        pageType={this.props.page_type as PageTypes}
-                                        isMinimized={shouldUseMinimizedUI || false}
-                                        resizeNotifier={this.props.resizeNotifier}
-                                    />
-                                </div>
+                                {!moduleRenderer && (
+                                    <div
+                                        className="mx_LeftPanel_wrapper--user"
+                                        ref={this._resizeContainer}
+                                        data-collapsed={shouldUseMinimizedUI ? true : undefined}
+                                    >
+                                        <LeftPanel
+                                            pageType={this.props.page_type as PageTypes}
+                                            isMinimized={shouldUseMinimizedUI || false}
+                                            resizeNotifier={this.props.resizeNotifier}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
+                        {!moduleRenderer && <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />}
                         <div className="mx_RoomView_wrapper">{pageElement}</div>
                     </div>
                 </div>
