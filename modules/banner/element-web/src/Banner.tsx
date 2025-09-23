@@ -21,6 +21,10 @@ const Root = styled.nav`
     border-bottom: "var(--cpd-border-width-1) solid var(--cpd-color-bg-subtle-primary)";
     display: flex;
     gap: var(--cpd-space-3x);
+
+    h1 {
+        align-self: center;
+    }
 `;
 
 const LogoContainer = styled.div`
