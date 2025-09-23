@@ -109,8 +109,16 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private calls = new Map<string, Call>(); // Key is room ID
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
+    private inUpdateRoom = false;
     private updateRoom(room: Room): void {
-        if (!this.calls.has(room.roomId)) {
+        // XXX: This method is guarded with the flag this.inUpdateRoom because
+        // we need to block this method from calling itself recursively. That
+        // could happen, for instance, if Call.get adds a new virtual widget to
+        // the WidgetStore, firing a WidgetStore update that we don't actually
+        // care about. Without the guard we could get duplicate Call objects
+        // fighting for control over the same widget.
+        if (!this.inUpdateRoom && !this.calls.has(room.roomId)) {
+            this.inUpdateRoom = true;
             const call = Call.get(room);
 
             if (call) {
@@ -141,6 +149,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             }
 
             this.emit(CallStoreEvent.Call, call, room.roomId);
+            this.inUpdateRoom = false;
         }
     }
 
