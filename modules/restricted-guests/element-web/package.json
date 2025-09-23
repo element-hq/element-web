@@ -22,8 +22,8 @@
         "vite-plugin-node-polyfills": "^0.23.0"
     },
     "dependencies": {
-        "@vector-im/compound-design-tokens": "^4.0.3",
-        "@vector-im/compound-web": "^7.11.0",
+        "@vector-im/compound-design-tokens": "^6.0.0",
+        "@vector-im/compound-web": "^8.0.0",
         "styled-components": "^6.1.18",
         "zod": "^3.24.2"
     }
