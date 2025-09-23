@@ -475,7 +475,6 @@ export class Client {
      * @param roomId - the room to update power levels in
      * @param userId - the ID of the user or users to update power levels of
      * @param powerLevel - the numeric power level to update given users to
-
      */
     public async setPowerLevel(
         roomId: string,
