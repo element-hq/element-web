@@ -470,6 +470,27 @@ export class Client {
     }
 
     /**
+     * Sends a state event into the room.
+     * @param roomId ID of the room to send the event into
+     * @param eventType type of event to send
+     * @param content the event content to send
+     * @param stateKey the state key to use
+     */
+    public async setPowerLevel(
+        roomId: string,
+        userId: string | string[],
+        powerLevel: number,
+    ): Promise<ISendEventResponse> {
+        const client = await this.prepareClient();
+        return client.evaluate(
+            async (client, { roomId, userId, powerLevel }) => {
+                return client.setPowerLevel(roomId, userId, powerLevel);
+            },
+            { roomId, userId, powerLevel },
+        );
+    }
+
+    /**
      * Leaves the given room.
      * @param roomId ID of the room to leave
      */
