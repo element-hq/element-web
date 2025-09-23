@@ -559,7 +559,6 @@ export interface WidgetGenerationParameters {
     skipLobby?: boolean;
 }
 
-
 /**
  * A group call using MSC3401 and Element Call as a backend.
  * (somewhat cheekily named)
@@ -724,10 +723,7 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    private static createOrGetCallWidget(
-        roomId: string,
-        client: MatrixClient
-    ): IApp {
+    private static createOrGetCallWidget(roomId: string, client: MatrixClient): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
             // Always update the widget data because even if the widget is already created,
@@ -747,12 +743,7 @@ export class ElementCall extends Call {
                 type: WidgetType.CALL.preferred,
                 url: url.toString(),
                 waitForIframeLoad: false,
-                data: ElementCall.getWidgetData(
-                    client,
-                    roomId,
-                    {},
-                    {},
-                ),
+                data: ElementCall.getWidgetData(client, roomId, {}, {}),
             },
             roomId,
         );
@@ -811,10 +802,7 @@ export class ElementCall extends Call {
         // - or this is a call room. Then we also always want to show a call.
         if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
             // create a widget for the case we are joining a running call and don't have on yet.
-            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
-                room.roomId,
-                room.client,
-            );
+            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(room.roomId, room.client);
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }
 
@@ -828,8 +816,12 @@ export class ElementCall extends Call {
     public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<void> {
         // Some parameters may only be set once the user has chosen to interact with the call, regenerate the URL
         // at this point in case any of the parameters have changed.
-        this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters}
-        this.widget.url = ElementCall.generateWidgetUrl(this.client, this.roomId, this.widgetGenerationParameters).toString();
+        this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters };
+        this.widget.url = ElementCall.generateWidgetUrl(
+            this.client,
+            this.roomId,
+            this.widgetGenerationParameters,
+        ).toString();
         await super.start();
         this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);

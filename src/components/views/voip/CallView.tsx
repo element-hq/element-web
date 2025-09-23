@@ -72,15 +72,5 @@ interface CallViewProps {
 export const CallView: FC<CallViewProps> = ({ room, resizing, role, onClose }) => {
     const call = useCall(room.roomId);
 
-    return (
-        call && (
-            <JoinCallView
-                room={room}
-                resizing={resizing}
-                call={call}
-                role={role}
-                onClose={onClose}
-            />
-        )
-    );
+    return call && <JoinCallView room={room} resizing={resizing} call={call} role={role} onClose={onClose} />;
 };
