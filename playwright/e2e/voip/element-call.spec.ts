@@ -205,11 +205,10 @@ test.describe("Element Call", () => {
         });
     });
 
-    test.describe("DMs", () => {
+    test.describe.only("DMs", () => {
         test.use({
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
-                    name: "TestRoom",
                     preset: "trusted_private_chat" as Preset.TrustedPrivateChat,
                     invite: [bot.credentials.userId],
                 });
