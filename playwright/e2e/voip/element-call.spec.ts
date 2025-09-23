@@ -180,7 +180,7 @@ test.describe("Element Call", () => {
                     // Fake a start of a call
                     await sendRTCState(bot, room.roomId, "notification");
                     const toast = page.locator(".mx_Toast_toast");
-                    const button = toast.getByTestId("incoming-call-join-button");
+                    const button = toast.getByRole("button", { name: "Join" });
                     if (skipLobbyToggle) {
                         await toast.getByRole("switch").check();
                         await expect(toast).toMatchScreenshot("incoming-call-group-video-toast-checked.png");
@@ -286,7 +286,7 @@ test.describe("Element Call", () => {
                     // Fake a start of a call
                     await sendRTCState(bot, room.roomId, "ring");
                     const toast = page.locator(".mx_Toast_toast");
-                    const button = toast.getByTestId("incoming-call-join-button");
+                    const button = toast.getByRole("button", { name: "Join" });
                     if (skipLobbyToggle) {
                         await toast.getByRole("switch").check();
                         await expect(toast).toMatchScreenshot("incoming-call-dm-video-toast-checked.png");
