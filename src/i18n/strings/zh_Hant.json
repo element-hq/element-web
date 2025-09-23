@@ -823,7 +823,6 @@
             "title": "已移除復原方法",
             "warning": "如果您沒有移除復原方法，攻擊者可能會試圖存取您的帳號。請立刻在設定中變更您帳號的密碼並設定新的復原方式。"
         },
-        "reset_all_button": "忘記或遺失了所有復原方法？<a>重設全部</a>",
         "set_up_toast_title": "設定安全備份",
         "setup_secure_backup": {
             "explainer": "請在登出前備份您的金鑰，以免遺失。"
@@ -842,7 +841,6 @@
             "after_new_login": {
                 "device_verified": "裝置已驗證",
                 "skip_verification": "暫時略過驗證",
-                "unable_to_verify": "無法驗證此裝置",
                 "verify_this_device": "驗證此裝置"
             },
             "cancelled": "您取消了驗證。",
@@ -862,7 +860,6 @@
             "incoming_sas_dialog_waiting": "正在等待夥伴確認…",
             "incoming_sas_user_dialog_text_1": "驗證此工作階段，並標記為可受信任。由您將工作階段標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
             "incoming_sas_user_dialog_text_2": "驗證此使用者將會把他們的工作階段標記為受信任，並同時為他們標記您的工作階段為可信任。",
-            "no_key_or_device": "您似乎沒有安全金鑰或其他可以驗證的裝置。此裝置將無法存取舊的加密訊息。為了在此裝置上驗證您的身分，您必須重設您的驗證金鑰。",
             "no_support_qr_emoji": "您正在嘗試驗證的裝置不支援掃描 QR Code 或表情符號驗證，這是 %(brand)s 所支援的。請嘗試使用其他客戶端。",
             "other_party_cancelled": "另一方取消了驗證。",
             "prompt_encrypted": "請驗證聊天室中的所有使用者來確保安全。",
@@ -877,7 +874,6 @@
             "request_toast_accept": "驗證工作階段",
             "request_toast_decline_counter": "忽略（%(counter)s）",
             "request_toast_detail": "從 %(ip)s 來的 %(deviceId)s",
-            "reset_proceed_prompt": "繼續重設",
             "sas_caption_self": "透過確認螢幕上顯示的以下數字來驗證裝置。",
             "sas_caption_user": "透過確認對方畫面上顯示的下列數字來確認使用者。",
             "sas_description": "如果兩個裝置上都沒有相機的話，就比較一組獨特的表情符號",
@@ -900,7 +896,6 @@
             "unverified_sessions_toast_description": "請確認您的帳號安全",
             "unverified_sessions_toast_reject": "稍後",
             "unverified_sessions_toast_title": "您有未驗證的工作階段",
-            "verification_description": "驗證您的身分來存取已加密的訊息並對其他人證明您的身分。",
             "verification_dialog_title_device": "驗證其他裝置",
             "verification_dialog_title_user": "驗證請求",
             "verification_skip_warning": "如果不進行驗證，您將無法存取您的所有訊息，且可能會被其他人視為不信任。",
@@ -910,9 +905,6 @@
             "verify_emoji_prompt": "透過比對獨特的表情符號來進行驗證。",
             "verify_emoji_prompt_qr": "如果您無法掃描上面的條碼，請透過比較獨特的表情符號驗證。",
             "verify_later": "我稍後驗證",
-            "verify_using_device": "用另一台裝置驗證",
-            "verify_using_key": "使用安全金鑰進行驗證",
-            "verify_using_key_or_phrase": "使用安全金鑰或密語進行驗證",
             "waiting_for_user_accept": "正在等待 %(displayName)s 接受…",
             "waiting_other_device": "正在等待您在其他裝置上驗證…",
             "waiting_other_device_details": "正在等待您在其他裝置上驗證，%(deviceName)s (%(deviceId)s)…",

@@ -826,7 +826,6 @@
             "title": "Palautustapa poistettu",
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
-        "reset_all_button": "Unohtanut tai kadottanut kaikki palautustavat? <a>Nollaa kaikki</a>",
         "set_up_recovery": "Määritä palautus",
         "set_up_recovery_toast_description": "Luo palautusavain, jota voit käyttää salatun viestihistorian palauttamiseen, jos menetät pääsyn laitteisiisi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
@@ -846,7 +845,6 @@
             "after_new_login": {
                 "device_verified": "Laite vahvistettu",
                 "skip_verification": "Ohita vahvistus toistaiseksi",
-                "unable_to_verify": "Tätä laitetta ei voitu vahvistaa",
                 "verify_this_device": "Vahvista tämä laite"
             },
             "cancelled": "Peruutit varmennuksen.",
@@ -905,9 +903,6 @@
             "verify_emoji_prompt": "Varmenna vertaamalla uniikkia emojia.",
             "verify_emoji_prompt_qr": "Jos et pysty skannaamaan yläpuolella olevaa koodia, varmenna vertaamalla emojia.",
             "verify_later": "Vahvistan myöhemmin",
-            "verify_using_device": "Vahvista toisella laitteella",
-            "verify_using_key": "Vahvista palautusavaimella",
-            "verify_using_key_or_phrase": "Vahvista turva-avaimella tai turvalauseella",
             "waiting_for_user_accept": "Odotetaan, että %(displayName)s hyväksyy…",
             "waiting_other_device": "Odotetaan vahvistustasi toiselta laitteelta…",
             "waiting_other_device_details": "Odotetaan vahvistustasi toiselta laitteelta, %(deviceName)s (%(deviceId)s)…",

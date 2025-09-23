@@ -633,7 +633,6 @@
             "title": "Rehava metodo foriĝis",
             "warning": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
-        "reset_all_button": "Ĉu vi forgesis aŭ perdis ĉiujn manierojn de rehavo? <a>Restarigu ĉion</a>",
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
         "setup_secure_backup": {
             "explainer": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi."
@@ -668,7 +667,6 @@
             "qr_prompt": "Skanu ĉi tiun unikan kodon",
             "qr_reciprocate_same_shield_user": "Preskaŭ finite! Ĉu %(displayName)s montras la saman ŝildon?",
             "request_toast_detail": "%(deviceId)s de %(ip)s",
-            "reset_proceed_prompt": "Procedu por restarigi",
             "sas_caption_user": "Kontrolu ĉu tiun uzanton per konfirmo, ke la jena numero aperis sur ĝia ekrano.",
             "sas_description": "Komparu unikan aron de bildsignoj se vi ne havas kameraon sur la alia aparato",
             "sas_emoji_caption_user": "Kontrolu ĉi tiun uzanton per konfirmo, ke la jenaj bildsignoj aperis sur ĝia ekrano.",
@@ -688,7 +686,6 @@
             "unverified_sessions_toast_description": "Kontrolu por certigi sekurecon de via konto",
             "unverified_sessions_toast_reject": "Pli poste",
             "unverified_sessions_toast_title": "Vi havas nekontrolitajn salutaĵojn",
-            "verification_description": "Kontrolu vian identecon por aliri ĉifritajn mesaĝojn kaj pruvi vian identecon al aliuloj.",
             "verification_dialog_title_user": "Kontrolpeto",
             "verification_skip_warning": "Sen kontrolado, vi ne havos aliron al ĉiuj viaj mesaĝoj kaj povas aperi kiel nefidinda al aliaj.",
             "verification_success_with_backup": "Via nova aparato nun estas kontrolita. Ĝi havas aliron al viaj ĉifritaj mesaĝoj, kaj aliaj vidos ĝin kiel fidinda.",
@@ -697,9 +694,6 @@
             "verify_emoji_prompt": "Kontrolu per komparo de unikaj bildsignoj.",
             "verify_emoji_prompt_qr": "Se vi ne povas skani la supran kodon, kontrolu per komparo de unikaj bildsignoj.",
             "verify_later": "Kontrolu poste",
-            "verify_using_device": "Kontrolu per alia aparato",
-            "verify_using_key": "Kontrolu per Sekureca ŝlosilo",
-            "verify_using_key_or_phrase": "Kontrolu per Sekureca ŝlosilo aŭ frazo",
             "waiting_for_user_accept": "Atendante akcepton de %(displayName)s…",
             "waiting_other_user": "Atendas kontrolon de %(displayName)s…"
         },
