@@ -9,7 +9,7 @@ import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
-import { Bot } from "../../pages/bot";
+import type { Bot } from "../../pages/bot";
 
 function assertCommonCallParameters(
     url: URLSearchParams,
