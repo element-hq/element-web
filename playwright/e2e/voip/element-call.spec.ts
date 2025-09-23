@@ -25,8 +25,6 @@ function assertCommonCallParameters(
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
     expect(hash.get("preload")).toEqual("false");
-
-    expect(hash.get("returnToLobby")).toEqual("false");
 }
 
 async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification") {
@@ -125,7 +123,7 @@ test.describe("Element Call", () => {
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
@@ -165,7 +163,7 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
 
             expect(hash.get("intent")).toEqual("join_existing");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         [true, false].forEach((skipLobbyToggle) => {
@@ -232,7 +230,7 @@ test.describe("Element Call", () => {
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call_dm");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, room, app }) => {
@@ -271,7 +269,7 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
 
             expect(hash.get("intent")).toEqual("join_existing_dm");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         [true, false].forEach((skipLobbyToggle) => {

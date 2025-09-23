@@ -200,7 +200,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * The widget associated with the call must be active for this to succeed.
      * Only call this if the call state is: ConnectionState.Disconnected.
      */
-    public async start(): Promise<void> {
+    public async start(_params?: WidgetGenerationParameters): Promise<void> {
         const messagingStore = WidgetMessagingStore.instance;
         this.messaging = messagingStore.getMessagingForUid(this.widgetUid) ?? null;
         if (!this.messaging) {
@@ -549,6 +549,18 @@ export enum ElementCallIntent {
 }
 
 /**
+ * Parameters to be passed during widget creation.
+ * These parameters are hints only, and may not be accepted by the implementation.
+ */
+export interface WidgetGenerationParameters {
+    /**
+     * Skip showing the lobby screen of a call.
+     */
+    skipLobby?: boolean;
+}
+
+
+/**
  * A group call using MSC3401 and Element Call as a backend.
  * (somewhat cheekily named)
  */
@@ -566,21 +578,105 @@ export class ElementCall extends Call {
         this.checkDestroy();
     }
 
-    private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
-        const baseUrl = window.location.href;
-        let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
+    public widgetGenerationParameters: WidgetGenerationParameters = {};
 
-        const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
-        if (elementCallUrl) url = new URL(elementCallUrl);
+    /**
+     * Calculate the correct intent (and associated parameters) for an Element Call room. Paarameters
+     * will be applied to the `params` instance.
+     *
+     * @param params Existing URL parameters
+     * @param client The current client.
+     * @param roomId The room ID for the call.
+     */
+    private static appendRoomParams(params: URLSearchParams, client: MatrixClient, roomId: string): void {
+        const room = client.getRoom(roomId);
+        if (!room) {
+            // If the room isn't known, or the room is a video room then skip setting an intent.
+            return;
+        } else if (isVideoRoom(room)) {
+            // Video call rooms already exist, so just treat as if we're joining a group call.
+            params.append("intent", ElementCallIntent.JoinExisting);
+            return;
+        }
+        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+        const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+        const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+        // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
+        // preload by default so we override here. This can be removed when that package
+        // is released and upgraded.
+        if (isDM) {
+            if (hasCallStarted) {
+                params.append("intent", ElementCallIntent.JoinExistingDM);
+                params.append("preload", "false");
+            } else {
+                params.append("intent", ElementCallIntent.StartCallDM);
+                params.append("preload", "false");
+            }
+        } else {
+            if (hasCallStarted) {
+                params.append("intent", ElementCallIntent.JoinExisting);
+                params.append("preload", "false");
+            } else {
+                params.append("intent", ElementCallIntent.StartCall);
+                params.append("preload", "false");
+            }
+        }
+    }
+
+    /**
+     * Calculate the correct analytics parameters for an Element Call room. Paarameters
+     * will be applied to the `params` instance.
+     *
+     * @param params Existing URL parameters
+     * @param client The current client.
+     */
+    private static appendAnalyticsParams(params: URLSearchParams, client: MatrixClient): void {
+        const posthogConfig = SdkConfig.get("posthog");
+        if (!posthogConfig || PosthogAnalytics.instance.getAnonymity() === Anonymity.Disabled) {
+            return;
+        }
+
+        const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE)?.getContent();
+        // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
+        // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
+        // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
+        // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
+        const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn ? accountAnalyticsData?.id : "";
+
+        params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
+        params.append("posthogUserId", analyticsID);
+        params.append("posthogApiHost", posthogConfig.api_host);
+        params.append("posthogApiKey", posthogConfig.project_api_key);
+
+        // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
+        // unlike EW where data is shared upon an intentional user action (rageshake).
+        const sentryConfig = SdkConfig.get("sentry");
+        if (sentryConfig) {
+            params.append("sentryDsn", sentryConfig.dsn);
+            params.append("sentryEnvironment", sentryConfig.environment ?? "");
+        }
+    }
+
+    /**
+     * Generate the correct Element Call widget URL for creating or joining a call in this room.
+     * Unless `Developer.elementCallUrl` is set, the widget will use the embedded Element Call package.
+     *
+     * @param client
+     * @param roomId
+     * @param opts
+     * @returns
+     */
+    private static generateWidgetUrl(client: MatrixClient, roomId: string, opts: WidgetGenerationParameters = {}): URL {
+        const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
+        const url = elementCallUrlOverride
+            ? new URL(elementCallUrlOverride)
+            : // this strips hash fragment from baseUrl
+              new URL("./widgets/element-call/index.html#", window.location.href);
 
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
-            confineToRoom: "true", // Only show the call interface for the configured room
             // Template variables are used, so that this can be configured using the widget data.
-            skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
-            returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
-            header: "none", // Hide the header since our room header is enough
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
             roomId: roomId,
@@ -590,33 +686,8 @@ export class ElementCall extends Call {
             theme: "$org.matrix.msc2873.client_theme",
         });
 
-        const room = client.getRoom(roomId);
-        if (room !== null && !isVideoRoom(room)) {
-            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-            // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
-            // preload by default so we override here. This can be removed when that package
-            // is released and upgraded.
-            if (isDM) {
-                params.append("sendNotificationType", "ring");
-                if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExistingDM);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", ElementCallIntent.StartCallDM);
-                    params.append("preload", "false");
-                }
-            } else {
-                params.append("sendNotificationType", "notification");
-                if (hasCallStarted) {
-                    params.append("intent", ElementCallIntent.JoinExisting);
-                    params.append("preload", "false");
-                } else {
-                    params.append("intent", ElementCallIntent.StartCall);
-                    params.append("preload", "false");
-                }
-            }
+        if (typeof opts.skipLobby === "boolean") {
+            params.set("skipLobby", opts.skipLobby.toString());
         }
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
@@ -624,34 +695,10 @@ export class ElementCall extends Call {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        const posthogConfig = SdkConfig.get("posthog");
-        if (posthogConfig && PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled) {
-            const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE)?.getContent();
-            // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
-            // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
-            // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
-            // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
-            const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn
-                ? accountAnalyticsData?.id
-                : "";
-
-            params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
-            params.append("posthogUserId", analyticsID);
-            params.append("posthogApiHost", posthogConfig.api_host);
-            params.append("posthogApiKey", posthogConfig.project_api_key);
-
-            // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
-            // unlike EW where data is shared upon an intentional user action (rageshake).
-            const sentryConfig = SdkConfig.get("sentry");
-            if (sentryConfig) {
-                params.append("sentryDsn", sentryConfig.dsn);
-                params.append("sentryEnvironment", sentryConfig.environment ?? "");
-            }
-        }
-
         if (SettingsStore.getValue("fallbackICEServerAllowed")) {
             params.append("allowIceFallback", "true");
         }
+
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
             params.append("allowVoipWithNoMedia", "true");
         }
@@ -668,6 +715,8 @@ export class ElementCall extends Call {
                 })
                 .forEach((font) => params.append("font", font));
         }
+        this.appendAnalyticsParams(params, client);
+        this.appendRoomParams(params, client, roomId);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
@@ -675,27 +724,15 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false
-    // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
         roomId: string,
-        client: MatrixClient,
-        skipLobby: boolean | undefined,
-        returnToLobby: boolean | undefined,
+        client: MatrixClient
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
             // Always update the widget data because even if the widget is already created,
             // we might have settings changes that update the widget.
-            const overwrites: IWidgetData = {};
-            if (skipLobby !== undefined) {
-                overwrites.skipLobby = skipLobby;
-            }
-            if (returnToLobby !== undefined) {
-                overwrites.returnToLobby = returnToLobby;
-            }
-            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, overwrites);
+            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, {});
             return ecWidget;
         }
 
@@ -714,10 +751,7 @@ export class ElementCall extends Call {
                     client,
                     roomId,
                     {},
-                    {
-                        skipLobby: skipLobby ?? false,
-                        returnToLobby: returnToLobby ?? false,
-                    },
+                    {},
                 ),
             },
             roomId,
@@ -780,8 +814,6 @@ export class ElementCall extends Call {
             const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
                 room.roomId,
                 room.client,
-                undefined,
-                isVideoRoom(room),
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
         }
@@ -789,11 +821,15 @@ export class ElementCall extends Call {
         return null;
     }
 
-    public static create(room: Room, skipLobby = false): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
+    public static create(room: Room): void {
+        ElementCall.createOrGetCallWidget(room.roomId, room.client);
     }
 
-    public async start(): Promise<void> {
+    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<void> {
+        // Some parameters may only be set once the user has chosen to interact with the call, regenerate the URL
+        // at this point in case any of the parameters have changed.
+        this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters}
+        this.widget.url = ElementCall.generateWidgetUrl(this.client, this.roomId, this.widgetGenerationParameters).toString();
         await super.start();
         this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
