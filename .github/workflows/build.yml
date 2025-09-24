@@ -44,7 +44,7 @@ jobs:
               with:
                   repository: element-hq/element-web
 
-            - uses: .github/actions/build
+            - uses: ./.github/actions/build
               with:
                   artifact-name: webapp-${{ matrix.image }}
                   config-path: element.io/develop/config.json
