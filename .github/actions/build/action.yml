@@ -11,23 +11,6 @@ inputs:
 runs:
     using: composite
     steps:
-        - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-          with:
-              repository: element-hq/element-web
-              path: .element-web-build
-
-        - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-          with:
-              # Disable cache on Windows as it is slower than not caching
-              # https://github.com/actions/setup-node/issues/975
-              cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
-              node-version: "lts/*"
-              cache-dependency-path: .element-web-build/yarn.lock
-
-        # Workaround for yarn install timeouts, especially on Windows
-        - run: yarn config set network-timeout 300000
-          shell: bash
-
         - name: Fetch layered build
           id: layered_build
           env:
@@ -35,7 +18,7 @@ runs:
               PR_NUMBER: ${{ github.event.pull_request.number }}
               # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
               JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-          working-directory: .element-web-build
+          working-directory: ${{ github.action_path }}/../../..
           shell: bash
           run: |
               scripts/layered.sh
@@ -44,21 +27,16 @@ runs:
               echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
 
         - name: Copy config
-          working-directory: .element-web-build
+          working-directory: ${{ github.action_path }}/../../..
           shell: bash
           run: cp "$CONFIG_PATH" config.json
           env:
               CONFIG_PATH: ${{ inputs.config-path }}
 
         - name: Build
-          working-directory: .element-web-build
+          working-directory: ${{ github.action_path }}/../../..
           shell: bash
           env:
               CI_PACKAGE: true
               VERSION: "${{ steps.layered_build.outputs.VERSION }}"
-          run: |
-              yarn build
-
-        - run: mv webapp ..
-          working-directory: .element-web-build
-          shell: bash
+          run: yarn build
