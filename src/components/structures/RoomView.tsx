@@ -152,7 +152,6 @@ interface IRoomProps extends RoomViewProps {
     threepidInvite?: IThreepidInvite;
     oobData?: IOOBData;
 
-    resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
 
     forceTimeline?: boolean; // should we force access to the timeline, overriding (for eg) spaces
@@ -895,7 +894,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.on("isResizing", this.onIsResizing);
 
         this.settingWatchers = [
             SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
@@ -1011,7 +1010,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.props.resizeNotifier.off("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.off("isResizing", this.onIsResizing);
 
         if (this.state.room) {
             this.context.widgetLayoutStore.off(
@@ -2057,7 +2056,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <LocalRoomCreateLoader
                     localRoom={localRoom}
                     names={names}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
@@ -2070,7 +2069,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <LocalRoomView
                     e2eStatus={this.state.e2eStatus}
                     localRoom={localRoom}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
@@ -2084,7 +2083,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return (
             <ScopedRoomContextProvider {...this.state}>
                 <WaitingForThirdPartyRoomView
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     roomView={this.roomView}
                     inviteEvent={inviteEvent}
                 />
@@ -2403,7 +2402,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <SpaceRoomView
                     space={this.state.room}
                     justCreatedOpts={this.props.justCreatedOpts}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     onJoinButtonClicked={this.onJoinButtonClicked}
                     onRejectButtonClicked={
@@ -2420,7 +2419,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 room={this.state.room}
                 userId={this.context.client.getSafeUserId()}
                 showApps={this.state.showApps}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
             >
                 {aux}
             </AuxPanel>
@@ -2430,7 +2429,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             <PinnedMessageBanner
                 room={this.state.room}
                 permalinkCreator={this.permalinkCreator}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
             />
         );
 
@@ -2445,7 +2444,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <MessageComposer
                     room={this.state.room}
                     e2eStatus={this.state.e2eStatus}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     replyToEvent={this.state.replyToEvent}
                     permalinkCreator={this.permalinkCreator}
                 />
@@ -2467,7 +2466,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     promise={this.state.search.promise}
                     abortController={this.state.search.abortController}
                     inProgress={!!this.state.search.inProgress}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}
                 />
@@ -2502,7 +2501,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     className={this.messagePanelClassNames}
                     membersLoaded={this.state.membersLoaded}
                     permalinkCreator={this.permalinkCreator}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     showReactions={true}
                     layout={this.state.layout}
                     editState={this.state.editState}
@@ -2534,7 +2533,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const rightPanel = showRightPanel ? (
             <RightPanel
                 room={this.state.room}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
                 permalinkCreator={this.permalinkCreator}
                 e2eStatus={this.state.e2eStatus}
                 onSearchChange={this.onSearchChange}
@@ -2595,7 +2594,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <AppsDrawer
                             room={this.state.room}
                             userId={this.context.client.getSafeUserId()}
-                            resizeNotifier={this.props.resizeNotifier}
+                            resizeNotifier={this.context.resizeNotifier}
                             showApps={true}
                             role="main"
                         />
@@ -2641,7 +2640,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     <ErrorBoundary>
                         <MainSplit
                             panel={rightPanel}
-                            resizeNotifier={this.props.resizeNotifier}
+                            resizeNotifier={this.context.resizeNotifier}
                             sizeKey={sizeKey}
                             defaultSize={defaultSize}
                             analyticsRoomType={analyticsRoomType}
