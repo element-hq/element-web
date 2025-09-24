@@ -18,7 +18,7 @@ runs:
         - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
           with:
               repository: element-hq/element-web
-              path: ${{ runner.temp }}/element-web-build
+              path: .element-web-build
 
         - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
           with:
@@ -26,7 +26,7 @@ runs:
               # https://github.com/actions/setup-node/issues/975
               cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
               node-version: "lts/*"
-              cache-dependency-path: ${{ runner.temp }}/element-web-build/yarn.lock
+              cache-dependency-path: .element-web-build/yarn.lock
 
         # Workaround for yarn install timeouts, especially on Windows
         - run: yarn config set network-timeout 300000
@@ -39,7 +39,7 @@ runs:
               PR_NUMBER: ${{ github.event.pull_request.number }}
               # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
               JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-          working-directory: ${{ runner.temp }}/element-web-build
+          working-directory: .element-web-build
           shell: bash
           run: |
               scripts/layered.sh
@@ -48,14 +48,14 @@ runs:
               echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
 
         - name: Copy config
-          working-directory: ${{ runner.temp }}/element-web-build
+          working-directory: .element-web-build
           shell: bash
           run: cp "$CONFIG_PATH" config.json
           env:
               CONFIG_PATH: ${{ inputs.config-path }}
 
         - name: Build
-          working-directory: ${{ runner.temp }}/element-web-build
+          working-directory: .element-web-build
           shell: bash
           env:
               CI_PACKAGE: true
@@ -67,5 +67,8 @@ runs:
           uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
           with:
               name: ${{ inputs.artifact-name }}
-              path: ${{ runner.temp }}/element-web-build/webapp
+              path: .element-web-build/webapp
               retention-days: 1
+
+        - run: rm -R .element-web-build
+          shell: bash
