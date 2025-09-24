@@ -5,10 +5,6 @@ inputs:
         required: false
         description: "Path to the config.json to use. Defaults to element.io/develop/config.json"
         default: "element.io/develop/config.json"
-    artifact-name:
-        required: false
-        description: "Name of the artifact to upload"
-        default: "webapp"
     matrix-js-sdk-sha:
         required: false
         description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
@@ -63,12 +59,6 @@ runs:
           run: |
               yarn build
 
-        - name: Upload Artifact
-          uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-          with:
-              name: ${{ inputs.artifact-name }}
-              path: .element-web-build/webapp
-              retention-days: 1
-
-        - run: rm -R .element-web-build
+        - run: mv webapp ..
+          working-directory: .element-web-build
           shell: bash

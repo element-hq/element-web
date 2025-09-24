@@ -46,5 +46,11 @@ jobs:
 
             - uses: ./.github/actions/build
               with:
-                  artifact-name: webapp-${{ matrix.image }}
                   config-path: element.io/develop/config.json
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              with:
+                  name: ${{ inputs.artifact-name }}
+                  path: webapp
+                  retention-days: 1
