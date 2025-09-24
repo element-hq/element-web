@@ -119,7 +119,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             isItemFocusable={() => true}
             onKeyDown={keyDownCallback}
             isScrolling={setIsScrolling}
-            overscan={{ main: 15 * 48, reverse: 15 * 48 }}
+            increaseViewportBy={{ bottom: 25 * 48, top: 25 * 48 }}
         />
     );
 }
