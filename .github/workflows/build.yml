@@ -38,8 +38,9 @@ jobs:
                       image: windows-2022
                     - isPullRequest: true
                       image: macos-14
-        uses: ./.github/workflows/build-reusable.yml
-        with:
-            runs-on: ${{ matrix.image }}
-            artifact-name: webapp-${{ matrix.image }}
-            config-path: element.io/develop/config.json
+        runs-on: ${{ matrix.image }}
+        steps:
+            - uses: element-hq/element-web/.github/actions/build@${{ github.sha }}
+              with:
+                  artifact-name: webapp-${{ matrix.image }}
+                  config-path: element.io/develop/config.json
