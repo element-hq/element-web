@@ -105,6 +105,10 @@ export interface Api
      */
     readonly customComponents: CustomComponentsApi;
 
+    /**
+     * Allows modules to render components that are part of Element Web.
+     * @alpha
+     */
     readonly builtins: BuiltinsApi;
 
     /**
@@ -113,6 +117,10 @@ export interface Api
      */
     readonly navigation: NavigationApi;
 
+    /**
+     * Allows modules to insert extra UI into Element Web.
+     * @alpha
+     */
     readonly extras: ExtrasApi;
 
     /**

@@ -7,11 +7,16 @@ Please see LICENSE files in the repository root for full details.
 
 import { JSX } from "react";
 
+/**
+ * A function called to render a component when a user navigates to the corresponding
+ * location. Currently renders alongside just the SpacePanel.
+ * @alpha
+ */
 export type LocationRenderFunction = () => JSX.Element;
 
 /**
  * API methods to navigate the application.
- * @public
+ * @alpha
  */
 export interface NavigationApi {
     /**
