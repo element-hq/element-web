@@ -1,5 +1,5 @@
-name: Upload release assets
-description: Uploads assets to an existing release and optionally signs them
+name: Build element-web
+description: Run within a checkout to build a webapp directory
 inputs:
     config-path:
         required: false
