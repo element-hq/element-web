@@ -22,6 +22,7 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 
 import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
@@ -211,13 +212,16 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     }
 
     if (opts.encryption) {
+        const content: RoomEncryptionEventContent = {
+            algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+        };
+        if (opts.stateEncryption) {
+            content["io.element.msc3414.encrypt_state_events"] = true;
+        }
         createOpts.initial_state.push({
             type: "m.room.encryption",
             state_key: "",
-            content: {
-                "algorithm": MEGOLM_ENCRYPTION_ALGORITHM,
-                "io.element.msc3414.encrypt_state_events": opts.stateEncryption,
-            },
+            content,
         });
     }
 
