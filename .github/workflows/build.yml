@@ -40,7 +40,11 @@ jobs:
                       image: macos-14
         runs-on: ${{ matrix.image }}
         steps:
-            - uses: element-hq/element-web/.github/actions/build@${{ github.sha }}
+            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              with:
+                  repository: element-hq/element-web
+
+            - uses: .github/actions/build
               with:
                   artifact-name: webapp-${{ matrix.image }}
                   config-path: element.io/develop/config.json
