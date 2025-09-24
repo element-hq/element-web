@@ -674,8 +674,6 @@
         "encrypted_warning": "You can't disable this later. Bridges & most bots won't work yet.",
         "encryption_forced": "Your server requires encryption to be enabled in private rooms.",
         "encryption_label": "Enable end-to-end encryption",
-        "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from being visible to the server.",
-        "state_encryption_label": "Encrypt state events",
         "error_title": "Failure to create room",
         "generic_error": "Server may be unavailable, overloaded, or you hit a bug.",
         "join_rule_change_notice": "You can change this at any time from room settings.",
@@ -688,6 +686,8 @@
         "join_rule_restricted_label": "Everyone in <SpaceName/> will be able to find and join this room.",
         "name_validation_required": "Please enter a name for the room",
         "room_visibility_label": "Room visibility",
+        "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from being visible to the server.",
+        "state_encryption_label": "Encrypt state events",
         "title_private_room": "Create a private room",
         "title_public_room": "Create a public room",
         "title_video_room": "Create a video room",
@@ -3530,8 +3530,8 @@
             "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
-            "state_enabled": "State events in this room are end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "State events in this room are end-to-end encrypted.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "m.room.guest_access": {
