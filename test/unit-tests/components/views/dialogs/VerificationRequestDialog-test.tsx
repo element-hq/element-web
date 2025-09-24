@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
 import { User } from "matrix-js-sdk/src/matrix";
 import {
     type ShowSasCallbacks,
@@ -78,7 +78,6 @@ describe("VerificationRequestDialog", () => {
         const dialog = renderComponent(VerificationPhase.Done);
 
         expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
-
         expect(screen.getByText("You've successfully verified your device!")).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
@@ -97,6 +96,64 @@ describe("VerificationRequestDialog", () => {
         ).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
+    });
+
+    it("Renders correctly if the request is supplied later via a promise", async () => {
+        // Given we supply a promise of a request instead of a request
+        const member = User.createUser("@alice:example.org", stubClient());
+        const requestPromise = Promise.resolve(createRequest(VerificationPhase.Cancelled));
+
+        // When we render the dialog
+        render(
+            <VerificationRequestDialog
+                onFinished={jest.fn()}
+                member={member}
+                verificationRequestPromise={requestPromise}
+            />,
+        );
+
+        // And wait for the component to mount, the promise to resolve and the component state to update
+        await act(async () => await new Promise(process.nextTick));
+
+        // Then it renders the resolved information
+        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "You cancelled verification on your other device. Start verification again from the notification.",
+            ),
+        ).toBeInTheDocument();
+    });
+
+    it("Renders the later promise request if both immediate and promise are supplied", async () => {
+        // Given we supply a promise of a request as well as a request
+        const member = User.createUser("@alice:example.org", stubClient());
+        const request = createRequest(VerificationPhase.Ready);
+        const requestPromise = Promise.resolve(createRequest(VerificationPhase.Cancelled));
+
+        // When we render the dialog
+        render(
+            <VerificationRequestDialog
+                onFinished={jest.fn()}
+                member={member}
+                verificationRequest={request}
+                verificationRequestPromise={requestPromise}
+            />,
+        );
+
+        // And wait for the component to mount, the promise to resolve and the component state to update
+        await act(async () => await new Promise(process.nextTick));
+
+        // Then it renders the information from the request in the promise
+        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "You cancelled verification on your other device. Start verification again from the notification.",
+            ),
+        ).toBeInTheDocument();
     });
 });
 
