@@ -12,8 +12,7 @@ concurrency:
     cancel-in-progress: true
 
 env:
-    # These must be set for fetchdep.sh to get the right branch
-    REPOSITORY: ${{ github.repository }}
+    # This must be set for fetchdep.sh to get the right branch
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
 permissions: {} # No permissions required

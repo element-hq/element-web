@@ -10,8 +10,7 @@ concurrency:
     cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 # develop pushes and repository_dispatch handled in build_develop.yaml
 env:
-    # These must be set for fetchdep.sh to get the right branch
-    REPOSITORY: ${{ github.repository }}
+    # This must be set for fetchdep.sh to get the right branch
     PR_NUMBER: ${{ github.event.pull_request.number }}
 permissions: {} # No permissions required
 jobs:
@@ -39,6 +38,9 @@ jobs:
                     - isPullRequest: true
                       image: macos-14
         runs-on: ${{ matrix.image }}
+        defaults:
+            run:
+                shell: bash
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
@@ -52,9 +54,18 @@ jobs:
             # Workaround for yarn install timeouts, especially on Windows
             - run: yarn config set network-timeout 300000
 
-            - uses: ./.github/actions/build
-              with:
-                  config-path: element.io/develop/config.json
+            - name: Fetch layered build
+              run: ./scripts/layered.sh
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
+
+            - name: Build
+              env:
+                  CI_PACKAGE: true
+              run: |
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  yarn build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
