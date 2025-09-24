@@ -71,9 +71,7 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: |
-                  VERSION=$(scripts/get-version-from-git.sh)
-                  yarn build
+              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
