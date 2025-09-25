@@ -279,7 +279,7 @@ export function processEmojiReplacement(
  * @param setSuggestionData - setter function to set the suggestion state
  * @param setText - setter function to set the content of the composer
  */
-function processTextReplacement(
+export function processTextReplacement(
     replacementText: string,
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
