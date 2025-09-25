@@ -246,8 +246,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
-                // Voice only calls have no toggle, therefore do not provide an option
-                skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
+                skipLobby: ("shiftKey" in e && e.shiftKey) || skipLobbyToggle,
                 voiceOnly: notificationContent["m.call.intent"] === "audio",
                 metricsTrigger: undefined,
             });

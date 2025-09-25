@@ -21,13 +21,11 @@ interface JoinCallViewProps {
     room: Room;
     resizing: boolean;
     call: Call;
-    skipLobby?: boolean;
-    voiceOnly?: boolean;
     role?: AriaRole;
     onClose: () => void;
 }
 
-const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, voiceOnly, role, onClose }) => {
+const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClose }) => {
     const cli = useContext(MatrixClientContext);
     useTypedEventEmitter(call, CallEvent.Close, onClose);
 
@@ -35,13 +33,6 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
         // We'll take this opportunity to tidy up our room state
         call.clean();
     }, [call]);
-
-    useEffect(() => {
-        // Always update the widget data so that we don't ignore "skipLobby" accidentally.
-        call.widget.data ??= {};
-        call.widget.data.skipLobby = skipLobby;
-        call.widget.data.intent = ElementCall.getWidgetIntent(room.client, room.roomId, voiceOnly);
-    }, [call.widget, skipLobby, voiceOnly]);
 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
         // The stickyPromise has to resolve before the widget actually becomes sticky.
@@ -71,8 +62,6 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
 interface CallViewProps {
     room: Room;
     resizing: boolean;
-    skipLobby?: boolean;
-    voiceOnly?: boolean;
     role?: AriaRole;
     /**
      * Callback for when the user closes the call.
@@ -80,20 +69,8 @@ interface CallViewProps {
     onClose: () => void;
 }
 
-export const CallView: FC<CallViewProps> = ({ room, resizing, skipLobby, role, onClose, voiceOnly }) => {
+export const CallView: FC<CallViewProps> = ({ room, resizing, role, onClose }) => {
     const call = useCall(room.roomId);
 
-    return (
-        call && (
-            <JoinCallView
-                room={room}
-                resizing={resizing}
-                call={call}
-                skipLobby={skipLobby}
-                voiceOnly={voiceOnly}
-                role={role}
-                onClose={onClose}
-            />
-        )
-    );
+    return call && <JoinCallView room={room} resizing={resizing} call={call} role={role} onClose={onClose} />;
 };
