@@ -8,24 +8,17 @@ Please see LICENSE files in the repository root for full details.
 import { JSX } from "react";
 
 /**
- * Any kind of event that can trigger a button
- * @alpha
- */
-export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
-
-/**
- * The type of the function used to render a space panel item.
+ * Properties of an item added to the Space panel
  * @alpha
  */
 export interface SpacePanelItemProps {
-    spaceKey?: string;
     className?: string;
     icon?: JSX.Element;
     label: string;
     contextMenuTooltip?: string;
     style?: React.CSSProperties;
     //notificationState?: NotificationState;
-    onClick?(ev?: ButtonEvent): void;
+    onSelected?(): void;
 }
 
 /**
@@ -33,5 +26,12 @@ export interface SpacePanelItemProps {
  * @alpha Subject to change.
  */
 export interface ExtrasApi {
-    addSpacePanelItem(props: SpacePanelItemProps): void;
+    /**
+     * Inserts an item into the space panel as if it were a space button, below
+     * buttons for other spaces.
+     * If called again with the same spaceKey, will update the existing item.
+     * @param spaceKey - A key to identify this space-like item.
+     * @param props - Properties of the item to add.
+     */
+    setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }

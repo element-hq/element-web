@@ -153,8 +153,7 @@ export interface DirectoryCustomisations {
 
 // @alpha
 export interface ExtrasApi {
-    // (undocumented)
-    addSpacePanelItem(renderer: SpacePanelItemRenderFunction): void;
+    setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
 // @public
@@ -328,10 +327,21 @@ export interface RoomViewProps {
 // @alpha @deprecated (undocumented)
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 
-// Warning: (ae-forgotten-export) The symbol "SpacePanelItemProps" needs to be exported by the entry point index.d.ts
-//
 // @alpha
-export type SpacePanelItemRenderFunction = (props: SpacePanelItemProps) => JSX.Element;
+export interface SpacePanelItemProps {
+    // (undocumented)
+    className?: string;
+    // (undocumented)
+    contextMenuTooltip?: string;
+    // (undocumented)
+    icon?: JSX.Element;
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    onSelected?(): void;
+    // (undocumented)
+    style?: React.CSSProperties;
+}
 
 // @public
 export type Translations = Record<string, {
