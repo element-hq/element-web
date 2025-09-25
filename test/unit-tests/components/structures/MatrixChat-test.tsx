@@ -1632,6 +1632,10 @@ describe("<MatrixChat />", () => {
     });
 
     describe("Multi-tab lockout", () => {
+        beforeEach(() => {
+            mockPlatformPeg();
+        });
+
         afterEach(() => {
             Lifecycle.setSessionLockNotStolen();
         });
@@ -1677,6 +1681,8 @@ describe("<MatrixChat />", () => {
             beforeEach(() => {
                 // make sure we start from a clean DOM for each of these tests
                 document.body.replaceChildren();
+                // use the MockPlatform
+                mockPlatformPeg();
             });
 
             function simulateSessionLockClaim() {

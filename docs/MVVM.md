@@ -10,58 +10,80 @@ If you do MVVM right, your view should be dumb i.e it gets data from the view mo
 
 ### Practical guidelines for MVVM in element-web
 
+A first documentation and implementation of MVVM was done in [MVVM-v1.md](MVVM-v1.md). This v1 version is now deprecated and this document describes the current implementation.
+
 #### Model
 
 This is anywhere your data or business logic comes from. If your view model is accessing something simple exposed from `matrix-js-sdk`, then the sdk is your model. If you're using something more high level in element-web to get your data/logic (eg: `MemberListStore`), then that becomes your model.
 
-#### View Model
-
-1. View model is always a custom react hook named like `useFooViewModel()`.
-2. The return type of your view model (known as view state) must be defined as a typescript interface:
-    ```ts
-    inteface FooViewState {
-    	somethingUseful: string;
-    	somethingElse: BarType;
-    	update: () => Promise<void>
-    	...
-    }
-    ```
-3. Any react state that your UI needs must be in the view model.
-
 #### View
 
-1. Views are simple react components (eg: `FooView`).
-2. Views usually start by calling the view model hook, eg:
+1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/src/shared-components). Develop it in storybook!
+2. Views are simple react components (eg: `FooView`).
+3. Views use [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) internally where the view model is the external store.
+4. Views should define the interface of the view model they expect:
+
     ```tsx
-    const FooView: React.FC<IProps> = (props: IProps) => {
-    	const vm = useFooViewModel();
-    	....
-    	return(
-    		<div>
-    			{vm.somethingUseful}
-    		</div>
-    	);
+    // Snapshot is the return type of your view model
+    interface FooViewSnapshot {
+        value: string;
+    }
+
+    // To call function on the view model
+    interface FooViewActions {
+        doSomething: () => void;
+    }
+
+    // ViewModel is a type defining the methods needed for `useSyncExternalStore`
+    // https://github.com/element-hq/element-web/blob/develop/src/shared-components/ViewModel.ts
+    type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
+
+    interface FooViewProps {
+        vm: FooViewModel;
+    }
+
+    function FooView({ vm }: FooViewProps) {
+        // useViewModel is a helper function that uses useSyncExternalStore under the hood
+        const { value } = useViewModel(vm);
+        return (
+            <button type="button" onClick={() => vm.doSomething()}>
+                {value}
+            </button>
+        );
     }
     ```
-3. Views are also allowed to accept the view model as a prop, eg:
-    ```tsx
-    const FooView: React.FC<IProps> = ({ vm }: IProps) => {
-    	....
-    	return(
-    		<div>
-    			{vm.somethingUseful}
-    		</div>
-    	);
+
+5. Multiple views can share the same view model if necessary.
+6. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/shared-components/audio/AudioPlayerView/AudioPlayerView.tsx)
+
+#### View Model
+
+1. A View model is a class extending [`BaseViewModel`](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/base/BaseViewModel.ts).
+2. Implements the interface defined in the view (e.g `FooViewModel` in the example above).
+3. View models define a snapshot type that defines the data the view will consume. The snapshot is immutable and can only be changed by calling `this.snapshot.set(...)` in the view model. This will trigger a re-render in the view.
+
+    ```ts
+    interface Props {
+        propsValue: string;
+    }
+
+    class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModel {
+        constructor(props: Props) {
+            // Call super with initial snapshot
+            super(props, { value: "initial" });
+        }
+
+        public doSomething() {
+            // Call this.snapshot.set to update the snapshot
+            this.snapshot.set({ value: "changed" });
+        }
     }
     ```
-4. Multiple views can share the same view model if necessary.
+
+4. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/audio/AudioPlayerViewModel.ts)
 
 ### Benefits
 
 1. MVVM forces a separation of concern i.e we will no longer have large react components that have a lot of state and rendering code mixed together. This improves code readability and makes it easier to introduce changes.
 2. Introduces the possibility of code reuse. You can reuse an old view model with a new view or vice versa.
 3. Adding to the point above, in future you could import element-web view models to your project and supply your own views thus creating something similar to the [hydrogen sdk](https://github.com/element-hq/hydrogen-web/blob/master/doc/SDK.md).
-
-### Example
-
-We started experimenting with MVVM in the redesigned memberlist, you can see the code [here](https://github.com/vector-im/element-web/blob/develop/src/components/views/rooms/MemberList/MemberListView.tsx).

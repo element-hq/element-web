@@ -38,7 +38,6 @@ import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widge
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { getCurrentLanguage } from "../languageHandler";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
-import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
@@ -742,7 +741,7 @@ export class ElementCall extends Call {
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
         const url = ElementCall.generateWidgetUrl(client, roomId);
-        const createdWidget = WidgetStore.instance.addVirtualWidget(
+        return WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
                 creatorUserId: client.getUserId()!,
@@ -754,8 +753,6 @@ export class ElementCall extends Call {
             },
             roomId,
         );
-        WidgetStore.instance.emit(UPDATE_EVENT, null);
-        return createdWidget;
     }
 
     private static getWidgetData(
