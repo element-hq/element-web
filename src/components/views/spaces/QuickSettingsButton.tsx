@@ -95,10 +95,7 @@ const QuickSettingsButton: React.FC<{
                 <StyledCheckbox
                     className="mx_QuickSettingsButton_option"
                     checked={!!favouritesEnabled}
-                    onChange={onMetaSpaceChangeFactory(
-                        MetaSpace.Favourites,
-                        "WebQuickSettingsPinToSidebarCheckbox",
-                    )}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
                     <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
                     {_t("common|favourites")}
@@ -106,10 +103,7 @@ const QuickSettingsButton: React.FC<{
                 <StyledCheckbox
                     className="mx_QuickSettingsButton_option"
                     checked={!!peopleEnabled}
-                    onChange={onMetaSpaceChangeFactory(
-                        MetaSpace.People,
-                        "WebQuickSettingsPinToSidebarCheckbox",
-                    )}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
                     <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
                     {_t("common|people")}

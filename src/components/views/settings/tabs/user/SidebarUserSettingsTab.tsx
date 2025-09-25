@@ -102,10 +102,7 @@ const SidebarUserSettingsTab: React.FC = () => {
 
                     <StyledCheckbox
                         checked={!!favouritesEnabled}
-                        onChange={onMetaSpaceChangeFactory(
-                            MetaSpace.Favourites,
-                            "WebSettingsSidebarTabSpacesCheckbox",
-                        )}
+                        onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebSettingsSidebarTabSpacesCheckbox")}
                         className="mx_SidebarUserSettingsTab_checkbox"
                         description={_t("settings|sidebar|metaspaces_favourites_description")}
                     >
@@ -115,10 +112,7 @@ const SidebarUserSettingsTab: React.FC = () => {
 
                     <StyledCheckbox
                         checked={!!peopleEnabled}
-                        onChange={onMetaSpaceChangeFactory(
-                            MetaSpace.People,
-                            "WebSettingsSidebarTabSpacesCheckbox",
-                        )}
+                        onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebSettingsSidebarTabSpacesCheckbox")}
                         className="mx_SidebarUserSettingsTab_checkbox"
                         description={_t("settings|sidebar|metaspaces_people_description")}
                     >
