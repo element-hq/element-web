@@ -181,6 +181,7 @@ export function setUpClientRoomAndStores(): {
     const roomSession = new MockEventEmitter({
         memberships: [],
         getOldestMembership: jest.fn().mockReturnValue(undefined),
+        getConsensusCallIntent: jest.fn().mockReturnValue(undefined),
         room,
     }) as Mocked<MatrixRTCSession>;
 

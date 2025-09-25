@@ -143,7 +143,7 @@ describe("IncomingCallToast", () => {
         ]);
         renderToast();
 
-        screen.getByText("Video call started");
+        screen.getByText("Incoming video call");
         screen.getByText("Video");
         screen.getByLabelText("3 people joined");
 
@@ -166,7 +166,7 @@ describe("IncomingCallToast", () => {
         call.destroy();
         renderToast();
 
-        screen.getByText("Video call started");
+        screen.getByText("Incoming video call");
         screen.getByText("Video");
 
         screen.getByRole("button", { name: "Join" });
@@ -188,6 +188,7 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: true,
                 view_call: true,
+                voiceOnly: false,
             }),
         );
         await waitFor(() =>
@@ -215,6 +216,7 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: false,
                 view_call: true,
+                voiceOnly: false,
             }),
         );
         await waitFor(() =>
@@ -239,6 +241,7 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: true,
                 view_call: true,
+                voiceOnly: false,
             }),
         );
         await waitFor(() =>

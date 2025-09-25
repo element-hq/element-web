@@ -148,6 +148,7 @@ describe("CallEvent", () => {
                 action: Action.ViewRoom,
                 room_id: room.roomId,
                 view_call: true,
+                voiceOnly: false,
             }),
         );
         defaultDispatcher.unregister(dispatcherRef);

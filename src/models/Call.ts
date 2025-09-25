@@ -701,7 +701,6 @@ export class ElementCall extends Call {
         returnToLobby: boolean | undefined,
         voiceOnly: boolean | undefined,
     ): IApp {
-        console.log("createOrGetCallWidget", new Error().stack);
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
             // Always update the widget data because even if the widget is already created,
