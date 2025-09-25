@@ -245,7 +245,7 @@ test.describe("Element Call", () => {
         );
     });
 
-    test.describe.only("DMs", () => {
+    test.describe("DMs", () => {
         test.use({
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
@@ -313,7 +313,7 @@ test.describe("Element Call", () => {
         });
 
         [true, false].forEach((skipLobbyToggle) => {
-            test.only(
+            test(
                 `should be able to join a call via incoming call toast (skipLobby=${skipLobbyToggle})`,
                 { tag: ["@screenshot"] },
                 async ({ page, user, bot, room, app }) => {
