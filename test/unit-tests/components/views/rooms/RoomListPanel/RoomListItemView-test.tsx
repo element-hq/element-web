@@ -10,6 +10,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { RoomListItemView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListItemView";
@@ -19,7 +20,6 @@ import {
     useRoomListItemViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
 import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel", () => ({
     useRoomListItemViewModel: jest.fn(),
