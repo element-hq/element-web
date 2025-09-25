@@ -308,7 +308,7 @@ test.describe("Element Call", () => {
         });
     });
 
-    test.describe.only("Video Rooms", () => {
+    test.describe("Video Rooms", () => {
         test.use({
             config: {
                 features: {
@@ -317,7 +317,7 @@ test.describe("Element Call", () => {
                 },
             },
         });
-        test.only("should be able to create and join a video room", async ({ page, user, app }) => {
+        test("should be able to create and join a video room", async ({ page, user }) => {
             await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("Test room");
