@@ -172,17 +172,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Get the order of meta spaces to display in the space panel.
-     *
-     * This accessor should be removed when the "feature_new_room_list" labs flag is removed.
-     * "People" and "Favourites" will be removed from the "metaSpaceOrder" array and this filter will no longer be needed.
+     * Get the order of meta spaces to display in the space panel
      * @private
      */
     private get metaSpaceOrder(): MetaSpace[] {
-        if (!SettingsStore.getValue("feature_new_room_list")) return metaSpaceOrder;
-
-        // People and Favourites are not shown when the new room list is enabled
-        return metaSpaceOrder.filter((space) => space !== MetaSpace.People && space !== MetaSpace.Favourites);
+        return metaSpaceOrder;
     }
 
     public get invitedSpaces(): Room[] {
