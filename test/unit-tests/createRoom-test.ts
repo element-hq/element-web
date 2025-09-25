@@ -43,6 +43,49 @@ describe("createRoom", () => {
         });
     });
 
+    it("creates a private with encryption", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PrivateChat }, encryption: true });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        algorithm: "m.megolm.v1.aes-sha2",
+                    },
+                },
+            ],
+        });
+    });
+
+    it("creates a private room with state event encryption", async () => {
+        await createRoom(client, {
+            createOpts: { preset: Preset.PrivateChat },
+            encryption: true,
+            stateEncryption: true,
+        });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc3414.encrypt_state_events": true,
+                    },
+                },
+            ],
+        });
+    });
+
     it("creates a private room in a space", async () => {
         const roomId = await createRoom(client, { roomType: RoomType.Space });
         const parentSpace = client.getRoom(roomId!)!;
