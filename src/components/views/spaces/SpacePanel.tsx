@@ -341,7 +341,18 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                     </Draggable>
                 ))}
                 {children}
-                {ModuleApi.extras.spacePanelItems.map((renderer) => renderer({ isPanelCollapsed }))}
+                {ModuleApi.extras.spacePanelItems.map((itemProps) => (
+                    <li
+                        key={itemProps.spaceKey}
+                        className={classNames("mx_SpaceItem", {
+                            collapsed: isPanelCollapsed,
+                        })}
+                        role="treeitem"
+                        aria-selected={false} // TODO
+                    >
+                        <SpaceButton {...itemProps} isNarrow={isPanelCollapsed} size="32px" />
+                    </li>
+                ))}
                 {shouldShowComponent(UIComponent.CreateSpaces) && (
                     <CreateSpaceButton isPanelCollapsed={isPanelCollapsed} setPanelCollapsed={setPanelCollapsed} />
                 )}

@@ -5,12 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SpacePanelItemRenderFunction, type ExtrasApi } from "@element-hq/element-web-module-api";
+import { type SpacePanelItemProps, type ExtrasApi } from "@element-hq/element-web-module-api";
 
 export class ElementWebExtrasApi implements ExtrasApi {
-    public spacePanelItems: SpacePanelItemRenderFunction[] = [];
+    public spacePanelItems: SpacePanelItemProps[] = [];
 
-    public addSpacePanelItem(renderer: SpacePanelItemRenderFunction): void {
-        this.spacePanelItems.push(renderer);
+    public addSpacePanelItem(item: SpacePanelItemProps): void {
+        this.spacePanelItems.push(item);
     }
 }
