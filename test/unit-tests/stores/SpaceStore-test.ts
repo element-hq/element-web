@@ -1402,13 +1402,18 @@ describe("SpaceStore", () => {
         removeListener();
     });
 
-    it("Favourites and People meta spaces should not be returned when the feature_new_room_list labs flag is enabled", async () => {
+    it("Favourites and People meta spaces should be returned even when the feature_new_room_list labs flag is enabled", async () => {
         // Enable the new room list
         await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
 
         await run();
-        // Favourites and People meta spaces should not be returned
-        expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
+        // Favourites and People meta spaces should be returned
+        expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([
+            MetaSpace.Home,
+            MetaSpace.Favourites,
+            MetaSpace.People,
+            MetaSpace.Orphans,
+        ]);
     });
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {
