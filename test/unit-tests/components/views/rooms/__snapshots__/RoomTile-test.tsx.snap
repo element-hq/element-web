@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`RoomTile when message previews are enabled and there is a message in a thread should render as expected 1`] = `
 <DocumentFragment>

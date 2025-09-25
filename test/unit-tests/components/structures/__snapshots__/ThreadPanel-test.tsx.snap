@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properly renders Show: All threads 1`] = `
 <DocumentFragment>

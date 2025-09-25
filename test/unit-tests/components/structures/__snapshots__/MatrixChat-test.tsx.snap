@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens after a session is restored 1`] = `
 <div>
