@@ -597,6 +597,10 @@ export class ElementCall extends Call {
             params.append("intent", ElementCallIntent.JoinExisting);
             // Video rooms should always return to lobby.
             params.append("returnToLobby", "true");
+            // Never skip the lobby, we always want to give the caller a chance to explicitly join.
+            params.append("skipLobby", "false");
+            // Never preload, as per below warning.
+            params.append("preload", "false");
             return;
         }
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
