@@ -19,11 +19,12 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useEventEmitter, useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
-import { ElementCall, type ConnectionState } from "../../../models/Call";
+import { CallEvent, type ConnectionState } from "../../../models/Call";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 export interface RoomListItemViewState {
     /**
@@ -70,7 +71,7 @@ export interface RoomListItemViewState {
     /**
      * Whether the call is a voice or video call.
      */
-    callType: "voice"|"video"|undefined;
+    callType: "voice" | "video" | undefined;
     /**
      * Pre-rendered and translated preview for the latest message in the room, or undefined
      * if no preview should be shown.
@@ -142,23 +143,8 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         });
     }, [room]);
 
-    const [callType, setCallType] = useState<"video"|"voice"|undefined>();
-
-    useEffect(() => {
-        if (!call || !participantCount) {
-            return;
-        }
-        if (call instanceof ElementCall === false) {
-            setCallType("video");
-            return;
-        }
-        // Should refresh whenever hasParticipantInCall changes
-        if (call.session.getConsensusCallIntent() === "audio") {
-            setCallType("voice");
-        } else {
-            setCallType("video");
-        }
-    }, [call, participantCount]);
+    const [callType, setCallType] = useState<CallType>(CallType.Video);
+    useTypedEventEmitter(call ?? undefined, CallEvent.CallTypeChanged, setCallType);
 
     return {
         name,
@@ -173,7 +159,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         hasParticipantInCall: participantCount > 0,
         messagePreview,
         showNotificationDecoration,
-        callType,
+        callType: call ? callType : undefined,
     };
 }
 

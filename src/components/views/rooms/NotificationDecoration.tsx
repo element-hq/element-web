@@ -18,6 +18,7 @@ import { type RoomNotificationState } from "../../../stores/notifications/RoomNo
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
     /**
@@ -27,7 +28,7 @@ interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
     /**
      * Whether the room has a voice or video call.
      */
-    callType?: "voice"|"video";
+    callType?: CallType;
 }
 
 /**
@@ -70,8 +71,12 @@ export function NotificationDecoration({
             data-testid="notification-decoration"
         >
             {isUnsentMessage && <ErrorIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />}
-            {callType === "video" && <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
-            {callType === "voice" && <VoiceCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
+            {callType === CallType.Video && (
+                <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
+            )}
+            {callType === CallType.Voice && (
+                <VoiceCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
+            )}
             {invited && <EmailIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {isMention && <MentionIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {(isMention || isNotification) && <UnreadCounter count={count || null} />}

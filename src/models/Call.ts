@@ -84,6 +84,7 @@ export enum CallEvent {
     Participants = "participants",
     Close = "close",
     Destroy = "destroy",
+    CallTypeChanged = "call_type_changed",
 }
 
 interface CallEventHandlerMap {
@@ -94,6 +95,7 @@ interface CallEventHandlerMap {
     ) => void;
     [CallEvent.Close]: () => void;
     [CallEvent.Destroy]: () => void;
+    [CallEvent.CallTypeChanged]: (callType: CallType) => void;
 }
 
 /**
@@ -103,7 +105,17 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected readonly widgetUid: string;
     protected readonly room: Room;
 
-    public isVoiceCall = false;
+    private _callType: CallType = CallType.Video;
+    public get callType() {
+        return this._callType;
+    }
+
+    protected set callType(callType: CallType) {
+        if (this._callType !== callType) {
+            this.emit(CallEvent.CallTypeChanged, callType);
+        }
+        this._callType = callType;
+    }
 
     /**
      * The time after which device member state should be considered expired.
@@ -888,7 +900,10 @@ export class ElementCall extends Call {
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
 
-    private readonly onMembershipChanged = (): void => this.updateParticipants();
+    private readonly onMembershipChanged = () => {
+        this.updateParticipants();
+        this.callType = this.session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video;
+    };
 
     private updateParticipants(): void {
         const participants = new Map<RoomMember, Set<string>>();
