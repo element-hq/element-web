@@ -240,6 +240,8 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
+                // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
+                // to the defaults of the call implementation.
                 placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
             }
         },
