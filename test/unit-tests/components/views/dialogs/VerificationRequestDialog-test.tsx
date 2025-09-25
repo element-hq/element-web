@@ -7,18 +7,20 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { User } from "matrix-js-sdk/src/matrix";
+import { TypedEventEmitter, User } from "matrix-js-sdk/src/matrix";
 import {
     type ShowSasCallbacks,
     VerificationPhase,
     type Verifier,
     type VerificationRequest,
     type ShowQrCodeCallbacks,
+    VerificationRequestEvent,
+    type VerificationRequestEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 
-import VerificationRequestDialog from "../../../../../src/components/views/dialogs/VerificationRequestDialog";
 import { stubClient } from "../../../../test-utils";
+import VerificationRequestDialog from "../../../../../src/components/views/dialogs/VerificationRequestDialog";
 
 describe("VerificationRequestDialog", () => {
     function renderComponent(phase: VerificationPhase, method?: "emoji" | "qr"): ReturnType<typeof render> {
@@ -155,11 +157,32 @@ describe("VerificationRequestDialog", () => {
             ),
         ).toBeInTheDocument();
     });
+
+    it("Changes the dialog contents when the request changes phase", async () => {
+        // Given we rendered the component with a phase of Unsent
+        const member = User.createUser("@alice:example.org", stubClient());
+        const request = createRequest(VerificationPhase.Unsent);
+
+        render(<VerificationRequestDialog onFinished={jest.fn()} member={member} verificationRequest={request} />);
+
+        // When I cancel the request (which changes phase and emits a Changed event)
+        await act(async () => await request.cancel());
+
+        // Then the dialog is updated to reflect that
+        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "You cancelled verification on your other device. Start verification again from the notification.",
+            ),
+        ).toBeInTheDocument();
+    });
 });
 
-function createRequest(phase: VerificationPhase, method?: "emoji" | "qr"): VerificationRequest {
+function createRequest(phase: VerificationPhase, method?: "emoji" | "qr"): MockVerificationRequest {
     let verifier = undefined;
-    let chosenMethod = undefined;
+    let chosenMethod = null;
 
     switch (method) {
         case "emoji":
@@ -172,24 +195,7 @@ function createRequest(phase: VerificationPhase, method?: "emoji" | "qr"): Verif
             break;
     }
 
-    return {
-        phase: jest.fn().mockReturnValue(phase),
-
-        // VerificationRequest is an emitter - ignore any events that are emitted.
-        on: jest.fn(),
-        off: jest.fn(),
-
-        // These tests (so far) only check for when we are initiating a verificiation of our own device.
-        isSelfVerification: jest.fn().mockReturnValue(true),
-        initiatedByMe: jest.fn().mockReturnValue(true),
-
-        // Always returning true means we can support QR code and emoji verification.
-        otherPartySupportsMethod: jest.fn().mockReturnValue(true),
-
-        // If we asked for emoji, these are populated.
-        verifier,
-        chosenMethod,
-    } as unknown as VerificationRequest;
+    return new MockVerificationRequest(phase, verifier, chosenMethod);
 }
 
 function createEmojiVerifier(): Verifier {
@@ -225,4 +231,110 @@ function createQrVerifier(): Verifier {
         off: jest.fn(),
         verify: jest.fn(),
     } as unknown as Verifier;
+}
+
+class MockVerificationRequest
+    extends TypedEventEmitter<VerificationRequestEvent, VerificationRequestEventHandlerMap>
+    implements VerificationRequest
+{
+    phase_: VerificationPhase;
+    verifier_: Verifier | undefined;
+    chosenMethod_: string | null;
+
+    constructor(phase: VerificationPhase, verifier: Verifier | undefined, chosenMethod: string | null) {
+        super();
+        this.phase_ = phase;
+        this.verifier_ = verifier;
+        this.chosenMethod_ = chosenMethod;
+    }
+
+    get phase(): VerificationPhase {
+        return this.phase_;
+    }
+
+    get isSelfVerification(): boolean {
+        // So far we are only testing verification of our own devices
+        return true;
+    }
+
+    get initiatedByMe(): boolean {
+        // So far we are only testing verification started by this device
+        return true;
+    }
+
+    otherPartySupportsMethod(): boolean {
+        // This makes both emoji and QR verification options appear
+        return true;
+    }
+
+    get verifier(): Verifier | undefined {
+        return this.verifier_;
+    }
+
+    get chosenMethod(): string | null {
+        return this.chosenMethod_;
+    }
+
+    async cancel(): Promise<void> {
+        this.phase_ = VerificationPhase.Cancelled;
+        this.emit(VerificationRequestEvent.Change);
+    }
+
+    get transactionId(): string | undefined {
+        return undefined;
+    }
+
+    get roomId(): string | undefined {
+        return undefined;
+    }
+
+    get otherUserId(): string {
+        return "otheruser";
+    }
+
+    get otherDeviceId(): string | undefined {
+        return undefined;
+    }
+
+    get pending(): boolean {
+        return false;
+    }
+
+    get accepting(): boolean {
+        return false;
+    }
+
+    get declining(): boolean {
+        return false;
+    }
+
+    get timeout(): number | null {
+        return null;
+    }
+
+    get methods(): string[] {
+        return [];
+    }
+
+    async accept(): Promise<void> {}
+
+    startVerification(_method: string): Promise<Verifier> {
+        throw new Error("Method not implemented.");
+    }
+
+    scanQRCode(_qrCodeData: Uint8ClampedArray): Promise<Verifier> {
+        throw new Error("Method not implemented.");
+    }
+
+    async generateQRCode(): Promise<Uint8ClampedArray | undefined> {
+        return undefined;
+    }
+
+    get cancellationCode(): string | null {
+        return null;
+    }
+
+    get cancellingUserId(): string | undefined {
+        return "otheruser";
+    }
 }
