@@ -328,14 +328,17 @@ test.describe("Element Call", () => {
                     } else {
                         await toast.getByRole("switch").uncheck();
                     }
-                    await expect(toast).toMatchScreenshot(`incoming-call-dm-video-toast-${skipLobbyToggle ? "checked" : "unchecked"}.png`, {
-                        // Hide UserId
-                        css: `
+                    await expect(toast).toMatchScreenshot(
+                        `incoming-call-dm-video-toast-${skipLobbyToggle ? "checked" : "unchecked"}.png`,
+                        {
+                            // Hide UserId
+                            css: `
                             .mx_IncomingCallToast_AvatarWithDetails span:nth-child(2) {
                                 opacity: 0;
                             }
                         `,
-                    });
+                        },
+                    );
 
                     // And test joining
                     await button.click();
