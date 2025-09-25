@@ -16,9 +16,9 @@ This is anywhere your data or business logic comes from. If your view model is a
 
 #### View
 
-1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/src/shared-components). Develops it in storybook!
+1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/src/shared-components). Develop it in storybook!
 2. Views are simple react components (eg: `FooView`).
-3. Views use underneath [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) where the view model is the external store.
+3. Views use [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) internally where the view model is the external store.
 4. Views should define the interface of the view model they expect:
     ```tsx
    // Snapshot is the return type of your view model
