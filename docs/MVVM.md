@@ -22,35 +22,37 @@ This is anywhere your data or business logic comes from. If your view model is a
 2. Views are simple react components (eg: `FooView`).
 3. Views use [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) internally where the view model is the external store.
 4. Views should define the interface of the view model they expect:
+
     ```tsx
-   // Snapshot is the return type of your view model
-   interface FooViewSnapshot {
+    // Snapshot is the return type of your view model
+    interface FooViewSnapshot {
         value: string;
-   }
+    }
 
-   // To call function on the view model
-   interface FooViewActions {
+    // To call function on the view model
+    interface FooViewActions {
         doSomething: () => void;
-   }
+    }
 
-   // ViewModel is a type defining the methods needed for `useSyncExternalStore`
-   // https://github.com/element-hq/element-web/blob/develop/src/shared-components/ViewModel.ts
-   type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
+    // ViewModel is a type defining the methods needed for `useSyncExternalStore`
+    // https://github.com/element-hq/element-web/blob/develop/src/shared-components/ViewModel.ts
+    type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
 
-   interface FooViewProps {
-       vm: FooViewModel;
-   }
+    interface FooViewProps {
+        vm: FooViewModel;
+    }
 
-   function FooView({ vm }: FooViewProps) {
+    function FooView({ vm }: FooViewProps) {
         // useViewModel is a helper function that uses useSyncExternalStore under the hood
-        const { value } = useViewModel(vm)
-        return(
+        const { value } = useViewModel(vm);
+        return (
             <button type="button" onClick={() => vm.doSomething()}>
                 {value}
             </button>
         );
-   }
+    }
     ```
+
 5. Multiple views can share the same view model if necessary.
 6. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/shared-components/audio/AudioPlayerView/AudioPlayerView.tsx)
 
@@ -59,12 +61,13 @@ This is anywhere your data or business logic comes from. If your view model is a
 1. A View model is a class extending [`BaseViewModel`](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/base/BaseViewModel.ts).
 2. Implements the interface defined in the view (e.g `FooViewModel` in the example above).
 3. View models define a snapshot type that defines the data the view will consume. The snapshot is immutable and can only be changed by calling `this.snapshot.set(...)` in the view model. This will trigger a re-render in the view.
+
     ```ts
     interface Props {
         propsValue: string;
     }
 
-   class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModel {
+    class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModel {
         constructor(props: Props) {
             // Call super with initial snapshot
             super(props, { value: "initial" });
@@ -76,6 +79,7 @@ This is anywhere your data or business logic comes from. If your view model is a
         }
     }
     ```
+
 4. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/audio/AudioPlayerViewModel.ts)
 
 ### Benefits
