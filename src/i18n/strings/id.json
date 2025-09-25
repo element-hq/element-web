@@ -964,7 +964,6 @@
             "title": "Metode Pemulihan Dihapus",
             "warning": "Jika Anda tidak menghapus metode pemulihan, sebuah penyerang mungkin mencoba mengakses akun Anda. Ubah kata sandi akun Anda dan segera tetapkan metode pemulihan baru di Pengaturan."
         },
-        "reset_all_button": "Lupa atau kehilangan semua metode pemulihan? <a>Atur ulang semuanya</a>",
         "set_up_recovery": "Siapkan pemulihan",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
@@ -987,7 +986,6 @@
             "after_new_login": {
                 "device_verified": "Perangkat telah diverifikasi",
                 "skip_verification": "Lewatkan verifikasi untuk sementara",
-                "unable_to_verify": "Tidak dapat memverifikasi perangkat ini",
                 "verify_this_device": "Verifikasi perangkat ini"
             },
             "cancelled": "Anda membatalkan verifikasi.",
@@ -1022,7 +1020,6 @@
                 "text": "Berikan ID dan sidik jari salah satu perangkat Anda untuk memverifikasinya. PERHATIKAN bahwa ini memungkinkan perangkat lain untuk mengirim dan menerima pesan seperti Anda. JIKA SESEORANG MEMINTA ANDA UNTUK MENEMPELKAN SESUATU DI SINI, KEMUNGKINAN ANDA SEDANG DITIPU!",
                 "wrong_fingerprint": "Tidak dapat memverifikasi perangkat '%(deviceId)s' - sidik jari yang disediakan '%(fingerprint)s' tidak cocok dengan sidik jari perangkat, '%(fprint)s'"
             },
-            "no_key_or_device": "Sepertinya Anda tidak memiliki Kunci Pemulihan atau perangkat lain yang dapat Anda verifikasi. Perangkat ini tidak akan dapat mengakses pesan terenkripsi lama. Untuk memverifikasi identitas Anda di perangkat ini, Anda harus mengatur ulang kunci verifikasi Anda.",
             "no_support_qr_emoji": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
             "other_party_cancelled": "Pengguna yang lain membatalkan proses verifikasi ini.",
             "prompt_encrypted": "Verifikasi semua pengguna di sebuah ruangan untuk memastikan keamanannya.",
@@ -1038,7 +1035,6 @@
             "request_toast_accept_user": "Verifikasi Pengguna",
             "request_toast_decline_counter": "Abaikan (%(counter)s)",
             "request_toast_detail": "%(deviceId)s dari %(ip)s",
-            "reset_proceed_prompt": "Lanjutkan dengan mengatur ulang",
             "sas_caption_self": "Verifikasi perangkat ini dengan mengkonfirmasi nomor berikut ini yang ditampilkan di layarnya.",
             "sas_caption_user": "Verifikasi pengguna ini dengan mengkonfirmasi nomor berikut yang ditampilkan.",
             "sas_description": "Bandingkan emoji jika Anda tidak memiliki sebuah kamera di kedua perangkat",
@@ -1061,7 +1057,6 @@
             "unverified_sessions_toast_description": "Periksa untuk memastikan akun Anda aman",
             "unverified_sessions_toast_reject": "Nanti",
             "unverified_sessions_toast_title": "Anda memiliki sesi yang belum diverifikasi",
-            "verification_description": "Verifikasi identitas Anda untuk mengakses pesan terenkripsi dan membuktikan identitas Anda kepada orang lain. Jika Anda juga menggunakan ponsel, harap buka aplikasi di sana sebelum melanjutkan.",
             "verification_dialog_title_device": "Verifikasi perangkat lain",
             "verification_dialog_title_user": "Permintaan Verifikasi",
             "verification_skip_warning": "Tanpa memverifikasi, Anda tidak akan memiliki akses ke semua pesan Anda dan tampak tidak dipercayai kepada lainnya.",
@@ -1071,9 +1066,6 @@
             "verify_emoji_prompt": "Verifikasi dengan membandingkan emoji unik.",
             "verify_emoji_prompt_qr": "Jika Anda tidak dapat memindai kode di atas, verifikasi dengan membandingkan emoji yang unik.",
             "verify_later": "Saya verifikasi nanti",
-            "verify_using_device": "Verifikasi dengan perangkat lain",
-            "verify_using_key": "Verifikasi dengan Kunci Keamanan",
-            "verify_using_key_or_phrase": "Verifikasi dengan Kunci atau Frasa Keamanan",
             "waiting_for_user_accept": "Menunggu untuk %(displayName)s untuk menerima…",
             "waiting_other_device": "Menunggu Anda untuk verifikasi di perangkat Anda yang lain…",
             "waiting_other_device_details": "Menunggu Anda untuk memverifikasi perangkat Anda yang lain, %(deviceName)s (%(deviceId)s)…",

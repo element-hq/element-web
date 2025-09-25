@@ -1,3 +1,41 @@
+Changes in [1.12.0](https://github.com/element-hq/element-web/releases/tag/v1.12.0) (2025-09-23)
+================================================================================================
+## 🦖 Deprecations
+
+* Remove remaining support for outdated .well-known settings ([#30702](https://github.com/element-hq/element-web/pull/30702)). Contributed by @richvdh.
+
+## ✨ Features
+
+* Add decline button to call notification toast (use new notification event) ([#30729](https://github.com/element-hq/element-web/pull/30729)). Contributed by @toger5.
+* Use the new room list by default ([#30640](https://github.com/element-hq/element-web/pull/30640)). Contributed by @langleyd.
+* "Verify this device" redesign ([#30596](https://github.com/element-hq/element-web/pull/30596)). Contributed by @uhoreg.
+* Set Element Call "intents" when starting and answering DM calls. ([#30730](https://github.com/element-hq/element-web/pull/30730)). Contributed by @Half-Shot.
+* Add axe compliance for new room list ([#30700](https://github.com/element-hq/element-web/pull/30700)). Contributed by @langleyd.
+* Stop ringing and remove toast if another device answers a RTC call. ([#30728](https://github.com/element-hq/element-web/pull/30728)). Contributed by @Half-Shot.
+* Automatically adjust history visibility when making a room private ([#30713](https://github.com/element-hq/element-web/pull/30713)). Contributed by @Half-Shot.
+* Release announcement for new room list ([#30675](https://github.com/element-hq/element-web/pull/30675)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Room list: make the filter resize correctly ([#30795](https://github.com/element-hq/element-web/pull/30795)). Contributed by @RiotRobot.
+* [Backport staging] Avoid flicker of the room list filter on resize ([#30794](https://github.com/element-hq/element-web/pull/30794)). Contributed by @RiotRobot.
+* Don't show release announcements while toasts are displayed ([#30770](https://github.com/element-hq/element-web/pull/30770)). Contributed by @dbkr.
+* Fix enabling key backup not working if there is an untrusted key backup ([#30707](https://github.com/element-hq/element-web/pull/30707)). Contributed by @Half-Shot.
+* Force `preload` to be false when setting an intent on an Element Call. ([#30759](https://github.com/element-hq/element-web/pull/30759)). Contributed by @Half-Shot.
+* Fix handling of 413 server response when uploading media ([#30737](https://github.com/element-hq/element-web/pull/30737)). Contributed by @hughns.
+* Make landmark navigation work with new room list ([#30747](https://github.com/element-hq/element-web/pull/30747)). Contributed by @dbkr.
+* Prevent voice message from displaying spurious errors ([#30736](https://github.com/element-hq/element-web/pull/30736)). Contributed by @florianduros.
+* Align default avatar and fix colors in composer pills ([#30739](https://github.com/element-hq/element-web/pull/30739)). Contributed by @florianduros.
+* Use configured URL for link to desktop app in message search settings ([#30742](https://github.com/element-hq/element-web/pull/30742)). Contributed by @t3chguy.
+* Fix history visibility when creating space rooms ([#30745](https://github.com/element-hq/element-web/pull/30745)). Contributed by @dbkr.
+* Check HTML-encoded quotes when handling translations for embedded pages (such as welcome.html) ([#30743](https://github.com/element-hq/element-web/pull/30743)). Contributed by @Half-Shot.
+* Fix local room encryption status always not enabled ([#30461](https://github.com/element-hq/element-web/pull/30461)). Contributed by @BillCarsonFr.
+* fix: make url in topic in room intro clickable ([#30686](https://github.com/element-hq/element-web/pull/30686)). Contributed by @florianduros.
+* Block change recovery key button while a change is ongoing. ([#30664](https://github.com/element-hq/element-web/pull/30664)). Contributed by @Half-Shot.
+* Hide advanced settings during room creation when `UIFeature.advancedSettings=false` ([#30684](https://github.com/element-hq/element-web/pull/30684)). Contributed by @florianduros.
+* A11y: improve accessibility of pinned messages ([#30558](https://github.com/element-hq/element-web/pull/30558)). Contributed by @florianduros.
+
+
 Changes in [1.11.112](https://github.com/element-hq/element-web/releases/tag/v1.11.112) (2025-09-16)
 ====================================================================================================
 Fix [CVE-2025-59161](https://www.cve.org/CVERecord?id=CVE-2025-59161) / [GHSA-m6c8-98f4-75rr](https://github.com/element-hq/element-web/security/advisories/GHSA-m6c8-98f4-75rr)

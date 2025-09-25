@@ -731,7 +731,6 @@
             "title": "Herstelmethode verwijderd",
             "warning": "Als je de herstelmethode niet hebt verwijderd, is het mogelijk dat er een aanvaller toegang tot jouw account probeert te verkrijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
-        "reset_all_button": "Alles vergeten en alle herstelmethoden verloren? <a>Alles opnieuw instellen</a>",
         "set_up_toast_title": "Beveiligde back-up instellen",
         "setup_secure_backup": {
             "explainer": "Maak een back-up van je sleutels voordat je jezelf afmeldt om ze niet te verliezen."
@@ -750,7 +749,6 @@
             "after_new_login": {
                 "device_verified": "Apparaat geverifieerd",
                 "skip_verification": "Verificatie voorlopig overslaan",
-                "unable_to_verify": "Kan dit apparaat niet verifiëren",
                 "verify_this_device": "Verifieer dit apparaat"
             },
             "cancelled": "Je hebt de verificatie geannuleerd.",
@@ -767,7 +765,6 @@
             "incoming_sas_dialog_title": "Inkomend verificatieverzoek",
             "incoming_sas_user_dialog_text_1": "Verifieer deze persoon om als vertrouwd te markeren. Personen vertrouwen geeft je extra zekerheid bij het gebruik van eind-tot-eind-versleutelde berichten.",
             "incoming_sas_user_dialog_text_2": "Deze persoon verifiëren zal de sessie als vertrouwd markeren voor jullie beide.",
-            "no_key_or_device": "Het lijkt erop dat je geen veiligheidssleutel hebt of andere apparaten waarmee je kunt verifiëren.  Dit apparaat heeft geen toegang tot oude versleutelde berichten. Om je identiteit op dit apparaat te verifiëren, moet je jouw verificatiesleutels opnieuw instellen.",
             "no_support_qr_emoji": "Het apparaat dat je probeert te verifiëren ondersteund niet de door %(brand)s ondersteunde methodes: scannen van een QR-code of emoji verificatie. Probeer het met een andere app.",
             "other_party_cancelled": "De tegenpartij heeft de verificatie geannuleerd.",
             "prompt_encrypted": "Controleer alle personen in een kamer om er zeker van te zijn dat het veilig is.",
@@ -780,7 +777,6 @@
             "qr_reciprocate_same_shield_device": "Je bent er bijna! Toont het andere apparaat hetzelfde schild?",
             "qr_reciprocate_same_shield_user": "Bijna klaar! Toont %(displayName)s hetzelfde schild?",
             "request_toast_detail": "%(deviceId)s van %(ip)s",
-            "reset_proceed_prompt": "Met reset doorgaan",
             "sas_caption_self": "Verifieer dit apparaat door te bevestigen dat het volgende nummer zichtbaar is op het scherm.",
             "sas_caption_user": "Verifieer deze persoon door te bevestigen dat hun scherm het volgende getal toont.",
             "sas_description": "Vergelijk een unieke lijst met emoji als geen van beide apparaten een camera heeft",
@@ -800,7 +796,6 @@
             "unsupported_method": "Kan geen ondersteunde verificatiemethode vinden.",
             "unverified_session_toast_title": "Nieuwe login gevonden. Was jij dat?",
             "unverified_sessions_toast_description": "Controleer ze zodat jouw account veilig is",
-            "verification_description": "Verifeer je identiteit om toegang te krijgen tot je versleutelde berichten en om je identiteit te bewijzen voor anderen.",
             "verification_dialog_title_device": "Verifieer ander apparaat",
             "verification_dialog_title_user": "Verificatieverzoek",
             "verification_skip_warning": "Zonder verifiëren heb je geen toegang tot al je berichten en kan je als onvertrouwd aangemerkt staan bij anderen.",
@@ -810,9 +805,6 @@
             "verify_emoji_prompt": "Verifieer door unieke emoji te vergelijken.",
             "verify_emoji_prompt_qr": "Als je bovenstaande code niet kan scannen, verifieer dan door unieke emoji te vergelijken.",
             "verify_later": "Ik verifieer het later",
-            "verify_using_device": "Verifieer met andere apparaat",
-            "verify_using_key": "Verifieer met veiligheidssleutel",
-            "verify_using_key_or_phrase": "Verifieer met veiligheidssleutel of -wachtwoord",
             "waiting_for_user_accept": "Wachten tot %(displayName)s aanvaardt…",
             "waiting_other_device": "Wachten op je verificatie op het andere apparaat…",
             "waiting_other_device_details": "Wachten op je verificatie op het andere apparaat, %(deviceName)s (%(deviceId)s)…",

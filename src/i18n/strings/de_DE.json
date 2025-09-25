@@ -644,7 +644,7 @@
         "mode_plain": "Formatierung ausblenden",
         "mode_rich_text": "Formatierung anzeigen",
         "no_perms_notice": "Du darfst in diesem Chat nichts schreiben",
-        "placeholder": "Eine unverschlüsselte Nachricht senden...",
+        "placeholder": "Unverschlüsselte Nachricht senden...",
         "placeholder_encrypted": "Nachricht senden …",
         "placeholder_reply": "Eine unverschlüsselte Antwort senden…",
         "placeholder_reply_encrypted": "Antwort senden…",
@@ -718,6 +718,7 @@
         "personal_space_description": "Ein privater Space zum Organisieren deiner Chats",
         "private_description": "Nur für Eingeladene – optimal für dich selbst oder Teams",
         "private_heading": "Dein privater Space",
+        "private_only_heading": "Dein Space",
         "private_personal_description": "Stelle sicher, dass die richtigen Personen Zugriff auf %(name)s haben",
         "private_personal_heading": "Für wen ist dieser Space gedacht?",
         "private_space": "Für mich und meine Kollegen",
@@ -968,7 +969,6 @@
             "title": "Wiederherstellungsmethode gelöscht",
             "warning": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen, Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein."
         },
-        "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
         "set_up_recovery": "Wiederherstellung einrichten",
         "set_up_recovery_toast_description": "Erzeuge einen Wiederherstellungsschlüssel. Er wird verwendet, um den verschlüsselten Nachrichtenverlauf wiederherzustellen, falls du den Zugriff auf deine Geräte verlierst.",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
@@ -991,7 +991,6 @@
             "after_new_login": {
                 "device_verified": "Gerät verifiziert",
                 "skip_verification": "Verifizierung vorläufig überspringen",
-                "unable_to_verify": "Gerät konnte nicht verifiziert werden",
                 "verify_this_device": "Dieses Gerät verifizieren"
             },
             "cancelled": "Du hast die Verifikation abgebrochen.",
@@ -1026,7 +1025,6 @@
                 "text": "Gib die Geräte-ID und den Fingerabdruck eines deiner eigenen Geräte zur Verifizierung ein. HINWEIS: Dadurch kann das andere Gerät Nachrichten in deinem Namen senden und empfangen. WENN DICH JEMAND AUFGEFORDERT HAT, HIER ETWAS EINZUFÜGEN, WIRST DU WAHRSCHEINLICH BETROGEN!",
                 "wrong_fingerprint": "Das Gerät „%(deviceId)s” kann nicht verifiziert werden – der angegebene Fingerabdruck „%(fingerprint)s” stimmt nicht mit dem Fingerabdruck des Geräts „%(fprint)s” überein"
             },
-            "no_key_or_device": "Es sieht so aus, als hättest du weder einen Wiederherstellungsschlüssel noch andere Geräte, mit denen du dich verifizieren kannst. Dieses Gerät kann daher nicht auf den verschlüsselten Nachrichtenverlauf zugreifen. Um deine Identität auf diesem Gerät zu bestätigen, muss deine kryptografische Identität zurückgesetzt werden.",
             "no_support_qr_emoji": "Das Gerät unterstützt weder Verifizieren mittels QR-Code noch Emoji-Verifizierung. %(brand)s benötigt dies jedoch. Bitte verwende eine andere Anwendung.",
             "other_party_cancelled": "Die Gegenstelle hat die Überprüfung abgebrochen.",
             "prompt_encrypted": "Verifiziere alle Nutzer in einem Chat um vollständige Sicherheit zu gewährleisten.",
@@ -1042,7 +1040,6 @@
             "request_toast_accept_user": "Benutzer verifizieren",
             "request_toast_decline_counter": "Ignoriere (%(counter)s)",
             "request_toast_detail": "%(deviceId)s von %(ip)s",
-            "reset_proceed_prompt": "Mit Zurücksetzen fortfahren",
             "sas_caption_self": "Verifiziere dieses Gerät, indem du überprüfst, dass die folgende Zahl auf dem Bildschirm erscheint.",
             "sas_caption_user": "Verifiziere diesen Nutzer, indem du bestätigst, dass die folgende Nummer auf dessen Bildschirm erscheint.",
             "sas_description": "Vergleiche eine einmalige Reihe von Emojis, sofern du an keinem Gerät eine Kamera hast",
@@ -1065,7 +1062,6 @@
             "unverified_sessions_toast_description": "Überprüfe, um dein Konto sicher zu halten",
             "unverified_sessions_toast_reject": "Später",
             "unverified_sessions_toast_title": "Du hast nicht verifizierte Sitzungen",
-            "verification_description": "Verifiziere deine Identität, um auf verschlüsselte Nachrichten zuzugreifen und dich gegenüber anderen Nutzern auszuweisen. Solltest du auch ein mobiles Gerät verwenden, öffne dort die App bevor du fortfährst.",
             "verification_dialog_title_device": "Anderes Gerät verifizieren",
             "verification_dialog_title_user": "Verifizierungsanfrage",
             "verification_skip_warning": "Ohne dich zu verifizieren wirst du keinen Zugriff auf alle deine Nachrichten haben und könntest für andere als nicht vertrauenswürdig erscheinen.",
@@ -1075,9 +1071,6 @@
             "verify_emoji_prompt": "Durch den Vergleich einzigartiger Emojis verifizieren.",
             "verify_emoji_prompt_qr": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
             "verify_later": "Später verifizieren",
-            "verify_using_device": "Mit anderem Gerät verifizieren",
-            "verify_using_key": "Mit Wiederherstellungsschlüssel verifizieren",
-            "verify_using_key_or_phrase": "Mit Wiederherstellungsschlüssel oder Wiederherstellungsphrase verifizieren",
             "waiting_for_user_accept": "Warte auf die Annahme von %(displayName)s …",
             "waiting_other_device": "Warten darauf, dass du das auf deinem anderen Gerät bestätigst…",
             "waiting_other_device_details": "Warten, dass du auf deinem anderen Gerät %(deviceName)s (%(deviceId)s) verifizierst…",
@@ -1127,6 +1120,7 @@
         "tls": "Verbindung zum Heim-Server fehlgeschlagen – bitte überprüfe die Internetverbindung und stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und dass Anfragen nicht durch eine Browser-Erweiterung blockiert werden.",
         "unknown": "Unbekannter Fehler",
         "unknown_error_code": "Unbekannter Fehlercode",
+        "update_history_visibility": "Die Sichtbarkeit des Nachrichtenverlaufs konnte nicht geändert werden",
         "update_power_level": "Ändern der Berechtigungsstufe fehlgeschlagen"
     },
     "error_app_open_in_another_tab": "Wechsle zu einem anderen Tab um mit %(brand)s zu verbinden. Dieser Tab kann jetzt geschlossen werden.",
@@ -2383,6 +2377,10 @@
             "users_default": "Standard-Rolle"
         },
         "security": {
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "Du hast keine Berechtigung, die Sichtbarkeit des Nachrichtenverlaufs des Chats zu ändern. Das ist gefährlich, weil es nicht angemeldeten Nutzern ermöglichen könnte, Nachrichten zu lesen.",
+                "title": "Chat kann nicht \"privat\" gemacht werden"
+            },
             "enable_encryption_confirm_description": "Die Verschlüsselung für einen Chat kann nicht mehr deaktiviert werden sobald sie aktiv ist. Nachrichten in einem verschlüsselten Chat können nur noch von Mitgliedern, aber nicht mehr vom Server gelesen werden. Einige Bots und Brücken werden vielleicht nicht mehr funktionieren. <a>Erfahre mehr über Verschlüsselung.</a>",
             "enable_encryption_confirm_title": "Verschlüsselung aktivieren?",
             "enable_encryption_public_room_confirm_description_1": "<b>Verschlüsselung wird für öffentliche Chats nicht empfohlen.</b> Jeder kann öffentliche Chats finden und ihnen beitreten, also kann auch jeder die Nachrichten lesen. Die Verschlüsselung bringt keine Vorteile und lässt sich später auch nicht mehr deaktivieren. Außerdem verlangsamt die Verschlüsselung das Senden und Empfangen von Nachrichten in öffentlichen Chats.",
@@ -2400,7 +2398,7 @@
             "history_visibility_joined": "Mitglieder (ab Betreten)",
             "history_visibility_legend": "Wer kann den bisherigen Verlauf lesen?",
             "history_visibility_shared": "Mitglieder",
-            "history_visibility_warning": "Änderungen an der Sichtbarkeit des Verlaufs gelten nur für zukünftige Nachrichten. Die Sichtbarkeit des existierenden Verlaufs bleibt unverändert.",
+            "history_visibility_warning": "Die Sichtbarkeit des existierenden Nachrichtenverlaufs bleibt unverändert.",
             "history_visibility_world_readable": "Alle",
             "join_rule_description": "Entscheide, wer %(roomName)s betreten kann.",
             "join_rule_invite": "Privat (Betreten mit Einladung)",
@@ -2443,6 +2441,7 @@
                 "other": "Spaces aktualisieren … (%(progress)s von %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Chat-Version wird aktualisiert",
+            "join_rule_world_readable_description": "Wenn du änderst, wer dem Chat beitreten darf, ändert sich auch, wer zukünftige Nachrichten sehen kann.",
             "public_without_alias_warning": "Um den Chat zu verlinken, füge bitte eine Adresse hinzu.",
             "publish_room": "Veröffentliche diesen Chat im Chat Verzeichnis.",
             "publish_space": "Veröffentliche diesen Space im Chat Verzeichnis.",

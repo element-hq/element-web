@@ -965,7 +965,6 @@
             "title": "Helyreállítási mód eltávolítva",
             "warning": "Ha nem Ön távolított el a helyreállítási módot, akkor lehet, hogy egy támadó hozzá akar férni a fiókjához. Azonnal változtassa meg a jelszavát, és állítson be egy helyreállítási módot a Beállításokban."
         },
-        "reset_all_button": "Elfelejtette vagy elveszett minden helyreállítási lehetőség? <a>Minden alaphelyzetbe állítása</a>",
         "set_up_recovery": "Helyreállítás beállítása",
         "set_up_recovery_toast_description": "Létrehozhat egy helyreállítási kulcsot, amellyel helyreállíthatja a titkosított üzenetelőzményeit, ha elveszíti a hozzáférést az eszközeihez.",
         "set_up_toast_title": "Biztonsági mentés beállítása",
@@ -988,7 +987,6 @@
             "after_new_login": {
                 "device_verified": "Eszköz ellenőrizve",
                 "skip_verification": "Ellenőrzés kihagyása most",
-                "unable_to_verify": "Ennek az eszköznek az ellenőrzése nem lehetséges",
                 "verify_this_device": "Az eszköz ellenőrzése"
             },
             "cancelled": "Megszakította az ellenőrzést.",
@@ -1023,7 +1021,6 @@
                 "text": "Adja meg valamelyik saját eszköze azonosítóját és ujjlenyomatát annak ellenőrzéséhez. MEGJEGYZÉS: ez lehetővé teszi a másik eszköz számára, hogy az Ön nevében küldjön és fogadjon üzeneteket. HA VALAKI AZT MONDTA, HOGY ILLESSZEN BE IDE VALAMIT, VALÓSZÍNŰLEG ÁTVERIK!",
                 "wrong_fingerprint": "Nem sikerült ellenőrizni a(z) „%(deviceId)s” eszközt – a mellékelt „%(fingerprint)s” ujjlenyomat nem egyezik az eszköz ujjlenyomatával: „%(fprint)s”"
             },
-            "no_key_or_device": "Úgy tűnik, hogy nem rendelkezik helyreállítási kulccsal, vagy másik eszközzel, amellyel ellenőrizhetné. Ezzel az eszközzel nem fér majd hozzá a régi titkosított üzenetekhez. Ahhoz, hogy a személyazonosságát ezen az eszközön ellenőrizni lehessen, az ellenőrzési kulcsokat alaphelyzetbe kell állítania.",
             "no_support_qr_emoji": "Az ellenőrizni kívánt eszköz nem támogatja sem a QR-kód leolvasását, sem az emodzsis ellenőrzést, amelyeket az %(brand)s támogat. Próbálja meg egy másik klienssel.",
             "other_party_cancelled": "A másik fél megszakította az ellenőrzést.",
             "prompt_encrypted": "Ellenőrizze a szoba összes tagját, hogy meggyőződjön a biztonságáról.",
@@ -1039,7 +1036,6 @@
             "request_toast_accept_user": "Felhasználó ellenőrzése",
             "request_toast_decline_counter": "Mellőzés (%(counter)s)",
             "request_toast_detail": "%(deviceId)s innen: %(ip)s",
-            "reset_proceed_prompt": "Lecserélés folytatása",
             "sas_caption_self": "Ellenőrizze ezt az eszközt azzal, hogy megerősíti, hogy a következő szám jelenik meg a képernyőjén.",
             "sas_caption_user": "Ellenőrizze ezt a felhasználót azzal, hogy megerősíti, hogy a következő szám jelenik meg a képernyőjén.",
             "sas_description": "Hasonlítsd össze az egyedi emodzsikat ha valamelyik eszközön nincs kamera",
@@ -1062,7 +1058,6 @@
             "unverified_sessions_toast_description": "Tekintse át, hogy meggyőződjön arról, hogy a fiókja biztonságban van",
             "unverified_sessions_toast_reject": "Később",
             "unverified_sessions_toast_title": "Ellenőrizetlen bejelentkezései vannak",
-            "verification_description": "Ellenőrizze a személyazonosságát, hogy hozzáférjen a titkosított üzeneteihez és másoknak is bizonyítani tudja személyazonosságát.",
             "verification_dialog_title_device": "Másik eszköz ellenőrzése",
             "verification_dialog_title_user": "Ellenőrzési kérés",
             "verification_skip_warning": "Az ellenőrzés nélkül nem fér hozzá az összes üzenetéhez és mások számára megbízhatatlannak fog látszani.",
@@ -1072,9 +1067,6 @@
             "verify_emoji_prompt": "Ellenőrzés egyedi emodzsik összehasonlításával.",
             "verify_emoji_prompt_qr": "Ha nem tudod beolvasni az alábbi kódot, ellenőrizd az egyedi emodzsik összehasonlításával.",
             "verify_later": "Később ellenőrzöm",
-            "verify_using_device": "Ellenőrizze egy másik eszközzel",
-            "verify_using_key": "Ellenőrzés helyreállítási kulccsal",
-            "verify_using_key_or_phrase": "Ellenőrzés helyreállítási kulccsal vagy jelmondattal",
             "waiting_for_user_accept": "%(displayName)s felhasználóra várakozás az elfogadáshoz…",
             "waiting_other_device": "Várakozás a másik eszköztől való ellenőrzésre…",
             "waiting_other_device_details": "Várakozás a másik eszközről való ellenőrzésre: %(deviceName)s (%(deviceId)s)…",
