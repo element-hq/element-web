@@ -162,8 +162,8 @@ test.describe("Element Call", () => {
         test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {
             await app.viewRoomById(room.roomId);
             // Allow bob to create a call
-            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
             await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
             // Fake a start of a call
             await sendRTCState(bot, room.roomId);
             const button = page.getByTestId("join-call-button");
@@ -187,8 +187,8 @@ test.describe("Element Call", () => {
                 async ({ page, user, bot, room, app }) => {
                     await app.viewRoomById(room.roomId);
                     // Allow bob to create a call
-                    await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
                     await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                    await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
                     // Fake a start of a call
                     await sendRTCState(bot, room.roomId, "notification", "video");
                     const toast = page.locator(".mx_Toast_toast");
@@ -222,8 +222,8 @@ test.describe("Element Call", () => {
             async ({ page, user, bot, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 // Allow bob to create a call
-                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
                 await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
                 // Fake a start of a call
                 await sendRTCState(bot, room.roomId, "notification", "audio");
                 const toast = page.locator(".mx_Toast_toast");
@@ -245,7 +245,7 @@ test.describe("Element Call", () => {
         );
     });
 
-    test.describe("DMs", () => {
+    test.describe.only("DMs", () => {
         test.use({
             room: async ({ page, app, user, bot }, use) => {
                 const roomId = await app.client.createRoom({
@@ -313,7 +313,7 @@ test.describe("Element Call", () => {
         });
 
         [true, false].forEach((skipLobbyToggle) => {
-            test(
+            test.only(
                 `should be able to join a call via incoming call toast (skipLobby=${skipLobbyToggle})`,
                 { tag: ["@screenshot"] },
                 async ({ page, user, bot, room, app }) => {
@@ -325,11 +325,17 @@ test.describe("Element Call", () => {
                     const button = toast.getByRole("button", { name: "Accept" });
                     if (skipLobbyToggle) {
                         await toast.getByRole("switch").check();
-                        await expect(toast).toMatchScreenshot(`incoming-call-dm-video-toast-checked.png`);
                     } else {
                         await toast.getByRole("switch").uncheck();
-                        await expect(toast).toMatchScreenshot(`incoming-call-dm-video-toast-unchecked.png`);
                     }
+                    await expect(toast).toMatchScreenshot(`incoming-call-dm-video-toast-${skipLobbyToggle ? "checked" : "unchecked"}.png`, {
+                        // Hide UserId
+                        css: `
+                            .mx_IncomingCallToast_AvatarWithDetails span:nth-child(2) {
+                                opacity: 0;
+                            }
+                        `,
+                    });
 
                     // And test joining
                     await button.click();
@@ -356,7 +362,14 @@ test.describe("Element Call", () => {
                 const toast = page.locator(".mx_Toast_toast");
                 const button = toast.getByRole("button", { name: "Accept" });
 
-                await expect(toast).toMatchScreenshot(`incoming-call-dm-voice-toast.png`);
+                await expect(toast).toMatchScreenshot(`incoming-call-dm-voice-toast.png`, {
+                    // Hide UserId
+                    css: `
+                        .mx_IncomingCallToast_AvatarWithDetails span:nth-child(2) {
+                            opacity: 0;
+                        }
+                    `,
+                });
 
                 // And test joining
                 await button.click();

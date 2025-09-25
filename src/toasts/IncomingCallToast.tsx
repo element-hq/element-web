@@ -303,6 +303,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                         avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
                         details={detailsInformation}
                         title={room ? room.name : _t("voip|call_toast_unknown_room")}
+                        className="mx_IncomingCallToast_AvatarWithDetails"
                     />
                     {!isVoice && (
                         <div className="mx_IncomingCallToast_toggleWithLabel">

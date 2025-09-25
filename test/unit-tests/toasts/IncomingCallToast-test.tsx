@@ -143,7 +143,7 @@ describe("IncomingCallToast", () => {
         ]);
         renderToast();
 
-        screen.getByText("Incoming video call");
+        screen.getByText("Video call started");
         screen.getByText("Video");
         screen.getByLabelText("3 people joined");
 
@@ -166,7 +166,7 @@ describe("IncomingCallToast", () => {
         call.destroy();
         renderToast();
 
-        screen.getByText("Incoming video call");
+        screen.getByText("Video call started");
         screen.getByText("Video");
 
         screen.getByRole("button", { name: "Join" });

@@ -19,6 +19,7 @@ import {
     useRoomListItemViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
 import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel", () => ({
     useRoomListItemViewModel: jest.fn(),
@@ -64,7 +65,7 @@ describe("<RoomListItemView />", () => {
             isBold: false,
             isVideoRoom: false,
             callConnectionState: null,
-            callType: "video",
+            callType: CallType.Video,
             hasParticipantInCall: false,
             name: room.name,
             showNotificationDecoration: false,
