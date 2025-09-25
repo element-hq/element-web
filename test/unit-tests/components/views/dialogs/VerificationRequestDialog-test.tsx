@@ -88,7 +88,7 @@ describe("VerificationRequestDialog", () => {
     it("Shows a failure message if verification was cancelled", async () => {
         const dialog = renderComponent(VerificationPhase.Cancelled);
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
@@ -118,7 +118,7 @@ describe("VerificationRequestDialog", () => {
         await act(async () => await new Promise(process.nextTick));
 
         // Then it renders the resolved information
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
@@ -148,7 +148,7 @@ describe("VerificationRequestDialog", () => {
         await act(async () => await new Promise(process.nextTick));
 
         // Then it renders the information from the request in the promise
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
@@ -169,7 +169,7 @@ describe("VerificationRequestDialog", () => {
         await act(async () => await request.cancel());
 
         // Then the dialog is updated to reflect that
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
         expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
