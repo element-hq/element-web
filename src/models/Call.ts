@@ -579,6 +579,17 @@ export interface WidgetGenerationParameters {
 }
 
 /**
+ * Parameters to be passed during widget creation.
+ * These parameters are hints only, and may not be accepted by the implementation.
+ */
+export interface WidgetGenerationParameters {
+    /**
+     * Skip showing the lobby screen of a call.
+     */
+    skipLobby?: boolean;
+}
+
+/**
  * A group call using MSC3401 and Element Call as a backend.
  * (somewhat cheekily named)
  */
