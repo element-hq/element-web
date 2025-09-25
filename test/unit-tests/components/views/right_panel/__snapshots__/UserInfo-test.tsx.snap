@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
 <div>

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PinnedMessagesCard /> should show the empty state when there are no pins 1`] = `
 <DocumentFragment>

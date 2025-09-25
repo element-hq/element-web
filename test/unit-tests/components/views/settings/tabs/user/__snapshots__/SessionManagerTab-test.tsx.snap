@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SessionManagerTab /> Device verification does not allow device verification on session that do not support encryption 1`] = `
 HTMLCollection [
