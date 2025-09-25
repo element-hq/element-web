@@ -593,8 +593,10 @@ export class ElementCall extends Call {
             // If the room isn't known, or the room is a video room then skip setting an intent.
             return;
         } else if (isVideoRoom(room)) {
-            // Video call rooms already exist, so just treat as if we're joining a group call.
+            // Video rooms already exist, so just treat as if we're joining a group call.
             params.append("intent", ElementCallIntent.JoinExisting);
+            // Video rooms should always return to lobby.
+            params.append("returnToLobby", "true");
             return;
         }
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
@@ -673,6 +675,7 @@ export class ElementCall extends Call {
               new URL("./widgets/element-call/index.html#", window.location.href);
 
         // Splice together the Element Call URL for this call
+        // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
         const params = new URLSearchParams({
             // Template variables are used, so that this can be configured using the widget data.
             perParticipantE2EE: "$perParticipantE2EE",
