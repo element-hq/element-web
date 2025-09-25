@@ -43,7 +43,7 @@ const EncryptionInfo: React.FC<IProps> = ({
 }: IProps) => {
     let content: JSX.Element;
     if (waitingForOtherParty && isSelfVerification) {
-        content = <div>{_t("encryption|verification|self_verification_hint")}</div>;
+        content = <div>{_t("encryption|verification|once_accepted_can_continue")}</div>;
     } else if (waitingForOtherParty || waitingForNetwork) {
         let text: string;
         if (waitingForOtherParty) {

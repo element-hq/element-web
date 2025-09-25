@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { VerificationPhase, VerificationRequestEvent, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { VerificationMethod } from "matrix-js-sdk/src/types";
 import { type User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -111,10 +112,28 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
 
     private dialogTitle(request?: VerificationRequest): string {
         if (request?.isSelfVerification) {
-            if (request.phase === VerificationPhase.Cancelled) {
-                return _t("encryption|verification|verification_dialog_title_failed");
-            } else {
-                return _t("encryption|verification|verification_dialog_title_device");
+            switch (request.phase) {
+                case VerificationPhase.Ready:
+                    return _t("encryption|verification|verification_dialog_title_choose");
+                case VerificationPhase.Done:
+                    return _t("encryption|verification|verification_dialog_title_verified");
+                case VerificationPhase.Started:
+                    switch (request.chosenMethod) {
+                        case VerificationMethod.Reciprocate:
+                            return _t("encryption|verification|verification_dialog_title_confirm_green_shield");
+                        case VerificationMethod.Sas:
+                            return _t("encryption|verification|verification_dialog_title_compare_emojis");
+                        default:
+                            return _t("encryption|verification|verification_dialog_title_device");
+                    }
+                case VerificationPhase.Unsent:
+                    return _t("encryption|verification|verification_dialog_title_unsent");
+                case VerificationPhase.Requested:
+                    return _t("encryption|verification|verification_dialog_title_start_on_other_device");
+                case VerificationPhase.Cancelled:
+                    return _t("encryption|verification|verification_dialog_title_failed");
+                default:
+                    return _t("encryption|verification|verification_dialog_title_device");
             }
         } else {
             return _t("encryption|verification|verification_dialog_title_user");
