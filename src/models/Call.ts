@@ -106,7 +106,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected readonly room: Room;
 
     private _callType: CallType = CallType.Video;
-    public get callType() {
+    public get callType(): CallType {
         return this._callType;
     }
 
@@ -606,7 +606,12 @@ export class ElementCall extends Call {
      * @param client The current client.
      * @param roomId The room ID for the call.
      */
-    private static appendRoomParams(params: URLSearchParams, client: MatrixClient, roomId: string, {voiceOnly}: WidgetGenerationParameters): void {
+    private static appendRoomParams(
+        params: URLSearchParams,
+        client: MatrixClient,
+        roomId: string,
+        { voiceOnly }: WidgetGenerationParameters,
+    ): void {
         const room = client.getRoom(roomId);
         if (!room) {
             // If the room isn't known, or the room is a video room then skip setting an intent.
@@ -630,10 +635,13 @@ export class ElementCall extends Call {
         // is released and upgraded.
         if (isDM) {
             if (hasCallStarted) {
-                params.append("intent", voiceOnly ? ElementCallIntent.JoinExistingDM : ElementCallIntent.JoinExistingDMVoice);
+                params.append(
+                    "intent",
+                    voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM,
+                );
                 params.append("preload", "false");
             } else {
-                params.append("intent", voiceOnly ? ElementCallIntent.StartCallDM : ElementCallIntent.StartCallDMVoice);
+                params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
                 params.append("preload", "false");
             }
         } else {
@@ -821,7 +829,7 @@ export class ElementCall extends Call {
         )
             perParticipantE2EE = true;
 
-        let intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
+        const intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
 
         return {
             ...currentData,
@@ -935,7 +943,7 @@ export class ElementCall extends Call {
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
 
-    private readonly onMembershipChanged = () => {
+    private readonly onMembershipChanged = (): void => {
         this.updateParticipants();
         this.callType = this.session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video;
     };

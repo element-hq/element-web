@@ -7,6 +7,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import dispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -24,7 +25,6 @@ import { NotificationStateEvents } from "../../../stores/notifications/Notificat
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 export interface RoomListItemViewState {
     /**

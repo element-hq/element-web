@@ -14,6 +14,7 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -32,7 +33,6 @@ import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
-import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import DMRoomMap from "../utils/DMRoomMap";
 
 /**
@@ -251,7 +251,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 metricsTrigger: undefined,
             });
         },
-        [room, skipLobbyToggle],
+        [room, skipLobbyToggle, notificationContent],
     );
 
     // Dismiss on closing toast.
@@ -269,6 +269,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
     const isVoice = notificationContent["m.call.intent"] === "audio";
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
+    const participantCount = useParticipantCount(call);
     const detailsInformation =
         notificationContent.notification_type === "ring" ? (
             <span>{otherUserId}</span>
@@ -277,7 +278,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 type={isVoice ? LiveContentType.Voice : LiveContentType.Video}
                 text={isVoice ? _t("common|voice") : _t("common|video")}
                 active={false}
-                participantCount={useParticipantCount(call)}
+                participantCount={participantCount}
             />
         );
 

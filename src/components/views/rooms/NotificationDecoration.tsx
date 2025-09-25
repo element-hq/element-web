@@ -12,13 +12,13 @@ import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/ic
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
+import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { Flex } from "../../../shared-components/utils/Flex";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
     /**

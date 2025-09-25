@@ -29,7 +29,7 @@ import { type IApp } from "../../stores/WidgetStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";

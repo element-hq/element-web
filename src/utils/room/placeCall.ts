@@ -12,7 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { getPlatformCallTypeProps, PlatformCallType } from "../../hooks/room/useRoomCall";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
 
@@ -27,7 +27,7 @@ export const placeCall = async (
     room: Room,
     callType: CallType,
     platformCallType: PlatformCallType,
-    skipLobby: boolean|undefined,
+    skipLobby: boolean | undefined,
     voiceOnly: boolean,
 ): Promise<void> => {
     const { analyticsName } = getPlatformCallTypeProps(platformCallType);

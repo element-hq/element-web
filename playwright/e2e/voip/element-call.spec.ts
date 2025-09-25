@@ -10,7 +10,6 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
-import { RTCCallIntent } from "matrix-js-sdk/src/matrixrtc/types";
 
 function assertCommonCallParameters(
     url: URLSearchParams,
@@ -28,7 +27,7 @@ function assertCommonCallParameters(
     expect(hash.get("preload")).toEqual("false");
 }
 
-async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification", intent?: RTCCallIntent) {
+async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification", intent?: string) {
     const resp = await bot.sendStateEvent(
         roomId,
         "org.matrix.msc3401.call.member",
@@ -217,7 +216,7 @@ test.describe("Element Call", () => {
             );
         });
 
-        test.only(
+        test(
             `should be able to join a call via incoming voice call toast`,
             { tag: ["@screenshot"] },
             async ({ page, user, bot, room, app }) => {
@@ -346,7 +345,7 @@ test.describe("Element Call", () => {
             );
         });
 
-        test.only(
+        test(
             `should be able to join a call via incoming voice call toast`,
             { tag: ["@screenshot"] },
             async ({ page, user, bot, room, app }) => {
