@@ -60,7 +60,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
             >
                 <EncryptionPanel
                     layout="dialog"
-                    verificationRequest={this.props.verificationRequest}
+                    verificationRequest={this.state.verificationRequest}
                     verificationRequestPromise={this.props.verificationRequestPromise}
                     onClose={this.props.onFinished}
                     member={member}
