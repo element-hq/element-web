@@ -294,7 +294,9 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     ) : (
                         <div className="mx_IncomingCallToast_message">
                             <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
-                            { notificationContent.notification_type === "ring" ? _t("voip|video_call_incoming") : _t("voip|video_call_started")}
+                            {notificationContent.notification_type === "ring"
+                                ? _t("voip|video_call_incoming")
+                                : _t("voip|video_call_started")}
                         </div>
                     )}
                     <AvatarWithDetails

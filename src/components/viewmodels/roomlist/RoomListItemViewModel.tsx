@@ -71,7 +71,7 @@ export interface RoomListItemViewState {
     /**
      * Whether the call is a voice or video call.
      */
-    callType: "voice" | "video" | undefined;
+    callType: CallType | undefined;
     /**
      * Pre-rendered and translated preview for the latest message in the room, or undefined
      * if no preview should be shown.
