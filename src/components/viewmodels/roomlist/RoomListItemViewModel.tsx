@@ -152,7 +152,6 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
             setCallType("video");
             return;
         }
-        console.log("call.session.getConsensusCallIntent()", call.session.getConsensusCallIntent());
         // Should refresh whenever hasParticipantInCall changes
         if (call.session.getConsensusCallIntent() === "audio") {
             setCallType("voice");
