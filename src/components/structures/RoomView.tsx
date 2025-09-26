@@ -2620,7 +2620,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <CallView
                             room={this.state.room}
                             resizing={this.state.resizing}
-                            skipLobby={this.roomViewStore.skipCallLobby() ?? false}
                             role="main"
                             onClose={this.onCallClose}
                         />

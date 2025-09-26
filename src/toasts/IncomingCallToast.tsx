@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Button, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
@@ -147,13 +147,18 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
     });
     const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
-    // Start ringing if not already.
+    const soundHasStarted = useRef<boolean>(false);
     useEffect(() => {
+        // This section can race, so we use a ref to keep track of whether we have started trying to play.
+        // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
+        // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing.
         const isRingToast = notificationContent.notification_type == "ring";
-        if (isRingToast && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
-            LegacyCallHandler.instance.play(AudioID.Ring);
+        if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+            // Start ringing if not already.
+            soundHasStarted.current = true;
+            void LegacyCallHandler.instance.play(AudioID.Ring);
         }
-    }, [notificationContent.notification_type]);
+    }, [notificationContent.notification_type, soundHasStarted]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
@@ -237,7 +242,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
-                skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
+                skipLobby: ("shiftKey" in e && e.shiftKey) || skipLobbyToggle,
                 metricsTrigger: undefined,
             });
         },

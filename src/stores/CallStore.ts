@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
 import { type MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
-import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -53,8 +52,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         for (const room of this.matrixClient.getRooms()) {
             this.updateRoom(room);
         }
-        this.matrixClient.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
-        this.matrixClient.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
         this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
 
@@ -85,12 +82,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.calls.clear();
         this._connectedCalls.clear();
 
-        if (this.matrixClient) {
-            this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
-            this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
-            this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
-            this.matrixClient.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
-        }
+        this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
@@ -117,8 +109,16 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private calls = new Map<string, Call>(); // Key is room ID
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
+    private inUpdateRoom = false;
     private updateRoom(room: Room): void {
-        if (!this.calls.has(room.roomId)) {
+        // XXX: This method is guarded with the flag this.inUpdateRoom because
+        // we need to block this method from calling itself recursively. That
+        // could happen, for instance, if Call.get adds a new virtual widget to
+        // the WidgetStore, firing a WidgetStore update that we don't actually
+        // care about. Without the guard we could get duplicate Call objects
+        // fighting for control over the same widget.
+        if (!this.inUpdateRoom && !this.calls.has(room.roomId)) {
+            this.inUpdateRoom = true;
             const call = Call.get(room);
 
             if (call) {
@@ -149,6 +149,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             }
 
             this.emit(CallStoreEvent.Call, call, room.roomId);
+            this.inUpdateRoom = false;
         }
     }
 
@@ -186,7 +187,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         }
     };
 
-    private onGroupCall = (groupCall: GroupCall): void => this.updateRoom(groupCall.room);
     private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
         this.updateRoom(session.room);
     };

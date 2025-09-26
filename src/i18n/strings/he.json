@@ -617,7 +617,6 @@
             "accepting": "מקבל…",
             "after_new_login": {
                 "device_verified": "המכשיר אומת",
-                "unable_to_verify": "לא ניתן לאמת את מכשיר זה",
                 "verify_this_device": "אמתו את מכשיר זה"
             },
             "cancelled": "בטלתם את האימות.",

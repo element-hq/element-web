@@ -792,7 +792,6 @@
             "title": "復元方法を削除しました",
             "warning": "復元方法を削除しなかった場合、攻撃者があなたのアカウントにアクセスしようとしている可能性があります。設定画面でアカウントのパスワードを至急変更し、新しい復元方法を設定してください。"
         },
-        "reset_all_button": "復元方法を全て失ってしまいましたか？<a>リセットできます</a>",
         "set_up_toast_title": "セキュアバックアップを設定",
         "setup_secure_backup": {
             "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。"
@@ -811,7 +810,6 @@
             "after_new_login": {
                 "device_verified": "端末が認証されました",
                 "skip_verification": "認証をスキップ",
-                "unable_to_verify": "この端末を認証できません",
                 "verify_this_device": "この端末を認証"
             },
             "cancelled": "認証をキャンセルしました。",
@@ -831,7 +829,6 @@
             "incoming_sas_dialog_waiting": "相手の承認を待機しています…",
             "incoming_sas_user_dialog_text_1": "このユーザーを認証すると、信頼済として表示します。ユーザーを信頼すると、より一層安心してエンドツーエンド暗号化を使用することができます。",
             "incoming_sas_user_dialog_text_2": "このユーザーを認証すると、相手のセッションと自分のセッションを信頼済として表示します。",
-            "no_key_or_device": "セキュリティーキーもしくは認証可能な端末が設定されていません。この端末では、以前暗号化されたメッセージにアクセスすることができません。この端末で本人確認を行うには、認証用の鍵を再設定する必要があります。",
             "no_support_qr_emoji": "認証しようとしている端末は、QRコードのスキャンや絵文字による認証をサポートしていませんが、%(brand)sではサポートされています。異なるクライアントで試してください。",
             "other_party_cancelled": "相手が認証をキャンセルしました。",
             "prompt_encrypted": "ルームの全てのユーザーを認証すると、ルームが安全であることを確認できます。",
@@ -844,7 +841,6 @@
             "qr_reciprocate_same_shield_device": "あと少しです！ あなたの他の端末は同じ盾マークを表示していますか？",
             "qr_reciprocate_same_shield_user": "あと少しです！%(displayName)sは同じ盾マークを表示していますか？",
             "request_toast_detail": "%(ip)sの%(deviceId)s",
-            "reset_proceed_prompt": "リセットする",
             "sas_caption_self": "この端末を認証するには、画面に以下の数字が表示されていることを確認してください。",
             "sas_caption_user": "このユーザーを認証するには、相手の画面に以下の数字が表示されていることを確認してください。",
             "sas_description": "両方の端末でQRコードをキャプチャできない場合、絵文字の比較を選んでください",
@@ -866,7 +862,6 @@
             "unverified_sessions_toast_description": "アカウントが安全かどうか確認してください",
             "unverified_sessions_toast_reject": "後で",
             "unverified_sessions_toast_title": "未認証のセッションがあります",
-            "verification_description": "暗号化されたメッセージにアクセスするには、本人確認が必要です。",
             "verification_dialog_title_device": "他の端末を認証",
             "verification_dialog_title_user": "認証の要求",
             "verification_skip_warning": "認証を行わないと、あなたの全てのメッセージにアクセスできず、他のユーザーに信頼済として表示されない可能性があります。",
@@ -876,9 +871,6 @@
             "verify_emoji_prompt": "絵文字の並びを比較して認証。",
             "verify_emoji_prompt_qr": "上記のコードをスキャンできない場合は、絵文字による確認を行ってください。",
             "verify_later": "後で認証",
-            "verify_using_device": "別の端末で認証",
-            "verify_using_key": "セキュリティーキーで認証",
-            "verify_using_key_or_phrase": "セキュリティーキーあるいはセキュリティーフレーズで認証",
             "waiting_for_user_accept": "%(displayName)sによる承認を待機しています…",
             "waiting_other_device": "他の端末での認証を待機しています…",
             "waiting_other_device_details": "端末 %(deviceName)s（%(deviceId)s）での認証を待機しています…",

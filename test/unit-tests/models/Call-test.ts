@@ -11,12 +11,9 @@ import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 import {
     RoomType,
-    Room,
+    type Room,
     RoomEvent,
     MatrixEvent,
-    RoomStateEvent,
-    PendingEventOrdering,
-    type IContent,
     type MatrixClient,
     type IMyDevice,
     type RoomMember,
@@ -41,15 +38,7 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "../../../src/models/Call";
-import {
-    stubClient,
-    mkEvent,
-    mkRoomMember,
-    setupAsyncStoreWithClient,
-    mockPlatformPeg,
-    MockEventEmitter,
-} from "../../test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
@@ -60,80 +49,7 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
-const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
-jest.spyOn(SettingsStore, "getValue").mockImplementation(
-    (settingName): any => enabledSettings.has(settingName) || undefined,
-);
-
-const setUpClientRoomAndStores = (): {
-    client: Mocked<MatrixClient>;
-    room: Room;
-    alice: RoomMember;
-    bob: RoomMember;
-    carol: RoomMember;
-    roomSession: Mocked<MatrixRTCSession>;
-} => {
-    stubClient();
-    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
-    DMRoomMap.makeShared(client);
-
-    const room = new Room("!1:example.org", client, "@alice:example.org", {
-        pendingEventOrdering: PendingEventOrdering.Detached,
-    });
-
-    const alice = mkRoomMember(room.roomId, "@alice:example.org");
-    const bob = mkRoomMember(room.roomId, "@bob:example.org");
-    const carol = mkRoomMember(room.roomId, "@carol:example.org");
-    jest.spyOn(room, "getMember").mockImplementation((userId) => {
-        switch (userId) {
-            case alice.userId:
-                return alice;
-            case bob.userId:
-                return bob;
-            case carol.userId:
-                return carol;
-            default:
-                return null;
-        }
-    });
-
-    jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-
-    client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
-
-    const roomSession = new MockEventEmitter({
-        memberships: [],
-        getOldestMembership: jest.fn().mockReturnValue(undefined),
-    }) as Mocked<MatrixRTCSession>;
-
-    client.matrixRTC.getRoomSession.mockReturnValue(roomSession);
-    client.getRooms.mockReturnValue([room]);
-    client.getUserId.mockReturnValue(alice.userId);
-    client.getDeviceId.mockReturnValue("alices_device");
-    client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
-    client.sendStateEvent.mockImplementation(async (roomId, eventType, content, stateKey = "") => {
-        if (roomId !== room.roomId) throw new Error("Unknown room");
-        const event = mkEvent({
-            event: true,
-            type: eventType,
-            room: roomId,
-            user: alice.userId,
-            skey: stateKey,
-            content: content as IContent,
-        });
-        room.addLiveEvents([event], { addToState: true });
-        return { event_id: event.getId()! };
-    });
-
-    setupAsyncStoreWithClient(WidgetStore.instance, client);
-    setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
-
-    return { client, room, alice, bob, carol, roomSession };
-};
-
-const cleanUpClientRoomAndStores = (client: MatrixClient, room: Room) => {
-    client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
-};
+const { enabledSettings } = enableCalls();
 
 const setUpWidget = (call: Call): { widget: Widget; messaging: Mocked<ClientWidgetApi> } => {
     call.widget.data = { ...call.widget, skipLobby: true };
@@ -763,7 +679,7 @@ describe("ElementCall", () => {
             expect(urlParams.get("analyticsID")).toBeFalsy();
         });
 
-        it("requests ringing notifications and correct intent in DMs", async () => {
+        it("requests correct intent in DMs", async () => {
             getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
                 room.roomId === roomId ? "any-user" : undefined,
             );
@@ -772,7 +688,6 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("sendNotificationType")).toBe("ring");
             expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
         });
 
@@ -808,15 +723,6 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExisting);
         });
-
-        it("requests visual notifications in non-DMs", async () => {
-            ElementCall.create(room);
-            const call = Call.get(room);
-            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-
-            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("sendNotificationType")).toBe("notification");
-        });
     });
 
     describe("instance in a non-video room", () => {
@@ -828,7 +734,7 @@ describe("ElementCall", () => {
             jest.useFakeTimers();
             jest.setSystemTime(0);
 
-            ElementCall.create(room, true);
+            ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
             if (maybeCall === null) throw new Error("Failed to create call");
             call = maybeCall;
@@ -846,7 +752,7 @@ describe("ElementCall", () => {
             WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
-            const startup = call.start();
+            const startup = call.start({});
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
             await startup;
             await connect(call, messaging, false);
