@@ -27,7 +27,6 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { type FetchRoomFn } from "../notifications/ListNotificationState";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { DefaultTagID } from "../room-list/models";
@@ -110,10 +109,6 @@ export const getChildOrder = (
     roomId: string,
 ): Array<Many<ListIteratee<unknown>>> => {
     return [validOrder(order) ?? NaN, ts, roomId]; // NaN has lodash sort it at the end in asc
-};
-
-const getRoomFn: FetchRoomFn = (room: Room) => {
-    return RoomNotificationStateStore.instance.getRoomState(room);
 };
 
 type SpaceStoreActions =
@@ -1375,7 +1370,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
             return this.notificationStateMap.get(key)!;
         }
 
-        const state = new SpaceNotificationState(getRoomFn);
+        const state = new SpaceNotificationState();
         this.notificationStateMap.set(key, state);
         return state;
     }
