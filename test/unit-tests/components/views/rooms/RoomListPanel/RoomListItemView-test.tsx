@@ -215,4 +215,31 @@ describe("<RoomListItemView />", () => {
         // But the room item itself should still be rendered
         expect(button).toBeInTheDocument();
     });
+
+    test("should hide hover menu when context menu opens", async () => {
+        const user = userEvent.setup();
+
+        mocked(useRoomListItemViewModel).mockReturnValue({
+            ...defaultValue,
+            showContextMenu: true,
+            showHoverMenu: true,
+        });
+
+        renderRoomListItem();
+
+        const button = screen.getByRole("option", { name: `Open room ${room.name}` });
+
+        // First hover to show hover menu
+        await user.hover(button);
+        await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
+
+        // Then right-click to open context menu
+        await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
+
+        // Context menu should be open
+        await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
+
+        // Hover menu (More Options button) should be hidden when context menu is open
+        expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
+    });
 });
