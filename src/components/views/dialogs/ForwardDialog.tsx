@@ -182,6 +182,8 @@ const transformEvent = (event: MatrixEvent): { type: string; content: IContent }
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        "m.mentions": __, // strip mentions
         // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
         ...content
     } = event.getContent();
