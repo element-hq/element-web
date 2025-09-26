@@ -236,7 +236,7 @@ exports[`VerificationRequestDialog Shows a failure message if verification was c
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Verification failed
       </h1>
     </div>
     <div
