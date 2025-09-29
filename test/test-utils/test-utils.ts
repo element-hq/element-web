@@ -17,7 +17,7 @@ import {
     type RoomMember,
     type MatrixClient,
     type EventTimeline,
-    type RoomState,
+    RoomState,
     EventType,
     type IEventRelation,
     type IUnsigned,
@@ -30,6 +30,7 @@ import {
     JoinRule,
     type OidcClientConfig,
     type GroupCall,
+    type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -84,6 +85,7 @@ export function createTestClient(): MatrixClient {
     const eventEmitter = new EventEmitter();
 
     let txnId = 1;
+    let createdRoom: Room | undefined;
 
     const client = {
         getHomeserverUrl: jest.fn(),
@@ -162,7 +164,14 @@ export function createTestClient(): MatrixClient {
         }),
 
         getPushActionsForEvent: jest.fn(),
-        getRoom: jest.fn().mockImplementation((roomId) => mkStubRoom(roomId, "My room", client)),
+        getRoom: jest.fn().mockImplementation((roomId) => {
+            // If the test called `createRoom`, return the mocked room it created.
+            if (createdRoom) {
+                return createdRoom;
+            } else {
+                return mkStubRoom(roomId, "My room", client);
+            }
+        }),
         getRooms: jest.fn().mockReturnValue([]),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
@@ -200,6 +209,7 @@ export function createTestClient(): MatrixClient {
         setAccountData: jest.fn(),
         deleteAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
+        setRoomName: jest.fn(),
         setRoomTopic: jest.fn(),
         setRoomReadMarkers: jest.fn().mockResolvedValue({}),
         sendTyping: jest.fn().mockResolvedValue({}),
@@ -212,7 +222,23 @@ export function createTestClient(): MatrixClient {
         getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
         }),
-        createRoom: jest.fn().mockResolvedValue({ room_id: "!1:example.org" }),
+        createRoom: jest.fn(async (createOpts?: ICreateRoomOpts) => {
+            const initialState = createOpts?.initial_state?.map((event, i) =>
+                mkEvent({
+                    ...event,
+                    room: "!1:example.org",
+                    user: "@user:example.com",
+                    event: true,
+                }),
+            );
+            createdRoom = mkStubRoom(
+                "!1:example.org",
+                "My room",
+                client,
+                initialState && mkRoomState("!1:example.org", initialState),
+            );
+            return { room_id: "!1:example.org" };
+        }),
         setPowerLevel: jest.fn().mockResolvedValue(undefined),
         pushRules: {},
         decryptEventIfNeeded: () => Promise.resolve(),
@@ -613,10 +639,11 @@ export function mkStubRoom(
     roomId: string | null | undefined = null,
     name: string | undefined,
     client: MatrixClient | undefined,
+    state?: RoomState | undefined,
 ): Room {
     const stubTimeline = {
         getEvents: (): MatrixEvent[] => [],
-        getState: (): RoomState | undefined => undefined,
+        getState: (): RoomState | undefined => state,
     } as unknown as EventTimeline;
     return {
         canInvite: jest.fn().mockReturnValue(false),
@@ -694,6 +721,24 @@ export function mkStubRoom(
         tags: {},
         timeline: [],
     } as unknown as Room;
+}
+
+export function mkRoomState(
+    roomId: string = "!1:example.org",
+    stateEvents: MatrixEvent[] = [],
+    members: RoomMember[] = [],
+): RoomState {
+    const roomState = new RoomState(roomId);
+
+    roomState.setStateEvents(stateEvents);
+
+    if (members.length > 0) {
+        for (const member of members) {
+            roomState.members[member.userId] = member;
+        }
+    }
+
+    return roomState;
 }
 
 export function mkServerConfig(

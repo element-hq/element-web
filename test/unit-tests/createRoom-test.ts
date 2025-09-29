@@ -64,7 +64,7 @@ describe("createRoom", () => {
 
     it("creates a private room with state event encryption", async () => {
         await createRoom(client, {
-            createOpts: { preset: Preset.PrivateChat },
+            createOpts: { preset: Preset.PrivateChat, name: "Super-Secret Super-colliding Super Room" },
             encryption: true,
             stateEncryption: true,
         });
@@ -82,8 +82,11 @@ describe("createRoom", () => {
                         "io.element.msc3414.encrypt_state_events": true,
                     },
                 },
+                // Room name is NOT included, since it needs to be encrypted.
             ],
         });
+
+        expect(client.setRoomName).toHaveBeenCalledWith("!1:example.org", "Super-Secret Super-colliding Super Room");
     });
 
     it("creates a private room in a space", async () => {

@@ -335,9 +335,12 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             // We need to set up initial state manually if state encryption is enabled, since it needs
             // to be encrypted.
             if (opts.stateEncryption && stateEncryptedOpts) {
+                // Set room name
                 if (stateEncryptedOpts.name) {
                     await client.setRoomName(roomId, stateEncryptedOpts.name);
                 }
+
+                // Set room avatar
                 if (opts.avatar) {
                     let url: string;
                     if (opts.avatar instanceof File) {
