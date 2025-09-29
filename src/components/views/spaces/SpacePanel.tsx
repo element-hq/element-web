@@ -68,6 +68,7 @@ import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
+import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -379,61 +380,72 @@ const SpacePanel: React.FC = () => {
                         onDragEndHandler();
                     }}
                 >
-                    <nav
-                        className={classNames("mx_SpacePanel", {
-                            collapsed: isPanelCollapsed,
-                            newUi: newRoomListEnabled,
-                        })}
-                        onKeyDown={(ev) => {
-                            const navAction = getKeyBindingsManager().getNavigationAction(ev);
-                            if (
-                                navAction === KeyBindingAction.NextLandmark ||
-                                navAction === KeyBindingAction.PreviousLandmark
-                            ) {
-                                LandmarkNavigation.findAndFocusNextLandmark(
-                                    Landmark.ACTIVE_SPACE_BUTTON,
-                                    navAction === KeyBindingAction.PreviousLandmark,
-                                );
-                                ev.stopPropagation();
-                                ev.preventDefault();
-                                return;
-                            }
-                            onKeyDownHandler(ev);
-                        }}
-                        ref={ref}
-                        aria-label={_t("common|spaces")}
+                    <ReleaseAnnouncement
+                        feature="newNotificationSounds"
+                        header={_t("settings|notifications|sounds_release_announcement|title")}
+                        description={_t("settings|notifications|sounds_release_announcement|description")}
+                        closeLabel={_t("action|ok")}
+                        displayArrow={false}
+                        placement="right-start"
                     >
-                        <UserMenu isPanelCollapsed={isPanelCollapsed}>
-                            <AccessibleButton
-                                className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
-                                onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                                title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
-                                caption={
-                                    <KeyboardShortcut
-                                        value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
-                                        className="mx_SpacePanel_Tooltip_KeyboardShortcut"
-                                    />
+                        <nav
+                            className={classNames("mx_SpacePanel", {
+                                collapsed: isPanelCollapsed,
+                                newUi: newRoomListEnabled,
+                            })}
+                            onKeyDown={(ev) => {
+                                const navAction = getKeyBindingsManager().getNavigationAction(ev);
+                                if (
+                                    navAction === KeyBindingAction.NextLandmark ||
+                                    navAction === KeyBindingAction.PreviousLandmark
+                                ) {
+                                    LandmarkNavigation.findAndFocusNextLandmark(
+                                        Landmark.ACTIVE_SPACE_BUTTON,
+                                        navAction === KeyBindingAction.PreviousLandmark,
+                                    );
+                                    ev.stopPropagation();
+                                    ev.preventDefault();
+                                    return;
                                 }
-                            />
-                        </UserMenu>
-                        <Droppable droppableId="top-level-spaces">
-                            {(provided, snapshot) => (
-                                <InnerSpacePanel
-                                    {...provided.droppableProps}
-                                    isPanelCollapsed={isPanelCollapsed}
-                                    setPanelCollapsed={setPanelCollapsed}
-                                    isDraggingOver={snapshot.isDraggingOver}
-                                    innerRef={provided.innerRef}
-                                >
-                                    {provided.placeholder}
-                                </InnerSpacePanel>
-                            )}
-                        </Droppable>
+                                onKeyDownHandler(ev);
+                            }}
+                            ref={ref}
+                            aria-label={_t("common|spaces")}
+                        >
+                            <UserMenu isPanelCollapsed={isPanelCollapsed}>
+                                <AccessibleButton
+                                    className={classNames("mx_SpacePanel_toggleCollapse", {
+                                        expanded: !isPanelCollapsed,
+                                    })}
+                                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                                    title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
+                                    caption={
+                                        <KeyboardShortcut
+                                            value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
+                                            className="mx_SpacePanel_Tooltip_KeyboardShortcut"
+                                        />
+                                    }
+                                />
+                            </UserMenu>
+                            <Droppable droppableId="top-level-spaces">
+                                {(provided, snapshot) => (
+                                    <InnerSpacePanel
+                                        {...provided.droppableProps}
+                                        isPanelCollapsed={isPanelCollapsed}
+                                        setPanelCollapsed={setPanelCollapsed}
+                                        isDraggingOver={snapshot.isDraggingOver}
+                                        innerRef={provided.innerRef}
+                                    >
+                                        {provided.placeholder}
+                                    </InnerSpacePanel>
+                                )}
+                            </Droppable>
 
-                        <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
+                            <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
 
-                        <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
-                    </nav>
+                            <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
+                        </nav>
+                    </ReleaseAnnouncement>
                 </DragDropContext>
             )}
         </RovingTabIndexProvider>

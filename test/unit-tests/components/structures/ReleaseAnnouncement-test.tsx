@@ -23,7 +23,7 @@ describe("ReleaseAnnouncement", () => {
     function renderReleaseAnnouncement() {
         return render(
             <ReleaseAnnouncement
-                feature="newRoomList_intro"
+                feature="newNotificationSounds"
                 header="header"
                 description="description"
                 closeLabel="close"
