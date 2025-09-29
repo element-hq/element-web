@@ -25,8 +25,6 @@ function assertCommonCallParameters(
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
     expect(hash.get("preload")).toEqual("false");
-
-    expect(hash.get("returnToLobby")).toEqual("false");
 }
 
 async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification") {
@@ -125,7 +123,7 @@ test.describe("Element Call", () => {
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, bot, room, app }) => {
@@ -165,7 +163,7 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
 
             expect(hash.get("intent")).toEqual("join_existing");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         [true, false].forEach((skipLobbyToggle) => {
@@ -232,7 +230,7 @@ test.describe("Element Call", () => {
             const hash = new URLSearchParams(url.hash.slice(1));
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call_dm");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         test("should be able to skip lobby by holding down shift", async ({ page, user, room, app }) => {
@@ -271,7 +269,7 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
 
             expect(hash.get("intent")).toEqual("join_existing_dm");
-            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("skipLobby")).toEqual(null);
         });
 
         [true, false].forEach((skipLobbyToggle) => {
@@ -307,6 +305,35 @@ test.describe("Element Call", () => {
                     expect(hash.get("skipLobby")).toEqual(skipLobbyToggle.toString());
                 },
             );
+        });
+    });
+
+    test.describe("Video Rooms", () => {
+        test.use({
+            config: {
+                features: {
+                    feature_video_rooms: true,
+                    feature_element_call_video_rooms: true,
+                },
+            },
+        });
+        test("should be able to create and join a video room", async ({ page, user }) => {
+            await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+            await page.getByRole("menuitem", { name: "New video room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill("Test room");
+            await page.getByRole("button", { name: "Create video room" }).click();
+            await expect(page).toHaveURL(new RegExp(`/#/room/`));
+            const roomId = new URL(page.url()).hash.slice("#/room/".length);
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            await expect(frameUrlStr).toBeDefined();
+            // Ensure we set the correct parameters for ECall.
+            const url = new URL(frameUrlStr);
+            const hash = new URLSearchParams(url.hash.slice(1));
+            assertCommonCallParameters(url.searchParams, hash, user, { roomId });
+            expect(hash.get("intent")).toEqual("join_existing");
+            expect(hash.get("skipLobby")).toEqual("false");
+            expect(hash.get("returnToLobby")).toEqual("true");
         });
     });
 });

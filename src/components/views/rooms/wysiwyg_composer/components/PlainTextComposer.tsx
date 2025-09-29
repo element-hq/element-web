@@ -60,6 +60,7 @@ export function PlainTextComposer({
         handleCommand,
         handleMention,
         handleAtRoomMention,
+        handleEmoji,
     } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation, isAutoReplaceEmojiEnabled);
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
@@ -84,6 +85,7 @@ export function PlainTextComposer({
                 handleMention={handleMention}
                 handleCommand={handleCommand}
                 handleAtRoomMention={handleAtRoomMention}
+                handleEmoji={handleEmoji}
             />
             <Editor
                 ref={editorRef}

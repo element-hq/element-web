@@ -679,7 +679,7 @@ describe("ElementCall", () => {
             expect(urlParams.get("analyticsID")).toBeFalsy();
         });
 
-        it("requests ringing notifications and correct intent in DMs", async () => {
+        it("requests correct intent in DMs", async () => {
             getUserIdForRoomIdSpy.mockImplementation((roomId: string) =>
                 room.roomId === roomId ? "any-user" : undefined,
             );
@@ -688,7 +688,6 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("sendNotificationType")).toBe("ring");
             expect(urlParams.get("intent")).toBe(ElementCallIntent.StartCallDM);
         });
 
@@ -724,15 +723,6 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("intent")).toBe(ElementCallIntent.JoinExisting);
         });
-
-        it("requests visual notifications in non-DMs", async () => {
-            ElementCall.create(room);
-            const call = Call.get(room);
-            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-
-            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("sendNotificationType")).toBe("notification");
-        });
     });
 
     describe("instance in a non-video room", () => {
@@ -744,7 +734,7 @@ describe("ElementCall", () => {
             jest.useFakeTimers();
             jest.setSystemTime(0);
 
-            ElementCall.create(room, true);
+            ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
             if (maybeCall === null) throw new Error("Failed to create call");
             call = maybeCall;
@@ -762,7 +752,7 @@ describe("ElementCall", () => {
             WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
-            const startup = call.start();
+            const startup = call.start({});
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
             await startup;
             await connect(call, messaging, false);

@@ -109,10 +109,6 @@ interface State {
      * Whether we're viewing a call or call lobby in this room
      */
     viewingCall: boolean;
-    /**
-     * If we want the call to skip the lobby and immediately join
-     */
-    skipLobby?: boolean;
 
     promptAskToJoin: boolean;
 
@@ -359,13 +355,13 @@ export class RoomViewStore extends EventEmitter {
                 let call = CallStore.instance.getCall(payload.room_id);
                 // Start a call if not already there
                 if (call === null) {
-                    ElementCall.create(room, false);
+                    ElementCall.create(room);
                     call = CallStore.instance.getCall(payload.room_id)!;
                 }
                 call.presented = true;
                 // Immediately start the call. This will connect to all required widget events
                 // and allow the widget to show the lobby.
-                if (call.connectionState === ConnectionState.Disconnected) call.start();
+                if (call.connectionState === ConnectionState.Disconnected) call.start({ skipLobby: payload.skipLobby });
             }
             // If we switch to a different room from the call, we are no longer presenting it
             const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
@@ -413,7 +409,6 @@ export class RoomViewStore extends EventEmitter {
                 replyingToEvent: null,
                 viaServers: payload.via_servers ?? [],
                 wasContextSwitch: payload.context_switch ?? false,
-                skipLobby: payload.skipLobby,
                 viewingCall:
                     payload.view_call ??
                     (payload.room_id === this.state.roomId
@@ -470,7 +465,6 @@ export class RoomViewStore extends EventEmitter {
                     viaServers: payload.via_servers,
                     wasContextSwitch: payload.context_switch,
                     viewingCall: payload.view_call ?? false,
-                    skipLobby: payload.skipLobby,
                 });
                 try {
                     const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(payload.room_alias);
@@ -737,10 +731,6 @@ export class RoomViewStore extends EventEmitter {
 
     public isViewingCall(): boolean {
         return this.state.viewingCall;
-    }
-
-    public skipCallLobby(): boolean | undefined {
-        return this.state.skipLobby;
     }
 
     /**

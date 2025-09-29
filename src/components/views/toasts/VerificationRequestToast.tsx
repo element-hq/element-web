@@ -177,7 +177,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 detail={detail}
                 primaryLabel={
                     request.isSelfVerification || !request.roomId
-                        ? _t("encryption|verification|request_toast_accept")
+                        ? _t("encryption|verification|request_toast_start_verification")
                         : _t("encryption|verification|request_toast_accept_user")
                 }
                 onPrimaryClick={this.accept}

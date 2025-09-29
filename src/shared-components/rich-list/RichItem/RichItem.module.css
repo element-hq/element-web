@@ -6,11 +6,14 @@
  */
 
 .richItem {
-    all: unset;
+    /* Remove browser button style */
+    background: transparent;
+    border: none;
     padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-4x);
     width: 100%;
     box-sizing: border-box;
     cursor: pointer;
+    text-align: start;
 
     display: grid;
     column-gap: var(--cpd-space-3x);
@@ -20,7 +23,8 @@
         "avatar description time";
 }
 
-.richItem:hover {
+.richItem:hover,
+.richItem:focus {
     background-color: var(--cpd-color-bg-subtle-secondary);
     border-radius: 12px;
 }

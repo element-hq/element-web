@@ -234,6 +234,11 @@ describe("WysiwygComposer", () => {
                 range: { start: 1, end: 1 },
                 component: <div>community</div>,
             },
+            {
+                completion: "😄",
+                range: { start: 1, end: 1 },
+                component: <div>😄</div>,
+            },
         ];
 
         const constructMockProvider = (data: ICompletion[]) =>
@@ -434,6 +439,16 @@ describe("WysiwygComposer", () => {
 
             // check that it we still have the initial text
             expect(screen.getByText(initialInput)).toBeInTheDocument();
+        });
+
+        it("selecting an emoji suggestion inserts the emoji", async () => {
+            await insertMentionInput();
+
+            // select the room suggestion
+            await userEvent.click(screen.getByText("😄"));
+
+            // check that it has inserted the plain text
+            expect(screen.getByText("😄")).toBeInTheDocument();
         });
     });
 

@@ -21,12 +21,13 @@ import PosthogTrackers from "../../PosthogTrackers";
  * @param room the room to place the call in
  * @param callType the type of call
  * @param platformCallType the platform to pass the call on
+ * @param skipLobby Has the user indicated they would like to skip the lobby. Otherwise, defer to platform defaults.
  */
 export const placeCall = async (
     room: Room,
     callType: CallType,
     platformCallType: PlatformCallType,
-    skipLobby: boolean,
+    skipLobby?: boolean,
 ): Promise<void> => {
     const { analyticsName } = getPlatformCallTypeProps(platformCallType);
     PosthogTrackers.trackInteraction(analyticsName);

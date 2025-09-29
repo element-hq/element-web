@@ -14,6 +14,7 @@ import {
     processEmojiReplacement,
     processMention,
     processSelectionChange,
+    processTextReplacement,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useSuggestion";
 
 function createMockPlainTextSuggestionPattern(props: Partial<Suggestion> = {}): Suggestion {
@@ -379,6 +380,95 @@ describe("findSuggestionInText", () => {
             startOffset: precedingText.length,
             endOffset: precedingText.length + emoiticon.length,
         });
+    });
+});
+
+describe("processTextReplacement", () => {
+    it("does not change parent hook state if suggestionData is null", () => {
+        const mockSetSuggestionData = jest.fn();
+        const mockSetText = jest.fn();
+        const replacementText = "replacement";
+
+        // call the function with null suggestionData
+        processTextReplacement(replacementText, null, mockSetSuggestionData, mockSetText);
+
+        // check that the parent state setters have not been called
+        expect(mockSetText).not.toHaveBeenCalled();
+        expect(mockSetSuggestionData).not.toHaveBeenCalled();
+    });
+
+    it("does not change parent hook state if existingContent is null", () => {
+        const mockSetSuggestionData = jest.fn();
+        const mockSetText = jest.fn();
+        const replacementText = "replacement";
+
+        // create a mock node with null textContent
+        const mockNode = {
+            textContent: null,
+        } as unknown as Text;
+
+        const mockSuggestion: Suggestion = {
+            mappedSuggestion: { keyChar: ":", type: "emoji", text: ":)" },
+            node: mockNode,
+            startOffset: 0,
+            endOffset: 2,
+        };
+
+        // call the function with a node that has null textContent
+        processTextReplacement(replacementText, mockSuggestion, mockSetSuggestionData, mockSetText);
+
+        // check that the parent state setters have not been called
+        expect(mockSetText).not.toHaveBeenCalled();
+        expect(mockSetSuggestionData).not.toHaveBeenCalled();
+    });
+
+    it("can replace text content when both suggestionData and existingContent are valid", () => {
+        const mockSetSuggestionData = jest.fn();
+        const mockSetText = jest.fn();
+        const replacementText = "🙂";
+        const initialText = "Hello :) world";
+
+        // create a div and append a text node to it
+        const editorDiv = document.createElement("div");
+        const textNode = document.createTextNode(initialText);
+        editorDiv.appendChild(textNode);
+        document.body.appendChild(editorDiv);
+
+        const mockSuggestion: Suggestion = {
+            mappedSuggestion: { keyChar: ":", type: "emoji", text: ":)" },
+            node: textNode,
+            startOffset: 6, // position of ":)"
+            endOffset: 8, // end of ":)"
+        };
+
+        // mock document.getSelection
+        const mockSelection = {
+            setBaseAndExtent: jest.fn(),
+        };
+        jest.spyOn(document, "getSelection").mockReturnValue(mockSelection as any);
+
+        // call the function
+        processTextReplacement(replacementText, mockSuggestion, mockSetSuggestionData, mockSetText);
+
+        // check that the text content was updated correctly
+        expect(textNode.textContent).toBe("Hello 🙂 world");
+
+        // check that setText was called with the new content
+        expect(mockSetText).toHaveBeenCalledWith("Hello 🙂 world");
+
+        // check that suggestionData was cleared
+        expect(mockSetSuggestionData).toHaveBeenCalledWith(null);
+
+        // check that the cursor was positioned at the end
+        expect(mockSelection.setBaseAndExtent).toHaveBeenCalledWith(
+            textNode,
+            "Hello 🙂 world".length,
+            textNode,
+            "Hello 🙂 world".length,
+        );
+
+        // clean up
+        document.body.removeChild(editorDiv);
     });
 });
 
