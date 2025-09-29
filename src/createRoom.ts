@@ -211,12 +211,19 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
+    let stateEncryptedOpts: ICreateRoomOpts | undefined;
     if (opts.encryption) {
         const content: RoomEncryptionEventContent = {
             algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
         };
         if (opts.stateEncryption) {
             content["io.element.msc3414.encrypt_state_events"] = true;
+            stateEncryptedOpts = opts.createOpts;
+            // Erase room name, since we want to encrypt it.
+            opts.createOpts = {
+                ...opts,
+                name: undefined,
+            };
         }
         createOpts.initial_state.push({
             type: "m.room.encryption",
@@ -258,7 +265,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
-    if (opts.avatar) {
+    if (opts.avatar && !opts.stateEncryption) {
         let url = opts.avatar;
         if (opts.avatar instanceof File) {
             ({ content_uri: url } = await client.uploadContent(opts.avatar));
@@ -326,6 +333,24 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             });
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
+        })
+        .then(async () => {
+            // We need to set up initial state manually if state encryption is enabled, since it needs
+            // to be encrypted.
+            if (opts.stateEncryption && stateEncryptedOpts) {
+                if (stateEncryptedOpts.name) {
+                    await client.setRoomName(roomId, stateEncryptedOpts.name);
+                }
+                if (opts.avatar) {
+                    let url: string;
+                    if (opts.avatar instanceof File) {
+                        ({ content_uri: url } = await client.uploadContent(opts.avatar));
+                    } else {
+                        url = opts.avatar;
+                    }
+                    await client.sendStateEvent(roomId, EventType.RoomAvatar, { url }, "");
+                }
+            }
         })
         .then(() => {
             if (opts.parentSpace) {
