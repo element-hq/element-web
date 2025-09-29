@@ -126,7 +126,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 ) : null;
             return (
                 <div>
-                    {_t("encryption|verification|qr_or_sas_header")}
+                    {_t("encryption|verification|verify_by_completing_one_of")}
                     <div className="mx_VerificationPanel_QRPhase_startOptions">
                         {qrBlockDialog}
                         {or}
@@ -224,7 +224,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     private renderQRReciprocatePhase(): JSX.Element {
         const { member, request } = this.props;
         const description = request.isSelfVerification
-            ? _t("encryption|verification|qr_reciprocate_same_shield_device")
+            ? _t("encryption|verification|qr_reciprocate_check_again_device")
             : _t("encryption|verification|qr_reciprocate_same_shield_user", {
                   displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
               });
@@ -237,18 +237,17 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                     <E2EIcon isUser={true} status={E2EStatus.Verified} size={128} hideTooltip={true} />
                     <div className="mx_VerificationPanel_reciprocateButtons">
                         <AccessibleButton
-                            kind="danger"
-                            disabled={this.state.reciprocateButtonClicked}
-                            onClick={this.onReciprocateNoClick}
-                        >
-                            {_t("action|no")}
-                        </AccessibleButton>
-                        <AccessibleButton
                             kind="primary"
                             disabled={this.state.reciprocateButtonClicked}
                             onClick={this.onReciprocateYesClick}
                         >
-                            {_t("action|yes")}
+                            {_t("encryption|verification|qr_reciprocate_yes")}
+                        </AccessibleButton>
+                        <AccessibleButton
+                            disabled={this.state.reciprocateButtonClicked}
+                            onClick={this.onReciprocateNoClick}
+                        >
+                            {_t("encryption|verification|qr_reciprocate_no")}
                         </AccessibleButton>
                     </div>
                 </React.Fragment>
@@ -260,12 +259,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 </p>
             );
         }
-        return (
-            <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">
-                <h3>{_t("encryption|verification|scan_qr")}</h3>
-                {body}
-            </div>
-        );
+        return <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">{body}</div>;
     }
 
     private renderVerifiedPhase(): JSX.Element {
@@ -282,18 +276,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         let description: string;
         if (request.isSelfVerification) {
-            const device = this.state.otherDeviceDetails;
-            if (!device) {
-                // This can happen if the device is logged out while we're still showing verification
-                // UI for it.
-                logger.warn("Verified device we don't know about: " + this.props.request.otherDeviceId);
-                description = _t("encryption|verification|successful_own_device");
-            } else {
-                description = _t("encryption|verification|successful_device", {
-                    deviceName: device.displayName,
-                    deviceId: device.deviceId,
-                });
-            }
+            description = _t("encryption|verification|now_you_can");
         } else {
             description = _t("encryption|verification|successful_user", {
                 displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
@@ -313,35 +296,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     }
 
     private renderCancelledPhase(): JSX.Element {
-        const { member, request } = this.props;
-
-        let startAgainInstruction: string;
-        if (request.isSelfVerification) {
-            startAgainInstruction = _t("encryption|verification|prompt_self");
-        } else {
-            startAgainInstruction = _t("encryption|verification|prompt_user");
-        }
-
-        let text: string;
-        if (request.cancellationCode === "m.timeout") {
-            text = _t("encryption|verification|timed_out") + ` ${startAgainInstruction}`;
-        } else if (request.cancellingUserId === request.otherUserId) {
-            if (request.isSelfVerification) {
-                text = _t("encryption|verification|cancelled_self");
-            } else {
-                text = _t("encryption|verification|cancelled_user", {
-                    displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
-                });
-            }
-            text = `${text} ${startAgainInstruction}`;
-        } else {
-            text = _t("encryption|verification|cancelled") + ` ${startAgainInstruction}`;
-        }
-
         return (
             <div className="mx_UserInfo_container">
-                <h3>{_t("common|verification_cancelled")}</h3>
-                <p>{text}</p>
+                <p>{_t("encryption|verification|cancelled_verification")}</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("action|got_it")}
