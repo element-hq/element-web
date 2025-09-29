@@ -323,6 +323,17 @@ test.describe("Room list filters and sort", () => {
         }
 
         test(
+            "should render the primary filters",
+            { tag: "@screenshot" },
+            async ({ page, app, user }) => {
+                const primaryFilters = getPrimaryFilters(page);
+                await expect(primaryFilters).toMatchScreenshot("collapsed-primary-filters.png");
+                await getFilterExpandButton(page).click();
+                await expect(primaryFilters).toMatchScreenshot("expanded-primary-filters.png");
+            },
+        );
+
+        test(
             "should render the default placeholder when there is no filter",
             { tag: "@screenshot" },
             async ({ page, app, user }) => {
