@@ -11,7 +11,7 @@ import SettingsStore from "../SettingsStore";
 import SettingController from "./SettingController";
 
 export default class EncryptedStateEventsController extends SettingController {
-    public async onChange(): Promise<void> {
+    public onChange(): void {
         SettingsStore.setValue("feature_share_history_on_invite", null, SettingLevel.CONFIG, true);
         PlatformPeg.get()?.reload();
     }
