@@ -32,20 +32,26 @@ test.describe("Release announcement", () => {
             // dismiss the toast so the announcement appears
             await page.getByRole("button", { name: "Dismiss" }).click();
 
-            const name = "Chats has a new look!";
+            const newSoundsName = "We’ve refreshed your sounds";
+            // The new sounds release announcement should be displayed
+            await util.assertReleaseAnnouncementIsVisible(newSoundsName);
+            // Hide the new sounds release announcement
+            const newSoundsDialog = util.getReleaseAnnouncement(newSoundsName);
+            await newSoundsDialog.getByRole("button", { name: "OK" }).click();
 
-            // The release announcement should be displayed
-            await util.assertReleaseAnnouncementIsVisible(name);
-            // Hide the release announcement
-            const dialog = util.getReleaseAnnouncement(name);
+            const newRoomListName = "Chats has a new look!";
+            // The new room list release announcement should be displayed
+            await util.assertReleaseAnnouncementIsVisible(newRoomListName);
+            // Hide the new room list release announcement
+            const dialog = util.getReleaseAnnouncement(newRoomListName);
             await dialog.getByRole("button", { name: "Next" }).click();
 
-            await util.assertReleaseAnnouncementIsNotVisible(name);
+            await util.assertReleaseAnnouncementIsNotVisible(newRoomListName);
 
             await page.reload();
             await expect(page.getByRole("button", { name: "Room options" })).toBeVisible();
-            // Check that once the release announcement has been marked as viewed, it does not appear again
-            await util.assertReleaseAnnouncementIsNotVisible(name);
+            // Check that once the release announcements has been marked as viewed, it does not appear again
+            await util.assertReleaseAnnouncementIsNotVisible(newRoomListName);
         },
     );
 });
