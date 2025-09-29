@@ -1067,7 +1067,6 @@
             "verification_dialog_title_device": "Verify other device",
             "verification_dialog_title_failed": "Verification failed",
             "verification_dialog_title_start_on_other_device": "Start verification on the other device",
-            "verification_dialog_title_unsent": "encryption|verification|verification_dialog_title_unsent",
             "verification_dialog_title_user": "Verification Request",
             "verification_dialog_title_verified": "Device verified",
             "verification_skip_warning": "Without verifying, you won't have access to all your messages and may appear as untrusted to others.",

@@ -127,7 +127,6 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
                             return _t("encryption|verification|verification_dialog_title_device");
                     }
                 case VerificationPhase.Unsent:
-                    return _t("encryption|verification|verification_dialog_title_unsent");
                 case VerificationPhase.Requested:
                     return _t("encryption|verification|verification_dialog_title_start_on_other_device");
                 case VerificationPhase.Cancelled:
