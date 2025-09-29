@@ -218,8 +218,8 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         };
         if (opts.stateEncryption) {
             content["io.element.msc3414.encrypt_state_events"] = true;
-            stateEncryptedOpts = createOpts;
-            // Erase room name, since we want to encrypt it.
+            // Erase room name, since we want to encrypt it. Copy options for later use.
+            stateEncryptedOpts = { ...createOpts };
             delete createOpts.name;
         }
         createOpts.initial_state.push({
