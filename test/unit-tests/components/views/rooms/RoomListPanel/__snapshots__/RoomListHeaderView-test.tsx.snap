@@ -55,7 +55,6 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -94,7 +93,6 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         </button>
       </div>
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -196,7 +194,6 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -235,7 +232,6 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         </button>
       </div>
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -331,7 +327,6 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -370,7 +365,6 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         </button>
       </div>
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -472,7 +466,6 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -511,7 +504,6 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         </button>
       </div>
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -581,7 +573,6 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
@@ -620,7 +611,6 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
         </button>
       </div>
       <div
-        aria-expanded="false"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >

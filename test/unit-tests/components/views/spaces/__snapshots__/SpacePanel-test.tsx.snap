@@ -5,7 +5,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
   <nav
     aria-controls="«r2»"
     aria-describedby="«r2»"
-    aria-expanded="true"
     aria-haspopup="dialog"
     aria-label="Spaces"
     class="mx_SpacePanel collapsed newUi"
