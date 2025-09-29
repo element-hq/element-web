@@ -2839,6 +2839,10 @@
             "notify_at_room": "Notify when someone mentions using @room",
             "notify_keyword": "Notify when someone uses a keyword",
             "notify_mention": "Notify when someone mentions using @displayname or %(mxid)s",
+            "sounds_release_announcement": {
+                "title": "We’ve refreshed your sounds",
+                "description": "Your notification ping and call ringer have been updated—clearer, quicker, and less disruptive"
+            },
             "other_section": "Other things we think you might be interested in:",
             "people_mentions_keywords": "People, Mentions and Keywords",
             "play_sound_for_description": "Applied by default to all rooms on all devices.",
