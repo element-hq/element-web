@@ -2860,6 +2860,10 @@
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded",
             "show_message_desktop_notification": "Show message in desktop notification",
+            "sounds_release_announcement": {
+                "description": "Your notification ping and call ringer have been updated—clearer, quicker, and less disruptive",
+                "title": "We’ve refreshed your sounds"
+            },
             "voip": "Audio and Video calls"
         },
         "preferences": {
