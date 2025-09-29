@@ -35,8 +35,8 @@ describe("VerificationRequestDialog", () => {
     it("Initially, asks how you would like to verify this device", async () => {
         const dialog = renderComponent(VerificationPhase.Ready);
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
-        expect(screen.getByText("Verify this device by completing one of the following:")).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Choose how to verify" })).toBeInTheDocument();
+        expect(screen.getByText("Verify by completing one of the following:")).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
     });
@@ -44,11 +44,8 @@ describe("VerificationRequestDialog", () => {
     it("After we started verification here, says we are waiting for the other device", async () => {
         const dialog = renderComponent(VerificationPhase.Requested);
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
-
-        expect(
-            screen.getByText("To proceed, please accept the verification request on your other device."),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Start verification on the other device" })).toBeInTheDocument();
+        expect(screen.getByText("Once accepted you'll be able to continue with the verification.")).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
     });
@@ -56,10 +53,10 @@ describe("VerificationRequestDialog", () => {
     it("When other device accepted emoji, displays emojis and asks for confirmation", async () => {
         const dialog = renderComponent(VerificationPhase.Started, "emoji");
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Compare emojis" })).toBeInTheDocument();
 
         expect(
-            screen.getByText("Confirm the emoji below are displayed on both devices, in the same order:"),
+            screen.getByText("Confirm that the emojis below match those shown on your other device."),
         ).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
@@ -68,10 +65,18 @@ describe("VerificationRequestDialog", () => {
     it("After scanning QR, shows confirmation dialog", async () => {
         const dialog = renderComponent(VerificationPhase.Started, "qr");
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Verify by scanning" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("heading", {
+                name: "Confirm that you see a green shield on your other device",
+            }),
+        ).toBeInTheDocument();
 
-        expect(screen.getByText("Almost there! Is your other device showing the same shield?")).toBeInTheDocument();
+        // We used to have a subheading here: confirm it is not present.
+        expect(screen.queryByRole("heading", { name: "Verify by scanning" })).not.toBeInTheDocument();
+
+        expect(screen.getByText("Check again on your other device to finish verification.")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Yes, I see a green shield" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "No, I don't see a green shield" })).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
     });
@@ -79,8 +84,13 @@ describe("VerificationRequestDialog", () => {
     it("Shows a successful message if verification finished normally", async () => {
         const dialog = renderComponent(VerificationPhase.Done);
 
-        expect(screen.getByRole("heading", { name: "Verify other device" })).toBeInTheDocument();
-        expect(screen.getByText("You've successfully verified your device!")).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Device verified" })).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                "Now you can read or send messages securely, and anyone you chat with can also trust this device.",
+            ),
+        ).toBeInTheDocument();
 
         expect(dialog.asFragment()).toMatchSnapshot();
     });
@@ -89,11 +99,13 @@ describe("VerificationRequestDialog", () => {
         const dialog = renderComponent(VerificationPhase.Cancelled);
 
         expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
+
+        // We used to have a sub-heading here: confirm is it not present.
+        expect(screen.queryByRole("heading", { name: "Verification cancelled" })).not.toBeInTheDocument();
 
         expect(
             screen.getByText(
-                "You cancelled verification on your other device. Start verification again from the notification.",
+                "Either the request timed out, the request was denied, or there was a verification mismatch.",
             ),
         ).toBeInTheDocument();
 
@@ -119,11 +131,10 @@ describe("VerificationRequestDialog", () => {
 
         // Then it renders the resolved information
         expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
             screen.getByText(
-                "You cancelled verification on your other device. Start verification again from the notification.",
+                "Either the request timed out, the request was denied, or there was a verification mismatch.",
             ),
         ).toBeInTheDocument();
     });
@@ -149,11 +160,10 @@ describe("VerificationRequestDialog", () => {
 
         // Then it renders the information from the request in the promise
         expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
             screen.getByText(
-                "You cancelled verification on your other device. Start verification again from the notification.",
+                "Either the request timed out, the request was denied, or there was a verification mismatch.",
             ),
         ).toBeInTheDocument();
     });
@@ -170,11 +180,10 @@ describe("VerificationRequestDialog", () => {
 
         // Then the dialog is updated to reflect that
         expect(screen.getByRole("heading", { name: "Verification failed" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Verification cancelled" })).toBeInTheDocument();
 
         expect(
             screen.getByText(
-                "You cancelled verification on your other device. Start verification again from the notification.",
+                "Either the request timed out, the request was denied, or there was a verification mismatch.",
             ),
         ).toBeInTheDocument();
     });
@@ -327,7 +336,7 @@ class MockVerificationRequest
     }
 
     async generateQRCode(): Promise<Uint8ClampedArray | undefined> {
-        return undefined;
+        return new Uint8ClampedArray();
     }
 
     get cancellationCode(): string | null {
