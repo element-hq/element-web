@@ -20,6 +20,9 @@ import {
     Preset,
     RestrictedAllowType,
     Visibility,
+    Direction,
+    RoomStateEvent,
+    RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
@@ -335,6 +338,33 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             // We need to set up initial state manually if state encryption is enabled, since it needs
             // to be encrypted.
             if (opts.stateEncryption && stateEncryptedOpts) {
+                const resolvedRoom = await room;
+
+                await new Promise<void>((resolve, reject) => {
+                    if (resolvedRoom.hasEncryptionStateEvent()) {
+                        return resolve();
+                    }
+
+                    const roomState = resolvedRoom.getLiveTimeline().getState(Direction.Forward)!;
+
+                    // Soft fail, since the room will still be functional if the initial state is not encrypted.
+                    const timeout = setTimeout(() => {
+                        logger.warn("Timed out while waiting for room to enable encryption");
+                        roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+                        resolve();
+                    }, 3000);
+
+                    const onRoomStateUpdate = (state: RoomState): void => {
+                        if (state.getStateEvents(EventType.RoomEncryption, "")) {
+                            roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+                            clearTimeout(timeout);
+                            resolve();
+                        }
+                    };
+
+                    roomState.on(RoomStateEvent.Update, onRoomStateUpdate);
+                });
+
                 // Set room name
                 if (stateEncryptedOpts.name) {
                     await client.setRoomName(roomId, stateEncryptedOpts.name);
