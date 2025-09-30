@@ -72,9 +72,9 @@ describe("RoomListViewModel", () => {
                 "Unreads",
                 "People",
                 "Rooms",
+                "Favourites",
                 "Mentions",
                 "Invites",
-                "Favourites",
                 "Low priority",
             ].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
