@@ -183,20 +183,6 @@ const AvatarSetting: React.FC<IProps> = ({
             <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
         </AccessibleButton>
     );
-    if (avatarURL) {
-        avatarElement = (
-            <AccessibleButton
-                element="img"
-                className="mx_AvatarSetting_avatarDisplay"
-                src={avatarURL}
-                alt={avatarAltText}
-                onClick={uploadAvatar}
-                // Inhibit tab stop as we have explicit upload/remove buttons
-                tabIndex={-1}
-                disabled={disabled}
-            />
-        );
-    }
 
     let uploadAvatarBtn: JSX.Element | undefined;
     if (!disabled) {
