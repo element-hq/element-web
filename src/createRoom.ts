@@ -22,7 +22,7 @@ import {
     Visibility,
     Direction,
     RoomStateEvent,
-    RoomState,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
