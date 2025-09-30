@@ -2664,6 +2664,7 @@
             "allow_spellcheck": "Allow spell check",
             "application_language": "Application language",
             "application_language_reload_hint": "The app will reload after selecting another language",
+            "avatar_open_menu": "Open avatar menu",
             "avatar_remove_progress": "Removing image...",
             "avatar_save_progress": "Uploading image...",
             "avatar_upload_error_text": "The file format is not supported or the image is larger than %(size)s.",
