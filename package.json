@@ -79,7 +79,7 @@
         "@types/react-dom": "19.1.9",
         "oidc-client-ts": "3.3.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001741",
+        "caniuse-lite": "1.0.30001745",
         "testcontainers": "^11.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
