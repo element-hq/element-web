@@ -596,14 +596,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
         // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            try {
-                this.reload();
-            } catch (e) {
-                // We catch here as we probably don't want a failed reload to prevent the function
-                // from doing what it's supposed to be doing (which caused
-                // https://github.com/element-hq/element-desktop/issues/2527).
-                console.info("Failed to reload Jitsi widget on popout", e);
-            }
+            this.reload();
         }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
