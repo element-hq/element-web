@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode, createRef, useCallback, useEffect, useState, useId } from "react";
+import React, { type JSX, type ReactNode, createRef, useCallback, useEffect, useState } from "react";
 import EditIcon from "@vector-im/compound-design-tokens/assets/web/icons/edit";
 import UploadIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
@@ -147,9 +147,6 @@ const AvatarSetting: React.FC<IProps> = ({
         }
     }, [avatar]);
 
-    // Prevents ID collisions when this component is used more than once on the same page.
-    const a11yId = useId();
-
     const onFileChanged = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = getFileChanged(e);
@@ -170,17 +167,24 @@ const AvatarSetting: React.FC<IProps> = ({
         setMenuOpen(newOpen);
     }, []);
 
-    let avatarElement = (
+    const avatarElement = (
         <AccessibleButton
             element="div"
-            onClick={uploadAvatar}
+            /**
+             * This button will open a menu. That is done by passing this element as trigger
+             * to the menu component, hence the empty onClick.
+             */
+            onClick={() => {}}
             className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
-            aria-labelledby={disabled ? undefined : a11yId}
-            // Inhibit tab stop as we have explicit upload/remove buttons
-            tabIndex={-1}
             disabled={disabled}
         >
-            <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
+            <BaseAvatar
+                idName={placeholderId}
+                name={placeholderName}
+                size="90px"
+                url={avatarURL}
+                altText={avatarAccessibleName}
+            />
         </AccessibleButton>
     );
 
@@ -190,8 +194,14 @@ const AvatarSetting: React.FC<IProps> = ({
             mx_AvatarSetting_uploadButton_active: menuOpen,
         });
         uploadAvatarBtn = (
-            <div className={uploadButtonClasses}>
-                <EditIcon width="20px" height="20px" />
+            <div
+                className={uploadButtonClasses}
+                role="button"
+                aria-label={_t("settings|general|avatar_open_menu")}
+                tabIndex={0}
+                aria-haspopup="menu"
+            >
+                <EditIcon aria-hidden={true} width="20px" height="20px" />
             </div>
         );
     }
