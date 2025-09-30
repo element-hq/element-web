@@ -89,9 +89,9 @@ interface IProps {
     removeAvatar?: () => void;
 
     /**
-     * The alt text for the avatar
+     * The accessible name for the avatar, eg: "Foo's Profile Picture"
      */
-    avatarAltText: string;
+    avatarAccessibleName: string;
 
     /**
      * String to use for computing the colour of the placeholder avatar if no avatar is set
@@ -121,7 +121,7 @@ export function getFileChanged(e: React.ChangeEvent<HTMLInputElement>): File | n
  */
 const AvatarSetting: React.FC<IProps> = ({
     avatar,
-    avatarAltText,
+    avatarAccessibleName,
     onChange,
     removeAvatar,
     disabled,
@@ -197,7 +197,7 @@ const AvatarSetting: React.FC<IProps> = ({
     }
 
     const content = (
-        <div className="mx_AvatarSetting_avatar" role="group" aria-label={avatarAltText}>
+        <div className="mx_AvatarSetting_avatar" role="group" aria-label={avatarAccessibleName}>
             {avatarElement}
             {uploadAvatarBtn}
         </div>
