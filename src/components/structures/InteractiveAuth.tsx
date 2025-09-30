@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
     type ContinueKind,
-    type CustomAuthType,
+    CustomAuthType,
     type IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
@@ -117,6 +117,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 AuthType.UnstableRegistrationToken,
                 AuthType.Sso,
                 AuthType.SsoUnstable,
+                CustomAuthType.MasCrossSigningReset,
             ],
         });
     }
