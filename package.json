@@ -158,7 +158,7 @@
         "sanitize-html": "2.17.0",
         "tar-js": "^0.3.0",
         "temporal-polyfill": "^0.3.0",
-        "ua-parser-js": "1.0.40",
+        "ua-parser-js": "2.0.5",
         "uuid": "^13.0.0",
         "what-input": "^5.2.10"
     },
