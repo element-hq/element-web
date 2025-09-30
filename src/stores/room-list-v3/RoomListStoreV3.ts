@@ -81,6 +81,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         super(dispatcher);
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, () => {
+            SettingsStore.unwatchSetting("Spaces.showPeopleInSpace");
+            SettingsStore.watchSetting("Spaces.showPeopleInSpace", SpaceStore.instance.activeSpace, () =>
+                this.onActiveSpaceChanged(),
+            );
+
             this.onActiveSpaceChanged();
         });
         SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());

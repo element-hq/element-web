@@ -33,7 +33,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("space|preferences|sections_section")}>
+            <SettingsSection heading={_t("space|preferences|sections_filter")}>
                 <SettingsSubsection>
                     <StyledCheckbox
                         checked={!!showPeople}
@@ -45,7 +45,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                                 !showPeople,
                             );
                         }}
-                        description={_t("space|preferences|show_people_in_space", {
+                        description={_t("space|preferences|show_people_filter_in_space", {
                             spaceName: space.name,
                         })}
                     >
