@@ -65,7 +65,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
                 role="option"
                 aria-selected={this.props.highlighted}
                 ref={this.props.inputRef}
-                tabIndex={0}
+                tabIndex={-1}
             >
                 {this.props.children}
             </li>
