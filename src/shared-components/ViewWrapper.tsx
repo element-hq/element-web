@@ -17,7 +17,11 @@ interface ViewWrapperProps<V> {
      */
     Component: ComponentType<{ vm: V }>;
     /**
-     * The props to pass to the component, which can include both snapshot data and actions.
+     * Optional additional props to pass to the component, besides the view model.
+     */
+    componentProps?: Record<string, any>;
+    /**
+     * The props to pass to the view model, which can include both snapshot data and actions.
      */
     props: Record<string, any>;
 }
@@ -36,6 +40,7 @@ interface ViewWrapperProps<V> {
 export function ViewWrapper<T, V extends ViewModel<T>>({
     props,
     Component,
+    componentProps,
 }: Readonly<ViewWrapperProps<V>>): JSX.Element {
     const vm = useMemo(() => {
         const isFunction = (value: any): value is typeof Function => typeof value === typeof Function;
@@ -48,5 +53,5 @@ export function ViewWrapper<T, V extends ViewModel<T>>({
         return vm as unknown as V;
     }, [props]);
 
-    return <Component vm={vm} />;
+    return <Component vm={vm} {...componentProps} />;
 }

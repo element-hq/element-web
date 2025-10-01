@@ -1,0 +1,21 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.description {
+    font: var(--cpd-font-body-lg-regular);
+    color: var(--cpd-color-text-secondary);
+    margin-bottom: var(--cpd-space-6x);
+}
+
+.list {
+    margin-top: var(--cpd-space-4x);
+    width: 100%;
+}
+
+.button {
+    margin-top: var(--cpd-space-10x);
+}
