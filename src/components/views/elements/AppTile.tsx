@@ -588,7 +588,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // reset messaging
         this.resetWidget(this.props);
         this.iframeParent?.querySelector("iframe")?.remove();
-        // The widget parent will now be re-mounted, at which point startMessaging will be called
+        // iframeParent will now be re-mounted, at which point startMessaging will be called
     }
 
     // TODO replace with full screen interactions
