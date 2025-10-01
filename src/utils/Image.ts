@@ -9,7 +9,6 @@
 import { arrayHasDiff } from "./arrays";
 
 export function mayBeAnimated(mimeType?: string): boolean {
-    // AVIF animation support at the time of writing is only available in Chrome hence not having `blobIsAnimated` check
     return ["image/gif", "image/webp", "image/png", "image/apng", "image/avif"].includes(mimeType!);
 }
 
@@ -32,6 +31,21 @@ function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): strin
  * @returns True if the image is animated, false if not, or undefined if it could not be determined.
  */
 export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
+    try {
+        // Try parse the image using ImageDecoder as this is the most coherent way of asserting whether a piece of media
+        // is or is not animated. Limited availability at time of writing, notably Safari lacks support.
+        // https://developer.mozilla.org/en-US/docs/Web/API/ImageDecoder
+        const data = await blob.arrayBuffer();
+        const decoder = new ImageDecoder({ data, type: blob.type });
+        await decoder.tracks.ready;
+        if ([...decoder.tracks].some((track) => track.animated)) {
+            return true;
+        }
+    } catch (e) {
+        console.warn("ImageDecoder not supported or failed to decode image", e);
+        // Not supported by this browser, fall through to manual checks
+    }
+
     switch (blob.type) {
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.
