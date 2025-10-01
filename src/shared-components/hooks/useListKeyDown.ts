@@ -5,7 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useRef, type RefObject, type KeyboardEvent, type KeyboardEventHandler } from "react";
+import {
+    useCallback,
+    useRef,
+    type RefObject,
+    type KeyboardEvent,
+    type KeyboardEventHandler,
+    type FocusEventHandler,
+    type FocusEvent,
+} from "react";
 
 /**
  * A hook that provides keyboard navigation for a list of options.
@@ -13,8 +21,28 @@ import { useCallback, useRef, type RefObject, type KeyboardEvent, type KeyboardE
 export function useListKeyDown(): {
     listRef: RefObject<HTMLUListElement | null>;
     onKeyDown: KeyboardEventHandler<HTMLUListElement>;
+    onFocus: FocusEventHandler<HTMLUListElement>;
 } {
     const listRef = useRef<HTMLUListElement>(null);
+
+    const onFocus = useCallback((evt: FocusEvent<HTMLUListElement>) => {
+        if (!listRef.current) return;
+
+        if (evt.target === listRef.current) {
+            // By default, focus the selected item
+            let selectedChild = listRef.current?.firstElementChild;
+
+            // If there is a selected item, focus that instead
+            for (const child of listRef.current.children) {
+                if (child.getAttribute("aria-selected") === "true") {
+                    selectedChild = child;
+                    break;
+                }
+            }
+
+            (selectedChild as HTMLElement)?.focus();
+        }
+    }, []);
 
     const onKeyDown = useCallback((evt: KeyboardEvent<HTMLUListElement>) => {
         const { key } = evt;
@@ -60,5 +88,5 @@ export function useListKeyDown(): {
             evt.preventDefault();
         }
     }, []);
-    return { listRef, onKeyDown };
+    return { listRef, onKeyDown, onFocus };
 }
