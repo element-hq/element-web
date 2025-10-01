@@ -5,11 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type HTMLProps, type JSX, type PropsWithChildren } from "react";
+import React, { type HTMLProps, type JSX, type PropsWithChildren, useId } from "react";
 import classNames from "classnames";
 
 import styles from "./RichList.module.css";
 import { Flex } from "../../utils/Flex";
+import { useListKeyDown } from "../../hooks/useListKeyDown";
 
 export interface RichListProps extends HTMLProps<HTMLDivElement> {
     /**
@@ -51,15 +52,25 @@ export function RichList({
     isEmpty = false,
     ...props
 }: PropsWithChildren<RichListProps>): JSX.Element {
+    const id = useId();
+    const { listRef, onKeyDown } = useListKeyDown();
+
     return (
         <Flex className={classNames(styles.richList, className)} direction="column" {...props}>
-            <span className={styles.title} {...titleAttributes}>
+            <span id={id} className={styles.title} {...titleAttributes}>
                 {title}
             </span>
             {isEmpty ? (
                 <span className={styles.empty}>{children}</span>
             ) : (
-                <ul role="listbox" className={styles.content} aria-label={title}>
+                <ul
+                    ref={listRef}
+                    role="listbox"
+                    className={styles.content}
+                    aria-labelledby={id}
+                    tabIndex={0}
+                    onKeyDown={onKeyDown}
+                >
                     {children}
                 </ul>
             )}

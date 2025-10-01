@@ -52,6 +52,7 @@ export function useSuggestion(
     handleMention: (href: string, displayName: string, attributes: AllowedMentionAttributes) => void;
     handleAtRoomMention: (attributes: AllowedMentionAttributes) => void;
     handleCommand: (text: string) => void;
+    handleEmojiSuggestion: (text: string) => void;
     handleEmojiReplacement: () => void;
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
@@ -86,11 +87,15 @@ export function useSuggestion(
 
     const handleEmojiReplacement = (): void => processEmojiReplacement(suggestionData, setSuggestionData, setText);
 
+    const handleEmojiSuggestion = (emoji: string): void =>
+        processTextReplacement(emoji, suggestionData, setSuggestionData, setText);
+
     return {
         suggestion: suggestionData?.mappedSuggestion ?? null,
         handleCommand,
         handleMention,
         handleAtRoomMention,
+        handleEmojiSuggestion,
         handleEmojiReplacement,
         onSelect,
     };
@@ -260,10 +265,31 @@ export function processEmojiReplacement(
     setText: (text?: string) => void,
 ): void {
     // if we do not have a suggestion of the correct type, return early
-    if (suggestionData === null || suggestionData.mappedSuggestion.type !== `custom`) {
+    if (suggestionData?.mappedSuggestion?.type !== `custom`) {
         return;
     }
-    const { node, mappedSuggestion } = suggestionData;
+
+    processTextReplacement(suggestionData.mappedSuggestion.text, suggestionData, setSuggestionData, setText);
+}
+
+/**
+ * Replaces the relevant part of the editor text, replacing the suggestionData selection with the replacement text.
+ * @param replacementText - the text that we will insert into the DOM
+ * @param suggestionData - representation of the part of the DOM that will be replaced
+ * @param setSuggestionData - setter function to set the suggestion state
+ * @param setText - setter function to set the content of the composer
+ */
+export function processTextReplacement(
+    replacementText: string,
+    suggestionData: SuggestionState,
+    setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
+    setText: (text?: string) => void,
+): void {
+    // if we do not have suggestion data return early
+    if (suggestionData === null) {
+        return;
+    }
+    const { node } = suggestionData;
     const existingContent = node.textContent;
 
     if (existingContent == null) {
@@ -273,7 +299,7 @@ export function processEmojiReplacement(
     // replace the emoticon with the suggesed emoji
     const newContent =
         existingContent.slice(0, suggestionData.startOffset) +
-        mappedSuggestion.text +
+        replacementText +
         existingContent.slice(suggestionData.endOffset);
 
     node.textContent = newContent;
@@ -405,6 +431,8 @@ export function getMappedSuggestion(text: string, isAutoReplaceEmojiEnabled?: bo
         case "#":
         case "@":
             return { keyChar: firstChar, text: restOfString, type: "mention" };
+        case ":":
+            return { keyChar: firstChar, text: restOfString, type: "emoji" };
         default:
             return null;
     }

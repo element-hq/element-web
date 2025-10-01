@@ -1106,7 +1106,7 @@ describe("<MatrixChat />", () => {
                 act(() => verify.click());
 
                 // And close the device verification dialog
-                const closeButton = await screen.findByRole("button", { name: "Close dialog" });
+                const closeButton = screen.getByRole("button", { name: "Close dialog" });
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
@@ -1179,7 +1179,7 @@ describe("<MatrixChat />", () => {
                         .fn()
                         .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
                     isCrossSigningReady: jest.fn().mockReturnValue(false),
-                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn() }),
+                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
                 } as any;
             }
         });
@@ -1632,6 +1632,10 @@ describe("<MatrixChat />", () => {
     });
 
     describe("Multi-tab lockout", () => {
+        beforeEach(() => {
+            mockPlatformPeg();
+        });
+
         afterEach(() => {
             Lifecycle.setSessionLockNotStolen();
         });
@@ -1677,6 +1681,8 @@ describe("<MatrixChat />", () => {
             beforeEach(() => {
                 // make sure we start from a clean DOM for each of these tests
                 document.body.replaceChildren();
+                // use the MockPlatform
+                mockPlatformPeg();
             });
 
             function simulateSessionLockClaim() {

@@ -119,7 +119,7 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 </div>
             );
             sasCaption = this.props.isSelf
-                ? _t("encryption|verification|sas_emoji_caption_self")
+                ? _t("encryption|verification|confirm_the_emojis")
                 : _t("encryption|verification|sas_emoji_caption_user");
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);

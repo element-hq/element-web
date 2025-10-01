@@ -228,7 +228,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
  */
 async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedDevicePage: Page) {
     await deviceToVerifyPage.getByRole("button", { name: "Use another device" }).click();
-    await alreadyVerifiedDevicePage.getByRole("button", { name: "Verify session" }).click();
+    await alreadyVerifiedDevicePage.getByRole("button", { name: "Start verification" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "Start" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "They match" }).click();
     await deviceToVerifyPage.getByRole("button", { name: "They match" }).click();

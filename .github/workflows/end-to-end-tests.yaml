@@ -60,15 +60,10 @@ jobs:
                   node-version: "lts/*"
 
             - name: Fetch layered build
-              id: layered_build
               env:
                   # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-              run: |
-                  scripts/layered.sh
-                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
-                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
-                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+              run: scripts/layered.sh
 
             - name: Copy config
               run: cp element.io/develop/config.json config.json
@@ -76,9 +71,7 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
-                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
-              run: |
-                  yarn build
+              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -154,7 +147,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
+              uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
