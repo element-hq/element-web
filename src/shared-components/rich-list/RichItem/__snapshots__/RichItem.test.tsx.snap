@@ -10,7 +10,7 @@ exports[`RichItem renders the item in default state 1`] = `
       aria-label="Rich Item Title"
       class="richItem"
       role="option"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="flex avatar"
@@ -52,7 +52,7 @@ exports[`RichItem renders the item in selected state 1`] = `
       aria-selected="true"
       class="richItem"
       role="option"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         aria-hidden="true"
@@ -103,7 +103,7 @@ exports[`RichItem renders the item without timestamp 1`] = `
       aria-label="Rich Item Title"
       class="richItem"
       role="option"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="flex avatar"
