@@ -10,7 +10,7 @@ import classNames from "classnames";
 
 import styles from "./RichList.module.css";
 import { Flex } from "../../utils/Flex";
-import { useListKeyDown } from "../../hooks/useListKeyDown";
+import { useListKeyboardNavigation } from "../../hooks/useListKeyboardNavigation";
 
 export interface RichListProps extends HTMLProps<HTMLDivElement> {
     /**
@@ -53,7 +53,7 @@ export function RichList({
     ...props
 }: PropsWithChildren<RichListProps>): JSX.Element {
     const id = useId();
-    const { listRef, onKeyDown } = useListKeyDown();
+    const { listRef, onKeyDown, onFocus } = useListKeyboardNavigation();
 
     return (
         <Flex className={classNames(styles.richList, className)} direction="column" {...props}>
@@ -70,6 +70,7 @@ export function RichList({
                     aria-labelledby={id}
                     tabIndex={0}
                     onKeyDown={onKeyDown}
+                    onFocus={onFocus}
                 >
                     {children}
                 </ul>
