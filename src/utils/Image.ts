@@ -26,7 +26,12 @@ function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): strin
     return String.fromCharCode.apply(null, Array.from(arrayBufferRead(arr, start, len)));
 }
 
-export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): Promise<boolean> {
+/**
+ * Check if a Blob contains an animated image.
+ * @param blob The Blob to check.
+ * @returns True if the image is animated, false if not, or undefined if it could not be determined.
+ */
+export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): Promise<boolean | undefined> {
     switch (mimeType) {
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.
@@ -42,7 +47,7 @@ export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): 
                 const animationFlagMask = 1 << 1;
                 return (flags & animationFlagMask) != 0;
             }
-            break;
+            return false;
         }
 
         case "image/gif": {
@@ -100,9 +105,7 @@ export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): 
                 }
                 i += length + 4;
             }
-            break;
+            return false;
         }
     }
-
-    return false;
 }
