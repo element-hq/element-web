@@ -72,11 +72,15 @@ export class MediaEventHelper implements IDestroyable {
     };
 
     private fetchSource = (): Promise<Blob> => {
+        const content = this.event.getContent<MediaEventContent>();
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<MediaEventContent>();
             return decryptFile(content.file!, content.info);
         }
-        return this.media.downloadSource().then((r) => r.blob());
+
+        return this.media
+            .downloadSource()
+            .then((r) => r.blob())
+            .then((blob) => blob.slice(0, blob.size, content.info?.mimetype ?? blob.type));
     };
 
     private fetchThumbnail = (): Promise<Blob | null> => {

@@ -158,7 +158,7 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
     }
 
     // We don't await this immediately so it can happen in the background
-    const isAnimatedPromise = blobIsAnimated(imageFile.type, imageFile);
+    const isAnimatedPromise = blobIsAnimated(imageFile);
 
     const imageElement = await loadImageElement(imageFile);
 

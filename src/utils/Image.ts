@@ -31,8 +31,8 @@ function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): strin
  * @param blob The Blob to check.
  * @returns True if the image is animated, false if not, or undefined if it could not be determined.
  */
-export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): Promise<boolean | undefined> {
-    switch (mimeType) {
+export async function blobIsAnimated(blob: Blob): Promise<boolean | undefined> {
+    switch (blob.type) {
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.
             // Based on https://developers.google.com/speed/webp/docs/riff_container#extended_file_format
