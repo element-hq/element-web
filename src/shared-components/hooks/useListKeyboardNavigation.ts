@@ -18,7 +18,7 @@ import {
 /**
  * A hook that provides keyboard navigation for a list of options.
  */
-export function useListKeyDown(): {
+export function useListKeyboardNavigation(): {
     listRef: RefObject<HTMLUListElement | null>;
     onKeyDown: KeyboardEventHandler<HTMLUListElement>;
     onFocus: FocusEventHandler<HTMLUListElement>;

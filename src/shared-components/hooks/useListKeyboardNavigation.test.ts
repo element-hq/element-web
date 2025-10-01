@@ -8,7 +8,7 @@
 import { type KeyboardEvent } from "react";
 import { renderHook } from "jest-matrix-react";
 
-import { useListKeyDown } from "./useListKeyDown";
+import { useListKeyboardNavigation } from "./useListKeyboardNavigation";
 
 describe("useListKeyDown", () => {
     let mockList: HTMLUListElement;
@@ -54,7 +54,7 @@ describe("useListKeyDown", () => {
             onFocus: React.FocusEventHandler<HTMLUListElement>;
         };
     } {
-        const { result } = renderHook(() => useListKeyDown());
+        const { result } = renderHook(() => useListKeyboardNavigation());
         result.current.listRef.current = mockList;
         return result;
     }
