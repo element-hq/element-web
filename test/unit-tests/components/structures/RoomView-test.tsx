@@ -157,7 +157,6 @@ describe("RoomView", () => {
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
                         threepidInvite={undefined as any}
-                        resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         ref={ref}
                     />
@@ -196,7 +195,6 @@ describe("RoomView", () => {
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
                         threepidInvite={undefined}
-                        resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         onRegistered={jest.fn()}
                     />
