@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useMemo } from "react";
+import React, { type JSX, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
@@ -21,6 +21,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
 import { AudioPlayerView } from "../../../shared-components/audio/AudioPlayerView";
+import { useAutoDisposedViewModel } from "../../../viewmodels/base/useAutoDisposedViewModel";
 
 interface IState {
     error?: boolean;
@@ -69,7 +70,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public componentWillUnmount(): void {
         this.state.playback?.destroy();
-        this.state.audioPlayerVm?.dispose();
     }
 
     protected get showFileBody(): boolean {
@@ -133,7 +133,7 @@ interface AudioPlayerProps {
  * AudioPlayer component that initializes the AudioPlayerViewModel and renders the AudioPlayerView.
  */
 function AudioPlayer({ playback, mediaName }: AudioPlayerProps): JSX.Element {
-    const vm = useMemo(() => new AudioPlayerViewModel({ playback, mediaName }), [playback, mediaName]);
+    const vm = useAutoDisposedViewModel(() => new AudioPlayerViewModel({ playback, mediaName }));
 
     useEffect(() => {
         return () => {
