@@ -55,7 +55,6 @@ import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "../../../../src/components/structures/RoomView";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
