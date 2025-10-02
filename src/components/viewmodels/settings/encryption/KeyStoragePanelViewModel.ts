@@ -49,7 +49,6 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
         matrixClient,
         CryptoEvent.KeyBackupStatus,
         async (enabled?: boolean) => {
-            logger.log("Called with", enabled);
             if (enabled !== undefined) {
                 return enabled;
             }
