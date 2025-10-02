@@ -598,7 +598,6 @@
         "user": "Användare",
         "user_avatar": "Profilbild",
         "username": "Användarnamn",
-        "verification_cancelled": "Verifiering avbruten",
         "verified": "Verifierad",
         "version": "Version",
         "video": "Video",
@@ -967,7 +966,6 @@
             "title": "Återställningsmetod borttagen",
             "warning": "Om du inte tog bort återställningsmetoden kan en angripare försöka komma åt ditt konto. Byt ditt kontolösenord och ställ in en ny återställningsmetod omedelbart i inställningarna."
         },
-        "reset_all_button": "Glömt eller förlorat alla återställningsalternativ? <a>Återställ allt</a>",
         "set_up_recovery": "Ställ in återställning",
         "set_up_recovery_toast_description": "Generera en återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
@@ -990,12 +988,8 @@
             "after_new_login": {
                 "device_verified": "Enhet verifierad",
                 "skip_verification": "Hoppa över verifiering för tillfället",
-                "unable_to_verify": "Kunde inte verifiera den här enheten",
                 "verify_this_device": "Verifiera den här enheten"
             },
-            "cancelled": "Du avbröt verifiering.",
-            "cancelled_self": "Du avbröt verifiering på din andra enhet.",
-            "cancelled_user": "%(displayName)s avbröt verifiering.",
             "cancelling": "Avbryter…",
             "complete_action": "Uppfattat",
             "complete_description": "Du har verifierat den här användaren.",
@@ -1025,46 +1019,33 @@
                 "text": "Ange ID och fingeravtryck för en av dina egna enheter för att verifiera den. OBSERVERA att detta gör att den andra enheten kan skicka och ta emot meddelanden som om den vore du. OM NÅGON HAR BETT DIG ATT KLISTRA IN NÅGOT HÄR ÄR DET TROLIGT ATT DU BLIR LURAD!",
                 "wrong_fingerprint": "Kunde inte verifiera enheten '%(deviceId)s' - det angivna fingeravtrycket '%(fingerprint)s' stämmer inte överens med enhetens fingeravtryck, '%(fprint)s'"
             },
-            "no_key_or_device": "Det ser ut som att du inte har någon säkerhetsnyckel eller några andra enheter du kan verifiera mot. Den här enheten kommer inte kunna komma åt gamla krypterad meddelanden. För att verifiera din identitet på den här enheten så behöver du återställa dina verifieringsnycklar.",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "other_party_cancelled": "Den andra parten avbröt verifieringen.",
             "prompt_encrypted": "Verifiera alla användare i ett rum för att försäkra att det är säkert.",
-            "prompt_self": "Starta verifiering igen från aviseringen.",
             "prompt_unencrypted": "I krypterade rum, verifiera alla användare för att försäkra att det är säkert.",
-            "prompt_user": "Starta verifiering igen från deras profil.",
             "qr_or_sas": "%(qrCode)s eller %(emojiCompare)s",
-            "qr_or_sas_header": "Verifiera den här enheten genom att slutföra ett av följande:",
             "qr_prompt": "Skanna den här unika koden",
-            "qr_reciprocate_same_shield_device": "Nästan klar! Visar din andra enhet samma sköld?",
             "qr_reciprocate_same_shield_user": "Nästan klar! Visar %(displayName)s samma sköld?",
-            "request_toast_accept": "Verifiera session",
             "request_toast_accept_user": "Verifiera användare",
             "request_toast_decline_counter": "Ignorera (%(counter)s)",
             "request_toast_detail": "%(deviceId)s från %(ip)s",
-            "reset_proceed_prompt": "Fortsätt återställning",
             "sas_caption_self": "Verifiera den här enheten genom att bekräfta att det följande numret visas på dess skärm.",
             "sas_caption_user": "Verifiera den här användaren genom att bekräfta att följande nummer visas på deras skärm.",
             "sas_description": "Jämför en unik uppsättning emojier om du inte har en kamera på någon av enheterna",
-            "sas_emoji_caption_self": "Bekräfta att emojierna nedan visas på båda enheterna i samma ordning:",
             "sas_emoji_caption_user": "Verifiera den här användaren genom att bekräfta att följande emojier visas på deras skärm.",
             "sas_match": "De matchar",
             "sas_no_match": "De matchar inte",
             "sas_prompt": "Jämför unika emojier",
             "scan_qr": "Verifiera med skanning",
             "scan_qr_explainer": "Be %(displayName)s att skanna din kod:",
-            "self_verification_hint": "För att fortsätta, acceptera verifieringsförfrågan på din andra enhet.",
             "start_button": "Starta verifiering",
-            "successful_device": "Du har verifierat %(deviceName)s (%(deviceId)s) framgångsrikt!",
-            "successful_own_device": "Du har verifierat din enhet framgångsrikt!",
             "successful_user": "Du har verifierat %(displayName)s framgångsrikt!",
-            "timed_out": "Verifieringen löpte ut.",
             "unsupported_method": "Kunde inte hitta en verifieringsmetod som stöds.",
             "unverified_session_toast_accept": "Ja, det var jag",
             "unverified_session_toast_title": "Ny inloggning. Var det du?",
             "unverified_sessions_toast_description": "Granska för att försäkra dig om att ditt konto är säkert",
             "unverified_sessions_toast_reject": "Senare",
             "unverified_sessions_toast_title": "Du har overifierade sessioner",
-            "verification_description": "Verifiera din identitet för att komma åt krypterade meddelanden och bevisa din identitet för andra.",
             "verification_dialog_title_device": "Verifiera annan enhet",
             "verification_dialog_title_user": "Verifikationsförfrågan",
             "verification_skip_warning": "Om du inte verifierar så kommer du inte komma åt alla dina meddelanden och visas kanske som ej betrodd för andra.",
@@ -1074,9 +1055,6 @@
             "verify_emoji_prompt": "Verifiera genom att jämföra unika emojier.",
             "verify_emoji_prompt_qr": "Om du inte kan skanna koden ovan, verifiera genom att jämföra unika emojier.",
             "verify_later": "Jag verifierar senare",
-            "verify_using_device": "Verifiera med annan enhet",
-            "verify_using_key": "Verifiera med säkerhetsnyckel",
-            "verify_using_key_or_phrase": "Verifiera med säkerhetsnyckel eller -fras",
             "waiting_for_user_accept": "Väntar på att %(displayName)s ska acceptera…",
             "waiting_other_device": "Väntar på att du ska verifiera på din andra enhet…",
             "waiting_other_device_details": "Väntar på att du ska verifiera på din andra enhet, %(deviceName)s (%(deviceId)s)…",
@@ -1366,6 +1344,10 @@
         "name_email_mxid_share_space": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>), eller <a>dela det här rummet</a>.",
         "name_mxid_share_room": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
         "name_mxid_share_space": "Bjud in någon med deras namn eller användarnamn (som <userId/>), eller <a>dela det här utrymmet</a>.",
+        "progress": {
+            "dont_close": "Stäng inte appen förrän det är klart.",
+            "preparing": "Förbereder inbjudningar …"
+        },
         "recents_section": "Senaste konversationerna",
         "room_failed_partial": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
         "room_failed_partial_title": "Vissa inbjudningar kunde inte skickas",
@@ -1763,6 +1745,7 @@
     },
     "power_level": {
         "admin": "Administratör",
+        "creator": "Ägare",
         "custom": "Anpassad (%(level)s)",
         "custom_level": "Anpassad nivå",
         "default": "Standard",
@@ -1870,11 +1853,6 @@
                 "other": "Du kan bara fästa upp till %(count)s widgets"
             },
             "menu": "Öppna menyn",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Du hittar alla fästa meddelanden här. För muspekaren över ett meddelande och välj \"Fäst\" för att lägga till det.",
-                "title": "Alla nya fästa meddelanden"
-            },
             "reply_thread": "Svara på ett <link> trådmeddelande </link>",
             "unpin_all": {
                 "button": "Lossa alla meddelanden",
@@ -1915,6 +1893,7 @@
         "thread_list": {
             "context_menu_label": "Trådalternativ"
         },
+        "title": "Högerpanel",
         "video_room_chat": {
             "title": "Chatt"
         }
@@ -2005,8 +1984,6 @@
             "send_message_start_dm": "Skicka ditt första meddelande för att bjuda in <displayName/> att chatta",
             "start_of_dm_history": "Det här är början på din direktmeddelandehistorik med <displayName/>.",
             "start_of_room": "Det här är början på <roomName/>.",
-            "topic": "Ämne: %(topic)s ",
-            "topic_edit": "Ämne: %(topic)s (<a>redigera</a>)",
             "unencrypted_warning": "Totalsträckskryptering är inte aktiverat",
             "user_created": "%(displayName)s skapade det här rummet.",
             "you_created": "Du skapade det här rummet."
@@ -2062,7 +2039,6 @@
             "button_close_list": "Stäng listan",
             "button_view_all": "Visa alla",
             "description": "Det här rummet har fästa meddelanden. Klicka för att se dem.",
-            "go_to_message": "Visa det fästa meddelandet på tidslinjen.",
             "title": "<bold>%(index)s av %(length)s</bold> fästa meddelanden"
         },
         "read_topic": "Klicka för att läsa ämne",

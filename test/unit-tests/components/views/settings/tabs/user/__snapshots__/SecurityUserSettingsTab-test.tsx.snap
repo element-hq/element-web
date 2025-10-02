@@ -142,7 +142,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   Element can't securely cache encrypted messages locally while running in a web browser. Use 
                   <a
                     class="mx_ExternalLink"
-                    href="https://element.io/get-started"
+                    href="https://element.io/download"
                     rel="noreferrer noopener"
                     target="_blank"
                   >

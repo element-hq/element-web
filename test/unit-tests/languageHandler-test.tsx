@@ -301,7 +301,7 @@ describe("languageHandler JSX", function () {
         it("translates a string to german", async () => {
             await setLanguage("de");
             const translated = _t(basicString);
-            expect(translated).toBe("Räume");
+            expect(translated).toBe("Chats");
         });
 
         it.each(testCasesEn)("%s", (_d, translationString, variables, tags, result) => {

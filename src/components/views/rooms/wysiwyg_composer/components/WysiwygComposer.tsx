@@ -25,6 +25,7 @@ import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { isNotNull } from "../../../../../Typeguards";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { useContainsCommand } from "../hooks/useContainsCommand.ts";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -83,6 +84,9 @@ export const WysiwygComposer = memo(function WysiwygComposer({
         }
     }, [onChange, messageContent, disabled]);
 
+    // Disable formatting buttons if the message content contains a slash command
+    const disableFormatting = useContainsCommand(content, room);
+
     useEffect(() => {
         function handleClick(e: Event): void {
             e.preventDefault();
@@ -123,8 +127,9 @@ export const WysiwygComposer = memo(function WysiwygComposer({
                 handleMention={wysiwyg.mention}
                 handleAtRoomMention={wysiwyg.mentionAtRoom}
                 handleCommand={wysiwyg.command}
+                handleEmoji={wysiwyg.emoji}
             />
-            <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
+            <FormattingButtons composer={wysiwyg} actionStates={actionStates} disabled={disableFormatting} />
             <Editor
                 ref={ref}
                 disabled={!isReady}

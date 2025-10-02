@@ -4,11 +4,11 @@ exports[`<RoomList /> should render a room list 1`] = `
 <DocumentFragment>
   <div
     aria-label="Room list"
-    context="[object Object]"
     data-testid="room-list"
     data-virtuoso-scroller="true"
     role="listbox"
     style="height: 100%; outline: none; overflow-y: auto; position: relative;"
+    tabindex="0"
   >
     <div
       data-viewport-type="element"

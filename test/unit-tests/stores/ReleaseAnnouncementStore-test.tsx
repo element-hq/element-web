@@ -11,8 +11,10 @@ import { mocked } from "jest-mock";
 import SettingsStore, { type CallbackFn } from "../../../src/settings/SettingsStore";
 import { type Feature, ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 import { type SettingLevel } from "../../../src/settings/SettingLevel";
+import ToastStore from "../../../src/stores/ToastStore";
 
 jest.mock("../../../src/settings/SettingsStore");
+jest.mock("../../../src/stores/ToastStore");
 
 describe("ReleaseAnnouncementStore", () => {
     let releaseAnnouncementStore: ReleaseAnnouncementStore;
@@ -47,6 +49,11 @@ describe("ReleaseAnnouncementStore", () => {
             watchCallbacks.push(callback);
             return "watcherId";
         });
+
+        mocked(ToastStore.sharedInstance).mockReturnValue({
+            on: jest.fn(),
+            getToasts: jest.fn().mockReturnValue([]),
+        } as any);
 
         releaseAnnouncementStore = new ReleaseAnnouncementStore();
     });
@@ -110,12 +117,18 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should listen to release announcement data changes in the store", async () => {
         const secondStore = new ReleaseAnnouncementStore();
-        expect(secondStore.getReleaseAnnouncement()).toBe("pinningMessageList");
+        expect(secondStore.getReleaseAnnouncement()).toBe("newNotificationSounds");
 
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe(null);
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe(null);
+        expect(await promise).toBe("newRoomList_intro");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomList_intro");
+    });
+
+    it("should return null when there are toasts on screen", async () => {
+        mocked(ToastStore.sharedInstance().getToasts).mockReturnValue([{} as any]);
+
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
     });
 });

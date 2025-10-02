@@ -21,6 +21,7 @@ import DesktopCapturerSourcePicker from "../../../../src/components/views/elemen
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
+import ToastStore from "../../../../src/stores/ToastStore.ts";
 
 jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -125,6 +126,30 @@ describe("ElectronPlatform", () => {
         expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
         // @ts-ignore mock
         expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
+    });
+
+    it("should show a toast when showToast is fired", async () => {
+        new ElectronPlatform();
+        dispatcher.dispatch(
+            {
+                action: "client_started",
+            },
+            true,
+        );
+        const spy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+
+        const [event, handler] = getElectronEventHandlerCall("showToast")!;
+        handler({} as any, { title: "title", description: "description" });
+
+        expect(event).toBeTruthy();
+        await waitFor(() =>
+            expect(spy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    title: "title",
+                    props: expect.objectContaining({ description: "description" }),
+                }),
+            ),
+        );
     });
 
     describe("updates", () => {

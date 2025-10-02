@@ -133,6 +133,7 @@ import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
+import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -257,6 +258,7 @@ interface LocalRoomViewProps {
     roomView: RefObject<HTMLElement | null>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
+    e2eStatus?: E2EStatus;
 }
 
 /**
@@ -304,6 +306,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     } else {
         composer = (
             <MessageComposer
+                e2eStatus={props.e2eStatus}
                 room={props.localRoom}
                 resizeNotifier={props.resizeNotifier}
                 permalinkCreator={props.permalinkCreator}
@@ -1397,10 +1400,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private async getIsRoomEncrypted(roomId = this.state.roomId): Promise<boolean> {
-        const crypto = this.context.client?.getCrypto();
-        if (!crypto || !roomId) return false;
+        if (!roomId) return false;
 
-        return await crypto.isEncryptionEnabledInRoom(roomId);
+        const room = this.context.client?.getRoom(roomId);
+        const crypto = this.context.client?.getCrypto();
+        if (!room || !crypto) return false;
+
+        return isRoomEncrypted(room, crypto);
     }
 
     private async calculateRecommendedVersion(room: Room): Promise<void> {
@@ -2061,6 +2067,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return (
             <ScopedRoomContextProvider {...this.state}>
                 <LocalRoomView
+                    e2eStatus={this.state.e2eStatus}
                     localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
@@ -2602,7 +2609,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <CallView
                             room={this.state.room}
                             resizing={this.state.resizing}
-                            skipLobby={this.context.roomViewStore.skipCallLobby() ?? false}
                             role="main"
                             onClose={this.onCallClose}
                         />

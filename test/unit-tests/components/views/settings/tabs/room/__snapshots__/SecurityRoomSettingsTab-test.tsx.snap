@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default history visibility when no state event found 1`] = `
 <fieldset
@@ -15,7 +15,7 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
     <div
       class="mx_SettingsSubsection_text"
     >
-      Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.
+      The visibility of existing history will not be changed.
     </div>
   </div>
   <div
@@ -117,6 +117,7 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
   class="mx_ErrorDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
@@ -159,6 +160,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"

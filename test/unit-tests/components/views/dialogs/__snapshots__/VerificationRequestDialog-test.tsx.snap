@@ -1,0 +1,434 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Confirm that you see a green shield on your other device
+      </h1>
+    </div>
+    <div
+      class="mx_UserInfo_container mx_VerificationPanel_reciprocate_section"
+    >
+      <p>
+        Check again on your other device to finish verification.
+      </p>
+      <div
+        class="mx_E2EIcon mx_E2EIcon_verified"
+        data-testid="e2e-icon"
+        style="width: 128px; height: 128px;"
+      >
+        <div
+          class="mx_E2EIcon_normal"
+        />
+      </div>
+      <div
+        class="mx_VerificationPanel_reciprocateButtons"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+        >
+          Yes, I see a green shield
+        </div>
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          No, I don't see a green shield
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`VerificationRequestDialog After we started verification here, says we are waiting for the other device 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Start verification on the other device
+      </h1>
+    </div>
+    <div>
+      Once accepted you'll be able to continue with the verification.
+    </div>
+    <div
+      aria-describedby="«r6»"
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`VerificationRequestDialog Initially, asks how you would like to verify this device 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Choose how to verify
+      </h1>
+    </div>
+    <div>
+      Verify by completing one of the following:
+      <div
+        class="mx_VerificationPanel_QRPhase_startOptions"
+      >
+        <div
+          class="mx_VerificationPanel_QRPhase_startOption"
+        >
+          <p>
+            Scan this unique code
+          </p>
+          <div
+            class="mx_QRCode mx_VerificationQRCode"
+          >
+            <div
+              class="mx_Spinner"
+            >
+              <div
+                aria-label="Loading…"
+                class="mx_Spinner_icon"
+                data-testid="spinner"
+                role="progressbar"
+                style="width: 32px; height: 32px;"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_VerificationPanel_QRPhase_betweenText"
+        >
+           or 
+        </div>
+        <div
+          class="mx_VerificationPanel_QRPhase_startOption"
+        >
+          <p>
+            Compare unique emoji
+          </p>
+          <span
+            class="mx_VerificationPanel_QRPhase_helpText"
+          >
+            Compare a unique set of emoji if you don't have a camera on either device
+          </span>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="0"
+          >
+            Start
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`VerificationRequestDialog Shows a failure message if verification was cancelled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Verification failed
+      </h1>
+    </div>
+    <div
+      class="mx_UserInfo_container"
+    >
+      <p>
+        Either the request timed out, the request was denied, or there was a verification mismatch.
+      </p>
+      <div
+        class="mx_AccessibleButton mx_UserInfo_wideButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Got it
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`VerificationRequestDialog Shows a successful message if verification finished normally 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Device verified
+      </h1>
+    </div>
+    <div
+      class="mx_UserInfo_container mx_VerificationPanel_verified_section"
+    >
+      <p>
+        Now you can read or send messages securely, and anyone you chat with can also trust this device.
+      </p>
+      <div
+        class="mx_E2EIcon mx_E2EIcon_verified"
+        data-testid="e2e-icon"
+        style="width: 128px; height: 128px;"
+      >
+        <div
+          class="mx_E2EIcon_normal"
+        />
+      </div>
+      <div
+        class="mx_AccessibleButton mx_UserInfo_wideButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Got it
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`VerificationRequestDialog When other device accepted emoji, displays emojis and asks for confirmation 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_InfoDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Compare emojis
+      </h1>
+    </div>
+    <div
+      class="mx_UserInfo_container"
+    >
+      <div
+        class="mx_VerificationShowSas"
+      >
+        <p>
+          Confirm that the emojis below match those shown on your other device.
+        </p>
+        <div
+          class="mx_VerificationShowSas_emojiSas"
+        >
+          <div
+            class="mx_VerificationShowSas_emojiSas_block"
+          >
+            <div
+              class="mx_VerificationShowSas_emojiSas_emoji"
+            >
+              🐶
+            </div>
+            <div
+              class="mx_VerificationShowSas_emojiSas_label"
+            >
+              Dog
+            </div>
+          </div>
+          <div
+            class="mx_VerificationShowSas_emojiSas_block"
+          >
+            <div
+              class="mx_VerificationShowSas_emojiSas_emoji"
+            >
+              🐱
+            </div>
+            <div
+              class="mx_VerificationShowSas_emojiSas_label"
+            >
+              Cat
+            </div>
+          </div>
+          <div
+            class="mx_VerificationShowSas_emojiSas_break"
+          />
+        </div>
+        <p />
+        <div
+          class="mx_VerificationShowSas_buttonRow"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="0"
+          >
+            They match
+          </div>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+            role="button"
+            tabindex="0"
+          >
+            They don't match
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

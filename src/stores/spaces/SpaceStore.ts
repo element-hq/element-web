@@ -49,7 +49,7 @@ import {
     UPDATE_SUGGESTED_ROOMS,
     UPDATE_TOP_LEVEL_SPACES,
 } from ".";
-import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
+import { getCachedRoomIdForAlias } from "../../RoomAliasCache";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import {
     flattenSpaceHierarchyWithCache,
@@ -1249,7 +1249,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 let roomId = payload.room_id;
 
                 if (payload.room_alias && !roomId) {
-                    roomId = getCachedRoomIDForAlias(payload.room_alias);
+                    const result = getCachedRoomIdForAlias(payload.room_alias);
+                    if (result) roomId = result.roomId;
                 }
 
                 if (!roomId) return; // we'll get re-fired with the room ID shortly

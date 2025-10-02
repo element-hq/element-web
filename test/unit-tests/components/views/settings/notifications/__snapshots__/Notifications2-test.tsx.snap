@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
 <div>
@@ -121,11 +121,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               I want to be notified for (Default Setting)
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"
@@ -214,11 +214,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Play a sound for
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"
@@ -411,11 +411,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Other things we think you might be interested in:
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_content"
@@ -598,11 +598,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Mentions and Keywords
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"
@@ -1098,11 +1098,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               I want to be notified for (Default Setting)
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"
@@ -1188,11 +1188,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Play a sound for
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"
@@ -1382,11 +1382,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Other things we think you might be interested in:
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_content"
@@ -1566,11 +1566,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
           <div
             class="mx_SettingsSubsectionHeading"
           >
-            <h3
+            <h2
               class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
             >
               Mentions and Keywords
-            </h3>
+            </h2>
           </div>
           <div
             class="mx_SettingsSubsection_description"

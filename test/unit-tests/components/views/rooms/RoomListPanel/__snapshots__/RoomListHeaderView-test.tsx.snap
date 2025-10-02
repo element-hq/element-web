@@ -25,7 +25,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«rc»"
+        id="radix-«rk»"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -54,76 +54,86 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="«rg»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«re»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«rs»"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«rq»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Add"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«rl»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Add"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r15»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </DocumentFragment>
@@ -154,7 +164,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«ro»"
+        id="radix-«r18»"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -183,70 +193,80 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="«rs»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«rq»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«r1g»"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r1e»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Start chat"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-label="Start chat"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </DocumentFragment>
@@ -306,76 +326,86 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="«r4»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r2»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«r8»"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r6»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Add"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r9»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Add"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«rh»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </DocumentFragment>
@@ -406,7 +436,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r28»"
+        id="radix-«r3g»"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -435,76 +465,86 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="«r2c»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r2a»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«r3o»"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r3m»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Add"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r2h»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Add"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r41»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </DocumentFragment>
@@ -532,76 +572,86 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       class="flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="«r2m»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r2k»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="«r4a»"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r48»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Add"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-«r2r»"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-        type="button"
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        aria-haspopup="dialog"
+        class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Add"
+          class="_icon-button_1pz9o_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-«r4j»"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_zr2a0_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </DocumentFragment>

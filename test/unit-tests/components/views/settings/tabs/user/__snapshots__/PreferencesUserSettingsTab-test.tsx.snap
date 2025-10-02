@@ -78,14 +78,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show shortcuts to recently viewed rooms above the room list
+                    Show message previews
                   </span>
                 </label>
                 <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Show shortcuts to recently viewed rooms above the room list"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  aria-checked="false"
+                  aria-disabled="false"
+                  aria-label="Show message previews"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                   id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
                   tabindex="0"

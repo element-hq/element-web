@@ -19,7 +19,6 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     margin: 100px auto auto;
     border-radius: 4px;
-    box-shadow: 0 2px 4px 0 rgb(0, 0, 0, 0.33);
     background-color: $authpage-modal-bg-color;
 
     @media only screen and (max-height: 768px) {
@@ -28,5 +27,10 @@ Please see LICENSE files in the repository root for full details.
 
     @media only screen and (max-width: 480px) {
         margin-top: 0;
+    }
+
+    /* Apply a blurred shadow around the modal */
+    &.mx_AuthPage_modal_withBlur {
+        box-shadow: 0 2px 4px 0 rgb(0, 0, 0, 0.33);
     }
 }

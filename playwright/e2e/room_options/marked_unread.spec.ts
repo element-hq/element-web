@@ -34,7 +34,7 @@ test.describe("Mark as Unread", () => {
         await bot.sendMessage(roomId, "I am a robot. Beep.");
 
         // Regular notification on new message
-        await expect(page.getByLabel(TEST_ROOM_NAME + " 1 unread message.")).toBeVisible();
+        await expect(page.getByLabel(`Open room ${TEST_ROOM_NAME} with 1 unread message.`)).toBeVisible();
         await expect(page).toHaveTitle("Element [1]");
 
         await page.goto("/#/room/" + roomId);
@@ -48,9 +48,12 @@ test.describe("Mark as Unread", () => {
 
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
         await roomTile.focus();
-        await roomTile.getByRole("button", { name: "Room options" }).click();
+        await roomTile.getByRole("button", { name: "More Options" }).click();
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
-        await expect(page.getByLabel(TEST_ROOM_NAME + " Unread messages.")).toBeVisible();
+        // focus the user menu to avoid to have hover decoration
+        await page.getByRole("button", { name: "User menu" }).focus();
+
+        await expect(roomTile.getByTestId("notification-decoration")).toBeVisible();
     });
 });

@@ -43,7 +43,7 @@ class Helpers {
      */
     async verifyDevice(recoveryKey: GeneratedSecretStorageKey) {
         // Select the security phrase
-        await this.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
+        await this.page.getByRole("button", { name: "Use recovery key" }).click();
         await this.enterRecoveryKey(recoveryKey);
         await this.page.getByRole("button", { name: "Done" }).click();
     }
@@ -104,7 +104,10 @@ class Helpers {
 
         const clipboardContent = await this.app.getClipboard();
         await dialog.getByRole("textbox").fill(clipboardContent);
-        await dialog.getByRole("button", { name: confirmButtonLabel }).click();
+        const button = dialog.getByRole("button", { name: confirmButtonLabel });
+        await button.click();
+        // Button should disable immediately after clicking.
+        await expect(button).toBeDisabled();
         await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }

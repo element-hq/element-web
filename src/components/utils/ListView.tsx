@@ -133,13 +133,13 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             }
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                setTabIndexKey(key);
                 isScrollingToItem.current = true;
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
                     done: () => {
+                        setTabIndexKey(key);
                         isScrollingToItem.current = false;
                     },
                 });
@@ -184,28 +184,32 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
             // Guard against null/undefined events and modified keys which we don't want to handle here but do
             // at the settings level shortcuts(E.g. Select next room, etc )
-            if (e || !isModifiedKeyEvent(e)) {
-                if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
-                    scrollToItem(currentIndex - 1, false);
-                    handled = true;
-                } else if (e.code === Key.ARROW_DOWN && currentIndex !== undefined) {
-                    scrollToItem(currentIndex + 1, true);
-                    handled = true;
-                } else if (e.code === Key.HOME) {
-                    scrollToIndex(0);
-                    handled = true;
-                } else if (e.code === Key.END) {
-                    scrollToIndex(items.length - 1);
-                    handled = true;
-                } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
-                    const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                    scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
-                    handled = true;
-                } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
-                    const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                    scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
-                    handled = true;
-                }
+            // Guard against null/undefined events and modified keys
+            if (!e || isModifiedKeyEvent(e)) {
+                onKeyDown?.(e);
+                return;
+            }
+
+            if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
+                scrollToItem(currentIndex - 1, false);
+                handled = true;
+            } else if (e.code === Key.ARROW_DOWN && currentIndex !== undefined) {
+                scrollToItem(currentIndex + 1, true);
+                handled = true;
+            } else if (e.code === Key.HOME) {
+                scrollToIndex(0);
+                handled = true;
+            } else if (e.code === Key.END) {
+                scrollToIndex(items.length - 1);
+                handled = true;
+            } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
+                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
+                handled = true;
+            } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
+                const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
+                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
+                handled = true;
             }
 
             if (handled) {
@@ -281,7 +285,10 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     return (
         <Virtuoso
-            tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
+            // note that either the container of direct children must be focusable to be axe
+            // compliant, so we leave tabIndex as the default so the container can be focused
+            // (virtuoso wraps the children inside another couple of elements so setting it
+            // on those doesn't seem to work, unfortunately)
             ref={virtuosoHandleRef}
             scrollerRef={scrollerRef}
             onKeyDown={keyDownCallback}

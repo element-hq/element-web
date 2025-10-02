@@ -12,6 +12,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
     class="mx_ManageRestrictedJoinRuleDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -189,6 +190,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should render empty state 1`] = `
     class="mx_ManageRestrictedJoinRuleDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"

@@ -585,6 +585,8 @@ Currently, the following UI feature flags are supported:
 - `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
   to true.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
+- `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
+- `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
 
 ## Undocumented / developer options
 

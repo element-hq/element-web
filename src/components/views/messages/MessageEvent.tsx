@@ -51,6 +51,11 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
     getRelationsForEvent?: GetRelationsForEvent;
 
     isSeeingThroughMessageHiddenForModeration?: boolean;
+
+    /**
+     * Optional ID for the root element.
+     */
+    id?: string;
 }
 
 export interface IOperableEventTile {
@@ -308,6 +313,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             getRelationsForEvent: this.props.getRelationsForEvent,
             isSeeingThroughMessageHiddenForModeration: this.props.isSeeingThroughMessageHiddenForModeration,
             inhibitInteraction: this.props.inhibitInteraction,
+            id: this.props.id,
         };
         if (hasCaption) {
             return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;

@@ -7,6 +7,7 @@ exports[`dialogTermsInteractionCallback should render a dialog with the expected
   class=""
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"

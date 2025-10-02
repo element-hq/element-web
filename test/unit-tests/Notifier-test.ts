@@ -371,6 +371,7 @@ describe("Notifier", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+            jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
@@ -384,33 +385,49 @@ describe("Notifier", () => {
             jest.resetAllMocks();
         });
 
-        const emitCallNotifyEvent = (type?: string, roomMention = true) => {
-            const callEvent = mkEvent({
-                type: type ?? EventType.CallNotify,
+        const emitCallNotificationEvent = (
+            params: {
+                type?: string;
+                roomMention?: boolean;
+                lifetime?: number;
+                ts?: number;
+            } = {},
+        ) => {
+            const { type, roomMention, lifetime, ts } = {
+                type: EventType.RTCNotification,
+                roomMention: true,
+                lifetime: 30000,
+                ts: Date.now(),
+                ...params,
+            };
+            const notificationEvent = mkEvent({
+                type: type,
                 user: "@alice:foo",
                 room: roomId,
+                ts,
                 content: {
-                    "application": "m.call",
+                    "notification_type": "ring",
+                    "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
                     "m.mentions": { user_ids: [], room: roomMention },
-                    "notify_type": "ring",
-                    "call_id": "abc123",
+                    lifetime,
+                    "sender_ts": ts,
                 },
                 event: true,
             });
-            emitLiveEvent(callEvent);
-            return callEvent;
+            emitLiveEvent(notificationEvent);
+            return notificationEvent;
         };
 
         it("shows group call toast", () => {
-            const notifyEvent = emitCallNotifyEvent();
+            const notificationEvent = emitCallNotificationEvent();
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    key: getIncomingCallToastKey(notifyEvent.getContent().call_id ?? "", roomId),
+                    key: getIncomingCallToastKey(notificationEvent.getId() ?? "", roomId),
                     priority: 100,
                     component: IncomingCallToast,
                     bodyClassName: "mx_IncomingCallToast",
-                    props: { notifyEvent },
+                    props: { notificationEvent },
                 }),
             );
         });
@@ -438,13 +455,19 @@ describe("Notifier", () => {
             const roomSession = MatrixRTCSession.roomSessionForRoom(mockClient, testRoom);
 
             mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
-            emitCallNotifyEvent();
+            emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
             spyCallMemberships.mockRestore();
         });
 
-        it("should not show toast when calling with non-group call event", () => {
-            emitCallNotifyEvent("event_type");
+        it("should not show toast when calling with a different event type to org.matrix.msc4075.rtc.notification", () => {
+            emitCallNotificationEvent({ type: "event_type" });
+
+            expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+        });
+
+        it("should not show notification event is expired", () => {
+            emitCallNotificationEvent({ ts: Date.now() - 40000 });
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
         });

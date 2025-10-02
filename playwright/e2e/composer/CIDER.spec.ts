@@ -14,6 +14,9 @@ const CtrlOrMeta = process.platform === "darwin" ? "Meta" : "Control";
 test.describe("Composer", () => {
     test.use({
         displayName: "Janet",
+        botCreateOpts: {
+            displayName: "Bob",
+        },
     });
 
     test.use({
@@ -93,6 +96,26 @@ test.describe("Composer", () => {
                     page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 3" }),
                 ).toBeVisible();
             });
+        });
+
+        test("can send mention", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Set up a private room so we have another user to mention
+            await app.client.createRoom({
+                is_direct: true,
+                invite: [bot.credentials.userId],
+            });
+            await app.viewRoomByName("Bob");
+
+            const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+            await composer.pressSequentially("@bob");
+
+            // Note that we include the user ID here as the room tile is also an 'option' role
+            // with text 'Bob'
+            await page.getByRole("option", { name: `Bob ${bot.credentials.userId}` }).click();
+            await expect(composer.getByText("Bob")).toBeVisible();
+            await expect(composer).toMatchScreenshot("mention.png");
+            await composer.press("Enter");
+            await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
         });
     });
 });

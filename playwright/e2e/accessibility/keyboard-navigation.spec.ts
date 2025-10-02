@@ -29,7 +29,7 @@ test.describe("Landmark navigation tests", () => {
 
         // Pressing Control+F6 again will focus room search
         await page.keyboard.press("ControlOrMeta+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         // Pressing Control+F6 again will focus the message composer
         await page.keyboard.press("ControlOrMeta+F6");
@@ -44,7 +44,7 @@ test.describe("Landmark navigation tests", () => {
         await expect(page.locator(".mx_HomePage")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
         await expect(page.locator(".mx_SpaceButton_active")).toBeFocused();
@@ -75,11 +75,11 @@ test.describe("Landmark navigation tests", () => {
 
         // Pressing Control+F6 again will focus room search
         await page.keyboard.press("ControlOrMeta+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         // Pressing Control+F6 again will focus the room tile in the room list
         await page.keyboard.press("ControlOrMeta+F6");
-        await expect(page.locator(".mx_RoomTile_selected")).toBeFocused();
+        await expect(page.locator(".mx_RoomListItemView_selected")).toBeFocused();
 
         // Pressing Control+F6 again will focus the message composer
         await page.keyboard.press("ControlOrMeta+F6");
@@ -94,10 +94,10 @@ test.describe("Landmark navigation tests", () => {
         await expect(page.locator(".mx_BasicMessageComposer_input")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
-        await expect(page.locator(".mx_RoomTile_selected")).toBeFocused();
+        await expect(page.locator(".mx_RoomListItemView_selected")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
         await expect(page.locator(".mx_SpaceButton_active")).toBeFocused();
@@ -131,11 +131,11 @@ test.describe("Landmark navigation tests", () => {
 
         // Pressing Control+F6 again will focus room search
         await page.keyboard.press("ControlOrMeta+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         // Pressing Control+F6 again will focus the room tile in the room list
         await page.keyboard.press("ControlOrMeta+F6");
-        await expect(page.locator(".mx_RoomTile")).toBeFocused();
+        await expect(page.locator(".mx_RoomListItemView")).toBeFocused();
 
         // Pressing Control+F6 again will focus the home section
         await page.keyboard.press("ControlOrMeta+F6");
@@ -150,10 +150,10 @@ test.describe("Landmark navigation tests", () => {
         await expect(page.locator(".mx_HomePage")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
-        await expect(page.locator(".mx_RoomTile")).toBeFocused();
+        await expect(page.locator(".mx_RoomListItemView")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
-        await expect(page.locator(".mx_RoomSearch")).toBeFocused();
+        await expect(page.locator(".mx_RoomListSearch_search")).toBeFocused();
 
         await page.keyboard.press("ControlOrMeta+Shift+F6");
         await expect(page.locator(".mx_SpaceButton_active")).toBeFocused();

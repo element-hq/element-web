@@ -186,7 +186,7 @@ test.describe("Login", () => {
                 await page.goto("/");
                 await login(page, homeserver, credentials);
 
-                await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+                await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
 
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
             });
@@ -219,7 +219,7 @@ test.describe("Login", () => {
                     await page.goto("/");
                     await login(page, homeserver, credentials);
 
-                    await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+                    await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
 
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
                 });
@@ -254,10 +254,10 @@ test.describe("Login", () => {
                     await page.goto("/");
                     await login(page, homeserver, credentials);
 
-                    const h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
-                    await expect(h1).toBeVisible();
+                    const h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    await expect(h2).toBeVisible();
 
-                    await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
+                    await expect(h2.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
                 });
 
                 test("Continues to show verification prompt after cancelling device verification", async ({
@@ -274,18 +274,18 @@ test.describe("Login", () => {
                     // Load the page and see that we are asked to verify
                     await page.goto("/#/welcome");
                     await login(page, homeserver, credentials);
-                    let h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
-                    await expect(h1).toBeVisible();
+                    let h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    await expect(h2).toBeVisible();
 
-                    // Click "Verify with another device"
-                    await page.getByRole("button", { name: "Verify with another device" }).click();
+                    // Click "Use another device"
+                    await page.getByRole("button", { name: "Use another device" }).click();
 
                     // Cancel the new dialog
                     await page.getByRole("button", { name: "Close dialog" }).click();
 
                     // Check that we are still being asked to verify
-                    h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
-                    await expect(h1).toBeVisible();
+                    h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    await expect(h2).toBeVisible();
                 });
             });
 
@@ -303,18 +303,18 @@ test.describe("Login", () => {
                 await page.goto("/");
                 await login(page, homeserver, credentials);
 
-                await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+                await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
 
                 // Start the reset process
-                await page.getByRole("button", { name: "Proceed with reset" }).click();
+                await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // First try cancelling and restarting
                 await page.getByRole("button", { name: "Cancel" }).click();
-                await page.getByRole("button", { name: "Proceed with reset" }).click();
+                await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // Then click outside the dialog and restart
                 await page.getByRole("link", { name: "Powered by Matrix" }).click({ force: true });
-                await page.getByRole("button", { name: "Proceed with reset" }).click();
+                await page.getByRole("button", { name: "Can't confirm?" }).click();
 
                 // Finally we actually continue
                 await page.getByRole("button", { name: "Continue" }).click();

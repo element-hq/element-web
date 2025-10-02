@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PinnedMessagesCard /> should show the empty state when there are no pins 1`] = `
 <DocumentFragment>
@@ -19,7 +19,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         </p>
       </div>
       <button
-        aria-labelledby="«re»"
+        aria-labelledby="«rf»"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -101,7 +101,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«rk»"
+        aria-labelledby="«rl»"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -159,12 +159,13 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rq»"
+                aria-labelledby="«rs»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="«rr»"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -172,7 +173,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rv»"
+                id="radix-«r11»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -198,6 +199,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="«rr»"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -238,12 +240,13 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«r11»"
+                aria-labelledby="«r14»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="«r13»"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -251,7 +254,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«r16»"
+                id="radix-«r19»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -277,6 +280,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="«r13»"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -325,7 +329,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«rt2»"
+        aria-labelledby="«r10f»"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -383,12 +387,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rt8»"
+                aria-labelledby="«r10m»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="«r10l»"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -396,7 +401,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rtd»"
+                id="radix-«r10r»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -422,6 +427,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="«r10l»"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -462,12 +468,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rtf»"
+                aria-labelledby="«r10u»"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="«r10t»"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -475,7 +482,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rtk»"
+                id="radix-«r113»"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -501,6 +508,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="«r10t»"
             >
               <div
                 class="mx_EventTile_body translate"

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type FormEventHandler, type JSX, type MouseEventHandler, useState } from "react";
+import React, { type JSX, type MouseEventHandler, useState } from "react";
 import {
     Breadcrumb,
     Button,
@@ -310,7 +310,7 @@ interface KeyFormProps {
     /**
      * Called when the form is submitted.
      */
-    onSubmit: FormEventHandler;
+    onSubmit: () => Promise<void>;
     /**
      * The recovery key to confirm.
      */
@@ -329,6 +329,7 @@ interface KeyFormProps {
 function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: KeyFormProps): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
+    const [isKeyChangeInProgress, setIsKeyChangeInProgress] = useState<boolean>(false);
     const isKeyInvalidAndFilled = isKeyValid === false;
 
     return (
@@ -336,7 +337,14 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
-                onSubmit(evt);
+                if (isKeyChangeInProgress) {
+                    // Don't allow repeated attempts.
+                    return;
+                }
+                setIsKeyChangeInProgress(true);
+                onSubmit().finally(() => {
+                    setIsKeyChangeInProgress(false);
+                });
             }}
             onChange={async (evt) => {
                 evt.preventDefault();
@@ -360,7 +368,7 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                 )}
             </Field>
             <EncryptionCardButtons>
-                <Button disabled={!isKeyValid}>{submitButtonLabel}</Button>
+                <Button disabled={!isKeyValid || isKeyChangeInProgress}>{submitButtonLabel}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>

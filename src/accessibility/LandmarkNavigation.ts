@@ -9,6 +9,7 @@
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { Action } from "../dispatcher/actions";
 import defaultDispatcher from "../dispatcher/dispatcher";
+import SettingsStore from "../settings/SettingsStore";
 
 export const enum Landmark {
     // This is the space/home button in the left panel.
@@ -72,10 +73,16 @@ export class LandmarkNavigation {
 const landmarkToDomElementMap: Record<Landmark, () => HTMLElement | null | undefined> = {
     [Landmark.ACTIVE_SPACE_BUTTON]: () => document.querySelector<HTMLElement>(".mx_SpaceButton_active"),
 
-    [Landmark.ROOM_SEARCH]: () => document.querySelector<HTMLElement>(".mx_RoomSearch"),
+    [Landmark.ROOM_SEARCH]: () =>
+        SettingsStore.getValue("feature_new_room_list")
+            ? document.querySelector<HTMLElement>(".mx_RoomListSearch_search")
+            : document.querySelector<HTMLElement>(".mx_RoomSearch"),
     [Landmark.ROOM_LIST]: () =>
-        document.querySelector<HTMLElement>(".mx_RoomTile_selected") ||
-        document.querySelector<HTMLElement>(".mx_RoomTile"),
+        SettingsStore.getValue("feature_new_room_list")
+            ? document.querySelector<HTMLElement>(".mx_RoomListItemView_selected") ||
+              document.querySelector<HTMLElement>(".mx_RoomListItemView")
+            : document.querySelector<HTMLElement>(".mx_RoomTile_selected") ||
+              document.querySelector<HTMLElement>(".mx_RoomTile"),
 
     [Landmark.MESSAGE_COMPOSER_OR_HOME]: () => {
         const isComposerOpen = !!document.querySelector(".mx_MessageComposer");

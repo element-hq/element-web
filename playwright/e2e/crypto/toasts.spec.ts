@@ -8,7 +8,7 @@
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 import { test, expect } from "../../element-web-test";
-import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement } from "./utils";
+import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElementAndVerify } from "./utils";
 import { type Bot } from "../../pages/bot";
 
 test.describe("Key storage out of sync toast", () => {
@@ -18,12 +18,12 @@ test.describe("Key storage out of sync toast", () => {
         const res = await createBot(page, homeserver, credentials);
         recoveryKey = res.recoveryKey;
 
-        await logIntoElement(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         await deleteCachedSecrets(page);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page.getByRole("button", { name: "Add room" }).click();
+        await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();
@@ -65,10 +65,10 @@ test.describe("'Turn on key storage' toast", () => {
         const recoveryKey = res.recoveryKey;
         botClient = res.botClient;
 
-        await logIntoElement(page, credentials, recoveryKey.encodedPrivateKey);
+        await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page.getByRole("button", { name: "Add room" }).click();
+        await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();
@@ -126,7 +126,7 @@ test.describe("'Turn on key storage' toast", () => {
         await toast.getByRole("button", { name: "Continue" }).click();
 
         // Then we see the Encryption settings dialog with an option to turn on key storage
-        await expect(page.getByRole("checkbox", { name: "Allow key storage" })).toBeVisible();
+        await expect(page.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
 
         // And when we close that
         await page.getByRole("button", { name: "Close dialog" }).click();
@@ -153,7 +153,7 @@ test.describe("'Turn on key storage' toast", () => {
         await page.getByRole("button", { name: "Go to Settings" }).click();
 
         // Then we see Encryption settings again
-        await expect(page.getByRole("checkbox", { name: "Allow key storage" })).toBeVisible();
+        await expect(page.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
 
         // And when we close that, see the toast, click Dismiss, and Yes, Dismiss
         await page.getByRole("button", { name: "Close dialog" }).click();

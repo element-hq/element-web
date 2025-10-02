@@ -1,20 +1,23 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«ra»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«ra»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -58,18 +61,21 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
 exports[`<PinnedMessageBanner /> should display the last message when the pinned event array changed 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="false"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r4»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r4»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -137,18 +143,21 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
 exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r7»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r7»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -192,18 +201,21 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
 exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r6»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r6»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -247,18 +259,21 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
 exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r9»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r9»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -302,18 +317,21 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
 exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r8»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r8»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -357,18 +375,21 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
 exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="false"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r2»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r2»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -432,18 +453,21 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
 exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="false"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r3»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r3»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -511,18 +535,21 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
 exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
 <DocumentFragment>
   <div
-    aria-label="This room has pinned messages. Click to view them."
+    aria-label="Pinned messages"
     class="mx_PinnedMessageBanner"
     data-single-message="true"
     data-testid="pinned-message-banner"
+    role="region"
   >
     <button
-      aria-label="View the pinned message in the timeline."
+      aria-describedby="«r1»"
+      aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
+        id="«r1»"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"

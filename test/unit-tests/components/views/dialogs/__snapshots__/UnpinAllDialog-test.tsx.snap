@@ -12,6 +12,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
     class="mx_UnpinAllDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"

@@ -51,7 +51,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
+import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
@@ -130,7 +130,6 @@ import { NotificationLevel } from "../../stores/notifications/NotificationLevel"
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
-import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
@@ -238,6 +237,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly stores: SdkContextClass;
     private loadSessionAbortController = new AbortController();
 
+    private sessionLoadStarted = false;
+
     public constructor(props: IProps) {
         super(props);
         this.stores = SdkContextClass.instance;
@@ -312,7 +313,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private async initSession(): Promise<void> {
         // The Rust Crypto SDK will break if two Element instances try to use the same datastore at once, so
         // make sure we are the only Element instance in town (on this browser/domain).
-        if (!(await getSessionLock(() => this.onSessionLockStolen()))) {
+        const platform = PlatformPeg.get();
+        if (platform && !(await platform.getSessionLock(() => this.onSessionLockStolen()))) {
             // we failed to get the lock. onSessionLockStolen should already have been called, so nothing left to do.
             return;
         }
@@ -470,15 +472,21 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.fontWatcher.start();
 
         initSentry(SdkConfig.get("sentry"));
-
-        if (!checkSessionLockFree()) {
-            // another instance holds the lock; confirm its theft before proceeding
-            setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
-        } else {
-            this.startInitSession();
-        }
-
         window.addEventListener("resize", this.onWindowResized);
+
+        // Once we start loading the MatrixClient, we can't stop, even if MatrixChat gets unmounted (as it does
+        // in React's Strict Mode). So, start loading the session now, but only if this MatrixChat was not previously
+        // mounted.
+        if (!this.sessionLoadStarted) {
+            this.sessionLoadStarted = true;
+            const platform = PlatformPeg.get();
+            if (platform && !platform.checkSessionLockFree()) {
+                // another instance holds the lock; confirm its theft before proceeding
+                setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+            } else {
+                this.startInitSession();
+            }
+        }
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -1019,7 +1027,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 presentedId = theAlias;
                 // Store display alias of the presented room in cache to speed future
                 // navigation.
-                storeRoomAliasInCache(theAlias, room.roomId);
+                storeRoomAliasInCache(theAlias, room.roomId, calculateRoomVia(room));
             }
 
             // Store this as the ID of the last room accessed. This is so that we can

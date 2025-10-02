@@ -34,7 +34,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. 
       <br />
       <a
-        href="https://element.io/help#encryption5"
+        href="https://element.io/help#encryption"
         rel="noreferrer noopener"
         target="_blank"
       >

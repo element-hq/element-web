@@ -38,45 +38,20 @@ When `force_disable` is true:
 Note: If the server is configured to forcibly enable encryption for some or all rooms,
 this behaviour will be overridden.
 
-# Secure backup
+# Setting up recovery
 
 By default, Element strongly encourages (but does not require) users to set up
-Secure Backup so that cross-signing identity key and message keys can be
-recovered in case of a disaster where you lose access to all active devices.
+recovery so that you can access history on your new devices as well as retain access to your message history and cryptographic identity when you lose all of your devices.
 
-## Requiring secure backup
+## Removal of old settings
 
-To require Secure Backup to be configured before Element can be used, set the
-following on your homeserver's `/.well-known/matrix/client` config:
+Support for the configuration options `secure_backup_required` and `secure_backup_setup_methods`
+in the `/.well-known/matrix/client` config has been removed.
 
-```json
-{
-    "io.element.e2ee": {
-        "secure_backup_required": true
-    }
-}
-```
-
-## Preferring setup methods
-
-By default, Element offers users a choice of a random key or user-chosen
-passphrase when setting up Secure Backup. If a homeserver admin would like to
-only offer one of these, you can signal this via the
-`/.well-known/matrix/client` config, for example:
-
-```json
-{
-    "io.element.e2ee": {
-        "secure_backup_setup_methods": ["passphrase"]
-    }
-}
-```
-
-The field `secure_backup_setup_methods` is an array listing the methods the
-client should display. Supported values currently include `key` and
-`passphrase`. If the `secure_backup_setup_methods` field is not present or
-exists but does not contain any supported methods, Element will fallback to the
-default value of: `["key", "passphrase"]`.
+Setting up recovery is now always recommended to all users by showing a one-off toast and a
+permanent red dot on the _Encryption_ tab in the _Settings_ dialog. When creating a new
+recovery key, the UI only supports auto-generated keys. Using an existing (custom) passphrase
+still works, but is not exposed in the UI when setting up recovery.
 
 # Compatibility
 

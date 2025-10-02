@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Dropdown /> renders with placeholder 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Dropdown"
+  >
+    <div
+      aria-describedby="id_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="Test Dropdown"
+      aria-owns="id_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="id_value"
+      >
+        Select an option
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

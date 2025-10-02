@@ -129,6 +129,7 @@ export default function RoomHeader({
                 disabled={!!videoCallDisabledReason}
                 color="primary"
                 aria-label={videoCallDisabledReason ?? _t("action|join")}
+                data-testId="join-call-button"
             >
                 {_t("action|join")}
             </Button>

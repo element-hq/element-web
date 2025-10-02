@@ -13,11 +13,18 @@ import { cloneDeep } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Features } from "../settings/Settings";
+import ToastStore from "./ToastStore";
 
 /**
  * The features are shown in the array order.
  */
-const FEATURES = ["pinningMessageList"] as const;
+const FEATURES = [
+    "newNotificationSounds",
+    "newRoomList_intro",
+    "newRoomList_sort",
+    "newRoomList_filter",
+    "newRoomList_settings",
+] as const;
 /**
  * All the features that can be shown in the release announcements.
  */
@@ -76,6 +83,9 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
         SettingsStore.watchSetting("releaseAnnouncementData", null, () => {
             this.emit("releaseAnnouncementChanged", this.getReleaseAnnouncement());
         });
+        ToastStore.sharedInstance().on("update", () => {
+            this.emit("releaseAnnouncementChanged", this.getReleaseAnnouncement());
+        });
     }
 
     /**
@@ -103,6 +113,9 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
         // Do nothing if the release announcement is disabled
         const isReleaseAnnouncementEnabled = this.isReleaseAnnouncementEnabled();
         if (!isReleaseAnnouncementEnabled) return null;
+
+        // also don't show release announcements if any toasts are on screen
+        if (ToastStore.sharedInstance().getToasts().length > 0) return null;
 
         const viewedReleaseAnnouncements = this.getViewedReleaseAnnouncements();
 

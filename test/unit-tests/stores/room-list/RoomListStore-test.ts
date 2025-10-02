@@ -115,6 +115,10 @@ describe("RoomListStore", () => {
         // Given a store we can spy on
         const { store, handleRoomUpdate } = createStore();
 
+        mocked(client.getRoomUpgradeHistory).mockImplementation((roomId) =>
+            roomId === roomWithCreatePredecessor.roomId ? [oldRoom, roomWithCreatePredecessor] : [],
+        );
+
         // When we tell it we joined a new room that has an old room as
         // predecessor in the create event
         const payload = {

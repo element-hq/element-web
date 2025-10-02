@@ -36,6 +36,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
             data-testid="primary-filters"
             gap="var(--cpd-space-3x)"
             direction="row-reverse"
+            justify="space-between"
         >
             {displayChevron && (
                 <IconButton
@@ -52,20 +53,19 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
             )}
             <Flex
                 id={id}
-                as="ul"
+                as="div"
                 role="listbox"
                 aria-label={_t("room_list|primary_filters")}
                 align="center"
                 gap="var(--cpd-space-2x)"
                 wrap="wrap"
+                className="mx_RoomListPrimaryFilters_list"
                 ref={ref}
             >
                 {filters.map((filter, i) => (
-                    <li role="option" aria-selected={filter.active} key={i}>
-                        <ChatFilter selected={filter.active} onClick={() => filter.toggle()}>
-                            {filter.name}
-                        </ChatFilter>
-                    </li>
+                    <ChatFilter key={i} role="option" selected={filter.active} onClick={() => filter.toggle()}>
+                        {filter.name}
+                    </ChatFilter>
                 ))}
             </Flex>
         </Flex>
@@ -104,7 +104,7 @@ function useCollapseFilters<T extends HTMLElement>(
 
                 // If the previous element is on the left element of the current one, it means that the filter is wrapping
                 const previousSibling = child.previousElementSibling as HTMLElement | null;
-                if (previousSibling && child.offsetLeft < previousSibling.offsetLeft) {
+                if (previousSibling && child.offsetLeft <= previousSibling.offsetLeft) {
                     if (!isWrapping) setWrappingIndex(i);
                     isWrapping = true;
                 }

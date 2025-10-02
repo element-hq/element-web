@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { JSHandle, Page } from "@playwright/test";
+import type { JSHandle, Locator, Page } from "@playwright/test";
 import type { MatrixEvent, Room, IndexedDBStore, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../element-web-test";
 import { type Bot } from "../../pages/bot";
@@ -428,7 +428,7 @@ class Helpers {
     }
 
     getRoomListTile(label: string) {
-        return this.page.getByRole("treeitem", { name: new RegExp("^" + label) });
+        return this.page.getByRole("option", { name: new RegExp("^Open room " + label) });
     }
 
     /**
@@ -446,8 +446,8 @@ class Helpers {
      */
     async assertRead(room: RoomRef) {
         const tile = this.getRoomListTile(room.name);
-        await expect(tile.locator(".mx_NotificationBadge_dot")).not.toBeVisible();
-        await expect(tile.locator(".mx_NotificationBadge_count")).not.toBeVisible();
+        await expect(tile.getByTestId("notification-decoration")).not.toBeVisible();
+        await expect(tile).not.toHaveAccessibleName(/with \d* unread message/);
     }
 
     /**
@@ -463,15 +463,18 @@ class Helpers {
     /**
      * Assert a given room is marked as unread (via the room list tile)
      * @param room - the name of the room to check
-     * @param count - the numeric count to assert, or if "." specified then a bold/dot (no count) state is asserted
+     * @param count - the numeric count to assert
      */
-    async assertUnread(room: RoomRef, count: number | ".") {
+    async assertUnread(room: RoomRef, count: number) {
         const tile = this.getRoomListTile(room.name);
-        if (count === ".") {
-            await expect(tile.locator(".mx_NotificationBadge_dot")).toBeVisible();
-        } else {
-            await expect(tile.locator(".mx_NotificationBadge_count")).toHaveText(count.toString());
-        }
+        await expect(tile).toBeVisible();
+        await expect(tile).toHaveAccessibleName(/with \d* unread message/);
+    }
+
+    async unreadCountForRoomTile(tile: Locator): Promise<number> {
+        const accessibleName = await tile.getAttribute("aria-label");
+        const match = accessibleName?.match(/(\d+)\s+unread message/);
+        return match ? parseInt(match[1], 10) : 0;
     }
 
     /**
@@ -487,7 +490,7 @@ class Helpers {
         // .toBeLessThan doesn't have a retry mechanism, so we use .poll
         await expect
             .poll(async () => {
-                return parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10);
+                return this.unreadCountForRoomTile(tile);
             })
             .toBeLessThan(lessThan);
     }
@@ -505,7 +508,7 @@ class Helpers {
         // .toBeGreaterThan doesn't have a retry mechanism, so we use .poll
         await expect
             .poll(async () => {
-                return parseInt(await tile.locator(".mx_NotificationBadge_count").textContent(), 10);
+                return this.unreadCountForRoomTile(tile);
             })
             .toBeGreaterThan(greaterThan);
     }
@@ -597,23 +600,14 @@ class Helpers {
     }
 
     /**
-     * Toggle the `Show rooms with unread messages first` option for the room list
-     */
-    async toggleRoomUnreadOrder() {
-        await this.toggleRoomListMenu();
-        await this.page.getByText("Show rooms with unread messages first").click();
-        // Close contextual menu
-        await this.page.locator(".mx_ContextualMenu_background").click();
-    }
-
-    /**
      * Assert that the room list is ordered as expected
      * @param rooms
      */
     async assertRoomListOrder(rooms: Array<{ name: string }>) {
-        const roomList = this.page.locator(".mx_RoomTile_title");
+        const roomListContainer = this.page.getByTestId("room-list");
+        const roomTiles = roomListContainer.getByRole("option");
         for (const [i, room] of rooms.entries()) {
-            await expect(roomList.nth(i)).toHaveText(room.name);
+            await expect(roomTiles.nth(i)).toHaveAccessibleName(new RegExp(`${room.name}`));
         }
     }
 }

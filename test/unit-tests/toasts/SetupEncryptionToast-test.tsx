@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import * as SecurityManager from "../../../src/SecurityManager";
@@ -31,7 +31,7 @@ describe("SetupEncryptionToast", () => {
 
     describe("Set up recovery", () => {
         it("should render the toast", async () => {
-            showToast(Kind.SET_UP_RECOVERY);
+            act(() => showToast(Kind.SET_UP_RECOVERY));
 
             expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
         });
@@ -40,7 +40,7 @@ describe("SetupEncryptionToast", () => {
             jest.spyOn(DeviceListener.sharedInstance(), "recordRecoveryDisabled");
             jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
 
-            showToast(Kind.SET_UP_RECOVERY);
+            act(() => showToast(Kind.SET_UP_RECOVERY));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Dismiss" }));
@@ -52,13 +52,13 @@ describe("SetupEncryptionToast", () => {
 
     describe("Key storage out of sync (retrieve secrets)", () => {
         it("should render the toast", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
             await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
         });
 
         it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Forgot recovery key?"));
@@ -75,7 +75,7 @@ describe("SetupEncryptionToast", () => {
                 throw new Error("Something went wrong while recovering!");
             });
 
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Enter recovery key"));
@@ -88,15 +88,15 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Key storage out of sync (store secrets)", () => {
+    describe("Key storage out of sync (secrets are missing from 4S)", () => {
         it("should render the toast", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
 
             await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
         });
 
         it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Forgot recovery key?"));
@@ -104,7 +104,7 @@ describe("SetupEncryptionToast", () => {
             expect(dis.dispatch).toHaveBeenCalledWith({
                 action: "view_user_settings",
                 initialTabId: "USER_ENCRYPTION_TAB",
-                props: { initialEncryptionState: "change_recovery_key" },
+                props: { initialEncryptionState: "reset_identity_forgot" },
             });
         });
 
@@ -113,7 +113,7 @@ describe("SetupEncryptionToast", () => {
                 throw new Error("Something went wrong while recovering!");
             });
 
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Enter recovery key"));
@@ -128,7 +128,7 @@ describe("SetupEncryptionToast", () => {
 
     describe("Turn on key storage", () => {
         it("should render the toast", async () => {
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast(Kind.TURN_ON_KEY_STORAGE));
 
             await expect(screen.findByText("Turn on key storage")).resolves.toBeInTheDocument();
             await expect(screen.findByRole("button", { name: "Dismiss" })).resolves.toBeInTheDocument();
@@ -138,7 +138,7 @@ describe("SetupEncryptionToast", () => {
         it("should open settings to the Encryption tab when 'Continue' clicked", async () => {
             jest.spyOn(DeviceListener.sharedInstance(), "recordKeyBackupDisabled");
 
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast(Kind.TURN_ON_KEY_STORAGE));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Continue" }));
@@ -160,7 +160,7 @@ describe("SetupEncryptionToast", () => {
             });
 
             // When we show the toast, and click Dismiss
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast(Kind.TURN_ON_KEY_STORAGE));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Dismiss" }));

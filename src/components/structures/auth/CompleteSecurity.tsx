@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { Glass } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStore";
@@ -22,15 +23,17 @@ interface IProps {
 
 interface IState {
     phase?: Phase;
-    lostKeys: boolean;
 }
 
+/**
+ * Prompts the user to verify their device when they first log in.
+ */
 export default class CompleteSecurity extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
         store.start();
-        this.state = { phase: store.phase, lostKeys: store.lostKeys() };
+        this.state = { phase: store.phase };
     }
 
     public componentDidMount(): void {
@@ -40,7 +43,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
 
     private onStoreUpdate = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
-        this.setState({ phase: store.phase, lostKeys: store.lostKeys() });
+        this.setState({ phase: store.phase });
     };
 
     private onSkipClick = (): void => {
@@ -55,20 +58,14 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const { phase, lostKeys } = this.state;
+        const { phase } = this.state;
         let icon;
         let title;
 
         if (phase === Phase.Loading) {
             return null;
         } else if (phase === Phase.Intro) {
-            if (lostKeys) {
-                icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("encryption|verification|after_new_login|unable_to_verify");
-            } else {
-                icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("encryption|verification|after_new_login|verify_this_device");
-            }
+            // We don't specify an icon nor title since `SetupEncryptionBody` provides its own
         } else if (phase === Phase.Done) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
             title = _t("encryption|verification|after_new_login|device_verified");
@@ -98,17 +95,19 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         }
 
         return (
-            <AuthPage>
-                <CompleteSecurityBody>
-                    <h1 className="mx_CompleteSecurity_header">
-                        {icon}
-                        {title}
-                        {skipButton}
-                    </h1>
-                    <div className="mx_CompleteSecurity_body">
-                        <SetupEncryptionBody onFinished={this.props.onFinished} />
-                    </div>
-                </CompleteSecurityBody>
+            <AuthPage addBlur={false}>
+                <Glass className="mx_Dialog_border">
+                    <CompleteSecurityBody>
+                        <h1 className="mx_CompleteSecurity_header">
+                            {icon}
+                            {title}
+                            {skipButton}
+                        </h1>
+                        <div className="mx_CompleteSecurity_body">
+                            <SetupEncryptionBody onFinished={this.props.onFinished} allowLogout={true} />
+                        </div>
+                    </CompleteSecurityBody>
+                </Glass>
             </AuthPage>
         );
     }

@@ -51,9 +51,10 @@ export class ElementAppPage {
     /**
      * Open room creation dialog.
      */
-    public async openCreateRoomDialog(): Promise<Locator> {
-        await this.page.getByRole("button", { name: "Add room", exact: true }).click();
-        await this.page.getByRole("menuitem", { name: "New room", exact: true }).click();
+
+    public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
+        await this.page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }
 
@@ -70,12 +71,23 @@ export class ElementAppPage {
 
     /**
      * Opens the given room by name. The room must be visible in the
+     * room list and the room may contain unread messages.
+     *
+     * @param name The exact room name to find and click on/open.
+     */
+    public async viewRoomByName(name: string): Promise<void> {
+        // We get the room list by test-id which is a listbox and matching title=name
+        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
+    }
+
+    /**
+     * Opens the given room on the old room list by name. The room must be visible in the
      * room list, but the room list may be folded horizontally, and the
      * room may contain unread messages.
      *
      * @param name The exact room name to find and click on/open.
      */
-    public async viewRoomByName(name: string): Promise<void> {
+    public async viewRoomByNameOnOldRoomList(name: string): Promise<void> {
         // We look for the room inside the room list, which is a tree called Rooms.
         //
         // There are 3 cases:

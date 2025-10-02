@@ -41,7 +41,7 @@ test.describe("Room list", () => {
             }
         });
 
-        test("should render the room list", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        test("should render the room list", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
             const roomListView = getRoomList(page);
             await expect(roomListView.getByRole("option", { name: "Open room room29" })).toBeVisible();
             await expect(roomListView).toMatchScreenshot("room-list.png");
@@ -54,6 +54,7 @@ test.describe("Room list", () => {
             // scrollListToBottom seems to leave the mouse hovered over the list, move it away.
             await page.getByRole("button", { name: "User menu" }).hover();
 
+            await expect(axe).toHaveNoViolations();
             await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
         });
 
@@ -193,6 +194,9 @@ test.describe("Room list", () => {
 
                 await roomListView.getByRole("option", { name: "Open room room20" }).click();
 
+                // Make sure the room with the unread is visible before we press the keyboard action to select it
+                await expect(roomListView.getByRole("option", { name: "1 notification" })).toBeVisible();
+
                 await page.keyboard.press("Alt+Shift+ArrowDown");
 
                 await expect(page.getByRole("heading", { name: "1 notification", level: 1 })).toBeVisible();
@@ -247,6 +251,26 @@ test.describe("Room list", () => {
                 await page.keyboard.press("Escape");
                 // Focus should be back on the notification button
                 await expect(notificationButton).toBeFocused();
+            });
+
+            test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+
+                const topRoom = roomListView.getByRole("option", { name: "Open room room29" });
+
+                // open the room
+                await topRoom.click();
+                // put focus back on the room list item
+                await topRoom.click();
+                await expect(topRoom).toBeFocused();
+
+                await page.keyboard.press("End");
+                const bottomRoom = roomListView.getByRole("option", { name: "Open room room0" });
+                await expect(bottomRoom).toBeFocused();
+
+                await page.keyboard.press("Home");
+                const topRoomAgain = roomListView.getByRole("option", { name: "Open room room29" });
+                await expect(topRoomAgain).toBeFocused();
             });
         });
     });

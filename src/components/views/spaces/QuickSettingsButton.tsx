@@ -29,6 +29,7 @@ import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
@@ -137,16 +138,24 @@ const QuickSettingsButton: React.FC<{
 
     return (
         <>
-            <AccessibleButton
-                className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
-                onClick={openMenu}
-                aria-label={_t("quick_settings|title")}
-                title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
-                ref={handle}
-                aria-expanded={!isPanelCollapsed}
+            <ReleaseAnnouncement
+                feature="newRoomList_settings"
+                header={_t("room_list|release_announcement|settings|title")}
+                description={_t("room_list|release_announcement|settings|description")}
+                closeLabel={_t("room_list|release_announcement|done")}
+                placement="right"
             >
-                {!isPanelCollapsed ? _t("common|settings") : null}
-            </AccessibleButton>
+                <AccessibleButton
+                    className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
+                    onClick={openMenu}
+                    aria-label={_t("quick_settings|title")}
+                    title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
+                    ref={handle}
+                    aria-expanded={!isPanelCollapsed}
+                >
+                    {!isPanelCollapsed ? _t("common|settings") : null}
+                </AccessibleButton>
+            </ReleaseAnnouncement>
 
             {contextMenu}
         </>
