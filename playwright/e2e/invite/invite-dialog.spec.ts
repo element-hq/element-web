@@ -54,9 +54,7 @@ test.describe("Invite dialog", function () {
 
         await other.getByRole("option", { name: botName }).click();
 
-        await expect(
-            other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
-        ).toBeVisible();
+        await expect(other.getByTestId("invite-dialog-input-wrapper").getByText(botName)).toBeVisible();
 
         // Take a snapshot of the invite dialog with a user pill
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-with-user-pill.png");
@@ -95,9 +93,7 @@ test.describe("Invite dialog", function () {
             await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
             await other.getByRole("option", { name: botName }).click();
 
-            await expect(
-                other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
-            ).toBeVisible();
+            await expect(other.getByTestId("invite-dialog-input-wrapper").getByText(botName)).toBeVisible();
 
             // Take a snapshot of the invite dialog with a user pill
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png");

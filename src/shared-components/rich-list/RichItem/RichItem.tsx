@@ -12,7 +12,7 @@ import styles from "./RichItem.module.css";
 import { humanizeTime } from "../../utils/humanize";
 import { Flex } from "../../utils/Flex";
 
-export interface RichItemProps extends HTMLAttributes<HTMLButtonElement> {
+export interface RichItemProps extends HTMLAttributes<HTMLLIElement> {
     /**
      * Avatar to display at the start of the item
      */
@@ -64,10 +64,10 @@ export const RichItem = memo(function RichItem({
     ...props
 }: RichItemProps): JSX.Element {
     return (
-        <button
+        <li
             className={styles.richItem}
-            type="button"
             role="option"
+            tabIndex={-1}
             aria-selected={selected}
             aria-label={title}
             {...props}
@@ -80,7 +80,7 @@ export const RichItem = memo(function RichItem({
                     {humanizeTime(timestamp)}
                 </span>
             )}
-        </button>
+        </li>
     );
 });
 
