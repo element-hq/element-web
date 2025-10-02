@@ -49,6 +49,9 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
         matrixClient,
         CryptoEvent.KeyBackupStatus,
         async (enabled?: boolean) => {
+            // If we're called as a result of an event, rather than during
+            // initialisation, we can get the backup status from the event
+            // instead of having to query the backup version.
             if (enabled !== undefined) {
                 return enabled;
             }
