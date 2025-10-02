@@ -307,6 +307,30 @@ describe("<MatrixChat />", () => {
         });
     });
 
+    it("should notify resizenotifier when left panel hidden", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "hide_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
+    });
+
+    it("should notify resizenotifier when left panel shown", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "show_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
+    });
+
     describe("when query params have a OIDC params", () => {
         const issuer = "https://auth.com/";
         const homeserverUrl = "https://matrix.org";
