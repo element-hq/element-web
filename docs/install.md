@@ -8,16 +8,147 @@ There are some exceptions like when using localhost, which is considered a [secu
 
 ## Release tarball
 
-1. Download the latest version from <https://github.com/element-hq/element-web/releases>
-1. Untar the tarball on your web server
-1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
-1. Configure the correct caching headers in your webserver (see below)
-1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](config.md) for details.
-1. Enter the URL into your browser and log into Element!
+The release tarball contains a pre-built, production-ready version of Element Web that you can deploy to any static web server.
 
-Releases are signed using gpg and the OpenPGP standard,
-and can be checked against the public key located at <https://packages.element.io/element-release-key.asc>.
+### Installation Steps
+
+1. **Download the latest release**
+
+   Download from <https://github.com/element-hq/element-web/releases>
+
+   Releases are signed using GPG and the OpenPGP standard. You can verify the signature against the public key at <https://packages.element.io/element-release-key.asc>
+
+2. **Extract the tarball**
+
+   ```bash
+   tar -xzf element-v*.tar.gz
+   ```
+
+   This creates a directory named `element-x.x.x` containing all the static files.
+
+3. **Deploy to your web server**
+
+   Move or symlink the directory to your web server's document root:
+
+   ```bash
+   # Example: Move to /var/www/element
+   sudo mv element-x.x.x /var/www/element
+
+   # Or create a symlink for easier version management
+   sudo ln -s /var/www/element-x.x.x /var/www/element
+   ```
+
+4. **Configure Element Web**
+
+   Copy the sample configuration and customize it:
+
+   ```bash
+   cd /var/www/element
+   cp config.sample.json config.json
+   ```
+
+   Edit `config.json` to configure your homeserver and other settings. See the [configuration docs](config.md) for details.
+
+5. **Configure your web server**
+
+   Set up proper caching headers and security settings. See the [web server configuration examples](#web-server-configuration) below.
+
+6. **Access Element Web**
+
+   Navigate to your server's URL (e.g., `https://element.example.com`) and log in!
+
+### Web Server Configuration
+
+Element Web requires specific caching headers to work correctly. The following files **must not be cached** to ensure users always get the latest version:
+
+- `/index.html`
+- `/version`
+- `/config*.json` (including `config.json` and `config.domain.json`)
+
+Additionally, configure `Cache-Control: no-cache` for `/` to force browsers to revalidate on page load.
+
+#### Nginx Configuration
+
+Create a server block for Element Web (e.g., `/etc/nginx/sites-available/element`):
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name element.example.com;
+
+    # Redirect HTTP to HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name element.example.com;
+
+    # SSL configuration
+    ssl_certificate /etc/ssl/certs/element.example.com.crt;
+    ssl_certificate_key /etc/ssl/private/element.example.com.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # Document root
+    root /var/www/element;
+    index index.html;
+
+    # Caching configuration
+    # Disable caching for index.html to ensure updates are loaded
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    # Disable caching for version file
+    location = /version {
+        add_header Cache-Control "no-cache";
+    }
+
+    # Disable caching for config files
+    location ~* ^/config.*\.json$ {
+        add_header Cache-Control "no-cache";
+    }
+}
+```
+
+Enable the site and reload nginx:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/element /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+#### Caddy Configuration
+
+Create a Caddyfile for Element Web (e.g., `/etc/caddy/Caddyfile`):
+
+```caddyfile
+element.example.com {
+    # Caddy automatically handles HTTPS with Let's Encrypt
+
+    # Document root
+    root * /var/www/element
+
+    # Enable file serving
+    file_server
+    
+    # Disable caching for specific files and directories
+    @nocache {
+        path /index.html /version /config*.json 
+    }
+    header @nocache Cache-Control "no-cache"
+}
+```
+
+Reload Caddy:
+
+```bash
+sudo caddy reload --config /etc/caddy/Caddyfile
+```
 
 ## Debian package
 
