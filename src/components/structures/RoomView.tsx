@@ -2628,7 +2628,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     <ErrorBoundary>
                         <MainSplit
                             panel={rightPanel}
-                            resizeNotifier={this.context.resizeNotifier}
                             sizeKey={sizeKey}
                             defaultSize={defaultSize}
                             analyticsRoomType={analyticsRoomType}
