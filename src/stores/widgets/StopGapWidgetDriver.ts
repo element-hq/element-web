@@ -138,7 +138,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
             // For the legacy membership type
             this.allowedCapabilities.add(
-                WidgetEventCapability.forStateEvent(EventDirection.Send, "org.matrix.msc3401.call.member", clientUserId)
+                WidgetEventCapability.forStateEvent(EventDirection.Send, EventType.GroupCallMemberPrefix, clientUserId)
                     .raw,
             );
             const clientDeviceId = MatrixClientPeg.safeGet().getDeviceId();
@@ -148,14 +148,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
-                        "org.matrix.msc3401.call.member",
+                        EventType.GroupCallMemberPrefix,
                         `_${clientUserId}_${clientDeviceId}`,
                     ).raw,
                 );
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
-                        "org.matrix.msc3401.call.member",
+                        EventType.GroupCallMemberPrefix,
                         `_${clientUserId}_${clientDeviceId}_m.call`,
                     ).raw,
                 );
@@ -163,20 +163,20 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
-                        "org.matrix.msc3401.call.member",
+                        EventType.GroupCallMemberPrefix,
                         `${clientUserId}_${clientDeviceId}`,
                     ).raw,
                 );
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
-                        "org.matrix.msc3401.call.member",
+                        EventType.GroupCallMemberPrefix,
                         `${clientUserId}_${clientDeviceId}_m.call`,
                     ).raw,
                 );
             }
             this.allowedCapabilities.add(
-                WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call.member").raw,
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.GroupCallMemberPrefix).raw,
             );
             // for determining auth rules specific to the room version
             this.allowedCapabilities.add(
@@ -193,6 +193,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 //  MSC4310: Add dev and final event to ease future transition,
                 EventType.RTCDecline,
                 "m.rtc.decline",
+                // For sticky events
+                EventType.GroupCallMemberPrefix,
             ];
             for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);

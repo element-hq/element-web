@@ -826,6 +826,16 @@
         "low_bandwidth_mode_description": "Requires compatible homeserver.",
         "main_timeline": "Main timeline",
         "manual_device_verification": "Manual device verification",
+        "matrix_rtc": {
+            "active_focus": "Active focus",
+            "call_intent": "Call intent",
+            "connection_state": "Connection state",
+            "no_active_sessions": "There are no active Matrix RTC sessions",
+            "participants": "Participants",
+            "session_active": "Session active",
+            "session_ended": "Session ended"
+        },
+        "matrix_rtc_debug": "Matrix RTC debug",
         "no_receipt_found": "No receipt found",
         "notification_state": "Notification state is <strong>%(notificationState)s</strong>",
         "notifications_debug": "Notifications debug",
