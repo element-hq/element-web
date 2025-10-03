@@ -195,7 +195,7 @@ export default class ScrollPanel extends React.Component<IProps> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.context.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
+        this.context?.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
         this.checkScroll();
     }
 
@@ -216,14 +216,14 @@ export default class ScrollPanel extends React.Component<IProps> {
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
 
-        this.context.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
+        this.context?.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
 
         this.divScroll = null;
     }
 
     private onScroll = (ev: Event): void => {
         // skip scroll events caused by resizing
-        if (this.context.resizeNotifier && this.context.resizeNotifier.isResizing) return;
+        if (this.context?.resizeNotifier && this.context.resizeNotifier.isResizing) return;
         debuglog("onScroll called past resize gate; scroll node top:", this.getScrollNode().scrollTop);
         this.scrollTimeout?.restart();
         this.saveScrollState();
