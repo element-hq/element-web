@@ -11,6 +11,7 @@ import { render, fireEvent } from "jest-matrix-react";
 
 import MainSplit from "../../../../src/components/structures/MainSplit";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics.ts";
+import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
 describe("<MainSplit/>", () => {
     const children = (
@@ -19,9 +20,11 @@ describe("<MainSplit/>", () => {
         </div>
     );
     const panel = <div>Right panel</div>;
+    let sdkContext: SdkContextClass;
 
     beforeEach(() => {
         localStorage.clear();
+        sdkContext = new SdkContextClass();
     });
 
     it("renders", () => {
@@ -65,11 +68,13 @@ describe("<MainSplit/>", () => {
                 defaultSize={400}
                 analyticsRoomType="other_room"
             />,
+            { wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider> },
         );
 
         const spy = jest.spyOn(PosthogAnalytics.instance, "trackEvent");
 
         const handle = container.querySelector(".mx_ResizeHandle--horizontal")!;
+        expect(handle).toBeInTheDocument();
         fireEvent.mouseDown(handle);
         fireEvent.resize(handle, { clientX: 0 });
         fireEvent.mouseUp(handle);
