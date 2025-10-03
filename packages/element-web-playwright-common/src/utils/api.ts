@@ -64,10 +64,16 @@ export class Api {
  * Credentials for a user.
  */
 export interface Credentials {
+    /** The base URL of the homeserver's CS API. */
+    homeserverBaseUrl: string;
+
     accessToken: string;
     userId: string;
     deviceId: string;
+
+    /** The domain part of the user's matrix ID. */
     homeServer: string;
+
     password: string | null; // null for password-less users
     displayName?: string;
     username: string; // the localpart of the userId
@@ -86,7 +92,7 @@ export class ClientServerApi extends Api {
      * @param userId - The user ID to register.
      * @param password - The password to use for the user.
      */
-    public async loginUser(userId: string, password: string): Promise<Credentials> {
+    public async loginUser(userId: string, password: string): Promise<Omit<Credentials, "homeserverBaseUrl">> {
         const json = await this.request<{
             access_token: string;
             user_id: string;

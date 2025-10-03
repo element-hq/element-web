@@ -12,6 +12,32 @@ import { sample, uniqueId } from "lodash-es";
 import { test as base } from "./services.js";
 import { Credentials } from "../utils/api.js";
 
+/** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
+export async function populateLocalStorageWithCredentials(page: Page, credentials: Credentials) {
+    await page.addInitScript(
+        ({ credentials }) => {
+            window.localStorage.setItem("mx_hs_url", credentials.homeserverBaseUrl);
+            window.localStorage.setItem("mx_user_id", credentials.userId);
+            window.localStorage.setItem("mx_access_token", credentials.accessToken);
+            window.localStorage.setItem("mx_device_id", credentials.deviceId);
+            window.localStorage.setItem("mx_is_guest", "false");
+            window.localStorage.setItem("mx_has_pickle_key", "false");
+            window.localStorage.setItem("mx_has_access_token", "true");
+
+            window.localStorage.setItem(
+                "mx_local_settings",
+                JSON.stringify({
+                    // Retain any other settings which may have already been set
+                    ...JSON.parse(window.localStorage.getItem("mx_local_settings") ?? "{}"),
+                    // Ensure the language is set to a consistent value
+                    language: "en",
+                }),
+            );
+        },
+        { credentials },
+    );
+}
+
 export const test = base.extend<{
     /**
      * The displayname to use for the user registered in {@link #credentials}.
@@ -38,7 +64,7 @@ export const test = base.extend<{
 
     /**
      * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
-     * the credentials into localStorage per {@link #homeserver}, and then loads the front page of the
+     * the credentials into localStorage per {@link #pageWithCredentials}, and then loads the front page of the
      * app.
      */
     user: Credentials;
@@ -58,30 +84,8 @@ export const test = base.extend<{
         });
     },
 
-    pageWithCredentials: async ({ page, homeserver, credentials }, use) => {
-        await page.addInitScript(
-            ({ baseUrl, credentials }) => {
-                // Seed the localStorage with the required credentials
-                window.localStorage.setItem("mx_hs_url", baseUrl);
-                window.localStorage.setItem("mx_user_id", credentials.userId);
-                window.localStorage.setItem("mx_access_token", credentials.accessToken);
-                window.localStorage.setItem("mx_device_id", credentials.deviceId);
-                window.localStorage.setItem("mx_is_guest", "false");
-                window.localStorage.setItem("mx_has_pickle_key", "false");
-                window.localStorage.setItem("mx_has_access_token", "true");
-
-                window.localStorage.setItem(
-                    "mx_local_settings",
-                    JSON.stringify({
-                        // Retain any other settings which may have already been set
-                        ...JSON.parse(window.localStorage.getItem("mx_local_settings") ?? "{}"),
-                        // Ensure the language is set to a consistent value
-                        language: "en",
-                    }),
-                );
-            },
-            { baseUrl: homeserver.baseUrl, credentials },
-        );
+    pageWithCredentials: async ({ page, credentials }, use) => {
+        await populateLocalStorageWithCredentials(page, credentials);
         await use(page);
     },
 

@@ -13,6 +13,8 @@ import { routeConfigJson } from "./utils/config_json.js";
 
 export * from "./utils/config_json.js";
 
+export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
+
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
 process.env["PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS"] = "1";
