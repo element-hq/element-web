@@ -7,16 +7,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useContext, useEffect, useMemo, useState } from "react";
+import {
+    type MatrixRTCSession,
+    MatrixRTCSessionEvent,
+    MatrixRTCSessionManagerEvents,
+    type CallMembership,
+} from "matrix-js-sdk/src/matrixrtc";
+import { Badge } from "@vector-im/compound-web";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
-import { _t, _td } from "../../../../languageHandler.tsx";
+import { _t } from "../../../../languageHandler.tsx";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../../hooks/useEventEmitter.ts";
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager.ts";
-import { CallMembership, MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/index.ts";
-import { Badge } from "@vector-im/compound-web";
 import { useCall } from "../../../../hooks/useCall.ts";
-import { ElementCall } from "../../../../models/Call.ts";
+import { type ElementCall } from "../../../../models/Call.ts";
 
 function MatrixRTCSessionInfo({
     session,
@@ -39,7 +43,7 @@ function MatrixRTCSessionInfo({
     ) as { members: CallMembership[]; changeTs: Date } | undefined;
 
     // Re-check when memberships change.
-    const focus = useMemo(() => session.getActiveFocus(), [memberships]);
+    const focus = useMemo(() => session.getActiveFocus(), [memberships, session]);
     return (
         <section>
             <h3>
@@ -67,7 +71,7 @@ function MatrixRTCSessionInfo({
                     <p>{_t("common|n_members", { count: memberships.length })}:</p>
                     <ul>
                         {memberships.map((member) => (
-                            <li>
+                            <li key={member.membershipID}>
                                 <code>
                                     {member.sender} {member.deviceId}
                                 </code>
@@ -94,7 +98,7 @@ function MatrixRTCSessionInfo({
                             <p>{_t("devtools|matrix_rtc|participants")}:</p>
                             <ul>
                                 {[...call.participants.entries()].map(([roomMember, deviceIds]) => (
-                                    <li>
+                                    <li key={roomMember.userId}>
                                         {roomMember.userId} {[...deviceIds].join(", ")}
                                     </li>
                                 ))}
@@ -115,7 +119,7 @@ export default function MatrixRtcDebug({ onBack }: IDevtoolsProps): JSX.Element 
     const context = useContext(DevtoolsContext);
     const client = useMatrixClientContext();
     const call = useCall(context.room.roomId);
-    let [sessions, setSession] = useState<{ session: MatrixRTCSession; active: boolean; start: Date }[]>([]);
+    const [sessions, setSession] = useState<{ session: MatrixRTCSession; active: boolean; start: Date }[]>([]);
     useTypedEventEmitter(
         client.matrixRTC,
         MatrixRTCSessionManagerEvents.SessionStarted,
@@ -150,7 +154,7 @@ export default function MatrixRtcDebug({ onBack }: IDevtoolsProps): JSX.Element 
         if (existingSession) {
             setSession([{ session: existingSession, active: true, start: new Date() }]);
         }
-    }, []);
+    });
 
     return (
         <BaseTool onBack={onBack}>
