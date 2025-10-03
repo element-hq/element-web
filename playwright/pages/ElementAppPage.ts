@@ -212,6 +212,21 @@ export class ElementAppPage {
     }
 
     /**
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
+     */
+    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+        await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
+        await this.page.locator(".mx_BaseCard").getByRole("menuitem", { name: "Invite" }).click();
+        const inviteDialog = this.page.locator(".mx_InviteDialog_other");
+        const input = inviteDialog.getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await inviteDialog.getByRole("button", { name: "Invite" }).click();
+    }
+
+    /**
      * Get a locator for the tooltip associated with an element
      * @param e The element with the tooltip
      * @returns Locator to the tooltip
