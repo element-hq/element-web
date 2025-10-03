@@ -9,6 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type Config as BaseConfig } from "@element-hq/element-web-module-api";
 
 import { test as base } from "./fixtures/index.js";
+import { routeConfigJson } from "./utils/config_json.js";
+
+export * from "./utils/config_json.js";
 
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
@@ -68,32 +71,7 @@ export const test = base.extend<TestFixtures>({
     labsFlags: async ({}, use) => use([]),
     disablePresence: async ({}, use) => use(false),
     page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
-        await context.route(`http://localhost:8080/config.json*`, async (route) => {
-            const json = {
-                ...CONFIG_JSON,
-                ...config,
-                default_server_config: {
-                    "m.homeserver": {
-                        base_url: homeserver.baseUrl,
-                    },
-                    ...config.default_server_config,
-                },
-            };
-            json["features"] = {
-                ...json["features"],
-                // Enable the lab features
-                ...labsFlags.reduce<NonNullable<(typeof CONFIG_JSON)["features"]>>((obj, flag) => {
-                    obj[flag] = true;
-                    return obj;
-                }, {}),
-            };
-            if (disablePresence) {
-                json["enable_presence_by_hs_url"] = {
-                    [homeserver.baseUrl]: false,
-                };
-            }
-            await route.fulfill({ json });
-        });
+        await routeConfigJson(context, homeserver.baseUrl, config, labsFlags, disablePresence);
         await use(page);
     },
 });
