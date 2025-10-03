@@ -15,18 +15,21 @@ import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 const ROOM_ID = "!room:id";
 
 describe("AppsDrawer", () => {
     let client: MatrixClient;
     let room: Room;
+    let sdkContext: SdkContextClass;
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
+        sdkContext = new SdkContextClass();
     });
 
     afterEach(() => {
@@ -56,7 +59,11 @@ describe("AppsDrawer", () => {
         });
 
         const { container } = render(<AppsDrawer userId={client.getUserId()!} room={room} showApps={true} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
+            wrapper: ({ ...rest }) => (
+                <SDKContext.Provider value={sdkContext}>
+                    <MatrixClientContext.Provider value={client} {...rest} />
+                </SDKContext.Provider>
+            ),
         });
 
         const appsDrawerResizer = container.getElementsByClassName("mx_AppsDrawer_resizer")[0] as HTMLElement;
