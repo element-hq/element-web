@@ -302,7 +302,7 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         password: string,
         displayName?: string,
         admin = false,
-    ): Promise<Credentials> {
+    ): Promise<Omit<Credentials, "homeserverBaseUrl">> {
         const userId = await this.manageRegisterUser(username, password, displayName, admin);
         const { deviceId, accessToken } = await this.manageIssueCompatibilityToken(username, admin);
 
@@ -319,11 +319,16 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
 
     /**
      * Registers a user
+     *
      * @param username - the username of the user to register
      * @param password - the password of the user to register
      * @param displayName - optional display name to set on the newly registered user
      */
-    public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+    public async registerUser(
+        username: string,
+        password: string,
+        displayName?: string,
+    ): Promise<Omit<Credentials, "homeserverBaseUrl">> {
         return this.registerUserInternal(username, password, displayName, false);
     }
 

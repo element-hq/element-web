@@ -389,6 +389,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
 
         return {
             homeServer: data.home_server || data.user_id.split(":").slice(1).join(":"),
+            homeserverBaseUrl: this.baseUrl,
             accessToken: data.access_token,
             userId: data.user_id,
             deviceId: data.device_id,
@@ -433,7 +434,10 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
      * @param password - login password
      */
     public async loginUser(userId: string, password: string): Promise<Credentials> {
-        return this.csApi.loginUser(userId, password);
+        return {
+            ...(await this.csApi.loginUser(userId, password)),
+            homeserverBaseUrl: this.baseUrl,
+        };
     }
 
     /**
@@ -480,8 +484,9 @@ export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
      * @param password - the password of the user to register
      * @param displayName - optional display name to set on the newly registered user
      */
-    public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
-        return this.mas.registerUser(username, password, displayName);
+    public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        const registered = await this.mas.registerUser(username, password, displayName);
+        return { ...registered, homeserverBaseUrl: this.baseUrl };
     }
 
     /**
