@@ -70,6 +70,20 @@ export class ElementAppPage {
     }
 
     /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
+    }
+
+    /**
      * Opens the given room by name. The room must be visible in the
      * room list and the room may contain unread messages.
      *
