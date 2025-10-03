@@ -12,6 +12,7 @@ import { test as base } from "./fixtures/index.js";
 import { routeConfigJson } from "./utils/config_json.js";
 
 export * from "./utils/config_json.js";
+export * from "./utils/context.js";
 
 export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
 
