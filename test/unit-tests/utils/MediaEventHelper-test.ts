@@ -24,13 +24,17 @@ describe("MediaEventHelper", () => {
                     size: 1234,
                     w: 100,
                     h: 100,
+                    thumbnail_info: {
+                        mimetype: "image/png",
+                    },
+                    thumbnail_url: "mxc://matrix.org/thumbnail",
                 },
                 url: "mxc://matrix.org/abcdef",
             },
         });
         const helper = new MediaEventHelper(event);
 
-        const blob = await helper.sourceBlob.value;
-        expect(blob.type).toBe(event.getContent().info?.mimetype);
+        const blob = await helper.thumbnailBlob.value;
+        expect(blob?.type).toBe(event.getContent().info.thumbnail_info?.mimetype);
     });
 });
