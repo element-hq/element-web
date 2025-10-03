@@ -6,10 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, waitFor } from "jest-matrix-react";
+import { fireEvent, render, waitFor } from "jest-matrix-react";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
-import userEvent from "@testing-library/user-event";
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
 import LegacyCallViewForRoom from "../../../../../src/components/views/voip/LegacyCallViewForRoom";
@@ -72,8 +71,8 @@ describe("LegacyCallViewForRoom", () => {
         expect(props.sidebarShown).toBeFalsy(); // Value was remembered
     });
 
-    it("should notify on resize start", async () => {
-        const user = userEvent.setup();
+    it("should notify on resize start events", async () => {
+        //const user = userEvent.setup();
 
         const call = new MatrixCall({
             client: MatrixClientPeg.safeGet(),
@@ -91,6 +90,8 @@ describe("LegacyCallViewForRoom", () => {
         );
 
         jest.spyOn(sdkContext.resizeNotifier, "startResizing");
+        jest.spyOn(sdkContext.resizeNotifier, "stopResizing");
+        jest.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
 
         const { container } = render(<LegacyCallViewForRoom roomId={call.roomId} />, {
             wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
@@ -101,8 +102,12 @@ describe("LegacyCallViewForRoom", () => {
             expect(resizer).toBeInTheDocument();
         });
 
-        await user.click(resizer!);
+        fireEvent.mouseDown(resizer!);
+        fireEvent.mouseMove(resizer!, { clientY: 100 });
+        fireEvent.mouseUp(resizer!);
 
         expect(sdkContext.resizeNotifier.startResizing).toHaveBeenCalled();
+        expect(sdkContext.resizeNotifier.stopResizing).toHaveBeenCalled();
+        expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalled();
     });
 });
