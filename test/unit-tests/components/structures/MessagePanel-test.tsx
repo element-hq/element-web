@@ -15,11 +15,11 @@ import { render } from "jest-matrix-react";
 
 import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import * as TestUtilsMatrix from "../../../test-utils";
 import {
+    clientAndSDKContextRenderOptions,
     createTestClient,
     getMockClientWithEventEmitter,
     makeBeaconInfoEvent,
@@ -32,6 +32,7 @@ import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -54,6 +55,7 @@ describe("MessagePanel", function () {
         getClientWellKnown: jest.fn().mockReturnValue({}),
         supportsThreads: jest.fn().mockReturnValue(true),
     });
+    let sdkContext: SdkContextClass;
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
     const room = new Room(roomId, client, userId);
@@ -93,11 +95,9 @@ describe("MessagePanel", function () {
     } as unknown as IRoomState;
 
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
-        <MatrixClientContext.Provider value={client}>
-            <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
-                <MessagePanel {...defaultProps} {...props} />
-            </ScopedRoomContextProvider>
-        </MatrixClientContext.Provider>
+        <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
+            <MessagePanel {...defaultProps} {...props} />
+        </ScopedRoomContextProvider>
     );
 
     beforeEach(function () {
@@ -106,6 +106,8 @@ describe("MessagePanel", function () {
         jest.spyOn(SettingsStore, "getValue").mockImplementation((arg) => {
             return arg === "showDisplaynameChanges";
         });
+
+        sdkContext = new SdkContextClass();
 
         DMRoomMap.makeShared(client);
     });
@@ -314,7 +316,7 @@ describe("MessagePanel", function () {
     }
 
     it("should show the events", function () {
-        const { container } = render(getComponent({ events }));
+        const { container } = render(getComponent({ events }), clientAndSDKContextRenderOptions(client, sdkContext));
 
         // just check we have the right number of tiles for now
         const tiles = container.getElementsByClassName("mx_EventTile");
@@ -322,7 +324,10 @@ describe("MessagePanel", function () {
     });
 
     it("should collapse adjacent member events", function () {
-        const { container } = render(getComponent({ events: mkMelsEvents() }));
+        const { container } = render(
+            getComponent({ events: mkMelsEvents() }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
 
         // just check we have the right number of tiles for now
         const tiles = container.getElementsByClassName("mx_EventTile");
@@ -339,6 +344,7 @@ describe("MessagePanel", function () {
                 readMarkerEventId: events[4].getId(),
                 readMarkerVisible: true,
             }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const tiles = container.getElementsByClassName("mx_EventTile");
@@ -359,6 +365,7 @@ describe("MessagePanel", function () {
                 readMarkerEventId: melsEvents[4].getId(),
                 readMarkerVisible: true,
             }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const [summary] = container.getElementsByClassName("mx_GenericEventListSummary");
@@ -381,6 +388,7 @@ describe("MessagePanel", function () {
                 readMarkerEventId: melsEvents[9].getId(),
                 readMarkerVisible: true,
             }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const [summary] = container.getElementsByClassName("mx_GenericEventListSummary");
@@ -406,6 +414,7 @@ describe("MessagePanel", function () {
                     readMarkerVisible: true,
                 })}
             </div>,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const tiles = container.getElementsByClassName("mx_EventTile");
@@ -448,7 +457,7 @@ describe("MessagePanel", function () {
         client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
         TestUtilsMatrix.upsertRoomStateEvents(room, events);
 
-        const { container } = render(getComponent({ events }));
+        const { container } = render(getComponent({ events }), clientAndSDKContextRenderOptions(client, sdkContext));
 
         // we expect that
         // - the room creation event, the room encryption event, and Alice inviting Bob,
@@ -476,7 +485,10 @@ describe("MessagePanel", function () {
         });
         const combinedEvents = [...events, beaconInfoEvent];
         TestUtilsMatrix.upsertRoomStateEvents(room, combinedEvents);
-        const { container } = render(getComponent({ events: combinedEvents }));
+        const { container } = render(
+            getComponent({ events: combinedEvents }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
 
         const [summaryTile] = container.getElementsByClassName("mx_GenericEventListSummary");
 
@@ -498,6 +510,7 @@ describe("MessagePanel", function () {
                 readMarkerEventId: events[5].getId(),
                 readMarkerVisible: true,
             }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         // find the <li> which wraps the read marker
@@ -514,7 +527,10 @@ describe("MessagePanel", function () {
 
     it("should render Date separators for the events", function () {
         const events = mkOneDayEvents();
-        const { queryAllByRole } = render(getComponent({ events }));
+        const { queryAllByRole } = render(
+            getComponent({ events }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         const dates = queryAllByRole("separator");
 
         expect(dates.length).toEqual(1);
@@ -523,7 +539,10 @@ describe("MessagePanel", function () {
     it("appends events into summaries during forward pagination without changing key", () => {
         const events = mkMelsEvents().slice(1, 11);
 
-        const { container, rerender } = render(getComponent({ events }));
+        const { container, rerender } = render(
+            getComponent({ events }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         let els = container.getElementsByClassName("mx_GenericEventListSummary");
         expect(els.length).toEqual(1);
         expect(els[0].getAttribute("data-testid")).toEqual("eventlistsummary-" + events[0].getId());
@@ -553,7 +572,10 @@ describe("MessagePanel", function () {
     it("prepends events into summaries during backward pagination without changing key", () => {
         const events = mkMelsEvents().slice(1, 11);
 
-        const { container, rerender } = render(getComponent({ events }));
+        const { container, rerender } = render(
+            getComponent({ events }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         let els = container.getElementsByClassName("mx_GenericEventListSummary");
         expect(els.length).toEqual(1);
         expect(els[0].getAttribute("data-testid")).toEqual("eventlistsummary-" + events[0].getId());
@@ -583,7 +605,10 @@ describe("MessagePanel", function () {
     it("assigns different keys to summaries that get split up", () => {
         const events = mkMelsEvents().slice(1, 11);
 
-        const { container, rerender } = render(getComponent({ events }));
+        const { container, rerender } = render(
+            getComponent({ events }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         let els = container.getElementsByClassName("mx_GenericEventListSummary");
         expect(els.length).toEqual(1);
         expect(els[0].getAttribute("data-testid")).toEqual(`eventlistsummary-${events[0].getId()}`);
@@ -616,7 +641,7 @@ describe("MessagePanel", function () {
     it("doesn't lookup showHiddenEventsInTimeline while rendering", () => {
         // We're only interested in the setting lookups that happen on every render,
         // rather than those happening on first mount, so let's get those out of the way
-        const { rerender } = render(getComponent({ events: [] }));
+        const { rerender } = render(getComponent({ events: [] }), clientAndSDKContextRenderOptions(client, sdkContext));
 
         // Set up our spy and re-render with new events
         const settingsSpy = jest.spyOn(SettingsStore, "getValue").mockClear();
@@ -654,7 +679,10 @@ describe("MessagePanel", function () {
                 ts: 3,
             }),
         ];
-        const { container } = render(getComponent({ events }, { showHiddenEvents: true }));
+        const { container } = render(
+            getComponent({ events }, { showHiddenEvents: true }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
 
         const els = container.getElementsByClassName("mx_GenericEventListSummary");
         expect(els.length).toEqual(1);
@@ -678,7 +706,10 @@ describe("MessagePanel", function () {
                 }),
             );
         }
-        const { asFragment } = render(getComponent({ events }, { showHiddenEvents: false }));
+        const { asFragment } = render(
+            getComponent({ events }, { showHiddenEvents: false }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -699,7 +730,10 @@ describe("MessagePanel", function () {
                 }),
             );
         }
-        const { asFragment } = render(getComponent({ events }, { showHiddenEvents: false }));
+        const { asFragment } = render(
+            getComponent({ events }, { showHiddenEvents: false }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -720,7 +754,10 @@ describe("MessagePanel", function () {
                 }),
             );
         }
-        const { asFragment } = render(getComponent({ events }, { showHiddenEvents: true }));
+        const { asFragment } = render(
+            getComponent({ events }, { showHiddenEvents: true }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         const cpt = asFragment();
 
         // Ignore properties that change every time
@@ -751,7 +788,10 @@ describe("MessagePanel", function () {
                 content: { topic: "TOPIC" },
             }),
         ];
-        const { container } = render(getComponent({ events, showReadReceipts: true }));
+        const { container } = render(
+            getComponent({ events, showReadReceipts: true }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
 
         const tiles = container.getElementsByClassName("mx_EventTile");
         expect(tiles.length).toEqual(2);
@@ -784,7 +824,10 @@ describe("MessagePanel", function () {
             },
             true,
         );
-        const { container } = render(getComponent({ events, showReadReceipts: true }));
+        const { container } = render(
+            getComponent({ events, showReadReceipts: true }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
 
         const tiles = container.getElementsByClassName("mx_EventTile");
         expect(tiles.length).toEqual(2);
