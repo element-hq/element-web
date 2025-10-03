@@ -15,7 +15,6 @@ import LegacyCallViewForRoom from "../../../../../src/components/views/voip/Lega
 import { mkStubRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
 
 jest.mock("../../../../../src/components/views/voip/LegacyCallView", () => jest.fn(() => "LegacyCallView"));
@@ -45,16 +44,14 @@ describe("LegacyCallViewForRoom", () => {
         const cli = MatrixClientPeg.safeGet();
         cli.emit(CallEventHandlerEvent.Incoming, call);
 
-        const { rerender } = render(
-            <LegacyCallViewForRoom roomId={call.roomId} resizeNotifier={new ResizeNotifier()} />,
-        );
+        const { rerender } = render(<LegacyCallViewForRoom roomId={call.roomId} />);
 
         let props = LegacyCallViewMock.mock.lastCall![0];
         expect(props.sidebarShown).toBeTruthy(); // Sidebar defaults to shown
 
         props.setSidebarShown(false); // Hide the sidebar
 
-        rerender(<LegacyCallViewForRoom roomId={call.roomId} resizeNotifier={new ResizeNotifier()} />);
+        rerender(<LegacyCallViewForRoom roomId={call.roomId} />);
 
         console.log(LegacyCallViewMock.mock);
 
@@ -64,7 +61,7 @@ describe("LegacyCallViewForRoom", () => {
         rerender(<div> </div>); // Destroy the LegacyCallViewForRoom and LegacyCallView
         LegacyCallViewMock.mockClear(); // Drop stored LegacyCallView props
 
-        rerender(<LegacyCallViewForRoom roomId={call.roomId} resizeNotifier={new ResizeNotifier()} />);
+        rerender(<LegacyCallViewForRoom roomId={call.roomId} />);
 
         props = LegacyCallViewMock.mock.lastCall![0];
         expect(props.sidebarShown).toBeFalsy(); // Value was remembered

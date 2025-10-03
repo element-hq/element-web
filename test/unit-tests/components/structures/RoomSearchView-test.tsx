@@ -20,7 +20,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { stubClient } from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -33,7 +32,6 @@ jest.mock("../../../../src/Searching", () => ({
 
 describe("<RoomSearchView/>", () => {
     const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-    const resizeNotifier = new ResizeNotifier();
     let client: MatrixClient;
     let room: Room;
 
@@ -60,7 +58,6 @@ describe("<RoomSearchView/>", () => {
                 term="search term"
                 scope={SearchScope.All}
                 promise={deferred.promise}
-                resizeNotifier={resizeNotifier}
                 className="someClass"
                 onUpdate={jest.fn()}
             />,
@@ -119,7 +116,6 @@ describe("<RoomSearchView/>", () => {
                         highlights: [],
                         count: 1,
                     })}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -163,7 +159,6 @@ describe("<RoomSearchView/>", () => {
                         highlights: ["test"],
                         count: 1,
                     })}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -237,7 +232,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={onUpdate}
                 />
@@ -255,7 +249,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -275,7 +268,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -299,7 +291,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -324,7 +315,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={onUpdate}
                 />
@@ -430,7 +420,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -546,7 +535,6 @@ describe("<RoomSearchView/>", () => {
                         highlights: [],
                         count: 1,
                     })}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />

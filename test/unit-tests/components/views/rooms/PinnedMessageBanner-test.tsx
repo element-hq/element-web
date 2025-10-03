@@ -80,7 +80,7 @@ describe("<PinnedMessageBanner />", () => {
      */
     function renderBanner() {
         return render(
-            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
+            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />,
             withClientContextRenderOptions(mockClient),
         );
     }
@@ -153,9 +153,7 @@ describe("<PinnedMessageBanner />", () => {
             event3.getId()!,
         ]);
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3]);
-        rerender(
-            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
-        );
+        rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
         await expect(screen.findByText("Third pinned message")).resolves.toBeVisible();
         expect(asFragment()).toMatchSnapshot();
     });
@@ -256,9 +254,7 @@ describe("<PinnedMessageBanner />", () => {
             // The banner has no event to display and is hidden
             jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
             jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
-            rerender(
-                <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
-            );
+            rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
             // The timeline should be resized
             expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(2);
         });

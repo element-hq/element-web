@@ -12,7 +12,6 @@ import { screen, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import FilePanel from "../../../../src/components/structures/FilePanel";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { mkEvent, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
@@ -39,9 +38,7 @@ describe("FilePanel", () => {
         room.getOrCreateFilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
         mocked(cli.getRoom).mockReturnValue(room);
 
-        const { asFragment } = render(
-            <FilePanel roomId={room.roomId} onClose={jest.fn()} resizeNotifier={new ResizeNotifier()} />,
-        );
+        const { asFragment } = render(<FilePanel roomId={room.roomId} onClose={jest.fn()} />);
         await waitFor(() => {
             expect(screen.getByText("No files visible in this room")).toBeInTheDocument();
         });
@@ -64,7 +61,6 @@ describe("FilePanel", () => {
                 <FilePanel
                     roomId={room.roomId}
                     onClose={jest.fn()}
-                    resizeNotifier={new ResizeNotifier()}
                     ref={(ref) => {
                         filePanel = ref;
                     }}

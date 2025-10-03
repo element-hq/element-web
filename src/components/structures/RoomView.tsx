@@ -320,7 +320,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
                 <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
                     <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} room={room} />
                     <div className="mx_RoomView_timeline">
-                        <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={props.resizeNotifier}>
+                        <ScrollPanel className="mx_RoomView_messagePanel">
                             {encryptionTile}
                             <NewRoomIntro />
                         </ScrollPanel>
@@ -336,7 +336,6 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
 interface ILocalRoomCreateLoaderProps {
     localRoom: LocalRoom;
     names: string;
-    resizeNotifier: ResizeNotifier;
     mainSplitContentType: MainSplitContentType;
 }
 
@@ -2055,7 +2054,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <LocalRoomCreateLoader
                     localRoom={localRoom}
                     names={names}
-                    resizeNotifier={this.context.resizeNotifier}
                     mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
@@ -2418,18 +2416,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 room={this.state.room}
                 userId={this.context.client.getSafeUserId()}
                 showApps={this.state.showApps}
-                resizeNotifier={this.context.resizeNotifier}
             >
                 {aux}
             </AuxPanel>
         );
 
         const pinnedMessageBanner = (
-            <PinnedMessageBanner
-                room={this.state.room}
-                permalinkCreator={this.permalinkCreator}
-                resizeNotifier={this.context.resizeNotifier}
-            />
+            <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
         );
 
         let messageComposer;
@@ -2465,7 +2458,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     promise={this.state.search.promise}
                     abortController={this.state.search.abortController}
                     inProgress={!!this.state.search.inProgress}
-                    resizeNotifier={this.context.resizeNotifier}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}
                 />
@@ -2500,7 +2492,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     className={this.messagePanelClassNames}
                     membersLoaded={this.state.membersLoaded}
                     permalinkCreator={this.permalinkCreator}
-                    resizeNotifier={this.context.resizeNotifier}
                     showReactions={true}
                     layout={this.state.layout}
                     editState={this.state.editState}
@@ -2593,7 +2584,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <AppsDrawer
                             room={this.state.room}
                             userId={this.context.client.getSafeUserId()}
-                            resizeNotifier={this.context.resizeNotifier}
                             showApps={true}
                             role="main"
                         />

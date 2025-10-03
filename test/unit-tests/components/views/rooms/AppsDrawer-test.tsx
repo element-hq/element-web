@@ -13,7 +13,6 @@ import { render } from "jest-matrix-react";
 import { stubClient } from "../../../../test-utils";
 import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import SdkConfig from "../../../../../src/SdkConfig";
-import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
@@ -22,14 +21,12 @@ const ROOM_ID = "!room:id";
 describe("AppsDrawer", () => {
     let client: MatrixClient;
     let room: Room;
-    let dummyResizeNotifier: ResizeNotifier;
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        dummyResizeNotifier = new ResizeNotifier();
     });
 
     afterEach(() => {
@@ -58,17 +55,9 @@ describe("AppsDrawer", () => {
             return [];
         });
 
-        const { container } = render(
-            <AppsDrawer
-                userId={client.getUserId()!}
-                room={room}
-                resizeNotifier={dummyResizeNotifier}
-                showApps={true}
-            />,
-            {
-                wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-            },
-        );
+        const { container } = render(<AppsDrawer userId={client.getUserId()!} room={room} showApps={true} />, {
+            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
+        });
 
         const appsDrawerResizer = container.getElementsByClassName("mx_AppsDrawer_resizer")[0] as HTMLElement;
         expect(appsDrawerResizer.style.height).toBe("500px");

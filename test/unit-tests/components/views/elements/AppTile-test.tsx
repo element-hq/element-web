@@ -300,7 +300,7 @@ describe("AppTile", () => {
         // Run initial render with room 1, and also running lifecycle methods
         const renderResult = render(
             <MatrixClientContext.Provider value={cli}>
-                <AppsDrawer userId={cli.getSafeUserId()} room={r1} resizeNotifier={resizeNotifier} />
+                <AppsDrawer userId={cli.getSafeUserId()} room={r1} />
             </MatrixClientContext.Provider>,
         );
 
