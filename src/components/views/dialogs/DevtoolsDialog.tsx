@@ -105,6 +105,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         evt.preventDefault();
                         evt.stopPropagation();
                     }}
+                    className="mx_DevTools_toggleForm"
                 >
                     <h2 className="mx_DevTools_toolHeading">{_t("common|options")}</h2>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />

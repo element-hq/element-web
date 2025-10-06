@@ -86,6 +86,7 @@ export function NotificationPusherSettings(): JSX.Element {
             <SettingsSubsection
                 className="mx_NotificationPusherSettings"
                 heading={_t("settings|notifications|email_section")}
+                legacy={false}
             >
                 <SettingsSubsectionText className="mx_NotificationPusherSettings_description">
                     {_t("settings|notifications|email_description")}
@@ -109,7 +110,7 @@ export function NotificationPusherSettings(): JSX.Element {
                 </SettingsIndent>
             </SettingsSubsection>
             {notificationTargets.length > 0 && (
-                <SettingsSubsection heading={_t("settings|notifications|push_targets")}>
+                <SettingsSubsection heading={_t("settings|notifications|push_targets")} legacy={false}>
                     <ul>
                         {pushers
                             .filter((it) => it.kind !== "email")
