@@ -25,7 +25,18 @@ interface RoomListProps {
      */
     vm: RoomListViewState;
 }
-
+/**
+ * Height of a single room list item
+ */
+const ROOM_LIST_ITEM_HEIGHT = 48;
+/**
+ * Amount to extend the top and bottom of the viewport by.
+ * From manual testing and user feedback 25 items is reported to be enough to avoid blank space when using the mouse wheel,
+ * and the trackpad scrolling at a slow to moderate speed where you can still see/read the content.
+ * Using the trackpad to sling through a large percentage of the list quickly will still show blank space.
+ * We would likely need to simplify the item content to improve this case.
+ */
+const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
 /**
  * A virtualized list of rooms.
  */
@@ -112,14 +123,17 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             data-testid="room-list"
             role="listbox"
             aria-label={_t("room_list|list_title")}
-            fixedItemHeight={48}
+            fixedItemHeight={ROOM_LIST_ITEM_HEIGHT}
             items={roomsResult.rooms}
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}
             isItemFocusable={() => true}
             onKeyDown={keyDownCallback}
             isScrolling={setIsScrolling}
-            increaseViewportBy={{ bottom: 25 * 48, top: 25 * 48 }}
+            increaseViewportBy={{
+                bottom: EXTENDED_VIEWPORT_HEIGHT,
+                top: EXTENDED_VIEWPORT_HEIGHT,
+            }}
         />
     );
 }
