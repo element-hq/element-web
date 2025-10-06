@@ -12,15 +12,15 @@ import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
-import { type FetchRoomFn } from "./ListNotificationState";
 import { DefaultTagID } from "../room-list/models";
 import RoomListStore from "../room-list/RoomListStore";
+import { RoomNotificationStateStore } from "./RoomNotificationStateStore";
 
 export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
-    public constructor(private getRoomFn: FetchRoomFn) {
+    public constructor() {
         super();
     }
 
@@ -39,7 +39,7 @@ export class SpaceNotificationState extends NotificationState {
             state.off(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
         }
         for (const newRoom of diff.added) {
-            const state = this.getRoomFn(newRoom);
+            const state = RoomNotificationStateStore.instance.getRoomState(newRoom);
             state.on(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
             this.states[newRoom.roomId] = state;
         }

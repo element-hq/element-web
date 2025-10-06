@@ -44,6 +44,7 @@ import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type RoomViewProps } from "@element-hq/element-web-module-api";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -134,6 +135,7 @@ import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -147,11 +149,10 @@ if (DEBUG) {
     debuglog = logger.log.bind(console);
 }
 
-interface IRoomProps {
+interface IRoomProps extends RoomViewProps {
     threepidInvite?: IThreepidInvite;
     oobData?: IOOBData;
 
-    resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
 
     forceTimeline?: boolean; // should we force access to the timeline, overriding (for eg) spaces
@@ -382,6 +383,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private messagePanel: TimelinePanel | null = null;
     private roomViewBody = createRef<HTMLDivElement>();
 
+    private roomViewStore: RoomViewStore;
+
     public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
 
@@ -392,6 +395,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         if (!context.client) {
             throw new Error("Unable to create RoomView without MatrixClient");
+        }
+
+        if (props.roomId) {
+            this.roomViewStore = this.context.multiRoomViewStore.getRoomViewStoreForRoom(props.roomId);
+        } else {
+            this.roomViewStore = context.roomViewStore;
         }
 
         const llMembers = context.client.hasLazyLoadMembersEnabled();
@@ -527,7 +536,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getMainSplitContentType = (room: Room): MainSplitContentType => {
-        if (this.context.roomViewStore.isViewingCall() || isVideoRoom(room)) {
+        if (this.roomViewStore.isViewingCall() || isVideoRoom(room)) {
             return MainSplitContentType.Call;
         }
         if (this.context.widgetLayoutStore.hasMaximisedWidget(room)) {
@@ -541,8 +550,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
 
-        const roomLoadError = this.context.roomViewStore.getRoomLoadError() ?? undefined;
-        if (!initial && !roomLoadError && this.state.roomId !== this.context.roomViewStore.getRoomId()) {
+        const roomLoadError = this.roomViewStore.getRoomLoadError() ?? undefined;
+        if (!initial && !roomLoadError && this.state.roomId !== this.roomViewStore.getRoomId()) {
             // RoomView explicitly does not support changing what room
             // is being viewed: instead it should just be re-mounted when
             // switching rooms. Therefore, if the room ID changes, we
@@ -557,29 +566,29 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
 
-        const roomId = this.context.roomViewStore.getRoomId() ?? null;
+        const roomId = this.roomViewStore.getRoomId() ?? null;
         const room = this.context.client?.getRoom(roomId ?? undefined) ?? undefined;
 
         const newState: Partial<IRoomState> = {
             roomId: roomId ?? undefined,
-            roomAlias: this.context.roomViewStore.getRoomAlias() ?? undefined,
-            roomLoading: this.context.roomViewStore.isRoomLoading(),
+            roomAlias: this.roomViewStore.getRoomAlias() ?? undefined,
+            roomLoading: this.roomViewStore.isRoomLoading(),
             roomLoadError,
-            joining: this.context.roomViewStore.isJoining(),
-            replyToEvent: this.context.roomViewStore.getQuotingEvent() ?? undefined,
+            joining: this.roomViewStore.isJoining(),
+            replyToEvent: this.roomViewStore.getQuotingEvent() ?? undefined,
             // we should only peek once we have a ready client
-            shouldPeek: this.state.matrixClientIsReady && this.context.roomViewStore.shouldPeek(),
+            shouldPeek: this.state.matrixClientIsReady && this.roomViewStore.shouldPeek(),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
-            wasContextSwitch: this.context.roomViewStore.getWasContextSwitch(),
+            wasContextSwitch: this.roomViewStore.getWasContextSwitch(),
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
-            viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
+            promptAskToJoin: this.roomViewStore.promptAskToJoin(),
+            viewRoomOpts: this.roomViewStore.getViewRoomOpts(),
         };
 
         if (
@@ -595,7 +604,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.showRightPanel = false;
         }
 
-        const initialEventId = this.context.roomViewStore.getInitialEventId() ?? this.state.initialEventId;
+        const initialEventId = this.roomViewStore.getInitialEventId() ?? this.state.initialEventId;
         if (initialEventId) {
             let initialEvent = room?.findEventById(initialEventId);
             // The event does not exist in the current sync data
@@ -621,13 +630,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     action: Action.ShowThread,
                     rootEvent: thread.rootEvent,
                     initialEvent,
-                    highlighted: this.context.roomViewStore.isInitialEventHighlighted(),
-                    scroll_into_view: this.context.roomViewStore.initialEventScrollIntoView(),
+                    highlighted: this.roomViewStore.isInitialEventHighlighted(),
+                    scroll_into_view: this.roomViewStore.initialEventScrollIntoView(),
                 });
             } else {
                 newState.initialEventId = initialEventId;
-                newState.isInitialEventHighlighted = this.context.roomViewStore.isInitialEventHighlighted();
-                newState.initialEventScrollIntoView = this.context.roomViewStore.initialEventScrollIntoView();
+                newState.isInitialEventHighlighted = this.roomViewStore.isInitialEventHighlighted();
+                newState.initialEventScrollIntoView = this.roomViewStore.initialEventScrollIntoView();
             }
         }
 
@@ -887,14 +896,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.context.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
         // Start listening for RoomViewStore updates
-        this.context.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         this.context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
 
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.on("isResizing", this.onIsResizing);
 
         this.settingWatchers = [
             SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
@@ -1004,13 +1013,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         window.removeEventListener("beforeunload", this.onPageUnload);
 
-        this.context.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         this.context.rightPanelStore.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.props.resizeNotifier.off("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.off("isResizing", this.onIsResizing);
 
         if (this.state.room) {
             this.context.widgetLayoutStore.off(
@@ -1032,6 +1041,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // clean up if this was a local room
             this.context.client?.store.removeRoom(this.state.room.roomId);
         }
+
+        if (this.props.roomId) this.context.multiRoomViewStore.removeRoomViewStore(this.props.roomId);
     }
 
     private onRightPanelStoreUpdate = (): void => {
@@ -2056,7 +2067,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <LocalRoomCreateLoader
                     localRoom={localRoom}
                     names={names}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
@@ -2069,7 +2080,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <LocalRoomView
                     e2eStatus={this.state.e2eStatus}
                     localRoom={localRoom}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
@@ -2083,7 +2094,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return (
             <ScopedRoomContextProvider {...this.state}>
                 <WaitingForThirdPartyRoomView
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     roomView={this.roomView}
                     inviteEvent={inviteEvent}
                 />
@@ -2402,7 +2413,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <SpaceRoomView
                     space={this.state.room}
                     justCreatedOpts={this.props.justCreatedOpts}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     onJoinButtonClicked={this.onJoinButtonClicked}
                     onRejectButtonClicked={
@@ -2419,7 +2430,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 room={this.state.room}
                 userId={this.context.client.getSafeUserId()}
                 showApps={this.state.showApps}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
             >
                 {aux}
             </AuxPanel>
@@ -2429,7 +2440,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             <PinnedMessageBanner
                 room={this.state.room}
                 permalinkCreator={this.permalinkCreator}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
             />
         );
 
@@ -2444,7 +2455,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <MessageComposer
                     room={this.state.room}
                     e2eStatus={this.state.e2eStatus}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     replyToEvent={this.state.replyToEvent}
                     permalinkCreator={this.permalinkCreator}
                 />
@@ -2466,7 +2477,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     promise={this.state.search.promise}
                     abortController={this.state.search.abortController}
                     inProgress={!!this.state.search.inProgress}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}
                 />
@@ -2501,7 +2512,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     className={this.messagePanelClassNames}
                     membersLoaded={this.state.membersLoaded}
                     permalinkCreator={this.permalinkCreator}
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                     showReactions={true}
                     layout={this.state.layout}
                     editState={this.state.editState}
@@ -2533,7 +2544,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const rightPanel = showRightPanel ? (
             <RightPanel
                 room={this.state.room}
-                resizeNotifier={this.props.resizeNotifier}
+                resizeNotifier={this.context.resizeNotifier}
                 permalinkCreator={this.permalinkCreator}
                 e2eStatus={this.state.e2eStatus}
                 onSearchChange={this.onSearchChange}
@@ -2594,7 +2605,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <AppsDrawer
                             room={this.state.room}
                             userId={this.context.client.getSafeUserId()}
-                            resizeNotifier={this.props.resizeNotifier}
+                            resizeNotifier={this.context.resizeNotifier}
                             showApps={true}
                             role="main"
                         />
@@ -2639,7 +2650,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     <ErrorBoundary>
                         <MainSplit
                             panel={rightPanel}
-                            resizeNotifier={this.props.resizeNotifier}
+                            resizeNotifier={this.context.resizeNotifier}
                             sizeKey={sizeKey}
                             defaultSize={defaultSize}
                             analyticsRoomType={analyticsRoomType}

@@ -52,6 +52,7 @@ type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     className?: string;
     selected?: boolean;
     label: string;
+    icon?: JSX.Element;
     contextMenuTooltip?: string;
     notificationState?: NotificationState;
     isNarrow?: boolean;
@@ -65,6 +66,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
     space,
     spaceKey: _spaceKey,
     className,
+    icon,
     selected,
     label,
     contextMenuTooltip,
@@ -84,7 +86,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
 
     let avatar = (
         <div className="mx_SpaceButton_avatarPlaceholder">
-            <div className="mx_SpaceButton_icon" />
+            <div className="mx_SpaceButton_icon">{icon}</div>
         </div>
     );
     if (space) {
@@ -143,6 +145,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                 mx_SpaceButton_active: selected,
                 mx_SpaceButton_hasMenuOpen: menuDisplayed,
                 mx_SpaceButton_narrow: isNarrow,
+                mx_SpaceButton_withIcon: Boolean(icon),
             })}
             aria-label={label}
             title={!isNarrow || menuDisplayed ? undefined : label}
