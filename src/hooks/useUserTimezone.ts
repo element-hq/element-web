@@ -98,7 +98,7 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                 log.warn(`Could not render current timezone for ${userId}`, ex);
             }
         })();
-    }, [log, supported, userId, cli, showTwelveHour]);
+    }, [supported, userId, cli, showTwelveHour]);
 
     if (!timezone || !friendly) {
         return null;
