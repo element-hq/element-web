@@ -54,13 +54,14 @@ import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
+import { type LocalRoom } from "../../../../models/LocalRoom.ts";
 
 export default function RoomHeader({
     room,
     additionalButtons,
     oobData,
 }: {
-    room: Room;
+    room: Room | LocalRoom;
     additionalButtons?: ViewRoomOpts["buttons"];
     oobData?: IOOBData;
 }): JSX.Element {
@@ -129,6 +130,7 @@ export default function RoomHeader({
                 disabled={!!videoCallDisabledReason}
                 color="primary"
                 aria-label={videoCallDisabledReason ?? _t("action|join")}
+                data-testId="join-call-button"
             >
                 {_t("action|join")}
             </Button>

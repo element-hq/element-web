@@ -82,13 +82,13 @@ describe("CallView", () => {
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
     });
 
-    const renderView = async (skipLobby = false, role: string | undefined = undefined): Promise<void> => {
-        render(<CallView room={room} resizing={false} skipLobby={skipLobby} role={role} onClose={() => {}} />);
+    const renderView = async (role: string | undefined = undefined): Promise<void> => {
+        render(<CallView room={room} resizing={false} role={role} onClose={() => {}} />);
         await act(() => Promise.resolve()); // Let effects settle
     };
 
     it("accepts an accessibility role", async () => {
-        await renderView(undefined, "main");
+        await renderView("main");
         screen.getByRole("main");
     });
 
@@ -96,10 +96,5 @@ describe("CallView", () => {
         const cleanSpy = jest.spyOn(call, "clean");
         await renderView();
         expect(cleanSpy).toHaveBeenCalled();
-    });
-
-    it("updates the call's skipLobby parameter", async () => {
-        await renderView(true);
-        expect(call.widget.data?.skipLobby).toBe(true);
     });
 });

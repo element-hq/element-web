@@ -46,62 +46,8 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         </div>
       </button>
       <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rh5»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«rha»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
         aria-label="Threads"
-        aria-labelledby="«rhf»"
+        aria-labelledby="«rg1»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -128,7 +74,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rhk»"
+        aria-labelledby="«rg6»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -158,7 +104,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rhp»"
+          aria-labelledby="«rgb»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -265,62 +211,8 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </button>
       <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«ri3»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«ri8»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
         aria-label="Threads"
-        aria-labelledby="«rid»"
+        aria-labelledby="«rgj»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -347,7 +239,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rii»"
+        aria-labelledby="«rgo»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -377,7 +269,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rin»"
+          aria-labelledby="«rgt»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -570,62 +462,8 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         </div>
       </button>
       <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rcd»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«rci»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
         aria-label="Threads"
-        aria-labelledby="«rcn»"
+        aria-labelledby="«rc1»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -652,7 +490,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rcs»"
+        aria-labelledby="«rc6»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -682,7 +520,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rd1»"
+          aria-labelledby="«rcb»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -801,7 +639,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="«rda»"
+                aria-labelledby="«rck»"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -971,62 +809,8 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </div>
       </button>
       <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rep»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«reu»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
         aria-label="Threads"
-        aria-labelledby="«rf3»"
+        aria-labelledby="«re1»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -1053,7 +837,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </button>
       <button
         aria-label="Room info"
-        aria-labelledby="«rf8»"
+        aria-labelledby="«re6»"
         class="_icon-button_1pz9o_8"
         data-kind="primary"
         role="button"
@@ -1083,7 +867,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       >
         <div
           aria-label="2 members"
-          aria-labelledby="«rfd»"
+          aria-labelledby="«reb»"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"

@@ -50,15 +50,11 @@ test.describe("Invite dialog", function () {
         await expect(other.locator(".mx_InviteDialog_identityServer")).toBeVisible();
 
         // Assert that the bot id is rendered properly
-        await expect(
-            other.locator(".mx_InviteDialog_tile_nameStack_userId").getByText(bot.credentials.userId),
-        ).toBeVisible();
+        await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
 
-        await other.locator(".mx_InviteDialog_tile_nameStack_name").getByText(botName).click();
+        await other.getByRole("option", { name: botName }).click();
 
-        await expect(
-            other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
-        ).toBeVisible();
+        await expect(other.getByTestId("invite-dialog-input-wrapper").getByText(botName)).toBeVisible();
 
         // Take a snapshot of the invite dialog with a user pill
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-with-user-pill.png");
@@ -94,14 +90,10 @@ test.describe("Invite dialog", function () {
 
             await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
 
-            await expect(
-                other.locator(".mx_InviteDialog_tile_nameStack").getByText(bot.credentials.userId),
-            ).toBeVisible();
-            await other.locator(".mx_InviteDialog_tile_nameStack").getByText(botName).click();
+            await expect(other.getByRole("option", { name: botName }).getByText(bot.credentials.userId)).toBeVisible();
+            await other.getByRole("option", { name: botName }).click();
 
-            await expect(
-                other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
-            ).toBeVisible();
+            await expect(other.getByTestId("invite-dialog-input-wrapper").getByText(botName)).toBeVisible();
 
             // Take a snapshot of the invite dialog with a user pill
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png");
@@ -120,6 +112,8 @@ test.describe("Invite dialog", function () {
                 "background-color",
                 "rgba(0, 0, 0, 0)",
             );
+
+            await expect(page.locator(".mx_RoomView")).toMatchScreenshot("send_your_first_message_view.png");
 
             // Send a message to invite the bots
             const composer = app.getComposer().locator("[contenteditable]");

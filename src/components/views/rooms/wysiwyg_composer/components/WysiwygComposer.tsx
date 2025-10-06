@@ -127,6 +127,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
                 handleMention={wysiwyg.mention}
                 handleAtRoomMention={wysiwyg.mentionAtRoom}
                 handleCommand={wysiwyg.command}
+                handleEmoji={wysiwyg.emoji}
             />
             <FormattingButtons composer={wysiwyg} actionStates={actionStates} disabled={disableFormatting} />
             <Editor
