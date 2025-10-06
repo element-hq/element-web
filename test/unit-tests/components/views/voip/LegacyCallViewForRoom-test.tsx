@@ -72,8 +72,6 @@ describe("LegacyCallViewForRoom", () => {
     });
 
     it("should notify on resize start events", async () => {
-        //const user = userEvent.setup();
-
         const call = new MatrixCall({
             client: MatrixClientPeg.safeGet(),
             roomId: "test-room",
