@@ -21,7 +21,7 @@ import {
 import RightPanel from "../../../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
-import { stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
 import { Action } from "../../../../../src/dispatcher/actions";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
@@ -39,6 +39,7 @@ import { ElementWidget } from "../../../../../src/stores/widgets/StopGapWidget";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -53,6 +54,7 @@ jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
 
 describe("AppTile", () => {
     let cli: MatrixClient;
+    let sdkContext: SdkContextClass;
     let r1: Room;
     let r2: Room;
     const resizeNotifier = new ResizeNotifier();
@@ -116,6 +118,7 @@ describe("AppTile", () => {
     });
 
     beforeEach(() => {
+        sdkContext = new SdkContextClass();
         jest.spyOn(SettingsStore, "getValue").mockRestore();
     });
 
@@ -299,9 +302,8 @@ describe("AppTile", () => {
 
         // Run initial render with room 1, and also running lifecycle methods
         const renderResult = render(
-            <MatrixClientContext.Provider value={cli}>
-                <AppsDrawer userId={cli.getSafeUserId()} room={r1} resizeNotifier={resizeNotifier} />
-            </MatrixClientContext.Provider>,
+            <AppsDrawer userId={cli.getSafeUserId()} room={r1} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
         );
 
         expect(renderResult.getByText("Example 1")).toBeInTheDocument();
