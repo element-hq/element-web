@@ -24,10 +24,8 @@ const startDMWithBob = async (page: Page, bob: Bot) => {
     await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
     await page.getByRole("menuitem", { name: "Start chat" }).click();
     await page.getByTestId("invite-dialog-input").fill(bob.credentials.userId);
-    await page.locator(".mx_InviteDialog_tile_nameStack_name").getByText("Bob").click();
-    await expect(
-        page.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText("Bob"),
-    ).toBeVisible();
+    await page.getByRole("option", { name: bob.credentials.displayName }).click();
+    await expect(page.getByTestId("invite-dialog-input-wrapper").getByText("Bob")).toBeVisible();
     await page.getByRole("button", { name: "Go" }).click();
 };
 
@@ -146,6 +144,29 @@ test.describe("Cryptography", function () {
             const masterKey2 = await fetchMasterKey();
             expect(masterKey1).not.toEqual(masterKey2);
         }).toPass();
+    });
+
+    // When the user resets their identity, key storage also gets enabled.
+    // Check that the toggle updates to show the correct state.
+    test("Key backup status updates after resetting identity", async ({ page, app, user: aliceCredentials }) => {
+        await app.client.bootstrapCrossSigning(aliceCredentials);
+
+        const encryptionTab = await app.settings.openUserSettings("Encryption");
+        const keyStorageToggle = encryptionTab.getByRole("switch", { name: "Allow key storage" });
+        // Check that key storage starts off as disabled
+        expect(await keyStorageToggle.isChecked()).toBe(false);
+        // Find "the Reset cryptographic identity" button
+        await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
+
+        // Confirm
+        await encryptionTab.getByRole("button", { name: "Continue" }).click();
+
+        // Enter the password
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
+        await page.getByRole("button", { name: "Continue" }).click();
+
+        // Key storage should now be enabled
+        expect(await keyStorageToggle.isChecked()).toBe(true);
     });
 
     test(

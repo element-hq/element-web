@@ -242,7 +242,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 action: Action.ViewRoom,
                 room_id: room?.roomId,
                 view_call: true,
-                skipLobby: skipLobbyToggle ?? ("shiftKey" in e ? e.shiftKey : false),
+                skipLobby: ("shiftKey" in e && e.shiftKey) || skipLobbyToggle,
                 metricsTrigger: undefined,
             });
         },

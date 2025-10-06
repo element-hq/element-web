@@ -17,6 +17,7 @@ import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButt
 import { type OpenToTabPayload } from "../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
+import SdkConfig from "../../../SdkConfig";
 
 interface Props {
     onFinished: (dismissed: boolean) => void;
@@ -60,7 +61,7 @@ export default class ConfirmKeyStorageOffDialog extends React.Component<Props> {
                     a: (sub) => (
                         <>
                             <br />
-                            <a href="https://element.io/help#encryption5" target="_blank" rel="noreferrer noopener">
+                            <a href={SdkConfig.get("help_encryption_url")} target="_blank" rel="noreferrer noopener">
                                 {sub} <PopOutIcon />
                             </a>
                         </>

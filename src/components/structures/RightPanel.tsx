@@ -224,9 +224,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                 break;
             case RightPanelPhases.FilePanel:
                 if (!!roomId) {
-                    card = (
-                        <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} onClose={this.onClose} />
-                    );
+                    card = <FilePanel roomId={roomId} onClose={this.onClose} />;
                 }
                 break;
 

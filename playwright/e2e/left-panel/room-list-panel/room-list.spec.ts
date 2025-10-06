@@ -252,6 +252,26 @@ test.describe("Room list", () => {
                 // Focus should be back on the notification button
                 await expect(notificationButton).toBeFocused();
             });
+
+            test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
+                const roomListView = getRoomList(page);
+
+                const topRoom = roomListView.getByRole("option", { name: "Open room room29" });
+
+                // open the room
+                await topRoom.click();
+                // put focus back on the room list item
+                await topRoom.click();
+                await expect(topRoom).toBeFocused();
+
+                await page.keyboard.press("End");
+                const bottomRoom = roomListView.getByRole("option", { name: "Open room room0" });
+                await expect(bottomRoom).toBeFocused();
+
+                await page.keyboard.press("Home");
+                const topRoomAgain = roomListView.getByRole("option", { name: "Open room room29" });
+                await expect(topRoomAgain).toBeFocused();
+            });
         });
     });
 
