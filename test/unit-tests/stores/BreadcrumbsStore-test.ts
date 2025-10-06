@@ -112,7 +112,7 @@ describe("BreadcrumbsStore", () => {
             await dispatchJoinRoom(room.roomId);
 
             // We pass the value of the dynamic predecessor setting through
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, false);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, false);
         });
     });
 
@@ -134,7 +134,7 @@ describe("BreadcrumbsStore", () => {
             await dispatchJoinRoom(room.roomId);
 
             // We pass the value of the dynamic predecessor setting through
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, true);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, true);
         });
     });
 

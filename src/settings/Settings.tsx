@@ -690,7 +690,7 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|new_room_list"),
         description: _td("labs|under_active_development"),
         isFeature: true,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
     },
     /**
@@ -1430,6 +1430,14 @@ export const SETTINGS: Settings = {
         default: true,
     },
     [UIFeature.BulkUnverifiedSessionsReminder]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AllowCreatingPublicSpaces]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AllowCreatingPublicRooms]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },

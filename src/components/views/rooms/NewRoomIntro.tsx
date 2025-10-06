@@ -30,6 +30,8 @@ import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { useTopic } from "../../../hooks/room/useTopic";
+import { topicToHtml, Linkify } from "../../../HtmlUtils";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -52,6 +54,7 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useScopedRoomContext("room", "roomId");
+    const topic = useTopic(room);
 
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
@@ -106,7 +109,6 @@ const NewRoomIntro: React.FC = () => {
         );
     } else {
         const inRoom = room && room.getMyMembership() === KnownMembership.Join;
-        const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
         const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getSafeUserId());
 
         const onTopicClick = (): void => {
@@ -126,18 +128,23 @@ const NewRoomIntro: React.FC = () => {
         let topicText;
         if (canAddTopic && topic) {
             topicText = _t(
-                "room|intro|topic_edit",
-                { topic },
+                "room|intro|edit_topic",
+                {},
                 {
                     a: (sub) => (
                         <AccessibleButton element="a" kind="link_inline" onClick={onTopicClick}>
                             {sub}
                         </AccessibleButton>
                     ),
+                    topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
                 },
             );
         } else if (topic) {
-            topicText = _t("room|intro|topic", { topic });
+            topicText = _t(
+                "room|intro|display_topic",
+                {},
+                { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
+            );
         } else if (canAddTopic) {
             topicText = _t(
                 "room|intro|no_topic",
@@ -245,7 +252,7 @@ const NewRoomIntro: React.FC = () => {
                         },
                     )}
                 </p>
-                <p>{topicText}</p>
+                <p data-testid="topic">{topicText}</p>
                 {buttons}
             </React.Fragment>
         );

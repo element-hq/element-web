@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RichItem renders the list 1`] = `
+<div>
+  <div
+    style="height: 220px; overflow: hidden;"
+  >
+    <div
+      class="flex richList"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="title"
+        id="«r0»"
+      >
+        Rich List Title
+      </span>
+      <ul
+        aria-labelledby="«r0»"
+        class="content"
+        role="listbox"
+        tabindex="0"
+      >
+        <li
+          aria-label="First Item"
+          class="richItem"
+          role="option"
+          tabindex="-1"
+        >
+          <div
+            class="flex avatar"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <div
+              style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+            />
+          </div>
+          <span
+            class="title"
+          >
+            First Item
+          </span>
+          <span
+            class="description"
+          >
+            description
+          </span>
+        </li>
+        <li
+          aria-label="Second Item"
+          aria-selected="true"
+          class="richItem"
+          role="option"
+          tabindex="-1"
+        >
+          <div
+            aria-hidden="true"
+            class="flex checkmark"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <svg
+              color="var(--cpd-color-icon-on-solid-primary)"
+              fill="currentColor"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
+          <span
+            class="title"
+          >
+            Second Item
+          </span>
+          <span
+            class="description"
+          >
+            description
+          </span>
+        </li>
+        <li
+          aria-label="Third Item"
+          class="richItem"
+          role="option"
+          tabindex="-1"
+        >
+          <div
+            class="flex avatar"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <div
+              style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+            />
+          </div>
+          <span
+            class="title"
+          >
+            Third Item
+          </span>
+          <span
+            class="description"
+          >
+            description
+          </span>
+        </li>
+        <li
+          aria-label="Fourth Item"
+          class="richItem"
+          role="option"
+          tabindex="-1"
+        >
+          <div
+            class="flex avatar"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <div
+              style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+            />
+          </div>
+          <span
+            class="title"
+          >
+            Fourth Item
+          </span>
+          <span
+            class="description"
+          >
+            description
+          </span>
+        </li>
+        <li
+          aria-label="Fifth Item"
+          class="richItem"
+          role="option"
+          tabindex="-1"
+        >
+          <div
+            class="flex avatar"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <div
+              style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+            />
+          </div>
+          <span
+            class="title"
+          >
+            Fifth Item
+          </span>
+          <span
+            class="description"
+          >
+            description
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RichItem renders the list with isEmpty=true 1`] = `
+<div>
+  <div
+    style="height: 220px; overflow: hidden;"
+  >
+    <div
+      class="flex richList"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="title"
+        id="«r1»"
+      >
+        Rich List Title
+      </span>
+      <span
+        class="empty"
+      >
+        No items available
+      </span>
+    </div>
+  </div>
+</div>
+`;

@@ -5,12 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
+import { renderHook, waitFor } from "jest-matrix-react";
 import { act } from "react";
 import { mocked } from "jest-mock";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import type { BackupTrustInfo, KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { useKeyStoragePanelViewModel } from "../../../../../../src/components/viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 
@@ -37,6 +38,23 @@ describe("KeyStoragePanelViewModel", () => {
         expect(result.current.busy).toBe(true);
     });
 
+    it("should update if a KeyBackupStatus event is received", async () => {
+        const { result } = renderHook(
+            () => useKeyStoragePanelViewModel(),
+            withClientContextRenderOptions(matrixClient),
+        );
+        await waitFor(() => expect(result.current.isEnabled).toBe(false));
+
+        const mock = mocked(matrixClient.getCrypto()!.getActiveSessionBackupVersion);
+        mock.mockResolvedValue("1");
+        matrixClient.emit(CryptoEvent.KeyBackupStatus, true);
+        await waitFor(() => expect(result.current.isEnabled).toBe(true));
+
+        mock.mockResolvedValue(null);
+        matrixClient.emit(CryptoEvent.KeyBackupStatus, false);
+        await waitFor(() => expect(result.current.isEnabled).toBe(false));
+    });
+
     it("should call resetKeyBackup if there is no backup currently", async () => {
         mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue(null);
 
@@ -49,8 +67,21 @@ describe("KeyStoragePanelViewModel", () => {
         expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).toHaveBeenCalled();
     });
 
-    it("should not call resetKeyBackup if there is a backup currently", async () => {
-        mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({} as KeyBackupCheck);
+    it.each<BackupTrustInfo>([
+        { trusted: true, matchesDecryptionKey: false },
+        { trusted: false, matchesDecryptionKey: true },
+        { trusted: true, matchesDecryptionKey: true },
+    ])("should not call resetKeyBackup if there is a backup currently and it is trusted", async (trustInfo) => {
+        mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({
+            backupInfo: {
+                version: "1",
+                algorithm: "foobar",
+                auth_data: {
+                    public_key: "foobar",
+                },
+            },
+            trustInfo,
+        });
 
         const { result } = renderHook(
             () => useKeyStoragePanelViewModel(),
@@ -59,6 +90,30 @@ describe("KeyStoragePanelViewModel", () => {
 
         await result.current.setEnabled(true);
         expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).not.toHaveBeenCalled();
+    });
+
+    it("should call resetKeyBackup if there is a backup currently but it is not trusted", async () => {
+        mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({
+            backupInfo: {
+                version: "1",
+                algorithm: "foobar",
+                auth_data: {
+                    public_key: "foobar",
+                },
+            },
+            trustInfo: {
+                trusted: false,
+                matchesDecryptionKey: false,
+            },
+        });
+
+        const { result } = renderHook(
+            () => useKeyStoragePanelViewModel(),
+            withClientContextRenderOptions(matrixClient),
+        );
+
+        await result.current.setEnabled(true);
+        expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).toHaveBeenCalled();
     });
 
     it("should set account data flag when enabling", async () => {

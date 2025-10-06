@@ -6,7 +6,7 @@ exports[`<AuthPage /> should match snapshot 1`] = `
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal"
+      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
       style="position: relative;"
     >
       <div
@@ -15,7 +15,7 @@ exports[`<AuthPage /> should match snapshot 1`] = `
       />
       <div
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+        style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
       />
     </div>
     <footer

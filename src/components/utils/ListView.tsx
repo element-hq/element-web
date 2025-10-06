@@ -133,13 +133,13 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             }
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                setTabIndexKey(key);
                 isScrollingToItem.current = true;
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
                     done: () => {
+                        setTabIndexKey(key);
                         isScrollingToItem.current = false;
                     },
                 });
@@ -285,7 +285,10 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     return (
         <Virtuoso
-            tabIndex={props.tabIndex || undefined} // We don't need to focus the container, so leave it undefined by default
+            // note that either the container of direct children must be focusable to be axe
+            // compliant, so we leave tabIndex as the default so the container can be focused
+            // (virtuoso wraps the children inside another couple of elements so setting it
+            // on those doesn't seem to work, unfortunately)
             ref={virtuosoHandleRef}
             scrollerRef={scrollerRef}
             onKeyDown={keyDownCallback}

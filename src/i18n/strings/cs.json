@@ -600,7 +600,6 @@
         "user": "Uživatel",
         "user_avatar": "Profilový obrázek",
         "username": "Uživatelské jméno",
-        "verification_cancelled": "Oveření bylo zrušeno",
         "verified": "Ověřeno",
         "version": "Verze",
         "video": "Video",
@@ -656,6 +655,7 @@
         "poll_button_no_perms_description": "Nemáte oprávnění zahajovat hlasování v této místnosti.",
         "poll_button_no_perms_title": "Vyžaduje oprávnění",
         "replying_title": "Odpovídá",
+        "room_unencrypted": "Zprávy v této místnosti nejsou koncově šifrované.",
         "room_upgraded_link": "Konverzace pokračuje zde.",
         "room_upgraded_notice": "Tato místnost byla nahrazena a už není používaná.",
         "send_button_title": "Poslat zprávu",
@@ -719,6 +719,7 @@
         "personal_space_description": "Soukromý prostor pro uspořádání vašich místností",
         "private_description": "Pouze pozvat, nejlepší pro sebe nebo pro týmy",
         "private_heading": "Váš soukromý prostor",
+        "private_only_heading": "Váš prostor",
         "private_personal_description": "Zajistěte, aby do %(name)s měli přístup správní lidé",
         "private_personal_heading": "S kým pracujete?",
         "private_space": "Já a moji spolupracovníci",
@@ -969,7 +970,6 @@
             "title": "Záloha klíčů byla odstraněna",
             "warning": "Pokud jste způsob obnovy neodstranili vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
-        "reset_all_button": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Resetovat vše</a>",
         "set_up_recovery": "Nastavení obnovení",
         "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
@@ -992,16 +992,15 @@
             "after_new_login": {
                 "device_verified": "Zařízení ověřeno",
                 "skip_verification": "Prozatím přeskočit ověřování",
-                "unable_to_verify": "Nelze ověřit toto zařízení",
                 "verify_this_device": "Ověřit toto zařízení"
             },
-            "cancelled": "Zrušili jste proces ověření.",
-            "cancelled_self": "Ověřování na jiném zařízení jste zrušili.",
-            "cancelled_user": "%(displayName)s zrušil(a) proces ověření.",
             "cancelling": "Rušení…",
+            "cant_confirm": "Nemůžete potvrdit?",
             "complete_action": "OK",
             "complete_description": "Uživatel úspěšně ověřen.",
             "complete_title": "Ověřeno!",
+            "confirm_identity_description": "Ověřte toto zařízení a nastavte zabezpečené zasílání zpráv.",
+            "confirm_identity_title": "Potvrďte svou totožnost",
             "error_starting_description": "Nepodařilo se zahájit chat s druhým uživatelem.",
             "error_starting_title": "Chyba při zahájení ověření",
             "explainer": "Bezpečné zprávy s tímto uživatelem jsou koncově šifrované a nikdo další je nemůže číst.",
@@ -1027,47 +1026,37 @@
                 "text": "Zadejte ID a otisk prstu jednoho ze svých vlastních zařízení a ověřte jej. POZNÁMKA to umožňuje druhému zařízení odesílat a přijímat zprávy jako vy. POKUD VÁM NĚKDO ŘEKL, ABYSTE SEM NĚCO VLOŽILI, JE PRAVDĚPODOBNÉ, ŽE JSTE PODVEDENI!",
                 "wrong_fingerprint": "Nelze ověřit zařízení '%(deviceId)s' - zadaný otisk prstu '%(fingerprint)s' neodpovídá otisku prstu zařízení, '%(fprint)s'"
             },
-            "no_key_or_device": "Vypadá to, že nemáte klíč pro obnovení ani žádné jiné zařízení, které byste mohli ověřit.  Toto zařízení nebude mít přístup ke starým zašifrovaným zprávám. Abyste mohli na tomto zařízení ověřit svou identitu, budete muset obnovit ověřovací klíče.",
             "no_support_qr_emoji": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
             "other_party_cancelled": "Druhá strana ověření zrušila.",
             "prompt_encrypted": "Ověřit všechny uživatele v místnosti, abyste se přesvědčili o bezpečnosti.",
-            "prompt_self": "Začít proces ověření znovu pomocí notifikace.",
             "prompt_unencrypted": "V šifrovaných místnostech ověřte všechny uživatele, abyste zajistili bezpečnost komunikace.",
-            "prompt_user": "Proces ověření začněte znovu z profilu kontaktu.",
             "qr_or_sas": "%(qrCode)s nebo %(emojiCompare)s",
-            "qr_or_sas_header": "Ověřte toto zařízení dokončením jedné z následujících položek:",
             "qr_prompt": "Naskenujte tento jedinečný kód",
-            "qr_reciprocate_same_shield_device": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
             "qr_reciprocate_same_shield_user": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
-            "request_toast_accept": "Ověřit relaci",
             "request_toast_accept_user": "Ověřit uživatele",
             "request_toast_decline_counter": "Ignorovat (%(counter)s)",
             "request_toast_detail": "%(deviceId)s z %(ip)s",
-            "reset_proceed_prompt": "Pokračovat v resetování",
             "sas_caption_self": "Ověřte toto zařízení tak, že potvrdíte, že se na jeho obrazovce zobrazí následující číslo.",
             "sas_caption_user": "Ověřte uživatele zkontrolováním, že se na obrazovce objevila stejná čísla.",
             "sas_description": "Pokud na žádném zařízení nemáte kameru, porovnejte jedinečnou kombinaci emoji",
-            "sas_emoji_caption_self": "Potvrďte, že se následující emotikony zobrazují na obou zařízeních ve stejném pořadí:",
             "sas_emoji_caption_user": "Ověřte uživatele zkontrolováním, že se mu na obrazovce objevily stejné emoji.",
             "sas_match": "Shodují se",
             "sas_no_match": "Neshodují se",
             "sas_prompt": "Porovnejte jedinečnou kombinaci emoji",
             "scan_qr": "Ověřte naskenováním",
             "scan_qr_explainer": "Požádejte uživatele %(displayName)s o naskenování tohoto kódu pro vaše ověření:",
-            "self_verification_hint": "Pro pokračování, přijměte žádost o ověření na svém dalším zařízení.",
             "start_button": "Zahájit ověření",
-            "successful_device": "Ověřili jste %(deviceName)s (%(deviceId)s)!",
-            "successful_own_device": "Úspěšně jste ověřili vaše zařízení!",
             "successful_user": "Úspěšně jste ověřili uživatele %(displayName)s!",
-            "timed_out": "Ověření vypršelo.",
             "unsupported_method": "Nepovedlo se nám najít podporovanou metodu ověření.",
             "unverified_session_toast_accept": "Ano, to jsem byl já",
             "unverified_session_toast_title": "Nové přihlášní. Jste to vy?",
             "unverified_sessions_toast_description": "Zkontrolujte, zda je váš účet v bezpečí",
             "unverified_sessions_toast_reject": "Později",
             "unverified_sessions_toast_title": "Máte neověřené relace",
-            "verification_description": "Ověřte svou identitu, abyste získali přístup k šifrovaným zprávám a prokázali svou identitu ostatním. Pokud používáte také mobilní zařízení, před pokračováním otevřete aplikaci.",
+            "use_another_device": "Použít jiné zařízení",
+            "use_recovery_key": "Použít klíč pro obnovení",
             "verification_dialog_title_device": "Ověřit jiné zařízení",
+            "verification_dialog_title_failed": "Ověření se nezdařilo",
             "verification_dialog_title_user": "Požadavek na ověření",
             "verification_skip_warning": "Bez ověření nebudete mít přístup ke všem svým zprávám a můžete se ostatním jevit jako nedůvěryhodní.",
             "verification_success_with_backup": "Vaše nové zařízení je nyní ověřeno. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé jej budou považovat za důvěryhodné.",
@@ -1076,9 +1065,6 @@
             "verify_emoji_prompt": "Ověření porovnáním několika emoji.",
             "verify_emoji_prompt_qr": "Pokud vám skenování kódů nefunguje, ověřte se porovnáním emoji.",
             "verify_later": "Ověřím se později",
-            "verify_using_device": "Ověřit pomocí jiného zařízení",
-            "verify_using_key": "Ověřit pomocí klíče pro obnovení",
-            "verify_using_key_or_phrase": "Ověření pomocí klíče pro obnovení nebo fráze",
             "waiting_for_user_accept": "Čekáme, než %(displayName)s výzvu přijme…",
             "waiting_other_device": "Čekáme na ověření na jiném zařízení…",
             "waiting_other_device_details": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
@@ -1128,6 +1114,7 @@
         "tls": "Nelze se připojit k domovskému serveru – zkontrolujte prosím své připojení, prověřte, zda je <a>SSL certifikát</a> vašeho domovského serveru důvěryhodný, a že některé z rozšíření prohlížeče neblokuje komunikaci.",
         "unknown": "Neznámá chyba",
         "unknown_error_code": "neznámý kód chyby",
+        "update_history_visibility": "Nepodařilo se změnit viditelnost historie",
         "update_power_level": "Nepodařilo se změnit úroveň oprávnění"
     },
     "error_app_open_in_another_tab": "Přepněte na jiný panel a připojte se k %(brand)s. Tuto kartu nyní můžete zavřít.",
@@ -1174,7 +1161,7 @@
             "audio": "Zvuk",
             "file": "Soubor",
             "image": "Obrázek",
-            "poll": "Anketa",
+            "poll": "Hlasování",
             "video": "Video"
         },
         "preview": "<bold>%(prefix)s: </bold> %(preview)s"
@@ -1879,11 +1866,6 @@
                 "other": "Můžete připnout až %(count)s widgetů"
             },
             "menu": "Otevřít menu",
-            "release_announcement": {
-                "close": "OK",
-                "description": "Všechny připnuté zprávy najdete zde. Přejděte na libovolnou zprávu a výběrem možnosti \"Připnout\" ji přidejte.",
-                "title": "Všechny nové připnuté zprávy"
-            },
             "reply_thread": "Odpověď na <link>vlákno zprávy</link>",
             "unpin_all": {
                 "button": "Odepnout všechny zprávy",
@@ -1917,7 +1899,7 @@
             "view_in_timeline": "Zobrazit hlasování na časové ose",
             "view_poll": "Zobrazit hlasování"
         },
-        "polls_button": "Ankety",
+        "polls_button": "Hlasování",
         "room_summary_card": {
             "title": "Informace o místnosti"
         },
@@ -2006,7 +1988,9 @@
         "inaccessible_subtitle_1": "Zkuste to později nebo požádejte správce místnosti či prostoru, aby zkontroloval, zda máte přístup.",
         "inaccessible_subtitle_2": "Při pokusu o přístup do místnosti nebo prostoru bylo vráceno %(errcode)s. Pokud si myslíte, že se vám tato zpráva zobrazuje chybně, pošlete prosím <issueLink>hlášení o chybě</issueLink>.",
         "intro": {
+            "display_topic": "Téma: <topic/>",
             "dm_caption": "V této konverzaci jste pouze vy dva, dokud někdo z vás nepozve někoho dalšího.",
+            "edit_topic": "Téma: <topic/> (<a>upravit</a>)",
             "enable_encryption_prompt": "Povolte šifrování v nastavení.",
             "encrypted_3pid_dm_pending_join": "Jakmile se všichni připojí, budete moci konverzovat",
             "no_avatar_label": "Přidejte fotografii, aby lidé mohli snadno najít váši místnost.",
@@ -2016,8 +2000,6 @@
             "send_message_start_dm": "Odesláním první zprávy pozvete <displayName/> do chatu",
             "start_of_dm_history": "Toto je začátek historie vašich přímých zpráv s uživatelem <displayName />.",
             "start_of_room": "Toto je začátek místnosti <roomName/>.",
-            "topic": "Téma: %(topic)s ",
-            "topic_edit": "Téma: %(topic)s (<a>upravit</a>)",
             "unencrypted_warning": "Koncové šifrování není povoleno",
             "user_created": "%(displayName)s vytvořil tuto místnost.",
             "you_created": "Vytvořili jste tuto místnost."
@@ -2072,7 +2054,9 @@
         "pinned_message_banner": {
             "button_close_list": "Zavřít seznam",
             "button_view_all": "Zobrazit vše",
-            "description": "Tato místnost má připnuté zprávy. Kliknutím je zobrazíte.",
+            "description": "Připnuté zprávy",
+            "go_to_newest_message": "Zobrazit připnutou zprávu na časové ose a nejnovější připnutou zprávu zde",
+            "go_to_next_message": "Zobrazit připnutou zprávu na časové ose a další nejstarší připnutou zprávu zde",
             "title": "<bold>%(index)sz%(length)s</bold> Připnuté zprávy"
         },
         "read_topic": "Klikněte pro přečtení tématu",
@@ -2182,6 +2166,26 @@
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
+        },
+        "release_announcement": {
+            "done": "Hotovo",
+            "filter": {
+                "description": "Filtrujte své chaty jediným kliknutím. Rozbalením zobrazíte další filtry.",
+                "title": "Nové rychlé filtry"
+            },
+            "intro": {
+                "description": "Seznam chatů byl aktualizován, aby byl přehlednější a jednodušší na používání.",
+                "title": "Chaty mají nový vzhled!"
+            },
+            "next": "Další",
+            "settings": {
+                "description": "Chcete-li zobrazit nebo skrýt náhledy zpráv, přejděte do Všechna nastavení > Předvolby > Seznam místností",
+                "title": "Některá nastavení byla přesunuta"
+            },
+            "sort": {
+                "description": "Změňte pořadí svých chatů z nejnovějších na A-Z",
+                "title": "Seřaďte si chaty"
+            }
         },
         "room": {
             "more_options": "Více možností",
@@ -2372,6 +2376,10 @@
             "users_default": "Výchozí role"
         },
         "security": {
+            "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
+                "description": "Nemáte oprávnění měnit viditelnost historie místnosti. To je nebezpečné, protože by to mohlo umožnit uživatelům, kteří nejsou členy, číst zprávy.",
+                "title": "Nelze nastavit místnost jako soukromou"
+            },
             "enable_encryption_confirm_description": "Po zapnutí již nelze šifrování v této místnosti vypnout. Zprávy v šifrovaných místnostech mohou číst jen členové místnosti, server se k obsahu nedostane. Šifrování místností nepodporuje většina botů a propojení. <a>Více informací o šifrování.</a>",
             "enable_encryption_confirm_title": "Povolit šifrování?",
             "enable_encryption_public_room_confirm_description_1": "<b>Nedoporučuje se šifrovat veřejné místnosti.</b>Veřejné místnosti může najít a připojit se k nim kdokoli, takže si v nich může číst zprávy kdokoli. Nezískáte tak žádnou z výhod šifrování a nebudete ho moci později vypnout. Šifrování zpráv ve veřejné místnosti zpomalí příjem a odesílání zpráv.",
@@ -2389,7 +2397,7 @@
             "history_visibility_joined": "Pouze členové (od chvíle jejich vstupu)",
             "history_visibility_legend": "Kdo může číst historii?",
             "history_visibility_shared": "Pouze členové (od chvíle vybrání této volby)",
-            "history_visibility_warning": "Změny viditelnosti historie této místnosti ovlivní jenom nové zprávy. Viditelnost starších zpráv zůstane, jaká byla v době jejich odeslání.",
+            "history_visibility_warning": "Viditelnost stávající historie se nezmění.",
             "history_visibility_world_readable": "Kdokoliv",
             "join_rule_description": "Rozhodněte, kdo se může připojit k místnosti %(roomName)s.",
             "join_rule_invite": "Soukromý (pouze pro pozvané)",
@@ -2432,6 +2440,7 @@
                 "other": "Aktualizace prostorů... (%(progress)s z %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Aktualizace místnosti",
+            "join_rule_world_readable_description": "Změna toho, kdo může vstoupit do místnosti, změní také viditelnost budoucích zpráv.",
             "public_without_alias_warning": "Přidejte prosím místnosti adresu aby na ní šlo odkazovat.",
             "publish_room": "Zviditelněte tuto místnost ve veřejném adresáři místností.",
             "publish_space": "Zviditelněte tento prostor ve veřejném adresáři místností.",
@@ -2570,6 +2579,7 @@
                 "breadcrumb_second_description": "Ztratíte veškerou historii zpráv, která je uložena pouze na serveru",
                 "breadcrumb_third_description": "Budete muset znovu ověřit všechna svá stávající zařízení a kontakty",
                 "breadcrumb_title": "Opravdu chcete obnovit svou identitu?",
+                "breadcrumb_title_cant_confirm": "Musíte resetovat svou totožnost",
                 "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
                 "breadcrumb_title_sync_failed": "Synchronizace úložiště klíčů se nezdařila. Musíte obnovit svou identitu.",
                 "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
@@ -3971,6 +3981,7 @@
         "connection_lost": "Došlo ke ztrátě připojení k serveru",
         "connection_lost_description": "Bez připojení k serveru nelze uskutečňovat hovory.",
         "consulting": "Konzultace s %(transferTarget)s. <a>Převod na %(transferee)s</a>",
+        "decline_call": "Odmítnout",
         "default_device": "Výchozí zařízení",
         "dial": "Vytočit",
         "dialpad": "Číselník",
@@ -4022,6 +4033,7 @@
         "show_sidebar_button": "Zobrazit postranní panel",
         "silence": "Ztlumit zvonění",
         "silenced": "Oznámení ztlumena",
+        "skip_lobby_toggle_option": "Připojte se ihned",
         "start_screenshare": "Začít sdílet obrazovku",
         "stop_screenshare": "Ukončit sdílení obrazovky",
         "too_many_calls": "Přiliš mnoho hovorů",

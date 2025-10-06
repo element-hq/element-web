@@ -267,7 +267,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SpellCheckSection />
                     </SettingsSubsection>
                     <SettingsSubsection formWrap heading={_t("settings|preferences|room_list_heading")}>
-                        {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                        {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                         {/* The settings is on device level where the other room list settings are on account level  */}
                         {newRoomListEnabled && (
                             <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />

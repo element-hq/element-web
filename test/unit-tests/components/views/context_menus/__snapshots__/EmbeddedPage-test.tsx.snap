@@ -41,3 +41,51 @@ exports[`<EmbeddedPage /> should translate _t strings 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`<EmbeddedPage /> should translate _t strings 2`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> should translate _t strings 3`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> should translate _t strings 4`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;

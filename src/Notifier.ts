@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -45,7 +45,7 @@ import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
-import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
+import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
@@ -489,24 +489,30 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
-        // Check maximum age (<= 15 seconds) of a call notify event that will trigger a ringing notification
-        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 15000 && !thisUserHasConnectedDevice) {
-            const content = ev.getContent();
+        if (EventType.RTCNotification === ev.getType() && !thisUserHasConnectedDevice) {
+            const content = ev.getContent() as IRTCNotificationContent;
             const roomId = ev.getRoomId();
-            if (typeof content.call_id !== "string") {
-                logger.warn("Received malformatted CallNotify event. Did not contain 'call_id' of type 'string'");
+            const eventId = ev.getId();
+
+            // Check maximum age of a call notification event that will trigger a ringing notification
+            if (Date.now() - getNotificationEventSendTs(ev) > content.lifetime) {
+                logger.warn("Received outdated RTCNotification event.");
                 return;
             }
             if (!roomId) {
-                logger.warn("Could not get roomId for CallNotify event");
+                logger.warn("Could not get roomId for RTCNotification event");
+                return;
+            }
+            if (!eventId) {
+                logger.warn("Could not get eventId for RTCNotification event");
                 return;
             }
             ToastStore.sharedInstance().addOrReplaceToast({
-                key: getIncomingCallToastKey(content.call_id, roomId),
+                key: getIncomingCallToastKey(eventId, roomId),
                 priority: 100,
                 component: IncomingCallToast,
                 bodyClassName: "mx_IncomingCallToast",
-                props: { notifyEvent: ev },
+                props: { notificationEvent: ev },
             });
         }
     }

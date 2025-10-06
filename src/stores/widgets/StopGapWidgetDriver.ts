@@ -190,6 +190,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 EventType.Reaction,
                 EventType.RoomRedaction,
                 "io.element.call.reaction",
+                //  MSC4310: Add dev and final event to ease future transition,
+                EventType.RTCDecline,
+                "m.rtc.decline",
             ];
             for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);

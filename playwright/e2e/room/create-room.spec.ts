@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { UIFeature } from "../../../src/settings/UIFeature";
 import { test, expect } from "../../element-web-test";
 
 const name = "Test room";
@@ -43,6 +44,21 @@ test.describe("Create Room", () => {
         },
     );
 
+    test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+        await page.getByRole("button", { name: "Add", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Start chat" }).click();
+
+        await page.getByTestId("invite-dialog-input").fill(user.userId);
+
+        await page.getByRole("button", { name: "Go" }).click();
+
+        await expect(page.getByText("Encryption enabled")).toBeVisible();
+        await expect(page.getByText("Send your first message to")).toBeVisible();
+
+        const composer = page.getByRole("region", { name: "Message composer" });
+        await expect(composer.getByRole("textbox", { name: "Send a message…" })).toBeVisible();
+    });
+
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
 
@@ -64,5 +80,34 @@ test.describe("Create Room", () => {
         await expect(page).toHaveURL(new RegExp(`/#/room/#test-create-room-video:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
+    });
+
+    test.describe("Should hide public room option if not allowed", () => {
+        test.use({
+            config: {
+                setting_defaults: {
+                    [UIFeature.AllowCreatingPublicRooms]: false,
+                },
+            },
+        });
+
+        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
+            const dialog = await app.openCreateRoomDialog();
+            // Fill name & topic
+            await dialog.getByRole("textbox", { name: "Name" }).fill(name);
+            await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
+
+            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            await expect(axe).toHaveNoViolations();
+            // Snapshot it
+            await expect(dialog).toMatchScreenshot("create-room-no-public.png");
+
+            // Submit
+            await dialog.getByRole("button", { name: "Create room" }).click();
+
+            await expect(page).toHaveURL(new RegExp(`/#/room/!.+`));
+            const header = page.locator(".mx_RoomHeader");
+            await expect(header).toContainText(name);
+        });
     });
 });

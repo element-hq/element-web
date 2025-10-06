@@ -72,9 +72,9 @@ describe("RoomListViewModel", () => {
                 "Unreads",
                 "People",
                 "Rooms",
+                "Favourites",
                 "Mentions",
                 "Invites",
-                "Favourites",
                 "Low priority",
             ].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
@@ -127,7 +127,7 @@ describe("RoomListViewModel", () => {
             expect(vm.current.activePrimaryFilter).toEqual(vm.current.primaryFilters[i]);
         });
 
-        it("should remove all filters when active space is changed", async () => {
+        it("should not remove all filters when active space is changed", async () => {
             mockAndCreateRooms();
             const { result: vm } = renderHook(() => useRoomListViewModel());
 
@@ -141,8 +141,8 @@ describe("RoomListViewModel", () => {
             // Simulate a space change
             await act(() => SpaceStore.instance.emit(UPDATE_SELECTED_SPACE));
 
-            // Primary filer should have been unapplied
-            expect(vm.current.activePrimaryFilter).toEqual(undefined);
+            // Primary filter should remain unchanged
+            expect(vm.current.activePrimaryFilter?.name).toEqual("People");
         });
     });
 

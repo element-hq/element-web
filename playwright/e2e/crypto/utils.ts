@@ -206,32 +206,42 @@ export async function checkDeviceIsConnectedKeyBackup(
 
 /**
  * Fill in the login form in element with the given creds.
- *
- * If a `securityKey` is given, verifies the new device using the key.
  */
-export async function logIntoElement(page: Page, credentials: Credentials, securityKey?: string) {
+export async function logIntoElement(page: Page, credentials: Credentials) {
     await page.goto("/#/login");
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
     await page.getByPlaceholder("Password").fill(credentials.password);
     await page.getByRole("button", { name: "Sign in" }).click();
+}
 
-    // if a securityKey was given, verify the new device
-    if (securityKey !== undefined) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
+/**
+ * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
+ * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ *
+ * Afterwards, waits for the application to redirect to the home page.
+ */
+export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
+    await logIntoElement(page, credentials);
 
-        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
-        // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
-        // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
-        // for a recovery key straight away. We click the button if it's there so this works in both cases.
-        if (await useSecurityKey.isVisible()) {
-            await useSecurityKey.click();
-        }
-        // Fill in the recovery key
-        await page.locator(".mx_Dialog").getByTitle("Recovery key").fill(securityKey);
-        await page.getByRole("button", { name: "Continue", disabled: false }).click();
-        await page.getByRole("button", { name: "Done" }).click();
+    await page.locator(".mx_AuthPage").getByRole("button", { name: "Use recovery key" }).click();
+
+    const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "Use recovery key" });
+    // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
+    // through to enter the recovery key which is what we have here. If they haven't, they'll be prompted
+    // for a recovery key straight away. We click the button if it's there so this works in both cases.
+    if (await useSecurityKey.isVisible()) {
+        await useSecurityKey.click();
     }
+
+    // Fill in the recovery key
+    await page.locator(".mx_Dialog").getByTitle("Recovery key").fill(recoveryKey);
+    await page.getByRole("button", { name: "Continue", disabled: false }).click();
+    await page.getByRole("button", { name: "Done" }).click();
+
+    // The application should now redirect to `/#/home`. Wait for that to happen, otherwise if a test immediately does
+    // a `viewRoomById` or similar, it could race.
+    await page.waitForURL("/#/home");
 }
 
 /**
@@ -262,7 +272,7 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
 export async function verifySession(app: ElementAppPage, securityKey: string) {
     const settings = await app.settings.openUserSettings("Encryption");
     await settings.getByRole("button", { name: "Verify this device" }).click();
-    await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
+    await app.page.getByRole("button", { name: "Use recovery key" }).click();
     await app.page.locator(".mx_Dialog").getByTitle("Recovery key").fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
@@ -428,8 +438,8 @@ export async function sendMessageInCurrentRoom(page: Page, message: string): Pro
  * @param isEncrypted - Whether the room should be encrypted
  */
 export async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
-    await page.getByRole("button", { name: "Add room" }).click();
-    await page.locator(".mx_IconizedContextMenu").getByRole("menuitem", { name: "New room" }).click();
+    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+    await page.getByRole("menuitem", { name: "New room" }).click();
 
     const dialog = page.locator(".mx_Dialog");
 

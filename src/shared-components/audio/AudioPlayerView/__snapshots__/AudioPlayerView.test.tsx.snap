@@ -20,7 +20,7 @@ exports[`AudioPlayerView renders the audio player in default state 1`] = `
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="_indicator-icon_zr2a0_17"
@@ -111,7 +111,7 @@ exports[`AudioPlayerView renders the audio player in error state 1`] = `
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="_indicator-icon_zr2a0_17"
@@ -207,7 +207,7 @@ exports[`AudioPlayerView renders the audio player without media name 1`] = `
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="_indicator-icon_zr2a0_17"
@@ -298,7 +298,7 @@ exports[`AudioPlayerView renders the audio player without size 1`] = `
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+        tabindex="-1"
       >
         <div
           class="_indicator-icon_zr2a0_17"

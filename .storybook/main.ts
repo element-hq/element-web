@@ -13,7 +13,7 @@ import { mergeConfig } from "vite";
 const config: StorybookConfig = {
     stories: ["../src/shared-components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
     staticDirs: ["../webapp"],
-    addons: ["@storybook/addon-docs", "@storybook/addon-designs"],
+    addons: ["@storybook/addon-docs", "@storybook/addon-designs", "@storybook/addon-a11y"],
     framework: "@storybook/react-vite",
     core: {
         disableTelemetry: true,
@@ -35,6 +35,12 @@ const config: StorybookConfig = {
                 allowedHosts: ["localhost", ".docker.internal"],
             },
         });
+    },
+    refs: {
+        "compound-web": {
+            title: "Compound Web",
+            url: "https://element-hq.github.io/compound-web/",
+        },
     },
 };
 export default config;

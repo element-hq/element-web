@@ -2,6 +2,11 @@
 
 Everyone is welcome to contribute code to Element Web, provided that they are willing to license their contributions to Element under a [Contributor License Agreement](https://cla-assistant.io/element-hq/element-web) (CLA). This ensures that their contribution will be made available under an OSI-approved open-source license, currently licensed under Affero General Public License v3 (AGPLv3) or General Public License v3 (GPLv3) at your choice.
 
+If you're contributing, or thinking about contributing, please come & chat to
+us in our development room, [#element-dev](https://matrix.to/#/#element-dev:matrix.org).
+This is the best place to ask questions about the code, how to work on the project
+or whether a change is likely to be accepted.
+
 ## How to contribute
 
 The preferred and easiest way to contribute changes to the project is to fork

@@ -30,8 +30,6 @@ export interface IE2EEWellKnown {
      * Disables the option to enable encryption in room settings for all new and existing rooms
      */
     force_disable?: boolean;
-    secure_backup_required?: boolean;
-    secure_backup_setup_methods?: SecureBackupSetupMethod[];
 }
 
 export interface ITileServerWellKnown {
@@ -73,29 +71,4 @@ export function getEmbeddedPagesWellKnown(matrixClient: MatrixClient | undefined
 
 export function embeddedPagesFromWellKnown(clientWellKnown?: IClientWellKnown): IEmbeddedPagesWellKnown {
     return clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY];
-}
-
-export function isSecureBackupRequired(matrixClient: MatrixClient): boolean {
-    return getE2EEWellKnown(matrixClient)?.["secure_backup_required"] === true;
-}
-
-export enum SecureBackupSetupMethod {
-    Key = "key",
-    Passphrase = "passphrase",
-}
-
-export function getSecureBackupSetupMethods(matrixClient: MatrixClient): SecureBackupSetupMethod[] {
-    const wellKnown = getE2EEWellKnown(matrixClient);
-    if (
-        !wellKnown ||
-        !wellKnown["secure_backup_setup_methods"] ||
-        !wellKnown["secure_backup_setup_methods"].length ||
-        !(
-            wellKnown["secure_backup_setup_methods"].includes(SecureBackupSetupMethod.Key) ||
-            wellKnown["secure_backup_setup_methods"].includes(SecureBackupSetupMethod.Passphrase)
-        )
-    ) {
-        return [SecureBackupSetupMethod.Key, SecureBackupSetupMethod.Passphrase];
-    }
-    return wellKnown["secure_backup_setup_methods"];
 }

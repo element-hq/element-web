@@ -11,76 +11,52 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     flex-direction: row;
     pointer-events: initial; /* restore pointer events so the user can accept/decline */
-    width: 250px;
 
-    $closeButtonSize: 16px;
+    $closeButtonSize: var(--cpd-space-4x);
 
     .mx_IncomingCallToast_content {
         display: flex;
         flex-direction: column;
-        margin-left: 8px;
+        gap: var(--cpd-space-4x);
+        padding: var(--cpd-space-3x);
         width: 100%;
         overflow: hidden;
 
-        .mx_IncomingCallToast_info {
-            margin-bottom: $spacing-16;
-
-            .mx_IncomingCallToast_room {
-                display: inline-block;
-
-                font-weight: var(--cpd-font-weight-semibold);
-                font-size: $font-15px;
-                line-height: $font-24px;
-
-                /* Prevent overlap with the close button */
-                width: calc(100% - $closeButtonSize - 2 * $spacing-4);
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-
-                margin-bottom: $spacing-4;
-            }
-
-            .mx_IncomingCallToast_message {
-                font-size: $font-12px;
-                line-height: $font-15px;
-
-                margin-bottom: $spacing-4;
-            }
-
-            .mx_LiveContentSummary {
-                font-size: $font-12px;
-                line-height: $font-15px;
-
-                .mx_LiveContentSummary_participants::before {
-                    width: 15px;
-                    height: 15px;
-                }
-            }
+        .mx_IncomingCallToast_message {
+            font-size: var(--cpd-font-size-body-lg);
+            line-height: var(--cpd-font-size-heading-sm);
+            width: calc(100% - $closeButtonSize - 2 * var(--cpd-space-1x));
+            font-weight: var(--cpd-font-weight-semibold);
         }
 
-        .mx_IncomingCallToast_joinButton {
-            position: relative;
+        .mx_LiveContentSummary_participants::before {
+            width: 15px;
+            height: 15px;
+        }
 
-            bottom: $spacing-4;
-            right: $spacing-4;
+        .mx_IncomingCallToast_buttons {
+            display: flex;
+            gap: var(--cpd-space-2x);
+        }
+
+        .mx_IncomingCallToast_actionButton {
+            position: relative;
 
             align-self: flex-end;
 
             box-sizing: border-box;
             min-width: 120px;
 
-            padding: $spacing-4 0;
-
-            line-height: $font-24px;
+            padding: var(--cpd-space-1x) 0;
+            padding-right: var(--cpd-space-4x);
+            line-height: var(--cpd-space-6x);
         }
     }
 
     .mx_IncomingCallToast_closeButton {
         position: absolute;
 
-        top: $spacing-4;
-        right: $spacing-4;
+        right: 0;
 
         display: flex;
         height: $closeButtonSize;
@@ -97,6 +73,12 @@ Please see LICENSE files in the repository root for full details.
             mask-repeat: no-repeat;
             mask-size: contain;
             mask-position: center;
+        }
+    }
+    .mx_IncomingCallToast_toggleWithLabel {
+        display: flex;
+        span {
+            flex-grow: 1;
         }
     }
 }
