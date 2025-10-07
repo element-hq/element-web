@@ -12,7 +12,7 @@ import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } 
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 // Import i18n.tsx instead of languageHandler to avoid circular deps
-import { _t, _td, type TranslationKey } from "../shared-components/utils/i18n";
+import { _t, _td, type TranslationKey } from "../../packages/shared-components/utils/i18n";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,

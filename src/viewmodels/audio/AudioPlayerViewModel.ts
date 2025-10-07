@@ -11,10 +11,10 @@ import { logger } from "matrix-js-sdk/src/logger";
 import {
     type AudioPlayerViewSnapshot,
     type AudioPlayerViewModel as AudioPlayerViewModelInterface,
-} from "../../shared-components/audio/AudioPlayerView";
+} from "../../../packages/shared-components/audio/AudioPlayerView";
 import { type Playback } from "../../audio/Playback";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { percentageOf } from "../../shared-components/utils/numbers";
+import { percentageOf } from "../../../packages/shared-components/utils/numbers";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { BaseViewModel } from "../base/BaseViewModel";
