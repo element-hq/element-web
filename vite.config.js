@@ -1,13 +1,16 @@
 /*
+ *
  * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
+ * /
  */
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+import dts from 'vite-plugin-dts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -19,15 +22,17 @@ export default defineConfig({
             // the proper extensions will be added
             fileName: "element-web-shared-components",
         },
+        outDir: "shared-component-dist",
         rollupOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: ["react"],
+            external: ["react", "react-dom"],
             output: {
                 // Provide global variables to use in the UMD build
                 // for externalized deps
                 globals: {
                     react: "react",
+                    "react-dom": "ReactDom",
                 },
             },
         },
@@ -38,4 +43,5 @@ export default defineConfig({
             $webapp: resolve(__dirname, "webapp"),
         },
     },
+    plugins: [dts({ rollupTypes: true, include: ["src/shared-components/**/*.{ts,tsx}"], copyDtsFiles: true })],
 });

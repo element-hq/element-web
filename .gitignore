@@ -34,3 +34,5 @@ electron/pub
 
 *storybook.log
 storybook-static
+
+shared-component-dist
