@@ -993,7 +993,6 @@ test.describe("Timeline", () => {
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
         });
 
-
         test.only("can send a voice message", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
             await app.viewRoomById(room.roomId);
 
@@ -1009,8 +1008,7 @@ test.describe("Timeline", () => {
                 .getByRole("button", { name: "Send voice message" })
                 .click();
 
-
-            await expect(roomViewBody.locator(".mx_MVoiceMessageBody")).toMatchScreenshot('voice-message.png');
+            await expect(roomViewBody.locator(".mx_MVoiceMessageBody")).toMatchScreenshot("voice-message.png");
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {
