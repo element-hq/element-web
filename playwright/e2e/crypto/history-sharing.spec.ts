@@ -45,11 +45,10 @@ test.describe("History sharing", function () {
 
             // Bob accepts the invite
             await bobPage.getByRole("option", { name: "TestRoom" }).click();
-            await bobPage.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
+            await bobPage.getByRole("button", { name: "Accept" }).click();
 
             // Bob should now be able to decrypt the event
-            const roomViewBody = bobPage.locator(".mx_RoomView_body");
-            await expect(roomViewBody.getByText("A message from Alice")).toBeVisible();
+            await expect(bobPage.getByText("A message from Alice")).toBeVisible();
 
             const mask = [bobPage.locator(".mx_MessageTimestamp")];
             await expect(bobPage.locator(".mx_RoomView_body")).toMatchScreenshot("shared-history-invite-accepted.png", {

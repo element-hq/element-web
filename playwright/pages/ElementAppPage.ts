@@ -218,12 +218,12 @@ export class ElementAppPage {
      */
     public async inviteUserToCurrentRoom(userId: string): Promise<void> {
         await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
-        await this.page.locator(".mx_BaseCard").getByRole("menuitem", { name: "Invite" }).click();
-        const inviteDialog = this.page.locator(".mx_InviteDialog_other");
-        const input = inviteDialog.getByTestId("invite-dialog-input");
+        await this.page.getByLabel("Right panel").getByRole("menuitem", { name: "Invite" }).click();
+
+        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
         await input.fill(userId);
         await input.press("Enter");
-        await inviteDialog.getByRole("button", { name: "Invite" }).click();
+        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
     /**
