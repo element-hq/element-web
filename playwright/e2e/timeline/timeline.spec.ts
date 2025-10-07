@@ -993,7 +993,7 @@ test.describe("Timeline", () => {
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
         });
 
-        test.only("can send a voice message", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+        test("can send a voice message", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
             await app.viewRoomById(room.roomId);
 
             const composerOptions = await app.openMessageComposerOptions();
