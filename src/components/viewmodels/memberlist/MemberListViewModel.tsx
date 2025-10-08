@@ -168,7 +168,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                     }
 
                     setMemberMap(newMemberMap);
-                    setMemberCount(joinedSdk.length + invitedSdk.length + threePidInvited.length);
+                    setMemberCount(room.getInvitedAndJoinedMemberCount() + threePidInvited.length);
                     if (!searchQuery) {
                         /**
                          * Since searching for members only gives you the relevant
