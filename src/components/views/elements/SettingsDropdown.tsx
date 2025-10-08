@@ -31,6 +31,7 @@ const SettingsDropdown = ({
     label: specificLabel,
     isExplicit,
     hideIfCannotSet,
+    onChange,
 }: Props): JSX.Element => {
     const id = useId();
     const settingValue = useSettingValueAt(level, name, roomId ?? null, isExplicit);
@@ -41,8 +42,9 @@ const SettingsDropdown = ({
         (value: string): void => {
             setValue(value); // local echo
             SettingsStore.setValue(name, roomId ?? null, level, value);
+            onChange?.(value);
         },
-        [name, roomId, level],
+        [name, roomId, level, onChange],
     );
 
     const disabled = !SettingsStore.canSetValue(name, roomId ?? null, level);
