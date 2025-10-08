@@ -88,9 +88,10 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
+    const firstFocusableItem = props.items.find(props.isItemFocusable);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
-        props.items[0] ? getItemKey(props.items[0]) : undefined,
+        firstFocusableItem ? getItemKey(firstFocusableItem) : undefined,
     );
     /** Range of currently visible items in the viewport */
     const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
@@ -113,10 +114,10 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
 
     // Ensure the tabIndexKey is set if there is none already or if the existing key is no longer displayed
     useEffect(() => {
-        if (items.length && (!tabIndexKey || keyToIndexMap.get(tabIndexKey) === undefined)) {
-            setTabIndexKey(getItemKey(items[0]));
+        if (firstFocusableItem && (!tabIndexKey || keyToIndexMap.get(tabIndexKey) === undefined)) {
+            setTabIndexKey(getItemKey(firstFocusableItem));
         }
-    }, [items, getItemKey, tabIndexKey, keyToIndexMap]);
+    }, [firstFocusableItem, getItemKey, tabIndexKey, keyToIndexMap]);
 
     /**
      * Scrolls to a specific item index and sets it as focused.
