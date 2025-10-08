@@ -30,6 +30,7 @@
         "@storybook/icons": "^1.6.0",
         "@storybook/react-vite": "^9.1.10",
         "@storybook/test-runner": "^0.23.0",
+        "concurrently": "^9.2.1",
         "storybook": "^9.1.10",
         "vite": "^7.1.9"
     },
