@@ -51,6 +51,9 @@ export default {
         // dependencies for
         "react-merge-refs",
         "temporal-polyfill",
+
+		// Knip doesn't pick this up
+		"eslint-plugin-storybook",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows
