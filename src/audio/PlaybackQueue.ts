@@ -209,12 +209,8 @@ export class PlaybackQueue {
     }
 
     private onPlaybackClock(playback: Playback, mxEvent: MatrixEvent, clocks: number[]): void {
-        if (playback.currentState === PlaybackState.Decoding || playback.currentState === PlaybackState.Preparing)
-            return; // ignore pre-ready values
+        if (playback.currentState !== PlaybackState.Playing && playback.currentState !== PlaybackState.Paused) return; // ignore pre-ready values
 
-        // Check clock value to avoid overwriting an incorrect value.
-        if (playback.currentState !== PlaybackState.Stopped && typeof clocks[0] === "number") {
-            this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
-        }
+        this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
     }
 }
