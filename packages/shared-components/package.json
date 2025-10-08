@@ -32,7 +32,8 @@
         "@storybook/test-runner": "^0.23.0",
         "concurrently": "^9.2.1",
         "storybook": "^9.1.10",
-        "vite": "^7.1.9"
+        "vite": "^7.1.9",
+        "vite-plugin-node-polyfills": "^0.24.0"
     },
     "engines": {
         "node": ">=20.0.0"
