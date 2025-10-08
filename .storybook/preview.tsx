@@ -3,7 +3,7 @@ import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@s
 import "../res/css/shared.pcss";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
-import { setLanguage } from "../src/shared-components/utils/i18n";
+import { setLanguage } from "../packages/shared-components/src/utils/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { StoryContext } from "storybook/internal/csf";
 
