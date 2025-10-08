@@ -77,8 +77,8 @@ export class PlaybackQueue {
         if (!!val) {
             this.clockStates = new Map<string, number>(JSON.parse(val));
             // Clean out any null values (from older versions)
-            for (const key of this.clockStates.keys()) {
-                if (this.clockStates.get(key) == null) {
+            for (const [key, value] of this.clockStates.entries()) {
+                if (value == null) {
                     this.clockStates.delete(key);
                 }
             }
