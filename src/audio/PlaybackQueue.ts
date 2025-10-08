@@ -95,7 +95,9 @@ export class PlaybackQueue {
     private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
-        if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()!) && !wasLastPlaying) {
+        const currentClockState = this.clockStates.get(mxEvent.getId()!);
+
+        if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
             // noinspection JSIgnoredPromiseFromCall
             playback.skipTo(this.clockStates.get(mxEvent.getId()!)!);
         } else if (newState === PlaybackState.Stopped) {
