@@ -126,7 +126,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         const opts: IOpts = {};
         const createOpts: IOpts["createOpts"] = (opts.createOpts = {});
         opts.roomType = this.props.type;
-        createOpts.name = this.state.name;
+        opts.name = this.state.name;
 
         if (this.state.joinRule === JoinRule.Public) {
             createOpts.visibility = Visibility.Public;
@@ -139,7 +139,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         if (this.state.topic) {
-            createOpts.topic = this.state.topic;
+            opts.topic = this.state.topic;
         }
         if (this.state.noFederate) {
             createOpts.creation_content = { "m.federate": false };

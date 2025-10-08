@@ -198,9 +198,8 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
 
             expect(onFinished).toHaveBeenCalledWith(true, {
-                createOpts: {
-                    name: roomName,
-                },
+                createOpts: {},
+                name: roomName,
                 encryption: true,
                 parentSpace: undefined,
                 roomType: undefined,
@@ -259,9 +258,9 @@ describe("<CreateRoomDialog />", () => {
                 await flushPromises();
                 expect(onFinished).toHaveBeenCalledWith(true, {
                     createOpts: {
-                        name: roomName,
                         visibility: Visibility.Private,
                     },
+                    name: roomName,
                     encryption: true,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
@@ -277,9 +276,9 @@ describe("<CreateRoomDialog />", () => {
                 await flushPromises();
                 expect(onFinished).toHaveBeenCalledWith(true, {
                     createOpts: {
-                        name: roomName,
                         visibility: Visibility.Public,
                     },
+                    name: roomName,
                     encryption: true,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
@@ -349,11 +348,11 @@ describe("<CreateRoomDialog />", () => {
 
             expect(onFinished).toHaveBeenCalledWith(true, {
                 createOpts: {
-                    name: roomName,
                     preset: Preset.PublicChat,
                     room_alias_name: roomAlias,
                     visibility: Visibility.Public,
                 },
+                name: roomName,
                 guestAccess: false,
                 parentSpace: undefined,
                 roomType: undefined,
