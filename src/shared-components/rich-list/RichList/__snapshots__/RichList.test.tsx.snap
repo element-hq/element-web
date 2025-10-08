@@ -11,19 +11,21 @@ exports[`RichItem renders the list 1`] = `
     >
       <span
         class="title"
+        id="«r0»"
       >
         Rich List Title
       </span>
       <ul
-        aria-label="Rich List Title"
+        aria-labelledby="«r0»"
         class="content"
         role="listbox"
+        tabindex="0"
       >
-        <button
+        <li
           aria-label="First Item"
           class="richItem"
           role="option"
-          type="button"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -43,13 +45,13 @@ exports[`RichItem renders the list 1`] = `
           >
             description
           </span>
-        </button>
-        <button
+        </li>
+        <li
           aria-label="Second Item"
           aria-selected="true"
           class="richItem"
           role="option"
-          type="button"
+          tabindex="-1"
         >
           <div
             aria-hidden="true"
@@ -79,12 +81,12 @@ exports[`RichItem renders the list 1`] = `
           >
             description
           </span>
-        </button>
-        <button
+        </li>
+        <li
           aria-label="Third Item"
           class="richItem"
           role="option"
-          type="button"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -104,12 +106,12 @@ exports[`RichItem renders the list 1`] = `
           >
             description
           </span>
-        </button>
-        <button
+        </li>
+        <li
           aria-label="Fourth Item"
           class="richItem"
           role="option"
-          type="button"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -129,12 +131,12 @@ exports[`RichItem renders the list 1`] = `
           >
             description
           </span>
-        </button>
-        <button
+        </li>
+        <li
           aria-label="Fifth Item"
           class="richItem"
           role="option"
-          type="button"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -154,7 +156,7 @@ exports[`RichItem renders the list 1`] = `
           >
             description
           </span>
-        </button>
+        </li>
       </ul>
     </div>
   </div>
@@ -172,6 +174,7 @@ exports[`RichItem renders the list with isEmpty=true 1`] = `
     >
       <span
         class="title"
+        id="«r1»"
       >
         Rich List Title
       </span>

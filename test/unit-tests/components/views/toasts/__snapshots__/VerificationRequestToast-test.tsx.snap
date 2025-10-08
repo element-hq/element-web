@@ -28,7 +28,7 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>
@@ -68,7 +68,7 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>

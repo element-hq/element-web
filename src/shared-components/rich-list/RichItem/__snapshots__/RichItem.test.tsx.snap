@@ -6,11 +6,11 @@ exports[`RichItem renders the item in default state 1`] = `
     role="listbox"
     style="all: unset; list-style: none;"
   >
-    <button
+    <li
       aria-label="Rich Item Title"
       class="richItem"
       role="option"
-      type="button"
+      tabindex="-1"
     >
       <div
         class="flex avatar"
@@ -36,7 +36,7 @@ exports[`RichItem renders the item in default state 1`] = `
       >
         145 days ago
       </span>
-    </button>
+    </li>
   </ul>
 </div>
 `;
@@ -47,12 +47,12 @@ exports[`RichItem renders the item in selected state 1`] = `
     role="listbox"
     style="all: unset; list-style: none;"
   >
-    <button
+    <li
       aria-label="Rich Item Title"
       aria-selected="true"
       class="richItem"
       role="option"
-      type="button"
+      tabindex="-1"
     >
       <div
         aria-hidden="true"
@@ -88,7 +88,7 @@ exports[`RichItem renders the item in selected state 1`] = `
       >
         145 days ago
       </span>
-    </button>
+    </li>
   </ul>
 </div>
 `;
@@ -99,11 +99,11 @@ exports[`RichItem renders the item without timestamp 1`] = `
     role="listbox"
     style="all: unset; list-style: none;"
   >
-    <button
+    <li
       aria-label="Rich Item Title"
       class="richItem"
       role="option"
-      type="button"
+      tabindex="-1"
     >
       <div
         class="flex avatar"
@@ -123,7 +123,7 @@ exports[`RichItem renders the item without timestamp 1`] = `
       >
         This is a description of the rich item.
       </span>
-    </button>
+    </li>
   </ul>
 </div>
 `;
