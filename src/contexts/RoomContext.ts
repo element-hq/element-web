@@ -75,6 +75,7 @@ const RoomContext = createContext<
     promptAskToJoin: false,
     viewRoomOpts: { buttons: [] },
     isRoomEncrypted: null,
+    roomViewStore: undefined!
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
