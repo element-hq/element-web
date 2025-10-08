@@ -2891,6 +2891,7 @@
             "room_list_heading": "Room list",
             "show_avatars_pills": "Show avatars in user, room and event mentions",
             "show_polls_button": "Show polls button",
+            "startup_window_behaviour_label": "Start-up and window behaviour",
             "surround_text": "Surround selected text when typing special characters",
             "time_heading": "Displaying time",
             "user_timezone": "Set timezone"

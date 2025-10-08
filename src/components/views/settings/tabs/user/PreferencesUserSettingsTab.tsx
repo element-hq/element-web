@@ -266,14 +266,16 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <SpellCheckSection />
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading="Start-up and window behaviour">
-                        <SettingsDropdown
-                            name="Electron.autoLaunch"
-                            label={_t("settings|start_automatically|label", { brand })}
-                            level={SettingLevel.PLATFORM}
-                            hideIfCannotSet
-                        />
-                    </SettingsSubsection>
+                    {SettingsStore.canSetValue("Electron.autoLaunch", null, SettingLevel.PLATFORM) && (
+                        <SettingsSubsection heading={_t("settings|preferences|startup_window_behaviour_label")}>
+                            <SettingsDropdown
+                                name="Electron.autoLaunch"
+                                label={_t("settings|start_automatically|label", { brand })}
+                                level={SettingLevel.PLATFORM}
+                                hideIfCannotSet
+                            />
+                        </SettingsSubsection>
+                    )}
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                         {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
