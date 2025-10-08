@@ -508,17 +508,6 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
         return getChildOrder(ev.content.order, ev.origin_server_ts, ev.state_key);
     });
 
-    const [subspaces, childRooms] = sortedChildren.reduce(
-        (result, ev: HierarchyRelation) => {
-            const room = hierarchy.roomMap.get(ev.state_key);
-            if (room && roomSet.has(room)) {
-                result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room, hierarchy));
-            }
-            return result;
-        },
-        [[] as HierarchyRoom[], [] as HierarchyRoom[]],
-    );
-
     const newParents = new Set(parents).add(root.room_id);
     return (
         <React.Fragment>
@@ -570,7 +559,7 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
                         />
                     );
                 }
-            });
+            })}
         </React.Fragment>
     );
 };
