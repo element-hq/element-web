@@ -390,16 +390,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             this.state.joinRule !== JoinRule.Public
         ) {
             let microcopy: string;
-            if (privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
-                if (this.state.canChangeEncryption) {
-                    microcopy = isVideoRoom
-                        ? _t("create_room|encrypted_video_room_warning")
-                        : _t("create_room|state_encrypted_warning");
-                } else {
-                    microcopy = _t("create_room|encryption_forced");
-                }
-            } else {
+            if (!privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
                 microcopy = _t("settings|security|e2ee_default_disabled_warning");
+            } else if (!this.state.canChangeEncryption) {
+                microcopy = _t("create_room|encryption_forced");
+            } else if (isVideoRoom) {
+                microcopy = _t("create_room|encrypted_video_room_warning");
+            } else {
+                microcopy = _t("create_room|state_encrypted_warning");
             }
             e2eeStateSection = (
                 <React.Fragment>
