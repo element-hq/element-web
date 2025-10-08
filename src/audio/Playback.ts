@@ -15,7 +15,7 @@ import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../../packages/shared-components/utils/numbers";
+import { clamp } from "../../packages/shared-components/src/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 

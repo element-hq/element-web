@@ -43,7 +43,7 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import ModuleApi from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEventView } from "../../packages/shared-components/event-tiles/TextualEventView";
+import { TextualEventView } from "../../packages/shared-components/src/event-tiles/TextualEventView";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins

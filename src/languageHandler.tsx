@@ -25,7 +25,7 @@ import {
     type IVariables,
     KEY_SEPARATOR,
     getLangsJson,
-} from "../packages/shared-components/utils/i18n";
+} from "../packages/shared-components/src/utils/i18n";
 
 export {
     _t,
@@ -40,7 +40,7 @@ export {
     normalizeLanguageKey,
     getNormalizedLanguageKeys,
     substitute,
-} from "../packages/shared-components/utils/i18n";
+} from "../packages/shared-components/src/utils/i18n";
 
 const i18nFolder = "i18n/";
 

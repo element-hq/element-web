@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { Form } from "@vector-im/compound-web";
 import React, { type JSX, useCallback } from "react";
 
-import { Flex } from "../../../../../packages/shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import {
     type MemberWithSeparator,
     SEPARATOR,
