@@ -66,11 +66,11 @@ jobs:
               continue-on-error: true
 
             - name: Run Visual tests
-              run: "packages/shared-components && yarn test:storybook:ci"
+              run: "cd packages/shared-components && yarn test:storybook:ci"
 
             - name: Upload received images & diffs
               if: always()
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: received-images
-                  path: ipackages/shared-components/playwright/shared-component-received
+                  path: packages/shared-components/playwright/shared-component-received
