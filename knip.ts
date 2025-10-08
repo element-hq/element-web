@@ -20,7 +20,7 @@ export default {
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
 
-        "packages/",
+        "packages/**/*",
     ],
     ignoreDependencies: [
         // Required for `action-validator`
