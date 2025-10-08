@@ -44,7 +44,6 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              working-directory: packages/shared-components
               uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
               id: playwright-cache
               with:
@@ -72,9 +71,8 @@ jobs:
               run: "yarn test:storybook:ci"
 
             - name: Upload received images & diffs
-              working-directory: packages/shared-components
               if: always()
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: received-images
-                  path: playwright/shared-component-received
+                  path: ipackages/shared-components/playwright/shared-component-received
