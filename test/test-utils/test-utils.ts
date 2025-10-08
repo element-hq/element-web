@@ -732,10 +732,8 @@ export function mkRoomState(
 
     roomState.setStateEvents(stateEvents);
 
-    if (members.length > 0) {
-        for (const member of members) {
-            roomState.members[member.userId] = member;
-        }
+    for (const member of members) {
+        roomState.members[member.userId] = member;
     }
 
     return roomState;
