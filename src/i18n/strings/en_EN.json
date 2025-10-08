@@ -3064,7 +3064,12 @@
             "spaces_explainer": "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
             "title": "Sidebar"
         },
-        "start_automatically": "Start automatically after system login",
+        "start_automatically": {
+            "label": "Open %(brand)s when you log in to your computer",
+            "enabled": "Yes",
+            "disabled": "No",
+            "minimised": "Minimised"
+        },
         "tac_only_notifications": "Only show notifications in the thread activity centre",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
