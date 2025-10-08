@@ -15,9 +15,10 @@ import { MockedPlayback } from "./MockedPlayback";
 
 describe("PlaybackQueue", () => {
     let playbackQueue: PlaybackQueue;
+    let mockRoom: Mocked<Room>;
 
     beforeEach(() => {
-        const mockRoom = {
+        mockRoom = {
             getMember: jest.fn(),
         } as unknown as Mocked<Room>;
         playbackQueue = new PlaybackQueue(mockRoom);
@@ -62,5 +63,25 @@ describe("PlaybackQueue", () => {
         mockPlayback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
 
         expect(mockPlayback.skipTo).toHaveBeenCalledWith(1);
+    });
+
+    it("should ignore the nullish clock state when loading", () => {
+        const clockStates = new Map([
+            ["a", 1],
+            ["b", null],
+            ["c", 3],
+        ]);
+        localStorage.setItem(
+            `mx_voice_message_clocks_${mockRoom.roomId}`,
+            JSON.stringify(Array.from(clockStates.entries())),
+        );
+        playbackQueue = new PlaybackQueue(mockRoom);
+
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("a")).toBe(true);
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("b")).toBe(false);
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("c")).toBe(true);
     });
 });
