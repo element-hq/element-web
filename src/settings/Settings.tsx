@@ -1448,9 +1448,9 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|start_automatically|label"),
         options: [
-            { value: "enabled", label: "settings|start_automatically|enabled" },
-            { value: "disabled", label: "settings|start_automatically|disabled" },
-            { value: "minimised", label: "settings|start_automatically|minimised" },
+            { value: "enabled", label: _td("settings|start_automatically|enabled") },
+            { value: "disabled", label: _td("settings|start_automatically|disabled") },
+            { value: "minimised", label: _td("settings|start_automatically|minimised") },
         ],
         default: "disabled",
     },

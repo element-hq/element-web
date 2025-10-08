@@ -3065,9 +3065,9 @@
             "title": "Sidebar"
         },
         "start_automatically": {
-            "label": "Open %(brand)s when you log in to your computer",
-            "enabled": "Yes",
             "disabled": "No",
+            "enabled": "Yes",
+            "label": "Open %(brand)s when you log in to your computer",
             "minimised": "Minimised"
         },
         "tac_only_notifications": "Only show notifications in the thread activity centre",
