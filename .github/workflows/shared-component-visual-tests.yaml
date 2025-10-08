@@ -60,15 +60,13 @@ jobs:
               run: "yarn build:res"
 
             - name: Build storybook dependencies
-              working-directory: packages/shared-components
               # When the first test is ran, it will fail because the dependencies are not yet built.
               # This step is to ensure that the dependencies are built before running the tests.
-              run: "yarn test:storybook:ci"
+              run: "cd packages/shared-components && yarn test:storybook:ci"
               continue-on-error: true
 
             - name: Run Visual tests
-              working-directory: packages/shared-components
-              run: "yarn test:storybook:ci"
+              run: "packages/shared-components && yarn test:storybook:ci"
 
             - name: Upload received images & diffs
               if: always()
