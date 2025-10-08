@@ -32,7 +32,6 @@ import {
     RoomType,
     GuestAccess,
     HistoryVisibility,
-    type HierarchyRelation,
     type HierarchyRoom,
     JoinRule,
 } from "matrix-js-sdk/src/matrix";
@@ -71,6 +70,7 @@ import { getTopic } from "../../hooks/room/useTopic";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 import SettingsStore from "../../settings/SettingsStore";
+import { filterBoolean } from "../../utils/arrays.ts";
 
 interface IProps {
     space: Room;
@@ -504,17 +504,35 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
     const space = cli.getRoom(root.room_id);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getSafeUserId());
 
-    const sortedChildren = sortBy(root.children_state, (ev) => {
-        return getChildOrder(ev.content.order, ev.origin_server_ts, ev.state_key);
-    });
+    const sortedChildren = filterBoolean(
+        sortBy(root.children_state, (ev) => {
+            return getChildOrder(ev.content.order, ev.origin_server_ts, ev.state_key);
+        }).map((ev) => {
+            const hierarchyRoom = hierarchy.roomMap.get(ev.state_key);
+            if (!hierarchyRoom || !roomSet.has(hierarchyRoom)) return null;
+            // Find the most up-to-date info for this room, if it has been upgraded and we know about it.
+            return toLocalRoom(cli, hierarchyRoom, hierarchy);
+        }),
+    );
 
     const newParents = new Set(parents).add(root.room_id);
     return (
         <React.Fragment>
-            {uniqBy(sortedChildren, "room_id").map((ev) => {
-                const room = toLocalRoom(cli, hierarchy.roomMap.get(ev.state_key), hierarchy);
-            
-                if (room.room_type === RoomType.Space) {
+            {uniqBy(sortedChildren, "room_id").map((room) => {
+                if (room.room_type !== RoomType.Space) {
+                    return (
+                        <Tile
+                            key={room.room_id}
+                            room={room}
+                            suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
+                            selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
+                            onViewRoomClick={() => onViewRoomClick(room.room_id, room.room_type as RoomType)}
+                            onJoinRoomClick={() => onJoinRoomClick(room.room_id, newParents)}
+                            hasPermissions={hasPermissions}
+                            onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
+                        />
+                    );
+                } else {
                     if (newParents.has(room.room_id)) return null; // prevent cycles
                     return (
                         <Tile
@@ -544,19 +562,6 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
                                 onToggleClick={onToggleClick}
                             />
                         </Tile>
-                    );
-                } else {
-                    return (
-                        <Tile
-                            key={room.room_id}
-                            room={room}
-                            suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
-                            selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
-                            onViewRoomClick={() => onViewRoomClick(room.room_id, room.room_type as RoomType)}
-                            onJoinRoomClick={() => onJoinRoomClick(room.room_id, newParents)}
-                            hasPermissions={hasPermissions}
-                            onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
-                        />
                     );
                 }
             })}
