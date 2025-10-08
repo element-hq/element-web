@@ -134,7 +134,7 @@ import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
-import { RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
