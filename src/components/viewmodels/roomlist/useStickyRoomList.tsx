@@ -11,22 +11,21 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Optional } from "matrix-events-sdk";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
+import { isRoomListRoom, type RoomListEntry, type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
 
-function getIndexByRoomId(rooms: Room[], roomId: Optional<string>): number | undefined {
-    const index = rooms.findIndex((room) => room.roomId === roomId);
+function getIndexByRoomId(rooms: RoomListEntry[], roomId: Optional<string>): number | undefined {
+    const index = rooms.findIndex((room) => isRoomListRoom(room) && room.roomId === roomId);
     return index === -1 ? undefined : index;
 }
 
 function getRoomsWithStickyRoom(
-    rooms: Room[],
+    rooms: RoomListEntry[],
     oldIndex: number | undefined,
     newIndex: number | undefined,
     isRoomChange: boolean,
-): { newRooms: Room[]; newIndex: number | undefined } {
+): { newRooms: RoomListEntry[]; newIndex: number | undefined } {
     const updated = { newIndex, newRooms: rooms };
     if (isRoomChange) {
         /*
@@ -83,8 +82,8 @@ export interface StickyRoomListResult {
  * - Provides a list of rooms such that the active room is sticky i.e the active room is kept
  * in the same index even when the order of rooms in the list changes.
  * - Provides the index of the active room.
- * @param rooms list of rooms
- * @see {@link StickyRoomListResult} details what this hook returns..
+ * @param roomsResult list of rooms
+ * @see {@link StickyRoomListResult} details what this hook returns.
  */
 export function useStickyRoomList(roomsResult: RoomsResult): StickyRoomListResult {
     const [listState, setListState] = useState<StickyRoomListResult>({

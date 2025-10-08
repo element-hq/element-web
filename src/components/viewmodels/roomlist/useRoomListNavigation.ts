@@ -5,8 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
-
 import dispatcher from "../../../dispatcher/dispatcher";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -14,17 +12,20 @@ import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoom
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import { isRoomListRoom, type RoomListEntry } from "../../../stores/room-list-v3/RoomListStoreV3.ts";
 
 /**
  * Hook to navigate the room list using keyboard shortcuts.
  * It listens to the ViewRoomDelta action and updates the room list accordingly.
- * @param rooms
+ * @param entries
  */
-export function useRoomListNavigation(rooms: Room[]): void {
+export function useRoomListNavigation(entries: RoomListEntry[]): void {
     useDispatcher(dispatcher, (payload) => {
         if (payload.action !== Action.ViewRoomDelta) return;
         const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
         if (!roomId) return;
+
+        const rooms = entries.filter(isRoomListRoom);
 
         const { delta, unread } = payload as ViewRoomDeltaPayload;
         const filteredRooms = unread

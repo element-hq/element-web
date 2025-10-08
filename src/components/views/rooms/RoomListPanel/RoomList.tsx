@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useRef, useState, type JSX } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useCallback, useRef, useState } from "react";
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
@@ -18,6 +17,12 @@ import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filter
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
+import {
+    isRoomListRoom,
+    isRoomListSectionHeader,
+    type RoomListEntry,
+} from "../../../../stores/room-list-v3/RoomListStoreV3.ts";
+import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView.tsx";
 
 interface RoomListProps {
     /**
@@ -37,6 +42,11 @@ const ROOM_LIST_ITEM_HEIGHT = 48;
  * We would likely need to simplify the item content to improve this case.
  */
 const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
+
+const getItemKey = (item: RoomListEntry): string => {
+    return isRoomListSectionHeader(item) ? item.key : item.roomId;
+};
+
 /**
  * A virtualized list of rooms.
  */
@@ -48,37 +58,37 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
     const getItemComponent = useCallback(
         (
             index: number,
-            item: Room,
+            item: RoomListEntry,
             context: ListContext<{
                 spaceId: string;
                 filterKeys: FilterKey[] | undefined;
             }>,
             onFocus: (e: React.FocusEvent) => void,
         ): JSX.Element => {
-            const itemKey = item.roomId;
+            const itemKey = getItemKey(item);
             const isRovingItem = itemKey === context.tabIndexKey;
             const isFocused = isRovingItem && context.focused;
             const isSelected = activeIndex === index;
-            return (
-                <RoomListItemView
-                    room={item}
-                    key={itemKey}
-                    isSelected={isSelected}
-                    isFocused={isFocused}
-                    tabIndex={isRovingItem ? 0 : -1}
-                    roomIndex={index}
-                    roomCount={roomCount}
-                    onFocus={onFocus}
-                    listIsScrolling={isScrolling}
-                />
-            );
+            if (isRoomListSectionHeader(item)) {
+                return <RoomListSectionHeaderView section={item} />;
+            } else {
+                return (
+                    <RoomListItemView
+                        room={item}
+                        key={itemKey}
+                        isSelected={isSelected}
+                        isFocused={isFocused}
+                        tabIndex={isRovingItem ? 0 : -1}
+                        roomIndex={index}
+                        roomCount={roomCount}
+                        onFocus={onFocus}
+                        listIsScrolling={isScrolling}
+                    />
+                );
+            }
         },
         [activeIndex, roomCount, isScrolling],
     );
-
-    const getItemKey = useCallback((item: Room): string => {
-        return item.roomId;
-    }, []);
 
     const scrollIntoViewOnChange = useCallback(
         (params: {
@@ -127,7 +137,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             items={roomsResult.rooms}
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}
-            isItemFocusable={() => true}
+            isItemFocusable={isRoomListRoom}
             onKeyDown={keyDownCallback}
             isScrolling={setIsScrolling}
             increaseViewportBy={{

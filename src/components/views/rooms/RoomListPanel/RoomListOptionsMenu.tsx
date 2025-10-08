@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IconButton, Menu, MenuTitle, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
+import { IconButton, Menu, MenuTitle, Tooltip, RadioMenuItem, CheckboxMenuItem } from "@vector-im/compound-web";
 import React, { type Ref, type JSX, useState, useCallback } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
@@ -36,11 +36,15 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
     const [open, setOpen] = useState(false);
 
     const onActivitySelected = useCallback(() => {
-        vm.sort(SortOption.Activity);
+        vm.sort(SortOption.Activity, vm.useSections);
     }, [vm]);
 
     const onAtoZSelected = useCallback(() => {
-        vm.sort(SortOption.AToZ);
+        vm.sort(SortOption.AToZ, vm.useSections);
+    }, [vm]);
+
+    const onUseSectionsSelected = useCallback(() => {
+        vm.sort(vm.activeSortOption, !vm.useSections);
     }, [vm]);
 
     return (
@@ -62,6 +66,11 @@ export function RoomListOptionsMenu({ vm }: Props): JSX.Element {
                 label={_t("room_list|sort_type|atoz")}
                 checked={vm.activeSortOption === SortOption.AToZ}
                 onSelect={onAtoZSelected}
+            />
+            <CheckboxMenuItem
+                label={_t("room_list|sort_sections")}
+                checked={vm.useSections}
+                onSelect={onUseSectionsSelected}
             />
         </Menu>
     );

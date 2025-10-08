@@ -8,12 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import RoomListStoreV3, { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
-import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
+import { createRoom, hasCreateRoomRights } from "../../../../../src/components/viewmodels/roomlist/utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
@@ -176,7 +177,8 @@ describe("RoomListViewModel", () => {
     describe("Sticky room and active index", () => {
         function expectActiveRoom(vm: ReturnType<typeof useRoomListViewModel>, i: number, roomId: string) {
             expect(vm.activeIndex).toEqual(i);
-            expect(vm.roomsResult.rooms[i].roomId).toEqual(roomId);
+            const room = vm.roomsResult.rooms[i] as Room;
+            expect(room.roomId).toEqual(roomId);
         }
 
         it("active index is calculated with the last opened room in a space", () => {

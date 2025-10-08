@@ -221,11 +221,11 @@ describe("useRoomListHeaderViewModel", () => {
 
             // Change the sort option
             act(() => {
-                vm.current.sort(SortOption.AToZ);
+                vm.current.sort(SortOption.AToZ, false);
             });
 
             // Resort method in RLS must have been called
-            expect(resort).toHaveBeenCalledWith(SortingAlgorithm.Alphabetic);
+            expect(resort).toHaveBeenCalledWith(SortingAlgorithm.Alphabetic, false);
         });
 
         it("should set activeSortOption based on value from settings", () => {

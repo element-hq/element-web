@@ -11,7 +11,11 @@ import { mocked } from "jest-mock";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
-import { LISTS_UPDATE_EVENT, RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
+import {
+    isRoomListRoom,
+    LISTS_UPDATE_EVENT,
+    RoomListStoreV3Class,
+} from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEvents } from "../../../test-utils";
@@ -29,6 +33,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
 import { Action } from "../../../../src/dispatcher/actions";
+import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -42,6 +47,9 @@ describe("RoomListStoreV3", () => {
     }
 
     beforeEach(() => {
+        SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, SortingAlgorithm.Recency);
+        SettingsStore.setValue("RoomList.useSections", null, SettingLevel.DEVICE, false);
+
         jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
@@ -78,21 +86,26 @@ describe("RoomListStoreV3", () => {
         const { store, rooms, client } = await getRoomListStore();
 
         // List is sorted by recency, sort by alphabetical now
-        store.resort(SortingAlgorithm.Alphabetic);
+        store.resort(SortingAlgorithm.Alphabetic, false);
         let sortedRooms = new AlphabeticSorter().sort(rooms);
         expect(store.getSortedRooms()).toEqual(sortedRooms);
         expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Alphabetic);
 
         // Go back to recency sorting
-        store.resort(SortingAlgorithm.Recency);
+        store.resort(SortingAlgorithm.Recency, false);
         sortedRooms = new RecencySorter(client.getSafeUserId()).sort(rooms);
         expect(store.getSortedRooms()).toEqual(sortedRooms);
         expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Recency);
     });
 
     it("Uses preferred sorter on startup", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(() => {
-            return SortingAlgorithm.Alphabetic;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => {
+            switch (key) {
+                case "RoomList.preferredSorting":
+                    return SortingAlgorithm.Alphabetic;
+                default:
+                    return null;
+            }
         });
         const { store } = await getRoomListStore();
         expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Alphabetic);
@@ -120,7 +133,7 @@ describe("RoomListStoreV3", () => {
             dispatcher.dispatch(payload, true);
 
             expect(fn).toHaveBeenCalled();
-            expect(store.getSortedRooms()[0].roomId).toEqual(room.roomId);
+            expect(store.getSortedRooms().filter(isRoomListRoom)[0].roomId).toEqual(room.roomId);
         });
 
         it("Forgotten room is removed", async () => {
@@ -128,7 +141,12 @@ describe("RoomListStoreV3", () => {
             const room = rooms[37];
 
             // Room at index 37 should be in the store now
-            expect(store.getSortedRooms().map((r) => r.roomId)).toContain(room.roomId);
+            expect(
+                store
+                    .getSortedRooms()
+                    .filter(isRoomListRoom)
+                    .map((r) => r.roomId),
+            ).toContain(room.roomId);
 
             // Forget room at index 37
             const payload = {
@@ -141,7 +159,12 @@ describe("RoomListStoreV3", () => {
 
             // Room at index 37 should no longer be in the store
             expect(fn).toHaveBeenCalled();
-            expect(store.getSortedRooms().map((r) => r.roomId)).not.toContain(room.roomId);
+            expect(
+                store
+                    .getSortedRooms()
+                    .filter(isRoomListRoom)
+                    .map((r) => r.roomId),
+            ).not.toContain(room.roomId);
         });
 
         it.each([KnownMembership.Join, KnownMembership.Invite])(
@@ -226,7 +249,10 @@ describe("RoomListStoreV3", () => {
             );
 
             expect(fn).toHaveBeenCalled();
-            const roomIds = store.getSortedRooms().map((r) => r.roomId);
+            const roomIds = store
+                .getSortedRooms()
+                .filter(isRoomListRoom)
+                .map((r) => r.roomId);
             expect(roomIds).not.toContain(oldRoom.roomId);
             expect(roomIds).toContain(newRoom.roomId);
         });
@@ -261,7 +287,10 @@ describe("RoomListStoreV3", () => {
             );
 
             expect(fn).toHaveBeenCalled();
-            const roomIds = store.getSortedRooms().map((r) => r.roomId);
+            const roomIds = store
+                .getSortedRooms()
+                .filter(isRoomListRoom)
+                .map((r) => r.roomId);
             expect(roomIds).toContain(oldRoom.roomId);
             expect(roomIds).toContain(newRoom.roomId);
         });
@@ -314,8 +343,11 @@ describe("RoomListStoreV3", () => {
                 "!foo4:matrix.org",
                 "!foo5:matrix.org",
             ];
-            const rooms = store.getSortedRooms().filter((r) => ids.includes(r.roomId));
-            rooms.forEach((room) => expect(room.name).toBe("My DM Room"));
+            const rooms = store
+                .getSortedRooms()
+                .filter(isRoomListRoom)
+                .filter((r) => ids.includes(r.roomId));
+            rooms.filter(isRoomListRoom).forEach((room) => expect(room.name).toBe("My DM Room"));
         });
 
         it("Room is re-inserted on tag change", async () => {
@@ -499,7 +531,10 @@ describe("RoomListStoreV3", () => {
                 store.on(LISTS_UPDATE_EVENT, fn);
 
                 // The rooms which belong to the space should not be shown
-                const result = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
+                const result = store
+                    .getSortedRoomsInActiveSpace()
+                    .rooms.filter(isRoomListRoom)
+                    .map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result).not.toContain(id);
                 }
@@ -508,7 +543,10 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
                 SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
                 expect(fn).toHaveBeenCalled();
-                const result2 = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
+                const result2 = store
+                    .getSortedRoomsInActiveSpace()
+                    .rooms.filter(isRoomListRoom)
+                    .map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result2).toContain(id);
                 }
@@ -884,6 +922,7 @@ describe("RoomListStoreV3", () => {
             const { store, expectedRoomIds } = await getRoomListStoreWithRooms();
             const result = store
                 .getSortedRooms()
+                .filter(isRoomListRoom)
                 .slice(90)
                 .map((r) => r.roomId);
             expect(result).toEqual(expectedRoomIds);

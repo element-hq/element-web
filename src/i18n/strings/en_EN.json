@@ -2200,6 +2200,12 @@
             "open_room": "Open room %(roomName)s"
         },
         "room_options": "Room Options",
+        "sections": {
+            "chat": "Chats",
+            "favourite": "Favourites",
+            "low_priority": "Low priority",
+            "unread": "Unreads"
+        },
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
@@ -2210,6 +2216,7 @@
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
+        "sort_sections": "Group rooms by type",
         "sort_type": {
             "activity": "Activity",
             "atoz": "A-Z"

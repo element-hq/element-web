@@ -11,7 +11,7 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
-import type { FilterKey } from "./skip-list/filters";
+import { type FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
@@ -35,6 +35,7 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
 import { Action } from "../../dispatcher/actions";
+import { RoomListSectionHeader, SectionProcessor } from "./skip-list/SectionProcessor.ts";
 
 /**
  * These are the filters passed to the room skip list.
@@ -56,6 +57,17 @@ export enum RoomListStoreV3Event {
     ListsLoaded = "lists_loaded",
 }
 
+export type RoomListEntry = Room | RoomListSectionHeader;
+
+export function isRoomListSectionHeader(entry: RoomListEntry): entry is RoomListSectionHeader {
+    return entry instanceof RoomListSectionHeader;
+}
+
+// We have to define it as anything that's not a section header so it matches stubbed/mocked rooms in tests
+export function isRoomListRoom(entry: RoomListEntry): entry is Room {
+    return !isRoomListSectionHeader(entry);
+}
+
 // The result object for returning rooms from the store
 export type RoomsResult = {
     // The ID of the active space queried
@@ -63,11 +75,14 @@ export type RoomsResult = {
     // The filter queried
     filterKeys?: FilterKey[];
     // The resulting list of rooms
-    rooms: Room[];
+    rooms: RoomListEntry[];
 };
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
+
+const sectionProcessor = new SectionProcessor();
+
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
  * This is the third such implementation hence the "V3".
@@ -75,6 +90,7 @@ export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
  */
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
+    private useSections: boolean = false;
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
     public constructor(dispatcher: MatrixDispatcher) {
@@ -105,9 +121,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Get a list of sorted rooms.
      */
-    public getSortedRooms(): Room[] {
-        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList);
-        else return [];
+    public getSortedRooms(): RoomListEntry[] {
+        if (this.roomSkipList?.initialized) {
+            const rooms = Array.from(this.roomSkipList);
+            return this.useSections ? sectionProcessor.process(rooms) : rooms;
+        } else return [];
     }
 
     /**
@@ -119,30 +137,34 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = SpaceStore.instance.activeSpace;
-        if (this.roomSkipList?.initialized)
+        if (this.roomSkipList?.initialized) {
+            const rooms = Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys));
             return {
                 spaceId: spaceId,
                 filterKeys,
-                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
+                rooms: this.useSections ? sectionProcessor.process(rooms) : rooms,
             };
-        else return { spaceId: spaceId, filterKeys, rooms: [] };
+        } else return { spaceId: spaceId, filterKeys, rooms: [] };
     }
 
     /**
      * Resort the list of rooms using a different algorithm.
      * @param algorithm The sorting algorithm to use.
+     * @param useSections Whether to group rooms into sections
      */
-    public resort(algorithm: SortingAlgorithm): void {
+    public resort(algorithm: SortingAlgorithm, useSections: boolean): void {
         if (!this.roomSkipList) throw new Error("Cannot resort room list before skip list is created.");
         if (!this.matrixClient) throw new Error("Cannot resort room list without matrix client.");
-        if (this.roomSkipList.activeSortAlgorithm === algorithm) return;
+        if (this.roomSkipList.activeSortAlgorithm === algorithm && this.useSections === useSections) return;
         const sorter =
             algorithm === SortingAlgorithm.Alphabetic
                 ? new AlphabeticSorter()
                 : new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList.useNewSorter(sorter, this.getRooms());
+        this.useSections = useSections;
         this.emit(LISTS_UPDATE_EVENT);
         SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
+        SettingsStore.setValue("RoomList.useSections", null, SettingLevel.DEVICE, useSections);
     }
 
     /**
@@ -156,6 +178,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter, FILTERS);
+        this.useSections = SettingsStore.getValue("RoomList.useSections");
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
