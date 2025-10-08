@@ -99,7 +99,7 @@ export class PlaybackQueue {
 
         if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
             // noinspection JSIgnoredPromiseFromCall
-            playback.skipTo(this.clockStates.get(mxEvent.getId()!)!);
+            playback.skipTo(currentClockState);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId()!);
