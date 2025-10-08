@@ -11,8 +11,8 @@ import SettingsStore from "../SettingsStore";
 import SettingController from "./SettingController";
 
 export default class EncryptedStateEventsController extends SettingController {
-    public onChange(): void {
-        SettingsStore.setValue("feature_share_history_on_invite", null, SettingLevel.CONFIG, true);
+    public onChange(level: SettingLevel, roomId: string | null, newValue: boolean): void {
+        SettingsStore.setValue("feature_share_history_on_invite", null, SettingLevel.CONFIG, newValue);
         PlatformPeg.get()?.reload();
     }
 }

@@ -790,7 +790,7 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Encryption,
         controller: new EncryptedStateEventsController(),
         displayName: _td("labs|encrypted_state_events"),
-        description: _td("labs|encrypted_state_events_decsription"),
+        description: _td("labs|encrypted_state_events_description"),
         supportedLevels: LEVELS_ROOM_SETTINGS,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
