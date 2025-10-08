@@ -95,15 +95,9 @@ export class PlaybackQueue {
     private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
-        const currentClockState = this.clockStates.get(mxEvent.getId()!);
-        if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
-            if (currentClockState > 0) {
-                // skipTo will pause playback, which causes the clock to render the current
-                // playback seconds. If the clock state is 0, then we can just ignore
-                // skipping entirely.
-                // noinspection JSIgnoredPromiseFromCall
-                playback.skipTo(currentClockState);
-            }
+        if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()!) && !wasLastPlaying) {
+            // noinspection JSIgnoredPromiseFromCall
+            playback.skipTo(this.clockStates.get(mxEvent.getId()!)!);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId()!);
