@@ -522,50 +522,55 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
     const newParents = new Set(parents).add(root.room_id);
     return (
         <React.Fragment>
-            {uniqBy(childRooms, "room_id").map((room) => (
-                <Tile
-                    key={room.room_id}
-                    room={room}
-                    suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
-                    selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
-                    onViewRoomClick={() => onViewRoomClick(room.room_id, room.room_type as RoomType)}
-                    onJoinRoomClick={() => onJoinRoomClick(room.room_id, newParents)}
-                    hasPermissions={hasPermissions}
-                    onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
-                />
-            ))}
-
-            {subspaces
-                .filter((room) => !newParents.has(room.room_id))
-                .map((space) => (
-                    <Tile
-                        key={space.room_id}
-                        room={space}
-                        numChildRooms={
-                            space.children_state.filter((ev) => {
-                                const room = hierarchy.roomMap.get(ev.state_key);
-                                return room && roomSet.has(room) && !room.room_type;
-                            }).length
-                        }
-                        suggested={hierarchy.isSuggested(root.room_id, space.room_id)}
-                        selected={selectedMap?.get(root.room_id)?.has(space.room_id)}
-                        onViewRoomClick={() => onViewRoomClick(space.room_id, RoomType.Space)}
-                        onJoinRoomClick={() => onJoinRoomClick(space.room_id, newParents)}
-                        hasPermissions={hasPermissions}
-                        onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, space.room_id) : undefined}
-                    >
-                        <HierarchyLevel
-                            root={space}
-                            roomSet={roomSet}
-                            hierarchy={hierarchy}
-                            parents={newParents}
-                            selectedMap={selectedMap}
-                            onViewRoomClick={onViewRoomClick}
-                            onJoinRoomClick={onJoinRoomClick}
-                            onToggleClick={onToggleClick}
+            {uniqBy(sortedChildren, "room_id").map((ev) => {
+                const room = toLocalRoom(cli, hierarchy.roomMap.get(ev.state_key), hierarchy);
+            
+                if (room.room_type === RoomType.Space) {
+                    if (newParents.has(room.room_id)) return null; // prevent cycles
+                    return (
+                        <Tile
+                            key={room.room_id}
+                            room={room}
+                            numChildRooms={
+                                room.children_state.filter((ev) => {
+                                    const child = hierarchy.roomMap.get(ev.state_key);
+                                    return child && roomSet.has(child) && !child.room_type;
+                                }).length
+                            }
+                            suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
+                            selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
+                            onViewRoomClick={() => onViewRoomClick(room.room_id, RoomType.Space)}
+                            onJoinRoomClick={() => onJoinRoomClick(room.room_id, newParents)}
+                            hasPermissions={hasPermissions}
+                            onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
+                        >
+                            <HierarchyLevel
+                                root={room}
+                                roomSet={roomSet}
+                                hierarchy={hierarchy}
+                                parents={newParents}
+                                selectedMap={selectedMap}
+                                onViewRoomClick={onViewRoomClick}
+                                onJoinRoomClick={onJoinRoomClick}
+                                onToggleClick={onToggleClick}
+                            />
+                        </Tile>
+                    );
+                } else {
+                    return (
+                        <Tile
+                            key={room.room_id}
+                            room={room}
+                            suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
+                            selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
+                            onViewRoomClick={() => onViewRoomClick(room.room_id, room.room_type as RoomType)}
+                            onJoinRoomClick={() => onJoinRoomClick(room.room_id, newParents)}
+                            hasPermissions={hasPermissions}
+                            onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
                         />
-                    </Tile>
-                ))}
+                    );
+                }
+            });
         </React.Fragment>
     );
 };
