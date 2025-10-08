@@ -559,30 +559,38 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // it was, it means we're about to be unmounted.
             return;
         }
-
-        const roomId = this.state.roomViewStore.getRoomId() ?? null;
+        const roomViewStore = this.state.roomViewStore;
+        const roomId = roomViewStore.getRoomId() ?? null;
+        const roomAlias = roomViewStore.getRoomAlias() ?? undefined;
+        const roomLoading = roomViewStore.isRoomLoading();
+        const joining = roomViewStore.isJoining();
+        const replyToEvent = roomViewStore.getQuotingEvent() ?? undefined;
+        const shouldPeek = roomViewStore.shouldPeek();
+        const wasContextSwitch = roomViewStore.getWasContextSwitch();
+        const promptAskToJoin = roomViewStore.promptAskToJoin();
+        const viewRoomOpts = roomViewStore.getViewRoomOpts();
         const room = this.context.client?.getRoom(roomId ?? undefined) ?? undefined;
 
         const newState: Partial<IRoomState> = {
             roomId: roomId ?? undefined,
-            roomAlias: this.state.roomViewStore.getRoomAlias() ?? undefined,
-            roomLoading: this.state.roomViewStore.isRoomLoading(),
+            roomAlias: roomAlias,
+            roomLoading: roomLoading,
             roomLoadError,
-            joining: this.state.roomViewStore.isJoining(),
-            replyToEvent: this.state.roomViewStore.getQuotingEvent() ?? undefined,
+            joining: joining,
+            replyToEvent: replyToEvent,
             // we should only peek once we have a ready client
-            shouldPeek: this.state.matrixClientIsReady && this.state.roomViewStore.shouldPeek(),
+            shouldPeek: this.state.matrixClientIsReady && shouldPeek,
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
-            wasContextSwitch: this.state.roomViewStore.getWasContextSwitch(),
+            wasContextSwitch: wasContextSwitch,
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            promptAskToJoin: this.state.roomViewStore.promptAskToJoin(),
-            viewRoomOpts: this.state.roomViewStore.getViewRoomOpts(),
+            promptAskToJoin: promptAskToJoin,
+            viewRoomOpts: viewRoomOpts,
         };
 
         if (
