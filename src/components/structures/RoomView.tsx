@@ -565,7 +565,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomLoading = roomViewStore.isRoomLoading();
         const joining = roomViewStore.isJoining();
         const replyToEvent = roomViewStore.getQuotingEvent() ?? undefined;
-        const shouldPeek = roomViewStore.shouldPeek();
+        const shouldPeek = this.state.matrixClientIsReady && roomViewStore.shouldPeek();
         const wasContextSwitch = roomViewStore.getWasContextSwitch();
         const promptAskToJoin = roomViewStore.promptAskToJoin();
         const viewRoomOpts = roomViewStore.getViewRoomOpts();
@@ -579,7 +579,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             joining: joining,
             replyToEvent: replyToEvent,
             // we should only peek once we have a ready client
-            shouldPeek: this.state.matrixClientIsReady && shouldPeek,
+            shouldPeek: shouldPeek,
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
