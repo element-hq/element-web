@@ -4,7 +4,6 @@ module.exports = {
         "plugin:matrix-org/babel",
         "plugin:matrix-org/react",
         "plugin:matrix-org/a11y",
-        "plugin:storybook/recommended",
     ],
     parserOptions: {
         project: ["./tsconfig.json"],
