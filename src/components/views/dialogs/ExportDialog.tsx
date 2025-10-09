@@ -34,7 +34,6 @@ import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
 import ChatExport from "../../../customisations/ChatExport";
 import { validateNumberInRange } from "../../../utils/validate";
-import { SdkContextClass } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     room: Room;
