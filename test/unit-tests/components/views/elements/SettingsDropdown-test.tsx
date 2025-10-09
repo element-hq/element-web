@@ -22,4 +22,16 @@ describe("<SettingsDropdown />", () => {
         expect(trigger).toHaveTextContent("No");
         expect(trigger).toHaveAttribute("aria-disabled", "true");
     });
+
+    it("should not render a disabled setting if hideIfCannotSet=true", async () => {
+        const { container } = render(
+            <SettingsDropdown settingKey="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />,
+        );
+        expect(container).toBeEmptyDOMElement();
+    });
+
+    it("should not render a non-options setting", async () => {
+        const { container } = render(<SettingsDropdown settingKey="systemFont" level={SettingLevel.DEVICE} />);
+        expect(container).toBeEmptyDOMElement();
+    });
 });
