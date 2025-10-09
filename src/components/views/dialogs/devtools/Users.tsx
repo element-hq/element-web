@@ -190,7 +190,7 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
                 <li>{verificationStatus}</li>
             </ul>
             <section>
-                <h2>{_t("devtools|devices")}</h2>
+                <h2>{_t("devtools|devices", { count: devices.size })}</h2>
                 <ul>
                     {Array.from(devices.values()).map((device) => (
                         <li key={device.deviceId}>

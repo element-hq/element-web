@@ -336,7 +336,7 @@ exports[`<Users /> should render a single user 1`] = `
     </ul>
     <section>
       <h2>
-        Devices
+        Devices (3)
       </h2>
       <ul>
         <li>
