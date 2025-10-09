@@ -35,3 +35,4 @@ electron/pub
 storybook-static
 
 /packages/shared-components/node_modules
+/packages/shared-components/dist
