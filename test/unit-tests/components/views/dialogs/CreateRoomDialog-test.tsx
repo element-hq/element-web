@@ -76,10 +76,8 @@ describe("<CreateRoomDialog />", () => {
         expect(onFinished).toHaveBeenCalledWith(
             true,
             expect.objectContaining({
-                createOpts: expect.objectContaining({
-                    name: "Room with topic",
-                    topic,
-                }),
+                name: "Room with topic",
+                topic,
             }),
         );
     });
@@ -99,8 +97,8 @@ describe("<CreateRoomDialog />", () => {
         expect(onFinished).toHaveBeenCalledWith(
             true,
             expect.objectContaining({
+                name: "NoFederate Room",
                 createOpts: expect.objectContaining({
-                    name: "NoFederate Room",
                     creation_content: expect.objectContaining({
                         "m.federate": false,
                     }),
@@ -433,9 +431,7 @@ describe("<CreateRoomDialog />", () => {
             expect(onFinished).toHaveBeenCalledWith(
                 true,
                 expect.objectContaining({
-                    createOpts: expect.objectContaining({
-                        name: "Restricted Room",
-                    }),
+                    name: "Restricted Room",
                     joinRule: JoinRule.Restricted,
                 }),
             );
@@ -459,8 +455,8 @@ describe("<CreateRoomDialog />", () => {
             expect(onFinished).toHaveBeenCalledWith(
                 true,
                 expect.objectContaining({
+                    name: "Public Room",
                     createOpts: expect.objectContaining({
-                        name: "Public Room",
                         room_alias_name: "testroom",
                         visibility: Visibility.Public,
                         preset: Preset.PublicChat,
@@ -487,9 +483,7 @@ describe("<CreateRoomDialog />", () => {
             expect(onFinished).toHaveBeenCalledWith(
                 true,
                 expect.objectContaining({
-                    createOpts: expect.objectContaining({
-                        name: "Keyboard Room",
-                    }),
+                    name: "Keyboard Room",
                 }),
             );
         });
