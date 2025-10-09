@@ -213,9 +213,9 @@ const transformEvent = (event: MatrixEvent, userId: string): { type: string; con
             },
         };
     }
-    
+
     // Force an empty m.mentions property as there is no EditorModel to parse pills from
-    attachMentions(userId, content, null);
+    attachMentions(userId, content, null, undefined);
 
     return { type, content };
 };
