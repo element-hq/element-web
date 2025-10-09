@@ -6,7 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ClientServerApi } from "@element-hq/element-web-playwright-common/lib/utils/api.js";
+import { type ClientServerApi, type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api.js";
+export { type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api.js";
 
 export interface HomeserverInstance {
     readonly baseUrl: string;
@@ -35,16 +36,6 @@ export interface HomeserverInstance {
      * @param address The address of the 3pid to set
      */
     setThreepid(userId: string, medium: string, address: string): Promise<void>;
-}
-
-export interface Credentials {
-    accessToken: string;
-    userId: string;
-    deviceId: string;
-    homeServer: string;
-    password: string | null; // null for password-less users
-    displayName?: string;
-    username: string; // the localpart of the userId
 }
 
 export type HomeserverType = "synapse" | "dendrite" | "pinecone";
