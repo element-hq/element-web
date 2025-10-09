@@ -8,9 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { waitForPageReady } from "@storybook/test-runner";
 import { toMatchImageSnapshot } from "jest-image-snapshot";
 
-const customSnapshotsDir = `${process.cwd()}/playwright/shared-component-snapshots/`;
-const customReceivedDir = `${process.cwd()}/playwright/shared-component-received/`;
-
 /**
  * @type {import('@storybook/test-runner').TestRunnerConfig}
  */
@@ -25,11 +22,8 @@ const config = {
         // page.context().browser().browserType().name() to get the browser name to prefix the file name
         const image = await page.screenshot();
         expect(image).toMatchImageSnapshot({
-            customSnapshotsDir,
             customSnapshotIdentifier: `${context.id}-${process.platform}`,
             storeReceivedOnFailure: true,
-            customReceivedDir,
-            customDiffDir: customReceivedDir,
         });
     },
 };
