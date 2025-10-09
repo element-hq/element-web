@@ -3084,6 +3084,7 @@
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
             "mirror_local_feed": "Mirror local video feed",
+            "mirror_local_feed_description": "Not supported when using Element Call",
             "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
             "noise_suppression": "Noise suppression",
             "request_permissions": "Request media permissions",
