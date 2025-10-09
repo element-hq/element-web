@@ -28,7 +28,9 @@
         "./test/**/*.ts",
         "./test/**/*.tsx",
         "./scripts/*.ts",
-        "./declaration.d.ts"
+        "./declaration.d.ts",
+        "./packages/shared-components/src/**/*.ts",
+        "./packages/shared-components/src/**/*.tsx"
     ],
     "ts-node": {
         "files": true,

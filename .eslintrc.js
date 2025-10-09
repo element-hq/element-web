@@ -1,6 +1,11 @@
 module.exports = {
     plugins: ["matrix-org", "eslint-plugin-react-compiler"],
-    extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
+    extends: [
+        "plugin:matrix-org/babel",
+        "plugin:matrix-org/react",
+        "plugin:matrix-org/a11y",
+        "plugin:storybook/recommended",
+    ],
     parserOptions: {
         project: ["./tsconfig.json"],
     },
@@ -184,7 +189,12 @@ module.exports = {
     },
     overrides: [
         {
-            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            files: [
+                "src/**/*.{ts,tsx}",
+                "test/**/*.{ts,tsx}",
+                "playwright/**/*.ts",
+                "packages/shared-components/src/**/*.{ts,tsx}",
+            ],
             extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
                 "@typescript-eslint/explicit-function-return-type": [
