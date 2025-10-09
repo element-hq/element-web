@@ -16,6 +16,7 @@
         "package.json"
     ],
     "scripts": {
+        "prepare": "vite build",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
         "test:storybook": "test-storybook --url http://localhost:6007/",
