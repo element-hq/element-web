@@ -36,7 +36,7 @@ jobs:
               run: "yarn run lint:types"
 
             - name: Install Shared Component Dependencies
-              run: "yard --cwd packages/shared-components install"
+              run: "yarn --cwd packages/shared-components install"
 
             - name: Typecheck Shared Components
               run: "yarn --cwd packages/shared-components run lint:types"
