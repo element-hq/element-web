@@ -48,14 +48,6 @@ export default {
         // would with a normal library).
         "@types/content-type",
         "@types/sdp-transform",
-
-        // Used by shared components which we import by source and therefore need the
-        // dependencies for
-        "react-merge-refs",
-        "temporal-polyfill",
-
-        // Knip doesn't pick this up
-        "eslint-plugin-storybook",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows
