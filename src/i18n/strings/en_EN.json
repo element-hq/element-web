@@ -2891,6 +2891,7 @@
             "room_list_heading": "Room list",
             "show_avatars_pills": "Show avatars in user, room and event mentions",
             "show_polls_button": "Show polls button",
+            "startup_window_behaviour_label": "Start-up and window behaviour",
             "surround_text": "Surround selected text when typing special characters",
             "time_heading": "Displaying time",
             "user_timezone": "Set timezone"
@@ -3064,7 +3065,12 @@
             "spaces_explainer": "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
             "title": "Sidebar"
         },
-        "start_automatically": "Start automatically after system login",
+        "start_automatically": {
+            "disabled": "No",
+            "enabled": "Yes",
+            "label": "Open %(brand)s when you log in to your computer",
+            "minimised": "Minimised"
+        },
         "tac_only_notifications": "Only show notifications in the thread activity centre",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
