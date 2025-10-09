@@ -112,6 +112,8 @@ export async function renderMemberList(
         getJoinedMemberCount: jest
             .fn()
             .mockReturnValue(adminUsers.length + moderatorUsers.length + defaultUsers.length),
+        on: jest.fn(),
+        off: jest.fn(),
     } as unknown as RoomState;
     for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
         memberListRoom.currentState.members[member.userId] = member;
