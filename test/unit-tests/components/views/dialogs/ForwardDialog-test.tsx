@@ -153,8 +153,9 @@ describe("ForwardDialog", () => {
 
         await userEvent.keyboard("[Enter]");
         expect(mockClient.sendEvent).toHaveBeenCalledWith("A", "m.room.message", {
-            body: "Hello world!",
-            msgtype: "m.text",
+            "body": "Hello world!",
+            "msgtype": "m.text",
+            "m.mentions": {},
         });
     });
 
