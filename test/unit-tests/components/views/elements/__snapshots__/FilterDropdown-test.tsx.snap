@@ -11,6 +11,7 @@ exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
     class="mx_Dropdown_option mx_Dropdown_option_highlight"
     id="test__one"
     role="option"
+    tabindex="-1"
   >
     <div
       class="mx_FilterDropdown_option"
@@ -40,6 +41,7 @@ exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
     class="mx_Dropdown_option"
     id="test__two"
     role="option"
+    tabindex="-1"
   >
     <div
       class="mx_FilterDropdown_option"

@@ -39,7 +39,6 @@ import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
 import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
@@ -167,7 +166,6 @@ interface IProps {
     // which layout to use
     layout?: Layout;
 
-    resizeNotifier?: ResizeNotifier;
     permalinkCreator?: RoomPermalinkCreator;
     editState?: EditorStateTransfer;
 
@@ -1064,7 +1062,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     onUnfillRequest={this.props.onUnfillRequest}
                     style={style}
                     stickyBottom={this.props.stickyBottom}
-                    resizeNotifier={this.props.resizeNotifier}
                     fixedChildren={ircResizer}
                 >
                     {topSpinner}

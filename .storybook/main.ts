@@ -36,5 +36,11 @@ const config: StorybookConfig = {
             },
         });
     },
+    refs: {
+        "compound-web": {
+            title: "Compound Web",
+            url: "https://element-hq.github.io/compound-web/",
+        },
+    },
 };
 export default config;

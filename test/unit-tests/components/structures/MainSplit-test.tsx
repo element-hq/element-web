@@ -10,30 +10,26 @@ import React from "react";
 import { render, fireEvent } from "jest-matrix-react";
 
 import MainSplit from "../../../../src/components/structures/MainSplit";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics.ts";
+import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
 describe("<MainSplit/>", () => {
-    const resizeNotifier = new ResizeNotifier();
     const children = (
         <div>
             Child<span>Foo</span>Bar
         </div>
     );
     const panel = <div>Right panel</div>;
+    let sdkContext: SdkContextClass;
 
     beforeEach(() => {
         localStorage.clear();
+        sdkContext = new SdkContextClass();
     });
 
     it("renders", () => {
         const { asFragment, container } = render(
-            <MainSplit
-                resizeNotifier={resizeNotifier}
-                children={children}
-                panel={panel}
-                analyticsRoomType="other_room"
-            />,
+            <MainSplit children={children} panel={panel} analyticsRoomType="other_room" />,
         );
         expect(asFragment()).toMatchSnapshot();
         // Assert it matches the default width of 320
@@ -42,13 +38,7 @@ describe("<MainSplit/>", () => {
 
     it("respects defaultSize prop", () => {
         const { asFragment, container } = render(
-            <MainSplit
-                resizeNotifier={resizeNotifier}
-                children={children}
-                panel={panel}
-                defaultSize={500}
-                analyticsRoomType="other_room"
-            />,
+            <MainSplit children={children} panel={panel} defaultSize={500} analyticsRoomType="other_room" />,
         );
         expect(asFragment()).toMatchSnapshot();
         // Assert it matches the default width of 350
@@ -59,7 +49,6 @@ describe("<MainSplit/>", () => {
         localStorage.setItem("mx_rhs_size_thread", "333");
         const { container } = render(
             <MainSplit
-                resizeNotifier={resizeNotifier}
                 children={children}
                 panel={panel}
                 sizeKey="thread"
@@ -73,18 +62,19 @@ describe("<MainSplit/>", () => {
     it("should report to analytics on resize stop", () => {
         const { container } = render(
             <MainSplit
-                resizeNotifier={resizeNotifier}
                 children={children}
                 panel={panel}
                 sizeKey="thread"
                 defaultSize={400}
                 analyticsRoomType="other_room"
             />,
+            { wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider> },
         );
 
         const spy = jest.spyOn(PosthogAnalytics.instance, "trackEvent");
 
         const handle = container.querySelector(".mx_ResizeHandle--horizontal")!;
+        expect(handle).toBeInTheDocument();
         fireEvent.mouseDown(handle);
         fireEvent.resize(handle, { clientX: 0 });
         fireEvent.mouseUp(handle);

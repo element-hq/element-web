@@ -12,11 +12,10 @@ import { type NumberSize, Resizable } from "re-resizable";
 import { type Direction } from "re-resizable/lib/resizer";
 import { type WebPanelResize } from "@matrix-org/analytics-events/types/typescript/WebPanelResize";
 
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { PosthogAnalytics } from "../../PosthogAnalytics.ts";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 interface IProps {
-    resizeNotifier: ResizeNotifier;
     collapsedRhs?: boolean;
     panel?: JSX.Element;
     children: ReactNode;
@@ -36,16 +35,23 @@ interface IProps {
 }
 
 export default class MainSplit extends React.Component<IProps> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     public static defaultProps = {
         defaultSize: 320,
     };
 
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
+    }
+
     private onResizeStart = (): void => {
-        this.props.resizeNotifier.startResizing();
+        this.context.resizeNotifier.startResizing();
     };
 
     private onResize = (): void => {
-        this.props.resizeNotifier.notifyRightHandleResized();
+        this.context.resizeNotifier.notifyRightHandleResized();
     };
 
     private get sizeSettingStorageKey(): string {
@@ -63,7 +69,7 @@ export default class MainSplit extends React.Component<IProps> {
         delta: NumberSize,
     ): void => {
         const newSize = this.loadSidePanelSize().width + delta.width;
-        this.props.resizeNotifier.stopResizing();
+        this.context.resizeNotifier.stopResizing();
         window.localStorage.setItem(this.sizeSettingStorageKey, newSize.toString());
 
         PosthogAnalytics.instance.trackEvent<WebPanelResize>({

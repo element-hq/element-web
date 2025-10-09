@@ -8,7 +8,7 @@
 import { type KeyboardEvent } from "react";
 import { renderHook } from "jest-matrix-react";
 
-import { useListKeyDown } from "./useListKeyDown";
+import { useListKeyboardNavigation } from "./useListKeyboardNavigation";
 
 describe("useListKeyDown", () => {
     let mockList: HTMLUListElement;
@@ -51,9 +51,10 @@ describe("useListKeyDown", () => {
         current: {
             listRef: React.RefObject<HTMLUListElement | null>;
             onKeyDown: React.KeyboardEventHandler<HTMLUListElement>;
+            onFocus: React.FocusEventHandler<HTMLUListElement>;
         };
     } {
-        const { result } = renderHook(() => useListKeyDown());
+        const { result } = renderHook(() => useListKeyboardNavigation());
         result.current.listRef.current = mockList;
         return result;
     }
@@ -136,5 +137,19 @@ describe("useListKeyDown", () => {
         } as KeyboardEvent<HTMLUListElement>);
 
         expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it("should focus the first item if list itself is focused", () => {
+        const result = render();
+        result.current.onFocus({ target: mockList } as React.FocusEvent<HTMLUListElement>);
+        expect(mockItems[0].focus).toHaveBeenCalledTimes(1);
+    });
+
+    it("should focus the selected item if list itself is focused", () => {
+        mockItems[1].setAttribute("aria-selected", "true");
+        const result = render();
+
+        result.current.onFocus({ target: mockList } as React.FocusEvent<HTMLUListElement>);
+        expect(mockItems[1].focus).toHaveBeenCalledTimes(1);
     });
 });

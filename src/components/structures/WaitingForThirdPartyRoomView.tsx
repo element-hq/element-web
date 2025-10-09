@@ -41,7 +41,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                 <RoomHeader room={context.room!} />
                 <main className="mx_RoomView_body" ref={roomView}>
                     <div className="mx_RoomView_timeline">
-                        <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={resizeNotifier}>
+                        <ScrollPanel className="mx_RoomView_messagePanel">
                             <EventTileBubble
                                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                                 title={_t("room|waiting_for_join_title", { brand })}

@@ -67,7 +67,7 @@ export const RichItem = memo(function RichItem({
         <li
             className={styles.richItem}
             role="option"
-            tabIndex={0}
+            tabIndex={-1}
             aria-selected={selected}
             aria-label={title}
             {...props}

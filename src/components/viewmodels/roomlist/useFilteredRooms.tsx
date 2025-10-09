@@ -15,8 +15,6 @@ import RoomListStoreV3, {
     type RoomsResult,
 } from "../../../stores/room-list-v3/RoomListStoreV3";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
 
 /**
  * Provides information about a primary filter.
@@ -50,9 +48,9 @@ const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
     [FilterKey.UnreadFilter, _td("room_list|filters|unread")],
     [FilterKey.PeopleFilter, _td("room_list|filters|people")],
     [FilterKey.RoomsFilter, _td("room_list|filters|rooms")],
+    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
     [FilterKey.MentionsFilter, _td("room_list|filters|mentions")],
     [FilterKey.InvitesFilter, _td("room_list|filters|invites")],
-    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
     [FilterKey.LowPriorityFilter, _td("room_list|filters|low_priority")],
 ]);
 
@@ -73,9 +71,6 @@ export function useFilteredRooms(): FilteredRooms {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
         setRoomsResult(newRooms);
     }, []);
-
-    // Reset filters when active space changes
-    useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => setPrimaryFilter(undefined));
 
     const filterUndefined = (array: (FilterKey | undefined)[]): FilterKey[] =>
         array.filter((f) => f !== undefined) as FilterKey[];

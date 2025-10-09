@@ -55,7 +55,6 @@ import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "../../../../src/components/structures/RoomView";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
@@ -157,7 +156,6 @@ describe("RoomView", () => {
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
                         threepidInvite={undefined as any}
-                        resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         ref={ref}
                     />
@@ -196,7 +194,6 @@ describe("RoomView", () => {
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
                         threepidInvite={undefined}
-                        resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         onRegistered={jest.fn()}
                     />

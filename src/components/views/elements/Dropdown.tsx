@@ -65,6 +65,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
                 role="option"
                 aria-selected={this.props.highlighted}
                 ref={this.props.inputRef}
+                tabIndex={-1}
             >
                 {this.props.children}
             </li>
@@ -232,18 +233,27 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                 break;
             case KeyBindingAction.ArrowDown:
                 if (this.state.expanded) {
+                    const nextKey = this.nextOption(this.state.highlightedOption);
                     this.setState({
-                        highlightedOption: this.nextOption(this.state.highlightedOption),
+                        highlightedOption: nextKey,
                     });
+
+                    (
+                        this.dropdownRootElement?.querySelector(`#${this.props.id}__${nextKey}`) as HTMLLIElement
+                    )?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }
                 break;
             case KeyBindingAction.ArrowUp:
                 if (this.state.expanded) {
+                    const prevKey = this.prevOption(this.state.highlightedOption);
                     this.setState({
-                        highlightedOption: this.prevOption(this.state.highlightedOption),
+                        highlightedOption: prevKey,
                     });
+                    (
+                        this.dropdownRootElement?.querySelector(`#${this.props.id}__${prevKey}`) as HTMLLIElement
+                    )?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }

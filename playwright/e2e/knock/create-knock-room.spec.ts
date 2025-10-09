@@ -27,8 +27,7 @@ test.describe("Create Knock Room", () => {
 
         await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
-        const urlHash = await page.evaluate(() => window.location.hash);
-        const roomId = urlHash.replace("#/room/", "");
+        const roomId = await app.getCurrentRoomIdFromUrl();
 
         // Room should have a knock join rule
         await waitForRoom(page, app.client, roomId, (room) => {
@@ -44,8 +43,7 @@ test.describe("Create Knock Room", () => {
 
         await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
-        const urlHash = await page.evaluate(() => window.location.hash);
-        const roomId = urlHash.replace("#/room/", "");
+        const roomId = await app.getCurrentRoomIdFromUrl();
 
         await app.settings.openRoomSettings("Security & Privacy");
 
@@ -70,8 +68,7 @@ test.describe("Create Knock Room", () => {
 
         await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
-        const urlHash = await page.evaluate(() => window.location.hash);
-        const roomId = urlHash.replace("#/room/", "");
+        const roomId = await app.getCurrentRoomIdFromUrl();
 
         // Room should have a knock join rule
         await waitForRoom(page, app.client, roomId, (room) => {

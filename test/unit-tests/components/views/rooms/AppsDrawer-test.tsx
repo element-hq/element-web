@@ -13,23 +13,23 @@ import { render } from "jest-matrix-react";
 import { stubClient } from "../../../../test-utils";
 import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import SdkConfig from "../../../../../src/SdkConfig";
-import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 const ROOM_ID = "!room:id";
 
 describe("AppsDrawer", () => {
     let client: MatrixClient;
     let room: Room;
-    let dummyResizeNotifier: ResizeNotifier;
+    let sdkContext: SdkContextClass;
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        dummyResizeNotifier = new ResizeNotifier();
+        sdkContext = new SdkContextClass();
     });
 
     afterEach(() => {
@@ -58,17 +58,13 @@ describe("AppsDrawer", () => {
             return [];
         });
 
-        const { container } = render(
-            <AppsDrawer
-                userId={client.getUserId()!}
-                room={room}
-                resizeNotifier={dummyResizeNotifier}
-                showApps={true}
-            />,
-            {
-                wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-            },
-        );
+        const { container } = render(<AppsDrawer userId={client.getUserId()!} room={room} showApps={true} />, {
+            wrapper: ({ ...rest }) => (
+                <SDKContext.Provider value={sdkContext}>
+                    <MatrixClientContext.Provider value={client} {...rest} />
+                </SDKContext.Provider>
+            ),
+        });
 
         const appsDrawerResizer = container.getElementsByClassName("mx_AppsDrawer_resizer")[0] as HTMLElement;
         expect(appsDrawerResizer.style.height).toBe("500px");

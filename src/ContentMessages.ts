@@ -158,14 +158,17 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
     }
 
     // We don't await this immediately so it can happen in the background
-    const isAnimatedPromise = blobIsAnimated(imageFile.type, imageFile);
+    const isAnimatedPromise = blobIsAnimated(imageFile);
 
     const imageElement = await loadImageElement(imageFile);
 
     const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
     const imageInfo = result.info;
 
-    imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+    const isAnimated = await isAnimatedPromise;
+    if (isAnimated !== undefined) {
+        imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+    }
 
     // For lesser supported image types, always include the thumbnail even if it is larger
     if (!ALWAYS_INCLUDE_THUMBNAIL.includes(imageFile.type)) {

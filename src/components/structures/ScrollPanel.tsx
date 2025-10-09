@@ -13,8 +13,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import { SDKContext } from "../../contexts/SDKContext";
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See getExcessHeight.
@@ -57,10 +57,6 @@ interface IProps {
     /* style: styles to add to the top-level div
      */
     style?: CSSProperties;
-
-    /* resizeNotifier: ResizeNotifier to know when middle column has changed size
-     */
-    resizeNotifier?: ResizeNotifier;
 
     /* fixedChildren: allows for children to be passed which are rendered outside
      * of the wrapper
@@ -188,15 +184,18 @@ export default class ScrollPanel extends React.Component<IProps> {
     private heightUpdateInProgress = false;
     public divScroll: HTMLDivElement | null = null;
 
-    public constructor(props: IProps) {
-        super(props);
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.resetScrollState();
     }
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.props.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
+        this.context?.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
         this.checkScroll();
     }
 
@@ -217,14 +216,14 @@ export default class ScrollPanel extends React.Component<IProps> {
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
 
-        this.props.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
+        this.context?.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
 
         this.divScroll = null;
     }
 
     private onScroll = (ev: Event): void => {
         // skip scroll events caused by resizing
-        if (this.props.resizeNotifier && this.props.resizeNotifier.isResizing) return;
+        if (this.context?.resizeNotifier && this.context.resizeNotifier.isResizing) return;
         debuglog("onScroll called past resize gate; scroll node top:", this.getScrollNode().scrollTop);
         this.scrollTimeout?.restart();
         this.saveScrollState();

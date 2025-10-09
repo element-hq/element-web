@@ -133,13 +133,13 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
             }
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                setTabIndexKey(key);
                 isScrollingToItem.current = true;
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
                     done: () => {
+                        setTabIndexKey(key);
                         isScrollingToItem.current = false;
                     },
                 });

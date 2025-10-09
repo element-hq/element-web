@@ -62,3 +62,13 @@ export function withClientContextRenderOptions(client: MatrixClient): RenderOpti
         ),
     };
 }
+
+export function clientAndSDKContextRenderOptions(client: MatrixClient, sdkContext: SdkContextClass): RenderOptions {
+    return {
+        wrapper: ({ children }) => (
+            <SDKContext.Provider value={sdkContext}>
+                <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+            </SDKContext.Provider>
+        ),
+    };
+}

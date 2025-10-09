@@ -203,7 +203,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
             <div className="mx_UserProfileSettings_profile">
                 <AvatarSetting
                     avatar={avatarURL ?? undefined}
-                    avatarAltText={_t("common|user_avatar")}
+                    avatarAccessibleName={_t("common|user_avatar")}
                     onChange={onAvatarChange}
                     removeAvatar={avatarURL ? onAvatarRemove : undefined}
                     placeholderName={displayName}

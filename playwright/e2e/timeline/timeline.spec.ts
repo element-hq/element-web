@@ -961,7 +961,7 @@ test.describe("Timeline", () => {
         const reply = "Reply";
         const viewRoomSendMessageAndSetupReply = async (page: Page, app: ElementAppPage, roomId: string) => {
             // View room
-            await page.goto(`/#/room/${roomId}`);
+            await app.viewRoomById(roomId);
 
             // Send a message
             const composer = app.getComposerField();
@@ -991,6 +991,24 @@ test.describe("Timeline", () => {
             const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile_last .mx_EventTile_line");
             await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
+        });
+
+        test("can send a voice message", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
+
+            // Record an empty message
+            await page.waitForTimeout(3000);
+
+            const roomViewBody = page.locator(".mx_RoomView_body");
+            await roomViewBody
+                .locator(".mx_MessageComposer")
+                .getByRole("button", { name: "Send voice message" })
+                .click();
+
+            await expect(roomViewBody.locator(".mx_MVoiceMessageBody")).toMatchScreenshot("voice-message.png");
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {

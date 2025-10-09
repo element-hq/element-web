@@ -25,7 +25,7 @@ exports[`RichItem renders the list 1`] = `
           aria-label="First Item"
           class="richItem"
           role="option"
-          tabindex="0"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -51,7 +51,7 @@ exports[`RichItem renders the list 1`] = `
           aria-selected="true"
           class="richItem"
           role="option"
-          tabindex="0"
+          tabindex="-1"
         >
           <div
             aria-hidden="true"
@@ -86,7 +86,7 @@ exports[`RichItem renders the list 1`] = `
           aria-label="Third Item"
           class="richItem"
           role="option"
-          tabindex="0"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -111,7 +111,7 @@ exports[`RichItem renders the list 1`] = `
           aria-label="Fourth Item"
           class="richItem"
           role="option"
-          tabindex="0"
+          tabindex="-1"
         >
           <div
             class="flex avatar"
@@ -136,7 +136,7 @@ exports[`RichItem renders the list 1`] = `
           aria-label="Fifth Item"
           class="richItem"
           role="option"
-          tabindex="0"
+          tabindex="-1"
         >
           <div
             class="flex avatar"

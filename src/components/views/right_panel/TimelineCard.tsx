@@ -234,7 +234,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                             membersLoaded={true}
                             editState={this.state.editState}
                             eventId={this.state.initialEventId}
-                            resizeNotifier={this.props.resizeNotifier}
                             highlightedEventId={highlightedEventId}
                             onScroll={this.onScroll}
                         />
