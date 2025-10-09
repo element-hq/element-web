@@ -374,11 +374,13 @@ export default class ElectronPlatform extends BasePlatform {
         return this.supportedSettings?.[settingName] === true;
     }
 
-    public getSettingValue(settingName: string): Promise<any> {
+    public async getSettingValue(settingName: string): Promise<any> {
+        await this.initialised;
         return this.electron.getSettingValue(settingName);
     }
 
-    public setSettingValue(settingName: string, value: any): Promise<void> {
+    public async setSettingValue(settingName: string, value: any): Promise<void> {
+        await this.initialised;
         return this.electron.setSettingValue(settingName, value);
     }
 

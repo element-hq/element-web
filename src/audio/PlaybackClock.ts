@@ -74,7 +74,7 @@ export class PlaybackClock implements IDestroyable {
         // remainder of the division operation, we're assuming that playback is
         // incomplete or stopped, thus giving an accurate position within the active
         // clip segment.
-        return (this.context.currentTime - this.clipStart) % this.clipDuration;
+        return (this.context.currentTime - this.clipStart) % this.clipDuration || 0;
     }
 
     public get liveData(): SimpleObservable<number[]> {

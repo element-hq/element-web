@@ -10,9 +10,6 @@ import SettingsHandler from "./SettingsHandler";
 import PlatformPeg from "../../PlatformPeg";
 import { SETTINGS } from "../Settings";
 import { SettingLevel } from "../SettingLevel";
-import defaultDispatcher from "../../dispatcher/dispatcher";
-import { type ActionPayload } from "../../dispatcher/payloads";
-import { Action } from "../../dispatcher/actions";
 
 /**
  * Gets and sets settings at the "platform" level for the current device.
@@ -24,22 +21,22 @@ export default class PlatformSettingsHandler extends SettingsHandler {
     public constructor() {
         super();
 
-        defaultDispatcher.register(this.onAction);
+        void this.setup();
     }
 
-    private onAction = (payload: ActionPayload): void => {
-        if (payload.action === Action.PlatformSet) {
-            this.store = {};
-            // Load setting values as they are async and `getValue` must be synchronous
-            Object.entries(SETTINGS).forEach(([key, setting]) => {
-                if (setting.supportedLevels?.includes(SettingLevel.PLATFORM) && payload.platform.supportsSetting(key)) {
-                    payload.platform.getSettingValue(key).then((value: any) => {
-                        this.store[key] = value;
-                    });
-                }
-            });
-        }
-    };
+    private async setup(): Promise<void> {
+        const platform = await PlatformPeg.platformPromise;
+        await platform.initialised;
+
+        // Load setting values as they are async and `getValue` must be synchronous
+        Object.entries(SETTINGS).forEach(([key, setting]) => {
+            if (setting.supportedLevels?.includes(SettingLevel.PLATFORM) && platform.supportsSetting(key)) {
+                platform.getSettingValue(key).then((value: any) => {
+                    this.store[key] = value;
+                });
+            }
+        });
+    }
 
     public canSetValue(settingName: string, roomId: string): boolean {
         return PlatformPeg.get()?.supportsSetting(settingName) ?? false;

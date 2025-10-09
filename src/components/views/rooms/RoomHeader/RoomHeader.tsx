@@ -71,7 +71,7 @@ export default function RoomHeader({
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
 
     const members = useRoomMembers(room, 2500);
-    const memberCount = useRoomMemberCount(room, { throttleWait: 2500 });
+    const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
 
     const {
         voiceCallDisabledReason,

@@ -108,6 +108,12 @@ export async function renderMemberList(
         members: {},
         getMember: jest.fn(),
         getStateEvents: ((eventType, stateKey) => (stateKey === undefined ? [] : null)) as RoomState["getStateEvents"], // ignore 3pid invites
+        getInvitedMemberCount: jest.fn().mockReturnValue(0),
+        getJoinedMemberCount: jest
+            .fn()
+            .mockReturnValue(adminUsers.length + moderatorUsers.length + defaultUsers.length),
+        on: jest.fn(),
+        off: jest.fn(),
     } as unknown as RoomState;
     for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
         memberListRoom.currentState.members[member.userId] = member;

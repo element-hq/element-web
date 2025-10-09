@@ -38,6 +38,11 @@ type RoomMemberCountOpts = {
      * Wait time between room member count update
      */
     throttleWait?: number;
+    /**
+     * Whether to include invited members in the count
+     * @default false
+     */
+    includeInvited?: boolean;
 };
 
 /**
@@ -48,19 +53,21 @@ type RoomMemberCountOpts = {
  */
 export const useRoomMemberCount = (
     room: Room,
-    { throttleWait }: RoomMemberCountOpts = { throttleWait: 250 },
+    { throttleWait, includeInvited }: RoomMemberCountOpts = { throttleWait: 250, includeInvited: false },
 ): number => {
-    const [count, setCount] = useState<number>(room.getJoinedMemberCount());
+    const [count, setCount] = useState<number>(
+        includeInvited ? room.getInvitedAndJoinedMemberCount() : room.getJoinedMemberCount(),
+    );
     const throttledUpdate = useMemo(
         () =>
             throttle(
                 () => {
-                    setCount(room.getJoinedMemberCount());
+                    setCount(includeInvited ? room.getInvitedAndJoinedMemberCount() : room.getJoinedMemberCount());
                 },
                 throttleWait,
                 { leading: true, trailing: true },
             ),
-        [room, throttleWait],
+        [room, throttleWait, includeInvited],
     );
 
     useTypedEventEmitter(room.currentState, RoomStateEvent.Members, throttledUpdate);

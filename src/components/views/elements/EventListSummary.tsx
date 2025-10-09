@@ -180,7 +180,6 @@ export default class EventListSummary extends React.Component<Props, State> {
 
     private onEventSentinelUpdated = throttle(
         (): void => {
-            console.log("@@ SENTINEL UPDATED");
             this.setState(this.generateState());
         },
         500,
