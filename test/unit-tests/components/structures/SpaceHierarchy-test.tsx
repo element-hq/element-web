@@ -169,11 +169,14 @@ describe("SpaceHierarchy", () => {
         const room2 = mkStubRoom("room-id-3", "Room 2", client);
         const space1 = mkStubRoom("space-id-4", "Space 2", client);
         const room3 = mkStubRoom("room-id-5", "Room 3", client);
+        const space2 = mkStubRoom("space-id-6", "Space 3", client);
         mocked(client.getRooms).mockReturnValue([root]);
         mocked(client.getRoom).mockImplementation(
             (roomId) => client.getRooms().find((room) => room.roomId === roomId) ?? null,
         );
-        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue(KnownMembership.Leave));
+        [room1, room2, space1, room3, space2].forEach((r) =>
+            mocked(r.getMyMembership).mockReturnValue(KnownMembership.Leave),
+        );
 
         const hierarchyRoot: HierarchyRoom = {
             room_id: root.roomId,
@@ -323,6 +326,37 @@ describe("SpaceHierarchy", () => {
                 hierarchyKnockRoom1.room_id,
                 undefined,
             );
+        });
+
+        it("should not render cycles", async () => {
+            const hierarchySpace2: HierarchyRoom = {
+                room_id: space2.roomId,
+                name: "Space with cycle",
+                num_joined_members: 1,
+                room_type: "m.space",
+                children_state: [
+                    {
+                        state_key: root.roomId,
+                        content: { order: "1" },
+                        origin_server_ts: 111,
+                        type: "m.space.child",
+                        sender: "@other:server",
+                    },
+                ],
+                world_readable: true,
+                guest_can_join: true,
+            };
+
+            mocked(client.getRoomHierarchy).mockResolvedValue({
+                rooms: [hierarchyRoot, hierarchyRoom1, hierarchyRoom2, hierarchySpace1, hierarchySpace2],
+            });
+
+            const { getAllByText, queryByText, asFragment } = render(getComponent());
+            // Wait for spinners to go away
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+            expect(getAllByText("Nested space")).toHaveLength(1);
+            expect(queryByText("Space 1")).not.toBeInTheDocument();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 });
