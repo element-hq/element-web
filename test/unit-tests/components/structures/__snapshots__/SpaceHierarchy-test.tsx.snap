@@ -623,7 +623,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
     role="tree"
   >
     <li
-      aria-labelledby="«r8»"
+      aria-labelledby="«r3i»"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -653,7 +653,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«r8»"
+              id="«r3i»"
             >
               Unnamed Room
             </span>
@@ -687,7 +687,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«r8»"
+                    aria-labelledby="«r3i»"
                     class="_input_1hel1_18"
                     id="checkbox_EetmBG4yVC"
                     role="presentation"
@@ -721,7 +721,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
       </div>
     </li>
     <li
-      aria-labelledby="«rc»"
+      aria-labelledby="«r3m»"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -751,7 +751,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«rc»"
+              id="«r3m»"
             >
               Unnamed Room
             </span>
@@ -785,7 +785,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«rc»"
+                    aria-labelledby="«r3m»"
                     class="_input_1hel1_18"
                     id="checkbox_eEefiPqpMR"
                     role="presentation"
@@ -820,7 +820,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
     </li>
     <li
       aria-expanded="true"
-      aria-labelledby="«rg»"
+      aria-labelledby="«r3q»"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -850,7 +850,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«rg»"
+              id="«r3q»"
             >
               Nested space
             </span>
@@ -884,7 +884,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«rg»"
+                    aria-labelledby="«r3q»"
                     class="_input_1hel1_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
