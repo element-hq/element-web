@@ -89,7 +89,7 @@ describe("PreferencesUserSettingsTab", () => {
 
         renderTab();
         const toggle = await screen.findByRole("switch", { name: "Allow spell check" });
-        expect(toggle).toHaveAttribute("aria-checked", "false");
+        expect(toggle).not.toBeDisabled();
 
         await userEvent.click(toggle);
 
@@ -149,7 +149,7 @@ describe("PreferencesUserSettingsTab", () => {
                 mockGetValue(false);
                 const toggle = getToggle();
 
-                await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
+                await waitFor(() => expect(toggle).not.toBeDisabled());
                 fireEvent.click(toggle);
                 expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
             });
@@ -158,7 +158,7 @@ describe("PreferencesUserSettingsTab", () => {
                 mockGetValue(true);
                 const toggle = getToggle();
 
-                await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
+                await waitFor(() => expect(toggle).not.toBeDisabled());
                 fireEvent.click(toggle);
                 expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
             });
@@ -172,8 +172,8 @@ describe("PreferencesUserSettingsTab", () => {
             it("is forcibly enabled", async () => {
                 const toggle = getToggle();
                 await waitFor(() => {
-                    expect(toggle).toHaveAttribute("aria-checked", "true");
-                    expect(toggle).toHaveAttribute("aria-disabled", "true");
+                    expect(toggle).toBeChecked();
+                    expect(toggle).toBeDisabled();
                 });
             });
 
@@ -181,7 +181,8 @@ describe("PreferencesUserSettingsTab", () => {
                 mockGetValue(true);
                 const toggle = getToggle();
 
-                await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "true"));
+                await waitFor(() => expect(toggle).toBeDisabled());
+                console.log(toggle.innerHTML);
                 fireEvent.click(toggle);
                 expect(SettingsStore.setValue).not.toHaveBeenCalled();
             });

@@ -7,7 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -29,7 +30,6 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
@@ -91,9 +91,9 @@ const SpellCheckSection: React.FC = () => {
         })();
     }, []);
 
-    const onSpellCheckEnabledChange = useCallback((enabled: boolean) => {
-        setSpellCheckEnabled(enabled);
-        PlatformPeg.get()?.setSpellCheckEnabled(enabled);
+    const onSpellCheckEnabledChange = useCallback<ChangeEventHandler<HTMLInputElement>>((evt) => {
+        setSpellCheckEnabled(evt.target.checked);
+        PlatformPeg.get()?.setSpellCheckEnabled(evt.target.checked);
     }, []);
 
     const onSpellCheckLanguagesChange = useCallback((languages: string[]): void => {
@@ -105,11 +105,14 @@ const SpellCheckSection: React.FC = () => {
 
     return (
         <>
-            <LabelledToggleSwitch
-                label={_t("settings|general|allow_spellcheck")}
-                value={Boolean(spellCheckEnabled)}
-                onChange={onSpellCheckEnabledChange}
-            />
+            <Form.Root>
+                <SettingsToggleInput
+                    label={_t("settings|general|allow_spellcheck")}
+                    name="spell_check"
+                    checked={Boolean(spellCheckEnabled)}
+                    onChange={onSpellCheckEnabledChange}
+                />
+            </Form.Root>
             {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (
                 <SpellCheckSettings languages={spellCheckLanguages} onLanguagesChange={onSpellCheckLanguagesChange} />
             )}
@@ -263,8 +266,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <LanguageSection />
                         <SpellCheckSection />
                     </SettingsSubsection>
-
-                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
+                    <SettingsSubsection formWrap heading={_t("settings|preferences|room_list_heading")}>
                         {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                         {/* The settings is on device level where the other room list settings are on account level  */}
                         {newRoomListEnabled && (
@@ -272,12 +274,13 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         )}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|spaces")}>
+                    <SettingsSubsection formWrap heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
                     </SettingsSubsection>
 
                     <SettingsSubsection
                         heading={_t("settings|preferences|keyboard_heading")}
+                        formWrap
                         description={_t(
                             "settings|preferences|keyboard_view_shortcuts_button",
                             {},
@@ -293,7 +296,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|time_heading")} formWrap>
                         <div className="mx_SettingsSubsection_dropdown">
                             {_t("settings|preferences|user_timezone")}
                             <Dropdown
@@ -316,38 +319,39 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection
+                        formWrap
                         heading={_t("common|presence")}
                         description={_t("settings|preferences|presence_description")}
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|composer_heading")}>
+                    <SettingsSubsection formWrap heading={_t("settings|preferences|composer_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")}>
+                    <SettingsSubsection formWrap heading={_t("settings|preferences|code_blocks_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|media_heading")}>
+                    <SettingsSubsection formWrap heading={_t("settings|preferences|media_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|timeline")}>
+                    <SettingsSubsection formWrap heading={_t("common|timeline")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
+                    <SettingsSubsection formWrap heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
                         <InviteRulesAccountSetting />
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
+                    <SettingsSubsection formWrap heading={_t("settings|preferences|room_directory_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|general")} stretchContent>
+                    <SettingsSubsection formWrap heading={_t("common|general")} stretchContent>
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />

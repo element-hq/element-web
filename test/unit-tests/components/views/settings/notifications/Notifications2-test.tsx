@@ -114,7 +114,7 @@ describe("<Notifications />", () => {
             expect(screen.container).toMatchSnapshot();
 
             const globalMute = screen.getByLabelText(labelGlobalMute);
-            expect(globalMute).toHaveAttribute("aria-disabled", "true");
+            expect(globalMute).toBeDisabled();
 
             const levelAllMessages = screen.getByLabelText(labelLevelAllMessage);
             expect(levelAllMessages).toBeDisabled();

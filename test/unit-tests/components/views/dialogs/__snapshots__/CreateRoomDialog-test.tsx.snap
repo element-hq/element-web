@@ -24,7 +24,9 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
         Create a private room
       </h1>
     </div>
-    <form>
+    <form
+      class="_root_19upo_16"
+    >
       <div
         class="mx_Dialog_content"
       >
@@ -92,28 +94,35 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           Only people invited will be able to find and join this room. You can change this at any time from room settings.
         </p>
         <div
-          class="mx_SettingsFlag mx_CreateRoomDialog_e2eSwitch"
+          class="_inline-field_19upo_32"
         >
-          <span
-            class="mx_SettingsFlag_label"
+          <div
+            class="_inline-field-control_19upo_44"
           >
             <div
-              id="mx_LabelledToggleSwitch_«r4m»"
+              class="_container_19o42_10"
+            >
+              <input
+                checked=""
+                class="_input_19o42_24"
+                id="«r5k»"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_19o42_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="«r5k»"
             >
               Enable end-to-end encryption
-            </div>
-          </span>
-          <div
-            aria-checked="true"
-            aria-disabled="false"
-            aria-labelledby="mx_LabelledToggleSwitch_«r4m»"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
+            </label>
           </div>
         </div>
         <p>
@@ -128,30 +137,43 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             Show advanced
           </summary>
           <div
-            class="mx_SettingsFlag"
+            class="_inline-field_19upo_32"
           >
-            <span
-              class="mx_SettingsFlag_label"
+            <div
+              class="_inline-field-control_19upo_44"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r4n»"
+                class="_container_19o42_10"
+              >
+                <input
+                  class="_input_19o42_24"
+                  id="«r5m»"
+                  role="switch"
+                  type="checkbox"
+                />
+                <div
+                  class="_ui_19o42_34"
+                />
+              </div>
+            </div>
+            <div
+              class="_inline-field-body_19upo_38"
+            >
+              <label
+                class="_label_19upo_59"
+                for="«r5m»"
               >
                 Block anyone not part of server.org from ever joining this room.
-              </div>
-            </span>
-            <div
-              aria-checked="false"
-              aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r4n»"
-              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-              role="switch"
-              tabindex="0"
-            >
-              <div
-                class="mx_ToggleSwitch_ball"
-              />
+              </label>
+              <span
+                class="_message_19upo_85 _help-message_19upo_91"
+                id="radix-«r5o»"
+              >
+                You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
+              </span>
             </div>
           </div>
+          z
           <p>
             You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
           </p>
@@ -218,7 +240,9 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
         Create a private room
       </h1>
     </div>
-    <form>
+    <form
+      class="_root_19upo_16"
+    >
       <div
         class="mx_Dialog_content"
       >
@@ -286,28 +310,35 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           Only people invited will be able to find and join this room. You can change this at any time from room settings.
         </p>
         <div
-          class="mx_SettingsFlag mx_CreateRoomDialog_e2eSwitch"
+          class="_inline-field_19upo_32"
         >
-          <span
-            class="mx_SettingsFlag_label"
+          <div
+            class="_inline-field-control_19upo_44"
           >
             <div
-              id="mx_LabelledToggleSwitch_«r54»"
+              class="_container_19o42_10"
+            >
+              <input
+                checked=""
+                class="_input_19o42_24"
+                id="«r65»"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_19o42_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="«r65»"
             >
               Enable end-to-end encryption
-            </div>
-          </span>
-          <div
-            aria-checked="true"
-            aria-disabled="false"
-            aria-labelledby="mx_LabelledToggleSwitch_«r54»"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
+            </label>
           </div>
         </div>
         <p>

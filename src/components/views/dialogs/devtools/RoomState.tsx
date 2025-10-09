@@ -7,9 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { type ChangeEventHandler, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { type IContent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t, _td } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
@@ -19,7 +20,6 @@ import FilteredList from "./FilteredList";
 import Spinner from "../../elements/Spinner";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 
 export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
@@ -116,6 +116,10 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     const [event, setEvent] = useState<MatrixEvent | null>(null);
     const [history, setHistory] = useState(false);
     const [showEmptyState, setShowEmptyState] = useState(true);
+    const onEmptyStateToggled = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setShowEmptyState(e.target.checked),
+        [setShowEmptyState],
+    );
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -157,11 +161,19 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
                         <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
                     ))}
             </FilteredList>
-            <LabelledToggleSwitch
-                label={_t("devtools|show_empty_content_events")}
-                onChange={setShowEmptyState}
-                value={showEmptyState}
-            />
+            <Form.Root
+                onSubmit={(evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                }}
+            >
+                <SettingsToggleInput
+                    name="empty_state_toggle"
+                    label={_t("devtools|show_empty_content_events")}
+                    onChange={onEmptyStateToggled}
+                    checked={showEmptyState}
+                />
+            </Form.Root>
         </BaseTool>
     );
 };

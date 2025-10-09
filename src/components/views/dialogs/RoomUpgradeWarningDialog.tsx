@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode, type SyntheticEvent } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactNode, type SyntheticEvent } from "react";
 import { EventType, JoinRule } from "matrix-js-sdk/src/matrix";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import BugReportDialog from "./BugReportDialog";
@@ -87,8 +87,8 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         this.props.onFinished({ continue: false, invite: false });
     };
 
-    private onInviteUsersToggle = (inviteUsersToNewRoom: boolean): void => {
-        this.setState({ inviteUsersToNewRoom });
+    private onInviteUsersToggle: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ inviteUsersToNewRoom: evt.target.checked });
     };
 
     private openBugReportDialog = (e: SyntheticEvent): void => {
@@ -104,11 +104,19 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         let inviteToggle: JSX.Element | undefined;
         if (this.isInviteOrKnockRoom) {
             inviteToggle = (
-                <LabelledToggleSwitch
-                    value={this.state.inviteUsersToNewRoom}
-                    onChange={this.onInviteUsersToggle}
-                    label={_t("room_settings|advanced|upgrade_warning_dialog_invite_label")}
-                />
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsToggleInput
+                        name="room-upgrade-warning"
+                        checked={this.state.inviteUsersToNewRoom}
+                        onChange={this.onInviteUsersToggle}
+                        label={_t("room_settings|advanced|upgrade_warning_dialog_invite_label")}
+                    />
+                </Form.Root>
             );
         }
 
