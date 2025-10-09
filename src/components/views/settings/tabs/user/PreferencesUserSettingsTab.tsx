@@ -269,7 +269,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     {SettingsStore.canSetValue("Electron.autoLaunch", null, SettingLevel.PLATFORM) && (
                         <SettingsSubsection heading={_t("settings|preferences|startup_window_behaviour_label")}>
                             <SettingsDropdown
-                                name="Electron.autoLaunch"
+                                settingKey="Electron.autoLaunch"
                                 label={_t("settings|start_automatically|label", { brand })}
                                 level={SettingLevel.PLATFORM}
                                 hideIfCannotSet

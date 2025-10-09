@@ -15,7 +15,7 @@ import Dropdown, { type DropdownProps } from "./Dropdown.tsx";
 import { _t } from "../../../shared-components/utils/i18n.tsx";
 
 interface Props {
-    name: StringSettingKey;
+    settingKey: StringSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const SettingsDropdown = ({
-    name,
+    settingKey,
     roomId,
     level,
     label: specificLabel,
@@ -34,27 +34,27 @@ const SettingsDropdown = ({
     onChange,
 }: Props): JSX.Element => {
     const id = useId();
-    const settingValue = useSettingValueAt(level, name, roomId ?? null, isExplicit);
+    const settingValue = useSettingValueAt(level, settingKey, roomId ?? null, isExplicit);
     const [value, setValue] = useState(settingValue);
-    const setting = SETTINGS[name];
+    const setting = SETTINGS[settingKey];
 
     const onOptionChange = useCallback(
         (value: string): void => {
             setValue(value); // local echo
-            SettingsStore.setValue(name, roomId ?? null, level, value);
+            SettingsStore.setValue(settingKey, roomId ?? null, level, value);
             onChange?.(value);
         },
-        [name, roomId, level, onChange],
+        [settingKey, roomId, level, onChange],
     );
 
-    const disabled = !SettingsStore.canSetValue(name, roomId ?? null, level);
+    const disabled = !SettingsStore.canSetValue(settingKey, roomId ?? null, level);
     if (disabled && hideIfCannotSet) return <></>;
     if (!setting.options) {
         console.error("SettingsDropdown used for a setting with no `options`");
         return <></>;
     }
 
-    const label = specificLabel ?? SettingsStore.getDisplayName(name, level)!;
+    const label = specificLabel ?? SettingsStore.getDisplayName(settingKey, level)!;
     const options = setting.options.map((option) => {
         return <div key={option.value}>{_t(option.label)}</div>;
     }) as DropdownProps["children"];
