@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "1.12.1",
+    "version": "0.0.0-test.3",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -10,14 +10,14 @@
     "exports": {
         ".": {
             "require": {
-                "default": "dist/element-web-shared-components.umd.js",
                 "style": "dist/element-web-shared-components.css",
-                "types": "dist/element-web-shared-components.d.ts"
+                "types": "dist/element-web-shared-components.d.ts",
+                "default": "dist/element-web-shared-components.umd.js"
             },
             "import": {
-                "default": "dist/element-web-shared-components.mjs",
                 "style": "dist/element-web-shared-components.css",
-                "types": "dist/element-web-shared-components.d.ts"
+                "types": "dist/element-web-shared-components.d.ts",
+                "default": "dist/element-web-shared-components.mjs"
             }
         }
     },
