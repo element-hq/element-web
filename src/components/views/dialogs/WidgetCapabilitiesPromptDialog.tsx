@@ -95,8 +95,6 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             if (isTimelineA && !isTimelineB) return 1;
             if (!isTimelineA && isTimelineB) return -1;
             if (isTimelineA && isTimelineB) return lexicographicCompare(capA, capB);
-
-            return 0;
         });
         const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
