@@ -1,0 +1,47 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomPreviewContext {
+    > li {
+        list-style: none;
+        margin-bottom: var(--cpd-space-2x);
+    }
+    text-align: left;
+}
+
+.mx_RoomPreviewContext_detailsItem {
+    display: flex;
+    gap: var(--cpd-space-1x);
+
+    svg {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    &.safe {
+        color: var(--cpd-color-text-success-primary);
+    }
+
+    &.unknown {
+        color: var(--cpd-color-text-info-primary);
+    }
+
+    &.unsafe {
+        color: var(--cpd-color-text-critical-primary);
+    }
+
+    h1 {
+        font-size: var(--cpd-font-size-body-md);
+        margin: 0;
+    }
+
+    p {
+        color: var(--cpd-color-text-secondary);
+        margin-top: 2px;
+        margin-bottom: 0;
+    }
+}

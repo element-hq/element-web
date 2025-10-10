@@ -32,6 +32,7 @@ import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 import Field from "../elements/Field";
 import ModuleApi from "../../../modules/Api.ts";
+import { RoomPreviewContext } from "./RoomPreviewContext.tsx";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
@@ -317,6 +318,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
         let title: string | undefined;
         let subTitle: string | ReactNode[] | undefined;
         let reasonElement: JSX.Element | undefined;
+        let inviteContext: JSX.Element | undefined;
         let primaryActionHandler: (() => void) | undefined;
         let primaryActionLabel: string | undefined;
         let secondaryActionHandler: (() => void) | undefined;
@@ -557,6 +559,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                         />
                     );
                 }
+                inviteContext = <RoomPreviewContext inviterMember={inviteMember} />;
 
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("action|decline");
@@ -736,6 +739,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                     {subTitleElements}
                 </div>
                 {reasonElement}
+                {inviteContext}
                 <div
                     className={classNames("mx_RoomPreviewBar_actions", {
                         mx_RoomPreviewBar_fullWidth: messageCase === MessageCase.PromptAskToJoin,
