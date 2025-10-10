@@ -279,3 +279,6 @@
 - name: "Z-Flaky-Test-Disabled"
   description: "The flaking test has been disabled"
   color: "ededed"
+- name: "Z-Skip-Sonar"
+  description: "Skip SonarQube analysis for this PR"
+  color: "ededed"

@@ -34,6 +34,9 @@ interface IProps {
  * room.
  */
 export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) => {
+    const roomId = mxEvent.getRoomId();
+    console.log("Rendering RoomPredecessorTile for room ID", roomId);
+
     const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
     // Note: we ask the room for its predecessor here, instead of directly using
