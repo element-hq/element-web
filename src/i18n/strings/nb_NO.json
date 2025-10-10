@@ -3063,7 +3063,6 @@
             "spaces_explainer": "Områder er måter å gruppere rom og mennesker på. Ved siden av områdene du er i, kan du også bruke noen forhåndsbygde.",
             "title": "Sidepanel"
         },
-        "start_automatically": "Start automatisk etter systempålogging",
         "tac_only_notifications": "Vis bare varsler i trådens aktivitetssenter",
         "use_12_hour_format": "Vis tidsstempler i 12-timersformat (f.eks. 2:30pm)",
         "use_command_enter_send_message": "Bruk Kommando + Enter for å sende en melding",

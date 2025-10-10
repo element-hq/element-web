@@ -3052,7 +3052,6 @@
             "spaces_explainer": "Prostory jsou způsoby, jak seskupit místnosti a lidi. Kromě prostor, ve kterých se nacházíte, můžete použít i některé předem vytvořené.",
             "title": "Postranní panel"
         },
-        "start_automatically": "Zahájit automaticky po přihlášení do systému",
         "tac_only_notifications": "Zobrazení oznámení pouze v centru aktivity vlákna",
         "use_12_hour_format": "Zobrazovat čas v 12hodinovém formátu (např. 2:30 odp.)",
         "use_command_enter_send_message": "K odeslání zprávy použijte Command + Enter",
