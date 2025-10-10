@@ -3064,7 +3064,6 @@
             "spaces_explainer": "Kogukonnad on võimalus jututubade ja inimeste ühendamiseks. Lisaks nendele, mille liige sa juba olev, võid kasutada süsteemi poolt loodud kogukondi.",
             "title": "Külgpaan"
         },
-        "start_automatically": "Käivita Element automaatselt peale arvutisse sisselogimist",
         "tac_only_notifications": "Näita teavitusi vaid jutulõngade ülevaates",
         "use_12_hour_format": "Näita ajatempleid 12-tunnises vormingus (näiteks 2:30pl)",
         "use_command_enter_send_message": "Sõnumi saatmiseks vajuta Command + Enter klahve",

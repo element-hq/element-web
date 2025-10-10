@@ -3005,7 +3005,6 @@
             "spaces_explainer": "Utrymmen är sätt att gruppera rum och personer. Vid sidan av de utrymmen du befinner dig i kan du också använda några förbyggda.",
             "title": "Sidofält"
         },
-        "start_automatically": "Starta automatiskt vid systeminloggning",
         "tac_only_notifications": "Visa endast notiser i aktivitetscentret för trådar",
         "use_12_hour_format": "Visa tidsstämplar i 12-timmarsformat (t.ex. 2:30em)",
         "use_command_enter_send_message": "Använd Kommando + Enter för att skicka ett meddelande",

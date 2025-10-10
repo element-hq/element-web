@@ -3012,7 +3012,6 @@
             "spaces_explainer": "Przestrzenie to sposób grupowania pokoi i osób. Oprócz przestrzeni, w których się znajdujesz, możesz również korzystać z już wstępnie zbudowanych.",
             "title": "Pasek boczny"
         },
-        "start_automatically": "Uruchom automatycznie po zalogowaniu się do systemu",
         "tac_only_notifications": "Pokaż powiadomienia tylko w centrum aktywności wątków",
         "use_12_hour_format": "Pokaż czas w formacie 12-sto godzinnym (np. 2:30pm)",
         "use_command_enter_send_message": "Użyj Command + Enter, aby wysłać wiadomość",

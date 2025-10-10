@@ -1597,7 +1597,6 @@
             "metaspaces_home_description": "خانه برای داشتن یک نمای کلی از همه چیز مفید است.",
             "title": "نوارکناری"
         },
-        "start_automatically": "پس از ورود به سیستم به صورت خودکار آغاز کن",
         "use_12_hour_format": "زمان را با فرمت ۱۲ ساعته نشان بده (مثلا ۲:۳۰ بعدازظهر)",
         "use_command_enter_send_message": "استفاده از Command + Enter برای ارسال پیام",
         "use_control_enter_send_message": "استفاده از Ctrl + Enter برای ارسال پیام",

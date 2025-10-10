@@ -2863,7 +2863,6 @@
             "spaces_explainer": "Alanlar, odaları ve kişileri gruplamanın bir yoludur. İçinde bulunduğunuz alanların yanı sıra, önceden oluşturulmuş bazı alanları da kullanabilirsiniz.",
             "title": "Kenar çubuğu"
         },
-        "start_automatically": "Sisteme giriş yaptıktan sonra otomatik başlat",
         "tac_only_notifications": "Bildirimleri yalnızca mesaj dizisi etkinlik merkezinde göster",
         "use_12_hour_format": "Zaman damgalarını 12 biçiminde göster (örn. 2:30 pm)",
         "use_command_enter_send_message": "Mesaj göndermek için Command + Enter tuşlarını kullanın",
