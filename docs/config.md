@@ -89,7 +89,8 @@ instance. As of writing those settings are not fully documented, however a few a
    shouldn't be used as the federation capabilities of a room **cannot** be changed after the room is created.
 2. `default_country_code`: An optional ISO 3166 alpha2 country code (eg: `GB`, the default) to use when showing phone number
    inputs.
-3. `room_directory`: Optionally defines how the room directory component behaves. Currently only a single property, `servers`
+3. `default_layout_direction`: A string of either `ltr` or `rtl` to set the default directionality of the app.
+4. `room_directory`: Optionally defines how the room directory component behaves. Currently only a single property, `servers`
    is supported to add additional servers to the dropdown. For example:
     ```json
     {
@@ -98,7 +99,7 @@ instance. As of writing those settings are not fully documented, however a few a
         }
     }
     ```
-4. `setting_defaults`: Optional configuration for settings which are not described by this document and support the `config`
+5. `setting_defaults`: Optional configuration for settings which are not described by this document and support the `config`
    level. This list is incomplete. For example:
     ```json
     {

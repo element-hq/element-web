@@ -113,6 +113,7 @@ async function start(): Promise<void> {
         preparePlatform,
         loadConfig,
         loadLanguage,
+        loadLayoutDirection,
         loadTheme,
         loadApp,
         loadModules,
@@ -164,10 +165,12 @@ async function start(): Promise<void> {
 
         // Load language after loading config.json so that settingsDefaults.language can be applied
         const loadLanguagePromise = loadLanguage();
+        // Load layout direction after loading config.json
+        const loadLayoutDirectionPromise = loadLayoutDirection();
         // as quickly as we possibly can, set a default theme...
         const loadThemePromise = loadTheme();
         // await things settling so that any errors we have to render have features like i18n running
-        await settled(loadThemePromise, loadLanguagePromise);
+        await settled(loadThemePromise, loadLanguagePromise, loadLayoutDirectionPromise);
 
         const loadModulesPromise = loadModules();
         await settled(loadModulesPromise);
@@ -221,6 +224,7 @@ async function start(): Promise<void> {
         await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
+        await loadLayoutDirectionPromise;
 
         // We don't care if the log persistence made it through successfully, but we do want to
         // make sure it had a chance to load before we move on. It's prepared much higher up in
