@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type RoomMember, User, type Room } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, type ReactNode, useContext, useState } from "react";
+import { type RoomMember, type User, type Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, type ReactNode, useState } from "react";
 import { MenuItem } from "@vector-im/compound-web";
 import { ChatIcon, CheckIcon, MentionIcon, ShareIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
@@ -14,26 +14,16 @@ import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-
 import { _t } from "../../../../languageHandler";
 import { useUserInfoBasicOptionsViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
 import { Container, type Member } from "../UserInfo";
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
-import { DirectoryMember, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 
-/**
- * Converts the member to a DirectoryMember and starts a DM with them.
- */
-async function openDmForUser(matrixClient: MatrixClient, user: Member): Promise<void> {
-    const avatarUrl = user instanceof User ? user.avatarUrl : user.getMxcAvatarUrl();
-    const startDmUser = new DirectoryMember({
-        user_id: user.userId,
-        display_name: user.rawDisplayName,
-        avatar_url: avatarUrl,
-    });
-    await startDmOnFirstMessage(matrixClient, [startDmUser]);
-}
-
-const MessageButton = ({ member }: { member: Member }): JSX.Element => {
-    const cli = useContext(MatrixClientContext);
+const MessageButton = ({
+    member,
+    openDMForUser,
+}: {
+    member: Member;
+    openDMForUser: (user: Member) => Promise<void>;
+}): JSX.Element => {
     const [busy, setBusy] = useState(false);
 
     return (
@@ -43,7 +33,7 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
                 ev.preventDefault();
                 if (busy) return;
                 setBusy(true);
-                await openDmForUser(cli, member);
+                await openDMForUser(member);
                 setBusy(false);
             }}
             disabled={busy}
@@ -120,7 +110,9 @@ export const UserInfoBasicOptionsView: React.FC<{
     );
 
     const directMessageButton =
-        vm.isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : <MessageButton member={member} />;
+        vm.isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : (
+            <MessageButton member={member} openDMForUser={vm.onOpenDmForUser} />
+        );
 
     return (
         <Container>

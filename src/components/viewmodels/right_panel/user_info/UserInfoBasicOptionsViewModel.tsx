@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useContext } from "react";
-import { RoomMember, type Room, type User, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { RoomMember, User, type Room, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../../Modal";
 import ErrorDialog from "../../../views/dialogs/ErrorDialog";
@@ -22,9 +22,11 @@ import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import MultiInviter from "../../../../utils/MultiInviter";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import { useRoomPermissions } from "./UserInfoBasicViewModel";
+import { DirectoryMember, startDmOnFirstMessage } from "../../../../utils/direct-messages";
+import { type Member } from "../../../views/right_panel/UserInfo";
 
 export interface UserInfoBasicOptionsState {
-    // boolean to know if selected user is current user 
+    // boolean to know if selected user is current user
     isMe: boolean;
     // boolean to display/hide invite button
     showInviteButton: boolean;
@@ -34,12 +36,14 @@ export interface UserInfoBasicOptionsState {
     readReceiptButtonDisabled: boolean;
     // Method called when a insert pill button is clicked
     onInsertPillButton: () => void;
-    // Method called when a read receipt button is clicked
+    // Method called when a read receipt button is clicked, will add a pill in the input message field
     onReadReceiptButton: () => void;
-    // Method called when a share user button is clicked
+    // Method called when a share user button is clicked, will display modal with profile to share
     onShareUserClick: () => void;
-    // Method called when a invite button is clicked
+    // Method called when a invite button is clicked, will display modal to invite user
     onInviteUserButton: (evt: Event) => Promise<void>;
+    // Method called when the DM button is clicked, will open a DM with the selected member
+    onOpenDmForUser: (member: Member) => Promise<void>;
 }
 
 export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | RoomMember): UserInfoBasicOptionsState => {
@@ -128,6 +132,16 @@ export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | Room
         });
     };
 
+    const onOpenDmForUser = async (user: Member): Promise<void> => {
+        const avatarUrl = user instanceof User ? user.avatarUrl : user.getMxcAvatarUrl();
+        const startDmUser = new DirectoryMember({
+            user_id: user.userId,
+            display_name: user.rawDisplayName,
+            avatar_url: avatarUrl,
+        });
+        await startDmOnFirstMessage(cli, [startDmUser]);
+    };
+
     return {
         isMe,
         showInviteButton,
@@ -137,5 +151,6 @@ export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | Room
         onInsertPillButton,
         onInviteUserButton,
         onShareUserClick,
+        onOpenDmForUser,
     };
 };
