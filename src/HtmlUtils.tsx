@@ -22,7 +22,7 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { sanitizeHtmlParams, transformTags } from "./Linkify";
+import { linkifyHtml, sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
@@ -298,6 +298,7 @@ export interface EventRenderOpts {
      * Should inline media be rendered?
      */
     mediaIsVisible?: boolean;
+    linkify?: boolean;
 }
 
 function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
@@ -318,6 +319,18 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
                 },
             },
         };
+    }
+
+    if (opts.linkify) {
+        // Prevent mutating the source of sanitizeParams.
+        sanitizeParams = { ...sanitizeParams };
+        sanitizeParams.allowedClasses ??= {};
+        if (typeof sanitizeParams.allowedClasses.a === "boolean") {
+            // All classes are already allowed for "a"
+        } else {
+            sanitizeParams.allowedClasses.a ??= [];
+            sanitizeParams.allowedClasses.a.push("linkified");
+        }
     }
 
     try {
@@ -346,19 +359,26 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
             ? new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink)
             : null;
 
+        if (highlighter) {
+            // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
+            // to highlight HTML tags themselves. However, this does mean that we don't highlight textnodes which
+            // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
+            // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
+            // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
+            sanitizeParams.textFilter = function (safeText) {
+                return highlighter.applyHighlights(safeText, safeHighlights!).join("");
+            };
+        }
+
         if (isFormattedBody) {
-            if (highlighter) {
-                // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
-                // to highlight HTML tags themselves. However, this does mean that we don't highlight textnodes which
-                // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
-                // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
-                // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
-                sanitizeParams.textFilter = function (safeText) {
-                    return highlighter.applyHighlights(safeText, safeHighlights!).join("");
-                };
+            let unsafeBody = formattedBody!;
+
+            if (opts.linkify) {
+                unsafeBody = linkifyHtml(unsafeBody);
             }
 
-            safeBody = sanitizeHtml(formattedBody!, sanitizeParams);
+            safeBody = sanitizeHtml(unsafeBody, sanitizeParams);
+
             const phtml = new DOMParser().parseFromString(safeBody, "text/html");
             const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
             isHtmlMessage = !isPlainText;
@@ -373,6 +393,9 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
                 });
                 safeBody = phtml.body.innerHTML;
             }
+        } else if (opts.linkify) {
+            // If we are linkifying plain text, pass the result through sanitizeHtml so that the highlighter configured in sanitizeParams.textFilter gets applied.
+            safeBody = sanitizeHtml(linkifyHtml(escapeHtml(plainBody)), sanitizeParams);
         } else if (highlighter) {
             safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
@@ -428,14 +451,15 @@ export function bodyToNode(
     });
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && eventInfo.safeBody) {
-        // This has to be done after the emojiBody check as to not break big emoji on replies
-        formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
-    }
-
     let emojiBodyElements: JSX.Element[] | undefined;
-    if (!eventInfo.safeBody && eventInfo.bodyHasEmoji) {
-        emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+
+    if (eventInfo.bodyHasEmoji) {
+        if (eventInfo.safeBody) {
+            // This has to be done after the emojiBody check as to not break big emoji on replies
+            formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
+        } else {
+            emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+        }
     }
 
     return { strippedBody: eventInfo.strippedBody, formattedBody, emojiBodyElements, className };
@@ -458,7 +482,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let formattedBody = eventInfo.safeBody;
-    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && formattedBody) {
+    if (eventInfo.bodyHasEmoji && formattedBody) {
         // This has to be done after the emojiBody check above as to not break big emoji on replies
         formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
     }

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type DOMNode, Element, type HTMLReactParserOptions, Text } from "html-react-parser";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import { type Opts } from "linkifyjs";
 
 /**
  * The type of a parent node of an element, normally exported by domhandler but that is not a direct dependency of ours
@@ -65,29 +64,9 @@ export function applyReplacerOnString(
     });
 }
 
-/**
- * Converts a Replacer function to a render function for linkify-react
- * So that we can use the same replacer functions for both
- * @param replacer The replacer function to convert
- */
-export function replacerToRenderFunction(replacer: Replacer): Opts["render"] {
-    if (!replacer) return;
-    return ({ tagName, attributes, content }) => {
-        const domNode = new Element(tagName, attributes, [new Text(content)], "tag" as Element["type"]);
-        const result = replacer(domNode, 0);
-        if (result) return result;
-
-        // This is cribbed from the default render function in linkify-react
-        if (attributes.class) {
-            attributes.className = attributes.class;
-            delete attributes.class;
-        }
-        return React.createElement(tagName, attributes, content);
-    };
-}
-
 interface Parameters {
     isHtml: boolean;
+    replace: Replacer;
     // Required for keywordPillRenderer
     keywordRegexpPattern?: RegExp;
     // Required for mentionPillRenderer
@@ -114,7 +93,7 @@ export type RendererMap = Partial<
     }
 >;
 
-type PreparedRenderer = (parameters: Parameters) => Replacer;
+type PreparedRenderer = (parameters: Omit<Parameters, "replace">) => Replacer;
 
 /**
  * Combines multiple renderers into a single Replacer function
@@ -122,19 +101,22 @@ type PreparedRenderer = (parameters: Parameters) => Replacer;
  */
 export const combineRenderers =
     (...renderers: RendererMap[]): PreparedRenderer =>
-    (parameters) =>
-    (node, index) => {
-        if (node.type === "text") {
-            for (const replacer of renderers) {
-                const result = replacer[Node.TEXT_NODE]?.(node, parameters, index);
-                if (result) return result;
+    (parameters) => {
+        const replace: Replacer = (node, index) => {
+            if (node.type === "text") {
+                for (const replacer of renderers) {
+                    const result = replacer[Node.TEXT_NODE]?.(node, parametersWithReplace, index);
+                    if (result) return result;
+                }
             }
-        }
-        if (node instanceof Element) {
-            const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
-            for (const replacer of renderers) {
-                const result = replacer[tagName]?.(node, parameters, index);
-                if (result) return result;
+            if (node instanceof Element) {
+                const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
+                for (const replacer of renderers) {
+                    const result = replacer[tagName]?.(node, parametersWithReplace, index);
+                    if (result) return result;
+                }
             }
-        }
+        };
+        const parametersWithReplace: Parameters = { ...parameters, replace };
+        return replace;
     };
