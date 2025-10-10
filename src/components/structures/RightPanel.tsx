@@ -16,7 +16,6 @@ import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCardView from "../views/right_panel/RoomSummaryCardView";
-import WidgetCard from "../views/right_panel/WidgetCard";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
@@ -35,6 +34,7 @@ import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
 import { _t } from "../../languageHandler";
+import { WidgetCard } from "../viewmodels/right_panel/WidgetCardViewModel";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
