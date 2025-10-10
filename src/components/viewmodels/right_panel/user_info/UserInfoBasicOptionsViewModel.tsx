@@ -24,6 +24,8 @@ import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPa
 import { useRoomPermissions } from "./UserInfoBasicViewModel";
 
 export interface UserInfoBasicOptionsState {
+    // boolean to know if selected user is current user 
+    isMe: boolean;
     // boolean to display/hide invite button
     showInviteButton: boolean;
     // boolean to display/hide insert pill button
@@ -40,13 +42,11 @@ export interface UserInfoBasicOptionsState {
     onInviteUserButton: (evt: Event) => Promise<void>;
 }
 
-export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMember): UserInfoBasicOptionsState => {
+export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | RoomMember): UserInfoBasicOptionsState => {
     const cli = useContext(MatrixClientContext);
 
-    const roomId =
-        member instanceof RoomMember && member.roomId
-            ? member.roomId
-            : SdkContextClass.instance.roomViewStore.getRoomId();
+    // selected member is current user
+    const isMe = member.userId === cli.getUserId();
 
     // Those permissions are updated when a change is done on the room current state and the selected user
     const roomPermissions = useRoomPermissions(cli, room, member as RoomMember);
@@ -89,6 +89,11 @@ export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMe
 
     const onInviteUserButton = async (ev: Event): Promise<void> => {
         try {
+            const roomId =
+                member instanceof RoomMember && member.roomId
+                    ? member.roomId
+                    : SdkContextClass.instance.roomViewStore.getRoomId();
+
             // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.
             const inviter = new MultiInviter(cli, roomId || "");
             await inviter.invite([member.userId]).then(() => {
@@ -124,6 +129,7 @@ export const useUserInfoBasicOptionsSection = (room: Room, member: User | RoomMe
     };
 
     return {
+        isMe,
         showInviteButton,
         showInsertPillButton,
         readReceiptButtonDisabled,

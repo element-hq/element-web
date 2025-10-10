@@ -14,16 +14,16 @@ import { _t } from "../../../../languageHandler";
 import { useUserInfoBasicViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoBasicViewModel";
 import { PowerLevelSection } from "./UserInfoPowerLevels";
 import { Container } from "../UserInfo";
-import { IgnoreToggleButton } from "./UserInfoIgnoreButton";
+import { IgnoreToggleButton } from "./UserInfoIgnoreButtonView";
 import Spinner from "../../elements/Spinner";
 import { UserInfoAdminToolsContainer } from "./UserInfoAdminToolsContainer";
-import { UserInfoBasicOptions } from "./UserInfoBasicOptions";
+import { UserInfoBasicOptionsView } from "./UserInfoBasicOptionsView";
 
 /**
  * There are two types of components that can be displayed in the right panel concerning userinfo
  * Basic info or Encryption Panel
  */
-export const UserInfoBasic: React.FC<{
+export const UserInfoBasicView: React.FC<{
     room: Room;
     member: User | RoomMember;
 }> = ({ room, member }) => {
@@ -78,9 +78,9 @@ export const UserInfoBasic: React.FC<{
 
     return (
         <React.Fragment>
-            <UserInfoBasicOptions isMe={vm.isMe} room={room} member={member}>
+            <UserInfoBasicOptionsView room={room} member={member}>
                 {memberDetails}
-            </UserInfoBasicOptions>
+            </UserInfoBasicOptionsView>
             {adminToolsContainer}
             {!vm.isMe && (
                 <Container>

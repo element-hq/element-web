@@ -14,8 +14,15 @@ import QuestionDialog from "../../../views/dialogs/QuestionDialog";
 import { useTypedEventEmitter } from "../../../../hooks/useEventEmitter";
 
 export interface UserInfoPowerLevelState {
-    ignoreButtonClick: (ev: Event) => void;
+    /**
+     * Weither the member is ignored by current user or not
+     */
     isIgnored: boolean;
+    /**
+     * Trigger the method to ignore or unignore a user
+     * @param ev - The click event
+     */
+    ignoreButtonClick: (ev: Event) => void;
 }
 
 export const useUserInfoIgnoreButtonViewModel = (member: User | RoomMember): UserInfoPowerLevelState => {

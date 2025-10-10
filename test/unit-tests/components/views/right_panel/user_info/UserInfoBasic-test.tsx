@@ -15,7 +15,7 @@ import {
     type UserInfoBasicState,
     useUserInfoBasicViewModel,
 } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";
-import { UserInfoBasic } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasic";
+import { UserInfoBasicView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasicView";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 const defaultRoomPermissions = {
@@ -53,7 +53,7 @@ describe("<UserInfoBasic />", () => {
     const renderComponent = (props = defaultProps) => {
         return render(
             <MatrixClientContext.Provider value={matrixClient}>
-                <UserInfoBasic {...props} />
+                <UserInfoBasicView {...props} />
             </MatrixClientContext.Provider>,
         );
     };

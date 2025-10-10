@@ -27,7 +27,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
-import { UserInfoBasic } from "./user_info/UserInfoBasic";
+import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -221,7 +221,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     let content: JSX.Element | undefined;
     switch (phase) {
         case RightPanelPhases.MemberInfo:
-            content = <UserInfoBasic room={room as Room} member={member as User} />;
+            content = <UserInfoBasicView room={room as Room} member={member as User} />;
             break;
         case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");

@@ -12,15 +12,15 @@ import { fireEvent, render, screen } from "jest-matrix-react";
 
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
 import {
-    useUserInfoBasicOptionsSection,
+    useUserInfoBasicOptionsViewModel,
     type UserInfoBasicOptionsState,
 } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
-import { UserInfoBasicOptions } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasicOptions";
+import { UserInfoBasicOptionsView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoBasicOptionsView";
 import { UIComponent } from "../../../../../../src/settings/UIFeature";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 
 jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel", () => ({
-    useUserInfoBasicOptionsSection: jest.fn(),
+    useUserInfoBasicOptionsViewModel: jest.fn(),
 }));
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => {
@@ -32,6 +32,7 @@ jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => {
 
 describe("<UserOptionsSection />", () => {
     const defaultValue: UserInfoBasicOptionsState = {
+        isMe: false,
         showInviteButton: false,
         showInsertPillButton: false,
         readReceiptButtonDisabled: false,
@@ -47,13 +48,12 @@ describe("<UserOptionsSection />", () => {
     const defaultMember = new RoomMember(defaultRoomId, defaultUserId);
     let defaultRoom: Room;
 
-    let defaultProps: { isMe: boolean; member: User | RoomMember; room: Room };
+    let defaultProps: { member: User | RoomMember; room: Room };
 
     beforeEach(() => {
         const matrixClient = stubClient();
         defaultRoom = mkStubRoom(defaultRoomId, defaultRoomId, matrixClient);
         defaultProps = {
-            isMe: false,
             member: defaultMember,
             room: defaultRoom,
         };
@@ -65,19 +65,19 @@ describe("<UserOptionsSection />", () => {
 
     it("should always display sharedButton when user is not me", () => {
         // User is not me by default
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue });
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({ ...defaultValue });
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
         const sharedButton = screen.getByRole("button", { name: "Share profile" });
         expect(sharedButton).toBeInTheDocument();
     });
 
     it("should always display sharedButton when user is me", () => {
-        const propsWithMe = { ...defaultProps, isMe: true };
+        const propsWithMe = { ...defaultProps };
         const onShareUserClick = jest.fn();
-        const state = { ...defaultValue, onShareUserClick };
+        const state = { ...defaultValue, isMe: true, onShareUserClick };
 
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(state);
-        render(<UserInfoBasicOptions {...propsWithMe} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue(state);
+        render(<UserInfoBasicOptionsView {...propsWithMe} />);
 
         const sharedButton2 = screen.getByRole("button", { name: "Share profile" });
         expect(sharedButton2).toBeInTheDocument();
@@ -92,8 +92,8 @@ describe("<UserOptionsSection />", () => {
         const onInsertPillButton = jest.fn();
         const state = { ...defaultValue, showInsertPillButton: true, onInsertPillButton };
         // User is not me and showInsertpill is true
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(state);
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue(state);
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
 
         const insertPillButton = screen.getByRole("button", { name: "Mention" });
         expect(insertPillButton).toBeInTheDocument();
@@ -105,33 +105,41 @@ describe("<UserOptionsSection />", () => {
     });
 
     it("should not show insert pill button when user is not me and showinsertpill is false", () => {
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue, showInsertPillButton: false });
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({ ...defaultValue, showInsertPillButton: false });
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
         const insertPillButton = screen.queryByRole("button", { name: "Mention" });
         expect(insertPillButton).not.toBeInTheDocument();
     });
 
     it("should not show insert pill button when user is me", () => {
         // User is me, should not see the insert button even when show insertpill is true
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue, showInsertPillButton: true });
-        const propsWithMe = { ...defaultProps, isMe: true };
-        render(<UserInfoBasicOptions {...propsWithMe} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({
+            ...defaultValue,
+            showInsertPillButton: true,
+            isMe: true,
+        });
+        const propsWithMe = { ...defaultProps };
+        render(<UserInfoBasicOptionsView {...propsWithMe} />);
         const insertPillButton = screen.queryByRole("button", { name: "Mention" });
         expect(insertPillButton).not.toBeInTheDocument();
     });
 
     it("should not show readreceiptbutton when user is me", () => {
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue, readReceiptButtonDisabled: true });
-        const propsWithMe = { ...defaultProps, isMe: true };
-        render(<UserInfoBasicOptions {...propsWithMe} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({
+            ...defaultValue,
+            readReceiptButtonDisabled: true,
+            isMe: true,
+        });
+        const propsWithMe = { ...defaultProps };
+        render(<UserInfoBasicOptionsView {...propsWithMe} />);
 
         const readReceiptButton = screen.queryByRole("button", { name: "Jump to read receipt" });
         expect(readReceiptButton).not.toBeInTheDocument();
     });
 
     it("should show disable readreceiptbutton when readReceiptButtonDisabled is true", () => {
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue, readReceiptButtonDisabled: true });
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({ ...defaultValue, readReceiptButtonDisabled: true });
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
 
         const readReceiptButton = screen.getByRole("button", { name: "Jump to read receipt" });
         expect(readReceiptButton).toBeDisabled();
@@ -140,8 +148,8 @@ describe("<UserOptionsSection />", () => {
     it("should not show disable readreceiptbutton when readReceiptButtonDisabled is false", () => {
         const onReadReceiptButton = jest.fn();
         const state = { ...defaultValue, readReceiptButtonDisabled: false, onReadReceiptButton };
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(state);
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue(state);
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
 
         const readReceiptButton = screen.getByRole("button", { name: "Jump to read receipt" });
         expect(readReceiptButton).not.toBeDisabled();
@@ -153,9 +161,9 @@ describe("<UserOptionsSection />", () => {
     });
 
     it("should show not show invite button if shouldShowComponent is false", () => {
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue({ ...defaultValue, showInviteButton: true });
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({ ...defaultValue, showInviteButton: true });
         mocked(shouldShowComponent).mockReturnValue(false);
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
 
         const inviteButton = screen.queryByRole("button", { name: "Invite" });
         expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.InviteUsers);
@@ -165,9 +173,9 @@ describe("<UserOptionsSection />", () => {
     it("should show show invite button if shouldShowComponent is true", () => {
         const onInviteUserButton = jest.fn();
         const state = { ...defaultValue, showInviteButton: true, onInviteUserButton };
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(state);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue(state);
         mocked(shouldShowComponent).mockReturnValue(true);
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
 
         const inviteButton = screen.getByRole("button", { name: "Invite" });
         expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.InviteUsers);
@@ -180,18 +188,18 @@ describe("<UserOptionsSection />", () => {
 
     it("should show directMessageButton when user is not me", () => {
         // User is not me, direct message button should display
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(defaultValue);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue(defaultValue);
         mocked(shouldShowComponent).mockReturnValue(true);
-        render(<UserInfoBasicOptions {...defaultProps} />);
+        render(<UserInfoBasicOptionsView {...defaultProps} />);
         const dmButton = screen.getByRole("button", { name: "Send message" });
         expect(dmButton).toBeInTheDocument();
     });
 
     it("should not show directMessageButton when user is me", () => {
-        mocked(useUserInfoBasicOptionsSection).mockReturnValue(defaultValue);
+        mocked(useUserInfoBasicOptionsViewModel).mockReturnValue({ ...defaultValue, isMe: true });
         mocked(shouldShowComponent).mockReturnValue(true);
-        const propsWithMe = { ...defaultProps, isMe: true };
-        render(<UserInfoBasicOptions {...propsWithMe} />);
+        const propsWithMe = { ...defaultProps };
+        render(<UserInfoBasicOptionsView {...propsWithMe} />);
         const dmButton = screen.queryByRole("button", { name: "Send message" });
         expect(dmButton).not.toBeInTheDocument();
     });

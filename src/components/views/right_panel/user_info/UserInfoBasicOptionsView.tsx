@@ -12,7 +12,7 @@ import { ChatIcon, CheckIcon, MentionIcon, ShareIcon } from "@vector-im/compound
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 
 import { _t } from "../../../../languageHandler";
-import { useUserInfoBasicOptionsSection } from "../../../viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
+import { useUserInfoBasicOptionsViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
 import { Container, type Member } from "../UserInfo";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
@@ -53,21 +53,18 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
     );
 };
 
-export const UserInfoBasicOptions: React.FC<{
-    isMe: boolean;
+export const UserInfoBasicOptionsView: React.FC<{
     member: User | RoomMember;
     room: Room;
     children?: ReactNode;
-}> = ({ isMe, room, member, children }) => {
-    const vm = useUserInfoBasicOptionsSection(room, member);
+}> = ({ room, member, children }) => {
+    const vm = useUserInfoBasicOptionsViewModel(room, member);
 
     let insertPillButton: JSX.Element | undefined;
     let inviteUserButton: JSX.Element | undefined;
     let readReceiptButton: JSX.Element | undefined;
 
-    // Only allow the user to ignore the user if its not ourselves
-    // same goes for jumping to read receipt
-    if (!isMe) {
+    if (!vm.isMe) {
         readReceiptButton = (
             <MenuItem
                 role="button"
@@ -123,7 +120,7 @@ export const UserInfoBasicOptions: React.FC<{
     );
 
     const directMessageButton =
-        isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : <MessageButton member={member} />;
+        vm.isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : <MessageButton member={member} />;
 
     return (
         <Container>

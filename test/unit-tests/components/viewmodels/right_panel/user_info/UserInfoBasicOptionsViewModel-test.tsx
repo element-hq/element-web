@@ -21,7 +21,7 @@ import Modal from "../../../../../../src/Modal";
 import MultiInviter from "../../../../../../src/utils/MultiInviter";
 import { createTestClient, mkRoom, withClientContextRenderOptions } from "../../../../../test-utils";
 import dis from "../../../../../../src/dispatcher/dispatcher";
-import { useUserInfoBasicOptionsSection } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
+import { useUserInfoBasicOptionsViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicOptionsViewModel";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
 
@@ -54,7 +54,7 @@ describe("<UserOptionsSection />", () => {
         } = defaultProps,
     ) => {
         return renderHook(
-            () => useUserInfoBasicOptionsSection(props.room, props.member),
+            () => useUserInfoBasicOptionsViewModel(props.room, props.member),
             withClientContextRenderOptions(mockClient),
         );
     };
