@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.0.0-test.3",
+    "version": "0.0.0-test.4",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -10,14 +10,14 @@
     "exports": {
         ".": {
             "require": {
-                "style": "dist/element-web-shared-components.css",
-                "types": "dist/element-web-shared-components.d.ts",
-                "default": "dist/element-web-shared-components.umd.js"
+                "style": "./dist/element-web-shared-components.css",
+                "types": "./dist/element-web-shared-components.d.ts",
+                "default": "./dist/element-web-shared-components.umd.js"
             },
             "import": {
-                "style": "dist/element-web-shared-components.css",
-                "types": "dist/element-web-shared-components.d.ts",
-                "default": "dist/element-web-shared-components.mjs"
+                "style": "./dist/element-web-shared-components.css",
+                "types": "./dist/element-web-shared-components.d.ts",
+                "default": "./dist/element-web-shared-components.mjs"
             }
         }
     },
@@ -43,6 +43,7 @@
         "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
     "dependencies": {
+        "matrix-web-i18n": "^3.4.0",
         "patch-package": "^8.0.1"
     },
     "devDependencies": {
