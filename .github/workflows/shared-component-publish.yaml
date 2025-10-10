@@ -1,0 +1,49 @@
+name: Publish shared component npm package
+on:
+    workflow_dispatch:
+        inputs:
+            version-bump:
+                description: The scale of the version bump required for semver compatibility
+                required: true
+                default: patch
+                type: choice
+                options:
+                    - patch
+                    - minor
+                    - major
+concurrency: release
+jobs:
+    publish:
+        name: "Release & Publish"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+
+        steps:
+            - name: 🧮 Checkout code
+              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+            - name: 🔧 Set up node environment
+              uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+              with:
+                  cache: "yarn"
+                  node-version-file: ".node-version"
+
+            - name: 🛠️ Setup
+              # When running `install` it also calls the `prepare` step which generates
+              # a build
+              run: yarn --cwd packages/shared-components install --pure-lockfile
+
+            - name: 👊 Bump version
+              run: |
+                  cd packages/shared-components
+                  yarn version --no-git-tag-version --${{ github.event.inputs.version-bump }}
+                  git config --global user.name 'ElementRobot'
+                  git config --global user.email 'releases@riot.im'
+                  git commit -am "Shared components: ${{ github.event.inputs.version-bump }} version bump"
+                  git push
+
+            - name: 🚀 Publish to npm
+              working-directory: packages/shared-components
+              run: npm publish --access public --provenance
