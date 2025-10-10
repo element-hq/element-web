@@ -1674,6 +1674,13 @@
         "toast_description": "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.",
         "toast_title": "Use app for a better experience"
     },
+    "msc4335_user_limit_exceeded": {
+        "hard_limit": "You have exceeded a limit imposed by your homeserver.",
+        "increase_limit": "Increase limit",
+        "learn_more": "Learn more",
+        "soft_limit": "You have exceeded a limit imposed by your homeserver. The limit can be increased.",
+        "title": "Account limit exceeded"
+    },
     "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "No more results",
     "notif_panel": {

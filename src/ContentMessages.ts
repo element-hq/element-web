@@ -18,6 +18,7 @@ import {
     type UploadOpts,
     type UploadProgress,
     THREAD_RELATION_TYPE,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import {
     type ImageInfo,
@@ -31,6 +32,7 @@ import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
+import { type ReactNode } from "react";
 
 import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
@@ -57,6 +59,7 @@ import { attachMentions, attachRelation } from "./components/views/rooms/SendMes
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { blobIsAnimated } from "./utils/Image.ts";
+import MSC4335UserLimitExceededDialog from "./components/views/dialogs/MSC4335UserLimitExceededDialog.tsx";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -656,16 +659,33 @@ export default class ContentMessages {
             }
 
             if (!upload.cancelled) {
-                let desc = _t("upload_failed_generic", { fileName: upload.fileName });
-                if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
-                    desc = _t("upload_failed_size", {
-                        fileName: upload.fileName,
+                if (
+                    unwrappedError instanceof MatrixError &&
+                    unwrappedError.errcode === "ORG.MATRIX.MSC4335_USER_LIMIT_EXCEEDED" &&
+                    typeof unwrappedError.data["org.matrix.msc4335.info_uri"] === "string" &&
+                    typeof unwrappedError.data["org.matrix.msc4335.soft_limit"] === "boolean"
+                ) {
+                    // Support for experimental MSC4335 M_USER_LIMIT_EXCEEDED error
+                    Modal.createDialog(MSC4335UserLimitExceededDialog, {
+                        title: _t("upload_failed_title"),
+                        error: {
+                            infoUri: unwrappedError.data["org.matrix.msc4335.info_uri"],
+                            increaseUri: unwrappedError.data["org.matrix.msc4335.soft_limit"] ? unwrappedError.data["org.matrix.msc4335.increase_uri"] : undefined,
+                        },
+                    });
+                } else {
+                    let desc: ReactNode = _t("upload_failed_generic", { fileName: upload.fileName });
+                    if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
+                        desc = _t("upload_failed_size", {
+                            fileName: upload.fileName,
+                        });
+                    }
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t("upload_failed_title"),
+                        description: desc,
                     });
                 }
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("upload_failed_title"),
-                    description: desc,
-                });
+
                 dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
             }
         } finally {
