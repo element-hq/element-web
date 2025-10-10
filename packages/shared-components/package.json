@@ -1,5 +1,5 @@
 {
-    "name": "@element-web/shared-components",
+    "name": "@element-hq/web-shared-components",
     "version": "1.12.1",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
@@ -7,9 +7,10 @@
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
+    "main": "dist/element-web-shared-components.mjs",
     "license": "SEE LICENSE IN README.md",
     "files": [
-        "lib",
+        "dist",
         "src",
         "LICENSE",
         "README.md",
@@ -27,7 +28,9 @@
         "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
         "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
-    "dependencies": {},
+    "dependencies": {
+        "patch-package": "^8.0.1"
+    },
     "devDependencies": {
         "@storybook/addon-a11y": "^9.1.10",
         "@storybook/addon-designs": "^10.0.2",
@@ -38,7 +41,6 @@
         "concurrently": "^9.2.1",
         "eslint": "8",
         "jest-image-snapshot": "^6.5.1",
-        "patch-package": "^8.0.1",
         "prettier": "^3.6.2",
         "storybook": "^9.1.10",
         "typescript": "^5.9.3",
