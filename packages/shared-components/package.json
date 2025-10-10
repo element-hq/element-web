@@ -7,7 +7,21 @@
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
-    "main": "dist/element-web-shared-components.mjs",
+    "exports": {
+        ".": {
+            "require": {
+                "default": "dist/element-web-shared-components.umd.js",
+                "style": "dist/element-web-shared-components.css",
+                "types": "dist/element-web-shared-components.d.ts"
+            },
+            "import": {
+                "default": "dist/element-web-shared-components.mjs",
+                "style": "dist/element-web-shared-components.css",
+                "types": "dist/element-web-shared-components.d.ts"
+            }
+        }
+    },
+    "types": "dist/element-web-shared-components.d.ts",
     "license": "SEE LICENSE IN README.md",
     "files": [
         "dist",
