@@ -44,4 +44,5 @@ jobs:
           git push
 
       - name: 🚀 Publish to npm
-        run: yarn --cwd packages/shared-components publish
+        working-directory: packages/shared-components
+        run: npm publish --access public
