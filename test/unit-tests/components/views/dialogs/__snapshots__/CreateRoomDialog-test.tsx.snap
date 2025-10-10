@@ -313,6 +313,34 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
         <p>
           You can't disable this later. Bridges & most bots won't work yet.
         </p>
+        <div
+          class="mx_SettingsFlag mx_CreateRoomDialog_e2eSwitch"
+        >
+          <span
+            class="mx_SettingsFlag_label"
+          >
+            <div
+              id="mx_LabelledToggleSwitch_«r55»"
+            >
+              Encrypt state events
+            </div>
+          </span>
+          <div
+            aria-checked="false"
+            aria-disabled="false"
+            aria-labelledby="mx_LabelledToggleSwitch_«r55»"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <p>
+          Enables experimental support for encrypting state events, which hides metadata such as room names and topics from being visible to the server.
+        </p>
       </div>
     </form>
     <div
