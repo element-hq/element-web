@@ -21,14 +21,13 @@ export * from "./utils/Box";
 export * from "./utils/Flex";
 
 // Utils
-export * from "./utils/i18n"
-export * from "./utils/humanize"
-export * from "./utils/DateUtils"
-export * from "./utils/numbers"
+export * from "./utils/i18n";
+export * from "./utils/humanize";
+export * from "./utils/DateUtils";
+export * from "./utils/numbers";
 
 // MVVM
-export * from "./ViewWrapper"
-export type * from "./ViewModel"
-export * from "./useViewModel"
-export * from "./MockViewModel"
-
+export * from "./ViewWrapper";
+export type * from "./ViewModel";
+export * from "./useViewModel";
+export * from "./MockViewModel";
