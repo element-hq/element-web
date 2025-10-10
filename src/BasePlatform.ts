@@ -70,6 +70,7 @@ export default abstract class BasePlatform {
     protected notificationCount = 0;
     protected errorDidOccur = false;
     protected _favicon?: Favicon;
+    public readonly initialised = Promise.resolve<void>(undefined);
 
     protected constructor() {
         dis.register(this.onAction.bind(this));
