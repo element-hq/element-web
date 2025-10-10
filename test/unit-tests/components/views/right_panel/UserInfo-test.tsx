@@ -10,7 +10,15 @@ import React from "react";
 import { render, screen, act, waitForElementToBeRemoved } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { type Mocked, mocked } from "jest-mock";
-import { type Room, User, type MatrixClient, RoomMember, Device } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    User,
+    type MatrixClient,
+    RoomMember,
+    Device,
+    ProfileKeyTimezone,
+    ProfileKeyMSC4175Timezone,
+} from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 import {
     UserVerificationStatus,
@@ -120,7 +128,7 @@ beforeEach(() => {
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
-        getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
+        getExtendedProfile: jest.fn().mockRejectedValue(new Error("Not supported")),
         mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
@@ -199,29 +207,31 @@ describe("<UserInfo />", () => {
             expect(screen.getByRole("heading", { name: defaultUserId })).toBeInTheDocument();
         });
 
-        it("renders user timezone if set", async () => {
-            // For timezone, force a consistent locale.
-            jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
-                this: Date,
-                _locale,
-                opts,
-            ) {
-                return origDate.call(this, "en-US", {
-                    ...opts,
-                    hourCycle: "h12",
+        describe.each([[ProfileKeyTimezone], [ProfileKeyMSC4175Timezone]])("timezone rendering (%s)", (profileKey) => {
+            it("renders user timezone if set", async () => {
+                // For timezone, force a consistent locale.
+                jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
+                    this: Date,
+                    _locale,
+                    opts,
+                ) {
+                    return origDate.call(this, "en-US", {
+                        ...opts,
+                        hourCycle: "h12",
+                    });
                 });
+                mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+                mockClient.getExtendedProfile.mockResolvedValue({ [profileKey]: "Europe/London" });
+                renderComponent();
+                await expect(screen.findByText(/\d\d:\d\d (AM|PM)/)).resolves.toBeInTheDocument();
             });
-            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
-            mockClient.getExtendedProfileProperty.mockResolvedValue("Europe/London");
-            renderComponent();
-            await expect(screen.findByText(/\d\d:\d\d (AM|PM)/)).resolves.toBeInTheDocument();
-        });
 
-        it("does not renders user timezone if timezone is invalid", async () => {
-            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
-            mockClient.getExtendedProfileProperty.mockResolvedValue("invalid-tz");
-            renderComponent();
-            expect(screen.queryByText(/\d\d:\d\d (AM|PM)/)).not.toBeInTheDocument();
+            it("does not renders user timezone if timezone is invalid", async () => {
+                mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+                mockClient.getExtendedProfile.mockResolvedValue({ [profileKey]: "invalid-tz" });
+                renderComponent();
+                expect(screen.queryByText(/\d\d:\d\d (AM|PM)/)).not.toBeInTheDocument();
+            });
         });
 
         it("renders encryption info panel without pending verification", () => {
