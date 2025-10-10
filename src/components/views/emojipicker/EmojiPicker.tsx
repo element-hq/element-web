@@ -187,6 +187,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         }
 
         if (focusNode) {
+            focusNode?.focus();
             dispatch({
                 type: Type.SetFocus,
                 payload: { node: focusNode },
