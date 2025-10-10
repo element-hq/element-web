@@ -83,6 +83,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           Active Widgets
         </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Users
+        </button>
       </div>
       <div>
         <h2
