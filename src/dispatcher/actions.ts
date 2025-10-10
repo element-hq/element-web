@@ -121,7 +121,7 @@ export enum Action {
     UpdateSystemFont = "update_system_font",
 
     /**
-     * Changes room based on payload parameters. Should be used with JoinRoomPayload.
+     * Changes room based on payload parameters. Should be used with ViewRoomPayload.
      */
     ViewRoom = "view_room",
 

@@ -32,6 +32,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { CallView as _CallView } from "../../../../../src/components/views/voip/CallView";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { CallStore } from "../../../../../src/stores/CallStore";
+import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -50,6 +51,7 @@ describe("CallView", () => {
 
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        DMRoomMap.makeShared(client);
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,

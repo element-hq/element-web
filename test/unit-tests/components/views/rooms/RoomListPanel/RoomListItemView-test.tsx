@@ -10,6 +10,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { RoomListItemView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListItemView";
@@ -64,6 +65,7 @@ describe("<RoomListItemView />", () => {
             isBold: false,
             isVideoRoom: false,
             callConnectionState: null,
+            callType: CallType.Video,
             hasParticipantInCall: false,
             name: room.name,
             showNotificationDecoration: false,
