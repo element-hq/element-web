@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import { waitForPageReady } from "@storybook/test-runner";
 import { toMatchImageSnapshot } from "jest-image-snapshot";
 
-const customSnapshotsDir = `${process.cwd()}/playwright/shared-component-snapshots/`;
-const customReceivedDir = `${process.cwd()}/playwright/shared-component-received/`;
+const customSnapshotsDir = `${process.cwd()}/playwright/snapshots/`;
+const customReceivedDir = `${process.cwd()}/playwright/received/`;
 
 /**
  * @type {import('@storybook/test-runner').TestRunnerConfig}

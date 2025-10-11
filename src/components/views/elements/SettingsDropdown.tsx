@@ -12,7 +12,7 @@ import { type SettingLevel } from "../../../settings/SettingLevel";
 import { SETTINGS, type StringSettingKey } from "../../../settings/Settings";
 import { useSettingValueAt } from "../../../hooks/useSettings.ts";
 import Dropdown, { type DropdownProps } from "./Dropdown.tsx";
-import { _t } from "../../../shared-components/utils/i18n.tsx";
+import { _t } from "../../../../packages/shared-components/src/utils/i18n.tsx";
 
 interface Props {
     settingKey: StringSettingKey;

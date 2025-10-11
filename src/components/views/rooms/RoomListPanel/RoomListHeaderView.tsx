@@ -17,7 +17,7 @@ import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/vi
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,

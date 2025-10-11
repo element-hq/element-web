@@ -18,7 +18,7 @@ import BeaconStatus from "./BeaconStatus";
 import { BeaconDisplayStatus } from "./displayStatus";
 import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
 import ShareLatestLocation from "./ShareLatestLocation";
-import { humanizeTime } from "../../../shared-components/utils/humanize";
+import { humanizeTime } from "../../../../packages/shared-components/src/utils/humanize";
 
 interface Props {
     beacon: Beacon;

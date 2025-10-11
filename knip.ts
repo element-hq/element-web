@@ -19,6 +19,8 @@ export default {
         "src/hooks/useTimeout.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
+
+        "packages/**/*",
     ],
     ignoreDependencies: [
         // Required for `action-validator`

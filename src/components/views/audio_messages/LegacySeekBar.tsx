@@ -10,7 +10,7 @@ import React, { type ChangeEvent, type CSSProperties, type ReactNode } from "rea
 
 import { type PlaybackInterface } from "../../../audio/Playback";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
-import { percentageOf } from "../../../shared-components/utils/numbers";
+import { percentageOf } from "../../../../packages/shared-components/src/utils/numbers";
 import { _t } from "../../../languageHandler";
 
 interface IProps {

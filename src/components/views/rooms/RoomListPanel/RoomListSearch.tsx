@@ -20,7 +20,7 @@ import { MetaSpace } from "../../../../stores/spaces";
 import { Action } from "../../../../dispatcher/actions";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { Flex } from "../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import { useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../../LegacyCallHandler";
 
