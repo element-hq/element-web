@@ -153,4 +153,43 @@ describe("<RoomListItemMenuView />", () => {
         await user.click(screen.getByRole("menuitem", { name: "Mute room" }));
         expect(defaultValue.setRoomNotifState).toHaveBeenCalledWith(RoomNotifState.Mute);
     });
+
+    it("should prevent context menu event bubbling when right-clicking on open more options menu", async () => {
+        const user = userEvent.setup();
+        const { container } = renderMenu();
+
+        await user.click(screen.getByRole("button", { name: "More Options" }));
+        await screen.findByRole("menuitem", { name: "Mark as read" });
+
+        const contextMenuHandler = jest.fn();
+        container.addEventListener("contextmenu", contextMenuHandler);
+
+        const openMenu = screen.getByRole("menu", { name: "More Options" });
+        const menuWrapper = openMenu.parentElement;
+        const contextMenuEvent = new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
+        menuWrapper?.dispatchEvent(contextMenuEvent);
+
+        expect(contextMenuHandler).not.toHaveBeenCalled();
+        container.removeEventListener("contextmenu", contextMenuHandler);
+    });
+
+    it("should close notification menu when right-clicking on open notification menu", async () => {
+        const user = userEvent.setup();
+        const setMenuOpen = jest.fn();
+        renderMenu(setMenuOpen);
+
+        await user.click(screen.getByRole("button", { name: "Notification options" }));
+        await screen.findByRole("menuitem", { name: "Match default settings" });
+
+        setMenuOpen.mockClear();
+
+        const openNotificationMenu = screen.getByRole("menu", { name: "Notification options" });
+        const notificationMenuWrapper = openNotificationMenu.parentElement; // This should be the div with onContextMenu
+        const contextMenuEvent = new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
+        notificationMenuWrapper?.dispatchEvent(contextMenuEvent);
+
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        expect(setMenuOpen).toHaveBeenCalledWith(false);
+    });
 });

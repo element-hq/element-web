@@ -72,19 +72,26 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
     const [open, setOpen] = useState(false);
 
     return (
-        <Menu
-            open={open}
-            onOpenChange={(isOpen) => {
-                setOpen(isOpen);
-                setMenuOpen(isOpen);
+        <div
+            onContextMenu={(e) => {
+                // Prevent opening duplicate more options menu via right-click
+                if (open) e.stopPropagation();
             }}
-            title={_t("room_list|room|more_options")}
-            showTitle={false}
-            align="start"
-            trigger={<MoreOptionsButton size="24px" />}
         >
-            <MoreOptionContent vm={vm} />
-        </Menu>
+            <Menu
+                open={open}
+                onOpenChange={(isOpen) => {
+                    setOpen(isOpen);
+                    setMenuOpen(isOpen);
+                }}
+                title={_t("room_list|room|more_options")}
+                showTitle={false}
+                align="start"
+                trigger={<MoreOptionsButton size="24px" />}
+            >
+                <MoreOptionContent vm={vm} />
+            </Menu>
+        </div>
     );
 }
 
@@ -202,6 +209,16 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
         <div
             // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
             onKeyDown={(e) => e.stopPropagation()}
+            onContextMenu={() => {
+                if (open) {
+                    // Close notification menu and allow context menu to open via event bubbling
+                    // setTimeout ensures the menu closes after the current event completes bubbling
+                    setTimeout(() => {
+                        setOpen(false);
+                        setMenuOpen(false);
+                    }, 0);
+                }
+            }}
         >
             <Menu
                 open={open}
