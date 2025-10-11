@@ -57,6 +57,7 @@ import {
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { OverflowTileView } from "../rooms/OverflowTileView";
+import { attachMentions } from "../rooms/SendMessageComposer";
 
 const AVATAR_SIZE = 30;
 
@@ -178,7 +179,7 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
     );
 };
 
-const transformEvent = (event: MatrixEvent): { type: string; content: IContent } => {
+const transformEvent = (event: MatrixEvent, userId: string): { type: string; content: IContent } => {
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
@@ -213,6 +214,9 @@ const transformEvent = (event: MatrixEvent): { type: string; content: IContent }
         };
     }
 
+    // Force an empty m.mentions property as there is no EditorModel to parse pills from
+    attachMentions(userId, content, null, undefined);
+
     return { type, content };
 };
 
@@ -223,7 +227,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
-    const { type, content } = transformEvent(event);
+    const { type, content } = transformEvent(event, userId);
 
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({
