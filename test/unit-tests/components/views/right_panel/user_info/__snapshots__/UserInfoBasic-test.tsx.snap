@@ -1,0 +1,315 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserInfoBasic /> should display the defaut values 1`] = `
+<div>
+  <div
+    class="mx_UserInfo_container"
+  >
+    <div
+      class="mx_UserInfo_profileField"
+    >
+      <div
+        class="mx_PowerSelector"
+      >
+        <div
+          class="mx_Field mx_Field_select"
+        >
+          <select
+            data-testid="power-level-select-element"
+            id="mx_Field_1"
+            label="Power level"
+            placeholder="Power level"
+            type="text"
+          >
+            <option
+              data-testid="power-level-option-0"
+              value="0"
+            >
+              Default
+            </option>
+            <option
+              data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+              value="SELECT_VALUE_CUSTOM"
+            >
+              Custom level
+            </option>
+          </select>
+          <label
+            for="mx_Field_1"
+          >
+            Power level
+          </label>
+        </div>
+      </div>
+    </div>
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="primary"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m1.5 21.25 1.45-4.95a10.2 10.2 0 0 1-.712-2.1A10.2 10.2 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22q-1.125 0-2.2-.238a10.2 10.2 0 0 1-2.1-.712L2.75 22.5a.94.94 0 0 1-1-.25.94.94 0 0 1-.25-1m2.45-1.2 3.2-.95a1 1 0 0 1 .275-.062q.15-.013.275-.013.225 0 .438.038.212.036.412.137a7.4 7.4 0 0 0 1.675.6Q11.1 20 12 20q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12q0 .9.2 1.775t.6 1.675q.176.325.188.688t-.088.712z"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Send message
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="primary"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10 12q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 10 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q18 16.35 18 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 16 20H4q-.824 0-1.412-.587A1.93 1.93 0 0 1 2 18m2 0h12v-.8a.97.97 0 0 0-.5-.85q-1.35-.675-2.725-1.012a11.6 11.6 0 0 0-5.55 0Q5.85 15.675 4.5 16.35a.97.97 0 0 0-.5.85zm6-8q.825 0 1.412-.588Q12 8.826 12 8q0-.824-.588-1.412A1.93 1.93 0 0 0 10 6q-.825 0-1.412.588A1.93 1.93 0 0 0 8 8q0 .825.588 1.412Q9.175 10 10 10m7 1h2v2q0 .424.288.713.287.287.712.287.424 0 .712-.287A.97.97 0 0 0 21 13v-2h2q.424 0 .712-.287A.97.97 0 0 0 24 10a.97.97 0 0 0-.288-.713A.97.97 0 0 0 23 9h-2V7a.97.97 0 0 0-.288-.713A.97.97 0 0 0 20 6a.97.97 0 0 0-.712.287A.97.97 0 0 0 19 7v2h-2a.97.97 0 0 0-.712.287A.97.97 0 0 0 16 10q0 .424.288.713.287.287.712.287"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Invite
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26 _disabled_dyt4i_118"
+      data-kind="primary"
+      disabled=""
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Jump to read receipt
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="primary"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Share profile
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="primary"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 4a8 8 0 1 0 0 16 1 1 0 1 1 0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v1.5a3.5 3.5 0 0 1-6.396 1.966A5 5 0 1 1 17 12v1.5a1.5 1.5 0 0 0 3 0V12a8 8 0 0 0-8-8m3 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Mention
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="mx_UserInfo_container"
+  >
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="critical"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Deactivate user
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="mx_UserInfo_container"
+  >
+    <button
+      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      data-kind="critical"
+      role="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="_icon_dyt4i_50"
+        fill="currentColor"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12q0-1.35-.437-2.6A8 8 0 0 0 18.3 7.1L7.1 18.3q1.05.825 2.3 1.262T12 20m-6.3-3.1L16.9 5.7a8 8 0 0 0-2.3-1.263A7.8 7.8 0 0 0 12 4Q8.65 4 6.325 6.325T4 12q0 1.35.438 2.6A8 8 0 0 0 5.7 16.9"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      >
+        Ignore
+      </span>
+      <svg
+        aria-hidden="true"
+        class="_nav-hint_dyt4i_59"
+        fill="currentColor"
+        height="24"
+        viewBox="8 0 8 24"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+`;
