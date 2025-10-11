@@ -662,6 +662,59 @@ export class ElementCall extends Call {
     }
 
     /**
+     * Append parameters specific to the users settings
+     * @param params Existing URL parameters
+     */
+    private static appendSettingsParams(params: URLSearchParams): void {
+        const preferredAudioOutput = SettingsStore.getValue("webrtc_audiooutput", null, true);
+        const preferredAudioInput = SettingsStore.getValue("webrtc_audioinput", null, true);
+        const videoInput = SettingsStore.getValue("webrtc_videoinput", null, true);
+        const autoGainControl = SettingsStore.getValue("webrtc_audio_autoGainControl", null, true);
+        const echoCancellation = SettingsStore.getValue("webrtc_audio_echoCancellation", null, true);
+        const noiseSuppression = SettingsStore.getValue("webrtc_audio_noiseSuppression", null, true);
+
+        if (preferredAudioOutput) {
+            params.set("audio_output", preferredAudioOutput);
+        }
+        if (preferredAudioInput) {
+            params.set("audio_input", preferredAudioInput);
+        }
+        if (videoInput) {
+            params.set("video_input", videoInput);
+        }
+        if (autoGainControl !== undefined) {
+            params.set("auto_gaincontrol", autoGainControl.toString());
+        }
+        if (echoCancellation !== undefined) {
+            params.set("echo_cancellation", echoCancellation.toString());
+        }
+        if (noiseSuppression !== undefined) {
+            params.set("noise_suppression", noiseSuppression.toString());
+        }
+
+        if (SettingsStore.getValue("fallbackICEServerAllowed")) {
+            params.append("allowIceFallback", "true");
+        }
+
+        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
+            params.append("allowVoipWithNoMedia", "true");
+        }
+
+        // Set custom fonts
+        if (SettingsStore.getValue("useSystemFont")) {
+            SettingsStore.getValue("systemFont")
+                .split(",")
+                .map((font) => {
+                    // Strip whitespace and quotes
+                    font = font.trim();
+                    if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
+                    return font;
+                })
+                .forEach((font) => params.append("font", font));
+        }
+    }
+
+    /**
      * Generate the correct Element Call widget URL for creating or joining a call in this room.
      * Unless `Developer.elementCallUrl` is set, the widget will use the embedded Element Call package.
      *
@@ -700,28 +753,9 @@ export class ElementCall extends Call {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        if (SettingsStore.getValue("fallbackICEServerAllowed")) {
-            params.append("allowIceFallback", "true");
-        }
-
-        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
-            params.append("allowVoipWithNoMedia", "true");
-        }
-
-        // Set custom fonts
-        if (SettingsStore.getValue("useSystemFont")) {
-            SettingsStore.getValue("systemFont")
-                .split(",")
-                .map((font) => {
-                    // Strip whitespace and quotes
-                    font = font.trim();
-                    if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
-                    return font;
-                })
-                .forEach((font) => params.append("font", font));
-        }
         this.appendAnalyticsParams(params, client);
         this.appendRoomParams(params, client, roomId);
+        this.appendSettingsParams(params);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
