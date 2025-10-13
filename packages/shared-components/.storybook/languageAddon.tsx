@@ -12,7 +12,7 @@ import { GlobeIcon } from "@storybook/icons";
 
 // We can't import `shared/i18n.tsx` directly here.
 // The storybook addon doesn't seem to benefit the vite config of storybook and we can't resolve the alias in i18n.tsx.
-import json from "../webapp/i18n/languages.json";
+import json from "../../../webapp/i18n/languages.json";
 const languages = Object.keys(json).filter((lang) => lang !== "default");
 
 /**

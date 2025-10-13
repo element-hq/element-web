@@ -31,10 +31,15 @@ jobs:
                   cache: "yarn"
                   node-version: "lts/*"
 
+            - name: Install element web dependencies
+              run: yarn install --frozen-lockfile
+
             - name: Install dependencies
+              working-directory: packages/shared-components
               run: yarn install --frozen-lockfile
 
             - name: Get installed Playwright version
+              working-directory: packages/shared-components
               id: playwright
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
@@ -46,6 +51,7 @@ jobs:
                   key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
 
             - name: Install Playwright browsers
+              working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: "yarn playwright install --with-deps --only-shell"
 
@@ -56,15 +62,15 @@ jobs:
             - name: Build storybook dependencies
               # When the first test is ran, it will fail because the dependencies are not yet built.
               # This step is to ensure that the dependencies are built before running the tests.
-              run: "yarn test:storybook:ci"
+              run: "yarn --cwd packages/shared-components test:storybook:ci"
               continue-on-error: true
 
             - name: Run Visual tests
-              run: "yarn test:storybook:ci"
+              run: "yarn --cwd packages/shared-components test:storybook:ci"
 
             - name: Upload received images & diffs
               if: always()
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
               with:
                   name: received-images
-                  path: playwright/shared-component-received
+                  path: packages/shared-components/playwright/shared-component-received
