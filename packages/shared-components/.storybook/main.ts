@@ -11,8 +11,8 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
-    stories: ["../src/shared-components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-    staticDirs: ["../webapp"],
+    stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+    staticDirs: ["../../../webapp"],
     addons: ["@storybook/addon-docs", "@storybook/addon-designs", "@storybook/addon-a11y"],
     framework: "@storybook/react-vite",
     core: {
@@ -26,7 +26,7 @@ const config: StorybookConfig = {
             resolve: {
                 alias: {
                     // Alias used by i18n.tsx
-                    $webapp: path.resolve("webapp"),
+                    $webapp: path.resolve("../../webapp"),
                 },
             },
             // Needed for counterpart to work

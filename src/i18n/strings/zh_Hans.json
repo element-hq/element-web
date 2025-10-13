@@ -2251,7 +2251,6 @@
             "metaspaces_subsection": "要显示的空间",
             "title": "侧边栏"
         },
-        "start_automatically": "开机自启",
         "use_12_hour_format": "使用 12 小时制显示时间戳 （下午 2:30）",
         "use_command_enter_send_message": "使用 Command + Enter 发送消息",
         "use_command_f_search": "使用 Command + F 搜索时间线",

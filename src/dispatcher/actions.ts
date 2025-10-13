@@ -332,12 +332,6 @@ export enum Action {
     OverwriteLogin = "overwrite_login",
 
     /**
-     * Fired when the PlatformPeg gets a new platform set upon it, should only happen once per app load lifecycle.
-     * Fires with the PlatformSetPayload.
-     */
-    PlatformSet = "platform_set",
-
-    /**
      * Fired when we want to view a thread, either a new one or an existing one
      */
     ShowThread = "show_thread",

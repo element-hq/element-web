@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type Room, EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type Playback, PlaybackState } from "./Playback";
@@ -76,6 +76,12 @@ export class PlaybackQueue {
         const val = localStorage.getItem(`mx_voice_message_clocks_${this.room.roomId}`);
         if (!!val) {
             this.clockStates = new Map<string, number>(JSON.parse(val));
+            // Clean out any null values (from older versions)
+            for (const [key, value] of this.clockStates.entries()) {
+                if (value == null) {
+                    this.clockStates.delete(key);
+                }
+            }
         }
     }
 
@@ -89,9 +95,11 @@ export class PlaybackQueue {
     private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
-        if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()!) && !wasLastPlaying) {
+        const currentClockState = this.clockStates.get(mxEvent.getId()!);
+
+        if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
             // noinspection JSIgnoredPromiseFromCall
-            playback.skipTo(this.clockStates.get(mxEvent.getId()!)!);
+            playback.skipTo(currentClockState);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId()!);
@@ -201,10 +209,8 @@ export class PlaybackQueue {
     }
 
     private onPlaybackClock(playback: Playback, mxEvent: MatrixEvent, clocks: number[]): void {
-        if (playback.currentState === PlaybackState.Decoding) return; // ignore pre-ready values
+        if (playback.currentState !== PlaybackState.Playing && playback.currentState !== PlaybackState.Paused) return; // ignore pre-ready values
 
-        if (playback.currentState !== PlaybackState.Stopped) {
-            this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
-        }
+        this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
     }
 }

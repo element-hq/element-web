@@ -113,6 +113,8 @@ test.describe("Invite dialog", function () {
                 "rgba(0, 0, 0, 0)",
             );
 
+            await expect(page.locator(".mx_RoomView")).toMatchScreenshot("send_your_first_message_view.png");
+
             // Send a message to invite the bots
             const composer = app.getComposer().locator("[contenteditable]");
             await composer.fill("Hello}");
