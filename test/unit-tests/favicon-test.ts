@@ -50,4 +50,25 @@ describe("Favicon", () => {
         const newLink = window.document.querySelector("link");
         expect(originalLink).not.toStrictEqual(newLink);
     });
+
+    it("should use the size of the last favicon", () => {
+        const head = document.getElementsByTagName("head")[0];
+        const link = document.createElement("link");
+        link.rel = "icon";
+        link.sizes = "512x512";
+        link.href = "favicon.png";
+        head.appendChild(link);
+
+        const spy = jest.spyOn(document, "createElement");
+        const favicon = new Favicon();
+        jest.runAllTimers();
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        const img = spy.mock.results[0].value;
+        img.height = 512;
+        img.onload();
+        jest.runAllTimers();
+
+        expect(favicon["canvas"].height).toBe(512);
+    });
 });
