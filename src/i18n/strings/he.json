@@ -1746,7 +1746,6 @@
             "metaspaces_subsection": "מרחבי עבודה להצגה",
             "title": "סרגל צד"
         },
-        "start_automatically": "התחל באופן אוטומטי לאחר הכניסה",
         "use_12_hour_format": "הצג חותמות זמן של 12 שעות (כלומר 2:30pm)",
         "use_command_enter_send_message": "השתמש במקלדת Command + Enter על מנת לשלוח הודעה",
         "use_control_enter_send_message": "השתמש ב Ctrl + Enter על מנת לשלוח הודעה",

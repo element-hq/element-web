@@ -47,7 +47,6 @@ import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
 import { type IScrollState } from "./ScrollPanel";
 import { type ActionPayload } from "../../dispatcher/payloads";
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
@@ -123,7 +122,6 @@ interface IProps {
     // whether to always show timestamps for an event
     alwaysShowTimestamps?: boolean;
 
-    resizeNotifier?: ResizeNotifier;
     editState?: EditorStateTransfer;
     permalinkCreator?: RoomPermalinkCreator;
     membersLoaded?: boolean;
@@ -1849,7 +1847,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     this.state.alwaysShowTimestamps
                 }
                 className={this.props.className}
-                resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
                 editState={this.props.editState}
                 showReactions={this.props.showReactions}

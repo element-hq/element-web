@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Config, CONFIG_JSON } from "@element-hq/element-web-playwright-common";
+import { type Config } from "@element-hq/element-web-playwright-common";
 import { type Browser, type Page } from "@playwright/test";
 import { type StartedHomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/HomeserverContainer";
+import { routeConfigJson } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test.ts";
 import { logInAccountMas, registerAccountMas } from ".";
@@ -242,17 +243,6 @@ async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedD
  */
 async function newContext(browser: Browser, config: Partial<Partial<Config>>, homeserver: StartedHomeserverContainer) {
     const otherContext = await browser.newContext();
-    await otherContext.route(`http://localhost:8080/config.json*`, async (route) => {
-        const json = {
-            ...CONFIG_JSON,
-            ...config,
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: homeserver.baseUrl,
-                },
-            },
-        };
-        await route.fulfill({ json });
-    });
+    await routeConfigJson(otherContext, homeserver.baseUrl, config);
     return otherContext;
 }

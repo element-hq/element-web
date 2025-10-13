@@ -12,7 +12,7 @@ import { Heading, Tooltip, Text } from "@vector-im/compound-web";
 import { useUserfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 import MemberAvatar from "../../avatars/MemberAvatar";
 import { Container, type Member, type IDevice } from "../UserInfo";
-import { Flex } from "../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import PresenceLabel from "../../rooms/PresenceLabel";
 import CopyableText from "../../elements/CopyableText";
 import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView";

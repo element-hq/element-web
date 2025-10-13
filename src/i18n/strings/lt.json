@@ -1633,7 +1633,6 @@
             "metaspaces_subsection": "Kurias erdves rodyti",
             "title": "Šoninė juosta"
         },
-        "start_automatically": "Pradėti automatiškai prisijungus prie sistemos",
         "use_12_hour_format": "Rodyti laiko žymes 12 valandų formatu (pvz. 2:30pm)",
         "use_command_enter_send_message": "Naudokite Command + Enter žinutės išsiuntimui",
         "use_command_f_search": "Naudokite Command + F ieškojimui laiko juostoje",

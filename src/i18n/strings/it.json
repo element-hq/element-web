@@ -2559,7 +2559,6 @@
             "spaces_explainer": "Gli spazi sono modi per raggruppare stanze e persone. Oltre agli spazi in cui ti trovi, puoi usarne anche altri già integrati.",
             "title": "Barra laterale"
         },
-        "start_automatically": "Esegui automaticamente all'avvio del sistema",
         "use_12_hour_format": "Mostra gli orari nel formato 12 ore (es. 2:30pm)",
         "use_command_enter_send_message": "Usa Comando + Invio per inviare un messaggio",
         "use_command_f_search": "Usa Comando + F per cercare nella linea temporale",

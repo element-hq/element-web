@@ -2664,6 +2664,7 @@
             "allow_spellcheck": "Kasuta õigekontrolli",
             "application_language": "Rakenduse keel",
             "application_language_reload_hint": "Teise keele valimisel rakendus käivitub uuesti",
+            "avatar_open_menu": "Ava tunnuspiltide menüü",
             "avatar_remove_progress": "Eemaldame pilti...",
             "avatar_save_progress": "Laadime pilti üles...",
             "avatar_upload_error_text": "Failivormingu tugi puudub või fail on suurem, kui %(size)s.",
@@ -3063,7 +3064,9 @@
             "spaces_explainer": "Kogukonnad on võimalus jututubade ja inimeste ühendamiseks. Lisaks nendele, mille liige sa juba olev, võid kasutada süsteemi poolt loodud kogukondi.",
             "title": "Külgpaan"
         },
-        "start_automatically": "Käivita Element automaatselt peale arvutisse sisselogimist",
+        "start_automatically": {
+            "minimised": "Minimeeritud"
+        },
         "tac_only_notifications": "Näita teavitusi vaid jutulõngade ülevaates",
         "use_12_hour_format": "Näita ajatempleid 12-tunnises vormingus (näiteks 2:30pl)",
         "use_command_enter_send_message": "Sõnumi saatmiseks vajuta Command + Enter klahve",

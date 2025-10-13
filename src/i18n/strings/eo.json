@@ -1835,7 +1835,6 @@
             "metaspaces_home_all_rooms": "Montri ĉiujn ĉambrojn",
             "title": "Flanka kolumno"
         },
-        "start_automatically": "Memfare ruli post operaciuma saluto",
         "use_12_hour_format": "Montri tempindikojn en 12-hora formo (ekz. 2:30 post.)",
         "use_command_enter_send_message": "Sendu mesaĝon per komanda klavo + eniga klavo",
         "use_control_enter_send_message": "Sendu mesaĝon per stirklavo (Ctrl) + eniga klavo",

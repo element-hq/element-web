@@ -10,7 +10,7 @@ import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import SdkConfig from "../../SdkConfig";
-import { Flex } from "../../shared-components/utils/Flex";
+import { Flex } from "../../../packages/shared-components/src/utils/Flex";
 import { _t } from "../../languageHandler";
 import { Icon as AppleIcon } from "../../../res/themes/element/img/compound/apple.svg";
 import { Icon as MicrosoftIcon } from "../../../res/themes/element/img/compound/microsoft.svg";

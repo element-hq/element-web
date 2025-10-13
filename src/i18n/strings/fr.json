@@ -3062,7 +3062,6 @@
             "spaces_explainer": "Les espaces sont un nouveau moyen de regrouper les salons et les gens. En plus des espaces auxquels vous participez, vous pouvez également utiliser ceux qui sont prédéfinis.",
             "title": "Barre latérale"
         },
-        "start_automatically": "Démarrer automatiquement après la phase d'authentification du système",
         "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",

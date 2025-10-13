@@ -13,10 +13,12 @@ import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { flushPromises, mkMessage, stubClient } from "../../../../test-utils";
 import MessageEditHistoryDialog from "../../../../../src/components/views/dialogs/MessageEditHistoryDialog";
+import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 describe("<MessageEditHistory />", () => {
     const roomId = "!aroom:example.com";
     let client: jest.Mocked<MatrixClient>;
+    let sdkContext: SdkContextClass;
     let event: MatrixEvent;
 
     beforeEach(() => {
@@ -27,10 +29,13 @@ describe("<MessageEditHistory />", () => {
             room: "!room:example.com",
             msg: "My Great Message",
         });
+        sdkContext = new SdkContextClass();
     });
 
     async function renderComponent(): Promise<RenderResult> {
-        const result = render(<MessageEditHistoryDialog mxEvent={event} onFinished={jest.fn()} />);
+        const result = render(<MessageEditHistoryDialog mxEvent={event} onFinished={jest.fn()} />, {
+            wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
+        });
         await waitForElementToBeRemoved(() => result.queryByRole("progressbar"));
         await flushPromises();
         return result;
