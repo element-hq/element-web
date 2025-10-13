@@ -199,7 +199,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private onTimezoneUpdate = async (): Promise<void> => {
-        // In a future spec release, remove support for legacy key.
+        // TODO: In a future app release, remove support for legacy key.
         if (!SettingsStore.getValue("userTimezonePublish")) {
             // Ensure it's deleted
             try {
