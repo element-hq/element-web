@@ -22,7 +22,6 @@
         }
     },
     "types": "dist/element-web-shared-components.d.ts",
-    "license": "SEE LICENSE IN README.md",
     "files": [
         "dist",
         "src",
@@ -31,7 +30,6 @@
         "package.json"
     ],
     "scripts": {
-        "prepare": "vite build",
         "postinstall": "patch-package",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
@@ -56,6 +54,9 @@
         "concurrently": "^9.2.1",
         "eslint": "8",
         "jest-image-snapshot": "^6.5.1",
+        "eslint-plugin-storybook": "^9.1.10",
+        "jest-image-snapshot": "^6.5.1",
+        "patch-package": "^8.0.1",
         "prettier": "^3.6.2",
         "storybook": "^9.1.10",
         "typescript": "^5.9.3",

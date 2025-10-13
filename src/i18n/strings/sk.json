@@ -3046,7 +3046,6 @@
             "spaces_explainer": "Priestory sú spôsobom zoskupovania miestností a osôb. Popri priestoroch, v ktorých sa nachádzate, môžete použiť aj niektoré predpripravené.",
             "title": "Bočný panel"
         },
-        "start_automatically": "Spustiť automaticky po prihlásení do systému",
         "tac_only_notifications": "Zobraziť upozornenia iba v centre aktivít vlákna",
         "use_12_hour_format": "Pri zobrazovaní časových značiek používať 12 hodinový formát (napr. 2:30pm)",
         "use_command_enter_send_message": "Použite Command + Enter na odoslanie správy",

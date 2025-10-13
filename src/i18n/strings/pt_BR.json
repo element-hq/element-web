@@ -3043,7 +3043,6 @@
             "spaces_explainer": "Os espaços são formas de agrupar salas e pessoas. Além dos espaços em que você está, você também pode usar alguns pré-construídos.",
             "title": "Barra lateral"
         },
-        "start_automatically": "Iniciar automaticamente ao iniciar o sistema",
         "tac_only_notifications": "Mostrar apenas notificações no centro de atividades do tópico",
         "use_12_hour_format": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
         "use_command_enter_send_message": "Usar Command + Enter para enviar uma mensagem",

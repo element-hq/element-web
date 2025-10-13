@@ -2047,7 +2047,6 @@
             "metaspaces_subsection": "Svæði sem á að birta",
             "title": "Hliðarspjald"
         },
-        "start_automatically": "Ræsa sjálfvirkt við innskráningu í kerfi",
         "use_12_hour_format": "Birta tímamerki á 12 stunda sniði (t.d. 2:30 fh)",
         "use_command_enter_send_message": "Notaðu Command + Enter til að senda skilaboð",
         "use_command_f_search": "Notaðu Command + F til að leita í tímalínu",
