@@ -1,16 +1,7 @@
 name: Publish shared component npm package
 on:
-    workflow_dispatch:
-        inputs:
-            version-bump:
-                description: The scale of the version bump required for semver compatibility
-                required: true
-                default: patch
-                type: choice
-                options:
-                    - patch
-                    - minor
-                    - major
+    workflow_dispatch: {}
+
 concurrency: release
 jobs:
     publish:
@@ -38,3 +29,5 @@ jobs:
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
               run: npm publish --access public --provenance
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
