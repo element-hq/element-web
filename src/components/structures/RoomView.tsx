@@ -44,6 +44,7 @@ import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type RoomViewProps } from "@element-hq/element-web-module-api";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -147,7 +148,7 @@ if (DEBUG) {
     debuglog = logger.log.bind(console);
 }
 
-interface IRoomProps {
+interface IRoomProps extends RoomViewProps {
     threepidInvite?: IThreepidInvite;
     oobData?: IOOBData;
 
