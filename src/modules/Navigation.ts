@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type NavigationApi as INavigationApi } from "@element-hq/element-web-module-api";
+import { type LocationRenderFunction, type NavigationApi as INavigationApi } from "@element-hq/element-web-module-api";
 
 import { navigateToPermalink } from "../utils/permalinks/navigator.ts";
 import { parsePermalink } from "../utils/permalinks/Permalinks.ts";
@@ -14,6 +14,8 @@ import { Action } from "../dispatcher/actions.ts";
 import type { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload.ts";
 
 export class NavigationApi implements INavigationApi {
+    public locationRenderers = new Map<string, LocationRenderFunction>();
+
     public async toMatrixToLink(link: string, join = false): Promise<void> {
         navigateToPermalink(link);
 
@@ -37,5 +39,9 @@ export class NavigationApi implements INavigationApi {
                 });
             }
         }
+    }
+
+    public registerLocationRenderer(path: string, renderer: LocationRenderFunction): void {
+        this.locationRenderers.set(path, renderer);
     }
 }
