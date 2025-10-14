@@ -18,7 +18,7 @@ This is anywhere your data or business logic comes from. If your view model is a
 
 #### View
 
-1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/src/shared-components). Develop it in storybook!
+1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/packages/shared-components). Develop it in storybook!
 2. Views are simple react components (eg: `FooView`).
 3. Views use [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) internally where the view model is the external store.
 4. Views should define the interface of the view model they expect:
@@ -35,7 +35,7 @@ This is anywhere your data or business logic comes from. If your view model is a
     }
 
     // ViewModel is a type defining the methods needed for `useSyncExternalStore`
-    // https://github.com/element-hq/element-web/blob/develop/src/shared-components/ViewModel.ts
+    // https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
     type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
 
     interface FooViewProps {
@@ -54,7 +54,7 @@ This is anywhere your data or business logic comes from. If your view model is a
     ```
 
 5. Multiple views can share the same view model if necessary.
-6. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/shared-components/audio/AudioPlayerView/AudioPlayerView.tsx)
+6. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/audio/AudioPlayerView/AudioPlayerView.tsx)
 
 #### View Model
 
