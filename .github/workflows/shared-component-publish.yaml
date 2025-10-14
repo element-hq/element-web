@@ -35,15 +35,6 @@ jobs:
               # a build
               run: yarn --cwd packages/shared-components install --pure-lockfile
 
-            - name: 👊 Bump version
-              run: |
-                  cd packages/shared-components
-                  yarn version --no-git-tag-version --${{ github.event.inputs.version-bump }}
-                  git config --global user.name 'ElementRobot'
-                  git config --global user.email 'releases@riot.im'
-                  git commit -am "Shared components: ${{ github.event.inputs.version-bump }} version bump"
-                  git push
-
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
               run: npm publish --access public --provenance
