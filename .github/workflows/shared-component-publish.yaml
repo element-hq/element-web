@@ -20,6 +20,7 @@ jobs:
               with:
                   cache: "yarn"
                   node-version-file: ".node-version"
+                  registry-url: "https://registry.npmjs.org"
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
 
