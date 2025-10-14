@@ -6,22 +6,24 @@
  */
 
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { ViewWrapper } from "../../ViewWrapper";
-import { WidgetCardView, WidgetCardViewModel, WidgetCardViewSnapshot } from "./WidgetCardView";
+import { WidgetCardView, WidgetCardViewActions, WidgetCardViewModel, WidgetCardViewSnapshot } from "./WidgetCardView";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-const WidgeCardViewWrapper = (props: WidgetCardViewModel): JSX.Element => (
+type WidgetCardProps = WidgetCardViewSnapshot & WidgetCardViewActions;
+
+const WidgeCardViewWrapper = (props: WidgetCardProps): JSX.Element => (
     <ViewWrapper<WidgetCardViewSnapshot, WidgetCardViewModel> Component={WidgetCardView} props={props} />
 );
 
 export default {
     title: "RightPanel/WidgetCardView",
-    component: WidgetCardView,
+    component: WidgeCardViewWrapper,
     tags: ["autodocs"],
     args: {
-        room: "roomId",
+        room: new Room("roomId"),
         app: undefined,
         userId: "@userId",
         widgetPageTitle: "",
@@ -30,20 +32,20 @@ export default {
         creatorUserId: undefined,
         onClose: () => void
     }
-} as unknown as Meta<typeof WidgeCardViewWrapper>;
+} as Meta<typeof WidgeCardViewWrapper>;
 
 const Template: StoryFn<typeof WidgeCardViewWrapper> = (args) => <WidgeCardViewWrapper {...args} />;
 
 export const Default = Template.bind({});
 
-export const WidgetCreated = Template.bind({});
-WidgetCreated.args = {
-    room: "roomId",
-    app: undefined,
-    userId: "@userId",
-    widgetPageTitle: "",
-    widgetName: "",
-    shouldEmptyWidgetCard: true,
-    creatorUserId: undefined,
-    onClose: () => void
-};
+// export const WidgetCreated = Template.bind({});
+// WidgetCreated.args = {
+//     room: "roomId",
+//     app: undefined,
+//     userId: "@userId",
+//     widgetPageTitle: "",
+//     widgetName: "",
+//     shouldEmptyWidgetCard: true,
+//     creatorUserId: undefined,
+//     onClose: () => void
+// };

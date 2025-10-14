@@ -13,7 +13,7 @@ import {
     type WidgetCardViewSnapshot,
     type WidgetCardViewModel as WidgetCardViewModelInterface,
     WidgetCardView,
-} from "../../../shared-components/right-panel/WidgetCardView/WidgetCardView";
+} from "../../../../packages/shared-components/src/right-panel/WidgetCardView/WidgetCardView";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";

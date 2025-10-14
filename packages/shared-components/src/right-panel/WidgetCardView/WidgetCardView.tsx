@@ -31,7 +31,7 @@ export interface WidgetCardViewSnapshot {
     creatorUserId: string | undefined;
 }
 
-interface WidgetCardViewActions {
+export interface WidgetCardViewActions {
     onClose: () => void;
 }
 /**
