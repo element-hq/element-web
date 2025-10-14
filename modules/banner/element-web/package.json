@@ -4,6 +4,7 @@
     "version": "0.0.0",
     "type": "module",
     "main": "lib/index.js",
+    "license": "SEE LICENSE IN README.md",
     "scripts": {
         "prepare": "vite build",
         "lint:types": "tsc --noEmit",
