@@ -238,4 +238,24 @@ describe("renderTile", () => {
             expect.any(Function),
         );
     });
+
+    it("rendering a tile for a message of unknown type defers to the module API", () => {
+        ModuleApi.instance.customComponents.renderMessage = jest.fn();
+
+        const messageEvent = mkEvent({
+            event: true,
+            type: "weird.type",
+            user: client.getUserId()!,
+            room: roomId,
+            content: {
+                msgtype: MsgType.Text,
+            },
+        });
+
+        renderTile(TimelineRenderingType.Room, { mxEvent: messageEvent, showHiddenEvents: false }, client);
+
+        expect(ModuleApi.instance.customComponents.renderMessage).toHaveBeenCalledWith({
+            mxEvent: messageEvent,
+        });
+    });
 });
