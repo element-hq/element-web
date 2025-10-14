@@ -66,6 +66,9 @@
         "vite-plugin-node-polyfills": "^0.24.0",
         "vitest": "^3.2.4"
     },
+    "resolutions": {
+        "vite": "^7.1.9"
+    },
     "engines": {
         "node": ">=20.0.0"
     },

@@ -9,5 +9,5 @@ export * from "./BaseViewModel";
 export * from "./Disposables";
 export * from "./Snapshot";
 export * from "./ViewModelSubscriptions";
-export * from "./ViewModel";
+export type * from "./ViewModel";
 export * from "./MockViewModel";
