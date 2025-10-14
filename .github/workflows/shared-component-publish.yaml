@@ -5,7 +5,7 @@ on:
 concurrency: release
 jobs:
     publish:
-        name: "Release & Publish"
+        name: "Publish"
         runs-on: ubuntu-latest
         permissions:
             contents: write
