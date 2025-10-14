@@ -6,6 +6,7 @@
     "sideEffects": [
         "**/*.css"
     ],
+    "license": "SEE LICENSE IN README.md",
     "scripts": {
         "prepare": "vite build",
         "lint:types": "tsc --noEmit",
