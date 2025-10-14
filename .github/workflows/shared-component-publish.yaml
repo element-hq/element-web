@@ -20,6 +20,8 @@ jobs:
               with:
                   cache: "yarn"
                   node-version-file: ".node-version"
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
 
             - name: 🛠️ Setup
               # When running `install` it also calls the `prepare` step which generates
@@ -29,5 +31,3 @@ jobs:
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
               run: npm publish --access public --provenance
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
