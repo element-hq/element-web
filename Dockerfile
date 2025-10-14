@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.18-labs@sha256:79cdc14e1c220efb546ad14a8ebc816e3277cd72d27195ced5bebdd226dd1025
+# syntax=docker.io/docker/dockerfile:1.19-labs@sha256:dce1c693ef318bca08c964ba3122ae6248e45a1b96d65c4563c8dc6fe80349a2
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:22-bullseye@sha256:5e638ea282ab9f0224949e8cfc7bb4621710e5d21b19fc3cf6e8884fcb5839f0 AS builder
