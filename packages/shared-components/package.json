@@ -39,8 +39,7 @@
         "lint:types": "tsc --noEmit --jsx react",
         "test:storybook": "test-storybook --url http://localhost:6007/",
         "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
-        "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot",
-        "test:vm": "vitest --globals --dir ./src/viewmodel/tests"
+        "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
     "dependencies": {
         "matrix-web-i18n": "^3.4.0",
@@ -63,11 +62,7 @@
         "typescript": "^5.9.3",
         "vite": "^7.1.9",
         "vite-plugin-dts": "^4.5.4",
-        "vite-plugin-node-polyfills": "^0.24.0",
-        "vitest": "^3.2.4"
-    },
-    "resolutions": {
-        "vite": "^7.1.9"
+        "vite-plugin-node-polyfills": "^0.24.0"
     },
     "engines": {
         "node": ">=20.0.0"

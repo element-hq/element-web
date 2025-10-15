@@ -5,7 +5,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "events";
-import { vi } from "vitest";
 
 import { Disposables } from "..";
 
@@ -22,11 +21,11 @@ describe("Disposable", () => {
 
         const item1 = {
             foo: 5,
-            dispose: vi.fn(),
+            dispose: jest.fn(),
         };
         disposables.track(item1);
 
-        const item2 = vi.fn();
+        const item2 = jest.fn();
         disposables.track(item2);
 
         disposables.dispose();
@@ -39,7 +38,7 @@ describe("Disposable", () => {
         const disposables = new Disposables();
         disposables.dispose();
         expect(() => {
-            disposables.track(vi.fn);
+            disposables.track(jest.fn);
         }).toThrow();
     });
 
@@ -47,7 +46,7 @@ describe("Disposable", () => {
         const disposables = new Disposables();
         const emitter = new EventEmitter();
 
-        const fn = vi.fn();
+        const fn = jest.fn();
         disposables.trackListener(emitter, "FooEvent", fn);
         emitter.emit("FooEvent");
         expect(fn).toHaveBeenCalled();
