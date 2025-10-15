@@ -26,13 +26,17 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
 
             - name: Install element web dependencies
               run: yarn install --frozen-lockfile
+
+            - name: Build Element Web resources
+              # Needed to prepare language files
+              run: "yarn build:res"
 
             - name: Install dependencies
               working-directory: packages/shared-components
@@ -54,10 +58,6 @@ jobs:
               working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: "yarn playwright install --with-deps --only-shell"
-
-            - name: Build Element Web resources
-              # Needed to prepare language files
-              run: "yarn build:res"
 
             - name: Build storybook dependencies
               # When the first test is ran, it will fail because the dependencies are not yet built.

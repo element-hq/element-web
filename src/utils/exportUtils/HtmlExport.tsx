@@ -30,6 +30,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
 
 import exportJS from "!!raw-loader!./exportJS";
 
@@ -267,29 +268,31 @@ export default class HTMLExporter extends Exporter {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
                 <MatrixClientContext.Provider value={this.room.client}>
-                    <TooltipProvider>
-                        <EventTile
-                            mxEvent={mxEv}
-                            continuation={continuation}
-                            isRedacted={mxEv.isRedacted()}
-                            replacingEventId={mxEv.replacingEventId()}
-                            forExport={true}
-                            alwaysShowTimestamps={true}
-                            showUrlPreview={false}
-                            checkUnmounting={() => false}
-                            isTwelveHour={false}
-                            last={false}
-                            lastInSection={false}
-                            permalinkCreator={this.permalinkCreator}
-                            lastSuccessful={false}
-                            isSelectedEvent={false}
-                            showReactions={true}
-                            layout={Layout.Group}
-                            showReadReceipts={false}
-                            getRelationsForEvent={this.getRelationsForEvent}
-                            ref={ref}
-                        />
-                    </TooltipProvider>
+                    <SDKContext.Provider value={SdkContextClass.instance}>
+                        <TooltipProvider>
+                            <EventTile
+                                mxEvent={mxEv}
+                                continuation={continuation}
+                                isRedacted={mxEv.isRedacted()}
+                                replacingEventId={mxEv.replacingEventId()}
+                                forExport={true}
+                                alwaysShowTimestamps={true}
+                                showUrlPreview={false}
+                                checkUnmounting={() => false}
+                                isTwelveHour={false}
+                                last={false}
+                                lastInSection={false}
+                                permalinkCreator={this.permalinkCreator}
+                                lastSuccessful={false}
+                                isSelectedEvent={false}
+                                showReactions={true}
+                                layout={Layout.Group}
+                                showReadReceipts={false}
+                                getRelationsForEvent={this.getRelationsForEvent}
+                                ref={ref}
+                            />
+                        </TooltipProvider>
+                    </SDKContext.Provider>
                 </MatrixClientContext.Provider>
             </div>
         );
