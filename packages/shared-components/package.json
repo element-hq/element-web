@@ -52,7 +52,7 @@
         "@storybook/react-vite": "^9.1.10",
         "@storybook/test-runner": "^0.23.0",
         "concurrently": "^9.2.1",
-        "eslint": "8",
+        "eslint": "9",
         "jest-image-snapshot": "^6.5.1",
         "eslint-plugin-storybook": "^9.1.10",
         "jest-image-snapshot": "^6.5.1",
