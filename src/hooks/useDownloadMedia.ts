@@ -15,7 +15,7 @@ import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import { FileDownloader } from "../utils/FileDownloader";
 import { MediaEventHelper } from "../utils/MediaEventHelper";
-import ModuleApi from "../modules/Api";
+import { ModuleApi } from "../modules/Api";
 
 export interface UseDownloadMediaReturn {
     download: () => Promise<void>;
@@ -34,7 +34,7 @@ export function useDownloadMedia(url: string, fileName?: string, mxEvent?: Matri
     useEffect(() => {
         if (!mxEvent) return;
 
-        const hints = ModuleApi.customComponents.getHintsForMessage(mxEvent);
+        const hints = ModuleApi.instance.customComponents.getHintsForMessage(mxEvent);
         if (hints?.allowDownloadingMedia) {
             setCanDownload(false);
             hints

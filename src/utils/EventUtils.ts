@@ -30,7 +30,7 @@ import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import ModuleApi from "../modules/Api";
+import { ModuleApi } from "../modules/Api";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -78,7 +78,7 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
         return false;
     }
 
-    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)?.allowEditingEvent === false) {
+    if (ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.allowEditingEvent === false) {
         return false;
     }
 
