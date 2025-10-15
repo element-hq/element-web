@@ -31,6 +31,7 @@
     ],
     "scripts": {
         "postinstall": "patch-package",
+        "prepare": "vite build",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
         "lint": "yarn lint:types && yarn lint:js",
