@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
 <DocumentFragment>
@@ -58,7 +58,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
     role="tree"
   >
     <li
-      aria-labelledby="«r8»"
+      aria-labelledby="_r_8_"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -88,7 +88,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«r8»"
+              id="_r_8_"
             >
               Unnamed Room
             </span>
@@ -122,7 +122,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«r8»"
+                    aria-labelledby="_r_8_"
                     class="_input_1hel1_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
@@ -156,7 +156,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
       </div>
     </li>
     <li
-      aria-labelledby="«rc»"
+      aria-labelledby="_r_c_"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -186,7 +186,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«rc»"
+              id="_r_c_"
             >
               Unnamed Room
             </span>
@@ -220,7 +220,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«rc»"
+                    aria-labelledby="_r_c_"
                     class="_input_1hel1_18"
                     id="checkbox_GQvdMWe954"
                     role="presentation"
@@ -254,7 +254,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
       </div>
     </li>
     <li
-      aria-labelledby="«rg»"
+      aria-labelledby="_r_g_"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -284,7 +284,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«rg»"
+              id="_r_g_"
             >
               Knock room
             </span>
@@ -318,7 +318,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«rg»"
+                    aria-labelledby="_r_g_"
                     class="_input_1hel1_18"
                     id="checkbox_DVIAu5CsiH"
                     role="presentation"
@@ -353,7 +353,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
     </li>
     <li
       aria-expanded="true"
-      aria-labelledby="«rk»"
+      aria-labelledby="_r_k_"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -383,7 +383,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«rk»"
+              id="_r_k_"
             >
               Nested space
             </span>
@@ -417,7 +417,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_container_1hel1_10"
                 >
                   <input
-                    aria-labelledby="«rk»"
+                    aria-labelledby="_r_k_"
                     class="_input_1hel1_18"
                     id="checkbox_RD7nyrA2oh"
                     role="presentation"
@@ -458,7 +458,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
       />
     </li>
     <li
-      aria-labelledby="«ro»"
+      aria-labelledby="_r_o_"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
     >
@@ -488,7 +488,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_name"
           >
             <span
-              id="«ro»"
+              id="_r_o_"
             >
               Nested room
             </span>
@@ -510,7 +510,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             Join
           </div>
           <span
-            aria-labelledby="«rp»"
+            aria-labelledby="_r_p_"
             tabindex="0"
           >
             <form
@@ -526,7 +526,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                     class="_container_1hel1_10"
                   >
                     <input
-                      aria-labelledby="«ro»"
+                      aria-labelledby="_r_o_"
                       class="_input_1hel1_18"
                       disabled=""
                       id="checkbox_jWVJIPauy1"

@@ -52,7 +52,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r6»"
+          aria-labelledby="_r_6_"
           class="mx_E2EIconView"
         >
           <svg
@@ -126,7 +126,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r0»"
+          aria-labelledby="_r_0_"
           class="mx_E2EIconView"
         >
           <svg

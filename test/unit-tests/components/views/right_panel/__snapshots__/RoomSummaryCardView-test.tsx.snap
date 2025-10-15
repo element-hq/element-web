@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
 <div>
@@ -15,7 +15,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="«re»"
+        aria-labelledby="_r_e_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -210,7 +210,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <input
               aria-hidden="true"
               class="_input_19o42_24"
-              id="«rj»"
+              id="_r_j_"
               role="switch"
               type="checkbox"
             />
@@ -728,7 +728,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -885,7 +885,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             <input
               aria-hidden="true"
               class="_input_19o42_24"
-              id="«r5»"
+              id="_r_5_"
               role="switch"
               type="checkbox"
             />
@@ -1403,7 +1403,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="«r7»"
+        aria-labelledby="_r_7_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -1598,7 +1598,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <input
               aria-hidden="true"
               class="_input_19o42_24"
-              id="«rc»"
+              id="_r_c_"
               role="switch"
               type="checkbox"
             />

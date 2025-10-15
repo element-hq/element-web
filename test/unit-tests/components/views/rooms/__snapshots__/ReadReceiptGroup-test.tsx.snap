@@ -4,7 +4,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
   class="_tooltip_6ode6_8"
   data-floating-ui-focusable=""
-  id="«r6»"
+  id="_r_6_"
   role="tooltip"
   style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
   tabindex="-1"
@@ -22,7 +22,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
       stroke="none"
     />
     <clippath
-      id="«r9»"
+      id="_r_9_"
     >
       <rect
         height="10"
@@ -33,13 +33,13 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     </clippath>
   </svg>
   <span
-    id="«r4»"
+    id="_r_4_"
   >
     Alice
   </span>
   <span
     class="_caption_6ode6_28 cpd-theme-dark"
-    id="«r5»"
+    id="_r_5_"
   >
     @alice:example.org
   </span>

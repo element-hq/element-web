@@ -103,7 +103,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="«r2»"
+      aria-describedby="_r_2_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -318,7 +318,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="«r8»"
+      aria-describedby="_r_8_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
