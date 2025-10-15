@@ -7,7 +7,7 @@
 
 import React, { type ChangeEventHandler, type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
 
-import { type ViewModel } from "../../ViewModel";
+import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import { MediaBody } from "../../message-body/MediaBody";
 import { Flex } from "../../utils/Flex";

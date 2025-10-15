@@ -8,8 +8,8 @@
 import React, { type JSX, useMemo, type ComponentType } from "react";
 import { omitBy, pickBy } from "lodash";
 
-import { MockViewModel } from "./MockViewModel";
-import { type ViewModel } from "./ViewModel";
+import { MockViewModel } from "./viewmodel/MockViewModel";
+import { type ViewModel } from "./viewmodel/ViewModel";
 
 interface ViewWrapperProps<V> {
     /**
