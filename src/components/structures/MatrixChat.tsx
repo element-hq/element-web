@@ -140,6 +140,7 @@ import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/ShareP
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
+import mxModuleApi from "../../modules/Api";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -234,6 +235,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private fontWatcher?: FontWatcher;
     private readonly stores: SdkContextClass;
     private loadSessionAbortController = new AbortController();
+    private newUriBroadcastChannel = new BroadcastChannel("io.element.broadcast.new_uri");
 
     private sessionLoadStarted = false;
 
@@ -283,6 +285,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // object field used for tracking the status info appended to the title tag.
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
         this.subTitleStatus = "";
+
+        this.newUriBroadcastChannel.addEventListener("message", (ev) => {
+            const { screen, params } = ev.data;
+            console.log(ev,  ev.data);
+            this.showScreen(screen, params);
+        });
     }
 
     /**
@@ -470,6 +478,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         initSentry(SdkConfig.get("sentry"));
         window.addEventListener("resize", this.onWindowResized);
+        console.log("MatrixCHAT IS LOADING")
 
         // Once we start loading the MatrixClient, we can't stop, even if MatrixChat gets unmounted (as it does
         // in React's Strict Mode). So, start loading the session now, but only if this MatrixChat was not previously
@@ -478,8 +487,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.sessionLoadStarted = true;
             const platform = PlatformPeg.get();
             if (platform && !platform.checkSessionLockFree()) {
-                // another instance holds the lock; confirm its theft before proceeding
-                setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+                console.log("screenAfterLogin", this.screenAfterLogin);
+                if (this.screenAfterLogin?.screen.startsWith("matrix")) {
+                    console.log("Got URI req");
+                    // The user has clicked on a matrixuri link, so we need to forward it to them.
+                    this.newUriBroadcastChannel.postMessage({screen: this.screenAfterLogin.screen, params: this.screenAfterLogin.params});
+                    // This will put the application in a final state so the other instance can handle the URI.
+                    setTimeout(() => this.setState({ view: Views.SENT_URI }), 0);
+                } else {
+                    // another instance holds the lock; confirm its theft before proceeding
+                    setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+
+                }
             } else {
                 this.startInitSession();
             }
@@ -1752,6 +1771,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
+        if (this.state.view === Views.SENT_URI) {
+            // Ignore any screens once we've reached this state.
+            return;
+        }
         const cli = MatrixClientPeg.get();
         const isLoggedOutOrGuest = !cli || cli.isGuest();
         if (!isLoggedOutOrGuest && AUTH_SCREENS.includes(screen)) {
@@ -1817,6 +1840,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         } else if (screen === "settings") {
             dis.fire(Action.ViewUserSettings);
+        } else if (screen.startsWith("matrix")) {
+            console.log("matrix:", screen, params);
+            mxModuleApi.navigation.toMatrixToLink(screen, false).catch((ex) => {
+                console.log('Failed to handle matrix uri', ex);
+            })
         } else if (screen === "welcome") {
             dis.dispatch({
                 action: "view_welcome_page",
@@ -2097,6 +2125,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         this.startInitSession();
                     }}
                 />
+            );
+        } else if (this.state.view === Views.SENT_URI) {
+            view = (
+                <b>PLACEHOLDER: The URI has been broadcast to the other app.</b>
             );
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;

@@ -50,6 +50,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import ProtocolHandlerController from "./controllers/ProtocolHandlerController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -370,6 +371,7 @@ export interface Settings {
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    protocolHandlerRegistered: IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1344,6 +1346,11 @@ export const SETTINGS: Settings = {
         default: [],
         // Contains room IDs
         shouldExportToRageshake: false,
+    },
+    "protocolHandlerRegistered": {
+        default: false,
+        controller: new ProtocolHandlerController(),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
     },
     /**
      * Enable or disable the release announcement feature

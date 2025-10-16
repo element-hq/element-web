@@ -277,4 +277,8 @@ export default class WebPlatform extends BasePlatform {
     public async getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
         return SessionLock.getSessionLock(onNewInstance);
     }
+    
+    public async registerProtocolHandler(urlPattern: `${string}%s`) {
+        navigator.registerProtocolHandler("matrix", urlPattern);
+    }
 }

@@ -43,6 +43,10 @@ enum Views {
 
     // Another instance of the application has started up. We just show an error page.
     LOCK_STOLEN,
+
+    // Another instance of the application has opened and this session had a matrixuri, so we
+    // just show a warning and close.
+    SENT_URI,
 }
 
 export default Views;

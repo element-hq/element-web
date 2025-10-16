@@ -524,4 +524,10 @@ export default abstract class BasePlatform {
      * @returns {Promise<boolean>} True if the lock was acquired, false otherwise.
      */
     public abstract getSessionLock(_onNewInstance: () => Promise<void>): Promise<boolean>;
+
+    /**
+     * 
+     * @param urlPattern 
+     */
+    public registerProtocolHandler?(urlPattern: `${string}%s`): Promise<void>
 }
