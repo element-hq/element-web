@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventEmitter } from "events";
 
-import { Disposables } from "../../../src/viewmodels/base/Disposables";
+import { Disposables } from "..";
 
 describe("Disposable", () => {
     it("isDisposed is true after dispose() is called", () => {

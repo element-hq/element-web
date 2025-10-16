@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { useSyncExternalStore } from "react";
 
-import { type ViewModel } from "./ViewModel";
+import { type ViewModel } from "./viewmodel/ViewModel";
 
 /**
  * A small wrapper around useSyncExternalStore to use a view model in a shared component view

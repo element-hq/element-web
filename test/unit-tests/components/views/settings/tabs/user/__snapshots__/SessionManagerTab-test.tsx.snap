@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SessionManagerTab /> Device verification does not allow device verification on session that do not support encryption 1`] = `
 HTMLCollection [
@@ -397,7 +397,7 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
           >
             <input
               aria-label="Select all"
-              aria-labelledby="«r4q»"
+              aria-labelledby="_r_4q_"
               class="_input_1hel1_18"
               data-testid="device-select-all-checkbox"
               id="device-select-all-checkbox"
