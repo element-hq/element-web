@@ -140,7 +140,7 @@ import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/ShareP
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
-import ModuleApi from "../../modules/Api.ts";
+import { ModuleApi } from "../../modules/Api.ts";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1925,7 +1925,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params?.action,
             });
         } else {
-            if (ModuleApi.navigation.locationRenderers.get(screen)) {
+            if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
                 this.setState({ page_type: screen });
             }
         }

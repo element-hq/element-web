@@ -62,7 +62,7 @@ import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePage
 import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import ModuleApi from "../../modules/Api.ts";
+import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
@@ -254,7 +254,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         if (!space || !this.matrixClient || space === this.activeSpace) return;
 
         let cliSpace: Room | null = null;
-        if (ModuleApi.extras.spacePanelItems.has(space)) {
+        if (ModuleApi.instance.extras.spacePanelItems.has(space)) {
             // it's a "space" provided by a module: that's good enough
         } else if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
@@ -291,7 +291,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
                 });
-            } else if (ModuleApi.extras.spacePanelItems.has(space)) {
+            } else if (ModuleApi.instance.extras.spacePanelItems.has(space)) {
                 // module will handle this
             } else {
                 defaultDispatcher.dispatch<ViewHomePagePayload>({
@@ -1214,7 +1214,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY) as MetaSpace;
         const valid =
             lastSpaceId &&
-            (ModuleApi.extras.spacePanelItems.has(lastSpaceId) ||
+            (ModuleApi.instance.extras.spacePanelItems.has(lastSpaceId) ||
                 (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]));
         if (valid) {
             // don't context switch here as it may break permalinks

@@ -68,7 +68,7 @@ import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
-import ModuleApi from "../../../modules/Api.ts";
+import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
@@ -292,7 +292,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
         const [invites, metaSpaces, actualSpaces, activeSpace] = useSpaces();
         const activeSpaces = activeSpace ? [activeSpace] : [];
 
-        const moduleSpaceItems = useModuleSpacePanelItems(ModuleApi.extras);
+        const moduleSpaceItems = useModuleSpacePanelItems(ModuleApi.instance.extras);
 
         const metaSpacesSection = metaSpaces
             .filter((key) => !(key === MetaSpace.VideoRooms && !SettingsStore.getValue("feature_video_rooms")))

@@ -68,7 +68,7 @@ import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushR
 import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
-import ModuleApi from "../../modules/Api.ts";
+import { ModuleApi } from "../../modules/Api.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
@@ -681,7 +681,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         let pageElement;
 
         const moduleRenderer = this.props.page_type
-            ? ModuleApi.navigation.locationRenderers.get(this.props.page_type)
+            ? ModuleApi.instance.navigation.locationRenderers.get(this.props.page_type)
             : undefined;
 
         switch (this.props.page_type) {
