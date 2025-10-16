@@ -46,6 +46,7 @@ const config: Config = {
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
+        "<rootDir>/packages/**/*.{js,ts,tsx}",
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is
         // not available in that contest. So, turn off coverage instrumentation for it.
         "!<rootDir>/src/utils/SessionLock.ts",

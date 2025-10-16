@@ -33,7 +33,7 @@ import { CommandCategories, getCommand } from "../../../../../SlashCommands";
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
-import { attachRelation } from "../../SendMessageComposer";
+import { attachRelation } from "../../../../../utils/messages";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;

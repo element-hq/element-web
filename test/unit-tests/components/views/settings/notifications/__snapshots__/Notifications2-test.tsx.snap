@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
 <div>
@@ -21,7 +21,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r17»"
+                id="mx_LabelledToggleSwitch__r_17_"
               >
                 Enable notifications for this account
               </div>
@@ -29,7 +29,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               aria-checked="true"
               aria-disabled="true"
-              aria-labelledby="mx_LabelledToggleSwitch_«r17»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_17_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
               role="switch"
               tabindex="0"
@@ -46,7 +46,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r18»"
+                id="mx_LabelledToggleSwitch__r_18_"
               >
                 Enable desktop notifications for this session
               </div>
@@ -54,7 +54,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               aria-checked="false"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r18»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_18_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -71,7 +71,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r19»"
+                id="mx_LabelledToggleSwitch__r_19_"
               >
                 Show message preview in desktop notification
               </div>
@@ -79,7 +79,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               aria-checked="false"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r19»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_19_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -96,7 +96,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r1a»"
+                id="mx_LabelledToggleSwitch__r_1a_"
               >
                 Enable audible notifications for this session
               </div>
@@ -104,7 +104,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               aria-checked="true"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r1a»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_1a_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -758,7 +758,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_container_1hel1_10"
                     >
                       <input
-                        aria-describedby="«r24»"
+                        aria-describedby="_r_24_"
                         checked=""
                         class="_input_1hel1_18"
                         disabled=""
@@ -798,7 +798,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="«r24»"
+                      id="_r_24_"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
                     </span>
@@ -998,7 +998,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r0»"
+                id="mx_LabelledToggleSwitch__r_0_"
               >
                 Enable notifications for this account
               </div>
@@ -1006,7 +1006,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               aria-checked="true"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r0»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_0_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -1023,7 +1023,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r1»"
+                id="mx_LabelledToggleSwitch__r_1_"
               >
                 Enable desktop notifications for this session
               </div>
@@ -1031,7 +1031,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               aria-checked="false"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r1»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_1_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -1048,7 +1048,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r2»"
+                id="mx_LabelledToggleSwitch__r_2_"
               >
                 Show message preview in desktop notification
               </div>
@@ -1056,7 +1056,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               aria-checked="false"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r2»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_2_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -1073,7 +1073,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r3»"
+                id="mx_LabelledToggleSwitch__r_3_"
               >
                 Enable audible notifications for this session
               </div>
@@ -1081,7 +1081,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               aria-checked="true"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r3»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_3_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -1724,7 +1724,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_container_1hel1_10"
                     >
                       <input
-                        aria-describedby="«rt»"
+                        aria-describedby="_r_t_"
                         checked=""
                         class="_input_1hel1_18"
                         id="checkbox_kBerF1ejc4"
@@ -1763,7 +1763,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="«rt»"
+                      id="_r_t_"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
                     </span>

@@ -27,7 +27,6 @@ export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 
 // MVVM
+export * from "./viewmodel";
 export * from "./ViewWrapper";
-export type * from "./ViewModel";
 export * from "./useViewModel";
-export * from "./MockViewModel";
