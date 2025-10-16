@@ -15,33 +15,37 @@ import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 import { type IBodyProps } from "./IBodyProps";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
-class MStickerBodyInner extends MImageBodyInner {
-    // Mostly empty to prevent default behaviour of MImageBody
-    protected onClick = (ev: React.MouseEvent): void => {
+const MStickerBody: React.FC<IBodyProps> = (props) => {
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
+
+    const onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
-        if (!this.props.mediaVisible) {
-            this.props.setMediaVisible(true);
+        if (!mediaVisible) {
+            setVisible(true);
         }
     };
 
     // MStickerBody doesn't need a wrapping `<a href=...>`, but it does need extra padding
     // which is added by mx_MStickerBody_wrapper
-    protected wrapImage(contentUrl: string, children: React.ReactNode): JSX.Element {
-        let onClick: React.MouseEventHandler | undefined;
-        if (!this.props.mediaVisible) {
-            onClick = this.onClick;
+    const wrapImage = (contentUrl: string | null | undefined, children: React.ReactNode): JSX.Element => {
+        let onClickHandler: React.MouseEventHandler | undefined;
+        if (!mediaVisible) {
+            onClickHandler = onClick;
         }
         return (
-            <div className="mx_MStickerBody_wrapper" onClick={onClick}>
+            <div className="mx_MStickerBody_wrapper" onClick={onClickHandler}>
                 {" "}
                 {children}{" "}
             </div>
         );
-    }
+    };
 
     // Placeholder to show in place of the sticker image if img onLoad hasn't fired yet.
-    protected getPlaceholder(width: number, height: number): ReactNode {
-        if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
+    const getPlaceholder = (width: number, height: number): ReactNode => {
+        if (props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
+            // Use default blurhash placeholder
+            return null;
+        }
         return (
             <img
                 aria-hidden
@@ -50,15 +54,13 @@ class MStickerBodyInner extends MImageBodyInner {
                 src={IconsShowStickersSvg}
                 width="80"
                 height="80"
-                onMouseEnter={this.onImageEnter}
-                onMouseLeave={this.onImageLeave}
             />
         );
-    }
+    };
 
     // Tooltip to show on mouse over
-    protected getTooltipProps(): ComponentProps<typeof Tooltip> | null {
-        const content = this.props.mxEvent && this.props.mxEvent.getContent();
+    const getTooltipProps = (): ComponentProps<typeof Tooltip> | null => {
+        const content = props.mxEvent && props.mxEvent.getContent();
 
         if (!content?.body || !content.info?.w) return null;
 
@@ -66,21 +68,30 @@ class MStickerBodyInner extends MImageBodyInner {
             placement: "right",
             description: content.body,
         };
-    }
+    };
 
     // Don't show "Download this_file.png ..."
-    protected getFileBody(): ReactNode {
+    const getFileBody = (): ReactNode => {
         return null;
-    }
+    };
 
-    protected getBanner(content: MediaEventContent): ReactNode {
+    const getBanner = (content: MediaEventContent): ReactNode => {
         return null; // we don't need a banner, we have a tooltip
-    }
-}
+    };
 
-const MStickerBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
-    return <MStickerBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
+    return (
+        <MImageBodyInner
+            mediaVisible={mediaVisible}
+            setMediaVisible={setVisible}
+            onClick={onClick}
+            wrapImage={wrapImage}
+            getPlaceholder={getPlaceholder}
+            getTooltipProps={getTooltipProps}
+            getFileBody={getFileBody}
+            getBanner={getBanner}
+            {...props}
+        />
+    );
 };
 
 export default MStickerBody;
