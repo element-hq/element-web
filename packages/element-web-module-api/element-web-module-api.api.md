@@ -319,7 +319,6 @@ export interface RoomListCustomisations<Room> {
 
 // @alpha
 export interface RoomViewProps {
-    // (undocumented)
     roomId?: string;
 }
 

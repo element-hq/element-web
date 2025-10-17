@@ -10,6 +10,9 @@ Please see LICENSE files in the repository root for full details.
  * @alpha Subject to change.
  */
 export interface RoomViewProps {
+    /**
+     * The ID of the room to render.
+     */
     roomId?: string;
 }
 
