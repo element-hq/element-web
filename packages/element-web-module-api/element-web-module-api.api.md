@@ -44,7 +44,6 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
-    // Warning: (ae-incompatible-release-tags) The symbol "navigation" is marked as @public, but its signature references "NavigationApi" which is marked as @alpha
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
 }
@@ -288,9 +287,9 @@ export class ModuleLoader {
     start(): Promise<void>;
 }
 
-// @alpha
+// @public
 export interface NavigationApi {
-    // (undocumented)
+    // @alpha
     registerLocationRenderer(path: string, renderer: LocationRenderFunction): void;
     toMatrixToLink(link: string, join?: boolean): Promise<void>;
 }

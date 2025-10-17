@@ -16,7 +16,7 @@ export type LocationRenderFunction = () => JSX.Element;
 
 /**
  * API methods to navigate the application.
- * @alpha
+ * @public
  */
 export interface NavigationApi {
     /**
@@ -26,5 +26,11 @@ export interface NavigationApi {
      */
     toMatrixToLink(link: string, join?: boolean): Promise<void>;
 
+    /**
+     * Register a renderer for a given location path.
+     * @param path - The location path to register the renderer for.
+     * @param renderer - The function that will render the component for the location.
+     * @alpha
+     */
     registerLocationRenderer(path: string, renderer: LocationRenderFunction): void;
 }
