@@ -4,6 +4,7 @@ Copyright 2025 New Vector Ltd.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
+
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { RoomViewStore } from "./RoomViewStore";
@@ -11,6 +12,10 @@ import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type SdkContextClass } from "../contexts/SDKContext";
 import { Action } from "../dispatcher/actions";
 
+/**
+ * Acts as a cache of many RoomViewStore instances, creating them as necessary
+ * given a room ID.
+ */
 export class MultiRoomViewStore {
     /**
      * Map from room-id to RVS instance.
@@ -26,7 +31,6 @@ export class MultiRoomViewStore {
      * Get a RVS instance for the room identified by the given roomId.
      */
     public getRoomViewStoreForRoom(roomId: string): RoomViewStore {
-        console.log(`Create RVS: ${roomId}`);
         // Get existing store / create new store
         const store = this.stores.has(roomId)
             ? this.stores.get(roomId)!
@@ -49,7 +53,6 @@ export class MultiRoomViewStore {
      * Remove a RVS instance that was created by {@link getRoomViewStoreForRoom}.
      */
     public removeRoomViewStore(roomId: string): void {
-        console.log(`Remove RVS: ${roomId}`);
         const didRemove = this.stores.delete(roomId);
         if (!didRemove) {
             logger.warn(`removeRoomViewStore called with ${roomId} but no store exists for this room.`);
