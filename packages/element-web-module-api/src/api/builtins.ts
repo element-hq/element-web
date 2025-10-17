@@ -14,9 +14,10 @@ export interface RoomViewProps {
 }
 
 /**
- * Exposes components that are part of Element Web to allow modules to render them
- * as part of their custom components (because they can't import the components from
- * Element Web since it would cause a dependency cycle)
+ * Exposes components and classes that are part of Element Web to allow modules to
+ * render the components as part of their custom components or use the classes
+ * (because they can't import the components from Element Web since it would cause
+ * a dependency cycle)
  * @alpha
  */
 export interface BuiltinsApi {
