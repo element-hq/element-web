@@ -2891,6 +2891,7 @@
             "room_list_heading": "Jututubade loend",
             "show_avatars_pills": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes",
             "show_polls_button": "Näita küsitluste nuppu",
+            "startup_window_behaviour_label": "Käivitamine ja akna käitumine",
             "surround_text": "Erimärkide sisestamisel märgista valitud tekst",
             "time_heading": "Aegade kuvamine",
             "user_timezone": "Seadista ajavöönd"
@@ -3065,6 +3066,9 @@
             "title": "Külgpaan"
         },
         "start_automatically": {
+            "disabled": "Ei",
+            "enabled": "Jah",
+            "label": "Oma arvutisse logimisel ava %(brand)s",
             "minimised": "Minimeeritud"
         },
         "tac_only_notifications": "Näita teavitusi vaid jutulõngade ülevaates",
