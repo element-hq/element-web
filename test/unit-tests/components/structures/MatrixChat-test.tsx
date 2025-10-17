@@ -129,7 +129,7 @@ describe("<MatrixChat />", () => {
         setGuest: jest.fn(),
         setNotifTimelineSet: jest.fn(),
         getAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
         getDevices: jest.fn().mockResolvedValue({ devices: [] }),
         getProfileInfo: jest.fn().mockResolvedValue({
             displayname: "Ernie",
@@ -554,8 +554,8 @@ describe("<MatrixChat />", () => {
                     expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
                 );
 
-                // check we get to logged in view
-                await waitForSyncAndLoad(loginClient, true);
+                // set up keys screen is rendered
+                expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
 
             it("should persist device language when available", async () => {
@@ -1166,6 +1166,8 @@ describe("<MatrixChat />", () => {
                     // Given force_verification is on (outer describe)
                     // And we just logged in via OIDC (inner describe)
 
+                    mocked(loginClient.getCrypto()!.userHasCrossSigningKeys).mockResolvedValue(true);
+
                     // When we load the page
                     getComponent({ realQueryParams });
 
@@ -1322,6 +1324,7 @@ describe("<MatrixChat />", () => {
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                     setDeviceIsolationMode: jest.fn(),
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+                    isCrossSigningReady: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
                     resetKeyBackup: jest.fn(),
@@ -1587,8 +1590,8 @@ describe("<MatrixChat />", () => {
                     action: "will_start_client",
                 });
 
-                // logged in but waiting for sync screen
-                await screen.findByText("Logout");
+                // set up keys screen is rendered
+                expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
             });
         });
     });
