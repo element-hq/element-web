@@ -51,7 +51,6 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
 
 // @alpha
 export interface BuiltinsApi {
-    // (undocumented)
     getRoomViewComponent(): React.ComponentType<RoomViewProps>;
 }
 
@@ -329,17 +328,11 @@ export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 
 // @alpha
 export interface SpacePanelItemProps {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     contextMenuTooltip?: string;
-    // (undocumented)
     icon?: JSX.Element;
-    // (undocumented)
     label: string;
-    // (undocumented)
     onSelected?(): void;
-    // (undocumented)
     style?: React.CSSProperties;
 }
 

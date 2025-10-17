@@ -12,12 +12,34 @@ import { JSX } from "react";
  * @alpha
  */
 export interface SpacePanelItemProps {
+    /**
+     * A CSS class name for the item
+     */
     className?: string;
+
+    /**
+     * An icon to show in the item
+     */
     icon?: JSX.Element;
+
+    /**
+     * The label to show in the item
+     */
     label: string;
+
+    /**
+     * A tooltip to show when hovering over the item
+     */
     contextMenuTooltip?: string;
+
+    /**
+     * Styles to apply to the item
+     */
     style?: React.CSSProperties;
-    //notificationState?: NotificationState;
+
+    /**
+     * Callback when the item is selected
+     */
     onSelected?(): void;
 }
 
