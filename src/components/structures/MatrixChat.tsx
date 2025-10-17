@@ -1365,11 +1365,24 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (!mustVerifyFlag) return false;
 
         const client = MatrixClientPeg.safeGet();
+
+        // Guests won't have a cross-signing identity to confirm.
         if (client.isGuest()) return false;
 
+        // If we don't have crypto support, we can't verify.
         const crypto = client.getCrypto();
-        const crossSigningReady = await crypto?.isCrossSigningReady();
+        if (!crypto) return false;
 
+        // If the server doesn't support cross-signing, the user won't have an
+        // identity to confirm.
+        if (!(await doesServerSupportCrossSigning(client))) return false;
+
+        // If we skip setting up encryption, this takes priority over forcing
+        // verification.
+        if (await shouldSkipSetupEncryption(client)) return false;
+
+        // Force verification if this device hasn't already verified.
+        const crossSigningReady = await crypto.isCrossSigningReady();
         return !crossSigningReady;
     }
 
