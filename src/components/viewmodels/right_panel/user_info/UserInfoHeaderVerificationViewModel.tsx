@@ -12,6 +12,7 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type IDevice } from "../../../views/right_panel/UserInfo";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { verifyUser } from "../../../../verification";
+import { doesServerSupportCrossSigning } from "../../../../utils/crypto/doesServerSupportCrossSigning";
 
 export interface UserInfoVerificationSectionState {
     /**
@@ -32,7 +33,7 @@ export interface UserInfoVerificationSectionState {
 const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
     return useAsyncMemo<boolean>(
         async () => {
-            return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+            return doesServerSupportCrossSigning(cli);
         },
         [cli],
         false,

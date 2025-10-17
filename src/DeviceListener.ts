@@ -46,6 +46,7 @@ import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
+import { doesServerSupportCrossSigning } from "./utils/crypto/doesServerSupportCrossSigning";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -318,8 +319,7 @@ export default class DeviceListener {
 
         const cli = this.client;
 
-        // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
-        if (!(await cli.isVersionSupported("v1.1"))) {
+        if (!(await doesServerSupportCrossSigning(cli))) {
             logSpan.debug("cross-signing not supported");
             return;
         }
