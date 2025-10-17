@@ -185,6 +185,12 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
     });
 
+    test.use({
+        config: {
+            force_verification: false,
+        },
+    });
+
     test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
         const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
 
