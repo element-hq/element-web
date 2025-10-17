@@ -209,6 +209,26 @@ describe("RoomView", () => {
         return ref.current!;
     };
 
+    it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
+        stores.multiRoomViewStore.getRoomViewStoreForRoom = jest.fn().mockReturnValue(stores.roomViewStore);
+
+        const ref = createRef<RoomView>();
+        render(
+            <MatrixClientContext.Provider value={cli}>
+                <SDKContext.Provider value={stores}>
+                    <RoomView
+                        threepidInvite={undefined as any}
+                        forceTimeline={false}
+                        ref={ref}
+                        roomId="!room:example.dummy"
+                    />
+                </SDKContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(stores.multiRoomViewStore.getRoomViewStoreForRoom).toHaveBeenCalledWith("!room:example.dummy");
+    });
+
     it("should show member list right panel phase on Action.ViewUser without `payload.member`", async () => {
         const spy = jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
         await renderRoomView(false);
