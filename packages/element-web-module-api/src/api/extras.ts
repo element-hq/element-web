@@ -40,7 +40,7 @@ export interface SpacePanelItemProps {
     /**
      * Callback when the item is selected
      */
-    onSelected?(): void;
+    onSelected: () => void;
 }
 
 /**

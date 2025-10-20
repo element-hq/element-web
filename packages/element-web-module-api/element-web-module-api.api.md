@@ -329,7 +329,7 @@ export interface SpacePanelItemProps {
     className?: string;
     icon?: JSX.Element;
     label: string;
-    onSelected?(): void;
+    onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
 }
