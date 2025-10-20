@@ -1168,7 +1168,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     class="mx_SettingsFlag_label"
                   >
                     <div
-                      id="mx_LabelledToggleSwitch_«r8»"
+                      id="mx_LabelledToggleSwitch__r_8_"
                     >
                       Hide avatars of room and inviter
                     </div>
@@ -1176,7 +1176,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <div
                     aria-checked="false"
                     aria-disabled="false"
-                    aria-labelledby="mx_LabelledToggleSwitch_«r8»"
+                    aria-labelledby="mx_LabelledToggleSwitch__r_8_"
                     class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                     role="switch"
                     tabindex="0"
@@ -1194,13 +1194,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-«r9»"
+                    for="radix-_r_9_"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
-                    id="radix-«ra»"
+                    id="radix-_r_a_"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1307,7 +1307,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     class="mx_SettingsFlag_label"
                   >
                     <div
-                      id="mx_LabelledToggleSwitch_«re»"
+                      id="mx_LabelledToggleSwitch__r_e_"
                     >
                       Allow users to invite you to rooms
                     </div>
@@ -1316,7 +1316,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     aria-checked="true"
                     aria-disabled="true"
                     aria-label="Your server does not implement this feature."
-                    aria-labelledby="mx_LabelledToggleSwitch_«re»"
+                    aria-labelledby="mx_LabelledToggleSwitch__r_e_"
                     class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                     role="switch"
                     tabindex="0"

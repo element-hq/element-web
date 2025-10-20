@@ -25,8 +25,8 @@ import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStore
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler.tsx";
-import { Flex } from "../../../../shared-components/utils/Flex";
-import { Box } from "../../../../shared-components/utils/Box";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
+import { Box } from "../../../../../packages/shared-components/src/utils/Box";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
@@ -71,7 +71,7 @@ export default function RoomHeader({
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
 
     const members = useRoomMembers(room, 2500);
-    const memberCount = useRoomMemberCount(room, { throttleWait: 2500 });
+    const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
 
     const {
         voiceCallDisabledReason,

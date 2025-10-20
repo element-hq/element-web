@@ -41,9 +41,9 @@ import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
-import ModuleApi from "../modules/Api";
+import { ModuleApi } from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
+import { TextualEventView } from "../../packages/shared-components/src/event-tiles/TextualEventView";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
@@ -266,7 +266,7 @@ export function renderTile(
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
         // Will return null if no custom component can render it.
-        return ModuleApi.customComponents.renderMessage({
+        return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
     }
@@ -297,7 +297,7 @@ export function renderTile(
         case TimelineRenderingType.File:
         case TimelineRenderingType.Notification:
         case TimelineRenderingType.Thread:
-            return ModuleApi.customComponents.renderMessage(
+            return ModuleApi.instance.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
                 },
@@ -318,7 +318,7 @@ export function renderTile(
                     }),
             );
         default:
-            return ModuleApi.customComponents.renderMessage(
+            return ModuleApi.instance.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
                 },
@@ -363,7 +363,7 @@ export function renderReplyTile(
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
         // Will return null if no custom component can render it.
-        return ModuleApi.customComponents.renderMessage({
+        return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
     }
@@ -384,7 +384,7 @@ export function renderReplyTile(
         permalinkCreator,
     } = props;
 
-    return ModuleApi.customComponents.renderMessage(
+    return ModuleApi.instance.customComponents.renderMessage(
         {
             mxEvent: props.mxEvent,
         },
@@ -429,7 +429,7 @@ export function haveRendererForEvent(
 
     // Check to see if we have any hints for this message, which indicates
     // there is a custom renderer for the event.
-    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
+    if (ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)) {
         return true;
     }
 

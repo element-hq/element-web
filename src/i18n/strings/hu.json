@@ -3022,7 +3022,6 @@
             "spaces_explainer": "A terek a szobák és az emberek csoportosításának módjai. A terek mellett, amelyekben tartózkodik, használhat néhány előre beépítettet is.",
             "title": "Oldalsáv"
         },
-        "start_automatically": "Automatikus indítás rendszerindítás után",
         "tac_only_notifications": "Csak az üzenetszálak központban jelenítsen meg értesítéseket",
         "use_12_hour_format": "Az időbélyegek megjelenítése 12 órás formátumban (például du. 2:30)",
         "use_command_enter_send_message": "Command + Enter használata az üzenet küldéséhez",

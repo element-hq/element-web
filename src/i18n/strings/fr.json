@@ -2663,6 +2663,7 @@
             "allow_spellcheck": "Autoriser la vérification orthographique",
             "application_language": "Langue de l'application",
             "application_language_reload_hint": "L’application se rechargera après avoir sélectionné une autre langue",
+            "avatar_open_menu": "Ouvrir le menu de l'avatar",
             "avatar_remove_progress": "Suppression de l'image...",
             "avatar_save_progress": "Chargement de l'image...",
             "avatar_upload_error_text": "Le format de fichier n'est pas pris en charge ou l'image est plus grande que%(size)s.",
@@ -2889,6 +2890,7 @@
             "room_list_heading": "Liste de salons",
             "show_avatars_pills": "Afficher les avatars dans les mentions d'utilisateur, de salon et d’évènements",
             "show_polls_button": "Afficher le bouton des sondages",
+            "startup_window_behaviour_label": "Comportement au démarrage et de la fenêtre",
             "surround_text": "Entourer le texte sélectionné lors de la saisie de certains caractères",
             "time_heading": "Affichage de l’heure",
             "user_timezone": "Définir le fuseau horaire"
@@ -3062,7 +3064,12 @@
             "spaces_explainer": "Les espaces sont un nouveau moyen de regrouper les salons et les gens. En plus des espaces auxquels vous participez, vous pouvez également utiliser ceux qui sont prédéfinis.",
             "title": "Barre latérale"
         },
-        "start_automatically": "Démarrer automatiquement après la phase d'authentification du système",
+        "start_automatically": {
+            "disabled": "Non",
+            "enabled": "Oui",
+            "label": "Ouvrir %(brand)s au démarrage de votre ordinateur",
+            "minimised": "Minimisé"
+        },
         "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",

@@ -32,6 +32,7 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
 jest.mock("jszip");
 jest.mock("../../../../src/settings/SettingsStore");
@@ -75,6 +76,20 @@ const EVENT_ATTACHMENT_MALFORMED: IRoomEvent = {
     },
 };
 
+const EVENT_MENTION: IRoomEvent = {
+    event_id: "$4",
+    type: EventType.RoomMessage,
+    sender: "@bob:example.com",
+    origin_server_ts: 0,
+    content: {
+        "msgtype": "m.text",
+        "body": "Message Alex",
+        "format": "org.matrix.custom.html",
+        "formatted_body": 'Message <a href="https://matrix.to/#/@alex:example.org">@alex:example.org</a>',
+        "m.mentions": { user_ids: ["@alex:example.org"] },
+    },
+};
+
 describe("HTMLExport", () => {
     let client: jest.Mocked<MatrixClient>;
     let room: Room;
@@ -96,6 +111,7 @@ describe("HTMLExport", () => {
         jest.setSystemTime(REPEATABLE_DATE);
 
         client = stubClient() as jest.Mocked<MatrixClient>;
+        SdkContextClass.instance.client = client;
         DMRoomMap.makeShared(client);
 
         room = new Room("!myroom:example.org", client, "@me:example.org");
@@ -700,6 +716,25 @@ describe("HTMLExport", () => {
         });
 
         mockMessages(EVENT_MESSAGE);
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const file = getMessageFile(exporter);
+        expect(file).not.toBeUndefined();
+    });
+
+    it("should not crash when exporting mentions", async () => {
+        mockMessages(EVENT_MESSAGE, EVENT_MENTION);
         const exporter = new HTMLExporter(
             room,
             ExportType.LastNMessages,

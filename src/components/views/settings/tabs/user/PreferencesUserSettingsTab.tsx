@@ -34,6 +34,7 @@ import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
+import SettingsDropdown from "../../../elements/SettingsDropdown.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -248,11 +249,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
 
         const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
+        const brand = SdkConfig.get().brand;
 
-        // Always Preprend the default option
         const timezones = this.state.timezones.map((tz) => {
             return <div key={tz}>{tz}</div>;
         });
+        // Always prepend the default option
         timezones.unshift(<div key="">{browserTimezoneLabel}</div>);
 
         return (
@@ -263,6 +265,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <LanguageSection />
                         <SpellCheckSection />
                     </SettingsSubsection>
+
+                    {SettingsStore.canSetValue("Electron.autoLaunch", null, SettingLevel.PLATFORM) && (
+                        <SettingsSubsection heading={_t("settings|preferences|startup_window_behaviour_label")}>
+                            <SettingsDropdown
+                                settingKey="Electron.autoLaunch"
+                                label={_t("settings|start_automatically|label", { brand })}
+                                level={SettingLevel.PLATFORM}
+                                hideIfCannotSet
+                            />
+                        </SettingsSubsection>
+                    )}
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                         {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
@@ -356,7 +369,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             level={SettingLevel.PLATFORM}
                             hideIfCannotSet
                             label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
-                                appName: SdkConfig.get().brand,
+                                appName: brand,
                             })}
                         />
                         <SettingsFlag
@@ -366,7 +379,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             label={_t("settings|preferences|Electron.enableContentProtection")}
                         />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
-                        <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />
 
                         <Field

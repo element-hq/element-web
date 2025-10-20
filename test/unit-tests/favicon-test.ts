@@ -14,6 +14,8 @@ jest.useFakeTimers();
 
 describe("Favicon", () => {
     beforeEach(() => {
+        jest.restoreAllMocks();
+        document.getElementsByTagName("head")[0]?.remove();
         const head = document.createElement("head");
         window.document.documentElement.prepend(head);
     });
@@ -49,5 +51,41 @@ describe("Favicon", () => {
         jest.runAllTimers();
         const newLink = window.document.querySelector("link");
         expect(originalLink).not.toStrictEqual(newLink);
+    });
+
+    it("should default to 144px", () => {
+        const head = document.getElementsByTagName("head")[0];
+        const link = document.createElement("link");
+        link.rel = "icon";
+        link.href = "favicon.png";
+        head.appendChild(link);
+
+        const spy = jest.spyOn(document, "createElement");
+        const favicon = new Favicon();
+        jest.runAllTimers();
+
+        const img = spy.mock.results[0].value;
+        img.onload();
+
+        expect(favicon["canvas"].height).toBe(144);
+    });
+
+    it("should use the size of the last favicon", () => {
+        const head = document.getElementsByTagName("head")[0];
+        const link = document.createElement("link");
+        link.rel = "icon";
+        link.sizes = "512x512";
+        link.href = "favicon.png";
+        head.appendChild(link);
+
+        const spy = jest.spyOn(document, "createElement");
+        const favicon = new Favicon();
+        jest.runAllTimers();
+
+        const img = spy.mock.results[0].value;
+        img.height = 512;
+        img.onload();
+
+        expect(favicon["canvas"].height).toBe(512);
     });
 });

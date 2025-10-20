@@ -35,7 +35,7 @@ import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
+import { AvatarWithDetails } from "../../packages/shared-components/src/avatar/AvatarWithDetails";
 
 /**
  * Get the key for the incoming call toast. A combination of the event ID and room ID.

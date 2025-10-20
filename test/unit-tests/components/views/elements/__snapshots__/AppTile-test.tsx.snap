@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
 <DocumentFragment>
@@ -33,7 +33,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           />
         </div>
         <button
-          aria-labelledby="«r0»"
+          aria-labelledby="_r_0_"
           class="_icon-button_1pz9o_8"
           data-kind="secondary"
           data-testid="base-card-close-button"
@@ -342,8 +342,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="«r2n»"
-                aria-labelledby="«r2m»"
+                aria-describedby="_r_2n_"
+                aria-labelledby="_r_2m_"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg

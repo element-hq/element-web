@@ -51,7 +51,7 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
           class="mx_StyledRadioButton_content"
         >
           <span
-            aria-labelledby="«r0»"
+            aria-labelledby="_r_0_"
             class="mx_Login_underlinedServerName"
             tabindex="0"
           >

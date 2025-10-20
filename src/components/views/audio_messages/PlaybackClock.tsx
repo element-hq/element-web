@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { Clock } from "../../../shared-components/audio/Clock";
+import { Clock } from "../../../../packages/shared-components/src/audio/Clock";
 import { type Playback, PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 

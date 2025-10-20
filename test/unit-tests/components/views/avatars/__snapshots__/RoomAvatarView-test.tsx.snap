@@ -50,7 +50,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
     </span>
     <svg
       aria-label="This is a low priority room"
-      aria-labelledby="«r0»"
+      aria-labelledby="_r_0_"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -93,7 +93,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is public"
-      aria-labelledby="«rc»"
+      aria-labelledby="_r_c_"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
@@ -136,7 +136,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is a video room"
-      aria-labelledby="«r6»"
+      aria-labelledby="_r_6_"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -179,7 +179,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     </span>
     <svg
       aria-label="Away"
-      aria-labelledby="«r14»"
+      aria-labelledby="_r_14_"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
@@ -235,7 +235,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     </span>
     <svg
       aria-label="Busy"
-      aria-labelledby="«ru»"
+      aria-labelledby="_r_u_"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -293,7 +293,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     </span>
     <svg
       aria-label="Offline"
-      aria-labelledby="«ro»"
+      aria-labelledby="_r_o_"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -351,7 +351,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     </span>
     <svg
       aria-label="Online"
-      aria-labelledby="«ri»"
+      aria-labelledby="_r_i_"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"
