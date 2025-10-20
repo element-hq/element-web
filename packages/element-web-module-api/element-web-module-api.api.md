@@ -327,11 +327,11 @@ export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 // @alpha
 export interface SpacePanelItemProps {
     className?: string;
-    contextMenuTooltip?: string;
     icon?: JSX.Element;
     label: string;
     onSelected?(): void;
     style?: React.CSSProperties;
+    tooltip?: string;
 }
 
 // @public
