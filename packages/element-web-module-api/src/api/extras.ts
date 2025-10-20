@@ -18,7 +18,7 @@ export interface SpacePanelItemProps {
     className?: string;
 
     /**
-     * An icon to show in the item
+     * An icon to show in the item. If not provided, no icon will be shown.
      */
     icon?: JSX.Element;
 
