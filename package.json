@@ -122,6 +122,7 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
+        "linkify-html": "4.3.2",
         "linkify-react": "4.3.2",
         "linkify-string": "4.3.2",
         "linkifyjs": "4.3.2",
