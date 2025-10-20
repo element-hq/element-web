@@ -30,7 +30,7 @@ export interface SpacePanelItemProps {
     /**
      * A tooltip to show when hovering over the item
      */
-    contextMenuTooltip?: string;
+    tooltip?: string;
 
     /**
      * Styles to apply to the item
