@@ -218,7 +218,7 @@ export class ElementAppPage {
      */
     public async inviteUserToCurrentRoom(userId: string): Promise<void> {
         await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
-        await this.page.getByLabel("Right panel").getByRole("menuitem", { name: "Invite" }).click();
+        await this.page.getByTestId("right-panel").getByRole("menuitem", { name: "Invite" }).click();
 
         const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
         await input.fill(userId);
