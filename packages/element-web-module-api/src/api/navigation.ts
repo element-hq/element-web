@@ -5,6 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { JSX } from "react";
+
+/**
+ * A function called to render a component when a user navigates to the corresponding
+ * location. Currently renders alongside just the SpacePanel.
+ * @alpha
+ */
+export type LocationRenderFunction = () => JSX.Element;
+
 /**
  * API methods to navigate the application.
  * @public
@@ -16,4 +25,12 @@ export interface NavigationApi {
      * @param join - If true, the user will be made to attempt to join the room/space if they are not already a member.
      */
     toMatrixToLink(link: string, join?: boolean): Promise<void>;
+
+    /**
+     * Register a renderer for a given location path.
+     * @param path - The location path to register the renderer for.
+     * @param renderer - The function that will render the component for the location.
+     * @alpha
+     */
+    registerLocationRenderer(path: string, renderer: LocationRenderFunction): void;
 }

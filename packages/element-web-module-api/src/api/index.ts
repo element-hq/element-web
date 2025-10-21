@@ -15,6 +15,8 @@ import { NavigationApi } from "./navigation.ts";
 import { DialogApiExtension } from "./dialog.ts";
 import { AccountAuthApiExtension } from "./auth.ts";
 import { ProfileApiExtension } from "./profile.ts";
+import { ExtrasApi } from "./extras.ts";
+import { BuiltinsApi } from "./builtins.ts";
 
 /**
  * Module interface for modules to implement.
@@ -104,10 +106,22 @@ export interface Api
     readonly customComponents: CustomComponentsApi;
 
     /**
+     * Allows modules to render components that are part of Element Web.
+     * @alpha
+     */
+    readonly builtins: BuiltinsApi;
+
+    /**
      * API to navigate the application.
      * @public
      */
     readonly navigation: NavigationApi;
+
+    /**
+     * Allows modules to insert extra UI into Element Web.
+     * @alpha
+     */
+    readonly extras: ExtrasApi;
 
     /**
      * Create a ReactDOM root for rendering React components.
