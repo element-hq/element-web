@@ -15,7 +15,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { arrayFastClone } from "../utils/arrays";
 import { PlaybackManager } from "./PlaybackManager";
 import { isVoiceMessage } from "../utils/EventUtils";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type RoomViewStore } from "../stores/RoomViewStore";
 
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
@@ -38,10 +38,18 @@ export class PlaybackQueue {
     private currentPlaybackId: string | null = null; // event ID, broken out from above for ease of use
     private recentFullPlays = new Set<string>(); // event IDs
 
-    public constructor(private room: Room) {
+    /**
+     * Create a PlaybackQueue for a given room.
+     * @param room The room
+     * @param roomViewStore The RoomViewStore instance
+     */
+    public constructor(
+        private room: Room,
+        private roomViewStore: RoomViewStore,
+    ) {
         this.loadClocks();
 
-        SdkContextClass.instance.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {
+        this.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {
             if (!isActive) return;
 
             // Reset the state of the playbacks before they start mounting and enqueuing updates.
@@ -53,14 +61,20 @@ export class PlaybackQueue {
         });
     }
 
-    public static forRoom(roomId: string): PlaybackQueue {
+    /**
+     * Get the PlaybackQueue for a given room, creating it if necessary.
+     * @param roomId The ID of the room
+     * @param roomViewStore The RoomViewStore instance
+     * @returns The PlaybackQueue for the room
+     */
+    public static forRoom(roomId: string, roomViewStore: RoomViewStore): PlaybackQueue {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(roomId);
         if (!room) throw new Error("Unknown room");
         if (PlaybackQueue.queues.has(room.roomId)) {
             return PlaybackQueue.queues.get(room.roomId)!;
         }
-        const queue = new PlaybackQueue(room);
+        const queue = new PlaybackQueue(room, roomViewStore);
         PlaybackQueue.queues.set(room.roomId, queue);
         return queue;
     }
