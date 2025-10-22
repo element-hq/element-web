@@ -2124,7 +2124,6 @@
             "metaspaces_subsection": "Espazos a mostrar",
             "title": "Barra lateral"
         },
-        "start_automatically": "Iniciar automaticamente despois de iniciar sesión",
         "use_12_hour_format": "Mostrar marcas de tempo con formato 12 horas (ex. 2:30pm)",
         "use_command_enter_send_message": "Usar Command + Enter para enviar unha mensaxe",
         "use_command_f_search": "Usar Command + F para buscar na cronoloxía",

@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsDropdown /> should render a disabled setting 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsDropdown"
+  >
+    <label
+      class="mx_SettingsDropdown_label"
+      for="_r_0_"
+    >
+      <span
+        class="mx_SettingsDropdown_labelText"
+      >
+        Open %(brand)s when you log in to your computer
+      </span>
+    </label>
+    <div
+      class="mx_Dropdown mx_Dropdown_disabled"
+    >
+      <div
+        aria-describedby="_r_0__value"
+        aria-disabled="true"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-label="Open %(brand)s when you log in to your computer"
+        aria-owns="_r_0__input"
+        class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput mx_AccessibleButton_disabled"
+        disabled=""
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Dropdown_option"
+          id="_r_0__value"
+        >
+          <div>
+            No
+          </div>
+        </div>
+        <span
+          class="mx_Dropdown_arrow"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

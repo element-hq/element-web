@@ -1921,7 +1921,6 @@
         "thread_list": {
             "context_menu_label": "Dewisiadau edafedd"
         },
-        "title": "Panel dde",
         "video_room_chat": {
             "title": "Sgwrs"
         }
@@ -3058,7 +3057,6 @@
             "spaces_explainer": "Mae gofodau yn ffyrdd o grwpio ystafelloedd a phobl. Ochr yn ochr â'r lleoedd rydych chi ynddynt, gallwch chi ddefnyddio rhai sydd wedi'u hadeiladu ymlaen llaw hefyd.",
             "title": "Bar Ochr"
         },
-        "start_automatically": "Dechrau'n awtomatig ar ôl mewngofnodi i'r system",
         "tac_only_notifications": "Dim ond dangos hysbysiadau yng nghanolfan gweithgaredd yr edefyn",
         "use_12_hour_format": "Dangos stampiau amser mewn fformat 12 awr (e.e. 2:30pm)",
         "use_command_enter_send_message": "Defnyddiwch Command + Enter i anfon neges",

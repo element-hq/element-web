@@ -1917,7 +1917,6 @@
         "thread_list": {
             "context_menu_label": "Trådalternativer"
         },
-        "title": "Høyre panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -2890,6 +2889,7 @@
             "room_list_heading": "Romliste",
             "show_avatars_pills": "Vis avatarer i bruker-, rom- og hendelsesomtaler",
             "show_polls_button": "Vis avstemninger-knapp",
+            "startup_window_behaviour_label": "Oppstart og vindusatferd",
             "surround_text": "Omgi valgt tekst når du skriver spesialtegn",
             "time_heading": "Viser tid",
             "user_timezone": "Angi tidssone"
@@ -3063,7 +3063,12 @@
             "spaces_explainer": "Områder er måter å gruppere rom og mennesker på. Ved siden av områdene du er i, kan du også bruke noen forhåndsbygde.",
             "title": "Sidepanel"
         },
-        "start_automatically": "Start automatisk etter systempålogging",
+        "start_automatically": {
+            "disabled": "Nei",
+            "enabled": "Ja",
+            "label": "Åpne %(brand)s når du logger deg på datamaskinen din.",
+            "minimised": "Minimert"
+        },
         "tac_only_notifications": "Vis bare varsler i trådens aktivitetssenter",
         "use_12_hour_format": "Vis tidsstempler i 12-timersformat (f.eks. 2:30pm)",
         "use_command_enter_send_message": "Bruk Kommando + Enter for å sende en melding",

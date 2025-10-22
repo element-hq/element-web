@@ -2544,7 +2544,6 @@
             "spaces_explainer": "Avaruudet ovat tapa ryhmitellä huoneita ja ihmisiä. Voit käyttää nykyisten avaruuksiesi lisäksi esivalmisteltuja avaruuksia.",
             "title": "Sivupalkki"
         },
-        "start_automatically": "Käynnistä automaattisesti käyttöjärjestelmään kirjautumisen jälkeen",
         "use_12_hour_format": "Näytä aikaleimat 12 tunnin muodossa (esim. 2:30pm)",
         "use_command_enter_send_message": "Komento + Enter lähettää viestin",
         "use_command_f_search": "Komento + F hakee aikajanalta",

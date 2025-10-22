@@ -1916,7 +1916,6 @@
         "thread_list": {
             "context_menu_label": "Thread-Optionen"
         },
-        "title": "Rechte Seitenleiste",
         "video_room_chat": {
             "title": "Unterhaltung"
         }
@@ -2663,6 +2662,7 @@
             "allow_spellcheck": "Rechtschreibprüfung zulassen",
             "application_language": "Anwendungssprache",
             "application_language_reload_hint": "Nach Änderung der Sprache wird die App neu gestartet",
+            "avatar_open_menu": "Avatar-Menü öffnen",
             "avatar_remove_progress": "Bild wird entfernt...",
             "avatar_save_progress": "Bild wird hochgeladen...",
             "avatar_upload_error_text": "Das Dateiformat wird nicht unterstützt oder das Bild ist größer als %(size)s.",
@@ -2860,6 +2860,7 @@
             "rule_tombstone": "Wenn die Chat-Version aktualisiert wird",
             "show_message_desktop_notification": "Nachrichteninhalt in der Desktopbenachrichtigung anzeigen",
             "sounds_release_announcement": {
+                "description": "Deine Benachrichtigungs- und Anruftöne wurden verbessert – sie sind jetzt klarer, schneller und weniger störend.",
                 "title": "Wir haben deine Sounds aktualisiert"
             },
             "voip": "Audio- und Videoanrufe"
@@ -2888,6 +2889,7 @@
             "room_list_heading": "Chatliste",
             "show_avatars_pills": "Avatare in Nutzer-, Chat- und Ereigniserwähnungen anzeigen",
             "show_polls_button": "Zeige Pol button",
+            "startup_window_behaviour_label": "Start- und Fensterverhalten",
             "surround_text": "Sonderzeichen automatisch vor und hinter Textauswahl setzen",
             "time_heading": "Zeitanzeige",
             "user_timezone": "Zeitzone festlegen"
@@ -3061,7 +3063,12 @@
             "spaces_explainer": "Spaces sind eine Möglichkeit, Gruppen und Personen zu bündeln. Neben den Spaces, in denen du dich befindest, kannst du auch einige vorgefertigte verwenden.",
             "title": "Seitenleiste"
         },
-        "start_automatically": "Nach Systemstart automatisch starten",
+        "start_automatically": {
+            "disabled": "Nein",
+            "enabled": "Ja",
+            "label": "Öffne %(brand)s, wenn du dich an deinem Computer anmeldest",
+            "minimised": "Minimiert"
+        },
         "tac_only_notifications": "Benachrichtigungen nur im Thread Aktivitätszentrum anzeigen",
         "use_12_hour_format": "Uhrzeiten im 12-Stundenformat (z. B. 2:30 p. m.)",
         "use_command_enter_send_message": "Benutze Betriebssystemtaste + Eingabe um eine Nachricht zu senden",

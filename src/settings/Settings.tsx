@@ -12,7 +12,7 @@ import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } 
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 // Import i18n.tsx instead of languageHandler to avoid circular deps
-import { _t, _td, type TranslationKey } from "../shared-components/utils/i18n";
+import { _t, _td, type TranslationKey } from "../../packages/shared-components/src/utils/i18n";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
@@ -179,6 +179,14 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
      * Whether the setting should be exported in a rageshake report.
      */
     shouldExportToRageshake?: boolean;
+
+    /**
+     * Options array for a setting controlled by a dropdown.
+     */
+    options?: {
+        value: T;
+        label: TranslationKey;
+    }[];
 }
 
 export interface IFeature extends Omit<IBaseSetting<boolean>, "isFeature"> {
@@ -353,7 +361,7 @@ export interface Settings {
     "videoInputMuted": IBaseSetting<boolean>;
     "activeCallRoomIds": IBaseSetting<string[]>;
     "releaseAnnouncementData": IBaseSetting<ReleaseAnnouncementData>;
-    "Electron.autoLaunch": IBaseSetting<boolean>;
+    "Electron.autoLaunch": IBaseSetting<"enabled" | "minimised" | "disabled">;
     "Electron.warnBeforeExit": IBaseSetting<boolean>;
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
@@ -1438,8 +1446,13 @@ export const SETTINGS: Settings = {
     // We store them over there are they are necessary to know before the renderer process launches.
     "Electron.autoLaunch": {
         supportedLevels: [SettingLevel.PLATFORM],
-        displayName: _td("settings|start_automatically"),
-        default: false,
+        displayName: _td("settings|start_automatically|label"),
+        options: [
+            { value: "enabled", label: _td("settings|start_automatically|enabled") },
+            { value: "disabled", label: _td("settings|start_automatically|disabled") },
+            { value: "minimised", label: _td("settings|start_automatically|minimised") },
+        ],
+        default: "disabled",
     },
     "Electron.warnBeforeExit": {
         supportedLevels: [SettingLevel.PLATFORM],

@@ -70,6 +70,20 @@ export class ElementAppPage {
     }
 
     /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
+    }
+
+    /**
      * Opens the given room by name. The room must be visible in the
      * room list and the room may contain unread messages.
      *
@@ -195,6 +209,21 @@ export class ElementAppPage {
         const memberlist = this.page.locator(".mx_MemberListView");
         await memberlist.waitFor();
         return memberlist;
+    }
+
+    /**
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
+     */
+    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+        await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
+        await this.page.getByTestId("right-panel").getByRole("menuitem", { name: "Invite" }).click();
+
+        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
     /**

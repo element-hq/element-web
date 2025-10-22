@@ -994,6 +994,7 @@
                 "skip_verification": "Prozatím přeskočit ověřování",
                 "verify_this_device": "Ověřit toto zařízení"
             },
+            "cancelled_verification": "Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření.",
             "cancelling": "Rušení…",
             "cant_confirm": "Nemůžete potvrdit?",
             "complete_action": "OK",
@@ -1001,6 +1002,7 @@
             "complete_title": "Ověřeno!",
             "confirm_identity_description": "Ověřte toto zařízení a nastavte zabezpečené zasílání zpráv.",
             "confirm_identity_title": "Potvrďte svou totožnost",
+            "confirm_the_emojis": "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na vašem druhém zařízení.",
             "error_starting_description": "Nepodařilo se zahájit chat s druhým uživatelem.",
             "error_starting_title": "Chyba při zahájení ověření",
             "explainer": "Bezpečné zprávy s tímto uživatelem jsou koncově šifrované a nikdo další je nemůže číst.",
@@ -1027,15 +1029,21 @@
                 "wrong_fingerprint": "Nelze ověřit zařízení '%(deviceId)s' - zadaný otisk prstu '%(fingerprint)s' neodpovídá otisku prstu zařízení, '%(fprint)s'"
             },
             "no_support_qr_emoji": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
+            "now_you_can": "Nyní můžete bezpečně číst nebo odesílat zprávy a tomuto zařízení může důvěřovat kdokoli, s kým si povídáte.",
+            "once_accepted_can_continue": "Po přijetí budete moci pokračovat s ověřením.",
             "other_party_cancelled": "Druhá strana ověření zrušila.",
             "prompt_encrypted": "Ověřit všechny uživatele v místnosti, abyste se přesvědčili o bezpečnosti.",
             "prompt_unencrypted": "V šifrovaných místnostech ověřte všechny uživatele, abyste zajistili bezpečnost komunikace.",
             "qr_or_sas": "%(qrCode)s nebo %(emojiCompare)s",
             "qr_prompt": "Naskenujte tento jedinečný kód",
+            "qr_reciprocate_check_again_device": "Zkontrolujte znovu na svém druhém zařízení, abyste dokončili ověření.",
+            "qr_reciprocate_no": "Ne, nevidím zelený štít",
             "qr_reciprocate_same_shield_user": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
+            "qr_reciprocate_yes": "Ano, vidím zelený štít",
             "request_toast_accept_user": "Ověřit uživatele",
             "request_toast_decline_counter": "Ignorovat (%(counter)s)",
             "request_toast_detail": "%(deviceId)s z %(ip)s",
+            "request_toast_start_verification": "Zahájit ověření",
             "sas_caption_self": "Ověřte toto zařízení tak, že potvrdíte, že se na jeho obrazovce zobrazí následující číslo.",
             "sas_caption_user": "Ověřte uživatele zkontrolováním, že se na obrazovce objevila stejná čísla.",
             "sas_description": "Pokud na žádném zařízení nemáte kameru, porovnejte jedinečnou kombinaci emoji",
@@ -1055,12 +1063,18 @@
             "unverified_sessions_toast_title": "Máte neověřené relace",
             "use_another_device": "Použít jiné zařízení",
             "use_recovery_key": "Použít klíč pro obnovení",
+            "verification_dialog_title_choose": "Vyberte způsob ověření",
+            "verification_dialog_title_compare_emojis": "Porovnejte emotikony",
+            "verification_dialog_title_confirm_green_shield": "Potvrďte, že na druhém zařízení vidíte zelený štít",
             "verification_dialog_title_device": "Ověřit jiné zařízení",
             "verification_dialog_title_failed": "Ověření se nezdařilo",
+            "verification_dialog_title_start_on_other_device": "Spusťte ověření na druhém zařízení",
             "verification_dialog_title_user": "Požadavek na ověření",
+            "verification_dialog_title_verified": "Zařízení ověřeno",
             "verification_skip_warning": "Bez ověření nebudete mít přístup ke všem svým zprávám a můžete se ostatním jevit jako nedůvěryhodní.",
             "verification_success_with_backup": "Vaše nové zařízení je nyní ověřeno. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé jej budou považovat za důvěryhodné.",
             "verification_success_without_backup": "Vaše nové zařízení je nyní ověřeno. Ostatní uživatelé jej uvidí jako důvěryhodné.",
+            "verify_by_completing_one_of": "Ověřte provedením jedné z následujících akcí:",
             "verify_emoji": "Ověřit pomocí emoji",
             "verify_emoji_prompt": "Ověření porovnáním několika emoji.",
             "verify_emoji_prompt_qr": "Pokud vám skenování kódů nefunguje, ověřte se porovnáním emoji.",
@@ -1906,7 +1920,6 @@
         "thread_list": {
             "context_menu_label": "Možnosti vláken"
         },
-        "title": "Pravý panel",
         "video_room_chat": {
             "title": "Chatovat"
         }
@@ -2656,6 +2669,7 @@
             "allow_spellcheck": "Povolit kontrolu pravopisu",
             "application_language": "Jazyk aplikace",
             "application_language_reload_hint": "Po výběru jiného jazyka se aplikace znovu načte.",
+            "avatar_open_menu": "Otevřít nabídku avatara",
             "avatar_remove_progress": "Odstranění obrázku...",
             "avatar_save_progress": "Nahrávání obrázku...",
             "avatar_upload_error_text": "Formát souboru není podporován nebo je obrázek větší než %(size)s.",
@@ -2852,6 +2866,10 @@
             "rule_suppress_notices": "Zprávy poslané robotem",
             "rule_tombstone": "Při aktualizaci místnosti",
             "show_message_desktop_notification": "Zobrazit text zprávy v oznámení na ploše",
+            "sounds_release_announcement": {
+                "description": "Zvuky oznámení a vyzvánění hovorů byly aktualizovány – nyní jsou jasnější, rychlejší a méně rušivé",
+                "title": "Aktualizovali jsme vaše zvuky"
+            },
             "voip": "Hlasové a video hovory"
         },
         "preferences": {
@@ -2878,6 +2896,7 @@
             "room_list_heading": "Seznam místností",
             "show_avatars_pills": "Zobrazovat avatary ve zmínkách o uživatelích, místnostech a událostech",
             "show_polls_button": "Zobrazit tlačítko hlasování",
+            "startup_window_behaviour_label": "Spuštění a chování okna",
             "surround_text": "Ohraničit označený text při psaní speciálních znaků",
             "time_heading": "Zobrazování času",
             "user_timezone": "Nastavit časové pásmo"
@@ -3052,7 +3071,12 @@
             "spaces_explainer": "Prostory jsou způsoby, jak seskupit místnosti a lidi. Kromě prostor, ve kterých se nacházíte, můžete použít i některé předem vytvořené.",
             "title": "Postranní panel"
         },
-        "start_automatically": "Zahájit automaticky po přihlášení do systému",
+        "start_automatically": {
+            "disabled": "Ne",
+            "enabled": "Ano",
+            "label": "Spustit %(brand)s když se přihlásíte k počítači",
+            "minimised": "Minimalizováno"
+        },
         "tac_only_notifications": "Zobrazení oznámení pouze v centru aktivity vlákna",
         "use_12_hour_format": "Zobrazovat čas v 12hodinovém formátu (např. 2:30 odp.)",
         "use_command_enter_send_message": "K odeslání zprávy použijte Command + Enter",

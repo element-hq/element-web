@@ -18,7 +18,7 @@ import { LegacyCallEventGrouperEvent } from "../../structures/LegacyCallEventGro
 import AccessibleButton from "../elements/AccessibleButton";
 import InfoTooltip, { InfoTooltipKind } from "../elements/InfoTooltip";
 import { formatPreciseDuration } from "../../../DateUtils";
-import { Clock } from "../../../shared-components/audio/Clock";
+import { Clock } from "../../../../packages/shared-components/src/audio/Clock";
 
 const MAX_NON_NARROW_WIDTH = (450 / 70) * 100;
 
