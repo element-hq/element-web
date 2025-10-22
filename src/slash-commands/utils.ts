@@ -29,8 +29,7 @@ export function successSync(value: any): RunResult {
     return success(Promise.resolve(value));
 }
 
-export const canAffectPowerlevels = (cli: MatrixClient | null): boolean => {
-    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+export const canAffectPowerlevels = (cli: MatrixClient | null, roomId: string | null): boolean => {
     if (!cli || !roomId) return false;
     const room = cli?.getRoom(roomId);
     return !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getSafeUserId()) && !isLocalRoom(room);

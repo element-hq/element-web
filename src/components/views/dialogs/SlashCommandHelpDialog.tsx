@@ -14,13 +14,14 @@ import InfoDialog from "./InfoDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
+    roomId: string;
     onFinished(): void;
 }
 
-const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
+const SlashCommandHelpDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
     const categories: Record<string, Command[]> = {};
     Commands.forEach((cmd) => {
-        if (!cmd.isEnabled(MatrixClientPeg.get())) return;
+        if (!cmd.isEnabled(MatrixClientPeg.get(), roomId)) return;
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
         }
