@@ -7,7 +7,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -15,6 +14,7 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Optional } from "matrix-events-sdk";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 
 function getIndexByRoomId(rooms: Room[], roomId: Optional<string>): number | undefined {
     const index = rooms.findIndex((room) => room.roomId === roomId);
@@ -87,8 +87,9 @@ export interface StickyRoomListResult {
  * @see {@link StickyRoomListResult} details what this hook returns..
  */
 export function useStickyRoomList(roomsResult: RoomsResult): StickyRoomListResult {
+    const { roomId } = useScopedRoomContext("roomId");
     const [listState, setListState] = useState<StickyRoomListResult>({
-        activeIndex: getIndexByRoomId(roomsResult.rooms, SdkContextClass.instance.roomViewStore.getRoomId()),
+        activeIndex: getIndexByRoomId(roomsResult.rooms, roomId),
         roomsResult: roomsResult,
     });
 
@@ -97,7 +98,7 @@ export function useStickyRoomList(roomsResult: RoomsResult): StickyRoomListResul
     const updateRoomsAndIndex = useCallback(
         (newRoomId: string | null, isRoomChange: boolean = false) => {
             setListState((current) => {
-                const activeRoomId = newRoomId ?? SdkContextClass.instance.roomViewStore.getRoomId();
+                const activeRoomId = newRoomId ?? roomId;
                 const newActiveIndex = getIndexByRoomId(roomsResult.rooms, activeRoomId);
                 const oldIndex = current.activeIndex;
                 const { newIndex, newRooms } = getRoomsWithStickyRoom(
