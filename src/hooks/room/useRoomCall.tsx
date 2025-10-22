@@ -26,7 +26,6 @@ import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
 import { type IApp } from "../../stores/WidgetStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
@@ -37,6 +36,7 @@ import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 
 export enum PlatformCallType {
     ElementCall,
@@ -98,6 +98,7 @@ export const useRoomCall = (
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
+    const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
@@ -124,9 +125,9 @@ export const useRoomCall = (
     const hasGroupCall = groupCall !== null;
     const hasActiveCallSession = useParticipantCount(groupCall) > 0;
     const isViewingCall = useEventEmitterState(
-        SdkContextClass.instance.roomViewStore,
+        roomViewStore,
         UPDATE_EVENT,
-        () => SdkContextClass.instance.roomViewStore.isViewingCall() || isVideoRoom(room),
+        () => roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     // room
