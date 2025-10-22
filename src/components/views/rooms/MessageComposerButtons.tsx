@@ -170,7 +170,7 @@ interface IUploadButtonProps {
 // We put the file input outside the UploadButton component so that it doesn't get killed when the context menu closes.
 const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, relation, children }) => {
     const cli = useContext(MatrixClientContext);
-    const roomContext = useScopedRoomContext("timelineRenderingType");
+    const roomContext = useScopedRoomContext("timelineRenderingType", "replyToEvent");
     const uploadInput = useRef<HTMLInputElement>(null);
 
     const onUploadClick = (): void => {
@@ -195,6 +195,7 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
             Array.from(ev.target.files!),
             roomId,
             relation,
+            roomContext.replyToEvent,
             cli,
             roomContext.timelineRenderingType,
         );

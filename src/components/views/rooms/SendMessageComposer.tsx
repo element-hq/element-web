@@ -565,6 +565,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 Array.from(data.files),
                 this.props.room.roomId,
                 this.props.relation,
+                this.context.replyToEvent,
                 this.props.mxClient,
                 this.context.timelineRenderingType,
             );
