@@ -35,7 +35,7 @@ interface ICommandOpts {
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
-    isEnabled?(matrixClient: MatrixClient | null): boolean;
+    isEnabled?(matrixClient: MatrixClient | null, roomId: string | null): boolean;
     renderingTypes?: TimelineRenderingType[];
 }
 
@@ -49,7 +49,7 @@ export class Command {
     public readonly hideCompletionAfterSpace: boolean;
     public readonly renderingTypes?: TimelineRenderingType[];
     public readonly analyticsName?: SlashCommandEvent["command"];
-    private readonly _isEnabled?: (matrixClient: MatrixClient | null) => boolean;
+    private readonly _isEnabled?: (matrixClient: MatrixClient | null, roomId: string | null) => boolean;
 
     public constructor(opts: ICommandOpts) {
         this.command = opts.command;
@@ -102,7 +102,7 @@ export class Command {
         return _t("slash_command|usage") + ": " + this.getCommandWithArgs();
     }
 
-    public isEnabled(cli: MatrixClient | null): boolean {
-        return this._isEnabled?.(cli) ?? true;
+    public isEnabled(cli: MatrixClient | null, roomId: string | null): boolean {
+        return this._isEnabled?.(cli, roomId) ?? true;
     }
 }
