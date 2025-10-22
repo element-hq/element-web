@@ -195,8 +195,8 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
             Array.from(ev.target.files!),
             roomId,
             relation,
-            cli,
             roomContext.replyToEvent,
+            cli,
             roomContext.timelineRenderingType,
         );
 

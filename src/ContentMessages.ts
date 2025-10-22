@@ -55,7 +55,6 @@ import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog"
 import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
-import { SdkContextClass } from "./contexts/SDKContext";
 import { blobIsAnimated } from "./utils/Image.ts";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
@@ -428,12 +427,22 @@ export default class ContentMessages {
         return this.mediaConfig?.["m.upload.size"] ?? null;
     }
 
+    /**
+     * Sends a list of files to a room.
+     * @param files - The files to send.
+     * @param roomId - The ID of the room to send the files to.
+     * @param relation - The relation to the event being replied to.
+     * @param replyToEvent - The event being replied to, if any.
+     * @param matrixClient - The Matrix client to use for sending the files.
+     * @param context - The context in which the files are being sent.
+     * @returns A promise that resolves when the files have been sent.
+     */
     public async sendContentListToRoom(
         files: File[],
         roomId: string,
         relation: IEventRelation | undefined,
-        matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
+        matrixClient: MatrixClient,
         context = TimelineRenderingType.Room,
     ): Promise<void> {
         if (matrixClient.isGuest()) {

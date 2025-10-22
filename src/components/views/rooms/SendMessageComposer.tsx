@@ -565,8 +565,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 Array.from(data.files),
                 this.props.room.roomId,
                 this.props.relation,
-                this.props.mxClient,
                 this.context.replyToEvent,
+                this.props.mxClient,
                 this.context.timelineRenderingType,
             );
             return true; // to skip internal onPaste handler
