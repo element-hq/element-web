@@ -433,6 +433,7 @@ export default class ContentMessages {
         roomId: string,
         relation: IEventRelation | undefined,
         matrixClient: MatrixClient,
+        replyToEvent: MatrixEvent | undefined,
         context = TimelineRenderingType.Room,
     ): Promise<void> {
         if (matrixClient.isGuest()) {
@@ -440,7 +441,6 @@ export default class ContentMessages {
             return;
         }
 
-        const replyToEvent = SdkContextClass.instance.roomViewStore.getQuotingEvent();
         if (!this.mediaConfig) {
             // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");

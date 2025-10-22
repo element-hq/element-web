@@ -1124,6 +1124,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         roomId,
                         undefined,
                         this.context.client,
+                        this.state.replyToEvent,
                     );
                 }
 
@@ -2043,6 +2044,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             roomId,
             undefined,
             this.context.client,
+            this.state.replyToEvent,
             TimelineRenderingType.Room,
         );
     };
