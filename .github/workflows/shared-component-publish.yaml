@@ -29,6 +29,11 @@ jobs:
               # a build
               run: yarn --cwd packages/shared-components install --pure-lockfile
 
+            # NPM on github actions doesn't prepare as part of publish for reasons unknown
+            - name: 🚀 Prepare
+              working-directory: packages/shared-components
+              run: yarn prepare
+
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
               run: npm publish --access public --provenance
