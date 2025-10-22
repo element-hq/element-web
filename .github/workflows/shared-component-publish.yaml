@@ -32,7 +32,7 @@ jobs:
             # NPM on github actions doesn't prepare as part of publish for reasons unknown
             - name: 🚀 Prepare
               working-directory: packages/shared-components
-              run: yarn prepare
+              run: yarn run prepare
 
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
