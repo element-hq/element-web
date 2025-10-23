@@ -54,6 +54,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
+    readonly stores: StoresApi;
 }
 
 // @alpha
@@ -337,6 +338,12 @@ export interface RoomListCustomisations<Room> {
     isRoomVisible?(room: Room): boolean;
 }
 
+// @public
+export interface RoomListStoreApi {
+    getRooms(): Room[];
+    waitForReady(): Promise<void>;
+}
+
 // @alpha
 export interface RoomViewProps {
     roomId?: string;
@@ -353,6 +360,11 @@ export interface SpacePanelItemProps {
     onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
+}
+
+// @public
+export interface StoresApi {
+    getRoomListStore(): RoomListStoreApi;
 }
 
 // @public
