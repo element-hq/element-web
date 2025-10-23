@@ -18,6 +18,14 @@ import { _t, type TranslationKey, UserFriendlyError } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { CommandCategories, type RunResult } from "./interface";
 
+/**
+ * The function signature for the run function of a {@link Command}
+ * @param matrixClient - The Matrix client
+ * @param roomId - The room ID where the command is run
+ * @param threadId - The thread ID where the command is run, or null for room timeline
+ * @param args - The arguments passed to the command
+ * @returns The result of running the command
+ */
 type RunFn = (
     this: Command,
     matrixClient: MatrixClient,
@@ -26,6 +34,19 @@ type RunFn = (
     args?: string,
 ) => RunResult;
 
+/**
+ * Options for {@link Command}
+ * @param command - The command name, e.g. "me" for the /me command
+ * @param aliases - Alternative names for the command
+ * @param args - The arguments for the command, e.g. "<message>" for the /me command
+ * @param description - A translation key describing the command
+ * @param analyticsName - The name to use for analytics tracking
+ * @param runFn - The function to execute when the command is run
+ * @param category - The category of the command, e.g. CommandCategories.emoji
+ * @param hideCompletionAfterSpace - Whether to hide autocomplete after a space is typed
+ * @param isEnabled - A function to determine if the command is enabled in a given context
+ * @param renderingTypes - The rendering types (room/thread) where this command is valid
+ */
 interface ICommandOpts {
     command: string;
     aliases?: string[];

@@ -29,6 +29,12 @@ export function successSync(value: any): RunResult {
     return success(Promise.resolve(value));
 }
 
+/**
+ * Check whether the user can affect power levels in the given room
+ * @param cli - The Matrix client
+ * @param roomId - The room ID
+ * @returns True if the user can affect power levels, false otherwise
+ */
 export const canAffectPowerlevels = (cli: MatrixClient | null, roomId: string | null): boolean => {
     if (!cli || !roomId) return false;
     const room = cli?.getRoom(roomId);
