@@ -43,5 +43,12 @@ export default defineConfig({
             $webapp: resolve(__dirname, "..", "..", "webapp"),
         },
     },
-    plugins: [dts({ rollupTypes: true, include: ["src/**/*.{ts,tsx}"], exclude: ["src/**/*.test.{ts,tsx}"], copyDtsFiles: true })],
+    plugins: [
+        dts({
+            rollupTypes: true,
+            include: ["src/**/*.{ts,tsx}"],
+            exclude: ["src/**/*.test.{ts,tsx}"],
+            copyDtsFiles: true,
+        }),
+    ],
 });
