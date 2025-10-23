@@ -17,11 +17,11 @@ export interface AccountDataApi {
      */
     get(eventType: string): unknown;
     /**
-     * Sett account data on the homeserver.
+     * Set account data on the homeserver.
      */
     set(eventType: string, content: unknown): Promise<void>;
     /**
-     * Delete account data from homeserver.
+     * Changes the content of this event to be empty.
      */
     delete(eventType: string): Promise<void>;
 }
