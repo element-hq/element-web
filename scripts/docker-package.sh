@@ -17,4 +17,9 @@ else
 fi
 
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")
+
+# Build resources as the shared components need them
+yarn run build:res
+yarn --cwd packages/shared-components
+
 VERSION=$DIST_VERSION yarn build
