@@ -26,7 +26,7 @@ import {
 } from "../../../../test-utils";
 import DateSeparator from "../../../../../src/components/views/messages/DateSeparator";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import RoomContext from "../../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../../src/settings/SettingsStore");
