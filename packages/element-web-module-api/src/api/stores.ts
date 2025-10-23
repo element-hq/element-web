@@ -31,5 +31,5 @@ export interface StoresApi {
     /**
      * Use this to access limited functionality of the RLS from element-web.
      */
-    getRoomListStore(): RoomListStoreApi;
+    roomListStore: RoomListStoreApi;
 }
