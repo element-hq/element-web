@@ -25,11 +25,10 @@ export interface RoomViewProps {
  */
 export interface BuiltinsApi {
     /**
-     * Returns the RoomView component used by Element Web to render a room such that
-     * modules can render it as part of their own custom room views.
+     * Render room view component from element-web.
      *
      * @alpha
-     * @returns The RoomView component.
+     * @param roomId - Id of the room
      */
-    getRoomViewComponent(): React.ComponentType<RoomViewProps>;
+    renderRoomView(roomId: string): React.ReactNode;
 }
