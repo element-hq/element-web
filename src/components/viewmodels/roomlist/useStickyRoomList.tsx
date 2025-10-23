@@ -110,7 +110,7 @@ export function useStickyRoomList(roomsResult: RoomsResult): StickyRoomListResul
                 return { activeIndex: newIndex, roomsResult: { ...roomsResult, rooms: newRooms } };
             });
         },
-        [roomsResult],
+        [roomsResult, roomId],
     );
 
     // Re-calculate the index when the active room has changed.
