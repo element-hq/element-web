@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "../models/Room";
+import { Watchable } from "./watchable";
 
 /**
  * Modify account data stored on the homeserver.
@@ -13,9 +14,9 @@ import type { Room } from "../models/Room";
  */
 export interface AccountDataApi {
     /**
-     * Fetch account data stored from homeserver.
+     * Returns a watchable with account data for this event type.
      */
-    get(eventType: string): unknown;
+    get(eventType: string): Watchable<unknown>;
     /**
      * Set account data on the homeserver.
      */
