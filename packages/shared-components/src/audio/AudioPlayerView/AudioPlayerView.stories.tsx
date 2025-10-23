@@ -9,18 +9,18 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import {
-    AudioPlayerView,
-    type AudioPlayerViewActions,
-    type AudioPlayerViewSnapshot,
-    type AudioPlayerViewModel,
-} from "./AudioPlayerView";
-import { ViewWrapper } from "../../ViewWrapper";
+import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
+import { useMockedViewModel } from "../../useMockedViewModel";
 
 type AudioPlayerProps = AudioPlayerViewSnapshot & AudioPlayerViewActions;
-const AudioPlayerViewWrapper = (props: AudioPlayerProps): JSX.Element => (
-    <ViewWrapper<AudioPlayerViewSnapshot, AudioPlayerViewModel> Component={AudioPlayerView} props={props} />
-);
+const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...rest }: AudioPlayerProps): JSX.Element => {
+    const vm = useMockedViewModel(rest, {
+        togglePlay,
+        onKeyDown,
+        onSeekbarChange,
+    });
+    return <AudioPlayerView vm={vm} />;
+};
 
 export default {
     title: "Audio/AudioPlayerView",

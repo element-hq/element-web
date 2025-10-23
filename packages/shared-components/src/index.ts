@@ -28,5 +28,5 @@ export * from "./utils/numbers";
 
 // MVVM
 export * from "./viewmodel";
-export * from "./ViewWrapper";
+export * from "./useMockedViewModel";
 export * from "./useViewModel";
