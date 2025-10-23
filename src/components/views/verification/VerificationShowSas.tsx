@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type FC } from "react";
 import { type Device } from "matrix-js-sdk/src/matrix";
 import { type GeneratedSas, type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 import SasEmoji from "@matrix-org/spec/sas-emoji.json";
@@ -14,6 +14,137 @@ import SasEmoji from "@matrix-org/spec/sas-emoji.json";
 import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
+import { Icon as Emoji00 } from "../../../../res/img/sas-emoji/00.svg";
+import { Icon as Emoji01 } from "../../../../res/img/sas-emoji/01.svg";
+import { Icon as Emoji02 } from "../../../../res/img/sas-emoji/02.svg";
+import { Icon as Emoji03 } from "../../../../res/img/sas-emoji/03.svg";
+import { Icon as Emoji04 } from "../../../../res/img/sas-emoji/04.svg";
+import { Icon as Emoji05 } from "../../../../res/img/sas-emoji/05.svg";
+import { Icon as Emoji06 } from "../../../../res/img/sas-emoji/06.svg";
+import { Icon as Emoji07 } from "../../../../res/img/sas-emoji/07.svg";
+import { Icon as Emoji08 } from "../../../../res/img/sas-emoji/08.svg";
+import { Icon as Emoji09 } from "../../../../res/img/sas-emoji/09.svg";
+import { Icon as Emoji10 } from "../../../../res/img/sas-emoji/10.svg";
+import { Icon as Emoji11 } from "../../../../res/img/sas-emoji/11.svg";
+import { Icon as Emoji12 } from "../../../../res/img/sas-emoji/12.svg";
+import { Icon as Emoji13 } from "../../../../res/img/sas-emoji/13.svg";
+import { Icon as Emoji14 } from "../../../../res/img/sas-emoji/14.svg";
+import { Icon as Emoji15 } from "../../../../res/img/sas-emoji/15.svg";
+import { Icon as Emoji16 } from "../../../../res/img/sas-emoji/16.svg";
+import { Icon as Emoji17 } from "../../../../res/img/sas-emoji/17.svg";
+import { Icon as Emoji18 } from "../../../../res/img/sas-emoji/18.svg";
+import { Icon as Emoji19 } from "../../../../res/img/sas-emoji/19.svg";
+import { Icon as Emoji20 } from "../../../../res/img/sas-emoji/20.svg";
+import { Icon as Emoji21 } from "../../../../res/img/sas-emoji/21.svg";
+import { Icon as Emoji22 } from "../../../../res/img/sas-emoji/22.svg";
+import { Icon as Emoji23 } from "../../../../res/img/sas-emoji/23.svg";
+import { Icon as Emoji24 } from "../../../../res/img/sas-emoji/24.svg";
+import { Icon as Emoji25 } from "../../../../res/img/sas-emoji/25.svg";
+import { Icon as Emoji26 } from "../../../../res/img/sas-emoji/26.svg";
+import { Icon as Emoji27 } from "../../../../res/img/sas-emoji/27.svg";
+import { Icon as Emoji28 } from "../../../../res/img/sas-emoji/28.svg";
+import { Icon as Emoji29 } from "../../../../res/img/sas-emoji/29.svg";
+import { Icon as Emoji30 } from "../../../../res/img/sas-emoji/30.svg";
+import { Icon as Emoji31 } from "../../../../res/img/sas-emoji/31.svg";
+import { Icon as Emoji32 } from "../../../../res/img/sas-emoji/32.svg";
+import { Icon as Emoji33 } from "../../../../res/img/sas-emoji/33.svg";
+import { Icon as Emoji34 } from "../../../../res/img/sas-emoji/34.svg";
+import { Icon as Emoji35 } from "../../../../res/img/sas-emoji/35.svg";
+import { Icon as Emoji36 } from "../../../../res/img/sas-emoji/36.svg";
+import { Icon as Emoji37 } from "../../../../res/img/sas-emoji/37.svg";
+import { Icon as Emoji38 } from "../../../../res/img/sas-emoji/38.svg";
+import { Icon as Emoji39 } from "../../../../res/img/sas-emoji/39.svg";
+import { Icon as Emoji40 } from "../../../../res/img/sas-emoji/40.svg";
+import { Icon as Emoji41 } from "../../../../res/img/sas-emoji/41.svg";
+import { Icon as Emoji42 } from "../../../../res/img/sas-emoji/42.svg";
+import { Icon as Emoji43 } from "../../../../res/img/sas-emoji/43.svg";
+import { Icon as Emoji44 } from "../../../../res/img/sas-emoji/44.svg";
+import { Icon as Emoji45 } from "../../../../res/img/sas-emoji/45.svg";
+import { Icon as Emoji46 } from "../../../../res/img/sas-emoji/46.svg";
+import { Icon as Emoji47 } from "../../../../res/img/sas-emoji/47.svg";
+import { Icon as Emoji48 } from "../../../../res/img/sas-emoji/48.svg";
+import { Icon as Emoji49 } from "../../../../res/img/sas-emoji/49.svg";
+import { Icon as Emoji50 } from "../../../../res/img/sas-emoji/50.svg";
+import { Icon as Emoji51 } from "../../../../res/img/sas-emoji/51.svg";
+import { Icon as Emoji52 } from "../../../../res/img/sas-emoji/52.svg";
+import { Icon as Emoji53 } from "../../../../res/img/sas-emoji/53.svg";
+import { Icon as Emoji54 } from "../../../../res/img/sas-emoji/54.svg";
+import { Icon as Emoji55 } from "../../../../res/img/sas-emoji/55.svg";
+import { Icon as Emoji56 } from "../../../../res/img/sas-emoji/56.svg";
+import { Icon as Emoji57 } from "../../../../res/img/sas-emoji/57.svg";
+import { Icon as Emoji58 } from "../../../../res/img/sas-emoji/58.svg";
+import { Icon as Emoji59 } from "../../../../res/img/sas-emoji/59.svg";
+import { Icon as Emoji60 } from "../../../../res/img/sas-emoji/60.svg";
+import { Icon as Emoji61 } from "../../../../res/img/sas-emoji/61.svg";
+import { Icon as Emoji62 } from "../../../../res/img/sas-emoji/62.svg";
+import { Icon as Emoji63 } from "../../../../res/img/sas-emoji/63.svg";
+
+const emojiImages: Record<string, FC> = {
+    "Dog": Emoji00,
+    "Cat": Emoji01,
+    "Lion": Emoji02,
+    "Horse": Emoji03,
+    "Unicorn": Emoji04,
+    "Pig": Emoji05,
+    "Elephant": Emoji06,
+    "Rabbit": Emoji07,
+    "Panda": Emoji08,
+    "Rooster": Emoji09,
+    "Penguin": Emoji10,
+    "Turtle": Emoji11,
+    "Fish": Emoji12,
+    "Octopus": Emoji13,
+    "Butterfly": Emoji14,
+    "Flower": Emoji15,
+    "Tree": Emoji16,
+    "Cactus": Emoji17,
+    "Mushroom": Emoji18,
+    "Globe": Emoji19,
+    "Moon": Emoji20,
+    "Cloud": Emoji21,
+    "Fire": Emoji22,
+    "Banana": Emoji23,
+    "Apple": Emoji24,
+    "Strawberry": Emoji25,
+    "Corn": Emoji26,
+    "Pizza": Emoji27,
+    "Cake": Emoji28,
+    "Heart": Emoji29,
+    "Smiley": Emoji30,
+    "Robot": Emoji31,
+    "Hat": Emoji32,
+    "Glasses": Emoji33,
+    "Spanner": Emoji34,
+    "Santa": Emoji35,
+    "Thumbs Up": Emoji36,
+    "Umbrella": Emoji37,
+    "Hourglass": Emoji38,
+    "Clock": Emoji39,
+    "Gift": Emoji40,
+    "Light Bulb": Emoji41,
+    "Book": Emoji42,
+    "Pencil": Emoji43,
+    "Paperclip": Emoji44,
+    "Scissors": Emoji45,
+    "Lock": Emoji46,
+    "Key": Emoji47,
+    "Hammer": Emoji48,
+    "Telephone": Emoji49,
+    "Flag": Emoji50,
+    "Train": Emoji51,
+    "Bicycle": Emoji52,
+    "Aeroplane": Emoji53,
+    "Rocket": Emoji54,
+    "Trophy": Emoji55,
+    "Ball": Emoji56,
+    "Guitar": Emoji57,
+    "Trumpet": Emoji58,
+    "Bell": Emoji59,
+    "Anchor": Emoji60,
+    "Headphones": Emoji61,
+    "Folder": Emoji62,
+    "Pin": Emoji63,
+};
 
 interface IProps {
     pending?: boolean;
@@ -105,12 +236,17 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
-            const emojiBlocks = this.props.sas.emoji.map((emoji, i) => (
-                <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
-                    <div className="mx_VerificationShowSas_emojiSas_emoji">{emoji[0]}</div>
-                    <div className="mx_VerificationShowSas_emojiSas_label">{tEmoji(emoji, locale)}</div>
-                </div>
-            ));
+            const emojiBlocks = this.props.sas.emoji.map((emoji, i) => {
+                const EmojiImage = emojiImages[emoji[1]];
+                return (
+                    <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
+                        <div className="mx_VerificationShowSas_emojiSas_emoji">
+                            <EmojiImage />
+                        </div>
+                        <div className="mx_VerificationShowSas_emojiSas_label">{tEmoji(emoji, locale)}</div>
+                    </div>
+                );
+            });
             sasDisplay = (
                 <div className="mx_VerificationShowSas_emojiSas">
                     {emojiBlocks.slice(0, 4)}
