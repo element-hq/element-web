@@ -140,7 +140,6 @@ import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/ShareP
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
-import { doesServerSupportCrossSigning } from "../../utils/crypto/doesServerSupportCrossSigning";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -425,7 +424,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
-        } else if ((await doesServerSupportCrossSigning(cli)) && !(await shouldSkipSetupEncryption(cli))) {
+        } else if (!(await shouldSkipSetupEncryption(cli))) {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
@@ -1372,10 +1371,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // If we don't have crypto support, we can't verify.
         const crypto = client.getCrypto();
         if (!crypto) return false;
-
-        // If the server doesn't support cross-signing, the user won't have an
-        // identity to confirm.
-        if (!(await doesServerSupportCrossSigning(client))) return false;
 
         // If we skip setting up encryption, this takes priority over forcing
         // verification.

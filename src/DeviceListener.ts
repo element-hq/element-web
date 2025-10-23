@@ -46,7 +46,6 @@ import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
-import { doesServerSupportCrossSigning } from "./utils/crypto/doesServerSupportCrossSigning";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -318,11 +317,6 @@ export default class DeviceListener {
         logSpan.debug("starting recheck...");
 
         const cli = this.client;
-
-        if (!(await doesServerSupportCrossSigning(cli))) {
-            logSpan.debug("cross-signing not supported");
-            return;
-        }
 
         const crypto = cli.getCrypto();
         if (!crypto) {

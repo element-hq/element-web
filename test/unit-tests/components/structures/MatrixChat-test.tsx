@@ -1343,22 +1343,8 @@ describe("<MatrixChat />", () => {
                 expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
-            it("should go straight to logged in view when user does not have cross signing keys and server does not support cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(false);
-
-                await getComponentAndLogin(false);
-
-                expect(loginClient.doesServerSupportUnstableFeature).toHaveBeenCalledWith(
-                    "org.matrix.e2e_cross_signing",
-                );
-
-                // logged in
-                await screen.findByLabelText("User menu");
-            });
-
-            describe("when server supports cross signing and user does not have cross signing setup", () => {
+            describe("when user does not have cross signing setup", () => {
                 beforeEach(() => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
                     jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });
 
@@ -1403,8 +1389,6 @@ describe("<MatrixChat />", () => {
                 });
 
                 it("should go to setup e2e screen", async () => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
                     await getComponentAndLogin();
 
                     expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
@@ -1427,9 +1411,7 @@ describe("<MatrixChat />", () => {
                 expect(screen.getByText("Confirm your identity")).toBeInTheDocument();
             });
 
-            it("should setup e2e when server supports cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
+            it("should setup e2e", async () => {
                 await getComponentAndLogin();
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
