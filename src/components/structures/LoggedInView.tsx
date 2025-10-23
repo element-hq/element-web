@@ -68,7 +68,7 @@ import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushR
 import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
-import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -690,6 +690,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                         key={this.props.currentRoomId || "roomview"}
                         justCreatedOpts={this.props.roomJustCreatedOpts}
                         forceTimeline={this.props.forceTimeline}
+                        roomViewStore={SdkContextClass.instance.roomViewStore}
                     />
                 );
                 break;

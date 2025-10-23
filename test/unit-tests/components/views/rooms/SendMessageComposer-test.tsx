@@ -30,6 +30,7 @@ import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -37,6 +38,7 @@ jest.mock("../../../../../src/utils/local-room", () => ({
 
 describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: IRoomState = {
+        roomViewStore: SdkContextClass.instance.roomViewStore,
         roomLoading: true,
         peekLoading: false,
         shouldPeek: true,
