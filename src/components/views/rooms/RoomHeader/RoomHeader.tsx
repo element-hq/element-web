@@ -19,14 +19,13 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { Flex, Box } from "@element-hq/web-shared-components";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler.tsx";
-import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
-import { Box } from "../../../../../packages/shared-components/src/utils/Box";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";

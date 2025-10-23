@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type CSSProperties, type ReactNode } from "react";
+import { percentageOf } from "@element-hq/web-shared-components";
 
 import { type PlaybackInterface } from "../../../audio/Playback";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
-import { percentageOf } from "../../../../packages/shared-components/src/utils/numbers";
 import { _t } from "../../../languageHandler";
 
 interface IProps {

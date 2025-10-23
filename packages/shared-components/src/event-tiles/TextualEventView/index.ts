@@ -5,4 +5,4 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-export { TextualEventView } from "./TextualEventView";
+export { TextualEventView, type TextualEventViewSnapshot } from "./TextualEventView";

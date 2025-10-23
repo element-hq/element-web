@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { clamp } from "@element-hq/web-shared-components";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../../packages/shared-components/src/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 

@@ -11,13 +11,6 @@ import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
-
-import SettingsStore from "./settings/SettingsStore";
-import PlatformPeg from "./PlatformPeg";
-import { SettingLevel } from "./settings/SettingLevel";
-import { retry } from "./utils/promise";
-import SdkConfig from "./SdkConfig";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import {
     _t,
     normalizeLanguageKey,
@@ -25,7 +18,14 @@ import {
     type IVariables,
     KEY_SEPARATOR,
     getLangsJson,
-} from "../packages/shared-components/src/utils/i18n";
+} from "@element-hq/web-shared-components";
+
+import SettingsStore from "./settings/SettingsStore";
+import PlatformPeg from "./PlatformPeg";
+import { SettingLevel } from "./settings/SettingLevel";
+import { retry } from "./utils/promise";
+import SdkConfig from "./SdkConfig";
+import { ModuleRunner } from "./modules/ModuleRunner";
 
 export {
     _t,
@@ -40,7 +40,7 @@ export {
     normalizeLanguageKey,
     getNormalizedLanguageKeys,
     substitute,
-} from "../packages/shared-components/src/utils/i18n";
+} from "@element-hq/web-shared-components";
 
 const i18nFolder = "i18n/";
 
