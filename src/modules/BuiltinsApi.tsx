@@ -5,7 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import React from "react";
 import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-module-api";
+
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
+import { getSafeCli } from "./common";
 
 export class ElementWebBuiltinsApi implements BuiltinsApi {
     private _roomView?: React.ComponentType<RoomViewProps>;
@@ -29,5 +33,18 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
         }
 
         return this._roomView;
+    }
+
+    public renderRoomView(roomId: string): React.ReactNode {
+        const Component = this.getRoomViewComponent();
+        return <Component roomId={roomId} />;
+    }
+
+    public renderRoomAvatar(roomId: string, size?: string): React.ReactNode {
+        const room = getSafeCli().getRoom(roomId);
+        if (!room) {
+            throw new Error(`No room such room: ${roomId}`);
+        }
+        return <RoomAvatar room={room} size={size} />;
     }
 }

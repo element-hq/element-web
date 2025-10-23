@@ -1,0 +1,27 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+import type { ClientApi as IClientApi, Room } from "@element-hq/element-web-module-api";
+import { Room as ModuleRoom } from "./models/Room";
+import { AccountDataApi } from "./AccountDataApi";
+import { getSafeCli } from "./common";
+
+export class ClientApi implements IClientApi {
+    private accountDataApi?: AccountDataApi;
+
+    public getRoom(roomId: string): Room | null {
+        const sdkRoom = getSafeCli().getRoom(roomId);
+        if (sdkRoom) return new ModuleRoom(sdkRoom);
+        return null;
+    }
+
+    public get accountData(): AccountDataApi {
+        if (!this.accountDataApi) {
+            this.accountDataApi = new AccountDataApi();
+        }
+        return this.accountDataApi;
+    }
+}
