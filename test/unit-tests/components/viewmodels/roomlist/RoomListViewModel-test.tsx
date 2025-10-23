@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
+import React from "react";
 
 import RoomListStoreV3, { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
@@ -16,9 +17,9 @@ import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filt
 import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../../../../src/stores/spaces";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -179,6 +180,15 @@ describe("RoomListViewModel", () => {
             expect(vm.roomsResult.rooms[i].roomId).toEqual(roomId);
         }
 
+        function renderViewModel(roomId: string | undefined) {
+            const roomContext = { roomId } as any;
+            return renderHook(() => useRoomListViewModel(), {
+                wrapper: ({ children }) => (
+                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                ),
+            });
+        }
+
         it("active index is calculated with the last opened room in a space", () => {
             // Let's say there's two spaces: !space1:matrix.org and !space2:matrix.org
             // Let's also say that the current active space is !space1:matrix.org
@@ -196,9 +206,8 @@ describe("RoomListViewModel", () => {
 
             // Let's say that the room at index 4 is currently active
             const roomId = rooms[4].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expect(vm.current.activeIndex).toEqual(4);
 
             // Let's say that space is changed to "!space2:matrix.org"
@@ -221,9 +230,8 @@ describe("RoomListViewModel", () => {
 
             // Let's say that the room at index 5 is active
             const roomId = rooms[5].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expect(vm.current.activeIndex).toEqual(5);
 
             // Let's say that room at index 9 moves to index 5
@@ -248,9 +256,8 @@ describe("RoomListViewModel", () => {
         it("active room and active index are updated when another room is opened", () => {
             const { rooms } = mockAndCreateRooms();
             const roomId = rooms[5].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expectActiveRoom(vm.current, 5, roomId);
 
             // Let's say that room at index 9 becomes active
@@ -274,9 +281,8 @@ describe("RoomListViewModel", () => {
             const { rooms } = mockAndCreateRooms();
             // Let's say that the room at index 5 is active
             const roomId = rooms[5].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expectActiveRoom(vm.current, 5, roomId);
 
             // Let's say that we remove rooms from the start of the array
@@ -298,9 +304,8 @@ describe("RoomListViewModel", () => {
             const { rooms } = mockAndCreateRooms();
             // Let's say that the room at index 5 is active
             const roomId = rooms[5].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expectActiveRoom(vm.current, 5, roomId);
 
             // Let's say that we remove rooms from the start of the array
@@ -316,9 +321,8 @@ describe("RoomListViewModel", () => {
             const { rooms } = mockAndCreateRooms();
             // Let's say that the room at index 5 is active
             let roomId: string | undefined = rooms[5].roomId;
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(roomId);
             expectActiveRoom(vm.current, 5, roomId);
 
             // Let's remove the active room (i.e room at index 5)
@@ -332,9 +336,7 @@ describe("RoomListViewModel", () => {
             mockAndCreateRooms();
 
             // Let's say that there's no active room currently
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => undefined);
-
-            const { result: vm } = renderHook(() => useRoomListViewModel());
+            const { result: vm } = renderViewModel(undefined);
             expect(vm.current.activeIndex).toEqual(undefined);
         });
     });
