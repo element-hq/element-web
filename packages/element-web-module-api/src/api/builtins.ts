@@ -25,6 +25,15 @@ export interface RoomViewProps {
  */
 export interface BuiltinsApi {
     /**
+     * Render room avatar component from element-web.
+     *
+     * @alpha
+     * @param roomId - Id of the room
+     * @param size - Size of the avatar to render
+     */
+    renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
+
+    /**
      * Render room view component from element-web.
      *
      * @alpha
