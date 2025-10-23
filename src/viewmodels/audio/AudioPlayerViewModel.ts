@@ -7,7 +7,12 @@
 
 import { type ChangeEvent, type KeyboardEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { percentageOf, BaseViewModel, type AudioPlayerViewSnapshot, type AudioPlayerViewModel as AudioPlayerViewModelInterface } from "@element-hq/web-shared-components";
+import {
+    percentageOf,
+    BaseViewModel,
+    type AudioPlayerViewSnapshot,
+    type AudioPlayerViewModel as AudioPlayerViewModelInterface,
+} from "@element-hq/web-shared-components";
 
 import { type Playback } from "../../audio/Playback";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
