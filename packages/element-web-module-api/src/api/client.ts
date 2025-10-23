@@ -34,7 +34,7 @@ export interface ClientApi {
     /**
      * Use this to modify account data on the homeserver.
      */
-    getAccountDataApi: () => AccountDataApi;
+    accountData: AccountDataApi;
 
     /**
      * Fetch room by id from SDK.
