@@ -27,7 +27,7 @@ export interface AccountAuthInfo {
 // @public
 export interface AccountDataApi {
     delete(eventType: string): Promise<void>;
-    get(eventType: string): unknown;
+    get(eventType: string): Watchable<unknown>;
     set(eventType: string, content: unknown): Promise<void>;
 }
 
@@ -74,7 +74,7 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
 
 // @public
 export interface ClientApi {
-    getAccountDataApi: () => AccountDataApi;
+    accountData: AccountDataApi;
     getRoom: (id: string) => Room | null;
 }
 
@@ -384,9 +384,10 @@ export class Watchable<T> {
     //
     // (undocumented)
     protected readonly listeners: Set<WatchFn<T>>;
+    protected onFirstWatch(): void;
+    protected onLastWatch(): void;
     // (undocumented)
     unwatch(listener: (value: T) => void): void;
-    // (undocumented)
     get value(): T;
     set value(value: T);
     // (undocumented)
