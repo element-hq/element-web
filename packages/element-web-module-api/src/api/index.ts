@@ -17,6 +17,7 @@ import { AccountAuthApiExtension } from "./auth.ts";
 import { ProfileApiExtension } from "./profile.ts";
 import { ExtrasApi } from "./extras.ts";
 import { BuiltinsApi } from "./builtins.ts";
+import { ClientApi } from "./client.ts";
 
 /**
  * Module interface for modules to implement.
@@ -122,6 +123,11 @@ export interface Api
      * @alpha
      */
     readonly extras: ExtrasApi;
+
+    /**
+     * Access some very specific functionality from the client.
+     */
+    readonly client: ClientApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

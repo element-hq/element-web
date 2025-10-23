@@ -20,4 +20,5 @@ export type * from "./api/dialog";
 export type * from "./api/profile";
 export type * from "./api/navigation";
 export type * from "./api/builtins";
+export type * from "./api/client";
 export * from "./api/watchable";
