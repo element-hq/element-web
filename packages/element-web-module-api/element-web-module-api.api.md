@@ -340,7 +340,7 @@ export interface RoomListCustomisations<Room> {
 
 // @public
 export interface RoomListStoreApi {
-    getRooms(): Room[];
+    getRooms(): Watchable<Room[]>;
     waitForReady(): Promise<void>;
 }
 
@@ -364,7 +364,7 @@ export interface SpacePanelItemProps {
 
 // @public
 export interface StoresApi {
-    getRoomListStore(): RoomListStoreApi;
+    roomListStore: RoomListStoreApi;
 }
 
 // @public
