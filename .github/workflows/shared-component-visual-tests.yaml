@@ -34,10 +34,6 @@ jobs:
             - name: Install element web dependencies
               run: yarn install --frozen-lockfile
 
-            - name: Build Element Web resources
-              # Needed to prepare language files
-              run: "yarn build:res"
-
             - name: Install dependencies
               working-directory: packages/shared-components
               run: yarn install --frozen-lockfile
