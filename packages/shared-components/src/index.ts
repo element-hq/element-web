@@ -29,5 +29,5 @@ export * from "./utils/FormattingUtils";
 
 // MVVM
 export * from "./viewmodel";
-export * from "./ViewWrapper";
+export * from "./useMockedViewModel";
 export * from "./useViewModel";
