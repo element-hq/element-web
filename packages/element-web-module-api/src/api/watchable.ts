@@ -26,7 +26,7 @@ function isObject(value: unknown): value is object {
  * @public
  */
 export class Watchable<T> {
-    private readonly listeners = new Set<WatchFn<T>>();
+    protected readonly listeners = new Set<WatchFn<T>>();
 
     public constructor(private currentValue: T) {}
 
