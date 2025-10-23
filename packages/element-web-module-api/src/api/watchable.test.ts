@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, test, vitest } from "vitest";
+import { expect, test, vi, vitest } from "vitest";
 
 import { Watchable } from "./watchable";
 
@@ -55,4 +55,45 @@ test("when value is an object, shallow comparison works", () => {
     expect(listener).not.toHaveBeenCalled();
 
     watchable.unwatch(listener); // Clean up after the test
+});
+
+test("onFirstWatch and onLastWatch are called when appropriate", () => {
+    const onFirstWatch = vi.fn();
+    const onLastWatch = vi.fn();
+    class CustomWatchable extends Watchable<number> {
+        protected onFirstWatch(): void {
+            onFirstWatch();
+        }
+        protected onLastWatch(): void {
+            onLastWatch();
+        }
+    }
+
+    const watchable = new CustomWatchable(10);
+    // No listeners yet, so expect no calls
+    expect(onFirstWatch).not.toHaveBeenCalled();
+    expect(onLastWatch).not.toHaveBeenCalled();
+
+    // Let's say that we have three listeners
+    const listeners = [vi.fn(), vi.fn(), vi.fn()];
+
+    // Let's add all of them via watch
+    for (const listener of listeners) {
+        watchable.watch(listener);
+    }
+
+    // Only expect onFirstWatch() to have been called once
+    expect(onFirstWatch).toHaveBeenCalledOnce();
+
+    // Let's remove all the listeners
+    for (const listener of listeners) {
+        watchable.unwatch(listener);
+    }
+
+    // Only expect onLastWatch to have been called once
+    expect(onLastWatch).toHaveBeenCalledOnce();
+
+    // Should call onFirstWatch again once we have more listeners
+    watchable.watch(vi.fn());
+    expect(onFirstWatch).toHaveBeenCalledTimes(2);
 });
