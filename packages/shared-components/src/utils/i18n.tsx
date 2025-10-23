@@ -25,7 +25,7 @@ import React from "react";
 import { type TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
 import counterpart from "counterpart";
 
-import type Translations from "../../../../src/i18n/strings/en_EN.json";
+import { type TranslationKey } from "../../i18n/i18nKeys";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
@@ -44,17 +44,6 @@ counterpart.setSeparator(KEY_SEPARATOR);
 // see `translateWithFallback` for an explanation of fallback handling
 const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
-
-/**
- * A type representing the union of possible keys into the translation file using `|` delimiter to access nested fields.
- * @example `common|error` to access `error` within the `common` sub-object.
- * {
- *     "common": {
- *         "error": "Error"
- *     }
- * }
- */
-export type TranslationKey = _TranslationKey<typeof Translations>;
 
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings

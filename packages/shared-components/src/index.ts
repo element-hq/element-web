@@ -31,3 +31,6 @@ export * from "./utils/FormattingUtils";
 export * from "./viewmodel";
 export * from "./useMockedViewModel";
 export * from "./useViewModel";
+
+// i18n
+export type { TranslationKey } from "../i18n/i18nKeys.d.ts";
