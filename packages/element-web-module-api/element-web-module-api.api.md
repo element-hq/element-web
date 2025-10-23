@@ -24,6 +24,13 @@ export interface AccountAuthInfo {
     userId: string;
 }
 
+// @public
+export interface AccountDataApi {
+    delete(eventType: string): Promise<void>;
+    get(eventType: string): unknown;
+    set(eventType: string, content: unknown): Promise<void>;
+}
+
 // @alpha @deprecated (undocumented)
 export interface AliasCustomisations {
     // (undocumented)
@@ -37,6 +44,7 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension, DialogApiExtension, AccountAuthApiExtension, ProfileApiExtension {
     // @alpha
     readonly builtins: BuiltinsApi;
+    readonly client: ClientApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -62,6 +70,12 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
         includeAttachments?: boolean;
         sizeMb?: number;
     };
+}
+
+// @public
+export interface ClientApi {
+    getAccountDataApi: () => AccountDataApi;
+    getRoom: (id: string) => Room | null;
 }
 
 // @alpha @deprecated (undocumented)
@@ -311,6 +325,13 @@ export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
 
+// @public
+export interface Room {
+    getLastActiveTimestamp: () => number;
+    id: string;
+    name: Watchable<string>;
+}
+
 // @alpha @deprecated (undocumented)
 export interface RoomListCustomisations<Room> {
     isRoomVisible?(room: Room): boolean;
@@ -359,6 +380,10 @@ export type Variables = {
 // @public
 export class Watchable<T> {
     constructor(currentValue: T);
+    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    protected readonly listeners: Set<WatchFn<T>>;
     // (undocumented)
     unwatch(listener: (value: T) => void): void;
     // (undocumented)
