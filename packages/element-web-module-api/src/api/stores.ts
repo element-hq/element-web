@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "../models/Room";
+import { Watchable } from "./watchable";
 
 /**
  * Provides some basic functionality of the Room List Store from element-web.
@@ -13,9 +14,9 @@ import type { Room } from "../models/Room";
  */
 export interface RoomListStoreApi {
     /**
-     * Get a flat list of sorted room from the RLS.
+     * Returns a watchable holding a flat list of sorted room.
      */
-    getRooms(): Room[];
+    getRooms(): Watchable<Room[]>;
 
     /**
      * Returns a promise that resolves when RLS is ready.
