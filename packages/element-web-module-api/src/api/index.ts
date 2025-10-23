@@ -17,6 +17,7 @@ import { AccountAuthApiExtension } from "./auth.ts";
 import { ProfileApiExtension } from "./profile.ts";
 import { ExtrasApi } from "./extras.ts";
 import { BuiltinsApi } from "./builtins.ts";
+import { StoresApi } from "./stores.ts";
 import { ClientApi } from "./client.ts";
 
 /**
@@ -123,6 +124,11 @@ export interface Api
      * @alpha
      */
     readonly extras: ExtrasApi;
+
+    /**
+     * Allows modules to access a limited functionality of certain stores from Element Web.
+     */
+    readonly stores: StoresApi;
 
     /**
      * Access some very specific functionality from the client.
