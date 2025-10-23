@@ -13,6 +13,11 @@ import { type Command, CommandCategories, Commands } from "../../../SlashCommand
 import InfoDialog from "./InfoDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
+/**
+ * Props for {@link SlashCommandHelpDialog}
+ * @param roomId - The room ID to check whether commands are enabled
+ * @param onFinished - Callback called when the dialog is closed
+ */
 interface IProps {
     roomId: string;
     onFinished(): void;
