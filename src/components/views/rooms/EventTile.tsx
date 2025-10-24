@@ -1179,7 +1179,6 @@ export class UnwrappedEventTile extends React.PureComponent<EventTileProps, ISta
         const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
-        const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : undefined;
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
@@ -1448,7 +1447,6 @@ export class UnwrappedEventTile extends React.PureComponent<EventTileProps, ISta
                                 // overrides
                                 ref: this.tile,
                                 isSeeingThroughMessageHiddenForModeration,
-                                timestamp: bubbleTimestamp,
 
                                 // appease TS
                                 highlights: this.props.highlights,
