@@ -21,7 +21,7 @@ import { Action } from "../../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
+import { type RoomViewStore } from "../../../../src/stores/RoomViewStore";
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {
