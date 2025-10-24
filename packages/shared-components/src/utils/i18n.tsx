@@ -45,6 +45,24 @@ counterpart.setSeparator(KEY_SEPARATOR);
 const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
+// export wrappers around these functions because if we used counterpart directly from
+// element-web, it operates on a different instance of counterpart
+export function registerTranslations(locale: string, data: object): void {
+    counterpart.registerTranslations(locale, data);
+}
+
+export function setMissingEntryGenerator(callback: (value: string) => void): void {
+    counterpart.setMissingEntryGenerator(callback);
+}
+
+export function getLocale(): string {
+    return counterpart.getLocale();
+}
+
+export function setLocale(value: string): string {
+    return counterpart.setLocale(value);
+}
+
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
 export function _td(s: TranslationKey): TranslationKey {

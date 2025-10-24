@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import counterpart from "counterpart";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
@@ -18,6 +17,9 @@ import {
     type IVariables,
     KEY_SEPARATOR,
     getLangsJson,
+    registerTranslations,
+    setLocale,
+    getLocale,
 } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
@@ -100,7 +102,7 @@ export function getUserLanguage(): string {
 // Currently only used in unit tests to avoid having to load
 // the translations in element-web
 export function setMissingEntryGenerator(f: (value: string) => void): void {
-    counterpart.setMissingEntryGenerator(f);
+    setMissingEntryGenerator(f);
 }
 
 export async function setLanguage(...preferredLangs: string[]): Promise<void> {
@@ -116,8 +118,8 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
 
     const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
 
-    counterpart.registerTranslations(chosenLanguage, languageData);
-    counterpart.setLocale(chosenLanguage);
+    registerTranslations(chosenLanguage, languageData);
+    setLocale(chosenLanguage);
 
     await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
     // Adds a lot of noise to test runs, so disable logging there.
@@ -128,7 +130,7 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
     // Set 'en' as fallback language:
     if (chosenLanguage !== "en") {
         const fallbackLanguageData = await getLanguageRetry(i18nFolder + availableLanguages["en"]);
-        counterpart.registerTranslations("en", fallbackLanguageData);
+        registerTranslations("en", fallbackLanguageData);
     }
 
     await registerCustomTranslations();
@@ -166,7 +168,7 @@ export function getLanguageFromBrowser(): string {
 }
 
 export function getCurrentLanguage(): string {
-    return counterpart.getLocale();
+    return getLocale();
 }
 
 /**
@@ -258,7 +260,7 @@ function doRegisterTranslations(customTranslations: TranslationStringsObject): v
 
     // Finally, tell counterpart about our translations
     for (const [lang, translations] of langs) {
-        counterpart.registerTranslations(lang, translations);
+        registerTranslations(lang, translations);
     }
 }
 
