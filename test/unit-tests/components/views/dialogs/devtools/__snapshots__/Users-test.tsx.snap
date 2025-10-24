@@ -336,7 +336,7 @@ exports[`<Users /> should render a single user 1`] = `
     </ul>
     <section>
       <h2>
-        Devices (3)
+        Cryptographic devices (3)
       </h2>
       <ul>
         <li>
@@ -424,7 +424,7 @@ exports[`<Users /> should render a user list 1`] = `
         class="mx_SettingsFlag_label"
       >
         <div
-          id="mx_LabelledToggleSwitch_«r4»"
+          id="mx_LabelledToggleSwitch__r_4_"
         >
           Only joined users
         </div>
@@ -432,7 +432,7 @@ exports[`<Users /> should render a user list 1`] = `
       <div
         aria-checked="true"
         aria-disabled="false"
-        aria-labelledby="mx_LabelledToggleSwitch_«r4»"
+        aria-labelledby="mx_LabelledToggleSwitch__r_4_"
         class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
         role="switch"
         tabindex="0"

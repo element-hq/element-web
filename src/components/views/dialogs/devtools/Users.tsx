@@ -32,9 +32,9 @@ function i(sub: string): JSX.Element {
 /**
  * Shows a list of users in the room, and allows selecting a user to view.
  *
- * By default, filters to only show joined users.
+ * Initially, filters to only show joined users, but offers the user an option to show all users.
  *
- * If the `member` state is set, delegates to `User` to view a single user.
+ * Once the user chooses a specific member, delegates to {@link UserView} to view a single user.
  */
 export const UserList: React.FC<Pick<IDevtoolsProps, "onBack">> = ({ onBack }) => {
     const context = useContext(DevtoolsContext);
@@ -45,10 +45,7 @@ export const UserList: React.FC<Pick<IDevtoolsProps, "onBack">> = ({ onBack }) =
     const [member, setMember] = useState<RoomMember | null>(null);
 
     if (member) {
-        const _onBack = (): void => {
-            setMember(null);
-        };
-        return <UserView member={member} onBack={_onBack} />;
+        return <UserView member={member} onBack={() => setMember(null)} />;
     }
 
     const members = showOnlyJoined ? context.room.getJoinedMembers() : context.room.getMembers();
@@ -92,11 +89,15 @@ interface UserProps extends Pick<IDevtoolsProps, "onBack"> {
 /**
  * Shows a single user to view, and allows selecting a device to view.
  *
- * If the `device` state is set, delegates to `Device` to show a single device.
+ * Once the user chooses a specific device, delegates to {@link Device} to show a single device.
  */
 const UserView: React.FC<UserProps> = ({ member, onBack }) => {
     const context = useContext(DevtoolsContext);
     const crypto = context.room.client.getCrypto();
+    // An element to show the verification status of the device (unknown,
+    // unverified, verified by cross signing, signed by owner).  The element
+    // will show text as well as an icon.  If crypto is not available, the value
+    // will be `null`.
     const verificationStatus = useAsyncMemo(
         async () => {
             if (!crypto) {
@@ -140,25 +141,24 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
                 return _t("devtools|user_verification_status|unverified", {}, { E2EIcon: e2eIcon });
             }
         },
-        [context],
+        [context, member],
         _t("common|loading"),
     );
+    // The user's devices, as a Map from device ID to device information (see
+    // the `Device` type in `matrix-js-sdk/src/models/device.ts`).
     const devices = useAsyncMemo(
         async () => {
             const devices = await crypto?.getUserDeviceInfo([member.userId]);
             return devices?.get(member.userId) ?? new Map();
         },
-        [context],
+        [context, member],
         new Map(),
     );
     // The device to show, if any.
     const [device, setDevice] = useState<Device | null>(null);
 
     if (device) {
-        const _onBack = (): void => {
-            setDevice(null);
-        };
-        return <DeviceView crypto={crypto!} device={device} onBack={_onBack} />;
+        return <DeviceView crypto={crypto!} device={device} onBack={() => setDevice(null)} />;
     }
 
     const avatarUrl = member.getMxcAvatarUrl();
@@ -242,7 +242,7 @@ const DeviceButton: React.FC<DeviceButtonProps> = ({ crypto, device, onClick }) 
                 );
             }
         },
-        [],
+        [crypto, device],
         null,
     );
     return (
@@ -262,6 +262,9 @@ interface DeviceProps extends Pick<IDevtoolsProps, "onBack"> {
  * Show a single device to view.
  */
 const DeviceView: React.FC<DeviceProps> = ({ crypto, device, onBack }) => {
+    // An element to show the verification status of the device (unknown,
+    // unverified, verified by cross signing, signed by owner).  The element
+    // will show text as well as an icon if applicable.
     const verificationStatus = useAsyncMemo(
         async () => {
             const status = await crypto.getDeviceVerificationStatus(device.userId, device.deviceId);
@@ -297,7 +300,7 @@ const DeviceView: React.FC<DeviceProps> = ({ crypto, device, onBack }) => {
                 return _t("devtools|device_verification_status|unverified", {}, { E2EIcon: e2eIcon });
             }
         },
-        [],
+        [crypto, device],
         _t("common|loading"),
     );
 

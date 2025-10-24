@@ -816,7 +816,7 @@
             "unverified": "Verification status: <E2EIcon /> Not signed by owner",
             "verified": "Verification status: <E2EIcon /> Verified by cross-signing"
         },
-        "devices": "Devices (%(count)s)",
+        "devices": "Cryptographic devices (%(count)s)",
         "edit_setting": "Edit setting",
         "edit_values": "Edit values",
         "empty_string": "<empty string>",
