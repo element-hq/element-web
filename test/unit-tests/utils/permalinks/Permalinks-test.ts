@@ -336,14 +336,10 @@ describe("Permalinks", function () {
 
     it("should handle when ACL allow is not an array", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(
-            roomId,
-            [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)],
-            {
-                deny: ["*.evilcorp.com"],
-                allow: "not-an-array" as any, // Test malformed data
-            },
-        );
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)], {
+            deny: ["*.evilcorp.com"],
+            allow: "not-an-array" as any, // Test malformed data
+        });
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         // Should fall back to default behavior (no allowed servers list = allow none)
@@ -353,14 +349,10 @@ describe("Permalinks", function () {
 
     it("should handle when ACL deny is not an array", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(
-            roomId,
-            [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)],
-            {
-                deny: "not-an-array" as any, // Test malformed data
-                allow: ["*"],
-            },
-        );
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)], {
+            deny: "not-an-array" as any, // Test malformed data
+            allow: ["*"],
+        });
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         // Should not crash and still allow the server
