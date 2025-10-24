@@ -22,7 +22,7 @@
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 import React from "react";
-import { type TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
+import { KEY_SEPARATOR } from "matrix-web-i18n";
 import counterpart from "counterpart";
 
 import { type TranslationKey } from "../../i18n/i18nKeys";
