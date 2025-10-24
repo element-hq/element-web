@@ -30,8 +30,7 @@
         "package.json"
     ],
     "scripts": {
-        "postinstall": "patch-package",
-        "prepare": "yarn --cwd ../.. build:res && ts-node scripts/gatherTranslationKeys.ts && vite build",
+        "prepare": "patch-package && yarn --cwd ../.. build:res && ts-node scripts/gatherTranslationKeys.ts && vite build",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
         "lint": "yarn lint:types && yarn lint:js",
