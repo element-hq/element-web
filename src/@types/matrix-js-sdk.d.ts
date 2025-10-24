@@ -36,6 +36,7 @@ declare module "matrix-js-sdk/src/types" {
     export interface StateEvents {
         // Jitsi-backed video room state events
         [JitsiCallMemberEventType]: JitsiCallMemberContent;
+        "org.matrix.msc4143.rtc.slot": any;
 
         // Unstable widgets state events
         "im.vector.modular.widgets": IWidget | EmptyObject;

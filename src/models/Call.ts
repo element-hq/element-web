@@ -556,6 +556,7 @@ export interface WidgetGenerationParameters {
      * Skip showing the lobby screen of a call.
      */
     skipLobby?: boolean;
+    useMSC4354?: boolean;
 }
 
 /**
@@ -706,6 +707,10 @@ export class ElementCall extends Call {
 
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
             params.append("allowVoipWithNoMedia", "true");
+        }
+
+        if (SettingsStore.getValue("feature_element_call_msc4354")) {
+            params.append("useMSC4354", "true");
         }
 
         // Set custom fonts

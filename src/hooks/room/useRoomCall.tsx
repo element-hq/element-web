@@ -37,6 +37,8 @@ import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
+import Modal from "../../Modal";
 
 export enum PlatformCallType {
     ElementCall,
@@ -97,6 +99,11 @@ export const useRoomCall = (
     callOptions: PlatformCallType[];
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
+
+    hasElementCallSlot: boolean;
+    canAdjustElementCallSlot: boolean;
+    createElementCallSlot(): void;
+    removeElementCallSlot(): void;
 } => {
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
@@ -105,6 +112,8 @@ export const useRoomCall = (
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
+    // Use sticky events 
+    const isMSC4354Enabled = useFeatureEnabled("feature_element_call_msc4354");
 
     const hasLegacyCall = useEventEmitterState(
         LegacyCallHandler.instance,
@@ -132,17 +141,30 @@ export const useRoomCall = (
     // room
     const memberCount = useRoomMemberCount(room);
 
-    const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
+    const [mayEditWidgets, mayCreateElementCallState, maySendSlot, hasRoomSlot] = useRoomState<[boolean, boolean, boolean, boolean]>(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
         room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
+        room.currentState.mayClientSendStateEvent("org.matrix.msc4143.rtc.slot", room.client),
+        // TODO: Replace with proper const
+        room.currentState.getStateEvents("org.matrix.msc4143.rtc.slot", "m.call#ROOM")?.getContent()?.application?.type === 'm.call'
     ]);
+
+        // TODO: Check that we are allowed to create audio/video calls, when the telephony PR lands.
+    const hasElementCallSlot = !isMSC4354Enabled || hasRoomSlot;
+
+    const mayCreateElementCalls = useMemo(() => {
+        if (isMSC4354Enabled) {
+            return hasElementCallSlot || maySendSlot 
+        }
+        return mayCreateElementCallState;
+    }, [isMSC4354Enabled, mayCreateElementCallState, maySendSlot, hasElementCallSlot]);
 
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
         if (memberCount <= 2) {
-            options.push(PlatformCallType.LegacyCall);
+            // options.push(PlatformCallType.LegacyCall);
         } else if (mayEditWidgets || hasJitsiWidget) {
             options.push(PlatformCallType.JitsiCall);
         }
@@ -224,16 +246,54 @@ export const useRoomCall = (
         room.roomId,
     ]);
 
+    const createElementCallSlot = useCallback(async (): Promise<boolean> => {
+        if (hasElementCallSlot) {
+            return true;
+        }
+        const { finished } = Modal.createDialog(QuestionDialog, {
+            title: "Do you want to allow calls in this room?",
+            description: (
+                <p>
+                    This room doesn't currently permit calling. If you continue, other users will
+                    be able to place calls in the future. You may turn this off in the Room Settings.
+                </p>
+            ),
+            button: _t("action|continue"),
+        });
+        const [confirmed] = await finished;
+        if (!confirmed) {
+            return false;
+        }
+        await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", {
+            "application": {
+                "type": "m.call",
+                // 
+                "m.call.id": "i_dont_know_what_this_should_be",
+            }
+        }, "m.call#ROOM");
+        return true;
+    }, [room, hasElementCallSlot]);
+
+    const removeElementCallSlot = useCallback(async (): Promise<void> => {
+        if (hasElementCallSlot) {
+            await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", { }, "m.call#ROOM");
+        }
+    }, [room, hasElementCallSlot]);
+
     const voiceCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
+                void (async () => {
+                    if (callPlatformType !== PlatformCallType.ElementCall || await createElementCallSlot()) {
+                        await placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
+                    }
+                })();
             }
         },
-        [promptPinWidget, room, widget],
+        [promptPinWidget, room, widget, createElementCallSlot],
     );
     const videoCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
@@ -243,10 +303,14 @@ export const useRoomCall = (
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
+                void (async () => {
+                    if (callPlatformType !== PlatformCallType.ElementCall || await createElementCallSlot()) {
+                        await placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
+                    }
+                })();
             }
         },
-        [widget, promptPinWidget, room],
+        [widget, promptPinWidget, room, createElementCallSlot],
     );
 
     let voiceCallDisabledReason: string | null;
@@ -304,5 +368,9 @@ export const useRoomCall = (
         callOptions,
         showVoiceCallButton: !hideVoiceCallButton,
         showVideoCallButton: !hideVideoCallButton,
+        hasElementCallSlot,
+        canAdjustElementCallSlot: maySendSlot,
+        createElementCallSlot,
+        removeElementCallSlot,
     };
 };

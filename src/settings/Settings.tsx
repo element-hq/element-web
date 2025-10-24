@@ -50,6 +50,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import { UNSTABLE_MSC4354_STICKY_EVENTS } from "matrix-js-sdk/src/matrix";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -220,6 +221,7 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
+    "feature_element_call_msc4354": IFeature;
     "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_allow_screen_share_only_mode": IFeature;
@@ -627,13 +629,29 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
+    "feature_element_call_msc4354": {
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        displayName: _td("labs|feature_element_call_msc4354"),
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_element_call_msc4354",
+            defaultWatchManager,
+            [[UNSTABLE_MSC4354_STICKY_EVENTS]],
+            undefined,
+            _td("labs|feature_element_call_msc4354_msc_support"),
+        ),
+        default: false,
+
+    },
     "feature_group_calls": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        displayName: _td("labs|group_calls"),
         controller: new ReloadOnChangeController(),
+        displayName: _td("labs|group_calls"),
         default: false,
     },
     "feature_disable_call_per_sender_encryption": {

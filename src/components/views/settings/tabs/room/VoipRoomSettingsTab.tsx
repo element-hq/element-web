@@ -6,69 +6,40 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useMemo, useState } from "react";
-import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk/src/matrix";
-import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import React, { useCallback, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
-import { useRoomState } from "../../../../../hooks/useRoomState";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
+import { useElementCallPermissions } from "../../../../../hooks/room/useElementCallPermissions";
 
 interface ElementCallSwitchProps {
     room: Room;
 }
 
 const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
-    const isPublic = useMemo(() => room.getJoinRule() === JoinRule.Public, [room]);
-    const [content, maySend] = useRoomState(
-        room,
-        useCallback(
-            (state: RoomState) => {
-                const content = state
-                    ?.getStateEvents(EventType.RoomPowerLevels, "")
-                    ?.getContent<RoomPowerLevelsEventContent>();
-                return [
-                    content ?? {},
-                    state?.maySendStateEvent(EventType.RoomPowerLevels, room.client.getSafeUserId()),
-                ] as const;
-            },
-            [room.client],
-        ),
-    );
-
-    const [elementCallEnabled, setElementCallEnabled] = useState<boolean>(() => {
-        return content.events?.[ElementCallMemberEventType.name] === 0;
-    });
-
-    const onChange = useCallback(
-        (enabled: boolean): void => {
-            setElementCallEnabled(enabled);
-
-            // Take a copy to avoid mutating the original
-            const newContent = { events: {}, ...content };
-
-            if (enabled) {
-                const userLevel = newContent.events[EventType.RoomMessage] ?? content.users_default ?? 0;
-                const moderatorLevel = content.kick ?? 50;
-
-                newContent.events[ElementCallEventType.name] = isPublic ? moderatorLevel : userLevel;
-                newContent.events[ElementCallMemberEventType.name] = userLevel;
-            } else {
-                const adminLevel = newContent.events[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
-
-                newContent.events[ElementCallEventType.name] = adminLevel;
-                newContent.events[ElementCallMemberEventType.name] = adminLevel;
+    // For MSC4356 only.
+    const {canStartCall, canAdjustCallPermissions, enableCallInRoom, disableCallInRoom} = useElementCallPermissions(room);
+    const [busy, setBusy] = useState<boolean>();
+    const onToggle = useCallback(() => {
+        setBusy(true)
+        void (async () => {
+            try {
+                if (canStartCall) {
+                    await disableCallInRoom();
+                } else {
+                    await enableCallInRoom();
+                }
+            } finally {
+                setBusy(false);
             }
+        })();
 
-            room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
-        },
-        [room.client, room.roomId, content, isPublic],
-    );
+    }, [canStartCall, enableCallInRoom, disableCallInRoom]);
 
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
 
@@ -79,10 +50,10 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
             caption={_t("room_settings|voip|enable_element_call_caption", {
                 brand,
             })}
-            value={elementCallEnabled}
-            onChange={onChange}
-            disabled={!maySend}
-            tooltip={_t("room_settings|voip|enable_element_call_no_permissions_tooltip")}
+            value={canStartCall}
+            onChange={onToggle}
+            disabled={busy || !canAdjustCallPermissions}
+            tooltip={canAdjustCallPermissions ? undefined : _t("room_settings|voip|enable_element_call_no_permissions_tooltip")}
         />
     );
 };
