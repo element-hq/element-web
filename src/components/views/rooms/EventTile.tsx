@@ -282,7 +282,7 @@ export function isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
-export class UnwrappedEventTile extends React.PureComponent<EventTileProps, IState> {
+export class UnwrappedEventTile extends React.Component<EventTileProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
