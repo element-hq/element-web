@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { useCallback, useMemo } from "react";
 
 import type React from "react";
@@ -18,9 +18,21 @@ import { LocalRoom } from "../../models/LocalRoom";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import Modal from "../../Modal";
 
+type ElementCallPermissions = {
+    canStartCall: boolean;
+    canAdjustCallPermissions: boolean;
+    enableCallInRoom(): void;
+    disableCallInRoom(): void;
+}
 
-const useLegacyCallPermissions = (room: Room | LocalRoom): ReturnType<typeof useElementCallPermissions> {
 
+function useLegacyCallPermissions(room: Room | LocalRoom): ElementCallPermissions {
+    return {
+        canStartCall: true,
+        canAdjustCallPermissions: true,
+        enableCallInRoom: () => {},
+        disableCallInRoom: () => {},
+    }
 }
 
 /**
@@ -30,21 +42,15 @@ const useLegacyCallPermissions = (room: Room | LocalRoom): ReturnType<typeof use
  */
 const useSlotsCallPermissions = (
     room: Room | LocalRoom,
-): {
-    canStartCall: boolean;
-    canAdjustCallPermissions: boolean;
-    enableCallInRoom(): void;
-    disableCallInRoom(): void;
-} => {
+): ElementCallPermissions => {
     // Use sticky events 
     const isMSC4354Enabled = useFeatureEnabled("feature_element_call_msc4354");
-    const [mayCreateElementCallState, maySendSlot, hasRoomSlot, isPublic] = useRoomState<[boolean, boolean, boolean, boolean, boolean]>(room, () => [
+    const [mayCreateElementCallState, maySendSlot, hasRoomSlot] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
         room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
         room.currentState.mayClientSendStateEvent("org.matrix.msc4143.rtc.slot", room.client),
         // TODO: Replace with proper const
         room.currentState.getStateEvents("org.matrix.msc4143.rtc.slot", "m.call#ROOM")?.getContent()?.application?.type === 'm.call',
-        room.getJoinRule() === JoinRule.Public,
     ]);
 
     // TODO: Check that we are allowed to create audio/video calls, when the telephony PR lands.
@@ -100,6 +106,10 @@ const useSlotsCallPermissions = (
     };
 };
 
-const useLegacyCallPermissions = (room: Room | LocalRoom): ReturnType<typeof useElementCallPermissions> {
-
+export function useElementCallPermissions (room: Room | LocalRoom): ElementCallPermissions {
+    const isMSC4354Enabled = useFeatureEnabled("feature_element_call_msc4354");
+    if (isMSC4354Enabled) {
+        return useSlotsCallPermissions(room);
+    }
+    return useLegacyCallPermissions(room);
 }
