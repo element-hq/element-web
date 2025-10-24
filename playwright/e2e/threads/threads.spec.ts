@@ -497,7 +497,9 @@ test.describe("Threads", () => {
         await expect(
             threadPanel.locator(".mx_EventTile_last").getByText("Hello again Mr. User in a thread"),
         ).toBeVisible();
-        await expect(threadPanel).toMatchScreenshot("thread-panel.png", { css: ".mx_MessageTimestamp { visibility: hidden !important; }" });
+        await expect(threadPanel).toMatchScreenshot("thread-panel.png", {
+            css: ".mx_MessageTimestamp { visibility: hidden !important; }",
+        });
 
         const rightPanel = page.locator(".mx_RightPanel");
         // Check that the threads are listed
