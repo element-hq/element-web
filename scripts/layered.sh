@@ -45,9 +45,6 @@ yarn link matrix-js-sdk
 [ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
 yarn install --frozen-lockfile $@
 
-# Build the resources as shared-components needs the languages file
-yarn build:res
-
 # Link shared components
 pushd packages/shared-components
 yarn link
