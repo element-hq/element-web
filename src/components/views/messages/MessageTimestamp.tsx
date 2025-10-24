@@ -80,7 +80,12 @@ export default class MessageTimestamp extends React.Component<IProps> {
             );
         } else {
             content = (
-                <span className="mx_MessageTimestamp" aria-hidden={true} aria-live="off">
+                <span
+                    className="mx_MessageTimestamp"
+                    aria-hidden={true}
+                    aria-live="off"
+                    tabIndex={this.props.inhibitTooltip ? undefined : 0}
+                >
                     {icon}
                     {timestamp}
                 </span>
@@ -90,7 +95,7 @@ export default class MessageTimestamp extends React.Component<IProps> {
         if (this.props.inhibitTooltip) return content;
 
         return (
-            <Tooltip description={label} caption={caption} isTriggerInteractive={!!this.props.href}>
+            <Tooltip description={label} caption={caption}>
                 {content}
             </Tooltip>
         );
