@@ -299,6 +299,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
+    private readonly id = uniqueId();
 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -920,7 +921,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
-        const id = uniqueId();
 
         const {
             hasRenderer,
@@ -1150,12 +1150,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const timestamp = showTimestamp && ts ? messageTimestamp : null;
-        const linkedTimestamp = timestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : null;
+        const useIRCLayout = this.props.layout === Layout.IRC;
+        // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
+        const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
+        const timestamp = showTimestamp && ts ? messageTimestamp : dummyTimestamp;
+        const linkedTimestamp =
+            timestamp !== dummyTimestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : dummyTimestamp;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
-            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={id} tabIndex={0} />;
+            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
         }
 
         let reactionsRow: JSX.Element | undefined;
@@ -1172,7 +1176,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // If we have reactions or a pinned message badge, we need a footer
         const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
 
-        const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
@@ -1240,7 +1243,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {avatar}
                             {sender}
                         </div>,
-                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div
+                            id={this.id}
+                            className={lineClasses}
+                            key="mx_EventTile_line"
+                            onContextMenu={this.onContextMenu}
+                        >
                             {this.renderContextMenu()}
                             {replyChain}
                             {renderTile(TimelineRenderingType.Thread, {
@@ -1430,7 +1438,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         {sender}
                         {ircPadlock}
                         {avatar}
-                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div
+                            id={this.id}
+                            className={lineClasses}
+                            key="mx_EventTile_line"
+                            onContextMenu={this.onContextMenu}
+                        >
                             {this.renderContextMenu()}
                             {groupTimestamp}
                             {groupPadlock}
