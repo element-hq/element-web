@@ -253,6 +253,7 @@ interface IState {
     reactions?: Relations | null | undefined;
 
     hover: boolean;
+    focusWithin: boolean;
 
     // Position of the context menu
     contextMenu?: {
@@ -316,6 +317,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             reactions: this.getReactions(),
 
             hover: false,
+            focusWithin: false,
 
             thread,
         };
@@ -1119,6 +1121,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             (this.props.alwaysShowTimestamps ||
                 this.props.last ||
                 this.state.hover ||
+                this.state.focusWithin ||
                 this.state.actionBarFocused ||
                 Boolean(this.state.contextMenu));
 
@@ -1207,7 +1210,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
                     layout={this.props.layout}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover || this.state.focusWithin}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}
@@ -1234,6 +1237,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-event-id": this.props.mxEvent.getId(),
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1291,6 +1296,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1422,6 +1429,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                     },
                     <>
                         {ircTimestamp}
