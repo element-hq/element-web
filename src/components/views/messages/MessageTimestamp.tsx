@@ -24,6 +24,24 @@ interface IProps {
     showFullDate?: boolean;
     showSeconds?: boolean;
     showRelative?: boolean;
+
+    /**
+     * If set to true then no tooltip will be shown
+     */
+    inhibitTooltip?: boolean;
+
+    /**
+     * If specified, will be rendered as an anchor bearing the href, a `span` element will be used otherwise
+     */
+    href?: string;
+    /**
+     * Optional onClick handler to attach to the DOM element
+     */
+    onClick?: React.MouseEventHandler<HTMLElement>;
+    /**
+     * Optional onContextMenu handler to attach to the DOM element
+     */
+    onContextMenu?: React.MouseEventHandler<HTMLElement>;
 }
 
 export default class MessageTimestamp extends React.Component<IProps> {
@@ -52,12 +70,28 @@ export default class MessageTimestamp extends React.Component<IProps> {
             icon = <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />;
         }
 
-        return (
-            <Tooltip description={label} caption={caption}>
+        let content;
+        if (this.props.href) {
+            content = (
+                <a href={this.props.href} className="mx_MessageTimestamp" aria-live="off">
+                    {icon}
+                    {timestamp}
+                </a>
+            );
+        } else {
+            content = (
                 <span className="mx_MessageTimestamp" aria-hidden={true} aria-live="off">
                     {icon}
                     {timestamp}
                 </span>
+            );
+        }
+
+        if (this.props.inhibitTooltip) return content;
+
+        return (
+            <Tooltip description={label} caption={caption} isTriggerInteractive={!!this.props.href}>
+                {content}
             </Tooltip>
         );
     }
