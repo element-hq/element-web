@@ -360,6 +360,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // We only show the 'sent' receipt on the last successful event.
         if (!this.props.lastSuccessful) return false;
 
+        // Don't show this in the thread view as it conflicts with the thread counter.
+        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
+
         // Check to make sure the sending state is appropriate. A null/undefined send status means
         // that the message is 'sent', so we're just double checking that it's explicitly not sent.
         if (this.props.eventSendStatus && this.props.eventSendStatus !== EventStatus.SENT) return false;
