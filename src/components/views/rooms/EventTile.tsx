@@ -40,7 +40,6 @@ import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
-import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -1135,16 +1134,24 @@ export class UnwrappedEventTile extends React.PureComponent<EventTileProps, ISta
             ts = this.props.mxEvent.getTs();
         }
 
-        const messageTimestamp = (
+        const messageTimestampProps = {
+            showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
+            showTwelveHour: this.props.isTwelveHour,
+            ts,
+            receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
+        };
+        const messageTimestamp = <MessageTimestamp {...messageTimestampProps} />;
+        const linkedMessageTimestamp = (
             <MessageTimestamp
-                showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
-                showTwelveHour={this.props.isTwelveHour}
-                ts={ts}
-                receivedTs={getLateEventInfo(this.props.mxEvent)?.received_ts}
+                {...messageTimestampProps}
+                href={permalink}
+                onClick={this.onPermalinkClicked}
+                onContextMenu={this.onTimestampContextMenu}
             />
         );
 
         const timestamp = showTimestamp && ts ? messageTimestamp : null;
+        const linkedTimestamp = timestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : null;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
@@ -1164,17 +1171,6 @@ export class UnwrappedEventTile extends React.PureComponent<EventTileProps, ISta
 
         // If we have reactions or a pinned message badge, we need a footer
         const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
-
-        const linkedTimestamp = !this.props.hideTimestamp ? (
-            <a
-                href={permalink}
-                onClick={this.onPermalinkClicked}
-                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-                onContextMenu={this.onTimestampContextMenu}
-            >
-                {timestamp}
-            </a>
-        ) : null;
 
         const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
@@ -1261,9 +1257,7 @@ export class UnwrappedEventTile extends React.PureComponent<EventTileProps, ISta
                                 showHiddenEvents: this.context.showHiddenEvents,
                             })}
                             {actionBar}
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                {timestamp}
-                            </a>
+                            {linkedTimestamp}
                             {msgOption}
                         </div>,
                         hasFooter && (
