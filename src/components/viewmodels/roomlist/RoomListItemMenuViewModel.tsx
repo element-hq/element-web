@@ -23,6 +23,9 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { RoomNotifState } from "../../../RoomNotifs";
 import { useNotificationState } from "../../../hooks/useRoomNotificationState";
+import { useSettingValue } from "../../../hooks/useSettings";
+import Modal from "../../../Modal";
+import DevtoolsDialog from "../../views/dialogs/DevtoolsDialog";
 
 export interface RoomListItemMenuViewState {
     /**
@@ -33,6 +36,10 @@ export interface RoomListItemMenuViewState {
      * Whether the notification menu should be shown.
      */
     showNotificationMenu: boolean;
+    /**
+     * Whether the developer tools menu option should be shown.
+     */
+    showDeveloperTools: boolean;
     /**
      * Whether the room is a favourite room.
      */
@@ -49,6 +56,10 @@ export interface RoomListItemMenuViewState {
      * Can copy the room link.
      */
     canCopyRoomLink: boolean;
+    /**
+     * Can open the room settings.
+     */
+    canOpenRoomSettings: boolean;
     /**
      * Can mark the room as read.
      */
@@ -103,6 +114,16 @@ export interface RoomListItemMenuViewState {
      */
     copyRoomLink: (evt: Event) => void;
     /**
+     * Open the room settings.
+     * @param evt
+     */
+    openRoomSettings: (evt: Event) => void;
+    /**
+     * Open the developer tools.
+     * @param evt
+     */
+    openDeveloperTools: () => void;
+    /**
      * Leave the room.
      * @param evt
      */
@@ -126,6 +147,7 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
 
     const showMoreOptionsMenu = hasAccessToOptionsMenu(room);
     const showNotificationMenu = hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
+    const showDeveloperTools = useSettingValue("developerMode");
 
     const canMarkAsRead = notificationLevel > NotificationLevel.None;
     const canMarkAsUnread = !canMarkAsRead && !isArchived;
@@ -133,6 +155,7 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
     const canInvite =
         room.canInvite(matrixClient.getUserId()!) && !isDm && shouldShowComponent(UIComponent.InviteUsers);
     const canCopyRoomLink = !isDm;
+    const canOpenRoomSettings = !isArchived;
 
     const [roomNotifState, setRoomNotifState] = useNotificationState(room);
     const isNotificationAllMessage = roomNotifState === RoomNotifState.AllMessages;
@@ -190,6 +213,27 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
         [room],
     );
 
+    const openRoomSettings = useCallback(
+        (evt: Event): void => {
+            dispatcher.dispatch({
+                action: "open_room_settings",
+                room_id: room.roomId,
+            });
+            PosthogTrackers.trackInteraction("WebRoomListRoomTileContextMenuSettingsItem", evt);
+        },
+        [room],
+    );
+
+    const openDeveloperTools = useCallback((): void => {
+        Modal.createDialog(
+            DevtoolsDialog,
+            {
+                roomId: room.roomId,
+            },
+            "mx_DevtoolsDialog_wrapper",
+        );
+    }, [room]);
+
     const leaveRoom = useCallback(
         (evt: Event): void => {
             dispatcher.dispatch({
@@ -204,10 +248,12 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
     return {
         showMoreOptionsMenu,
         showNotificationMenu,
+        showDeveloperTools,
         isFavourite,
         isLowPriority,
         canInvite,
         canCopyRoomLink,
+        canOpenRoomSettings,
         canMarkAsRead,
         canMarkAsUnread,
         isNotificationAllMessage,
@@ -220,6 +266,8 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
         toggleLowPriority,
         invite,
         copyRoomLink,
+        openRoomSettings,
+        openDeveloperTools,
         leaveRoom,
         setRoomNotifState,
     };

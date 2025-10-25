@@ -24,6 +24,9 @@ import { tagRoom } from "../../../../../src/utils/room/tagRoom";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { useNotificationState } from "../../../../../src/hooks/useRoomNotificationState";
 import { RoomNotifState } from "../../../../../src/RoomNotifs";
+import Modal from "../../../../../src/Modal";
+import DevtoolsDialog from "../../../../../src/components/views/dialogs/DevtoolsDialog";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
@@ -61,6 +64,7 @@ describe("RoomListItemMenuViewModel", () => {
         mocked(useUnreadNotifications).mockReturnValue({ symbol: null, count: 0, level: NotificationLevel.None });
         mocked(useNotificationState).mockReturnValue([RoomNotifState.AllMessages, jest.fn()]);
         jest.spyOn(dispatcher, "dispatch");
+        jest.spyOn(Modal, "createDialog");
     });
 
     afterEach(() => {
@@ -74,9 +78,11 @@ describe("RoomListItemMenuViewModel", () => {
     it("default", () => {
         const { result } = render();
         expect(result.current.showMoreOptionsMenu).toBe(false);
+        expect(result.current.showDeveloperTools).toBe(false);
         expect(result.current.canInvite).toBe(false);
         expect(result.current.isFavourite).toBe(false);
         expect(result.current.canCopyRoomLink).toBe(true);
+        expect(result.current.canOpenRoomSettings).toBe(true);
         expect(result.current.canMarkAsRead).toBe(false);
         expect(result.current.canMarkAsUnread).toBe(true);
     });
@@ -91,6 +97,12 @@ describe("RoomListItemMenuViewModel", () => {
         mocked(hasAccessToNotificationMenu).mockReturnValue(true);
         const { result } = render();
         expect(result.current.showNotificationMenu).toBe(true);
+    });
+
+    it("should has showDeveloperTools to be true when developer mode is enabled", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "developerMode");
+        const { result } = render();
+        expect(result.current.showDeveloperTools).toBe(true);
     });
 
     it("should be able to invite", () => {
@@ -188,6 +200,27 @@ describe("RoomListItemMenuViewModel", () => {
             action: "copy_room",
             room_id: room.roomId,
         });
+    });
+
+    it("should dispatch a open room settings action", () => {
+        const { result } = render();
+        result.current.openRoomSettings(new Event("click"));
+        expect(dispatcher.dispatch).toHaveBeenCalledWith({
+            action: "open_room_settings",
+            room_id: room.roomId,
+        });
+    });
+
+    it("should create a devtools modal", () => {
+        const { result } = render();
+        result.current.openDeveloperTools();
+        expect(Modal.createDialog).toHaveBeenCalledWith(
+            DevtoolsDialog,
+            {
+                roomId: room.roomId,
+            },
+            "mx_DevtoolsDialog_wrapper",
+        );
     });
 
     it("should dispatch forget room action", () => {

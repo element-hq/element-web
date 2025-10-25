@@ -27,17 +27,21 @@ describe("<RoomListItemMenuView />", () => {
     const defaultValue: RoomListItemMenuViewState = {
         showMoreOptionsMenu: true,
         showNotificationMenu: true,
+        showDeveloperTools: false,
         isFavourite: true,
         isLowPriority: true,
         canInvite: true,
         canMarkAsUnread: true,
         canMarkAsRead: true,
         canCopyRoomLink: true,
+        canOpenRoomSettings: true,
         isNotificationAllMessage: true,
         isNotificationMentionOnly: true,
         isNotificationAllMessageLoud: true,
         isNotificationMute: true,
         copyRoomLink: jest.fn(),
+        openRoomSettings: jest.fn(),
+        openDeveloperTools: jest.fn(),
         markAsUnread: jest.fn(),
         markAsRead: jest.fn(),
         leaveRoom: jest.fn(),
@@ -127,8 +131,35 @@ describe("<RoomListItemMenuView />", () => {
         expect(defaultValue.copyRoomLink).toHaveBeenCalled();
 
         await user.click(openMenu);
+        await user.click(screen.getByRole("menuitem", { name: "Settings" }));
+        expect(defaultValue.openRoomSettings).toHaveBeenCalled();
+
+        await user.click(openMenu);
         await user.click(screen.getByRole("menuitem", { name: "Leave room" }));
         expect(defaultValue.leaveRoom).toHaveBeenCalled();
+    });
+
+    it("should not display developer tools option when disabled", async () => {
+        const user = userEvent.setup();
+        renderMenu();
+
+        const openMenu = screen.getByRole("button", { name: "More Options" });
+        await user.click(openMenu);
+
+        expect(screen.queryByText("Developer tools")).not.toBeInTheDocument();
+    });
+
+    it("should display and have action linked for developer tools option when enabled", async () => {
+        mocked(useRoomListItemMenuViewModel).mockReturnValue({ ...defaultValue, showDeveloperTools: true });
+
+        const user = userEvent.setup();
+        renderMenu();
+
+        const openMenu = screen.getByRole("button", { name: "More Options" });
+        await user.click(openMenu);
+
+        await user.click(screen.getByRole("menuitem", { name: "Developer tools" }));
+        expect(defaultValue.openDeveloperTools).toHaveBeenCalled();
     });
 
     it("should display all the buttons and have the actions linked for the notification options menu", async () => {

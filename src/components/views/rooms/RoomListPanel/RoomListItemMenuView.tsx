@@ -13,6 +13,8 @@ import FavouriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/fa
 import ArrowDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-down";
 import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
+import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
+import CodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/code";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import OverflowIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 import NotificationIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
@@ -147,6 +149,24 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     Icon={LinkIcon}
                     label={_t("room_list|more_options|copy_link")}
                     onSelect={vm.copyRoomLink}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {vm.canOpenRoomSettings && (
+                <MenuItem
+                    Icon={SettingsIcon}
+                    label={_t("common|settings")}
+                    onSelect={vm.openRoomSettings}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
+            )}
+            {vm.showDeveloperTools && (
+                <MenuItem
+                    Icon={CodeIcon}
+                    label={_t("devtools|title")}
+                    onSelect={vm.openDeveloperTools}
                     onClick={(evt) => evt.stopPropagation()}
                     hideChevron={true}
                 />
