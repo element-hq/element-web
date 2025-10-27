@@ -1474,7 +1474,6 @@
         "upload_file": "Upload a file"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Allow screen share only mode",
         "ask_to_join": "Enable ask to join",
         "automatic_debug_logs": "Automatically send debug logs on any error",
         "automatic_debug_logs_decryption": "Automatically send debug logs on decryption errors",
