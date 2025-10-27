@@ -20,6 +20,7 @@ import {
     registerTranslations,
     setLocale,
     getLocale,
+    setMissingEntryGenerator as setMissingEntryGeneratorSharedComponents,
 } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
@@ -102,7 +103,7 @@ export function getUserLanguage(): string {
 // Currently only used in unit tests to avoid having to load
 // the translations in element-web
 export function setMissingEntryGenerator(f: (value: string) => void): void {
-    setMissingEntryGenerator(f);
+    setMissingEntryGeneratorSharedComponents(f);
 }
 
 export async function setLanguage(...preferredLangs: string[]): Promise<void> {
