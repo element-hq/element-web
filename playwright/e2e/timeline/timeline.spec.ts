@@ -637,9 +637,7 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
-                    has: page.locator(".mx_MessageTimestamp"),
-                });
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a.mx_MessageTimestamp");
                 // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
                 await expect(timestamp).not.toHaveAttribute("href", /~!/);
                 await timestamp.locator(".mx_MessageTimestamp").click();
