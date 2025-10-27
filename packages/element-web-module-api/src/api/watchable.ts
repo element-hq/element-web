@@ -26,10 +26,14 @@ function isObject(value: unknown): value is object {
  * @public
  */
 export class Watchable<T> {
-    private readonly listeners = new Set<WatchFn<T>>();
+    protected readonly listeners = new Set<WatchFn<T>>();
 
     public constructor(private currentValue: T) {}
 
+    /**
+     * The value stored in this watchable.
+     * Warning: Could potentially return stale data if you haven't called {@link Watchable#watch}.
+     */
     public get value(): T {
         return this.currentValue;
     }
@@ -50,12 +54,32 @@ export class Watchable<T> {
     }
 
     public watch(listener: (value: T) => void): void {
+        // Call onFirstWatch if there was no listener before.
+        if (this.listeners.size === 0) {
+            this.onFirstWatch();
+        }
         this.listeners.add(listener);
     }
 
     public unwatch(listener: (value: T) => void): void {
-        this.listeners.delete(listener);
+        const hasDeleted = this.listeners.delete(listener);
+        // Call onLastWatch if every listener has been removed.
+        if (hasDeleted && this.listeners.size === 0) {
+            this.onLastWatch();
+        }
     }
+
+    /**
+     * This is called when the number of listeners go from zero to one.
+     * Could be used to add external event listeners.
+     */
+    protected onFirstWatch(): void {}
+
+    /**
+     * This is called when the number of listeners go from one to zero.
+     * Could be used to remove external event listeners.
+     */
+    protected onLastWatch(): void {}
 }
 
 /**

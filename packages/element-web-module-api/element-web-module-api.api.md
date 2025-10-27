@@ -24,6 +24,13 @@ export interface AccountAuthInfo {
     userId: string;
 }
 
+// @public
+export interface AccountDataApi {
+    delete(eventType: string): Promise<void>;
+    get(eventType: string): Watchable<unknown>;
+    set(eventType: string, content: unknown): Promise<void>;
+}
+
 // @alpha @deprecated (undocumented)
 export interface AliasCustomisations {
     // (undocumented)
@@ -37,6 +44,7 @@ export interface AliasCustomisations {
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension, DialogApiExtension, AccountAuthApiExtension, ProfileApiExtension {
     // @alpha
     readonly builtins: BuiltinsApi;
+    readonly client: ClientApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -46,6 +54,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
+    readonly stores: StoresApi;
 }
 
 // @alpha
@@ -63,6 +72,12 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
         includeAttachments?: boolean;
         sizeMb?: number;
     };
+}
+
+// @public
+export interface ClientApi {
+    accountData: AccountDataApi;
+    getRoom: (id: string) => Room | null;
 }
 
 // @alpha @deprecated (undocumented)
@@ -312,9 +327,22 @@ export interface ProfileApiExtension {
     readonly profile: Watchable<Profile>;
 }
 
+// @public
+export interface Room {
+    getLastActiveTimestamp: () => number;
+    id: string;
+    name: Watchable<string>;
+}
+
 // @alpha @deprecated (undocumented)
 export interface RoomListCustomisations<Room> {
     isRoomVisible?(room: Room): boolean;
+}
+
+// @public
+export interface RoomListStoreApi {
+    getRooms(): Watchable<Room[]>;
+    waitForReady(): Promise<void>;
 }
 
 // @alpha
@@ -333,6 +361,11 @@ export interface SpacePanelItemProps {
     onSelected: () => void;
     style?: React.CSSProperties;
     tooltip?: string;
+}
+
+// @public
+export interface StoresApi {
+    roomListStore: RoomListStoreApi;
 }
 
 // @public
@@ -360,9 +393,14 @@ export type Variables = {
 // @public
 export class Watchable<T> {
     constructor(currentValue: T);
+    // Warning: (ae-forgotten-export) The symbol "WatchFn" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    protected readonly listeners: Set<WatchFn<T>>;
+    protected onFirstWatch(): void;
+    protected onLastWatch(): void;
     // (undocumented)
     unwatch(listener: (value: T) => void): void;
-    // (undocumented)
     get value(): T;
     set value(value: T);
     // (undocumented)
