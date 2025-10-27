@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 

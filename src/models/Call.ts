@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -556,7 +557,6 @@ export interface WidgetGenerationParameters {
      * Skip showing the lobby screen of a call.
      */
     skipLobby?: boolean;
-    useMSC4354?: boolean;
 }
 
 /**

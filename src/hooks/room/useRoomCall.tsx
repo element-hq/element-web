@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
@@ -143,7 +144,7 @@ export const useRoomCall = (
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
         if (memberCount <= 2) {
-            // options.push(PlatformCallType.LegacyCall);
+            options.push(PlatformCallType.LegacyCall);
         } else if (mayEditWidgets || hasJitsiWidget) {
             options.push(PlatformCallType.JitsiCall);
         }
@@ -215,7 +216,6 @@ export const useRoomCall = (
         if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
         }
-
         return State.NoCall;
     }, [
         callOptions,
@@ -301,8 +301,6 @@ export const useRoomCall = (
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }
-
-    console.log("useRoomCall", { voiceCallDisabledReason, videoCallDisabledReason, callOptions, hideVideoCallButton, hideVoiceCallButton, mayCreateElementCalls });
 
     /**
      * We've gone through all the steps

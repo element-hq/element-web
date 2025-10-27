@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
@@ -651,8 +652,8 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.VoiceAndVideo,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        controller: new ReloadOnChangeController(),
         displayName: _td("labs|group_calls"),
+        controller: new ReloadOnChangeController(),
         default: false,
     },
     "feature_disable_call_per_sender_encryption": {

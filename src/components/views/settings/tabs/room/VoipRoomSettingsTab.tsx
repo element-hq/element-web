@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -28,7 +29,6 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     const onToggle = useCallback(() => {
         setBusy(true)
         void (async () => {
-            console.log({canStartCall, canAdjustCallPermissions});
             try {
                 if (canStartCall) {
                     await disableCallInRoom();
