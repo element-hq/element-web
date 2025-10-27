@@ -518,10 +518,11 @@ export default class DeviceListener {
      */
     private async reportCryptoSessionStateToAnalytics(cli: MatrixClient): Promise<void> {
         const crypto = cli.getCrypto()!;
-        const secretStorageReady = await crypto.isSecretStorageReady();
+        const secretStorageStatus = await crypto.getSecretStorageStatus();
+        const secretStorageReady = secretStorageStatus.ready;
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const backupInfo = await this.getKeyBackupInfo();
-        const is4SEnabled = (await cli.secretStorage.getDefaultKeyId()) != null;
+        const is4SEnabled = secretStorageStatus.defaultKeyId != null;
         const deviceVerificationStatus = await crypto.getDeviceVerificationStatus(cli.getUserId()!, cli.getDeviceId()!);
 
         const verificationState =
