@@ -73,7 +73,13 @@ export default class MessageTimestamp extends React.Component<IProps> {
         let content;
         if (this.props.href) {
             content = (
-                <a href={this.props.href} className="mx_MessageTimestamp" aria-live="off">
+                <a
+                    href={this.props.href}
+                    onClick={this.props.onClick}
+                    onContextMenu={this.props.onContextMenu}
+                    className="mx_MessageTimestamp"
+                    aria-live="off"
+                >
                     {icon}
                     {timestamp}
                 </a>
@@ -81,10 +87,12 @@ export default class MessageTimestamp extends React.Component<IProps> {
         } else {
             content = (
                 <span
+                    onClick={this.props.onClick}
+                    onContextMenu={this.props.onContextMenu}
                     className="mx_MessageTimestamp"
                     aria-hidden={true}
                     aria-live="off"
-                    tabIndex={this.props.inhibitTooltip ? undefined : 0}
+                    tabIndex={this.props.onClick || !this.props.inhibitTooltip ? 0 : undefined}
                 >
                     {icon}
                     {timestamp}

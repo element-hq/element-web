@@ -361,7 +361,9 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
 
         // now click on the permalink for Permalink me
-        await page.locator(".mx_EventTile").filter({ hasText: "Permalink me" }).locator("a").dispatchEvent("click");
+        const tile = page.locator(".mx_EventTile").filter({ hasText: "Permalink me" });
+        await tile.hover();
+        await tile.locator("a").dispatchEvent("click");
 
         // make sure it is now selected with the little green |
         await expect(page.locator(".mx_EventTile_selected").filter({ hasText: "Permalink me" })).toBeVisible();
