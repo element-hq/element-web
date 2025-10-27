@@ -710,7 +710,7 @@ export class ElementCall extends Call {
         }
 
         if (SettingsStore.getValue("feature_element_call_msc4354")) {
-            params.append("useStickyEvents", "true");
+            params.append("preferStickyEvents", "true");
         }
 
         // Set custom fonts

@@ -117,8 +117,7 @@ const useSlotsCallPermissions = (
         await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", {
             "application": {
                 "type": "m.call",
-                // 
-                "m.call.id": "i_dont_know_what_this_should_be",
+                // m.call.id is not specified here, as we want this slot to be general purpose
             }
         }, "m.call#ROOM");
         return true;
