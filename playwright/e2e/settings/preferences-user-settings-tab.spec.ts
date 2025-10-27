@@ -31,8 +31,13 @@ test.describe("Preferences user settings tab", () => {
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
         await expect(tab).toMatchScreenshot("Preferences-user-settings-tab-should-be-rendered-properly-1.png", {
-            // masked due to daylight saving time
+            // masked with fixed-width due to daylight saving time making the text content vary
             mask: [tab.locator("#mx_dropdownUserTimezone_value")],
+            css: `
+                #mx_dropdownUserTimezone_value {
+                    width: 200px;
+                }
+            `,
         });
     });
 
