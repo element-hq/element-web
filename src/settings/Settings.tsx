@@ -645,7 +645,6 @@ export const SETTINGS: Settings = {
             false,
         ),
         default: false,
-
     },
     "feature_group_calls": {
         isFeature: true,
