@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
@@ -36,6 +37,7 @@ declare module "matrix-js-sdk/src/types" {
     export interface StateEvents {
         // Jitsi-backed video room state events
         [JitsiCallMemberEventType]: JitsiCallMemberContent;
+        "org.matrix.msc4143.rtc.slot": any;
 
         // Unstable widgets state events
         "im.vector.modular.widgets": IWidget | EmptyObject;

@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
@@ -35,8 +36,8 @@ import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
-import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { useElementCallPermissions } from "./useElementCallPermissions";
 
 export enum PlatformCallType {
     ElementCall,
@@ -73,6 +74,7 @@ export const getPlatformCallTypeProps = (
 const enum State {
     NoCall,
     NoPermission,
+    CallingDisabled,
     Unpinned,
     Ongoing,
     NotJoined,
@@ -105,6 +107,7 @@ export const useRoomCall = (
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
+    const { canStartCall: mayCreateElementCalls } = useElementCallPermissions(room);
 
     const hasLegacyCall = useEventEmitterState(
         LegacyCallHandler.instance,
@@ -132,9 +135,8 @@ export const useRoomCall = (
     // room
     const memberCount = useRoomMemberCount(room);
 
-    const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
+    const [mayEditWidgets] = useRoomState<[boolean]>(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
-        room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
     ]);
 
     // The options provided to the RoomHeader.
@@ -150,7 +152,7 @@ export const useRoomCall = (
             if (hasGroupCall || mayCreateElementCalls) {
                 options.push(PlatformCallType.ElementCall);
             }
-            if (useElementCallExclusively && !hasJitsiWidget) {
+            if (useElementCallExclusively && mayCreateElementCalls && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
             }
         }
@@ -207,6 +209,10 @@ export const useRoomCall = (
             return State.Ongoing;
         }
 
+        if (callOptions.length === 0 && !mayCreateElementCalls) {
+            return State.CallingDisabled;
+        }
+
         if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
         }
@@ -230,7 +236,9 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
+                void (async () => {
+                    await placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
+                })();
             }
         },
         [promptPinWidget, room, widget],
@@ -243,7 +251,9 @@ export const useRoomCall = (
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
+                void (async () => {
+                    await placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
+                })();
             }
         },
         [widget, promptPinWidget, room],
@@ -252,6 +262,9 @@ export const useRoomCall = (
     let voiceCallDisabledReason: string | null;
     let videoCallDisabledReason: string | null;
     switch (state) {
+        case State.CallingDisabled:
+            voiceCallDisabledReason = videoCallDisabledReason = _t("voip|disabled_branded_call", { brand: SdkConfig.get("element_call").brand });
+            break;
         case State.NoPermission:
             voiceCallDisabledReason = _t("voip|disabled_no_perms_start_voice_call");
             videoCallDisabledReason = _t("voip|disabled_no_perms_start_video_call");

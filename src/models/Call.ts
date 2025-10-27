@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -706,6 +707,10 @@ export class ElementCall extends Call {
 
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
             params.append("allowVoipWithNoMedia", "true");
+        }
+
+        if (SettingsStore.getValue("feature_element_call_msc4354")) {
+            params.append("preferStickyEvents", "true");
         }
 
         // Set custom fonts
