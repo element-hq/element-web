@@ -21,8 +21,8 @@
             }
         },
         "./dist/element-web-shared-components.css": {
-		    "require": "./dist/element-web-shared-components.css",
-		    "import": "./dist/element-web-shared-components.css"
+            "require": "./dist/element-web-shared-components.css",
+            "import": "./dist/element-web-shared-components.css"
         }
     },
     "types": "dist/element-web-shared-components.d.ts",
