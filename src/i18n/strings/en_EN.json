@@ -4008,6 +4008,7 @@
         "disable_microphone": "Mute microphone",
         "disabled_no_perms_start_video_call": "You do not have permission to start video calls",
         "disabled_no_perms_start_voice_call": "You do not have permission to start voice calls",
+        "disabled_branded_call": "Enable %(brand)s in the room settings",
         "disabled_ongoing_call": "Ongoing call",
         "element_call": "Element Call",
         "enable_camera": "Turn on camera",

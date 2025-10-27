@@ -28,6 +28,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     const onToggle = useCallback(() => {
         setBusy(true)
         void (async () => {
+            console.log({canStartCall, canAdjustCallPermissions});
             try {
                 if (canStartCall) {
                     await disableCallInRoom();
@@ -38,7 +39,6 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
                 setBusy(false);
             }
         })();
-
     }, [canStartCall, enableCallInRoom, disableCallInRoom]);
 
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;

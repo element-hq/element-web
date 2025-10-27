@@ -641,6 +641,7 @@ export const SETTINGS: Settings = {
             [[UNSTABLE_MSC4354_STICKY_EVENTS]],
             undefined,
             _td("labs|feature_element_call_msc4354_msc_support"),
+            false,
         ),
         default: false,
 
