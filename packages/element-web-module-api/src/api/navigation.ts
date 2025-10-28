@@ -15,6 +15,22 @@ import { JSX } from "react";
 export type LocationRenderFunction = () => JSX.Element;
 
 /**
+ * The options available for changing the open behaviour.
+ * @public
+ */
+export interface OpenRoomOptions {
+    /**
+     * The list of servers to join via.
+     */
+    viaServers?: string[];
+
+    /**
+     * Whether to automatically join the room if we are not already in it.
+     */
+    autoJoin?: boolean;
+}
+
+/**
  * API methods to navigate the application.
  * @public
  */
@@ -33,4 +49,11 @@ export interface NavigationApi {
      * @alpha
      */
     registerLocationRenderer(path: string, renderer: LocationRenderFunction): void;
+
+    /**
+     * Open a room in element-web.
+     * @param roomIdOrAlias - id/alias of the room to open
+     * @param opts - Options to control the open action, see {@link OpenRoomOptions}
+     */
+    openRoom(roomIdOrAlias: string, opts?: OpenRoomOptions): void;
 }
