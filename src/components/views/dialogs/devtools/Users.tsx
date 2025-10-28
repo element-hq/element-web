@@ -89,7 +89,7 @@ interface UserProps extends Pick<IDevtoolsProps, "onBack"> {
 /**
  * Shows a single user to view, and allows selecting a device to view.
  *
- * Once the user chooses a specific device, delegates to {@link Device} to show a single device.
+ * Once the user chooses a specific device, delegates to {@link DeviceView} to show a single device.
  */
 const UserView: React.FC<UserProps> = ({ member, onBack }) => {
     const context = useContext(DevtoolsContext);
