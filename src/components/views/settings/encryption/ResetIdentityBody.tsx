@@ -12,9 +12,8 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-
 import React, { type JSX, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
-import { EncryptionCard } from "./EncryptionCard";
+import { InformationCard, InformationCardButtons } from "../../../structures/InformationCard.tsx";
 import { uiAuthCallback } from "../../../../CreateCrossSigning";
-import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 
@@ -68,7 +67,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
     const [inProgress, setInProgress] = useState(false);
 
     return (
-        <EncryptionCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
+        <InformationCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
             <EncryptionCardEmphasisedContent>
                 <VisualList>
                     <VisualListItem Icon={CheckIcon} success={true}>
@@ -83,7 +82,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                 </VisualList>
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
             </EncryptionCardEmphasisedContent>
-            <EncryptionCardButtons>
+            <InformationCardButtons>
                 <Button
                     destructive={true}
                     disabled={inProgress}
@@ -114,8 +113,8 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                         {_t("action|cancel")}
                     </Button>
                 )}
-            </EncryptionCardButtons>
-        </EncryptionCard>
+            </InformationCardButtons>
+        </InformationCard>
     );
 }
 

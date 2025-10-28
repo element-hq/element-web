@@ -5,17 +5,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_EncryptionCard {
+.mx_InformationCard {
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-8x);
-    padding: var(--cpd-space-10x);
     border-radius: var(--cpd-space-4x);
     /* From figma */
-    box-shadow: 0 1.2px 2.4px 0 rgb(27, 29, 34, 0.15);
-    border: 1px solid var(--cpd-color-gray-400);
 
-    .mx_EncryptionCard_header {
+    border: 0px none;
+    box-shadow: none;
+    padding: 0px;
+
+    .mx_InformationCard_header {
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-4x);
@@ -31,15 +32,14 @@
         }
     }
 
-    /* extra class for specifying that we don't need a border */
-    &.mx_EncryptionCard_noBorder {
-        border: 0px none;
-        box-shadow: none;
-        padding: 0px;
+    &.mx_InformationCard_border {
+        padding: var(--cpd-space-10x);
+        box-shadow: 0 1.2px 2.4px 0 rgb(27, 29, 34, 0.15);
+        border: 1px solid var(--cpd-color-gray-400);
     }
 }
 
-.mx_EncryptionCard_buttons {
+.mx_InformationCard_buttons {
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-4x);

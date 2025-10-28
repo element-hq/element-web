@@ -56,10 +56,10 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+    class="mx_InformationCard mx_ChangeRecoveryKey"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8"
@@ -137,7 +137,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       </button>
     </div>
     <div
-      class="mx_EncryptionCard_buttons"
+      class="mx_InformationCard_buttons"
     >
       <button
         class="_button_vczzf_8"
@@ -218,10 +218,10 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+    class="mx_InformationCard mx_ChangeRecoveryKey"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8"
@@ -294,7 +294,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         </div>
       </div>
       <div
-        class="mx_EncryptionCard_buttons"
+        class="mx_InformationCard_buttons"
       >
         <button
           aria-disabled="true"
@@ -377,10 +377,10 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+    class="mx_InformationCard mx_ChangeRecoveryKey"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8"
@@ -475,7 +475,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         </span>
       </div>
       <div
-        class="mx_EncryptionCard_buttons"
+        class="mx_InformationCard_buttons"
       >
         <button
           aria-disabled="true"
@@ -558,10 +558,10 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+    class="mx_InformationCard mx_ChangeRecoveryKey"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8"
@@ -594,7 +594,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       After clicking continue, we’ll generate a recovery key for you.
     </span>
     <div
-      class="mx_EncryptionCard_buttons"
+      class="mx_InformationCard_buttons"
     >
       <button
         class="_button_vczzf_8"
@@ -675,10 +675,10 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+    class="mx_InformationCard mx_ChangeRecoveryKey"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8"
@@ -756,7 +756,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       </button>
     </div>
     <div
-      class="mx_EncryptionCard_buttons"
+      class="mx_InformationCard_buttons"
     >
       <button
         class="_button_vczzf_8"

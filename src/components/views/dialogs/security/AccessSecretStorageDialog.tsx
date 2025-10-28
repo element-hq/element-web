@@ -15,8 +15,7 @@ import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import { _t } from "../../../../languageHandler";
-import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
-import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
+import { InformationCard, InformationCardButtons } from "../../../structures/InformationCard";
 import BaseDialog from "../BaseDialog";
 
 // Don't shout at the user that their key is invalid every time they type a key: wait a short time
@@ -192,14 +191,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                         />
                     </div>
                     {recoveryKeyFeedback}
-                    <EncryptionCardButtons>
+                    <InformationCardButtons>
                         <Button disabled={!this.state.recoveryKeyCorrect} onClick={this.onRecoveryKeyNext}>
                             {_t("action|continue")}
                         </Button>
                         <Button kind="tertiary" onClick={this.onCancel}>
                             {_t("action|cancel")}
                         </Button>
-                    </EncryptionCardButtons>
+                    </InformationCardButtons>
                 </form>
             </div>
         );
@@ -208,14 +207,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         // SettingsDialog is open, then the `FocusLock` in *that* stops us getting the focus.
         return (
             <BaseDialog fixedWidth={false} hasCancel={false}>
-                <EncryptionCard
+                <InformationCard
                     Icon={LockSolidIcon}
                     className="mx_AccessSecretStorageDialog"
                     title={title}
                     description={_t("encryption|access_secret_storage_dialog|privacy_warning")}
                 >
                     {content}
-                </EncryptionCard>
+                </InformationCard>
             </BaseDialog>
         );
     }

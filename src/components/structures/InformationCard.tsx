@@ -9,7 +9,7 @@ import React, { type JSX, type PropsWithChildren, type ComponentType, type SVGAt
 import { BigIcon, Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-interface EncryptionCardProps {
+interface InformationCardProps {
     /**
      * CSS class name to apply to the card.
      */
@@ -27,25 +27,40 @@ interface EncryptionCardProps {
      */
     destructive?: boolean;
     /**
+     * Whether the component should have a border
+     */
+    border?: boolean;
+    /**
      * The icon to display.
      */
     Icon: ComponentType<SVGAttributes<SVGElement>>;
 }
 
 /**
- * A styled card for encryption settings.
+ * A component to present action buttons at the bottom of an {@link EncryptionCard}
+ * (mostly as somewhere for the common CSS to live).
  */
-export function EncryptionCard({
+export function InformationCardButtons({ children }: PropsWithChildren): JSX.Element {
+    return <div className="mx_InformationCard_buttons">{children}</div>;
+}
+
+
+/**
+ * A styled card for encryption settings.
+ * Note: This was previously known as the EncryptionCard
+ */
+export function InformationCard({
     title,
     description,
     className,
+    border = true,
     destructive = false,
     Icon,
     children,
-}: PropsWithChildren<EncryptionCardProps>): JSX.Element {
+}: PropsWithChildren<InformationCardProps>): JSX.Element {
     return (
-        <div className={classNames("mx_EncryptionCard", className)}>
-            <div className="mx_EncryptionCard_header">
+        <div className={classNames("mx_InformationCard", className, border && "mx_InformationCard_border")}>
+            <div className="mx_InformationCard_header">
                 <BigIcon destructive={destructive}>
                     <Icon />
                 </BigIcon>

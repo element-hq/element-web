@@ -9,14 +9,14 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 
-import { EncryptionCard } from "../../../../../../src/components/views/settings/encryption/EncryptionCard";
+import { InformationCard } from "../../../../../../src/components/structures/InformationCard";
 
-describe("<EncryptionCard />", () => {
+describe("<InformationCard />", () => {
     it("should render", () => {
         const { asFragment } = render(
-            <EncryptionCard Icon={KeyIcon} title="My title" description="My description">
+            <InformationCard Icon={KeyIcon} title="My title" description="My description">
                 Encryption card children
-            </EncryptionCard>,
+            </InformationCard>,
         );
         expect(asFragment()).toMatchSnapshot();
     });

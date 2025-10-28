@@ -11,10 +11,9 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-
 import React, { type JSX, useCallback, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
-import { EncryptionCard } from "./EncryptionCard";
+import { InformationCard, InformationCardButtons } from "../../../structures/InformationCard.tsx";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import SdkConfig from "../../../../SdkConfig";
-import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 
 interface Props {
@@ -49,7 +48,7 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                 pages={[_t("settings|encryption|title"), _t("settings|encryption|delete_key_storage|breadcrumb_page")]}
                 onPageClick={onFinish}
             />
-            <EncryptionCard
+            <InformationCard
                 Icon={ErrorIcon}
                 destructive={true}
                 title={_t("settings|encryption|delete_key_storage|title")}
@@ -65,15 +64,15 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                         </VisualListItem>
                     </VisualList>
                 </EncryptionCardEmphasisedContent>
-                <EncryptionCardButtons>
+                <InformationCardButtons>
                     <Button destructive={true} onClick={onDeleteClick} disabled={busy}>
                         {_t("settings|encryption|delete_key_storage|confirm")}
                     </Button>
                     <Button kind="tertiary" onClick={onFinish}>
                         {_t("action|cancel")}
                     </Button>
-                </EncryptionCardButtons>
-            </EncryptionCard>
+                </InformationCardButtons>
+            </InformationCard>
         </>
     );
 }

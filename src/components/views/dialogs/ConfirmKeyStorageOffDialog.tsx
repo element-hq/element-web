@@ -12,8 +12,7 @@ import { PopOutIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { EncryptionCard } from "../settings/encryption/EncryptionCard";
-import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
+import { InformationCard, InformationCardButtons } from "../../structures/InformationCard";
 import { type OpenToTabPayload } from "../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
@@ -52,7 +51,7 @@ export default class ConfirmKeyStorageOffDialog extends React.Component<Props> {
 
     public render(): React.ReactNode {
         return (
-            <EncryptionCard
+            <InformationCard
                 Icon={ErrorIcon}
                 destructive={true}
                 title={_t("settings|encryption|confirm_key_storage_off")}
@@ -67,15 +66,15 @@ export default class ConfirmKeyStorageOffDialog extends React.Component<Props> {
                         </>
                     ),
                 })}
-                <EncryptionCardButtons>
+                <InformationCardButtons>
                     <Button onClick={this.onGoToSettingsClick} autoFocus kind="primary" className="">
                         {_t("common|go_to_settings")}
                     </Button>
                     <Button onClick={this.onDismissClick} kind="secondary">
                         {_t("action|yes_dismiss")}
                     </Button>
-                </EncryptionCardButtons>
-            </EncryptionCard>
+                </InformationCardButtons>
+            </InformationCard>
         );
     }
 }

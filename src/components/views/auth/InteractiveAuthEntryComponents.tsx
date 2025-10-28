@@ -23,8 +23,7 @@ import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
 import { pickBestPolicyLanguage } from "../../../Terms.ts";
-import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons.tsx";
-import { EncryptionCard } from "../settings/encryption/EncryptionCard.tsx";
+import { InformationCard, InformationCardButtons } from "../../structures/InformationCard.tsx";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -973,14 +972,14 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
 
     public render(): React.ReactNode {
         return (
-            <EncryptionCard
+            <InformationCard
                 Icon={UserProfileSolidIcon}
                 title={_t("auth|uia|mas_cross_signing_reset_title")}
                 description={_t("auth|uia|mas_cross_signing_reset_description", {
                     serverName: this.props.matrixClient.getDomain(),
                 })}
             >
-                <EncryptionCardButtons>
+                <InformationCardButtons>
                     <Button
                         Icon={PopOutIcon}
                         onClick={this.onGoToAccountClick}
@@ -993,8 +992,8 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
                     <Button onClick={this.onRetryClick} kind="tertiary" className="mx_Dialog_nonDialogButton">
                         {_t("action|retry")}
                     </Button>
-                </EncryptionCardButtons>
-            </EncryptionCard>
+                </InformationCardButtons>
+            </InformationCard>
         );
     }
 }

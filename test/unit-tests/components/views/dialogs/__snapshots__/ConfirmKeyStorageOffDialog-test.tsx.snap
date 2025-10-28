@@ -3,10 +3,10 @@
 exports[`ConfirmKeyStorageOffDialog renders 1`] = `
 <DocumentFragment>
   <div
-    class="mx_EncryptionCard"
+    class="mx_InformationCard"
   >
     <div
-      class="mx_EncryptionCard_header"
+      class="mx_InformationCard_header"
     >
       <div
         class="_content_o77nw_8 _destructive_o77nw_34"
@@ -56,7 +56,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       </a>
     </span>
     <div
-      class="mx_EncryptionCard_buttons"
+      class="mx_InformationCard_buttons"
     >
       <button
         class="_button_vczzf_8"

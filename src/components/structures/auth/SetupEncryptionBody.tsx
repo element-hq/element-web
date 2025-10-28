@@ -22,8 +22,7 @@ import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import { ResetIdentityDialog } from "../../views/dialogs/ResetIdentityDialog";
-import { EncryptionCard } from "../../views/settings/encryption/EncryptionCard";
-import { EncryptionCardButtons } from "../../views/settings/encryption/EncryptionCardButtons";
+import { InformationCard, InformationCardButtons } from "../../structures/InformationCard";
 import { EncryptionCardEmphasisedContent } from "../../views/settings/encryption/EncryptionCardEmphasisedContent";
 import ExternalLink from "../../views/elements/ExternalLink";
 import dispatcher from "../../../dispatcher/dispatcher";
@@ -196,10 +195,11 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             }
 
             return (
-                <EncryptionCard
+                <InformationCard
                     title={_t("encryption|verification|confirm_identity_title")}
                     Icon={LockIcon}
-                    className="mx_EncryptionCard_noBorder mx_SetupEncryptionBody"
+                    className="mx_SetupEncryptionBody"
+                    border={false}
                 >
                     <EncryptionCardEmphasisedContent>
                         <span>{_t("encryption|verification|confirm_identity_description")}</span>
@@ -209,15 +209,15 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                             </ExternalLink>
                         </span>
                     </EncryptionCardEmphasisedContent>
-                    <EncryptionCardButtons>
+                    <InformationCardButtons>
                         {verifyButton}
                         {useRecoveryKeyButton}
                         <Button kind="secondary" onClick={this.onCantConfirmClick}>
                             {_t("encryption|verification|cant_confirm")}
                         </Button>
                         {signOutButton}
-                    </EncryptionCardButtons>
-                </EncryptionCard>
+                    </InformationCardButtons>
+                </InformationCard>
             );
         } else if (phase === Phase.Done) {
             let message: JSX.Element;
