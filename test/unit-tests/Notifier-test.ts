@@ -433,7 +433,7 @@ describe("Notifier", () => {
         });
 
         it("should not show toast when group call is already connected", () => {
-            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
+            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "sessionMembershipsForSlot").mockReturnValue([
                 new CallMembership(
                     mkEvent({
                         event: true,

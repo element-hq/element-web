@@ -222,7 +222,7 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_element_call_msc4354": IFeature;
+    "feature_element_call_nextgen": IFeature;
     "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_allow_screen_share_only_mode": IFeature;
@@ -630,18 +630,18 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
-    "feature_element_call_msc4354": {
+    "feature_element_call_nextgen": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        displayName: _td("labs|feature_element_call_msc4354"),
+        displayName: _td("labs|feature_element_call_nextgen"),
         controller: new ServerSupportUnstableFeatureController(
-            "feature_element_call_msc4354",
+            "feature_element_call_nextgen",
             defaultWatchManager,
             [[UNSTABLE_MSC4354_STICKY_EVENTS]],
             undefined,
-            _td("labs|feature_element_call_msc4354_msc_support"),
+            _td("labs|feature_element_call_nextgen_msc_support"),
             false,
         ),
         default: false,

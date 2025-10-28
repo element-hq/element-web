@@ -16,6 +16,7 @@ import { LocalRoom } from "../../models/LocalRoom";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import Modal from "../../Modal";
 import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { DefaultCallApplicationSlot, RtcSlotEventContent, slotDescriptionToId } from "matrix-js-sdk/src/matrixrtc";
 
 type ElementCallPermissions = {
     canStartCall: boolean;
@@ -75,6 +76,7 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
     };
 }
 
+
 /**
  * Hook for adjusting permissions for enabling Element Call.
  * This requires MSC4354 (Sticky events) to work.
@@ -83,10 +85,11 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
 const useSlotsCallPermissions = (
     room: Room | LocalRoom,
 ): ElementCallPermissions => {
+    const slotId = slotDescriptionToId({id: "", application: "m.call"});
     const [maySendSlot, hasRoomSlot] = useRoomState(room, () => [
-        room.currentState.mayClientSendStateEvent("org.matrix.msc4143.rtc.slot", room.client),
+        room.currentState.mayClientSendStateEvent(EventType.RTCSlot, room.client),
         // TODO: Replace with proper const
-        room.currentState.getStateEvents("org.matrix.msc4143.rtc.slot", "m.call#ROOM")?.getContent()?.application?.type === 'm.call',
+        room.currentState.getStateEvents(EventType.RTCSlot, slotId)?.getContent<RtcSlotEventContent>().application.type === DefaultCallApplicationSlot.application.type,
     ]);
 
     // TODO: Check that we are allowed to create audio/video calls, when the telephony PR lands.
@@ -109,17 +112,14 @@ const useSlotsCallPermissions = (
             return false;
         }
         await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", {
-            "application": {
-                "type": "m.call",
-                // m.call.id is not specified here, as we want this slot to be general purpose
-            }
-        }, "m.call#ROOM");
+            "application": DefaultCallApplicationSlot.application
+        }, slotId);
         return true;
     }, [room, hasRoomSlot]);
 
     const removeElementCallSlot = useCallback(async (): Promise<void> => {
         if (hasRoomSlot) {
-            await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", { }, "m.call#ROOM");
+            await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", { }, slotId);
         }
     }, [room, hasRoomSlot]);
 
@@ -142,6 +142,6 @@ export function useElementCallPermissions (room: Room | LocalRoom): ElementCallP
     // We load both, to avoid conditional hook rendering on settings change.
     const slotsPerms = useSlotsCallPermissions(room);
     const legacyPerms = useLegacyCallPermissions(room);
-    const isMSC4354Enabled = useFeatureEnabled("feature_element_call_msc4354");
+    const isMSC4354Enabled = useFeatureEnabled("feature_element_call_nextgen");
     return isMSC4354Enabled ? slotsPerms : legacyPerms;
 }

@@ -709,8 +709,8 @@ export class ElementCall extends Call {
             params.append("allowVoipWithNoMedia", "true");
         }
 
-        if (SettingsStore.getValue("feature_element_call_msc4354")) {
-            params.append("preferStickyEvents", "true");
+        if (SettingsStore.getValue("feature_element_call_nextgen")) {
+            params.append("multiSFU", "true");
         }
 
         // Set custom fonts

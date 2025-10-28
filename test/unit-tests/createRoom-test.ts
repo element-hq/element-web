@@ -125,7 +125,7 @@ describe("createRoom", () => {
     it("sets up Element video rooms correctly", async () => {
         const userId = client.getUserId()!;
         const createCallSpy = jest.spyOn(ElementCall, "create");
-        const callMembershipSpy = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom");
+        const callMembershipSpy = jest.spyOn(MatrixRTCSession, "sessionMembershipsForSlot");
         callMembershipSpy.mockReturnValue([]);
 
         const roomId = await createRoom(client, { roomType: RoomType.UnstableCall });

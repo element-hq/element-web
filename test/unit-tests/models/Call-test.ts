@@ -25,6 +25,7 @@ import {
     MatrixRTCSessionManagerEvents,
     MatrixRTCSession,
     MatrixRTCSessionEvent,
+    DefaultCallApplicationSlot,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type { Mocked } from "jest-mock";
@@ -933,8 +934,8 @@ describe("ElementCall", () => {
             setRoomMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);
         });
         it("don't sent notify event if there are existing room call members", async () => {
-            jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
-                { application: "m.call", callId: "" } as unknown as CallMembership,
+            jest.spyOn(MatrixRTCSession, "sessionMembershipsForSlot").mockReturnValue([
+                DefaultCallApplicationSlot as unknown as CallMembership,
             ]);
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
             ElementCall.create(room);
