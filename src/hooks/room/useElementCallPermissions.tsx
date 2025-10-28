@@ -16,22 +16,26 @@ import { LocalRoom } from "../../models/LocalRoom";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import Modal from "../../Modal";
 import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
-import { DefaultCallApplicationSlot, RtcSlotEventContent, slotDescriptionToId } from "matrix-js-sdk/src/matrixrtc";
+import {
+    DefaultCallApplicationDescription,
+    DefaultCallApplicationSlot,
+    MatrixRTCSession,
+} from "matrix-js-sdk/src/matrixrtc";
+import { slotDescriptionToId } from "matrix-js-sdk/src/matrixrtc";
 
 type ElementCallPermissions = {
     canStartCall: boolean;
     canAdjustCallPermissions: boolean;
     enableCallInRoom(): void;
     disableCallInRoom(): void;
-} 
-
+};
 
 /**
  * Hook for adjusting permissions for enabling Element Call.
  * This uses the legacy state controlled system.
  * @param room the room to track
  */
-function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions {
+function useLegacyCallPermissions(room: Room | LocalRoom): ElementCallPermissions {
     const [powerLevelContent, maySend, elementCallEnabled] = useRoomState(
         room,
         useCallback(
@@ -42,7 +46,7 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
                 return [
                     content ?? {},
                     state?.maySendStateEvent(EventType.RoomPowerLevels, room.client.getSafeUserId()),
-                    content?.events?.[ElementCallMemberEventType.name] === 0
+                    content?.events?.[ElementCallMemberEventType.name] === 0,
                 ] as const;
             },
             [room.client],
@@ -57,8 +61,7 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
         newContent.events[ElementCallEventType.name] = isPublic ? moderatorLevel : userLevel;
         newContent.events[ElementCallMemberEventType.name] = userLevel;
         room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
-    },[room, powerLevelContent]);
-
+    }, [room, powerLevelContent]);
 
     const disableCallInRoom = useCallback(() => {
         const newContent = { events: {}, ...powerLevelContent };
@@ -66,7 +69,7 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
         newContent.events[ElementCallEventType.name] = adminLevel;
         newContent.events[ElementCallMemberEventType.name] = adminLevel;
         room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
-    },[room, powerLevelContent]);
+    }, [room, powerLevelContent]);
 
     return {
         canStartCall: elementCallEnabled,
@@ -76,20 +79,17 @@ function useLegacyCallPermissions(room: Room| LocalRoom): ElementCallPermissions
     };
 }
 
-
 /**
  * Hook for adjusting permissions for enabling Element Call.
  * This requires MSC4354 (Sticky events) to work.
  * @param room the room to track
  */
-const useSlotsCallPermissions = (
-    room: Room | LocalRoom,
-): ElementCallPermissions => {
-    const slotId = slotDescriptionToId({id: "", application: "m.call"});
+const useSlotsCallPermissions = (room: Room | LocalRoom): ElementCallPermissions => {
+    const slotId = slotDescriptionToId(DefaultCallApplicationDescription);
     const [maySendSlot, hasRoomSlot] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent(EventType.RTCSlot, room.client),
         // TODO: Replace with proper const
-        room.currentState.getStateEvents(EventType.RTCSlot, slotId)?.getContent<RtcSlotEventContent>().application.type === DefaultCallApplicationSlot.application.type,
+        MatrixRTCSession.getRtcSlot(room, DefaultCallApplicationDescription) !== null,
     ]);
 
     // TODO: Check that we are allowed to create audio/video calls, when the telephony PR lands.
@@ -101,8 +101,8 @@ const useSlotsCallPermissions = (
             title: "Do you want to allow calls in this room?",
             description: (
                 <p>
-                    This room doesn't currently permit calling. If you continue, other users will
-                    be able to place calls in the future. You may turn this off in the Room Settings.
+                    This room doesn't currently permit calling. If you continue, other users will be able to place calls
+                    in the future. You may turn this off in the Room Settings.
                 </p>
             ),
             button: _t("action|continue"),
@@ -111,18 +111,20 @@ const useSlotsCallPermissions = (
         if (!confirmed) {
             return false;
         }
-        await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", {
-            "application": DefaultCallApplicationSlot.application
-        }, slotId);
+        await room.client.sendStateEvent(
+            room.roomId,
+            "org.matrix.msc4143.rtc.slot",
+            {
+                application: DefaultCallApplicationSlot.application,
+            },
+            slotId,
+        );
         return true;
     }, [room, hasRoomSlot]);
 
     const removeElementCallSlot = useCallback(async (): Promise<void> => {
-        if (hasRoomSlot) {
-            await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", { }, slotId);
-        }
-    }, [room, hasRoomSlot]);
-
+        await room.client.sendStateEvent(room.roomId, "org.matrix.msc4143.rtc.slot", {}, slotId);
+    }, [room]);
 
     return {
         canStartCall: hasRoomSlot,
@@ -135,10 +137,10 @@ const useSlotsCallPermissions = (
 /**
  * Get and set whether an Element Call session may take place. If MSC4354 is enabled,
  * this will use the new slots flow. Otherwise, this will fallback to the older state-based permissions.
- * @param room 
- * @returns 
+ * @param room
+ * @returns
  */
-export function useElementCallPermissions (room: Room | LocalRoom): ElementCallPermissions {
+export function useElementCallPermissions(room: Room | LocalRoom): ElementCallPermissions {
     // We load both, to avoid conditional hook rendering on settings change.
     const slotsPerms = useSlotsCallPermissions(room);
     const legacyPerms = useLegacyCallPermissions(room);
