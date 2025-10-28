@@ -289,9 +289,16 @@ export class ModuleLoader {
 
 // @public
 export interface NavigationApi {
+    openRoom(roomIdOrAlias: string, opts?: OpenRoomOptions): void;
     // @alpha
     registerLocationRenderer(path: string, renderer: LocationRenderFunction): void;
     toMatrixToLink(link: string, join?: boolean): Promise<void>;
+}
+
+// @public
+export interface OpenRoomOptions {
+    autoJoin?: boolean;
+    viaServers?: string[];
 }
 
 // @alpha
