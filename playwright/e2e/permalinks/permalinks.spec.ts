@@ -93,10 +93,12 @@ test.describe("permalinks", () => {
         getPill(timeline, danielleId);
 
         await expect(timeline).toMatchScreenshot("permalink-rendering.png", {
-            mask: [
-                // Exclude timestamps from the snapshot, for consistency.
-                page.locator(".mx_MessageTimestamp"),
-            ],
+            // Exclude timestamps from the snapshot, for consistency.
+            css: `
+                .mx_MessageTimestamp {
+                    visibility: hidden;
+                }
+            `,
         });
     });
 });

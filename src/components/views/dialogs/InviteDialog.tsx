@@ -12,7 +12,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
-import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
@@ -24,7 +23,6 @@ import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../.
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import { humanizeTime } from "../../../utils/humanize";
 import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list/models";
@@ -65,6 +63,10 @@ import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDi
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
+import { RichList } from "../../../../packages/shared-components/src/rich-list/RichList";
+import { RichItem } from "../../../../packages/shared-components/src/rich-list/RichItem";
+import { PillInput } from "../../../../packages/shared-components/src/pill-input/PillInput";
+import { Pill } from "../../../../packages/shared-components/src/pill-input/Pill";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -120,27 +122,10 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         const avatarSize = "20px";
         const avatar = <SearchResultAvatar user={this.props.member} size={avatarSize} />;
 
-        let closeButton;
-        if (this.props.onRemove) {
-            closeButton = (
-                <AccessibleButton
-                    className="mx_InviteDialog_userTile_remove"
-                    onClick={this.onRemove}
-                    aria-label={_t("action|remove")}
-                >
-                    <CloseIcon width="16px" height="16px" />
-                </AccessibleButton>
-            );
-        }
-
         return (
-            <span className="mx_InviteDialog_userTile">
-                <span className="mx_InviteDialog_userTile_pill">
-                    {avatar}
-                    <span className="mx_InviteDialog_userTile_name">{this.props.member.name}</span>
-                </span>
-                {closeButton}
-            </span>
+            <Pill label={this.props.member.name} onClick={this.onRemove}>
+                {avatar}
+            </Pill>
         );
     }
 }
@@ -163,7 +148,6 @@ interface IDMRoomTileProps {
     member: Member;
     lastActiveTs?: number;
     onToggle(member: Member): void;
-    highlightWord: string;
     isSelected: boolean;
 }
 
@@ -176,54 +160,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         this.props.onToggle(this.props.member);
     };
 
-    private highlightName(str: string): ReactNode {
-        if (!this.props.highlightWord) return str;
-
-        // We convert things to lowercase for index searching, but pull substrings from
-        // the submitted text to preserve case. Note: we don't need to htmlEntities the
-        // string because React will safely encode the text for us.
-        const lowerStr = str.toLowerCase();
-        const filterStr = this.props.highlightWord.toLowerCase();
-
-        const result: JSX.Element[] = [];
-
-        let i = 0;
-        let ii: number;
-        while ((ii = lowerStr.indexOf(filterStr, i)) >= 0) {
-            // Push any text we missed (first bit/middle of text)
-            if (ii > i) {
-                // Push any text we aren't highlighting (middle of text match, or beginning of text)
-                result.push(<span key={i + "begin"}>{str.substring(i, ii)}</span>);
-            }
-
-            i = ii; // copy over ii only if we have a match (to preserve i for end-of-text matching)
-
-            // Highlight the word the user entered
-            const substr = str.substring(i, filterStr.length + i);
-            result.push(
-                <span className="mx_InviteDialog_tile--room_highlight" key={i + "bold"}>
-                    {substr}
-                </span>,
-            );
-            i += substr.length;
-        }
-
-        // Push any text we missed (end of text)
-        if (i < str.length) {
-            result.push(<span key={i + "end"}>{str.substring(i)}</span>);
-        }
-
-        return result;
-    }
-
     public render(): React.ReactNode {
-        let timestamp: JSX.Element | undefined;
-        if (this.props.lastActiveTs) {
-            const humanTs = humanizeTime(this.props.lastActiveTs);
-            timestamp = <span className="mx_InviteDialog_tile--room_time">{humanTs}</span>;
-        }
-
-        const avatarSize = "36px";
+        const avatarSize = "32px";
         const avatar = (this.props.member as ThreepidMember).isEmail ? (
             <EmailPillAvatarIcon width={avatarSize} height={avatarSize} />
         ) : (
@@ -241,40 +179,23 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             />
         );
 
-        let checkmark: JSX.Element | undefined;
-        if (this.props.isSelected) {
-            // To reduce flickering we put the 'selected' room tile above the real avatar
-            checkmark = <div className="mx_InviteDialog_tile--room_selected" />;
-        }
-
-        // To reduce flickering we put the checkmark on top of the actual avatar (prevents
-        // the browser from reloading the image source when the avatar remounts).
-        const stackedAvatar = (
-            <span className="mx_InviteDialog_tile_avatarStack">
-                {avatar}
-                {checkmark}
-            </span>
-        );
-
         const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.props.member.userId, {
             withDisplayName: true,
         });
 
         const caption = (this.props.member as ThreepidMember).isEmail
             ? _t("invite|email_caption")
-            : this.highlightName(userIdentifier || this.props.member.userId);
+            : userIdentifier || this.props.member.userId;
 
         return (
-            <AccessibleButton className="mx_InviteDialog_tile mx_InviteDialog_tile--room" onClick={this.onClick}>
-                {stackedAvatar}
-                <span className="mx_InviteDialog_tile_nameStack">
-                    <div className="mx_InviteDialog_tile_nameStack_name">
-                        {this.highlightName(this.props.member.name)}
-                    </div>
-                    <div className="mx_InviteDialog_tile_nameStack_userId">{caption}</div>
-                </span>
-                {timestamp}
-            </AccessibleButton>
+            <RichItem
+                avatar={avatar}
+                title={this.props.member.name}
+                description={caption}
+                timestamp={this.props.lastActiveTs}
+                onClick={this.onClick}
+                selected={this.props.isSelected}
+            />
         );
     }
 }
@@ -672,13 +593,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
         switch (action) {
-            case KeyBindingAction.Backspace:
-                if (value || this.state.targets.length <= 0) break;
-
-                // when the field is empty and the user hits backspace remove the right-most target
-                this.removeMember(this.state.targets[this.state.targets.length - 1]);
-                handled = true;
-                break;
             case KeyBindingAction.Space:
                 if (!value || !value.includes("@") || value.includes(" ")) break;
 
@@ -971,16 +885,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onClickInputArea = (e: React.MouseEvent): void => {
-        // Stop the browser from highlighting text
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (this.editorRef && this.editorRef.current) {
-            this.editorRef.current.focus();
-        }
-    };
-
     private onUseDefaultIdentityServerClick = (e: ButtonEvent): void => {
         e.preventDefault();
 
@@ -1048,8 +952,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             if (sourceMembers.length === 0 && !hasAdditionalMembers) {
                 return (
                     <div className="mx_InviteDialog_section">
-                        <h3>{sectionName}</h3>
-                        <p>{_t("common|no_results")}</p>
+                        <RichList
+                            title={sectionName}
+                            titleAttributes={{ "role": "heading", "aria-level": 3 }}
+                            isEmpty={true}
+                        >
+                            {_t("common|no_results")}
+                        </RichList>
                     </div>
                 );
             }
@@ -1084,49 +993,48 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 lastActiveTs={lastActive(r)}
                 key={r.user.userId}
                 onToggle={this.toggleMember}
-                highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some((t) => t.userId === r.userId)}
             />
         ));
+
         return (
             <div className="mx_InviteDialog_section">
-                <h3>{sectionName}</h3>
-                {tiles}
+                <RichList title={sectionName} titleAttributes={{ "role": "heading", "aria-level": 3 }}>
+                    {tiles}
+                </RichList>
                 {showMore}
             </div>
         );
     }
 
     private renderEditor(): JSX.Element {
-        const hasPlaceholder =
-            this.props.kind == InviteKind.CallTransfer &&
-            this.state.targets.length === 0 &&
-            this.state.filterText.length === 0;
         const targets = this.state.targets.map((t) => (
             <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
         ));
-        const input = (
-            <input
-                type="text"
-                onKeyDown={this.onKeyDown}
-                onChange={this.updateFilter}
-                value={this.state.filterText}
-                ref={this.editorRef}
-                onPaste={this.onPaste}
-                autoFocus={true}
-                disabled={
-                    this.state.busy || (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0)
-                }
-                autoComplete="off"
-                placeholder={hasPlaceholder ? _t("action|search") : undefined}
-                data-testid="invite-dialog-input"
-            />
-        );
+
         return (
-            <div className="mx_InviteDialog_editor" onClick={this.onClickInputArea}>
+            <PillInput
+                data-testid="invite-dialog-input-wrapper"
+                className="mx_InviteDialog_editor"
+                inputProps={{
+                    "ref": this.editorRef,
+                    "value": this.state.filterText,
+                    "onKeyDown": this.onKeyDown,
+                    "onChange": this.updateFilter,
+                    "onPaste": this.onPaste,
+                    "placeholder": _t("action|search"),
+                    "autoFocus": true,
+                    "disabled":
+                        this.state.busy ||
+                        (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0),
+                    "data-testid": "invite-dialog-input",
+                }}
+                onRemoveChildren={() =>
+                    !this.state.busy && this.removeMember(this.state.targets[this.state.targets.length - 1])
+                }
+            >
                 {targets}
-                {input}
-            </div>
+            </PillInput>
         );
     }
 

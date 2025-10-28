@@ -377,7 +377,7 @@ export class Helpers {
      * Expand the space panel
      */
     expandSpacePanel() {
-        return this.page.getByRole("button", { name: "Expand" }).click();
+        return this.page.getByRole("navigation", { name: "Spaces" }).getByRole("button", { name: "Expand" }).click();
     }
 
     /**

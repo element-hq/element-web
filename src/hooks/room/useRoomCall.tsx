@@ -36,6 +36,7 @@ import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
+import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 
 export enum PlatformCallType {
     ElementCall,
@@ -83,7 +84,7 @@ const enum State {
  * @returns the call button attributes for the given room
  */
 export const useRoomCall = (
-    room: Room,
+    room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
     voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
@@ -229,7 +230,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey ?? false);
+                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
             }
         },
         [promptPinWidget, room, widget],
@@ -240,7 +241,9 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey ?? false);
+                // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
+                // to the defaults of the call implementation.
+                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
             }
         },
         [widget, promptPinWidget, room],
@@ -272,11 +275,16 @@ export const useRoomCall = (
         });
     }, [isViewingCall, room.roomId]);
 
+    const roomDoesNotExist = room instanceof LocalRoom && room.state !== LocalRoomState.CREATED;
+
     // We hide the voice call button if it'd have the same effect as the video call button
     let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
     let hideVideoCallButton = false;
-    // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
-    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled) {
+    // We hide both buttons if:
+    // - they require widgets but widgets are disabled
+    // - if the Voip feature is disabled.
+    // - The room is not created yet (rendering "send first message view")
+    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled || roomDoesNotExist) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }

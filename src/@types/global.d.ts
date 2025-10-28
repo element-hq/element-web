@@ -68,7 +68,8 @@ type ElectronChannel =
     | "openDesktopCapturerSourcePicker"
     | "userAccessToken"
     | "homeserverUrl"
-    | "serverSupportedVersions";
+    | "serverSupportedVersions"
+    | "showToast";
 
 declare global {
     // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
@@ -97,7 +98,7 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
-        mxRoomListStoreV3: RoomListStoreV3Class;
+        getRoomListStoreV3: () => RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;

@@ -181,8 +181,10 @@ test.describe("Timeline", () => {
                 await expect(gels.getByRole("button", { name: "Collapse" })).toBeVisible();
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-irc-layout.png", {
-                    mask: [page.locator(".mx_MessageTimestamp")],
                     css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
@@ -215,8 +217,10 @@ test.describe("Timeline", () => {
                 await expect(gels.getByRole("button", { name: "Collapse" })).toBeVisible();
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-modern-layout.png", {
-                    mask: [page.locator(".mx_MessageTimestamp")],
                     css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
@@ -255,7 +259,11 @@ test.describe("Timeline", () => {
                 // Save snapshot of expanded generic event list summary on bubble layout
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-bubble-layout.png", {
                     // Exclude timestamp from snapshot
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                    `,
                 });
 
                 // Click "collapse" link button on the first hovered info event line
@@ -271,7 +279,11 @@ test.describe("Timeline", () => {
 
                 // Save snapshot of collapsed generic event list summary on bubble layout
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("collapsed-gels-bubble-layout.png", {
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                    `,
                 });
             },
         );
@@ -312,12 +324,14 @@ test.describe("Timeline", () => {
                     "event-line-inline-start-margin-irc-layout.png",
                     {
                         // Exclude timestamp and read marker from snapshot
-                        mask: [page.locator(".mx_MessageTimestamp")],
                         css: `
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                        display: none !important;
-                    }
-                `,
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
                     },
                 );
                 await expect(axe).toHaveNoViolations();
@@ -409,7 +423,11 @@ test.describe("Timeline", () => {
                     "collapsed-gels-and-messages-irc-layout.png",
                     {
                         // Exclude timestamp from snapshot of mx_MainSplit
-                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                            .mx_MessageTimestamp {
+                                visibility: hidden;
+                            }
+                        `,
                     },
                 );
 
@@ -428,7 +446,11 @@ test.describe("Timeline", () => {
                     "expanded-gels-and-messages-irc-layout.png",
                     {
                         // Exclude timestamp from snapshot of mx_MainSplit
-                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                            .mx_MessageTimestamp {
+                                visibility: hidden;
+                            }
+                        `,
                     },
                 );
 
@@ -453,7 +475,11 @@ test.describe("Timeline", () => {
                     "expanded-gels-redaction-placeholder.png",
                     {
                         // Exclude timestamp from snapshot of mx_MainSplit
-                        mask: [page.locator(".mx_MessageTimestamp")],
+                        css: `
+                            .mx_MessageTimestamp {
+                                visibility: hidden;
+                            }
+                        `,
                     },
                 );
 
@@ -481,7 +507,11 @@ test.describe("Timeline", () => {
                 // Record alignment of expanded GELS, placeholder of deleted message, and emote
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-emote-irc-layout.png", {
                     // Exclude timestamp from snapshot of mx_MainSplit
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                    `,
                 });
             },
         );
@@ -492,12 +522,14 @@ test.describe("Timeline", () => {
             async ({ page, app, room }) => {
                 const screenshotOptions = {
                     // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
-                    mask: [page.locator(".mx_MessageTimestamp")],
                     css: `
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                        display: none !important;
-                    }
-                `,
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
                 };
 
                 await sendEvent(app.client, room.roomId);
@@ -605,12 +637,10 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
-                    has: page.locator(".mx_MessageTimestamp"),
-                });
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a.mx_MessageTimestamp");
                 // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
                 await expect(timestamp).not.toHaveAttribute("href", /~!/);
-                await timestamp.locator(".mx_MessageTimestamp").click();
+                await timestamp.click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -620,12 +650,14 @@ test.describe("Timeline", () => {
 
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
-                    mask: [page.locator(".mx_MessageTimestamp")],
                     css: `
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                        display: none !important;
-                    }
-                `,
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
                 };
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
@@ -654,7 +686,11 @@ test.describe("Timeline", () => {
 
             // Exclude timestamp from snapshot
             const screenshotOptions = {
-                mask: [page.locator(".mx_MessageTimestamp")],
+                css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
+                `,
             };
 
             await sendEvent(app.client, room.roomId);
@@ -795,8 +831,10 @@ test.describe("Timeline", () => {
             await app.timeline.scrollToBottom();
             await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot("url-preview.png", {
                 // Exclude timestamp and read marker from snapshot
-                mask: [page.locator(".mx_MessageTimestamp")],
                 css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
@@ -892,7 +930,13 @@ test.describe("Timeline", () => {
 
             const tile = page.locator(".mx_EventTile");
             await expect(tile).toBeVisible();
-            await expect(tile).toMatchScreenshot("code-block.png", { mask: [page.locator(".mx_MessageTimestamp")] });
+            await expect(tile).toMatchScreenshot("code-block.png", {
+                css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
+                `,
+            });
 
             // Edit a code block and assert the edited code block has been correctly rendered
             await tile.hover();
@@ -904,7 +948,11 @@ test.describe("Timeline", () => {
 
             const newTile = page.locator(".mx_EventTile");
             await expect(newTile).toMatchScreenshot("edited-code-block.png", {
-                mask: [page.locator(".mx_MessageTimestamp")],
+                css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
+                `,
             });
         });
 
@@ -961,7 +1009,7 @@ test.describe("Timeline", () => {
         const reply = "Reply";
         const viewRoomSendMessageAndSetupReply = async (page: Page, app: ElementAppPage, roomId: string) => {
             // View room
-            await page.goto(`/#/room/${roomId}`);
+            await app.viewRoomById(roomId);
 
             // Send a message
             const composer = app.getComposerField();
@@ -991,6 +1039,24 @@ test.describe("Timeline", () => {
             const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile_last .mx_EventTile_line");
             await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
+        });
+
+        test("can send a voice message", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
+
+            // Record an empty message
+            await page.waitForTimeout(3000);
+
+            const roomViewBody = page.locator(".mx_RoomView_body");
+            await roomViewBody
+                .locator(".mx_MessageComposer")
+                .getByRole("button", { name: "Send voice message" })
+                .click();
+
+            await expect(roomViewBody.locator(".mx_MVoiceMessageBody")).toMatchScreenshot("voice-message.png");
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {
@@ -1089,8 +1155,10 @@ test.describe("Timeline", () => {
 
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
-                mask: [page.locator(".mx_MessageTimestamp")],
                 css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
@@ -1215,12 +1283,14 @@ test.describe("Timeline", () => {
 
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
-                    mask: [page.locator(".mx_MessageTimestamp")],
                     css: `
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
-                        display: none !important;
-                    }
-                `,
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                            display: none !important;
+                        }
+                    `,
                 };
 
                 // Make sure the strings do not overflow on IRC layout
@@ -1279,8 +1349,10 @@ test.describe("Timeline", () => {
 
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
-                mask: [page.locator(".mx_MessageTimestamp")],
                 css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }

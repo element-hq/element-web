@@ -46,7 +46,7 @@ describe("SetupEncryptionDialog", () => {
 
         // And we hit the Proceed with reset button.
         // (The createDialog mock above simulates the user doing the reset)
-        await act(async () => screen.getByRole("button", { name: "Proceed with reset" }).click());
+        await act(async () => screen.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the phase has been set to Finished
         expect(store.phase).toBe(Phase.Finished);

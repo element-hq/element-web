@@ -108,7 +108,10 @@ test.describe("Composer", () => {
 
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
             await composer.pressSequentially("@bob");
-            await page.getByRole("option", { name: "Bob" }).click();
+
+            // Note that we include the user ID here as the room tile is also an 'option' role
+            // with text 'Bob'
+            await page.getByRole("option", { name: `Bob ${bot.credentials.userId}` }).click();
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");

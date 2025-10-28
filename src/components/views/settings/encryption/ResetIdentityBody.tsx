@@ -48,8 +48,12 @@ interface ResetIdentityBodyProps {
  * "forgot" is shown when the user chose 'Forgot recovery key?' during `SetupEncryptionToast`.
  *
  * "confirm" is shown when the user chose 'Reset all' during `SetupEncryptionBody`.
+ *
+ * "no_verification_method" is shown when the device is unverified and has no way of
+ * obtaining the existing keys, and hence the identity needs to be reset to have
+ * a cross-signed device.
  */
-export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm";
+export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm" | "no_verification_method";
 
 /**
  * User interface component allowing the user to reset their cryptographic identity.
@@ -124,5 +128,7 @@ function titleForVariant(variant: ResetIdentityBodyVariant): string {
             return _t("settings|encryption|advanced|breadcrumb_title_sync_failed");
         case "forgot":
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
+        case "no_verification_method":
+            return _t("settings|encryption|advanced|breadcrumb_title_cant_confirm");
     }
 }

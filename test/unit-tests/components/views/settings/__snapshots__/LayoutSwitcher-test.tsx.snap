@@ -27,7 +27,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="Modern"
             class="_label_19upo_59"
-            for="radix-«r0»"
+            for="radix-_r_0_"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -38,7 +38,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 <input
                   checked=""
                   class="_input_1e0uz_18"
-                  id="radix-«r0»"
+                  id="radix-_r_0_"
                   name="layout"
                   title=""
                   type="radio"
@@ -97,7 +97,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="4"
+                  id="1"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -155,7 +155,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="Message bubbles"
             class="_label_19upo_59"
-            for="radix-«r9»"
+            for="radix-_r_9_"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -165,7 +165,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1e0uz_18"
-                  id="radix-«r9»"
+                  id="radix-_r_9_"
                   name="layout"
                   title=""
                   type="radio"
@@ -224,7 +224,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="5"
+                  id="2"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -282,7 +282,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="IRC (experimental)"
             class="_label_19upo_59"
-            for="radix-«ri»"
+            for="radix-_r_i_"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -292,7 +292,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1e0uz_18"
-                  id="radix-«ri»"
+                  id="radix-_r_i_"
                   name="layout"
                   title=""
                   type="radio"
@@ -324,6 +324,9 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 data-self="true"
                 tabindex="-1"
               >
+                <span
+                  class="mx_MessageTimestamp"
+                />
                 <div
                   class="mx_DisambiguatedProfile"
                 >
@@ -351,7 +354,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="6"
+                  id="3"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -417,9 +420,9 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="_container_19o42_10"
             >
               <input
-                aria-describedby="radix-«rs»"
+                aria-describedby="radix-_r_s_"
                 class="_input_19o42_24"
-                id="radix-«rr»"
+                id="radix-_r_r_"
                 name="compactLayout"
                 role="switch"
                 title=""
@@ -435,13 +438,13 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           >
             <label
               class="_label_19upo_59"
-              for="radix-«rr»"
+              for="radix-_r_r_"
             >
               Show compact text and messages
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-«rs»"
+              id="radix-_r_s_"
             >
               Modern layout must be selected to use this feature.
             </span>

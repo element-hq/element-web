@@ -19,10 +19,10 @@ describe("KeyboardLandmarkUtils", () => {
                 <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
                 </div>
-                <div tabIndex={0} className="mx_RoomSearch" data-testid="mx_RoomSearch">
+                <div tabIndex={0} className="mx_RoomListSearch_search" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
                 </div>
-                <div tabIndex={0} className="mx_RoomTile" data-testid="mx_RoomTile">
+                <div tabIndex={0} className="mx_RoomListItemView" data-testid="mx_RoomListItemView">
                     ROOM_TILE
                 </div>
                 <div tabIndex={0} className="mx_HomePage" data-testid="mx_HomePage">
@@ -33,11 +33,11 @@ describe("KeyboardLandmarkUtils", () => {
         // ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> HOME <-> ACTIVE_SPACE_BUTTON
         // ACTIVE_SPACE_BUTTON -> ROOM_SEARCH
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ACTIVE_SPACE_BUTTON);
-        expect(screen.getByTestId("mx_RoomSearch")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListSearch_search")).toHaveFocus();
 
         // ROOM_SEARCH -> ROOM_LIST
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_SEARCH);
-        expect(screen.getByTestId("mx_RoomTile")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListItemView")).toHaveFocus();
 
         // ROOM_LIST -> HOME_PAGE
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_LIST);
@@ -53,11 +53,11 @@ describe("KeyboardLandmarkUtils", () => {
 
         // ROOM_LIST <- HOME_PAGE
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.MESSAGE_COMPOSER_OR_HOME, true);
-        expect(screen.getByTestId("mx_RoomTile")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListItemView")).toHaveFocus();
 
         // ROOM_SEARCH <- ROOM_LIST
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_LIST, true);
-        expect(screen.getByTestId("mx_RoomSearch")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListSearch_search")).toHaveFocus();
 
         // ACTIVE_SPACE_BUTTON <- ROOM_SEARCH
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_SEARCH, true);
@@ -72,10 +72,10 @@ describe("KeyboardLandmarkUtils", () => {
                 <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
                 </div>
-                <div tabIndex={0} className="mx_RoomSearch" data-testid="mx_RoomSearch">
+                <div tabIndex={0} className="mx_RoomListSearch_search" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
                 </div>
-                <div tabIndex={0} className="mx_RoomTile_selected" data-testid="mx_RoomTile_selected">
+                <div tabIndex={0} className="mx_RoomListItemView_selected" data-testid="mx_RoomListItemView_selected">
                     ROOM_TILE
                 </div>
                 <div tabIndex={0} className="mx_Room" data-testid="mx_Room">
@@ -89,11 +89,11 @@ describe("KeyboardLandmarkUtils", () => {
         // ACTIVE_SPACE_BUTTON <-> ROOM_SEARCH <-> ROOM_LIST <-> MESSAGE_COMPOSER <-> ACTIVE_SPACE_BUTTON
         // ACTIVE_SPACE_BUTTON -> ROOM_SEARCH
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ACTIVE_SPACE_BUTTON);
-        expect(screen.getByTestId("mx_RoomSearch")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListSearch_search")).toHaveFocus();
 
         // ROOM_SEARCH -> ROOM_LIST
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_SEARCH);
-        expect(screen.getByTestId("mx_RoomTile_selected")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListItemView_selected")).toHaveFocus();
 
         // ROOM_LIST -> MESSAGE_COMPOSER
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_LIST);
@@ -109,11 +109,11 @@ describe("KeyboardLandmarkUtils", () => {
 
         // ROOM_LIST <- MESSAGE_COMPOSER
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.MESSAGE_COMPOSER_OR_HOME, true);
-        expect(screen.getByTestId("mx_RoomTile_selected")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListItemView_selected")).toHaveFocus();
 
         // ROOM_SEARCH <- ROOM_LIST
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_LIST, true);
-        expect(screen.getByTestId("mx_RoomSearch")).toHaveFocus();
+        expect(screen.getByTestId("mx_RoomListSearch_search")).toHaveFocus();
 
         // ACTIVE_SPACE_BUTTON <- ROOM_SEARCH
         LandmarkNavigation.findAndFocusNextLandmark(Landmark.ROOM_SEARCH, true);

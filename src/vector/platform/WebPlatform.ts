@@ -22,6 +22,7 @@ import ToastStore from "../../stores/ToastStore.ts";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
 import SdkConfig from "../../SdkConfig.ts";
 import type { ActionPayload } from "../../dispatcher/payloads.ts";
+import * as SessionLock from "../../utils/SessionLock.ts";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -267,5 +268,13 @@ export default class WebPlatform extends BasePlatform {
 
     public reload(): void {
         window.location.reload();
+    }
+
+    public checkSessionLockFree(): boolean {
+        return SessionLock.checkSessionLockFree();
+    }
+
+    public async getSessionLock(onNewInstance: () => Promise<void>): Promise<boolean> {
+        return SessionLock.getSessionLock(onNewInstance);
     }
 }

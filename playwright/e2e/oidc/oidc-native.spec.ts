@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Config, CONFIG_JSON } from "@element-hq/element-web-playwright-common";
+import { type Config } from "@element-hq/element-web-playwright-common";
 import { type Browser, type Page } from "@playwright/test";
 import { type StartedHomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/HomeserverContainer";
+import { routeConfigJson } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test.ts";
 import { logInAccountMas, registerAccountMas } from ".";
@@ -129,8 +130,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
 
-        // We should be in (we see an error because we have no recovery key).
-        await expect(page.getByText("Unable to verify this device")).toBeVisible();
+        // We should be in
+        await expect(page.getByText("Confirm your identity")).toBeVisible();
     });
 
     test.describe("with force_verification on", () => {
@@ -162,7 +163,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "Continue" }).click();
 
             // We should be being warned that we need to verify (but we can't)
-            await expect(page.getByText("Unable to verify this device")).toBeVisible();
+            await expect(page.getByText("Confirm your identity")).toBeVisible();
 
             // And there should be no way to close this prompt
             await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
@@ -210,7 +211,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
 
                 // When we start verifying with another device
-                await page.getByRole("button", { name: "Verify with another device" }).click();
+                await page.getByRole("button", { name: "Use another device" }).click();
 
                 // And then cancel it
                 await page.getByRole("button", { name: "Close dialog" }).click();
@@ -227,8 +228,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
  * Perform interactive emoji verification for a new device.
  */
 async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedDevicePage: Page) {
-    await deviceToVerifyPage.getByRole("button", { name: "Verify with another device" }).click();
-    await alreadyVerifiedDevicePage.getByRole("button", { name: "Verify session" }).click();
+    await deviceToVerifyPage.getByRole("button", { name: "Use another device" }).click();
+    await alreadyVerifiedDevicePage.getByRole("button", { name: "Start verification" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "Start" }).click();
     await alreadyVerifiedDevicePage.getByRole("button", { name: "They match" }).click();
     await deviceToVerifyPage.getByRole("button", { name: "They match" }).click();
@@ -242,17 +243,6 @@ async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedD
  */
 async function newContext(browser: Browser, config: Partial<Partial<Config>>, homeserver: StartedHomeserverContainer) {
     const otherContext = await browser.newContext();
-    await otherContext.route(`http://localhost:8080/config.json*`, async (route) => {
-        const json = {
-            ...CONFIG_JSON,
-            ...config,
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: homeserver.baseUrl,
-                },
-            },
-        };
-        await route.fulfill({ json });
-    });
+    await routeConfigJson(otherContext, homeserver.baseUrl, config);
     return otherContext;
 }

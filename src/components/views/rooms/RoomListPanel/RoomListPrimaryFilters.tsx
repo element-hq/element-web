@@ -10,7 +10,7 @@ import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { Flex } from "../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import { _t } from "../../../../languageHandler";
 
 interface RoomListPrimaryFiltersProps {
@@ -59,6 +59,7 @@ export function RoomListPrimaryFilters({ vm }: RoomListPrimaryFiltersProps): JSX
                 align="center"
                 gap="var(--cpd-space-2x)"
                 wrap="wrap"
+                className="mx_RoomListPrimaryFilters_list"
                 ref={ref}
             >
                 {filters.map((filter, i) => (
@@ -103,7 +104,7 @@ function useCollapseFilters<T extends HTMLElement>(
 
                 // If the previous element is on the left element of the current one, it means that the filter is wrapping
                 const previousSibling = child.previousElementSibling as HTMLElement | null;
-                if (previousSibling && child.offsetLeft < previousSibling.offsetLeft) {
+                if (previousSibling && child.offsetLeft <= previousSibling.offsetLeft) {
                     if (!isWrapping) setWrappingIndex(i);
                     isWrapping = true;
                 }

@@ -112,7 +112,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         const main3 = await sendMessage(bot);
 
         // (So the room starts off unread)
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 3 unread messages.`)).toBeVisible();
 
         // When we send a threaded receipt for the last event in main
         // And an unthreaded receipt for an earlier event
@@ -147,13 +147,13 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendMessage(bot);
 
         // (The room starts off unread)
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 3 unread messages.`)).toBeVisible();
 
         // When we send a threaded receipt for the second-last event in main
         await sendThreadedReadReceipt(app, main2);
 
         // Then the room has only one unread
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 1 unread message.`)).toBeVisible();
     });
 
     test("Considers room read if there is only a main thread and we have a main receipt", async ({
@@ -166,7 +166,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendMessage(bot);
         const main3 = await sendMessage(bot);
         // (The room starts off unread)
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 3 unread messages.`)).toBeVisible();
 
         // When we send a threaded receipt for the last event in main
         await sendThreadedReadReceipt(app, main3);
@@ -186,7 +186,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         const thread1a = await botSendThreadMessage(bot, main1.event_id);
         await botSendThreadMessage(bot, main1.event_id);
         // 1 unread on the main thread, 2 in the new thread that aren't shown
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 1 unread message.`)).toBeVisible();
 
         // When we send receipts for main, and the second-last in the thread
         await sendThreadedReadReceipt(app, main1);
@@ -203,7 +203,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await botSendThreadMessage(bot, main1.event_id);
         const thread1b = await botSendThreadMessage(bot, main1.event_id);
         // 1 unread on the main thread, 2 in the new thread which don't show
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 1 unread message.`)).toBeVisible();
 
         // When we send receipts for main, and the last in the thread
         await sendThreadedReadReceipt(app, main1);
@@ -226,7 +226,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         const thread1a = await botSendThreadMessage(bot, main1.event_id);
         await botSendThreadMessage(bot, main1.event_id);
         // 1 unread on the main thread, 2 in the new thread which don't count
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 1 unread message.`)).toBeVisible();
 
         // When we send an unthreaded receipt for the second-last in the thread
         await sendUnthreadedReadReceipt(app, thread1a);
@@ -251,7 +251,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         const thread1b = await botSendThreadMessage(bot, main1.event_id);
         await sendMessage(bot);
         // 2 unreads on the main thread, 2 in the new thread which don't count
-        await expect(page.getByLabel(`${otherRoomName} 2 unread messages.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 2 unread messages.`)).toBeVisible();
 
         // When we send an unthreaded receipt for the last in the thread
         await sendUnthreadedReadReceipt(app, thread1b);
@@ -259,7 +259,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         // Then the room has only one unread - the one in the
         // main thread, because it is later than the unthreaded
         // receipt.
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await expect(page.getByLabel(`${otherRoomName} with 1 unread message.`)).toBeVisible();
     });
 
     /**
@@ -291,7 +291,9 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         const uriEncodedLastMessageId = encodeURIComponent(lastMessageId);
 
         // wait until all messages have been received
-        await expect(page.getByLabel(`${otherRoomName} ${sendMessageResponses.length} unread messages.`)).toBeVisible();
+        await expect(
+            page.getByLabel(`${otherRoomName} with ${sendMessageResponses.length} unread messages.`),
+        ).toBeVisible();
 
         // switch to the room with the messages
         await page.goto(`/#/room/${otherRoomId}`);

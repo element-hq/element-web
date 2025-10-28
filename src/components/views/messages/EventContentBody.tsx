@@ -11,7 +11,6 @@ import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { bodyToNode } from "../../../HtmlUtils.tsx";
-import { Linkify } from "../../../Linkify.tsx";
 import PlatformPeg from "../../../PlatformPeg.ts";
 import {
     applyReplacerOnString,
@@ -23,7 +22,6 @@ import {
     ambiguousLinkTooltipRenderer,
     codeBlockRenderer,
     spoilerRenderer,
-    replacerToRenderFunction,
 } from "../../../renderer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
@@ -154,12 +152,6 @@ const EventContentBody = memo(
         const [mediaIsVisible] = useMediaVisible(mxEvent);
 
         const replacer = useReplacer(content, mxEvent, options);
-        const linkifyOptions = useMemo(
-            () => ({
-                render: replacerToRenderFunction(replacer),
-            }),
-            [replacer],
-        );
 
         const isEmote = content.msgtype === MsgType.Emote;
 
@@ -170,8 +162,9 @@ const EventContentBody = memo(
                     // Part of Replies fallback support
                     stripReplyFallback: stripReply,
                     mediaIsVisible,
+                    linkify,
                 }),
-            [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply],
+            [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply, linkify],
         );
 
         if (as === "div") includeDir = true; // force dir="auto" on divs
@@ -189,9 +182,7 @@ const EventContentBody = memo(
             </As>
         );
 
-        if (!linkify) return body;
-
-        return <Linkify options={linkifyOptions}>{body}</Linkify>;
+        return body;
     },
 );
 

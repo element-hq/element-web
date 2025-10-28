@@ -46,9 +46,9 @@ import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import RoomName from "../elements/RoomName.tsx";
-import { Flex } from "../../../shared-components/utils/Flex";
+import { Flex } from "../../../../packages/shared-components/src/utils/Flex";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
-import { Box } from "../../../shared-components/utils/Box";
+import { Box } from "../../../../packages/shared-components/src/utils/Box";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 

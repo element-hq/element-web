@@ -39,7 +39,17 @@ const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) =>
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
  */
-class ModuleApi implements Api {
+export class ModuleApi implements Api {
+    private static _instance: ModuleApi;
+
+    public static get instance(): ModuleApi {
+        if (!ModuleApi._instance) {
+            ModuleApi._instance = new ModuleApi();
+            window.mxModuleApi = ModuleApi._instance;
+        }
+        return ModuleApi._instance;
+    }
+
     /* eslint-disable @typescript-eslint/naming-convention */
     public async _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void> {
         ModuleRunner.instance.registerModule((api) => new LegacyModule(api));
@@ -77,8 +87,3 @@ class ModuleApi implements Api {
 }
 
 export type ModuleApiType = ModuleApi;
-
-if (!window.mxModuleApi) {
-    window.mxModuleApi = new ModuleApi();
-}
-export default window.mxModuleApi;

@@ -51,9 +51,10 @@ export class ElementAppPage {
     /**
      * Open room creation dialog.
      */
+
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
-        await this.page.getByRole("button", { name: "Add room", exact: true }).click();
-        await this.page.getByRole("menuitem", { name: roomKindname, exact: true }).click();
+        await this.page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }
 
@@ -69,13 +70,38 @@ export class ElementAppPage {
     }
 
     /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
+    }
+
+    /**
      * Opens the given room by name. The room must be visible in the
+     * room list and the room may contain unread messages.
+     *
+     * @param name The exact room name to find and click on/open.
+     */
+    public async viewRoomByName(name: string): Promise<void> {
+        // We get the room list by test-id which is a listbox and matching title=name
+        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
+    }
+
+    /**
+     * Opens the given room on the old room list by name. The room must be visible in the
      * room list, but the room list may be folded horizontally, and the
      * room may contain unread messages.
      *
      * @param name The exact room name to find and click on/open.
      */
-    public async viewRoomByName(name: string): Promise<void> {
+    public async viewRoomByNameOnOldRoomList(name: string): Promise<void> {
         // We look for the room inside the room list, which is a tree called Rooms.
         //
         // There are 3 cases:
@@ -183,6 +209,21 @@ export class ElementAppPage {
         const memberlist = this.page.locator(".mx_MemberListView");
         await memberlist.waitFor();
         return memberlist;
+    }
+
+    /**
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
+     */
+    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+        await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
+        await this.page.getByTestId("right-panel").getByRole("menuitem", { name: "Invite" }).click();
+
+        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
     /**

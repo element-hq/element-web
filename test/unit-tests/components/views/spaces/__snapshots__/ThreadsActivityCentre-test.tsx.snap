@@ -2,7 +2,7 @@
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
-  aria-labelledby="radix-«r1m»"
+  aria-labelledby="radix-_r_1m_"
   aria-orientation="vertical"
   class="_menu_1glhz_8"
   data-align="start"
@@ -11,14 +11,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-«r1n»"
+  id="radix-_r_1n_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
-    id="«r1u»"
+    id="_r_1u_"
   >
     Threads activity
   </h3>
@@ -127,7 +127,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 
 exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
-  aria-labelledby="radix-«r2a»"
+  aria-labelledby="radix-_r_2a_"
   aria-orientation="vertical"
   class="_menu_1glhz_8"
   data-align="start"
@@ -136,14 +136,14 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-«r2b»"
+  id="radix-_r_2b_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
-    id="«r2i»"
+    id="_r_2i_"
   >
     Threads activity
   </h3>
@@ -161,7 +161,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 
 exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
 <div
-  aria-labelledby="radix-«r2j»"
+  aria-labelledby="radix-_r_2j_"
   aria-orientation="vertical"
   class="_menu_1glhz_8"
   data-align="start"
@@ -170,14 +170,14 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-«r2k»"
+  id="radix-_r_2k_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
-    id="«r2r»"
+    id="_r_2r_"
   >
     Threads activity
   </h3>

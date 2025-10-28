@@ -8,11 +8,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import classNames from "classnames";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthFooter from "./AuthFooter";
 
-export default class AuthPage extends React.PureComponent<React.PropsWithChildren> {
+interface IProps {
+    /**
+     * Whether to add a blurred shadow around the modal.
+     *
+     * If the modal component provides its own shadow or blurring, this can be
+     * disabled.  Defaults to `true`.
+     */
+    addBlur?: boolean;
+}
+
+export default class AuthPage extends React.PureComponent<React.PropsWithChildren<IProps>> {
     private static welcomeBackgroundUrl?: string;
 
     // cache the url as a static to prevent it changing without refreshing
@@ -58,14 +69,26 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         const modalContentStyle: React.CSSProperties = {
             display: "flex",
             zIndex: 1,
-            background: "rgba(255, 255, 255, 0.59)",
             borderRadius: "8px",
         };
 
+        let modalBlur;
+        if (this.props.addBlur !== false) {
+            // Blur out the background: add a `div` which covers the content behind the modal,
+            // and blurs it out, and make the modal's background semitransparent.
+            modalBlur = <div className="mx_AuthPage_modalBlur" style={blurStyle} />;
+            modalContentStyle.background = "rgba(255, 255, 255, 0.59)";
+        }
+
+        const modalClasses = classNames({
+            mx_AuthPage_modal: true,
+            mx_AuthPage_modal_withBlur: this.props.addBlur !== false,
+        });
+
         return (
             <div className="mx_AuthPage" style={pageStyle}>
-                <div className="mx_AuthPage_modal" style={modalStyle}>
-                    <div className="mx_AuthPage_modalBlur" style={blurStyle} />
+                <div className={modalClasses} style={modalStyle}>
+                    {modalBlur}
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
                         {this.props.children}
                     </div>

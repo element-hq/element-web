@@ -96,9 +96,9 @@ test.describe("Spaces", () => {
             await page.getByRole("button", { name: "Go to my first room" }).click();
 
             // Assert rooms exist in the room list
-            await expect(page.getByRole("treeitem", { name: "General" })).toBeVisible();
-            await expect(page.getByRole("treeitem", { name: "Random" })).toBeVisible();
-            await expect(page.getByRole("treeitem", { name: "Jokes" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "General" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "Random" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "Jokes" })).toBeVisible();
         },
     );
 
@@ -127,10 +127,10 @@ test.describe("Spaces", () => {
         await page.getByRole("button", { name: "Skip for now" }).click();
 
         // Assert rooms exist in the room list
-        const roomList = page.getByRole("tree", { name: "Rooms" });
-        await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
-        await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
-        await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
+        const roomList = page.getByRole("listbox", { name: "Room list", exact: true });
+        await expect(roomList.getByRole("option", { name: "General" })).toBeVisible();
+        await expect(roomList.getByRole("option", { name: "Random" })).toBeVisible();
+        await expect(roomList.getByRole("option", { name: "Projects" })).toBeVisible();
 
         // Assert rooms exist in the space explorer
         await expect(
@@ -200,7 +200,7 @@ test.describe("Spaces", () => {
 
             await page.getByRole("button", { name: "Skip for now" }).click();
 
-            await page.getByRole("button", { name: "Add room" }).click();
+            await page.getByRole("main").getByRole("button", { name: "Add" }).click();
             await page.getByRole("menuitem", { name: "Add existing room" }).click();
 
             await page.getByRole("checkbox", { name: "Sample Room" }).click();
@@ -424,10 +424,10 @@ test.describe("Spaces", () => {
             await page.getByRole("button", { name: "Skip for now" }).click();
 
             // Assert rooms exist in the room list
-            const roomList = page.getByRole("tree", { name: "Rooms" });
-            await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
-            await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
-            await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
+            const roomList = page.getByRole("listbox", { name: "Room list", exact: true });
+            await expect(roomList.getByRole("option", { name: "General" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Random" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Projects" })).toBeVisible();
 
             // Assert rooms exist in the space explorer
             await expect(
