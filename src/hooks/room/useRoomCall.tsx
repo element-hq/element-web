@@ -11,7 +11,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 
-import type React from "react";
+import React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
@@ -37,7 +37,11 @@ import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
-import { useElementCallPermissions } from "./useElementCallPermissions";
+import { ElementCallPromptAction, useElementCallPermissions } from "./useElementCallPermissions";
+import Modal from "../../Modal";
+import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
+import { logger } from "matrix-js-sdk/src/logger";
+import ConfirmEnableCallDialog from "../../components/views/dialogs/ConfirmEnableCallDialog";
 
 export enum PlatformCallType {
     ElementCall,
@@ -107,7 +111,12 @@ export const useRoomCall = (
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
-    const { canStartCall: mayCreateElementCalls } = useElementCallPermissions(room);
+    const {
+        canStartCall: mayCreateElementCalls,
+        permissionsPromptAction: elementCallPromptAction,
+        canAdjustCallPermissions: canAdjustElementCallPermissions,
+        enableCallInRoom,
+    } = useElementCallPermissions(room);
 
     const hasLegacyCall = useEventEmitterState(
         LegacyCallHandler.instance,
@@ -144,12 +153,17 @@ export const useRoomCall = (
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
         if (memberCount <= 2) {
-            options.push(PlatformCallType.LegacyCall);
+            // options.push(PlatformCallType.LegacyCall);
         } else if (mayEditWidgets || hasJitsiWidget) {
             options.push(PlatformCallType.JitsiCall);
         }
         if (groupCallsEnabled) {
             if (hasGroupCall || mayCreateElementCalls) {
+                options.push(PlatformCallType.ElementCall);
+            } else if (
+                canAdjustElementCallPermissions &&
+                elementCallPromptAction !== ElementCallPromptAction.NoPrompt
+            ) {
                 options.push(PlatformCallType.ElementCall);
             }
             if (useElementCallExclusively && mayCreateElementCalls && !hasJitsiWidget) {
@@ -210,7 +224,12 @@ export const useRoomCall = (
         }
 
         if (callOptions.length === 0 && !mayCreateElementCalls) {
-            return State.CallingDisabled;
+            // Element call is not enabled for this room and we are not meant to prompt it to be enabled.
+            if (!canAdjustElementCallPermissions || elementCallPromptAction === ElementCallPromptAction.NoPrompt) {
+                return State.NoPermission;
+            }
+            // Otherwise, we can prompt.
+            return State.NoCall;
         }
 
         if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
@@ -225,45 +244,63 @@ export const useRoomCall = (
         hasLegacyCall,
         hasManagedHybridWidget,
         mayCreateElementCalls,
+        canAdjustElementCallPermissions,
         mayEditWidgets,
         promptPinWidget,
         room.roomId,
     ]);
 
+    const onPlaceCall = useCallback(
+        (callType: CallType, platform: PlatformCallType, skipLobby?: boolean) => {
+            if (widget && promptPinWidget) {
+                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
+                return;
+            }
+
+            void (async () => {
+                // If we are placing an Element Call, we may not have permission to place it yet.
+                // MatrixRTC requires a slot to be in the room first, so prompt for this.
+                if (platform === PlatformCallType.ElementCall && !mayCreateElementCalls) {
+                    if (elementCallPromptAction === ElementCallPromptAction.NoPrompt) {
+                        throw Error("Should not have got to this stage");
+                    } else if (elementCallPromptAction === ElementCallPromptAction.Prompt) {
+                        const { finished } = Modal.createDialog(ConfirmEnableCallDialog);
+                        if (!(await finished)[0]) {
+                            return;
+                        }
+                    } // otherwise, this is set to AutoAllow and we can just continue.
+                    await enableCallInRoom();
+                }
+                await placeCall(room, callType, platform, skipLobby);
+            })().catch((ex) => {
+                logger.error("Failed to place call", ex);
+            });
+        },
+        [room, widget, promptPinWidget, mayCreateElementCalls, elementCallPromptAction, enableCallInRoom],
+    );
+
     const voiceCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
-            if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
-            } else {
-                void (async () => {
-                    await placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
-                })();
-            }
+            onPlaceCall(CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
         },
-        [promptPinWidget, room, widget],
+        [onPlaceCall],
     );
     const videoCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
-            if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
-            } else {
-                // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
-                // to the defaults of the call implementation.
-                void (async () => {
-                    await placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
-                })();
-            }
+            onPlaceCall(CallType.Video, callPlatformType, evt?.shiftKey || undefined);
         },
-        [widget, promptPinWidget, room],
+        [onPlaceCall],
     );
 
     let voiceCallDisabledReason: string | null;
     let videoCallDisabledReason: string | null;
     switch (state) {
         case State.CallingDisabled:
-            voiceCallDisabledReason = videoCallDisabledReason = _t("voip|disabled_branded_call", { brand: SdkConfig.get("element_call").brand });
+            voiceCallDisabledReason = videoCallDisabledReason = _t("voip|disabled_branded_call", {
+                brand: SdkConfig.get("element_call").brand,
+            });
             break;
         case State.NoPermission:
             voiceCallDisabledReason = _t("voip|disabled_no_perms_start_voice_call");

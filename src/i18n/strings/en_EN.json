@@ -4078,7 +4078,12 @@
         "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
-        "you_are_presenting": "You are presenting"
+        "you_are_presenting": "You are presenting",
+        "enable_call_dialog": {
+            "title": "Allow video calling in this room?",
+            "description": "Any members in this room will be able to start a video call. You can always change this by going to Room Settings > Voice & video",
+            "accept_button": "Allow video calls"
+        }
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Welcome to Element",

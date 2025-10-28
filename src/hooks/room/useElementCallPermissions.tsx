@@ -6,15 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, JoinRule, RoomState, type Room } from "matrix-js-sdk/src/matrix";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 import { useFeatureEnabled } from "../useSettings";
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom } from "../../models/LocalRoom";
-import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
-import Modal from "../../Modal";
 import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 import {
     DefaultCallApplicationDescription,
@@ -23,11 +21,27 @@ import {
 } from "matrix-js-sdk/src/matrixrtc";
 import { slotDescriptionToId } from "matrix-js-sdk/src/matrixrtc";
 
+export enum ElementCallPromptAction {
+    /**
+     * Do not allow calls to be started without permission being set.
+     */
+    NoPrompt,
+    /**
+     * Prompt before allowing a call to be started.
+     */
+    Prompt,
+    /**
+     * Do not prompt, just configure permissions automatically.
+     */
+    AutoAllow,
+}
+
 type ElementCallPermissions = {
     canStartCall: boolean;
     canAdjustCallPermissions: boolean;
-    enableCallInRoom(): void;
-    disableCallInRoom(): void;
+    permissionsPromptAction: ElementCallPromptAction;
+    enableCallInRoom(): Promise<void>;
+    disableCallInRoom(): Promise<void>;
 };
 
 /**
@@ -53,27 +67,28 @@ function useLegacyCallPermissions(room: Room | LocalRoom): ElementCallPermission
         ),
     );
 
-    const enableCallInRoom = useCallback(() => {
+    const enableCallInRoom = useCallback(async () => {
         const newContent = { events: {}, ...powerLevelContent };
         const userLevel = newContent.events[EventType.RoomMessage] ?? powerLevelContent.users_default ?? 0;
         const moderatorLevel = powerLevelContent.kick ?? 50;
         const isPublic = room.getJoinRule() === JoinRule.Public;
         newContent.events[ElementCallEventType.name] = isPublic ? moderatorLevel : userLevel;
         newContent.events[ElementCallMemberEventType.name] = userLevel;
-        room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
+        await room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
     }, [room, powerLevelContent]);
 
-    const disableCallInRoom = useCallback(() => {
+    const disableCallInRoom = useCallback(async () => {
         const newContent = { events: {}, ...powerLevelContent };
         const adminLevel = newContent.events[EventType.RoomPowerLevels] ?? powerLevelContent.state_default ?? 100;
         newContent.events[ElementCallEventType.name] = adminLevel;
         newContent.events[ElementCallMemberEventType.name] = adminLevel;
-        room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
+        await room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
     }, [room, powerLevelContent]);
 
     return {
         canStartCall: elementCallEnabled,
         canAdjustCallPermissions: maySend,
+        permissionsPromptAction: ElementCallPromptAction.NoPrompt,
         enableCallInRoom,
         disableCallInRoom,
     };
@@ -86,31 +101,15 @@ function useLegacyCallPermissions(room: Room | LocalRoom): ElementCallPermission
  */
 const useSlotsCallPermissions = (room: Room | LocalRoom): ElementCallPermissions => {
     const slotId = slotDescriptionToId(DefaultCallApplicationDescription);
-    const [maySendSlot, hasRoomSlot] = useRoomState(room, () => [
+    const [maySendSlot, hasRoomSlot, canEveryoneAdjustPermissions] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent(EventType.RTCSlot, room.client),
         // TODO: Replace with proper const
         MatrixRTCSession.getRtcSlot(room, DefaultCallApplicationDescription) !== null,
+        !room.getJoinedMembers().some((v) => !room.currentState.maySendStateEvent(EventType.RTCSlot, v.userId)),
     ]);
 
     // TODO: Check that we are allowed to create audio/video calls, when the telephony PR lands.
-    const createElementCallSlot = useCallback(async (): Promise<boolean> => {
-        if (hasRoomSlot) {
-            return true;
-        }
-        const { finished } = Modal.createDialog(QuestionDialog, {
-            title: "Do you want to allow calls in this room?",
-            description: (
-                <p>
-                    This room doesn't currently permit calling. If you continue, other users will be able to place calls
-                    in the future. You may turn this off in the Room Settings.
-                </p>
-            ),
-            button: _t("action|continue"),
-        });
-        const [confirmed] = await finished;
-        if (!confirmed) {
-            return false;
-        }
+    const createElementCallSlot = useCallback(async (): Promise<void> => {
         await room.client.sendStateEvent(
             room.roomId,
             "org.matrix.msc4143.rtc.slot",
@@ -119,7 +118,6 @@ const useSlotsCallPermissions = (room: Room | LocalRoom): ElementCallPermissions
             },
             slotId,
         );
-        return true;
     }, [room, hasRoomSlot]);
 
     const removeElementCallSlot = useCallback(async (): Promise<void> => {
@@ -129,6 +127,9 @@ const useSlotsCallPermissions = (room: Room | LocalRoom): ElementCallPermissions
     return {
         canStartCall: hasRoomSlot,
         canAdjustCallPermissions: maySendSlot,
+        permissionsPromptAction: canEveryoneAdjustPermissions
+            ? ElementCallPromptAction.AutoAllow
+            : ElementCallPromptAction.Prompt,
         enableCallInRoom: createElementCallSlot,
         disableCallInRoom: removeElementCallSlot,
     };
