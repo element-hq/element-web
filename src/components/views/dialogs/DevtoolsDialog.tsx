@@ -26,6 +26,7 @@ import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
 import { Crypto } from "./devtools/Crypto";
 import SettingsField from "../elements/SettingsField.tsx";
+import MatrixRtcDebug from "./devtools/MatrixRtcDebug.tsx";
 
 enum Category {
     Room,
@@ -46,6 +47,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|view_servers_in_room"), ServersInRoom],
         [_td("devtools|notifications_debug"), RoomNotifications],
         [_td("devtools|active_widgets"), WidgetExplorer],
+        [_td("devtools|matrix_rtc_debug"), MatrixRtcDebug],
     ],
     [Category.Other]: [
         [_td("devtools|explore_account_data"), AccountDataExplorer],
