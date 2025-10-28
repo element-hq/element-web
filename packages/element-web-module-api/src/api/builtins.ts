@@ -14,6 +14,14 @@ export interface RoomViewProps {
      * The ID of the room to render.
      */
     roomId?: string;
+    /*
+     * If true, the room header will be hidden.
+     */
+    hideHeader?: boolean;
+    /*
+     * If true, the message composer will be hidden.
+     */
+    hideComposer?: boolean;
 }
 
 /**
@@ -38,6 +46,7 @@ export interface BuiltinsApi {
      *
      * @alpha
      * @param roomId - Id of the room
+     * @param props - Additional props to pass to the room view
      */
-    renderRoomView(roomId: string): React.ReactNode;
+    renderRoomView(roomId: string, props?: Omit<RoomViewProps, "roomId">): React.ReactNode;
 }
