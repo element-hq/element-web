@@ -165,6 +165,11 @@ interface IRoomProps extends RoomViewProps {
      * Omitting this will mean that RoomView renders for the room held in SDKContext.RoomViewStore.
      */
     roomId?: string;
+
+    /*
+     * If true, hide the header
+     */
+    hideHeader?: boolean;
 }
 
 export { MainSplitContentType };
@@ -2665,10 +2670,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 ref={this.roomViewBody}
                                 data-layout={this.state.layout}
                             >
-                                <RoomHeader
-                                    room={this.state.room}
-                                    additionalButtons={this.state.viewRoomOpts.buttons}
-                                />
+                                {!this.props.hideHeader && (
+                                    <RoomHeader
+                                        room={this.state.room}
+                                        additionalButtons={this.state.viewRoomOpts.buttons}
+                                    />
+                                )}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>
