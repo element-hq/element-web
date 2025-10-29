@@ -32,6 +32,8 @@ import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 
 export { KEY_SEPARATOR, normalizeLanguageKey, getNormalizedLanguageKeys } from "matrix-web-i18n";
 
+export type { TranslationKey };
+
 const i18nFolder = "i18n/";
 
 // Control whether to also return original, untranslated strings
