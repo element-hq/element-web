@@ -40,7 +40,7 @@ export interface UserInfoBasicOptionsState {
     // Method called when a share user button is clicked, will display modal with profile to share
     onShareUserClick: () => void;
     // Method called when a invite button is clicked, will display modal to invite user
-    onInviteUserButton: (roomId: string, evt: Event) => Promise<void>;
+    onInviteUserButton: (fallbackRoomId: string, evt: Event) => Promise<void>;
     // Method called when the DM button is clicked, will open a DM with the selected member
     onOpenDmForUser: (member: Member) => Promise<void>;
 }
@@ -90,12 +90,12 @@ export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | Room
         });
     };
 
-    const onInviteUserButton = async (roomId: string, ev: Event): Promise<void> => {
+    const onInviteUserButton = async (fallbackRoomId: string, ev: Event): Promise<void> => {
         try {
-            const memberOrRoomRoomId = member instanceof RoomMember && member.roomId ? member.roomId : roomId;
+            const roomId = member instanceof RoomMember && member.roomId ? member.roomId : fallbackRoomId;
 
             // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.
-            const inviter = new MultiInviter(cli, memberOrRoomRoomId || "");
+            const inviter = new MultiInviter(cli, roomId || "");
             await inviter.invite([member.userId]).then(() => {
                 if (inviter.getCompletionState(member.userId) !== "invited") {
                     const errorStringFromInviterUtility = inviter.getErrorText(member.userId);
@@ -104,7 +104,7 @@ export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | Room
                     } else {
                         throw new UserFriendlyError("slash_command|invite_failed", {
                             user: member.userId,
-                            memberOrRoomRoomId,
+                            roomId,
                             cause: undefined,
                         });
                     }
