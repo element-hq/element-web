@@ -129,7 +129,6 @@ describe("<RoomListItemView />", () => {
                 onFocus={jest.fn()}
                 roomIndex={0}
                 roomCount={1}
-                listIsScrolling={false}
             />,
         );
 
@@ -192,27 +191,5 @@ describe("<RoomListItemView />", () => {
         // Menu should close
         await user.keyboard("{Escape}");
         expect(screen.queryByRole("menu")).toBeNull();
-    });
-
-    test("should not render context menu when list is scrolling", async () => {
-        const user = userEvent.setup();
-
-        mocked(useRoomListItemViewModel).mockReturnValue({
-            ...defaultValue,
-            showContextMenu: true,
-        });
-
-        renderRoomListItem({
-            listIsScrolling: true,
-        });
-
-        const button = screen.getByRole("option", { name: `Open room ${room.name}` });
-        await user.pointer([{ target: button }, { keys: "[MouseRight]", target: button }]);
-
-        // Context menu should not appear when scrolling
-        expect(screen.queryByRole("menu")).toBeNull();
-
-        // But the room item itself should still be rendered
-        expect(button).toBeInTheDocument();
     });
 });
