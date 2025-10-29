@@ -57,7 +57,7 @@ describe("<RoomListHeaderView />", () => {
             mocked(useRoomListHeaderViewModel).mockReturnValue(defaultValue);
 
             const { asFragment } = render(<RoomListHeaderView />);
-            expect(screen.queryByRole("button", { name: "Add" })).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "New conversation" })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
 
@@ -66,10 +66,10 @@ describe("<RoomListHeaderView />", () => {
             mocked(useRoomListHeaderViewModel).mockReturnValue({ ...defaultValue, displayComposeMenu: false });
 
             const { asFragment } = render(<RoomListHeaderView />);
-            expect(screen.queryByRole("button", { name: "Add" })).toBeNull();
+            expect(screen.queryByRole("button", { name: "New conversation" })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
 
-            await user.click(screen.getByRole("button", { name: "Start chat" }));
+            await user.click(screen.getByRole("button", { name: "New conversation" }));
             expect(defaultValue.createChatRoom).toHaveBeenCalled();
         });
 
@@ -77,7 +77,7 @@ describe("<RoomListHeaderView />", () => {
             const user = userEvent.setup();
             mocked(useRoomListHeaderViewModel).mockReturnValue(defaultValue);
             render(<RoomListHeaderView />);
-            const openMenu = screen.getByRole("button", { name: "Add" });
+            const openMenu = screen.getByRole("button", { name: "New conversation" });
             await user.click(openMenu);
 
             await user.click(screen.getByRole("menuitem", { name: "Start chat" }));
@@ -101,7 +101,7 @@ describe("<RoomListHeaderView />", () => {
             });
 
             render(<RoomListHeaderView />);
-            await user.click(screen.getByRole("button", { name: "Add" }));
+            await user.click(screen.getByRole("button", { name: "New conversation" }));
 
             expect(screen.queryByRole("menuitem", { name: "New room" })).toBeNull();
             expect(screen.queryByRole("menuitem", { name: "New video room" })).toBeNull();
@@ -157,7 +157,7 @@ describe("<RoomListHeaderView />", () => {
             });
 
             render(<RoomListHeaderView />);
-            await user.click(screen.getByRole("button", { name: "Add" }));
+            await user.click(screen.getByRole("button", { name: "Open space menu" }));
 
             expect(screen.queryByRole("menuitem", { name: "Invite" })).toBeNull();
             expect(screen.queryByRole("menuitem", { name: "Space Setting" })).toBeNull();
