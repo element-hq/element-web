@@ -10,12 +10,14 @@ Please see LICENSE files in the repository root for full details.
 // This prevents having to import the json file and make typescript do the work as this results in vite-dts
 // generating an import to the json file in the .d.ts which doesn't work at runtime: this way, the type
 // gets put into the bundle.
+// XXX: It should *not* be in the 'src' directory, being a generated file, but if it isn't then the type
+// bundler won't bundle the types and will leave the file as a ralative import, which will break.
 
 import * as fs from "fs";
 import * as path from "path";
 
 const i18nStringsPath = path.resolve(__dirname, "../../../src/i18n/strings/en_EN.json");
-const outPath = path.resolve(__dirname, "../i18n/i18nKeys.d.ts");
+const outPath = path.resolve(__dirname, "../src/i18nKeys.d.ts");
 
 function gatherKeys(obj: any, prefix: string[] = []): string[] {
     if (typeof obj !== "object" || obj === null) return [];
