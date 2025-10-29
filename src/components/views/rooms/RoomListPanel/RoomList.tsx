@@ -53,7 +53,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
                 spaceId: string;
                 filterKeys: FilterKey[] | undefined;
             }>,
-            onFocus: (e: React.FocusEvent) => void,
+            onFocus: (item: Room, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const itemKey = item.roomId;
             const isRovingItem = itemKey === context.tabIndexKey;

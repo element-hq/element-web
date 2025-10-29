@@ -16,7 +16,7 @@ import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { RoomListItemContextMenuView } from "./RoomListItemContextMenuView";
 
-interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onFocus"> {
     /**
      * The room to display
      */
@@ -32,7 +32,7 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
     /**
      * A callback that indicates the item has received focus
      */
-    onFocus: (e: React.FocusEvent) => void;
+    onFocus: (room: Room, e: React.FocusEvent) => void;
     /**
      * The index of the room in the list
      */
@@ -100,7 +100,7 @@ export const RoomListItemView = memo(function RoomListItemView({
             aria-selected={isSelected}
             aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
-            onFocus={onFocus}
+            onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(room, e)}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
             onBlur={() => setHover(false)}
