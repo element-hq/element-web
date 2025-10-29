@@ -97,7 +97,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="4"
+                  id="1"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -224,7 +224,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="5"
+                  id="2"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -324,6 +324,9 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 data-self="true"
                 tabindex="-1"
               >
+                <span
+                  class="mx_MessageTimestamp"
+                />
                 <div
                   class="mx_DisambiguatedProfile"
                 >
@@ -351,7 +354,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="6"
+                  id="3"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"

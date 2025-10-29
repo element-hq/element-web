@@ -1240,7 +1240,6 @@
         "upload_file": "上傳檔案"
     },
     "labs": {
-        "allow_screen_share_only_mode": "允許僅螢幕分享模式",
         "ask_to_join": "啟用要求加入",
         "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
         "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",

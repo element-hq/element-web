@@ -1476,7 +1476,6 @@
         "upload_file": "Nahrát soubor"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Povolit režim pouze sdílení obrazovky",
         "ask_to_join": "Umožnit požádat o vstup",
         "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
         "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",

@@ -25,6 +25,8 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { searchPagination, SearchScope } from "../../../../src/Searching";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import SettingsStore from "../../../../src/settings/SettingsStore.ts";
+import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
 jest.mock("../../../../src/Searching", () => ({
     searchPagination: jest.fn(),
@@ -438,6 +440,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should pass appropriate permalink creator for all rooms search", async () => {
+        await SettingsStore.setValue("alwaysShowTimestamps", null, SettingLevel.DEVICE, true);
         const room2 = new Room("!room2:server", client, client.getSafeUserId());
         const room3 = new Room("!room3:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockImplementation(

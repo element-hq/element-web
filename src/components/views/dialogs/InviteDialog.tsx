@@ -412,7 +412,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             // We mutate the given set so that any later callers avoid duplicating these users
             excludedTargetIds.add(userId);
         }
-        if (!recents) logger.warn("[Invite:Recents] No recents to suggest!");
+        if (recents.length === 0) logger.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);

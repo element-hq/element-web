@@ -222,7 +222,6 @@ export interface Settings {
     "feature_element_call_video_rooms": IFeature;
     "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
-    "feature_allow_screen_share_only_mode": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
@@ -642,16 +641,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|feature_disable_call_per_sender_encryption"),
-        default: false,
-    },
-    "feature_allow_screen_share_only_mode": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        description: _td("labs|under_active_development"),
-        displayName: _td("labs|allow_screen_share_only_mode"),
-        controller: new ReloadOnChangeController(),
         default: false,
     },
     "feature_location_share_live": {

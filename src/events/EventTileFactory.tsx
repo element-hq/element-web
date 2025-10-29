@@ -64,7 +64,6 @@ export interface EventTileTypeProps
         | "inhibitInteraction"
     > {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
-    timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
@@ -288,7 +287,6 @@ export function renderTile(
         callEventGrouper,
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
-        timestamp,
         inhibitInteraction,
         showHiddenEvents,
     } = props;
@@ -336,7 +334,6 @@ export function renderTile(
                         callEventGrouper,
                         getRelationsForEvent,
                         isSeeingThroughMessageHiddenForModeration,
-                        timestamp,
                         inhibitInteraction,
                         showHiddenEvents,
                     }),
