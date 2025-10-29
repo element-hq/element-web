@@ -10,10 +10,14 @@ Please see LICENSE files in the repository root for full details.
  * @alpha Subject to change.
  */
 export interface RoomViewProps {
-    /**
-     * The ID of the room to render.
+    /*
+     * If true, the room header will be hidden.
      */
-    roomId?: string;
+    hideHeader?: boolean;
+    /*
+     * If true, the message composer will be hidden.
+     */
+    hideComposer?: boolean;
 }
 
 /**
@@ -38,6 +42,7 @@ export interface BuiltinsApi {
      *
      * @alpha
      * @param roomId - Id of the room
+     * @param props - Additional props to pass to the room view
      */
-    renderRoomView(roomId: string): React.ReactNode;
+    renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
 }
