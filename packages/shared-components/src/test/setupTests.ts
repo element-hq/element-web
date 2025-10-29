@@ -1,5 +1,3 @@
-import { setLanguage } from "../../src/utils/i18n";
-
 /*
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
@@ -10,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "fetch-mock-jest";
 
+import { setLanguage } from "../../src/utils/i18n";
 import en from "../../../../src/i18n/strings/en_EN.json";
 
 export function setupLanguageMock() {
@@ -22,4 +21,3 @@ export function setupLanguageMock() {
 setupLanguageMock();
 
 setLanguage("en");
-//languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
