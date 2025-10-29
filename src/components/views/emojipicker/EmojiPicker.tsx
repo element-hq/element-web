@@ -187,6 +187,11 @@ class EmojiPicker extends React.Component<IProps, IState> {
         }
 
         if (focusNode) {
+            // Only move actual DOM focus if an emoji already has focus
+            // If the input has focus, keep using aria-activedescendant for virtual focus
+            if (document.activeElement !== document.querySelector(".mx_EmojiPicker_search input")) {
+                focusNode?.focus();
+            }
             dispatch({
                 type: Type.SetFocus,
                 payload: { node: focusNode },
