@@ -60,7 +60,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
 // @alpha
 export interface BuiltinsApi {
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
-    renderRoomView(roomId: string, props?: Omit<RoomViewProps, "roomId">): React.ReactNode;
+    renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
 }
 
 // @alpha @deprecated (undocumented)
@@ -351,7 +351,6 @@ export interface RoomViewProps {
     hideComposer?: boolean;
     // (undocumented)
     hideHeader?: boolean;
-    roomId?: string;
 }
 
 // @alpha @deprecated (undocumented)

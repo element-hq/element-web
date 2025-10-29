@@ -10,10 +10,6 @@ Please see LICENSE files in the repository root for full details.
  * @alpha Subject to change.
  */
 export interface RoomViewProps {
-    /**
-     * The ID of the room to render.
-     */
-    roomId?: string;
     /*
      * If true, the room header will be hidden.
      */
@@ -48,5 +44,5 @@ export interface BuiltinsApi {
      * @param roomId - Id of the room
      * @param props - Additional props to pass to the room view
      */
-    renderRoomView(roomId: string, props?: Omit<RoomViewProps, "roomId">): React.ReactNode;
+    renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
 }
