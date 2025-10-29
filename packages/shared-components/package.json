@@ -55,7 +55,7 @@
         "@storybook/test-runner": "^0.23.0",
         "concurrently": "^9.2.1",
         "eslint": "8",
-        "eslint-plugin-storybook": "^9.1.10",
+        "eslint-plugin-storybook": "^10.0.0",
         "jest-image-snapshot": "^6.5.1",
         "patch-package": "^8.0.1",
         "prettier": "^3.6.2",
