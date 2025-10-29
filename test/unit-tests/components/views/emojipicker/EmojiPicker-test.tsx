@@ -12,9 +12,22 @@ import userEvent from "@testing-library/user-event";
 
 import EmojiPicker from "../../../../../src/components/views/emojipicker/EmojiPicker";
 import { stubClient } from "../../../../test-utils";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("EmojiPicker", function () {
     stubClient();
+
+    beforeEach(() => {
+        // Clear recent emojis to prevent test pollution
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+            if (settingName === "recent_emoji") return [] as any;
+            return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
+        });
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
 
     it("should not mangle default order after filtering", async () => {
         const ref = createRef<EmojiPicker>();
@@ -89,5 +102,65 @@ describe("EmojiPicker", function () {
 
         expect(onChoose).toHaveBeenCalledWith("📫️");
         expect(onFinished).toHaveBeenCalled();
+    });
+
+    it("should move actual focus when navigating between emojis after Tab", async () => {
+        // mock offsetParent
+        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+            get() {
+                return this.parentNode;
+            },
+        });
+
+        const onChoose = jest.fn();
+        const onFinished = jest.fn();
+        const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
+
+        const input = container.querySelector("input")!;
+        expect(input).toHaveFocus();
+
+        // Wait for emojis to render
+        await waitFor(() => {
+            expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
+        });
+
+        function getEmoji(): string {
+            return document.activeElement?.textContent || "";
+        }
+
+        function getVirtuallyFocusedEmoji(): string {
+            const activeDescendant = input.getAttribute("aria-activedescendant");
+            if (!activeDescendant) return "";
+            return container.querySelector("#" + activeDescendant)?.textContent || "";
+        }
+
+        // Initially, arrow keys use virtual focus (aria-activedescendant)
+        // The first emoji is virtually focused by default
+        expect(input).toHaveFocus();
+        expect(getVirtuallyFocusedEmoji()).toEqual("😀");
+        expect(getEmoji()).toEqual(""); // No actual emoji has focus
+
+        await userEvent.keyboard("[ArrowDown]");
+        expect(input).toHaveFocus(); // Input still has focus
+        expect(getVirtuallyFocusedEmoji()).toEqual("🙂"); // Virtual focus moved
+        expect(getEmoji()).toEqual(""); // No actual emoji has focus
+
+        // Tab to move actual focus to the emoji
+        await userEvent.keyboard("[Tab]");
+        expect(input).not.toHaveFocus();
+        expect(getEmoji()).toEqual("🙂"); // Now emoji has actual focus
+
+        // Arrow keys now move actual DOM focus between emojis
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("🤩"); // Actual focus moved down one row
+        expect(input).not.toHaveFocus();
+
+        await userEvent.keyboard("[ArrowUp]");
+        expect(getEmoji()).toEqual("🙂"); // Actual focus moved back up
+        expect(input).not.toHaveFocus();
+
+        await userEvent.keyboard("[ArrowRight]");
+        expect(getEmoji()).toEqual("🙃"); // Actual focus moved right
+        expect(input).not.toHaveFocus();
     });
 });

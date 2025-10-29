@@ -66,6 +66,7 @@ class Search extends React.PureComponent<IProps> {
                     autoFocus
                     type="text"
                     placeholder={_t("action|search")}
+                    aria-label={_t("action|search")}
                     value={this.props.query}
                     onChange={(ev) => this.props.onChange(ev.target.value)}
                     onKeyDown={this.onKeyDown}

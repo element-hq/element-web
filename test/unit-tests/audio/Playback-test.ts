@@ -46,6 +46,7 @@ describe("Playback", () => {
 
     beforeEach(() => {
         jest.spyOn(logger, "error").mockRestore();
+        mockAudioBufferSourceNode.addEventListener.mockClear();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
         mockAudioContext.decodeAudioData.mockReset().mockResolvedValue(mockAudioBuffer);
         mockAudioContext.resume.mockClear().mockResolvedValue(undefined);
@@ -103,6 +104,26 @@ describe("Playback", () => {
 
         expect(mockAudioContext.suspend).toHaveBeenCalled();
         expect(playback.currentState).toEqual(PlaybackState.Stopped);
+    });
+
+    it("stop when audio source ended", async () => {
+        const buffer = new ArrayBuffer(8);
+        const playback = new Playback(buffer);
+        await playback.prepare();
+        await playback.play();
+
+        // Simulate the audio source ending by calling the 'ended' event listener
+        const endedListener = mockAudioBufferSourceNode.addEventListener.mock.calls.find(
+            (call) => call[0] === "ended",
+        )[1];
+        await endedListener();
+
+        // AudioContext should be suspended
+        expect(mockAudioContext.suspend).toHaveBeenCalled();
+        // Playback state should be Stopped
+        expect(playback.currentState).toEqual(PlaybackState.Stopped);
+        // Clock should be reset to 0
+        expect(playback.timeSeconds).toEqual(0);
     });
 
     describe("prepare()", () => {
