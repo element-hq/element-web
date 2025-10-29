@@ -2565,10 +2565,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.28.tgz#d45e01c4a56f143ee69c54dd6b12eade9e270a73"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
-"@posthog/core@1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.2.4.tgz#4fc7af7e48902e0b0ef970e010afe72c478865aa"
-  integrity sha512-o2TkycuV98PtAkcqE8B1DJv5LBvHEDTWirK5TlkQMeF2MJg0BYliY95CeRZFILNgZJCbI3k/fhahSMRQlpXOMg==
+"@posthog/core@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.3.1.tgz#d7331fa13c8ef407d97060c98f6733e86007f4cd"
+  integrity sha512-sGKVHituJ8L/bJxVV4KamMFp+IBWAZyCiYunFawJZ4cc59PCtLnKFIMEV6kn7A4eZQcQ6EKV5Via4sF3Z7qMLQ==
 
 "@principalstudio/html-webpack-inject-preload@^1.2.7":
   version "1.2.7"
@@ -2920,11 +2920,6 @@
     "@types/estree" "^1.0.0"
     estree-walker "^2.0.2"
     picomatch "^4.0.2"
-
-"@rrweb/types@^2.0.0-alpha.18":
-  version "2.0.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@rrweb/types/-/types-2.0.0-alpha.18.tgz#e1d9af844cebbf30a2be8808f6cf64f5df3e7f50"
-  integrity sha512-iMH3amHthJZ9x3gGmBPmdfim7wLGygC2GciIkw2A6SO8giSn8PHYtRT8OKNH4V+k3SZ6RSnYHcTQxBA7pSWZ3Q==
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"
@@ -11230,12 +11225,12 @@ postcss@^8.5.6:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-posthog-js@1.275.1:
-  version "1.275.1"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.275.1.tgz#5ce7f1b0b1b90eb6631c31d8d8d08665a4d3045e"
-  integrity sha512-ILglAzeUQl7h7rB3axr5rn5j2wBp53XedzJoUha5IC594BsrScdOD9NjLpkDAqV/Q5IsRKXbYOkr+HKaxgb4FA==
+posthog-js@1.280.1:
+  version "1.280.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.280.1.tgz#7590007164cf39a2ae6b2b837a8fc0dc139ed3c3"
+  integrity sha512-ZfXaExn42aZBQg88pBzGo71sy4hmei3ubBPb7DBbsfYC3ipZ6F6xmNr3ScNdOyF8cBTZbG24SlIvntp83jTlUA==
   dependencies:
-    "@posthog/core" "1.2.4"
+    "@posthog/core" "1.3.1"
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
