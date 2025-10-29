@@ -12,14 +12,19 @@ import { type ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite"
 import BaseAvatar from "../../../avatars/BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
+import { type MemberWithSeparator } from "../../../../viewmodels/memberlist/MemberListViewModel";
 
 interface Props {
+    /**
+     * Needed for `onFocus`
+     */
+    item: MemberWithSeparator;
     threePidInvite: ThreePIDInvite;
     memberIndex: number;
     memberCount: number;
     focused?: boolean;
     tabIndex?: number;
-    onFocus: (e: React.FocusEvent) => void;
+    onFocus: (item: MemberWithSeparator, e: React.FocusEvent) => void;
 }
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
@@ -40,7 +45,7 @@ export function ThreePidInviteTileView(props: Props): JSX.Element {
             iconJsx={iconJsx}
             focused={props.focused}
             tabIndex={props.tabIndex}
-            onFocus={props.onFocus}
+            onFocus={(e) => props.onFocus(props.item, e)}
         />
     );
 }
