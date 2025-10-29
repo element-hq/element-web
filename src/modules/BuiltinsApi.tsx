@@ -5,10 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import React from "react";
 import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-module-api";
 
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+
+interface RoomViewPropsWithRoomId extends RoomViewProps {
+    roomId: string;
+}
+
 export class ElementWebBuiltinsApi implements BuiltinsApi {
-    private _roomView?: React.ComponentType<RoomViewProps>;
+    private _roomView?: React.ComponentType<RoomViewPropsWithRoomId>;
 
     /**
      * Sets the components used to render a RoomView
@@ -19,15 +27,28 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
      *
      * @param component The RoomView component
      */
-    public setRoomViewComponent(component: React.ComponentType<RoomViewProps>): void {
+    public setRoomViewComponent(component: React.ComponentType<RoomViewPropsWithRoomId>): void {
         this._roomView = component;
     }
 
-    public getRoomViewComponent(): React.ComponentType<RoomViewProps> {
+    public getRoomViewComponent(): React.ComponentType<RoomViewPropsWithRoomId> {
         if (!this._roomView) {
             throw new Error("No RoomView component has been set");
         }
 
         return this._roomView;
+    }
+
+    public renderRoomView(roomId: string): React.ReactNode {
+        const Component = this.getRoomViewComponent();
+        return <Component roomId={roomId} />;
+    }
+
+    public renderRoomAvatar(roomId: string, size?: string): React.ReactNode {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) {
+            throw new Error(`No room such room: ${roomId}`);
+        }
+        return <RoomAvatar room={room} size={size} />;
     }
 }
