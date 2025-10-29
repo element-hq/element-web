@@ -73,6 +73,7 @@ class QuickReactions extends React.Component<IProps, IState> {
                             onMouseEnter={this.onMouseEnter}
                             onMouseLeave={this.onMouseLeave}
                             selectedEmojis={this.props.selectedEmojis}
+                            role="button"
                         />
                     ))}
                 </Toolbar>

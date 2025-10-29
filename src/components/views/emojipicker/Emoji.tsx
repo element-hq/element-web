@@ -21,7 +21,11 @@ interface IProps {
     onMouseLeave(emoji: IEmoji): void;
     disabled?: boolean;
     id?: string;
-    role?: string;
+    /**
+     * When role is set to `gridcell`, `aria-selected` will be set appropriately.
+     * When role is set to `button`, `aria-pressed` will be set appropriately.
+     */
+    role: "gridcell" | "button";
 }
 
 class Emoji extends React.PureComponent<IProps> {
@@ -37,6 +41,8 @@ class Emoji extends React.PureComponent<IProps> {
                 className="mx_EmojiPicker_item_wrapper"
                 disabled={this.props.disabled}
                 role={this.props.role}
+                aria-selected={this.props.role === "gridcell" ? isSelected : undefined}
+                aria-pressed={this.props.role === "button" ? isSelected : undefined}
                 focusOnMouseOver
             >
                 <div className={`mx_EmojiPicker_item ${isSelected ? "mx_EmojiPicker_item_selected" : ""}`}>
