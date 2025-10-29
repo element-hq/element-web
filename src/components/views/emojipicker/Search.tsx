@@ -71,9 +71,6 @@ class Search extends React.PureComponent<IProps> {
                     onChange={(ev) => this.props.onChange(ev.target.value)}
                     onKeyDown={this.onKeyDown}
                     ref={this.inputRef}
-                    // Typing in the search box sometimes reads out both the text being typed and the active descendant in a janky way.
-                    // Setting aria-hidden on the input prevents screen readers from reading the input's value.
-                    aria-hidden="true"
                     // Setting aria-activedescendant on the input allows screen readers to identify the active emoji.
                     // Setting it when there is not a query causes screen readers to read out the first emoji when focusing the input, and it continually tells you you are in the table vs the input.
                     aria-activedescendant={this.props.query ? this.context.state.activeNode?.id : undefined}
