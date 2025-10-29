@@ -61,7 +61,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   </h2>
                 </div>
                 <div
-                  class="flex mx_EncryptionCard_emphasisedContent"
+                  class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
                   style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <span>
@@ -227,7 +227,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   </h2>
                 </div>
                 <div
-                  class="flex mx_EncryptionCard_emphasisedContent"
+                  class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
                   style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <span>

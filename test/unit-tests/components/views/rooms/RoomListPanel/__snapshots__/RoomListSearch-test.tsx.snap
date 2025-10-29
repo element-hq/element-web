@@ -3,7 +3,7 @@
 exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_RoomListSearch"
+    class="_flex_4dswl_9 mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -27,7 +27,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
         />
       </svg>
       <span
-        class="flex"
+        class="_flex_4dswl_9"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
@@ -68,7 +68,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
 exports[`<RoomListSearch /> should display the dial button when the PTSN protocol is not supported 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_RoomListSearch"
+    class="_flex_4dswl_9 mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -92,7 +92,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
         />
       </svg>
       <span
-        class="flex"
+        class="_flex_4dswl_9"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
@@ -154,7 +154,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
 exports[`<RoomListSearch /> should hide the explore button when UIComponent.ExploreRooms is disabled 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_RoomListSearch"
+    class="_flex_4dswl_9 mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -178,7 +178,7 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
         />
       </svg>
       <span
-        class="flex"
+        class="_flex_4dswl_9"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
@@ -198,7 +198,7 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
 exports[`<RoomListSearch /> should hide the explore button when the active space is not MetaSpace.Home 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_RoomListSearch"
+    class="_flex_4dswl_9 mx_RoomListSearch"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -222,7 +222,7 @@ exports[`<RoomListSearch /> should hide the explore button when the active space
         />
       </svg>
       <span
-        class="flex"
+        class="_flex_4dswl_9"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span

@@ -251,7 +251,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
           Invited
         </div>
         <div
-          class="flex mx_InvitedIconView"
+          class="_flex_4dswl_9 mx_InvitedIconView"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <svg
