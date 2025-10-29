@@ -77,8 +77,7 @@ describe("EmojiPicker", function () {
         expect(input).toHaveFocus();
 
         function getEmoji(): string {
-            const activeDescendant = input.getAttribute("aria-activedescendant");
-            return container.querySelector("#" + activeDescendant)!.textContent!;
+            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
         }
 
         expect(getEmoji()).toEqual("😀");
@@ -129,9 +128,7 @@ describe("EmojiPicker", function () {
         }
 
         function getVirtuallyFocusedEmoji(): string {
-            const activeDescendant = input.getAttribute("aria-activedescendant");
-            if (!activeDescendant) return "";
-            return container.querySelector("#" + activeDescendant)?.textContent || "";
+            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
         }
 
         // Initially, arrow keys use virtual focus (aria-activedescendant)
