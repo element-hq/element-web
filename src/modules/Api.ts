@@ -27,7 +27,7 @@ import { NavigationApi } from "./Navigation.ts";
 import { openDialog } from "./Dialog.tsx";
 import { overwriteAccountAuth } from "./Auth.ts";
 import { ElementWebExtrasApi } from "./ExtrasApi.ts";
-import { ElementWebBuiltinsApi } from "./BuiltinsApi.ts";
+import { ElementWebBuiltinsApi } from "./BuiltinsApi.tsx";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
