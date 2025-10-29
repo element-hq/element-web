@@ -204,7 +204,7 @@ describe("<UserOptionsSection />", () => {
         jest.spyOn(Modal, "createDialog");
 
         const { result } = renderUserInfoBasicOptionsViewModelHook();
-        result.current.onInviteUserButton(new Event("click"));
+        result.current.onInviteUserButton("roomId", new Event("click"));
 
         // check that we have called .invite
         expect(spy).toHaveBeenCalledWith([defaultMember.userId]);
