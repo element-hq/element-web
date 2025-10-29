@@ -118,6 +118,7 @@ class Category extends React.PureComponent<IProps> {
                     overflowMargin={0}
                     renderItem={this.renderEmojiRow}
                     role="grid"
+                    aria-multiselectable
                 />
             </section>
         );
