@@ -9,10 +9,14 @@ import React from "react";
 import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-module-api";
 
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import { getSafeCli } from "./common";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+
+interface RoomViewPropsWithRoomId extends RoomViewProps {
+    roomId: string;
+}
 
 export class ElementWebBuiltinsApi implements BuiltinsApi {
-    private _roomView?: React.ComponentType<RoomViewProps>;
+    private _roomView?: React.ComponentType<RoomViewPropsWithRoomId>;
 
     /**
      * Sets the components used to render a RoomView
@@ -23,11 +27,11 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
      *
      * @param component The RoomView component
      */
-    public setRoomViewComponent(component: React.ComponentType<RoomViewProps>): void {
+    public setRoomViewComponent(component: React.ComponentType<RoomViewPropsWithRoomId>): void {
         this._roomView = component;
     }
 
-    public getRoomViewComponent(): React.ComponentType<RoomViewProps> {
+    public getRoomViewComponent(): React.ComponentType<RoomViewPropsWithRoomId> {
         if (!this._roomView) {
             throw new Error("No RoomView component has been set");
         }
@@ -41,7 +45,7 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
     }
 
     public renderRoomAvatar(roomId: string, size?: string): React.ReactNode {
-        const room = getSafeCli().getRoom(roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) {
             throw new Error(`No room such room: ${roomId}`);
         }

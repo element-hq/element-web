@@ -14,7 +14,7 @@ import Timer from "../../utils/Timer";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import type { SDKContext } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext";
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See getExcessHeight.
@@ -184,6 +184,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private heightUpdateInProgress = false;
     public divScroll: HTMLDivElement | null = null;
 
+    public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {

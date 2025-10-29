@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 /**
  * Get MatrixClient instance from SdkContextClass.
@@ -14,7 +14,7 @@ import { SdkContextClass } from "../contexts/SDKContext";
  * @returns MatrixClient object
  */
 export function getSafeCli(): MatrixClient {
-    const cli = SdkContextClass.instance.client;
+    const cli = MatrixClientPeg.get();
     if (!cli) {
         throw new Error("Could not get MatrixClient from SdkContextClass");
     }

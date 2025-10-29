@@ -8,22 +8,24 @@ Please see LICENSE files in the repository root for full details.
 import { Watchable, type AccountDataApi as IAccountDataApi } from "@element-hq/element-web-module-api";
 import { ClientEvent, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { getSafeCli } from "./common";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export class AccountDataApi implements IAccountDataApi {
     public get(eventType: string): Watchable<unknown> {
-        const cli = getSafeCli();
+        const cli = MatrixClientPeg.safeGet();
         return new AccountDataWatchable(cli, eventType);
     }
 
     public async set(eventType: string, content: any): Promise<void> {
+        const cli = MatrixClientPeg.safeGet();
         //@ts-expect-error: JS-SDK accepts known event-types, intentionally allow arbitrary types.
-        await getSafeCli().setAccountData(eventType, content);
+        await cli.setAccountData(eventType, content);
     }
 
     public async delete(eventType: string): Promise<void> {
+        const cli = MatrixClientPeg.safeGet();
         //@ts-expect-error: JS-SDK accepts known event-types, intentionally allow arbitrary types.
-        getSafeCli().deleteAccountData(eventType);
+        cli.deleteAccountData(eventType);
     }
 }
 

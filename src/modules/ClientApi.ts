@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 import type { ClientApi as IClientApi, Room } from "@element-hq/element-web-module-api";
 import { Room as ModuleRoom } from "./models/Room";
 import { AccountDataApi } from "./AccountDataApi";
-import { getSafeCli } from "./common";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export class ClientApi implements IClientApi {
     private accountDataApi?: AccountDataApi;
 
     public getRoom(roomId: string): Room | null {
-        const sdkRoom = getSafeCli().getRoom(roomId);
+        const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);
         return null;
     }
