@@ -121,7 +121,11 @@ test.describe("Polls", () => {
             .filter({ hasText: pollParams.title })
             .getAttribute("data-scroll-tokens");
         await expect(getPollTile(page, pollId)).toMatchScreenshot("Polls_Timeline_tile_no_votes.png", {
-            mask: [page.locator(".mx_MessageTimestamp")],
+            css: `
+                .mx_MessageTimestamp {
+                    visibility: hidden;
+                }
+            `,
         });
 
         // Bot votes 'Maybe' in the poll
@@ -293,7 +297,11 @@ test.describe("Polls", () => {
             await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
                 "ThreadView_with_a_poll_on_bubble_layout.png",
                 {
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                    `,
                 },
             );
 
@@ -303,7 +311,11 @@ test.describe("Polls", () => {
             await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
                 "ThreadView_with_a_poll_on_group_layout.png",
                 {
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    css: `
+                        .mx_MessageTimestamp {
+                            visibility: hidden;
+                        }
+                    `,
                 },
             );
 

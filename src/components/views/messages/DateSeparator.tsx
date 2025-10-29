@@ -31,8 +31,8 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from "./JumpToDatePicker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import TimelineSeparator from "./TimelineSeparator";
+import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
     roomId: string;
@@ -51,6 +51,8 @@ interface IState {
  * Has additional jump to date functionality when labs flag is enabled
  */
 export default class DateSeparator extends React.Component<IProps, IState> {
+    public static contextType = RoomContext;
+    declare public context: React.ContextType<typeof RoomContext>;
     private settingWatcherRef?: string;
 
     public constructor(props: IProps) {
@@ -143,7 +145,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // Only try to navigate to the room if the user is still viewing the same
             // room. We don't want to jump someone back to a room after a slow request
             // if they've already navigated away to another room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -169,7 +171,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // don't want to worry someone about an error in a room they no longer care
             // about after a slow request if they've already navigated away to another
             // room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
                 let submitDebugLogsContent: JSX.Element = <></>;

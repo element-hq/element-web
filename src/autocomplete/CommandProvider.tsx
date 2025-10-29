@@ -25,7 +25,7 @@ const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<Command>;
-
+    private room: Room;
     public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: COMMAND_RE, renderingType });
         this.matcher = new QueryMatcher(Commands, {
@@ -33,6 +33,7 @@ export default class CommandProvider extends AutocompleteProvider {
             funcs: [({ aliases }) => aliases.join(" ")], // aliases
             context: renderingType,
         });
+        this.room = room;
     }
 
     public async getCompletions(
@@ -51,7 +52,7 @@ export default class CommandProvider extends AutocompleteProvider {
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].slice(1); // strip leading `/`
-            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled(cli)) {
+            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled(cli, this.room.roomId)) {
                 // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name)!.hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)!];
@@ -70,7 +71,7 @@ export default class CommandProvider extends AutocompleteProvider {
         return matches
             .filter((cmd) => {
                 const display = !cmd.renderingTypes || cmd.renderingTypes.includes(this.renderingType);
-                return cmd.isEnabled(cli) && display;
+                return cmd.isEnabled(cli, this.room.roomId) && display;
             })
             .map((result) => {
                 let completion = result.getCommand() + " ";

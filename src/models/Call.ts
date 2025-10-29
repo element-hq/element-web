@@ -704,10 +704,6 @@ export class ElementCall extends Call {
             params.append("allowIceFallback", "true");
         }
 
-        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
-            params.append("allowVoipWithNoMedia", "true");
-        }
-
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
             SettingsStore.getValue("systemFont")

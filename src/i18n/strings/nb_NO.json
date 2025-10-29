@@ -1474,7 +1474,6 @@
         "upload_file": "Last opp en fil"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Tillat modus for bare skjermdeling",
         "ask_to_join": "Aktiver be om å bli med",
         "automatic_debug_logs": "Send automatisk feilsøkingslogger ved eventuelle feil",
         "automatic_debug_logs_decryption": "Send automatisk feilsøkingslogger ved dekrypteringsfeil",
@@ -1917,7 +1916,6 @@
         "thread_list": {
             "context_menu_label": "Trådalternativer"
         },
-        "title": "Høyre panel",
         "video_room_chat": {
             "title": "Chat"
         }

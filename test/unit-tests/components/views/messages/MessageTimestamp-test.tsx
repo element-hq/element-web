@@ -29,6 +29,7 @@ describe("MessageTimestamp", () => {
     aria-hidden="true"
     aria-live="off"
     class="mx_MessageTimestamp"
+    tabindex="0"
   >
     08:09
   </span>

@@ -1487,7 +1487,6 @@
         "upload_file": "Wyślij plik"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Zezwól na tryb wyłącznego udostępniania ekranu",
         "ask_to_join": "Włącz prośby o dołączenie",
         "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
         "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
@@ -1931,7 +1930,6 @@
         "thread_list": {
             "context_menu_label": "Opcje wątków"
         },
-        "title": "Prawy panel",
         "video_room_chat": {
             "title": "Czat"
         }

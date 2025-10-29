@@ -1471,7 +1471,6 @@
         "upload_file": "Unggah sebuah file"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Perbolehkan mode hanya pembagian layar",
         "ask_to_join": "Aktifkan bertanya untuk bergabung",
         "automatic_debug_logs": "Kirim catatan pengawakutu secara otomatis saat ada kesalahan",
         "automatic_debug_logs_decryption": "Kirim catatan pengawakutu secara otomatis ketika terjadi kesalahan pendekripsian",
@@ -1911,7 +1910,6 @@
         "thread_list": {
             "context_menu_label": "Opsi utasan"
         },
-        "title": "Panel kanan",
         "video_room_chat": {
             "title": "Obrolan"
         }

@@ -230,7 +230,7 @@ describe("message", () => {
                 });
 
                 // Then
-                expect(getCommandSpy).toHaveBeenCalledWith(validCommand);
+                expect(getCommandSpy).toHaveBeenCalledWith(mockRoom.roomId, validCommand);
             });
 
             it("does not call getCommand for valid command with invalid prefix", async () => {

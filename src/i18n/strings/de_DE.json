@@ -1474,7 +1474,6 @@
         "upload_file": "Eine Datei hochladen"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Nur-Bildschirm-Teilen-Modus erlauben",
         "ask_to_join": "Beitrittsanfragen erlauben",
         "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
         "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
@@ -1916,7 +1915,6 @@
         "thread_list": {
             "context_menu_label": "Thread-Optionen"
         },
-        "title": "Rechte Seitenleiste",
         "video_room_chat": {
             "title": "Unterhaltung"
         }

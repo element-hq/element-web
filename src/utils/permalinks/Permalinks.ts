@@ -217,7 +217,7 @@ export class RoomPermalinkCreator {
 
                 const allowed = aclEvent.getContent<{ allow: string[] }>().allow;
                 allowedHostsRegexps = []; // we don't want to use the default rule here
-                if (Array.isArray(denied)) {
+                if (Array.isArray(allowed)) {
                     allowed.forEach((h) => allowedHostsRegexps.push(getRegex(h)));
                 }
             }

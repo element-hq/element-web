@@ -1474,7 +1474,6 @@
         "upload_file": "Envoyer un fichier"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Activer le mode partage d’écran uniquement",
         "ask_to_join": "Activer demander à venir",
         "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
         "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
@@ -1916,7 +1915,6 @@
         "thread_list": {
             "context_menu_label": "Options des fils de discussion"
         },
-        "title": "Panneau droit",
         "video_room_chat": {
             "title": "Conversation privée"
         }

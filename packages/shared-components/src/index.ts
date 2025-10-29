@@ -21,12 +21,12 @@ export * from "./utils/Box";
 export * from "./utils/Flex";
 
 // Utils
-export * from "./utils/i18n";
+export { setLanguage } from "./utils/i18n";
 export * from "./utils/humanize";
 export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 
 // MVVM
 export * from "./viewmodel";
-export * from "./ViewWrapper";
+export * from "./useMockedViewModel";
 export * from "./useViewModel";

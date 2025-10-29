@@ -1474,7 +1474,6 @@
         "upload_file": "Laadi fail üles"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Luba kasutada vaid ekraanijagamisvaadet",
         "ask_to_join": "Võta kasutusele liitumine kasutaja sooviavalduse alusel",
         "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele",
         "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
@@ -1917,7 +1916,6 @@
         "thread_list": {
             "context_menu_label": "Jutulõnga valikud"
         },
-        "title": "Parem paan",
         "video_room_chat": {
             "title": "Vestle"
         }

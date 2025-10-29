@@ -1252,7 +1252,6 @@
         "upload_file": "Mampiakara rakitra"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Avelao ny fomba fizarana efijery ihany",
         "ask_to_join": "Alefaso ny fangatahana hiditra",
         "automatic_debug_logs": "Alefaso ho azy ny log debug amin'ny lesoka rehetra",
         "automatic_debug_logs_decryption": "Alefaso ho azy ny diarin'ny debug momba ny lesoka decryption",
