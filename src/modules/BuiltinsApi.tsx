@@ -8,27 +8,39 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-module-api";
 
-import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import type { Room } from "matrix-js-sdk/src/matrix";
 
 interface RoomViewPropsWithRoomId extends RoomViewProps {
     roomId: string;
 }
 
+interface RoomAvatarProps {
+    room: Room;
+    size?: string;
+}
+
+interface Components {
+    roomView: React.ComponentType<RoomViewPropsWithRoomId>;
+    roomAvatar: React.ComponentType<RoomAvatarProps>;
+}
+
 export class ElementWebBuiltinsApi implements BuiltinsApi {
     private _roomView?: React.ComponentType<RoomViewPropsWithRoomId>;
+    private _roomAvatar?: React.ComponentType<RoomAvatarProps>;
 
     /**
-     * Sets the components used to render a RoomView
+     * Sets the components used by the API.
      *
-     * This only really exists here because referencing RoomView directly causes a nightmare of
+     * This only really exists here because referencing these components directly causes a nightmare of
      * circular dependencies that break the whole app, so instead we avoid referencing it here
      * and pass it in from somewhere it's already referenced (see related comment in app.tsx).
      *
      * @param component The RoomView component
      */
-    public setRoomViewComponent(component: React.ComponentType<RoomViewPropsWithRoomId>): void {
-        this._roomView = component;
+    public setComponents(components: Components): void {
+        this._roomView = components.roomView;
+        this._roomAvatar = components.roomAvatar;
     }
 
     public getRoomViewComponent(): React.ComponentType<RoomViewPropsWithRoomId> {
@@ -37,6 +49,14 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
         }
 
         return this._roomView;
+    }
+
+    public getRoomAvatarComponent(): React.ComponentType<RoomAvatarProps> {
+        if (!this._roomAvatar) {
+            throw new Error("No RoomAvatar component has been set");
+        }
+
+        return this._roomAvatar;
     }
 
     public renderRoomView(roomId: string): React.ReactNode {
@@ -49,6 +69,7 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
         if (!room) {
             throw new Error(`No room such room: ${roomId}`);
         }
-        return <RoomAvatar room={room} size={size} />;
+        const Component = this.getRoomAvatarComponent();
+        return <Component room={room} size={size} />;
     }
 }

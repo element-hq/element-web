@@ -10,32 +10,26 @@ import { render } from "jest-matrix-react";
 import { ElementWebBuiltinsApi } from "../../../src/modules/BuiltinsApi";
 import { stubClient } from "../../test-utils/test-utils";
 
-jest.mock("../../../src/components/views/avatars/RoomAvatar", () => {
-    const Avatar: React.FC<{ room: { roomId: string }; size: string }> = ({ room, size }) => {
-        return (
-            <div>
-                Avatar, {room.roomId}, {size}
-            </div>
-        );
-    };
-    return {
-        __esModule: true,
-        default: Avatar,
-    };
-});
+const Avatar: React.FC<{ room: { roomId: string }; size: string }> = ({ room, size }) => {
+    return (
+        <div>
+            Avatar, {room.roomId}, {size}
+        </div>
+    );
+};
 
 describe("ElementWebBuiltinsApi", () => {
     it("returns the RoomView component thats been set", () => {
         const builtinsApi = new ElementWebBuiltinsApi();
         const sentinel = {};
-        builtinsApi.setRoomViewComponent(sentinel as any);
+        builtinsApi.setComponents({ roomView: sentinel, roomAvatar: Avatar } as any);
         expect(builtinsApi.getRoomViewComponent()).toBe(sentinel);
     });
 
     it("returns rendered RoomView component", () => {
         const builtinsApi = new ElementWebBuiltinsApi();
         const RoomView = () => <div>hello world</div>;
-        builtinsApi.setRoomViewComponent(RoomView as any);
+        builtinsApi.setComponents({ roomView: RoomView, roomAvatar: Avatar } as any);
         const { container } = render(<> {builtinsApi.renderRoomView("!foo:m.org")}</>);
         expect(container).toHaveTextContent("hello world");
     });
@@ -43,6 +37,7 @@ describe("ElementWebBuiltinsApi", () => {
     it("returns rendered RoomAvatar component", () => {
         stubClient();
         const builtinsApi = new ElementWebBuiltinsApi();
+        builtinsApi.setComponents({ roomView: {}, roomAvatar: Avatar } as any);
         const { container } = render(<> {builtinsApi.renderRoomAvatar("!foo:m.org", "50")}</>);
         expect(container).toHaveTextContent("Avatar");
         expect(container).toHaveTextContent("!foo:m.org");
