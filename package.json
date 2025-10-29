@@ -186,7 +186,6 @@
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.50.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
-        "@rrweb/types": "^2.0.0-alpha.18",
         "@sentry/webpack-plugin": "^4.0.0",
         "@storybook/react-vite": "^9.1.10",
         "@stylistic/eslint-plugin": "^5.0.0",
