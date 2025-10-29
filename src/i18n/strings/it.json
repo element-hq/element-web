@@ -1267,7 +1267,6 @@
         "upload_file": "Invia un file"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Consenti modalità solo condivisione schermo",
         "ask_to_join": "Attiva \"Chiedi di entrare\"",
         "automatic_debug_logs": "Invia automaticamente log di debug per qualsiasi errore",
         "automatic_debug_logs_decryption": "Invia automaticamente log di debug per errori di decifrazione",

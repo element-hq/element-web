@@ -1490,7 +1490,6 @@
         "upload_file": "Nahrať súbor"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Povoliť režim iba zdieľania obrazovky",
         "ask_to_join": "Umožniť požiadať o pripojenie",
         "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
         "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
