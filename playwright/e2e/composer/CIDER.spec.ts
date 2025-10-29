@@ -78,7 +78,7 @@ test.describe("Composer", () => {
 
         test.describe("render emoji picker with larger viewport height", async () => {
             test.use({ viewport: { width: 1280, height: 720 } });
-            test("render emoji picker", { tag: "@screenshot" },  async ({ page, app }) => {
+            test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
                 await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker.png");
             });
@@ -86,7 +86,7 @@ test.describe("Composer", () => {
 
         test.describe("render emoji picker with small viewport height", async () => {
             test.use({ viewport: { width: 1280, height: 360 } });
-            test("render emoji picker", { tag: "@screenshot" },  async ({ page, app }) => {
+            test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
                 await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker-small.png");
             });
