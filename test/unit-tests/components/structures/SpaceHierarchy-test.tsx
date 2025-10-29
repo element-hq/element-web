@@ -9,18 +9,19 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { type HierarchyRoom, JoinRule, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../../test-utils";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
-import SpaceHierarchy, { showRoom, toLocalRoom } from "../../../../src/components/structures/SpaceHierarchy";
+import SpaceHierarchy, { showRoom, toLocalRoom, joinRoom } from "../../../../src/components/structures/SpaceHierarchy";
 import { Action } from "../../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { type RoomViewStore } from "../../../../src/stores/RoomViewStore";
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {
@@ -63,6 +64,59 @@ describe("SpaceHierarchy", () => {
                 roomType: undefined,
                 metricsTrigger: "RoomDirectory",
             });
+        });
+    });
+
+    describe("joinRoom", () => {
+        let client: MatrixClient;
+        let hierarchy: RoomHierarchy;
+        let roomViewStore: RoomViewStore;
+        let room: Room;
+        const roomId = "!room:server";
+
+        beforeEach(() => {
+            stubClient();
+            client = MatrixClientPeg.safeGet();
+            room = new Room("space-id", client, "@alice:example.com");
+            hierarchy = new RoomHierarchy(room);
+            roomViewStore = {
+                showJoinRoomError: jest.fn(),
+            } as unknown as RoomViewStore;
+
+            jest.spyOn(client, "isGuest").mockReturnValue(false);
+            jest.spyOn(dispatcher, "dispatch");
+        });
+
+        it("should handle MatrixError exceptions when joining room", async () => {
+            // Mock joinRoom to throw a MatrixError
+            const matrixError = new MatrixError({ errcode: "M_FORBIDDEN", error: "Access denied" });
+            mocked(client.joinRoom).mockRejectedValue(matrixError);
+
+            // Attempt to join the room
+            await expect(joinRoom(client, roomViewStore, hierarchy, roomId)).rejects.toThrow(matrixError);
+
+            // Verify that showJoinRoomError was called with the MatrixError
+            expect(roomViewStore.showJoinRoomError).toHaveBeenCalledWith(matrixError, roomId);
+        });
+
+        it("should handle non-MatrixError exceptions when joining room", async () => {
+            // Mock joinRoom to throw a non-MatrixError
+            const customError = new Error("Custom error");
+            mocked(client.joinRoom).mockRejectedValue(customError);
+
+            // Attempt to join the room
+            await expect(joinRoom(client, roomViewStore, hierarchy, roomId)).rejects.toThrow("Custom error");
+
+            // Verify that showJoinRoomError was called with a MatrixError wrapper
+            expect(roomViewStore.showJoinRoomError).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    errcode: undefined,
+                    data: expect.objectContaining({
+                        error: "Unknown error",
+                    }),
+                }),
+                roomId,
+            );
         });
     });
 
