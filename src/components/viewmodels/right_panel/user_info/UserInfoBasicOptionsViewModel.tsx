@@ -17,7 +17,6 @@ import PosthogTrackers from "../../../../PosthogTrackers";
 import { ShareDialog } from "../../../views/dialogs/ShareDialog";
 import { type ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../../dispatcher/actions";
-import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import MultiInviter from "../../../../utils/MultiInviter";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
@@ -41,7 +40,7 @@ export interface UserInfoBasicOptionsState {
     // Method called when a share user button is clicked, will display modal with profile to share
     onShareUserClick: () => void;
     // Method called when a invite button is clicked, will display modal to invite user
-    onInviteUserButton: (evt: Event) => Promise<void>;
+    onInviteUserButton: (fallbackRoomId: string, evt: Event) => Promise<void>;
     // Method called when the DM button is clicked, will open a DM with the selected member
     onOpenDmForUser: (member: Member) => Promise<void>;
 }
@@ -91,12 +90,9 @@ export const useUserInfoBasicOptionsViewModel = (room: Room, member: User | Room
         });
     };
 
-    const onInviteUserButton = async (ev: Event): Promise<void> => {
+    const onInviteUserButton = async (fallbackRoomId: string, ev: Event): Promise<void> => {
         try {
-            const roomId =
-                member instanceof RoomMember && member.roomId
-                    ? member.roomId
-                    : SdkContextClass.instance.roomViewStore.getRoomId();
+            const roomId = member instanceof RoomMember && member.roomId ? member.roomId : fallbackRoomId;
 
             // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.
             const inviter = new MultiInviter(cli, roomId || "");
