@@ -39,10 +39,10 @@ class Emoji extends React.PureComponent<IProps> {
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
                 className="mx_EmojiPicker_item_wrapper"
-                disabled={this.props.disabled}
+                disabled={this.props.disabled || undefined}
                 role={this.props.role}
-                aria-selected={this.props.role === "gridcell" ? isSelected : undefined}
-                aria-pressed={this.props.role === "button" ? isSelected : undefined}
+                aria-selected={!this.props.disabled && this.props.role === "gridcell" ? isSelected : undefined}
+                aria-pressed={!this.props.disabled && this.props.role === "button" ? isSelected : undefined}
                 focusOnMouseOver
             >
                 <div className={`mx_EmojiPicker_item ${isSelected ? "mx_EmojiPicker_item_selected" : ""}`}>
