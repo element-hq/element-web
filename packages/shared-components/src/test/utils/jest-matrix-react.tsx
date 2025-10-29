@@ -29,7 +29,7 @@ const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
     };
 };
 
-const customRender = (ui: ReactElement, options: RenderOptions = {}) => {
+const customRender = (ui: ReactElement, options: RenderOptions = {}): ReturnType<typeof render> => {
     return render(ui, {
         ...options,
         wrapper: wrapWithTooltipProvider(options?.wrapper) as RenderOptions["wrapper"],

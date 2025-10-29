@@ -11,7 +11,7 @@ import fetchMock from "fetch-mock-jest";
 import { setLanguage } from "../../src/utils/i18n";
 import en from "../../../../src/i18n/strings/en_EN.json";
 
-export function setupLanguageMock() {
+export function setupLanguageMock(): void {
     fetchMock
         .get("/i18n/languages.json", {
             en: "en_EN.json",
