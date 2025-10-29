@@ -119,7 +119,7 @@ describe("<RoomListItemView />", () => {
         });
 
         const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
-        expect(listItem).toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover");
+        expect(listItem).toHaveClass("_flex_4dswl_9 mx_RoomListItemView mx_RoomListItemView_hover");
 
         rerender(
             <RoomListItemView
