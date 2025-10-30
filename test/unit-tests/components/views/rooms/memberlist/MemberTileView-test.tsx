@@ -17,13 +17,16 @@ import * as TestUtils from "../../../../../test-utils";
 import { type RoomMember } from "../../../../../../src/models/rooms/RoomMember";
 import {
     getPending3PidInvites,
+    type MemberWithSeparator,
     sdkRoomMemberToRoomMember,
 } from "../../../../../../src/components/viewmodels/memberlist/MemberListViewModel";
 import { RoomMemberTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/RoomMemberTileView";
 import { ThreePidInviteTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/ThreePidInviteTileView";
+import { type ThreePIDInvite } from "../../../../../../src/models/rooms/ThreePIDInvite";
 
 describe("MemberTileView", () => {
     describe("RoomMemberTileView", () => {
+        const item = {} as { member: RoomMember };
         let matrixClient: MatrixClient;
         let member: RoomMember;
 
@@ -32,11 +35,12 @@ describe("MemberTileView", () => {
             mocked(matrixClient.isRoomEncrypted).mockReturnValue(true);
             const sdkMember = new SdkRoomMember("roomId", matrixClient.getUserId()!);
             member = sdkRoomMemberToRoomMember(sdkMember)!.member!;
+            item.member = member;
         });
 
         it("should not display an E2EIcon when the e2E status = normal", () => {
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             const e2eIcon = container.querySelector(".mx_E2EIconView");
             expect(e2eIcon).toBeNull();
@@ -50,7 +54,7 @@ describe("MemberTileView", () => {
             } as unknown as UserVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
@@ -73,7 +77,7 @@ describe("MemberTileView", () => {
             } as DeviceVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
 
             await waitFor(async () => {
@@ -88,33 +92,46 @@ describe("MemberTileView", () => {
         it("renders user labels correctly", async () => {
             member.powerLevel = 50;
             const { container: container1 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container1).toHaveTextContent("Moderator");
 
             member.powerLevel = 100;
             const { container: container2 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container2).toHaveTextContent("Admin");
 
             member.powerLevel = Infinity;
             const { container: container3 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container3).toHaveTextContent("Owner");
 
             member.isInvite = true;
             const { container: container4 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container4).toHaveTextContent("Invited");
+        });
+
+        it("should call onFocus handler when focused", async () => {
+            const user = userEvent.setup();
+            const onFocus = jest.fn();
+            render(<RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={onFocus} />);
+
+            const button = screen.getByRole("option", { name: member.userId });
+            await user.click(button);
+
+            expect(onFocus).toHaveBeenCalledWith(item, expect.anything());
         });
     });
 
     describe("ThreePidInviteTileView", () => {
+        const member = {} as MemberWithSeparator;
         let cli: MatrixClient;
         let room: Room;
+        let threePidInvite: ThreePIDInvite;
 
         beforeEach(() => {
             cli = TestUtils.stubClient();
@@ -123,19 +140,39 @@ describe("MemberTileView", () => {
                 TestUtils.mkThirdPartyInviteEvent(cli.getSafeUserId(), "Foobar", room.roomId),
                 { toStartOfTimeline: false, addToState: true },
             );
+            threePidInvite = getPending3PidInvites(room)[0].threePidInvite!;
         });
 
         it("renders ThreePidInvite correctly", async () => {
-            const [{ threePidInvite }] = getPending3PidInvites(room);
             const { container } = render(
                 <ThreePidInviteTileView
-                    threePidInvite={threePidInvite!}
+                    item={member}
+                    threePidInvite={threePidInvite}
                     memberIndex={0}
                     memberCount={1}
                     onFocus={jest.fn()}
                 />,
             );
             expect(container).toMatchSnapshot();
+        });
+
+        it("should call onFocus handler when focused", async () => {
+            const user = userEvent.setup();
+            const onFocus = jest.fn();
+            render(
+                <ThreePidInviteTileView
+                    item={member}
+                    threePidInvite={threePidInvite}
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={onFocus}
+                />,
+            );
+
+            const button = screen.getByRole("option", { name: threePidInvite.event.getContent().display_name });
+            await user.click(button);
+
+            expect(onFocus).toHaveBeenCalledWith(member, expect.anything());
         });
     });
 });

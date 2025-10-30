@@ -16,15 +16,20 @@ import BaseAvatar from "../../../avatars/BaseAvatar";
 import { _t } from "../../../../../languageHandler";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
+import { type MemberWithSeparator } from "../../../../viewmodels/memberlist/MemberListViewModel";
 
 interface IProps {
+    /**
+     * Needed for `onFocus`
+     */
+    item: MemberWithSeparator;
     member: RoomMember;
     index: number;
     memberCount: number;
     showPresence?: boolean;
     focused?: boolean;
     tabIndex?: number;
-    onFocus: (e: React.FocusEvent) => void;
+    onFocus: (item: MemberWithSeparator, e: React.FocusEvent) => void;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
@@ -60,7 +65,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
     return (
         <MemberTileView
             onClick={vm.onClick}
-            onFocus={props.onFocus}
+            onFocus={(e) => props.onFocus(props.item, e)}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
