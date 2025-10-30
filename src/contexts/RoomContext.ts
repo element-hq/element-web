@@ -10,6 +10,7 @@ import { createContext } from "react";
 
 import { type IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
+import { type RoomViewStore } from "../stores/RoomViewStore";
 
 export enum TimelineRenderingType {
     Room = "Room",
@@ -32,6 +33,7 @@ export enum MainSplitContentType {
 const RoomContext = createContext<
     IRoomState & {
         threadId?: string;
+        roomViewStore: RoomViewStore;
     }
 >({
     roomLoading: true,
