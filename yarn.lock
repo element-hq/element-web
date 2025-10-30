@@ -1624,8 +1624,6 @@
 "@element-hq/web-shared-components@file:packages/shared-components":
   version "0.0.0-test.6"
   dependencies:
-    "@vector-im/compound-design-tokens" "^6.0.0"
-    "@vector-im/compound-web" "^8.2.4"
     classnames "^2.5.1"
     counterpart "^0.18.6"
     lodash "^4.17.21"
@@ -4091,7 +4089,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.0.0.tgz#a07975ee46307fc31c2ec64a216b6be2b3b27fb3"
   integrity sha512-Jk0NsLPCvdcuZi6an1cfyf4MDcIuoPlvja5ZWgJcORyGQZV1eLMHPYKShq9gj+EYk/BXZoPvQ1d6/T+/LSCNPA==
 
-"@vector-im/compound-web@^8.1.2", "@vector-im/compound-web@^8.2.4":
+"@vector-im/compound-web@^8.1.2":
   version "8.2.4"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.2.4.tgz#1109537365fe49368b13e05c5a32f23956e71fe8"
   integrity sha512-Fsb/99r98ICMdtNt/bFcWtLmjyngcye9Ugqm9VDapo1VnrO0wLFJHOcm+J+SvKZwTXCaSndBklygAr5FXk0E9w==
