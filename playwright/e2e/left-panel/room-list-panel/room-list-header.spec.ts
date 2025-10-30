@@ -30,7 +30,7 @@ test.describe("Header section of the room list", () => {
         const roomListHeader = getHeaderSection(page);
         await expect(roomListHeader).toMatchScreenshot("room-list-header.png");
 
-        const composeMenu = roomListHeader.getByRole("button", { name: "Add" });
+        const composeMenu = roomListHeader.getByRole("button", { name: "New conversation" });
         await composeMenu.click();
 
         await expect(page.getByRole("menu")).toMatchScreenshot("room-list-header-compose-menu.png");
@@ -55,7 +55,7 @@ test.describe("Header section of the room list", () => {
         await expect(roomListHeader).toMatchScreenshot("room-list-space-header.png");
 
         await expect(roomListHeader.getByRole("heading", { name: "MySpace" })).toBeVisible();
-        await expect(roomListHeader.getByRole("button", { name: "Add" })).toBeVisible();
+        await expect(roomListHeader.getByRole("button", { name: "New conversation" })).toBeVisible();
 
         const spaceMenu = roomListHeader.getByRole("button", { name: "Open space menu" });
         await spaceMenu.click();

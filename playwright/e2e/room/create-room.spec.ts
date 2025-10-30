@@ -45,7 +45,7 @@ test.describe("Create Room", () => {
     );
 
     test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
-        await page.getByRole("button", { name: "Add", exact: true }).click();
+        await page.getByRole("button", { name: "New conversation", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
 
         await page.getByTestId("invite-dialog-input").fill(user.userId);

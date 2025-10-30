@@ -21,7 +21,7 @@ const checkDMRoom = async (page: Page) => {
 };
 
 const startDMWithBob = async (page: Page, bob: Bot) => {
-    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
     await page.getByRole("menuitem", { name: "Start chat" }).click();
     await page.getByTestId("invite-dialog-input").fill(bob.credentials.userId);
     await page.getByRole("option", { name: bob.credentials.displayName }).click();
