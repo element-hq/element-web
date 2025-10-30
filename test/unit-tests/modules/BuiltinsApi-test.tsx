@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 
-import { ElementWebBuiltinsApi } from "../../../src/modules/BuiltinsApi";
+import { ElementWebBuiltinsApi } from "../../../src/modules/BuiltinsApi.tsx";
 import { stubClient } from "../../test-utils/test-utils";
 
 const Avatar: React.FC<{ room: { roomId: string }; size: string }> = ({ room, size }) => {
