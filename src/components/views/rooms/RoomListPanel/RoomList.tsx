@@ -27,8 +27,9 @@ interface RoomListProps {
 }
 /**
  * Height of a single room list item
+ * 44px (item height) + 4px (top padding) + 4px (bottom padding) = 52px
  */
-const ROOM_LIST_ITEM_HEIGHT = 48;
+const ROOM_LIST_ITEM_HEIGHT = 52;
 /**
  * Amount to extend the top and bottom of the viewport by.
  * From manual testing and user feedback 25 items is reported to be enough to avoid blank space when using the mouse wheel,

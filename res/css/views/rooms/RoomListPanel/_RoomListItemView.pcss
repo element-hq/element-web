@@ -18,40 +18,50 @@
     /* Remove button default style */
     background: unset;
     border: none;
-    padding: 0;
     text-align: unset;
 
     cursor: pointer;
-    height: 48px;
+    height: 52px;
     width: 100%;
+    padding: 0 var(--cpd-space-2x) var(--cpd-space-1x) var(--cpd-space-2x);
 
-    padding-left: var(--cpd-space-3x);
     font: var(--cpd-font-body-md-regular);
 
-    .mx_RoomListItemView_content {
-        height: 100%;
+    .mx_RoomListItemView_container {
+        padding-left: var(--cpd-space-3x);
         flex: 1;
-        min-width: 0;
-        padding-right: var(--cpd-space-5x);
+        height: 100%;
+        overflow: hidden;
 
-        .mx_RoomListItemView_text {
+        .mx_RoomListItemView_content {
+            height: 100%;
+            flex: 1;
             min-width: 0;
-        }
+            padding-right: var(--cpd-space-5x);
 
-        .mx_RoomListItemView_roomName {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+            .mx_RoomListItemView_text {
+                min-width: 0;
+            }
 
-        .mx_RoomListItemView_messagePreview {
-            font: var(--cpd-font-body-sm-regular);
-            color: var(--cpd-color-text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            .mx_RoomListItemView_roomName {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mx_RoomListItemView_messagePreview {
+                font: var(--cpd-font-body-sm-regular);
+                color: var(--cpd-color-text-secondary);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
+}
+
+.mx_RoomListItemView:not([data-index="0"]) {
+    padding-top: var(--cpd-space-1x);
 }
 
 .mx_RoomListItemView_hover {

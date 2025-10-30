@@ -85,13 +85,7 @@ export const RoomListItemView = memo(function RoomListItemView({
         <Flex
             as="button"
             ref={ref}
-            className={classNames("mx_RoomListItemView", {
-                mx_RoomListItemView_hover: showHoverDecoration,
-                mx_RoomListItemView_menu_open: showHoverMenu,
-                mx_RoomListItemView_selected: isSelected,
-                mx_RoomListItemView_bold: vm.isBold,
-            })}
-            gap="var(--cpd-space-3x)"
+            className="mx_RoomListItemView"
             align="center"
             type="button"
             role="option"
@@ -107,41 +101,52 @@ export const RoomListItemView = memo(function RoomListItemView({
             tabIndex={isFocused ? 0 : -1}
             {...props}
         >
-            <RoomAvatarView room={room} />
             <Flex
-                className="mx_RoomListItemView_content"
-                gap="var(--cpd-space-2x)"
+                gap="var(--cpd-space-3x)"
                 align="center"
-                justify="space-between"
+                className={classNames("mx_RoomListItemView_container", {
+                    mx_RoomListItemView_hover: showHoverDecoration,
+                    mx_RoomListItemView_menu_open: showHoverMenu,
+                    mx_RoomListItemView_selected: isSelected,
+                    mx_RoomListItemView_bold: vm.isBold,
+                })}
             >
-                {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                <div className="mx_RoomListItemView_text">
-                    <div className="mx_RoomListItemView_roomName" title={vm.name}>
-                        {vm.name}
-                    </div>
-                    {vm.messagePreview && (
-                        <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
-                            {vm.messagePreview}
+                <RoomAvatarView room={room} />
+                <Flex
+                    className="mx_RoomListItemView_content"
+                    gap="var(--cpd-space-2x)"
+                    align="center"
+                    justify="space-between"
+                >
+                    {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                    <div className="mx_RoomListItemView_text">
+                        <div className="mx_RoomListItemView_roomName" title={vm.name}>
+                            {vm.name}
                         </div>
-                    )}
-                </div>
-                {showHoverMenu ? (
-                    <RoomListItemMenuView
-                        room={room}
-                        setMenuOpen={(isOpen) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
-                    />
-                ) : (
-                    <>
-                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                        {vm.showNotificationDecoration && (
-                            <NotificationDecoration
-                                notificationState={vm.notificationState}
-                                aria-hidden={true}
-                                hasVideoCall={vm.hasParticipantInCall}
-                            />
+                        {vm.messagePreview && (
+                            <div className="mx_RoomListItemView_messagePreview" title={vm.messagePreview}>
+                                {vm.messagePreview}
+                            </div>
                         )}
-                    </>
-                )}
+                    </div>
+                    {showHoverMenu ? (
+                        <RoomListItemMenuView
+                            room={room}
+                            setMenuOpen={(isOpen) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
+                        />
+                    ) : (
+                        <>
+                            {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
+                            {vm.showNotificationDecoration && (
+                                <NotificationDecoration
+                                    notificationState={vm.notificationState}
+                                    aria-hidden={true}
+                                    hasVideoCall={vm.hasParticipantInCall}
+                                />
+                            )}
+                        </>
+                    )}
+                </Flex>
             </Flex>
         </Flex>
     );
