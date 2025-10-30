@@ -334,6 +334,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private onEnterFilter = (): void => {
+        // Only select emoji if highlight is shown
+        if (!this.state.showHighlight) return;
+
         const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
             '.mx_EmojiPicker_item_wrapper[tabindex="0"]',
         );

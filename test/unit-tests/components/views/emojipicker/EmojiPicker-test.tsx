@@ -171,4 +171,42 @@ describe("EmojiPicker", function () {
         expect(getEmoji()).toEqual("🙃"); // Actual focus moved right
         expect(input).not.toHaveFocus();
     });
+
+    it("should not select emoji on Enter press before highlight is shown", async () => {
+        // mock offsetParent
+        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+            get() {
+                return this.parentNode;
+            },
+        });
+
+        const onChoose = jest.fn();
+        const onFinished = jest.fn();
+        const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
+
+        const input = container.querySelector("input")!;
+        expect(input).toHaveFocus();
+
+        // Wait for emojis to render
+        await waitFor(() => {
+            expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();
+        });
+
+        // Press Enter immediately without interacting with arrow keys or search
+        await userEvent.keyboard("[Enter]");
+
+        // onChoose and onFinished should not be called
+        expect(onChoose).not.toHaveBeenCalled();
+        expect(onFinished).not.toHaveBeenCalled();
+
+        // Now press arrow key to show highlight
+        await userEvent.keyboard("[ArrowDown]");
+
+        // Press Enter again - now it should work
+        await userEvent.keyboard("[Enter]");
+
+        // onChoose and onFinished should be called
+        expect(onChoose).toHaveBeenCalledWith("😀");
+        expect(onFinished).toHaveBeenCalled();
+    });
 });
