@@ -19,9 +19,7 @@ export class ClientApi implements IClientApi {
     }
 
     public get accountData(): AccountDataApi {
-        if (!this.accountDataApi) {
-            this.accountDataApi = new AccountDataApi();
-        }
+        this.accountDataApi ??= new AccountDataApi();
         return this.accountDataApi;
     }
 }
