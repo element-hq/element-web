@@ -43,4 +43,11 @@ describe("ElementWebBuiltinsApi", () => {
         expect(container).toHaveTextContent("!foo:m.org");
         expect(container).toHaveTextContent("50");
     });
+
+    it("should throw error if called before components are set", () => {
+        stubClient();
+        const builtinsApi = new ElementWebBuiltinsApi();
+        expect(() => builtinsApi.renderRoomAvatar("!foo:m.org")).toThrow("No RoomAvatar component has been set");
+        expect(() => builtinsApi.renderRoomView("!foo:m.org")).toThrow("No RoomView component has been set");
+    });
 });
