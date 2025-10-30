@@ -30,12 +30,12 @@ export enum MainSplitContentType {
     Call,
 }
 
-const RoomContext = createContext<
-    IRoomState & {
-        threadId?: string;
-        roomViewStore: RoomViewStore;
-    }
->({
+export interface RoomContextType extends IRoomState {
+    threadId?: string;
+    roomViewStore: RoomViewStore;
+}
+
+const RoomContext = createContext<RoomContextType>({
     roomLoading: true,
     peekLoading: false,
     shouldPeek: true,

@@ -26,8 +26,7 @@ import {
 } from "../../../../test-utils";
 import DateSeparator from "../../../../../src/components/views/messages/DateSeparator";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
-import RoomContext from "../../../../../src/contexts/RoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../../src/settings/SettingsStore");
 
@@ -50,7 +49,7 @@ describe("DateSeparator", () => {
         ...RoomContext,
         roomId,
         roomViewStore: mockRoomViewStore,
-    } as unknown as IRoomState;
+    } as unknown as RoomContextType;
 
     const mockClient = getMockClientWithEventEmitter({
         timestampToEvent: jest.fn(),

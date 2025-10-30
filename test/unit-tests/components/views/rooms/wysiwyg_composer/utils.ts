@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { type EventTimeline, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { getRoomContext, mkEvent, mkStubRoom, stubClient } from "../../../../../test-utils";
-import { type IRoomState } from "../../../../../../src/components/structures/RoomView";
 import EditorStateTransfer from "../../../../../../src/utils/EditorStateTransfer";
+import type { RoomContextType } from "../../../../../../src/contexts/RoomContext";
 
 export function createMocks(eventContent = "Replying <strong>to</strong> this new content") {
     const mockClient = stubClient();
@@ -31,7 +31,7 @@ export function createMocks(eventContent = "Replying <strong>to</strong> this ne
         return eventId === mockEvent.getId() ? mockEvent : null;
     });
 
-    const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {
+    const defaultRoomContext: RoomContextType = getRoomContext(mockRoom, {
         liveTimeline: { getEvents: (): MatrixEvent[] => [] } as unknown as EventTimeline,
     });
 

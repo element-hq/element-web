@@ -27,12 +27,12 @@ import {
 import DocumentOffset from "../../../../../src/editor/offset";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Autocompleter, { type IProviderCompletions } from "../../../../../src/autocomplete/Autocompleter";
 import NotifProvider from "../../../../../src/autocomplete/NotifProvider";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 
 describe("<EditMessageComposer/>", () => {
     const userId = "@alice:server.org";
@@ -75,7 +75,7 @@ describe("<EditMessageComposer/>", () => {
 
     const defaultRoomContext = getRoomContext(room, {});
 
-    const getComponent = (editState: EditorStateTransfer, roomContext: IRoomState = defaultRoomContext) =>
+    const getComponent = (editState: EditorStateTransfer, roomContext: RoomContextType = defaultRoomContext) =>
         render(<EditMessageComposerWithMatrixClient editState={editState} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>

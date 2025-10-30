@@ -41,8 +41,7 @@ import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext";
-import { type IRoomState } from "../../../../../../src/components/structures/RoomView";
-import RoomContext from "../../../../../../src/contexts/RoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
 import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
 import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
@@ -85,7 +84,7 @@ describe("RoomHeader", () => {
         emit: jest.fn(),
     };
 
-    let roomContext: IRoomState;
+    let roomContext: RoomContextType;
 
     function getWrapper(): RenderOptions {
         return {
@@ -121,7 +120,7 @@ describe("RoomHeader", () => {
             ...RoomContext,
             roomId: ROOM_ID,
             roomViewStore: mockRoomViewStore,
-        } as unknown as IRoomState;
+        } as unknown as RoomContextType;
     });
 
     afterEach(() => {

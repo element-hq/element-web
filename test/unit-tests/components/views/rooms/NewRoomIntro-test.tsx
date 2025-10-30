@@ -22,16 +22,16 @@ import {
 } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
     render(
         <MatrixClientContext.Provider value={client}>
-            <ScopedRoomContextProvider {...({ room, roomId: room.roomId } as unknown as IRoomState)}>
+            <ScopedRoomContextProvider {...({ room, roomId: room.roomId } as unknown as RoomContextType)}>
                 <NewRoomIntro />
             </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>,

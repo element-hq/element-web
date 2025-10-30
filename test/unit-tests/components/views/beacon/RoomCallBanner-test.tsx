@@ -31,8 +31,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
-import RoomContext from "../../../../../src/contexts/RoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../src/contexts/RoomContext";
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -51,7 +50,7 @@ describe("<RoomCallBanner />", () => {
         emit: jest.fn(),
     };
 
-    let roomContext: IRoomState;
+    let roomContext: RoomContextType;
 
     beforeEach(() => {
         stubClient();
@@ -79,7 +78,7 @@ describe("<RoomCallBanner />", () => {
             ...RoomContext,
             roomId: room.roomId,
             roomViewStore: mockRoomViewStore,
-        } as unknown as IRoomState;
+        } as unknown as RoomContextType;
     });
 
     afterEach(async () => {

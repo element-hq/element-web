@@ -26,8 +26,8 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
-import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
+import type { RoomContextType } from "../../../../src/contexts/RoomContext.ts";
 
 jest.mock("../../../../src/utils/Feedback");
 
@@ -79,7 +79,7 @@ describe("ThreadPanel", () => {
             mockRoom.getLastLiveEvent.mockReturnValue(mockEvent);
             const roomContextObject = {
                 room: mockRoom,
-            } as unknown as IRoomState;
+            } as unknown as RoomContextType;
             const { container } = render(
                 <ScopedRoomContextProvider {...roomContextObject}>
                     <MatrixClientContext.Provider value={mockClient}>
