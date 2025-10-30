@@ -312,7 +312,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         if (this.isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
-                const [cmd, args, commandText] = getSlashCommand(this.model);
+                const [cmd, args, commandText] = getSlashCommand(roomId, this.model);
                 if (cmd) {
                     const threadId = editedEvent?.getThread()?.id || null;
                     const [content, commandSuccessful] = await runSlashCommand(

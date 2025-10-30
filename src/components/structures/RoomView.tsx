@@ -1128,6 +1128,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         [payload.file],
                         roomId,
                         undefined,
+                        this.state.replyToEvent,
                         this.context.client,
                     );
                 }
@@ -2047,6 +2048,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             Array.from(dataTransfer.files),
             roomId,
             undefined,
+            this.state.replyToEvent,
             this.context.client,
             TimelineRenderingType.Room,
         );
