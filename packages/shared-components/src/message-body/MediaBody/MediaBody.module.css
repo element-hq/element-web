@@ -7,7 +7,7 @@
 
 .mediaBody {
     background-color: var(--cpd-color-bg-subtle-secondary);
-    border-radius: var(--cpd-space-2x);
+    border-radius: var(--cpd-space-2x) !important;
     max-width: 243px; /* use max-width instead of width so it fits within right panels */
 
     font: var(--cpd-font-body-md-regular);
