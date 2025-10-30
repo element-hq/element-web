@@ -81,6 +81,10 @@ describe("EmojiPicker", function () {
         }
 
         expect(getEmoji()).toEqual("😀");
+        // First arrow key press shows highlight without navigating
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("😀");
+        // Subsequent arrow keys navigate
         await userEvent.keyboard("[ArrowDown]");
         expect(getEmoji()).toEqual("🙂");
         await userEvent.keyboard("[ArrowUp]");
@@ -137,6 +141,13 @@ describe("EmojiPicker", function () {
         expect(getVirtuallyFocusedEmoji()).toEqual("😀");
         expect(getEmoji()).toEqual(""); // No actual emoji has focus
 
+        // First arrow key press shows highlight without navigating
+        await userEvent.keyboard("[ArrowDown]");
+        expect(input).toHaveFocus(); // Input still has focus
+        expect(getVirtuallyFocusedEmoji()).toEqual("😀"); // Virtual focus stayed on first emoji
+        expect(getEmoji()).toEqual(""); // No actual emoji has focus
+
+        // Second arrow key press navigates
         await userEvent.keyboard("[ArrowDown]");
         expect(input).toHaveFocus(); // Input still has focus
         expect(getVirtuallyFocusedEmoji()).toEqual("🙂"); // Virtual focus moved
