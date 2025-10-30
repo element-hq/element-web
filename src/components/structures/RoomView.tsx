@@ -159,10 +159,6 @@ interface IRoomProps extends RoomViewProps {
 
     // Called with the credentials of a registered user (if they were a ROU that transitioned to PWLU)
     onRegistered?(credentials: IMatrixClientCreds): void;
-    /**
-     * The RoomViewStore instance for the room to be displayed.
-     */
-    roomViewStore: RoomViewStore;
 }
 
 export { MainSplitContentType };
