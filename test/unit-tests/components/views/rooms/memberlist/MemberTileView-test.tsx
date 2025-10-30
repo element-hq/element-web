@@ -22,6 +22,7 @@ import {
 } from "../../../../../../src/components/viewmodels/memberlist/MemberListViewModel";
 import { RoomMemberTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/RoomMemberTileView";
 import { ThreePidInviteTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/ThreePidInviteTileView";
+import { type ThreePIDInvite } from "../../../../../../src/models/rooms/ThreePIDInvite";
 
 describe("MemberTileView", () => {
     describe("RoomMemberTileView", () => {
@@ -113,12 +114,24 @@ describe("MemberTileView", () => {
             );
             expect(container4).toHaveTextContent("Invited");
         });
+
+        it("should call onFocus handler when focused", async () => {
+            const user = userEvent.setup();
+            const onFocus = jest.fn();
+            render(<RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={onFocus} />);
+
+            const button = screen.getByRole("option", { name: member.userId });
+            await user.click(button);
+
+            expect(onFocus).toHaveBeenCalledWith(item, expect.anything());
+        });
     });
 
     describe("ThreePidInviteTileView", () => {
         const member = {} as MemberWithSeparator;
         let cli: MatrixClient;
         let room: Room;
+        let threePidInvite: ThreePIDInvite;
 
         beforeEach(() => {
             cli = TestUtils.stubClient();
@@ -127,20 +140,39 @@ describe("MemberTileView", () => {
                 TestUtils.mkThirdPartyInviteEvent(cli.getSafeUserId(), "Foobar", room.roomId),
                 { toStartOfTimeline: false, addToState: true },
             );
+            threePidInvite = getPending3PidInvites(room)[0].threePidInvite!;
         });
 
         it("renders ThreePidInvite correctly", async () => {
-            const [{ threePidInvite }] = getPending3PidInvites(room);
             const { container } = render(
                 <ThreePidInviteTileView
                     item={member}
-                    threePidInvite={threePidInvite!}
+                    threePidInvite={threePidInvite}
                     memberIndex={0}
                     memberCount={1}
                     onFocus={jest.fn()}
                 />,
             );
             expect(container).toMatchSnapshot();
+        });
+
+        it("should call onFocus handler when focused", async () => {
+            const user = userEvent.setup();
+            const onFocus = jest.fn();
+            render(
+                <ThreePidInviteTileView
+                    item={member}
+                    threePidInvite={threePidInvite}
+                    memberIndex={0}
+                    memberCount={1}
+                    onFocus={onFocus}
+                />,
+            );
+
+            const button = screen.getByRole("option", { name: threePidInvite.event.getContent().display_name });
+            await user.click(button);
+
+            expect(onFocus).toHaveBeenCalledWith(member, expect.anything());
         });
     });
 });
