@@ -421,7 +421,9 @@ export default function RoomHeader({
                         </Box>
                     </button>
                     {/* If the room is local-only then we don't want to show any additional buttons, as it won't work */}
-                    {room instanceof LocalRoom === false && <RoomHeaderButtons room={room} additionalButtons={additionalButtons} />}
+                    {room instanceof LocalRoom === false && (
+                        <RoomHeaderButtons room={room} additionalButtons={additionalButtons} />
+                    )}
                 </Flex>
                 {askToJoinEnabled && <RoomKnocksBar room={room} />}
             </CurrentRightPanelPhaseContextProvider>
