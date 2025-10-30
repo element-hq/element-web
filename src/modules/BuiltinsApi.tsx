@@ -36,7 +36,7 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
      * circular dependencies that break the whole app, so instead we avoid referencing it here
      * and pass it in from somewhere it's already referenced (see related comment in app.tsx).
      *
-     * @param component The RoomView component
+     * @param component The components used by the api, see {@link Components}
      */
     public setComponents(components: Components): void {
         this._roomView = components.roomView;
