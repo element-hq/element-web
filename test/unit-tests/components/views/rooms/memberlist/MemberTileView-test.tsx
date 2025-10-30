@@ -17,6 +17,7 @@ import * as TestUtils from "../../../../../test-utils";
 import { type RoomMember } from "../../../../../../src/models/rooms/RoomMember";
 import {
     getPending3PidInvites,
+    type MemberWithSeparator,
     sdkRoomMemberToRoomMember,
 } from "../../../../../../src/components/viewmodels/memberlist/MemberListViewModel";
 import { RoomMemberTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/RoomMemberTileView";
@@ -24,6 +25,7 @@ import { ThreePidInviteTileView } from "../../../../../../src/components/views/r
 
 describe("MemberTileView", () => {
     describe("RoomMemberTileView", () => {
+        const item = {} as { member: RoomMember };
         let matrixClient: MatrixClient;
         let member: RoomMember;
 
@@ -32,11 +34,12 @@ describe("MemberTileView", () => {
             mocked(matrixClient.isRoomEncrypted).mockReturnValue(true);
             const sdkMember = new SdkRoomMember("roomId", matrixClient.getUserId()!);
             member = sdkRoomMemberToRoomMember(sdkMember)!.member!;
+            item.member = member;
         });
 
         it("should not display an E2EIcon when the e2E status = normal", () => {
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             const e2eIcon = container.querySelector(".mx_E2EIconView");
             expect(e2eIcon).toBeNull();
@@ -50,7 +53,7 @@ describe("MemberTileView", () => {
             } as unknown as UserVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             await waitFor(async () => {
                 await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
@@ -73,7 +76,7 @@ describe("MemberTileView", () => {
             } as DeviceVerificationStatus);
 
             const { container } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
 
             await waitFor(async () => {
@@ -88,31 +91,32 @@ describe("MemberTileView", () => {
         it("renders user labels correctly", async () => {
             member.powerLevel = 50;
             const { container: container1 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container1).toHaveTextContent("Moderator");
 
             member.powerLevel = 100;
             const { container: container2 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container2).toHaveTextContent("Admin");
 
             member.powerLevel = Infinity;
             const { container: container3 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container3).toHaveTextContent("Owner");
 
             member.isInvite = true;
             const { container: container4 } = render(
-                <RoomMemberTileView member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
+                <RoomMemberTileView item={item} member={member} index={0} memberCount={1} onFocus={jest.fn()} />,
             );
             expect(container4).toHaveTextContent("Invited");
         });
     });
 
     describe("ThreePidInviteTileView", () => {
+        const member = {} as MemberWithSeparator;
         let cli: MatrixClient;
         let room: Room;
 
@@ -129,6 +133,7 @@ describe("MemberTileView", () => {
             const [{ threePidInvite }] = getPending3PidInvites(room);
             const { container } = render(
                 <ThreePidInviteTileView
+                    item={member}
                     threePidInvite={threePidInvite!}
                     memberIndex={0}
                     memberCount={1}
