@@ -216,9 +216,16 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
         if (state.activeNode && [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) {
-            // If highlight is not shown yet, just show it on first arrow key press
+            // If highlight is not shown yet, show it and reset to first emoji
             if (!this.state.showHighlight) {
                 this.setState({ showHighlight: true });
+                // Reset to first emoji when showing highlight for the first time (or after it was hidden)
+                if (state.nodes.length > 0) {
+                    dispatch({
+                        type: Type.SetFocus,
+                        payload: { node: state.nodes[0] },
+                    });
+                }
                 ev.preventDefault();
                 ev.stopPropagation();
                 return;

@@ -209,4 +209,60 @@ describe("EmojiPicker", function () {
         expect(onChoose).toHaveBeenCalledWith("😀");
         expect(onFinished).toHaveBeenCalled();
     });
+
+    it("should reset to first emoji when filter is cleared after navigation", async () => {
+        // mock offsetParent
+        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+            get() {
+                return this.parentNode;
+            },
+        });
+
+        const onChoose = jest.fn();
+        const onFinished = jest.fn();
+        const { container } = render(<EmojiPicker onChoose={onChoose} onFinished={onFinished} />);
+
+        const input = container.querySelector("input")!;
+        expect(input).toHaveFocus();
+
+        function getEmoji(): string {
+            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
+        }
+
+        // Initially on first emoji
+        expect(getEmoji()).toEqual("😀");
+
+        // Show highlight with first arrow press
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("😀");
+
+        // Navigate to a different emoji
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("🙂");
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("🤩");
+
+        // Type a search query to filter emojis (this sets showHighlight=true)
+        await userEvent.type(input, "think");
+        await waitFor(() => {
+            // After filtering, we should be on the "thinking" emoji
+            expect(getEmoji()).toEqual("🤔");
+        });
+
+        // Clear the search filter
+        await userEvent.clear(input);
+
+        // After clearing, showHighlight is false, so the highlight is hidden
+        // The activeNode might still be on 🤔, but we can't see it
+
+        // Press arrow key - this should reset to first emoji AND show highlight
+        await userEvent.keyboard("[ArrowDown]");
+        await waitFor(() => {
+            expect(getEmoji()).toEqual("😀"); // Should now be on first emoji with highlight shown
+        });
+
+        // Next arrow key should navigate from first emoji
+        await userEvent.keyboard("[ArrowDown]");
+        expect(getEmoji()).toEqual("🙂");
+    });
 });
