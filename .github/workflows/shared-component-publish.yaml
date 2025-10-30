@@ -21,8 +21,10 @@ jobs:
                   cache: "yarn"
                   node-version-file: ".node-version"
                   registry-url: "https://registry.npmjs.org"
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
+
+            # Ensure npm 11.5.1 or later is installed
+            - name: Update npm
+              run: npm install -g npm@latest
 
             - name: 🛠️ Setup
               # When running `install` it also calls the `prepare` step which generates
