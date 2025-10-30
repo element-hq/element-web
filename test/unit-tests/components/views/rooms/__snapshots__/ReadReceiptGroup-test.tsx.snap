@@ -6,14 +6,14 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
   data-floating-ui-focusable=""
   id="_r_6_"
   role="tooltip"
-  style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
+  style="position: absolute; left: 0px; top: 0px; transform: translate(5px, -6px);"
   tabindex="-1"
 >
   <svg
     aria-hidden="true"
     class="_arrow_6ode6_33"
     height="10"
-    style="position: absolute; pointer-events: none; top: 100%;"
+    style="position: absolute; pointer-events: none; top: 100%; left: -1px;"
     viewBox="0 0 10 10"
     width="10"
   >
@@ -48,7 +48,9 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
 <div>
-  <div>
+  <span
+    tabindex="0"
+  >
     <div
       class="mx_AccessibleButton mx_ReadReceiptGroup_person"
       role="menuitem"
@@ -88,6 +90,6 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         </p>
       </div>
     </div>
-  </div>
+  </span>
 </div>
 `;
