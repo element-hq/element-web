@@ -12,7 +12,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import type { Room } from "matrix-js-sdk/src/matrix";
 
 interface RoomViewPropsWithRoomId extends RoomViewProps {
-    roomId: string;
+    roomId?: string;
 }
 
 interface RoomAvatarProps {
