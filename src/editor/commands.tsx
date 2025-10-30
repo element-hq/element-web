@@ -38,7 +38,13 @@ export function isSlashCommand(model: EditorModel): boolean {
     return false;
 }
 
-export function getSlashCommand(model: EditorModel): [Command | undefined, string | undefined, string] {
+/**
+ * Get the slash command and its arguments from the editor model
+ * @param roomId - The room ID to check whether the command is enabled
+ * @param model - The editor model
+ * @returns A tuple of the command (or undefined if not found), the arguments (or undefined), and the full command text
+ */
+export function getSlashCommand(roomId: string, model: EditorModel): [Command | undefined, string | undefined, string] {
     const commandText = model.parts.reduce((text, part) => {
         // use mxid to textify user pills in a command and room alias/id for room pills
         if (part.type === Type.UserPill || part.type === Type.RoomPill) {
@@ -46,7 +52,7 @@ export function getSlashCommand(model: EditorModel): [Command | undefined, strin
         }
         return text + part.text;
     }, "");
-    const { cmd, args } = getCommand(commandText);
+    const { cmd, args } = getCommand(roomId, commandText);
     return [cmd, args, commandText];
 }
 

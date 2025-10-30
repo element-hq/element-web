@@ -18,6 +18,7 @@ import SettingExplorer from "./devtools/SettingExplorer";
 import { RoomStateExplorer } from "./devtools/RoomState";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./devtools/BaseTool";
 import WidgetExplorer from "./devtools/WidgetExplorer";
+import { UserList } from "./devtools/Users";
 import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/AccountData";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
@@ -46,6 +47,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|view_servers_in_room"), ServersInRoom],
         [_td("devtools|notifications_debug"), RoomNotifications],
         [_td("devtools|active_widgets"), WidgetExplorer],
+        [_td("devtools|users"), UserList],
     ],
     [Category.Other]: [
         [_td("devtools|explore_account_data"), AccountDataExplorer],

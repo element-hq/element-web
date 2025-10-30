@@ -1394,7 +1394,6 @@
         "upload_file": "Carrega um ficheiro"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Permitir o modo de partilha de ecrã apenas",
         "ask_to_join": "Permitir pedir para participar",
         "automatic_debug_logs": "Envia automaticamente registos de depuração em qualquer erro",
         "automatic_debug_logs_decryption": "Envia automaticamente registos de depuração em caso de erros de desencriptação",

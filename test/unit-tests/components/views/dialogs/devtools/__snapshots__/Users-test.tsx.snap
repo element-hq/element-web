@@ -1,0 +1,454 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Users /> should render a single device - signed by owner 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <ul>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          User ID: @alice:example.com
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          Device ID: SIGNED
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        Displayname: 
+      </li>
+      <li>
+        <span>
+          Verification status: 
+          <div
+            class="mx_E2EIcon mx_E2EIcon_normal mx_E2EIcon_inline"
+            data-testid="e2e-icon"
+          />
+           Signed by owner
+        </span>
+      </li>
+      <li>
+        Dehydrated: No
+      </li>
+      <li>
+        Device keys
+        <ul>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              ed25519: an_ed25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              curve25519: a_curve25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Users /> should render a single device - unsigned 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <ul>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          User ID: @alice:example.com
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          Device ID: UNSIGNED
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        Displayname: 
+      </li>
+      <li>
+        <span>
+          Verification status: 
+          <div
+            class="mx_E2EIcon mx_E2EIcon_warning mx_E2EIcon_inline"
+            data-testid="e2e-icon"
+          >
+            <div
+              class="mx_E2EIcon_normal"
+            />
+          </div>
+           Not signed by owner
+        </span>
+      </li>
+      <li>
+        Dehydrated: No
+      </li>
+      <li>
+        Device keys
+        <ul>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              ed25519: an_ed25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              curve25519: a_curve25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Users /> should render a single device - verified by cross-signing 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <ul>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          User ID: @alice:example.com
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          Device ID: VERIFIED
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        Displayname: 
+      </li>
+      <li>
+        <span>
+          Verification status: 
+          <div
+            class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+            data-testid="e2e-icon"
+          >
+            <div
+              class="mx_E2EIcon_normal"
+            />
+          </div>
+           Verified by cross-signing
+        </span>
+      </li>
+      <li>
+        Dehydrated: No
+      </li>
+      <li>
+        Device keys
+        <ul>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              ed25519: an_ed25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+          <li>
+            <div
+              class="mx_CopyableText"
+            >
+              curve25519: a_curve25519_public_key
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Users /> should render a single user 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <ul>
+      <li>
+        <div
+          class="mx_CopyableText"
+        >
+          User ID: @alice:example.com
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </li>
+      <li>
+        Membership: join
+      </li>
+      <li>
+        <span>
+          Displayname: 
+          <i>
+            None
+          </i>
+        </span>
+      </li>
+      <li>
+        <span>
+          Avatar: 
+          <i>
+            None
+          </i>
+        </span>
+      </li>
+      <li>
+        <span>
+          Verification status: 
+          <div
+            class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+            data-testid="e2e-icon"
+          >
+            <div
+              class="mx_E2EIcon_normal"
+            />
+          </div>
+           Verified
+        </span>
+      </li>
+    </ul>
+    <section>
+      <h2>
+        Cryptographic devices (3)
+      </h2>
+      <ul>
+        <li>
+          <button
+            class="mx_DevTools_button"
+          >
+            <div
+              class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+              data-testid="e2e-icon"
+            >
+              <div
+                class="mx_E2EIcon_normal"
+              />
+            </div>
+            VERIFIED
+          </button>
+        </li>
+        <li>
+          <button
+            class="mx_DevTools_button"
+          >
+            <div
+              class="mx_E2EIcon mx_E2EIcon_normal mx_E2EIcon_inline"
+              data-testid="e2e-icon"
+            />
+            SIGNED
+          </button>
+        </li>
+        <li>
+          <button
+            class="mx_DevTools_button"
+          >
+            <div
+              class="mx_E2EIcon mx_E2EIcon_warning mx_E2EIcon_inline"
+              data-testid="e2e-icon"
+            >
+              <div
+                class="mx_E2EIcon_normal"
+              />
+            </div>
+            UNSIGNED
+          </button>
+        </li>
+      </ul>
+    </section>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Users /> should render a user list 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <div
+      class="mx_Field mx_Field_input mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
+    >
+      <input
+        autocomplete="off"
+        id="mx_Field_1"
+        label="Filter results"
+        placeholder="Filter results"
+        size="64"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_1"
+      >
+        Filter results
+      </label>
+    </div>
+    No results found
+    <div
+      class="mx_SettingsFlag"
+    >
+      <span
+        class="mx_SettingsFlag_label"
+      >
+        <div
+          id="mx_LabelledToggleSwitch__r_4_"
+        >
+          Only joined users
+        </div>
+      </span>
+      <div
+        aria-checked="true"
+        aria-disabled="false"
+        aria-labelledby="mx_LabelledToggleSwitch__r_4_"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+        role="switch"
+        tabindex="0"
+      >
+        <div
+          class="mx_ToggleSwitch_ball"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;

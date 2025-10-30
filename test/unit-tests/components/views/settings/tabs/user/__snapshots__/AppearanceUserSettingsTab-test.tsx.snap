@@ -467,6 +467,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         data-self="true"
                         tabindex="-1"
                       >
+                        <span
+                          class="mx_MessageTimestamp"
+                        />
                         <div
                           class="mx_DisambiguatedProfile"
                         >

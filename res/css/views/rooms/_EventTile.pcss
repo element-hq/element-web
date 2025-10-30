@@ -200,10 +200,6 @@ $left-gutter: 64px;
                Replaces margin-top: -6px. This interacts better with a read
                marker being in between. Content overflows. */
             height: 1px;
-
-            a {
-                text-decoration: none;
-            }
         }
 
         &.mx_EventTile_highlight,
@@ -273,9 +269,9 @@ $left-gutter: 64px;
         align-items: flex-start;
         padding-top: 0;
 
-        > a {
-            text-decoration: none; /* timestamps are links which shouldn't be underlined */
+        .mx_MessageTimestamp {
             min-width: var(--MessageTimestamp-width); /* ensure space for EventTile without timestamp */
+            text-align: right;
         }
 
         > * {
@@ -401,10 +397,6 @@ $left-gutter: 64px;
 
         .mx_ReplyChain {
             margin: 0;
-        }
-
-        .mx_MessageTimestamp {
-            text-align: right;
         }
 
         .mx_EditMessageComposer_buttons {

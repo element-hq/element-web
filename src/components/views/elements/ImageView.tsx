@@ -19,7 +19,6 @@ import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveLeftOf } from "../../structures/ContextMenu";
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
-import { formatFullDate } from "../../../DateUtils";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -457,18 +456,15 @@ export default class ImageView extends React.Component<IProps, IState> {
             const senderName = mxEvent.sender?.name ?? mxEvent.getSender();
             const sender = <div className="mx_ImageView_info_sender">{senderName}</div>;
             const messageTimestamp = (
-                <a
+                <MessageTimestamp
                     href={permalink}
                     onClick={this.onPermalinkClicked}
-                    aria-label={formatFullDate(new Date(mxEvent.getTs()), showTwelveHour, false)}
-                >
-                    <MessageTimestamp
-                        showFullDate={true}
-                        showTwelveHour={showTwelveHour}
-                        ts={mxEvent.getTs()}
-                        showSeconds={false}
-                    />
-                </a>
+                    showFullDate={true}
+                    showTwelveHour={showTwelveHour}
+                    ts={mxEvent.getTs()}
+                    showSeconds={false}
+                    inhibitTooltip
+                />
             );
             const avatar = (
                 <MemberAvatar

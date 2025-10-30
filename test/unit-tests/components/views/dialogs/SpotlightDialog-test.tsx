@@ -664,4 +664,39 @@ describe("Spotlight Dialog", () => {
             }),
         );
     });
+
+    describe("keyboard prompt filter and query checks", () => {
+        it("should show left and right arrow keys in keyboard hint when filter is null and no query", async () => {
+            render(<SpotlightDialog onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
+            expect(keyboardPrompt).toBeInTheDocument();
+            expect(keyboardPrompt?.textContent).toContain("←");
+            expect(keyboardPrompt?.textContent).toContain("→");
+        });
+
+        it("should not show left and right arrow keys in keyboard hint when filter is set", async () => {
+            render(<SpotlightDialog initialFilter={Filter.People} onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
+            expect(keyboardPrompt).toBeInTheDocument();
+            expect(keyboardPrompt?.textContent).not.toContain("←");
+            expect(keyboardPrompt?.textContent).not.toContain("→");
+        });
+
+        it("should not show left and right arrow keys in keyboard hint when query is present", async () => {
+            render(<SpotlightDialog initialText="test query" onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const keyboardPrompt = document.querySelector("#mx_SpotlightDialog_keyboardPrompt");
+            expect(keyboardPrompt).toBeInTheDocument();
+            expect(keyboardPrompt?.textContent).not.toContain("←");
+            expect(keyboardPrompt?.textContent).not.toContain("→");
+        });
+    });
 });
