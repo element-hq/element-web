@@ -9,19 +9,18 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       class="flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
@@ -83,19 +82,18 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       class="flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
@@ -243,19 +241,18 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       class="flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
@@ -499,19 +496,18 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       class="flex mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"

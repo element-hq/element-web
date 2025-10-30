@@ -357,19 +357,25 @@ export default function RoomHeader({
                 <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
                     <WithPresenceIndicator room={room} size="8px">
                         {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
+                        {/* Disable on-click actions until the room is created */}
                         <RoomAvatar
                             room={room}
                             size="40px"
                             oobData={oobData}
-                            onClick={onAvatarClick}
+                            onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
                             tabIndex={-1}
                             aria-label={_t("room|header_avatar_open_settings_label")}
                         />
                     </WithPresenceIndicator>
+                    {/* Disable on-click actions until the room is created */}
                     <button
                         aria-label={_t("right_panel|room_summary_card|title")}
                         tabIndex={0}
-                        onClick={() => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)}
+                        onClick={
+                            room instanceof LocalRoom
+                                ? undefined
+                                : () => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)
+                        }
                         className="mx_RoomHeader_infoWrapper"
                     >
                         <Box flex="1" className="mx_RoomHeader_info">
