@@ -99,7 +99,7 @@ jobs:
         permissions:
             statuses: write
         steps:
-            - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
+            - if: needs.jest_ew.result != 'skipped' && needs.jest_ew.result != 'success'
               run: exit 1
 
             - name: Skip SonarCloud in merge queue
