@@ -152,24 +152,42 @@ class EmojiPicker extends React.Component<IProps, IState> {
         this.updateVisibility();
     };
 
+    // Given a roving emoji button returns the role=row element containing it
+    private getRow(rovingNode?: Element): Element | undefined {
+        return this.getGridcell(rovingNode)?.parentElement ?? undefined;
+    }
+
+    // Given a roving emoji button returns the role=gridcell element containing it
+    private getGridcell(rovingNode?: Element): Element | undefined {
+        return rovingNode?.parentElement ?? undefined;
+    }
+
+    // Given a role=gridcell node returns the roving emoji button contained within
+    private getRovingNode(gridcellNode?: Element): Element | undefined {
+        return gridcellNode?.children[0];
+    }
+
     private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
-        const node = state.activeNode;
-        const parent = node?.parentElement;
-        if (!parent || !state.activeNode) return;
-        const rowIndex = Array.from(parent.children).indexOf(node);
+        const rowElement = this.getRow(state.activeNode);
+        const gridcellNode = this.getGridcell(state.activeNode);
+        if (!rowElement || !gridcellNode || !state.activeNode) return;
+
+        // Index of element within row container
+        const columnIndex = Array.from(rowElement.children).indexOf(gridcellNode);
+        // Index of element within the list of roving nodes
         const refIndex = state.nodes.indexOf(state.activeNode);
 
         let focusNode: HTMLElement | undefined;
-        let newParent: HTMLElement | undefined;
+        let newRowElement: Element | undefined;
         switch (ev.key) {
             case Key.ARROW_LEFT:
                 focusNode = state.nodes[refIndex - 1];
-                newParent = focusNode?.parentElement ?? undefined;
+                newRowElement = this.getRow(focusNode);
                 break;
 
             case Key.ARROW_RIGHT:
                 focusNode = state.nodes[refIndex + 1];
-                newParent = focusNode?.parentElement ?? undefined;
+                newRowElement = this.getRow(focusNode);
                 break;
 
             case Key.ARROW_UP:
@@ -177,11 +195,14 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 // For up/down we find the prev/next parent by inspecting the refs either side of our row
                 const node =
                     ev.key === Key.ARROW_UP
-                        ? state.nodes[refIndex - rowIndex - 1]
-                        : state.nodes[refIndex - rowIndex + EMOJIS_PER_ROW];
-                newParent = node?.parentElement ?? undefined;
-                const newTarget = newParent?.children[clamp(rowIndex, 0, newParent.children.length - 1)];
-                focusNode = state.nodes.find((r) => r === newTarget);
+                        ? state.nodes[refIndex - columnIndex - 1]
+                        : state.nodes[refIndex - columnIndex + EMOJIS_PER_ROW];
+                newRowElement = this.getRow(node);
+                if (newRowElement) {
+                    const newColumnIndex = clamp(columnIndex, 0, newRowElement.children.length - 1);
+                    const newTarget = this.getRovingNode(newRowElement?.children[newColumnIndex]);
+                    focusNode = state.nodes.find((r) => r === newTarget);
+                }
                 break;
             }
         }
@@ -197,7 +218,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 payload: { node: focusNode },
             });
 
-            if (parent !== newParent) {
+            if (rowElement !== newRowElement) {
                 focusNode?.scrollIntoView({
                     behavior: "auto",
                     block: "center",
@@ -315,7 +336,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onEnterFilter = (): void => {
         const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
-            '.mx_EmojiPicker_item_wrapper[tabindex="0"]',
+            '.mx_EmojiPicker_item_wrapper [tabindex="0"]',
         );
         btn?.click();
         this.props.onFinished();
