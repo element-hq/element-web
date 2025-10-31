@@ -336,7 +336,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onEnterFilter = (): void => {
         const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
-            '.mx_EmojiPicker_item_wrapper[tabindex="0"]',
+            '.mx_EmojiPicker_item_wrapper [tabindex="0"]',
         );
         btn?.click();
         this.props.onFinished();
