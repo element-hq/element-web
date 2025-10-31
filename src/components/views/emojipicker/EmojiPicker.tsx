@@ -356,62 +356,57 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 {({ onKeyDownHandler }) => {
                     let heightBefore = 0;
                     return (
-                        <FocusLock
-                            returnFocus={true}
-                            lockProps={{
-                                "onKeyDown": onKeyDownHandler,
-                                "role": "dialog",
-                                "tabIndex": -1,
-                                "aria-label": _t("a11y|emoji_picker"),
-                            }}
+                        <section
+                            className="mx_EmojiPicker"
+                            data-testid="mx_EmojiPicker"
+                            onKeyDown={onKeyDownHandler}
+                            aria-label={_t("a11y|emoji_picker")}
                         >
-                            <div className="mx_EmojiPicker" data-testid="mx_EmojiPicker">
-                                <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
-                                <Search
-                                    query={this.state.filter}
-                                    onChange={this.onChangeFilter}
-                                    onEnter={this.onEnterFilter}
-                                    onKeyDown={onKeyDownHandler}
+                            <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
+                            <Search
+                                query={this.state.filter}
+                                onChange={this.onChangeFilter}
+                                onEnter={this.onEnterFilter}
+                                onKeyDown={onKeyDownHandler}
+                            />
+                            <AutoHideScrollbar
+                                id="mx_EmojiPicker_body"
+                                className="mx_EmojiPicker_body"
+                                ref={this.scrollRef}
+                                onScroll={this.onScroll}
+                            >
+                                {this.categories.map((category) => {
+                                    const emojis = this.memoizedDataByCategory[category.id];
+                                    const categoryElement = (
+                                        <Category
+                                            key={category.id}
+                                            id={category.id}
+                                            name={category.name}
+                                            heightBefore={heightBefore}
+                                            viewportHeight={this.state.viewportHeight}
+                                            scrollTop={this.state.scrollTop}
+                                            emojis={emojis}
+                                            onClick={this.onClickEmoji}
+                                            onMouseEnter={this.onHoverEmoji}
+                                            onMouseLeave={this.onHoverEmojiEnd}
+                                            isEmojiDisabled={this.props.isEmojiDisabled}
+                                            selectedEmojis={this.props.selectedEmojis}
+                                        />
+                                    );
+                                    const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
+                                    heightBefore += height;
+                                    return categoryElement;
+                                })}
+                            </AutoHideScrollbar>
+                            {this.state.previewEmoji ? (
+                                <Preview emoji={this.state.previewEmoji} />
+                            ) : (
+                                <QuickReactions
+                                    onClick={this.onClickEmoji}
+                                    selectedEmojis={this.props.selectedEmojis}
                                 />
-                                <AutoHideScrollbar
-                                    id="mx_EmojiPicker_body"
-                                    className="mx_EmojiPicker_body"
-                                    ref={this.scrollRef}
-                                    onScroll={this.onScroll}
-                                >
-                                    {this.categories.map((category) => {
-                                        const emojis = this.memoizedDataByCategory[category.id];
-                                        const categoryElement = (
-                                            <Category
-                                                key={category.id}
-                                                id={category.id}
-                                                name={category.name}
-                                                heightBefore={heightBefore}
-                                                viewportHeight={this.state.viewportHeight}
-                                                scrollTop={this.state.scrollTop}
-                                                emojis={emojis}
-                                                onClick={this.onClickEmoji}
-                                                onMouseEnter={this.onHoverEmoji}
-                                                onMouseLeave={this.onHoverEmojiEnd}
-                                                isEmojiDisabled={this.props.isEmojiDisabled}
-                                                selectedEmojis={this.props.selectedEmojis}
-                                            />
-                                        );
-                                        const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
-                                        heightBefore += height;
-                                        return categoryElement;
-                                    })}
-                                </AutoHideScrollbar>
-                                {this.state.previewEmoji ? (
-                                    <Preview emoji={this.state.previewEmoji} />
-                                ) : (
-                                    <QuickReactions
-                                        onClick={this.onClickEmoji}
-                                        selectedEmojis={this.props.selectedEmojis}
-                                    />
-                                )}
-                            </div>
-                        </FocusLock>
+                            )}
+                        </section>
                     );
                 }}
             </RovingTabIndexProvider>
