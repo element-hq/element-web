@@ -92,6 +92,41 @@ test.describe("Composer", () => {
             });
         });
 
+        test("should have focus lock in emoji picker", async ({ page, app }) => {
+            const emojiButton = app.getComposer(false).getByRole("button", { name: "Emoji" });
+
+            // Open emoji picker by clicking the button
+            await emojiButton.click();
+
+            // Wait for emoji picker to be visible
+            const emojiPicker = page.getByTestId("mx_EmojiPicker");
+            await expect(emojiPicker).toBeVisible();
+
+            // Get initial focused element (should be search input)
+            const searchInput = emojiPicker.getByRole("textbox", { name: "Search" });
+            await expect(searchInput).toBeFocused();
+
+            // Try to tab multiple times - focus should stay within emoji picker
+            await page.keyboard.press("Tab");
+            await page.keyboard.press("Tab");
+            await page.keyboard.press("Tab");
+            await page.keyboard.press("Tab");
+            await page.keyboard.press("Tab");
+
+            // Verify we're still within the emoji picker (not back to composer)
+            const focusedElement = await page.evaluate(() => document.activeElement?.closest(".mx_EmojiPicker"));
+            expect(focusedElement).not.toBeNull();
+
+            // Close with Escape key
+            await page.keyboard.press("Escape");
+
+            // Verify emoji picker is closed
+            await expect(emojiPicker).not.toBeVisible();
+
+            // Verify focus returns to emoji button
+            await expect(emojiButton).toBeFocused();
+        });
+
         test.describe("when Control+Enter is required to send", () => {
             test.beforeEach(async ({ app }) => {
                 await app.settings.setValue("MessageComposerInput.ctrlEnterToSend", null, SettingLevel.ACCOUNT, true);
