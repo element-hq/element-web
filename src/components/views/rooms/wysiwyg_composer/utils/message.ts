@@ -76,7 +76,7 @@ export async function sendMessage(
     // Slash command handling here approximates what can be found in SendMessageComposer.sendMessage()
     // but note that the /me and // special cases are handled by the call to createMessageContent
     if (message.startsWith("/") && !message.startsWith("//") && !message.startsWith(EMOTE_PREFIX)) {
-        const { cmd, args } = getCommand(message);
+        const { cmd, args } = getCommand(roomId, message);
         if (cmd) {
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation?.event_id : null;
             let commandSuccessful: boolean;

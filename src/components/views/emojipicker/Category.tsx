@@ -61,17 +61,17 @@ class Category extends React.PureComponent<IProps> {
         return (
             <div key={rowIndex} role="row">
                 {emojisForRow.map((emoji) => (
-                    <Emoji
-                        key={emoji.hexcode}
-                        emoji={emoji}
-                        selectedEmojis={selectedEmojis}
-                        onClick={onClick}
-                        onMouseEnter={onMouseEnter}
-                        onMouseLeave={onMouseLeave}
-                        disabled={this.props.isEmojiDisabled?.(emoji.unicode)}
-                        id={`mx_EmojiPicker_item_${this.props.id}_${hexEncode(emoji.unicode)}`}
-                        role="gridcell"
-                    />
+                    <div role="gridcell" className="mx_EmojiPicker_item_wrapper" key={emoji.hexcode}>
+                        <Emoji
+                            emoji={emoji}
+                            selectedEmojis={selectedEmojis}
+                            onClick={onClick}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                            disabled={this.props.isEmojiDisabled?.(emoji.unicode)}
+                            id={`mx_EmojiPicker_item_${this.props.id}_${hexEncode(emoji.unicode)}`}
+                        />
+                    </div>
                 ))}
             </div>
         );
@@ -118,6 +118,7 @@ class Category extends React.PureComponent<IProps> {
                     overflowMargin={0}
                     renderItem={this.renderEmojiRow}
                     role="grid"
+                    aria-multiselectable
                 />
             </section>
         );

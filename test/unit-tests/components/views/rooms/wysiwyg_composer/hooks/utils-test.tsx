@@ -85,12 +85,13 @@ describe("handleClipboardEvent", () => {
             clipboardData: { files: ["something here"], types: [] },
         });
         const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient);
-
+        const mockReplyToEvent = {} as unknown as MatrixEvent;
         expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1);
         expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
             originalEvent.clipboardData?.files,
             mockRoom.roomId,
             undefined, // this is the event relation, an optional arg
+            mockReplyToEvent,
             mockClient,
             mockRoomState.timelineRenderingType,
         );
@@ -103,6 +104,7 @@ describe("handleClipboardEvent", () => {
             clipboardData: { files: ["something here"], types: [] },
         });
         const mockEventRelation = {} as unknown as IEventRelation;
+        const mockReplyToEvent = {} as unknown as MatrixEvent;
         const output = handleClipboardEvent(
             originalEvent,
             originalEvent.clipboardData,
@@ -116,6 +118,7 @@ describe("handleClipboardEvent", () => {
             originalEvent.clipboardData?.files,
             mockRoom.roomId,
             mockEventRelation, // this is the event relation, an optional arg
+            mockReplyToEvent,
             mockClient,
             mockRoomState.timelineRenderingType,
         );

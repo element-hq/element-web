@@ -356,7 +356,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         let content: RoomMessageEventContent | null = null;
 
         if (!containsEmote(model) && isSlashCommand(this.model)) {
-            const [cmd, args, commandText] = getSlashCommand(this.model);
+            const [cmd, args, commandText] = getSlashCommand(this.props.room.roomId, this.model);
             if (cmd) {
                 const threadId =
                     this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation?.event_id : null;
@@ -565,6 +565,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 Array.from(data.files),
                 this.props.room.roomId,
                 this.props.relation,
+                this.context.replyToEvent,
                 this.props.mxClient,
                 this.context.timelineRenderingType,
             );

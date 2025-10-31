@@ -67,10 +67,11 @@ import { type JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomRea
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { getTopic } from "../../hooks/room/useTopic";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import RoomContext from "../../contexts/RoomContext.ts";
 
 interface IProps {
     space: Room;
@@ -404,7 +405,20 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     });
 };
 
-export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): Promise<unknown> => {
+/**
+ * Join a room.
+ * @param cli The Matrix client
+ * @param roomViewStore The RoomViewStore instance
+ * @param hierarchy The RoomHierarchy instance
+ * @param roomId The ID of the room to join
+ * @returns A promise that resolves when the room has been joined
+ */
+export const joinRoom = async (
+    cli: MatrixClient,
+    roomViewStore: RoomViewStore,
+    hierarchy: RoomHierarchy,
+    roomId: string,
+): Promise<unknown> => {
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (cli.isGuest()) {
@@ -418,10 +432,10 @@ export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, room
         });
     } catch (err: unknown) {
         if (err instanceof MatrixError) {
-            SdkContextClass.instance.roomViewStore.showJoinRoomError(err, roomId);
+            roomViewStore.showJoinRoomError(err, roomId);
         } else {
             logger.warn("Got a non-MatrixError while joining room", err);
-            SdkContextClass.instance.roomViewStore.showJoinRoomError(
+            roomViewStore.showJoinRoomError(
                 new MatrixError({
                     error: _t("error|unknown"),
                 }),
@@ -761,6 +775,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
 
 const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, additionalButtons }) => {
     const cli = useContext(MatrixClientContext);
+    const roomContext = useContext(RoomContext);
     const [query, setQuery] = useState(initialText);
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
@@ -855,10 +870,10 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                                     onJoinRoomClick={async (roomId, parents) => {
                                         for (const parent of parents) {
                                             if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
-                                                await joinRoom(cli, hierarchy, parent);
+                                                await joinRoom(cli, roomContext.roomViewStore, hierarchy, parent);
                                             }
                                         }
-                                        await joinRoom(cli, hierarchy, roomId);
+                                        await joinRoom(cli, roomContext.roomViewStore, hierarchy, roomId);
                                     }}
                                 />
                             </>

@@ -20,7 +20,7 @@ import { useCall } from "../../../hooks/useCall";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { SessionDuration } from "../voip/CallDuration";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 
 interface RoomCallBannerProps {
     roomId: Room["roomId"];
@@ -83,7 +83,7 @@ interface Props {
 
 const RoomCallBanner: React.FC<Props> = ({ roomId }) => {
     const call = useCall(roomId);
-
+    const { roomViewStore } = useScopedRoomContext("roomViewStore");
     // this section is to check if we have a live location share. If so, we dont show the call banner
     const isMonitoringLiveLocation = useEventEmitterState(
         OwnBeaconStore.instance,
@@ -100,7 +100,7 @@ const RoomCallBanner: React.FC<Props> = ({ roomId }) => {
     }
 
     // Check if the call is already showing. No banner is needed in this case.
-    if (SdkContextClass.instance.roomViewStore.isViewingCall()) {
+    if (roomViewStore.isViewingCall()) {
         return null;
     }
 

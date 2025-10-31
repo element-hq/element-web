@@ -40,7 +40,7 @@ describe("<UserOptionsSection />", () => {
         onInsertPillButton: () => jest.fn(),
         onReadReceiptButton: () => jest.fn(),
         onShareUserClick: () => jest.fn(),
-        onInviteUserButton: (evt: Event) => Promise.resolve(),
+        onInviteUserButton: (fallbackRoomId: string, evt: Event) => Promise.resolve(),
         onOpenDmForUser: (member: Member) => Promise.resolve(),
     };
 
