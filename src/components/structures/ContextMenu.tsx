@@ -404,7 +404,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         );
 
         if (focusLock) {
-            body = <FocusLock>{body}</FocusLock>;
+            body = <FocusLock returnFocus>{body}</FocusLock>;
         }
 
         // filter props that are invalid for DOM elements
