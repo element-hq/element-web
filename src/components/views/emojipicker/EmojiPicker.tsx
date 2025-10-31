@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type Dispatch } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
-import FocusLock from "react-focus-lock";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
