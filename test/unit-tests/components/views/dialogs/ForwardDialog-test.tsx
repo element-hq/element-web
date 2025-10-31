@@ -258,7 +258,7 @@ describe("ForwardDialog", () => {
                 "msgtype": "m.text",
                 "body": "Hi @alice:example.org",
                 "m.mentions": {
-                    "user_ids": ["@alice:example.org"],
+                    user_ids: ["@alice:example.org"],
                 },
             },
             event: true,
@@ -274,14 +274,10 @@ describe("ForwardDialog", () => {
         });
 
         // Expected content should have mentions empty.
-        expect(mockClient.sendEvent).toHaveBeenCalledWith(
-            roomId,
-            messageWithMention.getType(),
-            {
-                ...messageWithMention.getContent(),
-                "m.mentions": {},
-            },
-        );
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, messageWithMention.getType(), {
+            ...messageWithMention.getContent(),
+            "m.mentions": {},
+        });
     });
 
     describe("Location events", () => {
@@ -398,11 +394,7 @@ describe("ForwardDialog", () => {
                 "m.mentions": {}, // Add mentions (explicitly set to empty)
             };
 
-            expect(mockClient.sendEvent).toHaveBeenCalledWith(
-                roomId,
-                pinDropLocationEvent.getType(),
-                expectedContent,
-            );
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, pinDropLocationEvent.getType(), expectedContent);
         });
     });
 
