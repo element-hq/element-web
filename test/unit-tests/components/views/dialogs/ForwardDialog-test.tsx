@@ -358,10 +358,15 @@ describe("ForwardDialog", () => {
 
             sendToFirstRoom(container);
 
+            const expectedContent = {
+                ...pinDropLocationEvent.getContent(),
+                "m.mentions": {}, // Add empty mentions
+            };
+
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 roomId,
                 pinDropLocationEvent.getType(),
-                pinDropLocationEvent.getContent(),
+                expectedContent,
             );
         });
     });
