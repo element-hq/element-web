@@ -17,6 +17,10 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 describe("EmojiPicker", function () {
     stubClient();
 
+    // Helper to get the currently active emoji's text content from the grid
+    const getActiveEmojiText = (container: HTMLElement): string =>
+        container.querySelector('.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper [tabindex="0"]')?.textContent || "";
+
     beforeEach(() => {
         // Clear recent emojis to prevent test pollution
         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
@@ -77,7 +81,7 @@ describe("EmojiPicker", function () {
         expect(input).toHaveFocus();
 
         function getEmoji(): string {
-            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
+            return getActiveEmojiText(container);
         }
 
         expect(getEmoji()).toEqual("😀");
@@ -132,7 +136,7 @@ describe("EmojiPicker", function () {
         }
 
         function getVirtuallyFocusedEmoji(): string {
-            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
+            return getActiveEmojiText(container);
         }
 
         // Initially, arrow keys use virtual focus (aria-activedescendant)
@@ -226,7 +230,7 @@ describe("EmojiPicker", function () {
         expect(input).toHaveFocus();
 
         function getEmoji(): string {
-            return container.querySelector('.mx_EmojiPicker_item_wrapper[tabindex="0"]')?.textContent || "";
+            return getActiveEmojiText(container);
         }
 
         // Initially on first emoji
