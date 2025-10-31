@@ -156,7 +156,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
     if (menuDisplayed && buttonRef.current) {
         const buttonRect = buttonRef.current.getBoundingClientRect();
         contextMenu = (
-            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false} focusLock>
                 <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
             </ContextMenu>
         );
