@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type Dispatch } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
@@ -50,6 +51,8 @@ interface IState {
     // should be enough to never have blank rows of emojis as
     // 3 rows of overflow are also rendered. The actual value is updated on scroll.
     viewportHeight: number;
+    // Track if user has interacted with arrow keys or search
+    showHighlight: boolean;
 }
 
 class EmojiPicker extends React.Component<IProps, IState> {
@@ -66,6 +69,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
             filter: "",
             scrollTop: 0,
             viewportHeight: 280,
+            showHighlight: false,
         };
 
         // Convert recent emoji characters to emoji data, removing unknowns and duplicates
@@ -233,6 +237,20 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
         if (state.activeNode && [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) {
+            // If highlight is not shown yet, show it and reset to first emoji
+            if (!this.state.showHighlight) {
+                this.setState({ showHighlight: true });
+                // Reset to first emoji when showing highlight for the first time (or after it was hidden)
+                if (state.nodes.length > 0) {
+                    dispatch({
+                        type: Type.SetFocus,
+                        payload: { node: state.nodes[0] },
+                    });
+                }
+                ev.preventDefault();
+                ev.stopPropagation();
+                return;
+            }
             this.keyboardNavigation(ev, state, dispatch);
         }
     };
@@ -274,6 +292,15 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onChangeFilter = (filter: string): void => {
         const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
+
+        // User has typed a query, show highlight
+        // If filter is cleared, hide highlight again
+        if (lcFilter && !this.state.showHighlight) {
+            this.setState({ showHighlight: true });
+        } else if (!lcFilter && this.state.showHighlight) {
+            this.setState({ showHighlight: false });
+        }
+
         for (const cat of this.categories) {
             let emojis: IEmoji[];
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
@@ -335,6 +362,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private onEnterFilter = (): void => {
+        // Only select emoji if highlight is shown
+        if (!this.state.showHighlight) return;
+
         const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
             '.mx_EmojiPicker_item_wrapper [tabindex="0"]',
         );
@@ -391,7 +421,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
                             />
                             <AutoHideScrollbar
                                 id="mx_EmojiPicker_body"
-                                className="mx_EmojiPicker_body"
+                                className={classNames("mx_EmojiPicker_body", {
+                                    mx_EmojiPicker_body_showHighlight: this.state.showHighlight,
+                                })}
                                 ref={this.scrollRef}
                                 onScroll={this.onScroll}
                             >
