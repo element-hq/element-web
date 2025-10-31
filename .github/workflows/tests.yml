@@ -116,8 +116,6 @@ jobs:
     jest_sc:
         name: Jest (Shared Components)
         runs-on: ubuntu-24.04
-        strategy:
-            fail-fast: false
         steps:
             - name: Checkout code
               uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
