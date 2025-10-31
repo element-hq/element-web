@@ -130,7 +130,7 @@ module.exports = (env, argv) => {
         entry: {
             bundle: "./src/vector/index.ts",
             mobileguide: "./src/vector/mobile_guide/index.ts",
-            jitsi: "./src/vector/jitsi/index.ts",
+            jitsi: "./src/vector/jitsi/index.tsx",
             usercontent: "./src/usercontent/index.ts",
             serviceworker: {
                 import: "./src/serviceworker/index.ts",

@@ -32,6 +32,11 @@ import { type IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";
+import React, { JSX, StrictMode, useEffect, useState } from "react";
+import { Button } from "@vector-im/compound-web";
+import { createRoot } from "react-dom/client";
+import { VideoCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+
 
 interface Config extends _Config {
     // Jitsi's types are missing these fields
@@ -102,11 +107,43 @@ async function checkAudioVideoEnabled(): Promise<[audioEnabled: boolean, videoEn
     return [audioEnabled, videoEnabled];
 }
 
+const JoinButtonContainer = ({configPromise}: {configPromise: ReturnType<typeof getVectorConfig>}): JSX.Element => {
+    const [shouldRender, setShouldRender] = useState(false);
+    useEffect(() => {
+        (async () => {
+            const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? {} as IConfigOptions);
+            const jitsiConfig = instanceConfig.get("jitsi_widget");
+            const skipScreen = new SnakedObject(jitsiConfig ?? {})?.get("skip_built_in_welcome_screen") ?? false;
+            setShouldRender(!skipScreen);
+        })();
+    }, []);
+
+    if (!shouldRender) {
+        return <div></div>;
+    }
+
+    return <>
+        <div className="joinConferencePrompt">
+            <VideoCallIcon width={"32px"} height={"32px"}/>
+            <h2>Jitsi Video Conference</h2>
+            <div id="widgetActionContainer">
+                <Button onClick={() => joinConference()}>Join conference</Button>
+            </div>
+        </div>
+    </>
+
+};
+
 const setupCompleted = (async (): Promise<string | void> => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
         // other setup work and therefore do not block.
         const configPromise = getVectorConfig();
+        // Render button layout immediately.
+        const domNode = document.querySelector('#joinButtonContainer')!;
+        const root = createRoot(domNode);
+        root.render(<StrictMode><JoinButtonContainer configPromise={configPromise} /></StrictMode>);
+
 
         // The widget's options are encoded into the fragment to avoid leaking info to the server.
         const widgetQuery = new URLSearchParams(window.location.hash.substring(1));
@@ -183,6 +220,7 @@ const setupCompleted = (async (): Promise<string | void> => {
                 void joinConference(audioInput as string | null, videoInput as string | null);
             });
             handleAction(ElementWidgetActions.HangupCall, async ({ force }) => {
+                console.log("Got hangup");
                 if (force === true) {
                     meetApi?.dispose();
                     void notifyHangup();
@@ -249,7 +287,7 @@ const setupCompleted = (async (): Promise<string | void> => {
         supportsScreensharing = qsParam("supportsScreensharing", true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
-        const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
+        const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? {} as IConfigOptions);
         const jitsiConfig = instanceConfig.get("jitsi_widget");
         if (jitsiConfig) {
             skipOurWelcomeScreen = new SnakedObject(jitsiConfig).get("skip_built_in_welcome_screen") ?? false;
@@ -267,17 +305,11 @@ const setupCompleted = (async (): Promise<string | void> => {
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
         }
-
-        enableJoinButton(); // always enable the button
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer")!.innerText = "Failed to load Jitsi widget";
     }
 })();
-
-function enableJoinButton(): void {
-    document.getElementById("joinButton")!.onclick = (): Promise<void> => joinConference();
-}
 
 function switchVisibleContainers(): void {
     inConference = !inConference;
