@@ -246,7 +246,7 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
         class="_message_19upo_85 _help-message_19upo_91"
         id="radix-_r_7_"
       >
-        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.
+        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.
       </span>
     </div>
   </div>
