@@ -16,6 +16,9 @@ import * as TestUtils from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
+import { CommandPartCreator } from "../../../../../src/editor/parts";
+import DocumentOffset from "../../../../../src/editor/offset";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("BasicMessageComposer", () => {
@@ -102,6 +105,25 @@ describe("BasicMessageComposer", () => {
         const input = composer.queryAllByRole("textbox");
         const placeholder = input[0].style.getPropertyValue("--placeholder");
         expect(placeholder).toMatch("'w\\\\e'");
+    });
+
+    it("should not consider typing for unknown or disabled slash commands", async () => {
+        // create a command part which represents a slash command the client doesn't recognise
+        const commandPc = new CommandPartCreator(room as unknown as Room, client as unknown as MatrixClient, null);
+        const commandPart = commandPc.command("/unknown do stuff");
+        const model = new EditorModel([commandPart], commandPc, renderer);
+
+        // spy on typingStore.setSelfTyping
+        const spy = jest.spyOn(SdkContextClass.instance.typingStore, "setSelfTyping");
+
+        render(<BasicMessageComposer model={model} room={room} />);
+
+        // simulate typing by updating the model - this will call the component's update callback
+        await model.update(commandPart.text, "insertText", new DocumentOffset(commandPart.text.length, true));
+
+        // Since the command is not in CommandMap, it should not be considered typing
+        expect(spy).toHaveBeenCalledWith(room.roomId, null, false);
+        spy.mockRestore();
     });
 });
 
