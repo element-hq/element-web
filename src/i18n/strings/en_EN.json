@@ -2619,7 +2619,7 @@
                 "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
-                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.",
+                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.",
                 "other_people_device_label": "In encrypted rooms, only send messages to verified users",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
