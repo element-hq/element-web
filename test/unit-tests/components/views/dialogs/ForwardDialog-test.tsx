@@ -249,6 +249,41 @@ describe("ForwardDialog", () => {
         expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
     });
 
+    it("strips mentions from forwarded messages", async () => {
+        const messageWithMention = mkEvent({
+            type: "m.room.message",
+            room: sourceRoom,
+            user: "@bob:example.org",
+            content: {
+                "msgtype": "m.text",
+                "body": "Hi @alice:example.org",
+                "m.mentions": {
+                    "user_ids": ["@alice:example.org"],
+                },
+            },
+            event: true,
+        });
+
+        const { container } = mountForwardDialog(messageWithMention);
+        const roomId = "a";
+
+        // Click the send button.
+        act(() => {
+            const sendButton = container.querySelector(".mx_ForwardList_sendButton");
+            fireEvent.click(sendButton!);
+        });
+
+        // Expected content should have mentions empty.
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(
+            roomId,
+            messageWithMention.getType(),
+            {
+                ...messageWithMention.getContent(),
+                "m.mentions": {},
+            },
+        );
+    });
+
     describe("Location events", () => {
         // 14.03.2022 16:15
         const now = 1647270879403;
@@ -360,7 +395,7 @@ describe("ForwardDialog", () => {
 
             const expectedContent = {
                 ...pinDropLocationEvent.getContent(),
-                "m.mentions": {}, // Add empty mentions
+                "m.mentions": {}, // Add mentions (explicitly set to empty)
             };
 
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
