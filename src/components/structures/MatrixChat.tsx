@@ -1924,10 +1924,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 userId: userId,
                 subAction: params?.action,
             });
-        } else {
-            if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
-                this.setState({ page_type: screen });
-            }
+        } else if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
+            this.setState({ page_type: screen });
         }
     }
 

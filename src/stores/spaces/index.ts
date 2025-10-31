@@ -42,6 +42,14 @@ export const getMetaSpaceName = (spaceKey: MetaSpace, allRoomsInHome = false): s
     }
 };
 
+/**
+ * This can be:
+ *  - a MetaSpace
+ *  - space ID (ie. a room ID)
+ *  - A 'custom' space from a module
+ * Unfortunately we can't type the last set as we don't know what modules will define,
+ * so we can't do better than string here.
+ */
 export type SpaceKey = string;
 
 export interface ISuggestedRoom extends HierarchyRoom {
