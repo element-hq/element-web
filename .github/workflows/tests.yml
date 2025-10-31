@@ -163,5 +163,5 @@ jobs:
               with:
                   name: coverage
                   path: |
-                      coverage
-                      !coverage/lcov-report
+                      packages/shared-components/coverage
+                      !packages/shared-components/coverage/lcov-report
