@@ -128,7 +128,10 @@ jobs:
                   node-version: "lts/*"
                   cache: "yarn"
 
-            - name: Install Deps
+            - name: Install EW Deps
+              run: "yarn install"
+
+            - name: Install Shared Component Deps
               working-directory: "packages/shared-components"
               run: "yarn install"
 
