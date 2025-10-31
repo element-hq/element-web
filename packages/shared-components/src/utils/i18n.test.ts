@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { registerTranslations, setMissingEntryGenerator, getLocale, setLocale } from "./i18n";
 import counterpart from "counterpart";
+
+import { registerTranslations, setMissingEntryGenerator, getLocale, setLocale } from "./i18n";
 
 describe("i18n utils", () => {
     beforeEach(() => {
