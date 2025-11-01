@@ -200,6 +200,19 @@ export class ElementAppPage {
     }
 
     /**
+     * Opens the room info panel if it is not already open.
+     *
+     * @returns locator to the right panel
+     */
+    public async openRoomInfoPanel(): Promise<Locator> {
+        const locator = this.page.getByTestId("right-panel");
+        if (!(await locator.isVisible())) {
+            await this.page.getByRole("button", { name: "Room info" }).first().click();
+        }
+        return locator;
+    }
+
+    /**
      * Opens/closes the memberlist panel
      * @returns locator to the memberlist panel
      */
@@ -217,8 +230,8 @@ export class ElementAppPage {
      * @param userId - The user to invite to the room.
      */
     public async inviteUserToCurrentRoom(userId: string): Promise<void> {
-        await this.toggleRoomInfoPanel(); // TODO skip this if the room info panel is already open
-        await this.page.getByTestId("right-panel").getByRole("menuitem", { name: "Invite" }).click();
+        const rightPanel = await this.openRoomInfoPanel();
+        await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
 
         const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
         await input.fill(userId);
