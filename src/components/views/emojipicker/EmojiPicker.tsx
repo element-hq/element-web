@@ -79,12 +79,14 @@ class EmojiPicker extends React.Component<IProps, IState> {
             ...DATA_BY_CATEGORY,
         };
 
+        const hasRecentlyUsed = this.recentlyUsed.length > 0;
         this.categories = [
             {
                 id: "recent",
                 name: _t("emoji|category_frequently_used"),
-                enabled: this.recentlyUsed.length > 0,
-                visible: this.recentlyUsed.length > 0,
+                enabled: hasRecentlyUsed,
+                visible: hasRecentlyUsed,
+                firstVisible: hasRecentlyUsed,
                 ref: React.createRef(),
             },
             {
@@ -92,6 +94,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_smileys_people"),
                 enabled: true,
                 visible: true,
+                firstVisible: !hasRecentlyUsed,
                 ref: React.createRef(),
             },
             {
@@ -99,6 +102,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_animals_nature"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -106,6 +110,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_food_drink"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -113,6 +118,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_activities"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -120,6 +126,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_travel_places"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -127,6 +134,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_objects"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -134,6 +142,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_symbols"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
             {
@@ -141,6 +150,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 name: _t("emoji|category_flags"),
                 enabled: true,
                 visible: false,
+                firstVisible: false,
                 ref: React.createRef(),
             },
         ];
@@ -259,6 +269,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         const body = this.scrollRef.current?.containerRef.current;
         if (!body) return;
         const rect = body.getBoundingClientRect();
+        let firstVisibleFound = false;
         for (const cat of this.categories) {
             const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
@@ -270,15 +281,24 @@ class EmojiPicker extends React.Component<IProps, IState> {
             const y = elemRect.y - rect.y;
             const yEnd = elemRect.y + elemRect.height - rect.y;
             cat.visible = y < rect.height && yEnd > 0;
+            if (cat.visible && !firstVisibleFound) {
+                firstVisibleFound = true;
+                cat.firstVisible = true;
+            } else {
+                cat.firstVisible = false;
+            }
             // We update this here instead of through React to avoid re-render on scroll.
             if (!cat.ref.current) continue;
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "true");
-                cat.ref.current.setAttribute("tabindex", "0");
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "false");
+            }
+            if (cat.firstVisible) {
+                cat.ref.current.setAttribute("tabindex", "0");
+            } else {
                 cat.ref.current.setAttribute("tabindex", "-1");
             }
         }

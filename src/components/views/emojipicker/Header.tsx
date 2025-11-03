@@ -36,10 +36,10 @@ class Header extends React.PureComponent<IProps> {
         let current: number;
         // As multiple categories may be visible at once, we want to find the one closest to the relative direction
         if (delta < 0) {
-            current = this.props.categories.findIndex((c) => c.visible);
+            current = this.props.categories.findIndex((c) => c.firstVisible);
         } else {
             // XXX: Switch to Array::findLastIndex once we enable ES2023
-            current = findLastIndex(this.props.categories, (c) => c.visible);
+            current = findLastIndex(this.props.categories, (c) => c.firstVisible);
         }
         this.changeCategoryAbsolute(current + delta, delta);
     }
@@ -104,7 +104,7 @@ class Header extends React.PureComponent<IProps> {
                             onClick={() => this.props.onAnchorClick(category.id)}
                             title={category.name}
                             role="tab"
-                            tabIndex={category.visible ? 0 : -1} // roving
+                            tabIndex={category.firstVisible ? 0 : -1} // roving
                             aria-selected={category.visible}
                             aria-controls={`mx_EmojiPicker_category_${category.id}`}
                         />
