@@ -125,7 +125,7 @@ describe("<MessageActionBar />", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        // Base case to test is that we have received the remote echo and have an eventId. No sending status.
+        // The base case is that we have received the remote echo and have an eventId. No sending status.
         alicesMessageEvent.setStatus(null);
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
