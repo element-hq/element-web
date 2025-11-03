@@ -325,11 +325,11 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         ) : null;
 
         return (
-            <div className="mx_MPollBody">
-                <h2 data-testid="pollQuestion">
+            <fieldset className="mx_MPollBody">
+                <legend data-testid="pollQuestion">
                     {pollEvent.question.text}
                     {editedSpan}
-                </h2>
+                </legend>
                 <div className="mx_MPollBody_allOptions">
                     {pollEvent.answers.map((answer: PollAnswerSubevent) => {
                         let answerVotes = 0;
@@ -360,7 +360,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     {totalText}
                     {isFetchingResponses && <Spinner w={16} h={16} />}
                 </div>
-            </div>
+            </fieldset>
         );
     }
 }
