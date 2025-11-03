@@ -83,6 +83,7 @@
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "1.4.1",
+        "@element-hq/web-shared-components": "file:packages/shared-components",
         "@fontsource/inconsolata": "^5",
         "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^11.5.7",
@@ -104,7 +105,6 @@
         "browserslist": "^4.23.2",
         "classnames": "^2.2.6",
         "commonmark": "^0.31.0",
-        "counterpart": "^0.18.6",
         "css-tree": "^3.0.0",
         "diff-dom": "^5.0.0",
         "diff-match-patch": "^1.0.5",

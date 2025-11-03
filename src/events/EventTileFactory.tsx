@@ -18,6 +18,7 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import { type Optional } from "matrix-events-sdk";
+import { TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -43,7 +44,6 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEventView } from "../../packages/shared-components/src/event-tiles/TextualEventView";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins

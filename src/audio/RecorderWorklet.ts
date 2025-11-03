@@ -1,16 +1,14 @@
 /*
-Copyrimport { type IAmplitudePayload, type ITimingPayload, PayloadEvent, WORKLET_NAME } from "./consts";
-import { percentageOf } from "../../packages/shared-components/src/utils/numbers";
-
-// from AudioWorkletGlobalScope: https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletGlobalScope" 2024 New Vector Ltd.
+Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { percentageOf } from "@element-hq/web-shared-components";
+
 import { type IAmplitudePayload, type ITimingPayload, PayloadEvent, WORKLET_NAME } from "./consts";
-import { percentageOf } from "../../packages/shared-components/src/utils/numbers";
 
 // from AudioWorkletGlobalScope: https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletGlobalScope
 declare const currentTime: number;
