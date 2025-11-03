@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 // generating an import to the json file in the .d.ts which doesn't work at runtime: this way, the type
 // gets put into the bundle.
 // XXX: It should *not* be in the 'src' directory, being a generated file, but if it isn't then the type
-// bundler won't bundle the types and will leave the file as a ralative import, which will break.
+// bundler won't bundle the types and will leave the file as a relative import, which will break.
 
 import * as fs from "fs";
 import * as path from "path";
