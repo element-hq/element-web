@@ -161,7 +161,7 @@ jobs:
               if: env.ENABLE_COVERAGE == 'true'
               uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
               with:
-                  name: coverage
+                  name: coverage-sharedcomponents
                   path: |
                       packages/shared-components/coverage
                       !packages/shared-components/coverage/lcov-report
