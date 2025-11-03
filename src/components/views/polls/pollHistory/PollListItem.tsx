@@ -22,11 +22,12 @@ interface Props {
 
 export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
     const pollEvent = event.unstableExtensibleEvent as unknown as PollStartEvent;
+    const [showTooltip, setShowTooltip] = React.useState(false);
+
     if (!pollEvent) {
         return null;
     }
     const formattedDate = formatLocalDateShort(event.getTs());
-    const [showTooltip, setShowTooltip] = React.useState(false);
 
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
