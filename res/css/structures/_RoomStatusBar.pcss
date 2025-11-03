@@ -149,6 +149,7 @@ Please see LICENSE files in the repository root for full details.
         align-items: center;
         min-height: 70px;
         padding-left: 16px;
+        padding-right: 16px;
         background: var(--cpd-color-gradient-info-linear);
         border-top: 1px solid var(--cpd-color-border-focused);
     }
@@ -160,6 +161,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_RoomStatusBar_historyVisibilityDescription {
+        padding-left: 4px; /* force alignment with the link beneath */
         font-size: $font-15px;
         color: var(--cpd-color-text-info-primary);
     }
@@ -170,9 +172,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_RoomStatusBar_historyVisibilityButtonBar {
-        flex-grow: 1;
+        margin-left: auto;
         text-align: right;
-        margin-right: 22px;
     }
 }
 

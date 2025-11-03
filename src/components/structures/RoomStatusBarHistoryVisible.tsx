@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import { InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Button, Link } from "@vector-im/compound-web";
 
-import AccessibleButton from "../views/elements/AccessibleButton";
 import { _t } from "../../languageHandler";
 
 interface RoomStatusBarHistoryVisibleProps {
@@ -36,25 +36,14 @@ export const RoomStatusBarHistoryVisible = (props: RoomStatusBarHistoryVisiblePr
                     <div className="mx_RoomStatusBar_historyVisibilityDescription">
                         {_t("room|status_bar|history_visible")}
                     </div>
-                    <AccessibleButton
-                        kind="link_inline"
-                        element="a"
-                        href="https://examplecom"
-                        rel="noreferrer noopener"
-                        target="_blank"
-                        onClick={() => {}}
-                    >
+                    <Link kind="primary" as="a" href="https://example.com" target="_blank">
                         {_t("action|learn_more")}
-                    </AccessibleButton>
+                    </Link>
                 </div>
                 <div className="mx_RoomStatusBar_historyVisibilityButtonBar">
-                    <AccessibleButton
-                        className="mx_RoomStatusBar_historyVisibilityButton"
-                        kind="primary"
-                        onClick={props.onClose}
-                    >
+                    <Button kind="primary" size="sm" onClick={props.onClose}>
                         {_t("action|dismiss")}
-                    </AccessibleButton>
+                    </Button>
                 </div>
             </div>
         </div>
