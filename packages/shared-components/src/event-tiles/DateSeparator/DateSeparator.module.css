@@ -1,0 +1,36 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ * Copyright 2017 Vector Creations Ltd
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.dateSeparator {
+    clear: both;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-primary);
+}
+
+.dateSeparator > hr {
+    flex: 1 1 0;
+    height: 0;
+    border: none;
+    border-bottom: 1px solid var(--cpd-color-gray-400);
+}
+
+.dateContent {
+    padding: 0 25px;
+}
+
+.dateHeading {
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    text-transform: capitalize;
+}
