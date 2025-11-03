@@ -125,7 +125,8 @@ describe("<MessageActionBar />", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        alicesMessageEvent.setStatus(EventStatus.SENT);
+        // Base case to test is that we have received the remote echo and have an eventId. No sending status.
+        alicesMessageEvent.setStatus(null);
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
     });
@@ -374,6 +375,25 @@ describe("<MessageActionBar />", () => {
             const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
             expect(queryByLabelText("Retry")).toBeTruthy();
             expect(queryByLabelText("Delete")).toBeTruthy();
+        });
+
+        it("only shows retry and delete buttons when event could not be sent", () => {
+            // Enable pin and other features
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+
+            alicesMessageEvent.setStatus(EventStatus.NOT_SENT);
+            const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+
+            // Should show retry and cancel buttons
+            expect(queryByLabelText("Retry")).toBeTruthy();
+            expect(queryByLabelText("Delete")).toBeTruthy();
+
+            // Should NOT show edit, pin, react, reply buttons
+            expect(queryByLabelText("Edit")).toBeFalsy();
+            expect(queryByLabelText("Pin")).toBeFalsy();
+            expect(queryByLabelText("React")).toBeFalsy();
+            expect(queryByLabelText("Reply")).toBeFalsy();
+            expect(queryByLabelText("Reply in thread")).toBeFalsy();
         });
 
         it.todo("unsends event on cancel click");

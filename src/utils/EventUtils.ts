@@ -70,7 +70,9 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
 
     if (
         !isCancellable ||
-        mxEvent.status === EventStatus.CANCELLED ||
+        // Editing local echos is not supported(results in send a message that references the local ID).
+        // We need to ensure the event is not local, and therefore has no send status.
+        mxEvent.status !== null ||
         mxEvent.isRedacted() ||
         mxEvent.isRelation(RelationType.Replace) ||
         mxEvent.getSender() !== matrixClient.getUserId()
