@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -7,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 // Copied from element-web/test/test-utils because, seemingly, if we
-// set that§ as the modules directory to use it directly, it fails to
+// set that as the modules directory to use it directly, it fails to
 // actually put the right thing in the context somehow.
 
 import React, { type ReactElement } from "react";
