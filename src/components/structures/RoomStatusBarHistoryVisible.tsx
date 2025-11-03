@@ -12,11 +12,20 @@ import { InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { _t } from "../../languageHandler";
 
-interface RoomStatusBarHistoryVisible {
+interface RoomStatusBarHistoryVisibleProps {
+    /**
+     * Called when the user presses the "dismiss" button.
+     */
     onClose: () => void;
 }
 
-export const RoomStatusBarHistoryVisible = (props: RoomStatusBarHistoryVisible): ReactElement => {
+/**
+ * RoomStatusBarHistoryVisible component.
+ *
+ * @param props - Props for the RoomStatusBarHistoryVisible component. See {@link RoomStatusBarHistoryVisibleProps}.
+ * @returns A ReactElement representing the status bar.
+ */
+export const RoomStatusBarHistoryVisible = (props: RoomStatusBarHistoryVisibleProps): ReactElement => {
     return (
         <div className="mx_RoomStatusBar mx_RoomStatusBar_historyVisibility">
             <div role="alert">
