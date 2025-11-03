@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { mocked, type MockedObject } from "jest-mock";
 import {
+    EventTimeline,
     MatrixEvent,
     type Room,
     type User,
@@ -16,7 +17,6 @@ import {
     type IEvent,
     type RoomMember,
     type MatrixClient,
-    type EventTimeline,
     type RoomState,
     EventType,
     type IEventRelation,

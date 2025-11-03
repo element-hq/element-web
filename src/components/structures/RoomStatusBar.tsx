@@ -109,7 +109,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
             unsentMessages: getUnsentMessages(this.props.room),
             isResending: false,
             roomHistoryVisibility: this.props.room.getHistoryVisibility(),
-            roomHasEncryptionStateEvent: false,
+            roomHasEncryptionStateEvent: this.props.room.hasEncryptionStateEvent(),
             acknowledgedHistoryVisibility: this.getUpdatedAcknowledgedHistoryVisibility(),
         };
     }
