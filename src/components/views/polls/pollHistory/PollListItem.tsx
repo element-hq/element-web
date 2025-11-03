@@ -26,15 +26,26 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
         return null;
     }
     const formattedDate = formatLocalDateShort(event.getTs());
+    const [showTooltip, setShowTooltip] = React.useState(false);
+
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
-            <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
-                <div className="mx_PollListItem_content">
-                    <span>{formattedDate}</span>
-                    <PollIcon className="mx_PollListItem_icon" />
+            <div 
+                className="mx_PollListItem_content"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+            >
+                <span>{formattedDate}</span>
+                <PollIcon className="mx_PollListItem_icon" />
+                <Tooltip 
+                    label={_t("right_panel|poll|view_poll")} 
+                    placement="top" 
+                    isTriggerInteractive={false}
+                    open={showTooltip}
+                >
                     <span className="mx_PollListItem_question">{pollEvent.question.text}</span>
-                </div>
-            </Tooltip>
+                </Tooltip>
+            </div>
         </li>
     );
 };
