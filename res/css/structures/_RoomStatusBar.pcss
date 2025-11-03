@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_RoomStatusBar:not(.mx_RoomStatusBar_unsentMessages) {
+.mx_RoomStatusBar:not(.mx_RoomStatusBar_unsentMessages):not(.mx_RoomStatusBar_historyVisibility) {
     margin-left: 65px;
     min-height: 50px;
 }
@@ -139,6 +139,40 @@ Please see LICENSE files in the repository root for full details.
                 margin-right: 10px; /* same margin/padding as the rightmost button */
             }
         }
+    }
+}
+
+.mx_RoomStatusBar_historyVisibility {
+    > div[role="alert"] {
+        /* cheat some basic alignment */
+        display: flex;
+        align-items: center;
+        min-height: 70px;
+        padding-left: 16px;
+        background: var(--cpd-color-gradient-info-linear);
+        border-top: 1px solid var(--cpd-color-border-focused);
+    }
+
+    .mx_RoomStatusBar_historyVisibilityBadge > svg {
+        margin-right: 12px;
+        font-size: $font-24px;
+        color: var(--cpd-color-text-badge-info);
+    }
+
+    .mx_RoomStatusBar_historyVisibilityDescription {
+        font-size: $font-15px;
+        color: var(--cpd-color-text-info-primary);
+    }
+
+    .mx_RoomStatusBar_historyVisibilityLink {
+        font-size: $font-12px;
+        color: var(--cpd-color-text-primary);
+    }
+
+    .mx_RoomStatusBar_historyVisibilityButtonBar {
+        flex-grow: 1;
+        text-align: right;
+        margin-right: 22px;
     }
 }
 
