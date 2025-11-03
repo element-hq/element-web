@@ -318,7 +318,10 @@ test.describe("Element Call", () => {
             },
         });
         test("should be able to create and join a video room", async ({ page, user }) => {
-            await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
+            await page
+                .getByRole("navigation", { name: "Room list" })
+                .getByRole("button", { name: "New conversation" })
+                .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("Test room");
             await page.getByRole("button", { name: "Create video room" }).click();
