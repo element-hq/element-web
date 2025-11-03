@@ -5,10 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import { useEffect, useState } from "react";
-import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    MatrixError,
+    ProfileKeyMSC4175Timezone,
+    ProfileKeyTimezone,
+} from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { getTwelveHourOptions } from "../DateUtils.ts";
 import { useSettingValue } from "./useSettings.ts";
+
+const log = logger.getChild("useUserTimezone");
 
 /**
  * Fetch a user's delclared timezone through their profile, and return
@@ -52,11 +60,13 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
             return;
         }
         (async () => {
-            console.log("Trying to fetch TZ");
+            log.debug("Trying to fetch TZ for", userId);
             try {
-                const tz = await cli.getExtendedProfileProperty(userId, "us.cloke.msc4175.tz");
+                const userProfile = await cli.getExtendedProfile(userId);
+                // In a future spec release, remove support for legacy key.
+                const tz = userProfile[ProfileKeyTimezone] ?? userProfile[ProfileKeyMSC4175Timezone];
                 if (typeof tz !== "string") {
-                    // Err, definitely not a tz.
+                    // Definitely not a tz.
                     throw Error("Timezone value was not a string");
                 }
                 // This will validate the timezone for us.
@@ -85,7 +95,7 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                     // No timezone set, ignore.
                     return;
                 }
-                console.error("Could not render current timezone for user", ex);
+                log.warn(`Could not render current timezone for ${userId}`, ex);
             }
         })();
     }, [supported, userId, cli, showTwelveHour]);

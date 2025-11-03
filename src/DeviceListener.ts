@@ -339,17 +339,16 @@ export default class DeviceListener {
         }
 
         const crossSigningReady = await crypto.isCrossSigningReady();
-        const secretStorageReady = await crypto.isSecretStorageReady();
+        const secretStorageStatus = await crypto.getSecretStorageStatus();
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const allCrossSigningSecretsCached =
             crossSigningStatus.privateKeysCachedLocally.masterKey &&
             crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
             crossSigningStatus.privateKeysCachedLocally.userSigningKey;
 
-        const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
         const recoveryDisabled = await this.recheckRecoveryDisabled(cli);
 
-        const recoveryIsOk = secretStorageReady || recoveryDisabled;
+        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled;
 
         const isCurrentDeviceTrusted =
             crossSigningReady &&
@@ -392,7 +391,7 @@ export default class DeviceListener {
             } else if (!keyBackupIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: showing TURN_ON_KEY_STORAGE toast");
                 showSetupEncryptionToast(SetupKind.TURN_ON_KEY_STORAGE);
-            } else if (defaultKeyId === null) {
+            } else if (secretStorageStatus.defaultKeyId === null) {
                 // The user just hasn't set up 4S yet: if they have key
                 // backup, prompt them to turn on recovery too. (If not, they
                 // have explicitly opted out, so don't hassle them.)
@@ -412,10 +411,9 @@ export default class DeviceListener {
                 // means that 4S doesn't have all the secrets.
                 logSpan.warn("4S is missing secrets", {
                     crossSigningReady,
-                    secretStorageReady,
+                    secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
-                    defaultKeyId,
                 });
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
             }
@@ -520,10 +518,11 @@ export default class DeviceListener {
      */
     private async reportCryptoSessionStateToAnalytics(cli: MatrixClient): Promise<void> {
         const crypto = cli.getCrypto()!;
-        const secretStorageReady = await crypto.isSecretStorageReady();
+        const secretStorageStatus = await crypto.getSecretStorageStatus();
+        const secretStorageReady = secretStorageStatus.ready;
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const backupInfo = await this.getKeyBackupInfo();
-        const is4SEnabled = (await cli.secretStorage.getDefaultKeyId()) != null;
+        const is4SEnabled = secretStorageStatus.defaultKeyId != null;
         const deviceVerificationStatus = await crypto.getDeviceVerificationStatus(cli.getUserId()!, cli.getDeviceId()!);
 
         const verificationState =

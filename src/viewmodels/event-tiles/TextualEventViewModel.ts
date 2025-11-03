@@ -10,8 +10,8 @@ import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { type EventTileTypeProps } from "../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { textForEvent } from "../../TextForEvent";
-import { type TextualEventViewSnapshot } from "../../shared-components/event-tiles/TextualEventView/TextualEventView";
-import { BaseViewModel } from "../base/BaseViewModel";
+import { type TextualEventViewSnapshot } from "../../../packages/shared-components/src/event-tiles/TextualEventView/TextualEventView";
+import { BaseViewModel } from "../../../packages/shared-components/src/viewmodel";
 
 export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapshot, EventTileTypeProps> {
     public constructor(props: EventTileTypeProps) {

@@ -373,4 +373,4 @@ export default class RoomListStoreV3 {
     }
 }
 
-window.mxRoomListStoreV3 = RoomListStoreV3.instance;
+window.getRoomListStoreV3 = () => RoomListStoreV3.instance;

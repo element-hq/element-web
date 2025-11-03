@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
 <div>
@@ -19,7 +19,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«r6i»"
+        aria-labelledby="_r_7c_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -306,7 +306,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </p>
       </div>
       <button
-        aria-labelledby="«r6s»"
+        aria-labelledby="_r_7m_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"

@@ -8,9 +8,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type BasePlatform from "./BasePlatform";
-import defaultDispatcher from "./dispatcher/dispatcher";
-import { Action } from "./dispatcher/actions";
-import { type PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayload";
 
 /*
  * Holds the current instance of the `Platform` to use across the codebase.
@@ -25,6 +22,14 @@ import { type PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayloa
  */
 export class PlatformPeg {
     private platform: BasePlatform | null = null;
+    private platformPromiseWithResolvers = Promise.withResolvers<BasePlatform>();
+
+    /**
+     * Returns a promise for the Platform object for the application.
+     */
+    public get platformPromise(): Promise<BasePlatform> {
+        return this.platformPromiseWithResolvers.promise;
+    }
 
     /**
      * Returns the current Platform object for the application.
@@ -39,11 +44,8 @@ export class PlatformPeg {
      * @param {BasePlatform} platform an instance of a class extending BasePlatform.
      */
     public set(platform: BasePlatform): void {
+        this.platformPromiseWithResolvers.resolve(platform);
         this.platform = platform;
-        defaultDispatcher.dispatch<PlatformSetPayload>({
-            action: Action.PlatformSet,
-            platform,
-        });
     }
 }
 

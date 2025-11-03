@@ -20,7 +20,7 @@ import { PlaybackManager } from "../../../audio/PlaybackManager";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
-import { AudioPlayerView } from "../../../shared-components/audio/AudioPlayerView";
+import { AudioPlayerView } from "../../../../packages/shared-components/src/audio/AudioPlayerView";
 
 interface IState {
     error?: boolean;

@@ -15,7 +15,7 @@ import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../shared-components/utils/numbers";
+import { clamp } from "../../packages/shared-components/src/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 
@@ -202,6 +202,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     private onPlaybackEnd = async (): Promise<void> => {
         await this.context.suspend();
         this.emit(PlaybackState.Stopped);
+        this.clock.flagStop();
     };
 
     public async play(): Promise<void> {
@@ -248,9 +249,8 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.emit(PlaybackState.Paused);
     }
 
-    public async stop(): Promise<void> {
-        await this.onPlaybackEnd();
-        this.clock.flagStop();
+    public stop(): Promise<void> {
+        return this.onPlaybackEnd();
     }
 
     public async toggle(): Promise<void> {

@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 
-import { Flex } from "../../../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../../../packages/shared-components/src/utils/Flex";
 
 interface Props {
     isThreePid: boolean;

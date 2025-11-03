@@ -11,10 +11,12 @@ import fs from "node:fs";
 import { test, expect } from "../../element-web-test";
 
 const screenshotOptions = (page: Page) => ({
-    mask: [page.locator(".mx_MessageTimestamp")],
     // Hide the jump to bottom button in the timeline to avoid flakiness
     // Exclude timestamp and read marker from snapshot
     css: `
+        .mx_MessageTimestamp {
+            visibility: hidden;
+        }
         .mx_JumpToBottomButton {
             display: none !important;
         }

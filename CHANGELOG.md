@@ -1,3 +1,26 @@
+Changes in [1.12.2](https://github.com/element-hq/element-web/releases/tag/v1.12.2) (2025-10-21)
+================================================================================================
+## ✨ Features
+
+* Room List: Extend the viewport to avoid so many black spots when scrolling the room list ([#30867](https://github.com/element-hq/element-web/pull/30867)). Contributed by @langleyd.
+* Hide calling buttons in room header before a room is created ([#30816](https://github.com/element-hq/element-web/pull/30816)). Contributed by @Half-Shot.
+* Improve invite dialog ui - Part 2 ([#30836](https://github.com/element-hq/element-web/pull/30836)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* Fix platform settings race condition and make auto-launch tri-state ([#30977](https://github.com/element-hq/element-web/pull/30977)). Contributed by @t3chguy.
+* Fix: member count in header and member list ([#30982](https://github.com/element-hq/element-web/pull/30982)). Contributed by @florianduros.
+* Fix duration of voice message in timeline ([#30973](https://github.com/element-hq/element-web/pull/30973)). Contributed by @florianduros.
+* Fix voice notes rendering at 00:00 when playback had not begun. ([#30961](https://github.com/element-hq/element-web/pull/30961)). Contributed by @Half-Shot.
+* Improve handling of animated images, add support for AVIF animations ([#30932](https://github.com/element-hq/element-web/pull/30932)). Contributed by @t3chguy.
+* Update key storage toggle when key storage status changes ([#30934](https://github.com/element-hq/element-web/pull/30934)). Contributed by @uhoreg.
+* Fix jitsi widget popout ([#30908](https://github.com/element-hq/element-web/pull/30908)). Contributed by @dbkr.
+* Improve keyboard navigation on invite dialog ([#30930](https://github.com/element-hq/element-web/pull/30930)). Contributed by @florianduros.
+* Prefer UIA flows with supported UIA stages ([#30926](https://github.com/element-hq/element-web/pull/30926)). Contributed by @richvdh.
+* Enhance accessibility of dropdown ([#30928](https://github.com/element-hq/element-web/pull/30928)). Contributed by @florianduros.
+* Improve accessibility of the `\<AvatarSetting> component ([#30907](https://github.com/element-hq/element-web/pull/30907)). Contributed by @MidhunSureshR.
+
+
 Changes in [1.12.1](https://github.com/element-hq/element-web/releases/tag/v1.12.1) (2025-10-07)
 ================================================================================================
 ## ✨ Features

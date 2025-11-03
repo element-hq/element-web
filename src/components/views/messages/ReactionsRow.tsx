@@ -34,7 +34,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
     if (menuDisplayed && button.current) {
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
-            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false} focusLock>
                 <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
             </ContextMenu>
         );

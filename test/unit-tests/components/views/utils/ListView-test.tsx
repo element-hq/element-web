@@ -363,7 +363,12 @@ describe("ListView", () => {
             const mockOnClick = jest.fn();
 
             mockGetItemComponent.mockImplementation(
-                (index: number, item: TestItemWithSeparator, context: any, onFocus: (e: React.FocusEvent) => void) => {
+                (
+                    index: number,
+                    item: TestItemWithSeparator,
+                    context: any,
+                    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+                ) => {
                     const itemKey = typeof item === "string" ? item : item.id;
                     const isFocused = context.tabIndexKey === itemKey;
                     return (
@@ -372,7 +377,7 @@ describe("ListView", () => {
                             data-testid={`row-${index}`}
                             tabIndex={isFocused ? 0 : -1}
                             onClick={() => mockOnClick(item)}
-                            onFocus={onFocus}
+                            onFocus={(e) => onFocus(item, e)}
                         >
                             {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
                         </div>

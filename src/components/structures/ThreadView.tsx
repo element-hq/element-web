@@ -49,7 +49,6 @@ import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import Heading from "../views/typography/Heading";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
@@ -124,7 +123,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         const roomId = this.props.mxEvent.getRoomId();
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
-        const hasRoomChanged = SdkContextClass.instance.roomViewStore.getRoomId() !== roomId;
+        const hasRoomChanged = this.context.roomViewStore.getRoomId() !== roomId;
         if (this.props.initialEvent && !hasRoomChanged) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
@@ -334,6 +333,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 Array.from(dataTransfer.files),
                 roomId,
                 this.threadRelation,
+                this.context.replyToEvent,
                 MatrixClientPeg.safeGet(),
                 TimelineRenderingType.Thread,
             );

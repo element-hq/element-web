@@ -1160,7 +1160,6 @@
         "upload_file": "上传文件"
     },
     "labs": {
-        "allow_screen_share_only_mode": "允许 “仅限屏幕共享” 模式",
         "ask_to_join": "启用 “需要验证加入请求”",
         "automatic_debug_logs": "遇到任何错误自动发送调试日志",
         "automatic_debug_logs_decryption": "自动发送有关解密错误的debug日志",
@@ -2251,7 +2250,6 @@
             "metaspaces_subsection": "要显示的空间",
             "title": "侧边栏"
         },
-        "start_automatically": "开机自启",
         "use_12_hour_format": "使用 12 小时制显示时间戳 （下午 2:30）",
         "use_command_enter_send_message": "使用 Command + Enter 发送消息",
         "use_command_f_search": "使用 Command + F 搜索时间线",

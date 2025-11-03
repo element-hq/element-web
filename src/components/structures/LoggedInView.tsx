@@ -17,6 +17,8 @@ import {
     type SyncStateData,
     SyncState,
     EventType,
+    ProfileKeyTimezone,
+    ProfileKeyMSC4175Timezone,
 } from "matrix-js-sdk/src/matrix";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
@@ -66,7 +68,7 @@ import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushR
 import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
-import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -197,10 +199,12 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private onTimezoneUpdate = async (): Promise<void> => {
+        // TODO: In a future app release, remove support for legacy key.
         if (!SettingsStore.getValue("userTimezonePublish")) {
             // Ensure it's deleted
             try {
-                await this._matrixClient.deleteExtendedProfileProperty("us.cloke.msc4175.tz");
+                await this._matrixClient.deleteExtendedProfileProperty(ProfileKeyMSC4175Timezone);
+                await this._matrixClient.deleteExtendedProfileProperty(ProfileKeyTimezone);
             } catch (ex) {
                 console.warn("Failed to delete timezone from user profile", ex);
             }
@@ -215,7 +219,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             return;
         }
         try {
-            await this._matrixClient.setExtendedProfileProperty("us.cloke.msc4175.tz", currentTimezone);
+            await this._matrixClient.setExtendedProfileProperty(ProfileKeyTimezone, currentTimezone);
+            await this._matrixClient.setExtendedProfileProperty(ProfileKeyMSC4175Timezone, currentTimezone);
         } catch (ex) {
             console.warn("Failed to update user profile with current timezone", ex);
         }
@@ -685,6 +690,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                         key={this.props.currentRoomId || "roomview"}
                         justCreatedOpts={this.props.roomJustCreatedOpts}
                         forceTimeline={this.props.forceTimeline}
+                        roomViewStore={SdkContextClass.instance.roomViewStore}
                     />
                 );
                 break;

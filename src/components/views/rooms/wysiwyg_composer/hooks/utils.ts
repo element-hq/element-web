@@ -148,7 +148,14 @@ export function handleClipboardEvent(
     // it puts the filename in as text/plain which we want to ignore.
     if (data.files.length && !data.types.includes("text/rtf")) {
         ContentMessages.sharedInstance()
-            .sendContentListToRoom(Array.from(data.files), room.roomId, eventRelation, mxClient, timelineRenderingType)
+            .sendContentListToRoom(
+                Array.from(data.files),
+                room.roomId,
+                eventRelation,
+                roomContext.replyToEvent,
+                mxClient,
+                timelineRenderingType,
+            )
             .catch(handleError);
         return true;
     }

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<CreateRoomDialog /> for a private room should create a private room 1`] = `
 <DocumentFragment>
@@ -32,14 +32,14 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
         >
           <input
-            id="mx_Field_21"
+            id="mx_Field_25"
             label="Name"
             placeholder="Name"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_21"
+            for="mx_Field_25"
           >
             Name
           </label>
@@ -48,14 +48,14 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           class="mx_Field mx_Field_input mx_CreateRoomDialog_topic"
         >
           <input
-            id="mx_Field_22"
+            id="mx_Field_26"
             label="Topic (optional)"
             placeholder="Topic (optional)"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_22"
+            for="mx_Field_26"
           >
             Topic (optional)
           </label>
@@ -98,7 +98,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             class="mx_SettingsFlag_label"
           >
             <div
-              id="mx_LabelledToggleSwitch_«r4m»"
+              id="mx_LabelledToggleSwitch__r_5i_"
             >
               Enable end-to-end encryption
             </div>
@@ -106,7 +106,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           <div
             aria-checked="true"
             aria-disabled="false"
-            aria-labelledby="mx_LabelledToggleSwitch_«r4m»"
+            aria-labelledby="mx_LabelledToggleSwitch__r_5i_"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
             role="switch"
             tabindex="0"
@@ -134,7 +134,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               class="mx_SettingsFlag_label"
             >
               <div
-                id="mx_LabelledToggleSwitch_«r4n»"
+                id="mx_LabelledToggleSwitch__r_5j_"
               >
                 Block anyone not part of server.org from ever joining this room.
               </div>
@@ -142,7 +142,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             <div
               aria-checked="false"
               aria-disabled="false"
-              aria-labelledby="mx_LabelledToggleSwitch_«r4n»"
+              aria-labelledby="mx_LabelledToggleSwitch__r_5j_"
               class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               role="switch"
               tabindex="0"
@@ -226,14 +226,14 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
         >
           <input
-            id="mx_Field_23"
+            id="mx_Field_27"
             label="Name"
             placeholder="Name"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_23"
+            for="mx_Field_27"
           >
             Name
           </label>
@@ -242,14 +242,14 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           class="mx_Field mx_Field_input mx_CreateRoomDialog_topic"
         >
           <input
-            id="mx_Field_24"
+            id="mx_Field_28"
             label="Topic (optional)"
             placeholder="Topic (optional)"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_24"
+            for="mx_Field_28"
           >
             Topic (optional)
           </label>
@@ -292,7 +292,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             class="mx_SettingsFlag_label"
           >
             <div
-              id="mx_LabelledToggleSwitch_«r54»"
+              id="mx_LabelledToggleSwitch__r_60_"
             >
               Enable end-to-end encryption
             </div>
@@ -300,7 +300,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           <div
             aria-checked="true"
             aria-disabled="false"
-            aria-labelledby="mx_LabelledToggleSwitch_«r54»"
+            aria-labelledby="mx_LabelledToggleSwitch__r_60_"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
             role="switch"
             tabindex="0"

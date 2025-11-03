@@ -14,6 +14,7 @@ import { type IRoomState, MainSplitContentType } from "../../src/components/stru
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
+import { SdkContextClass } from "../../src/contexts/SDKContext";
 
 export const makeMembershipEvent = (roomId: string, userId: string, membership = KnownMembership.Join) =>
     mkEvent({
@@ -44,6 +45,7 @@ export const makeRoomWithStateEvents = (
 
 export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoomState {
     return {
+        roomViewStore: SdkContextClass.instance.roomViewStore,
         room,
         roomLoading: true,
         peekLoading: false,

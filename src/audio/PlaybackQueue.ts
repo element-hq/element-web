@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type Room, EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type Playback, PlaybackState } from "./Playback";
@@ -15,7 +15,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { arrayFastClone } from "../utils/arrays";
 import { PlaybackManager } from "./PlaybackManager";
 import { isVoiceMessage } from "../utils/EventUtils";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type RoomViewStore } from "../stores/RoomViewStore";
 
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
@@ -38,10 +38,18 @@ export class PlaybackQueue {
     private currentPlaybackId: string | null = null; // event ID, broken out from above for ease of use
     private recentFullPlays = new Set<string>(); // event IDs
 
-    public constructor(private room: Room) {
+    /**
+     * Create a PlaybackQueue for a given room.
+     * @param room The room
+     * @param roomViewStore The RoomViewStore instance
+     */
+    public constructor(
+        private room: Room,
+        private roomViewStore: RoomViewStore,
+    ) {
         this.loadClocks();
 
-        SdkContextClass.instance.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {
+        this.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {
             if (!isActive) return;
 
             // Reset the state of the playbacks before they start mounting and enqueuing updates.
@@ -53,14 +61,20 @@ export class PlaybackQueue {
         });
     }
 
-    public static forRoom(roomId: string): PlaybackQueue {
+    /**
+     * Get the PlaybackQueue for a given room, creating it if necessary.
+     * @param roomId The ID of the room
+     * @param roomViewStore The RoomViewStore instance
+     * @returns The PlaybackQueue for the room
+     */
+    public static forRoom(roomId: string, roomViewStore: RoomViewStore): PlaybackQueue {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(roomId);
         if (!room) throw new Error("Unknown room");
         if (PlaybackQueue.queues.has(room.roomId)) {
             return PlaybackQueue.queues.get(room.roomId)!;
         }
-        const queue = new PlaybackQueue(room);
+        const queue = new PlaybackQueue(room, roomViewStore);
         PlaybackQueue.queues.set(room.roomId, queue);
         return queue;
     }
@@ -76,6 +90,12 @@ export class PlaybackQueue {
         const val = localStorage.getItem(`mx_voice_message_clocks_${this.room.roomId}`);
         if (!!val) {
             this.clockStates = new Map<string, number>(JSON.parse(val));
+            // Clean out any null values (from older versions)
+            for (const [key, value] of this.clockStates.entries()) {
+                if (value == null) {
+                    this.clockStates.delete(key);
+                }
+            }
         }
     }
 
@@ -90,14 +110,10 @@ export class PlaybackQueue {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
         const currentClockState = this.clockStates.get(mxEvent.getId()!);
+
         if (newState === PlaybackState.Stopped && currentClockState !== undefined && !wasLastPlaying) {
-            if (currentClockState > 0) {
-                // skipTo will pause playback, which causes the clock to render the current
-                // playback seconds. If the clock state is 0, then we can just ignore
-                // skipping entirely.
-                // noinspection JSIgnoredPromiseFromCall
-                playback.skipTo(currentClockState);
-            }
+            // noinspection JSIgnoredPromiseFromCall
+            playback.skipTo(currentClockState);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId()!);
@@ -207,10 +223,8 @@ export class PlaybackQueue {
     }
 
     private onPlaybackClock(playback: Playback, mxEvent: MatrixEvent, clocks: number[]): void {
-        if (playback.currentState === PlaybackState.Decoding) return; // ignore pre-ready values
+        if (playback.currentState !== PlaybackState.Playing && playback.currentState !== PlaybackState.Paused) return; // ignore pre-ready values
 
-        if (playback.currentState !== PlaybackState.Stopped) {
-            this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
-        }
+        this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
     }
 }

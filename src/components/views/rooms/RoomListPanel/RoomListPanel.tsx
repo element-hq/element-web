@@ -12,7 +12,7 @@ import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListHeaderView } from "./RoomListHeaderView";
 import { RoomListView } from "./RoomListView";
-import { Flex } from "../../../../shared-components/utils/Flex";
+import { Flex } from "../../../../../packages/shared-components/src/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";

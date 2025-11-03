@@ -1452,7 +1452,6 @@
         "upload_file": "Fájl feltöltése"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Csak képernyőmegosztási mód engedélyezése",
         "ask_to_join": "A kérést igénylő csatlakozás engedélyezése",
         "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
         "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
@@ -1891,7 +1890,6 @@
         "thread_list": {
             "context_menu_label": "Üzenetszál beállításai"
         },
-        "title": "Jobb oldali panel",
         "video_room_chat": {
             "title": "Csevegés"
         }
@@ -3022,7 +3020,6 @@
             "spaces_explainer": "A terek a szobák és az emberek csoportosításának módjai. A terek mellett, amelyekben tartózkodik, használhat néhány előre beépítettet is.",
             "title": "Oldalsáv"
         },
-        "start_automatically": "Automatikus indítás rendszerindítás után",
         "tac_only_notifications": "Csak az üzenetszálak központban jelenítsen meg értesítéseket",
         "use_12_hour_format": "Az időbélyegek megjelenítése 12 órás formátumban (például du. 2:30)",
         "use_command_enter_send_message": "Command + Enter használata az üzenet küldéséhez",

@@ -1240,7 +1240,6 @@
         "upload_file": "上傳檔案"
     },
     "labs": {
-        "allow_screen_share_only_mode": "允許僅螢幕分享模式",
         "ask_to_join": "啟用要求加入",
         "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
         "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
@@ -2494,7 +2493,6 @@
             "spaces_explainer": "空間是將房間和人群分組的方式。除了您所在的空間之外，您也可以使用一些預先構建的空間。",
             "title": "側邊欄"
         },
-        "start_automatically": "在系統登入後自動開始",
         "use_12_hour_format": "用 12 小時制顯示時間戳記（如：下午 2:30）",
         "use_command_enter_send_message": "使用 Command + Enter 來傳送訊息",
         "use_command_f_search": "使用 Command + F 來搜尋時間軸",

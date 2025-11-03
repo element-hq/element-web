@@ -158,6 +158,7 @@ describe("RoomView", () => {
                         threepidInvite={undefined as any}
                         forceTimeline={false}
                         ref={ref}
+                        roomViewStore={stores.roomViewStore}
                     />
                 </SDKContext.Provider>
             </MatrixClientContext.Provider>,
@@ -196,6 +197,7 @@ describe("RoomView", () => {
                         threepidInvite={undefined}
                         forceTimeline={false}
                         onRegistered={jest.fn()}
+                        roomViewStore={stores.roomViewStore}
                     />
                 </SDKContext.Provider>
             </MatrixClientContext.Provider>,

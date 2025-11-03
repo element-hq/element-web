@@ -63,10 +63,10 @@ import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDi
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
-import { RichList } from "../../../shared-components/rich-list/RichList";
-import { RichItem } from "../../../shared-components/rich-list/RichItem";
-import { PillInput } from "../../../shared-components/pill-input/PillInput";
-import { Pill } from "../../../shared-components/pill-input/Pill";
+import { RichList } from "../../../../packages/shared-components/src/rich-list/RichList";
+import { RichItem } from "../../../../packages/shared-components/src/rich-list/RichItem";
+import { PillInput } from "../../../../packages/shared-components/src/pill-input/PillInput";
+import { Pill } from "../../../../packages/shared-components/src/pill-input/Pill";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -415,7 +415,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             // We mutate the given set so that any later callers avoid duplicating these users
             excludedTargetIds.add(userId);
         }
-        if (!recents) logger.warn("[Invite:Recents] No recents to suggest!");
+        if (recents.length === 0) logger.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);

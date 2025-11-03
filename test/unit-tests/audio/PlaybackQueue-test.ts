@@ -7,57 +7,51 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Mocked } from "jest-mock";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import { SimpleObservable } from "matrix-widget-api";
 
 import { PlaybackQueue } from "../../../src/audio/PlaybackQueue";
-import { PlaybackState, type Playback } from "../../../src/audio/Playback";
-import { MockEventEmitter } from "../../test-utils";
+import { type Playback, PlaybackState } from "../../../src/audio/Playback";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
+import { MockedPlayback } from "./MockedPlayback";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 
 describe("PlaybackQueue", () => {
     let playbackQueue: PlaybackQueue;
+    let mockRoom: Mocked<Room>;
 
     beforeEach(() => {
-        const mockRoom = {
+        mockRoom = {
             getMember: jest.fn(),
         } as unknown as Mocked<Room>;
-        playbackQueue = new PlaybackQueue(mockRoom);
+        playbackQueue = new PlaybackQueue(mockRoom, SdkContextClass.instance.roomViewStore);
     });
 
-    it("does not call skipTo on playback if clock advances to 0s", () => {
+    it.each([
+        [PlaybackState.Playing, true],
+        [PlaybackState.Paused, true],
+        [PlaybackState.Preparing, false],
+        [PlaybackState.Decoding, false],
+        [PlaybackState.Stopped, false],
+    ])("should save (or not) the clock PlayBackState=%s expected=%s", (playbackState, expected) => {
         const mockEvent = {
             getId: jest.fn().mockReturnValue("$foo:bar"),
         } as unknown as Mocked<MatrixEvent>;
-        const mockPlayback = new MockEventEmitter({
-            clockInfo: {
-                liveData: new SimpleObservable<number[]>(),
-            },
-            skipTo: jest.fn(),
-        }) as unknown as Mocked<Playback>;
+        const mockPlayback = new MockedPlayback(playbackState, 0, 0) as unknown as Mocked<Playback>;
 
         // Enqueue
         playbackQueue.unsortedEnqueue(mockEvent, mockPlayback);
 
         // Emit our clockInfo of 0, which will playbackQueue to save the state.
-        mockPlayback.clockInfo.liveData.update([0]);
+        mockPlayback.clockInfo.liveData.update([1]);
 
-        // Fire an update event to say that we have stopped.
-        // Note that Playback really emits an UPDATE_EVENT whenever state changes, the types are lies.
-        mockPlayback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
-
-        expect(mockPlayback.skipTo).not.toHaveBeenCalled();
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has(mockEvent.getId()!)).toBe(expected);
     });
 
-    it("does call skipTo on playback if clock advances to 0s", () => {
+    it("does call skipTo on playback if clock advances to 1s", () => {
         const mockEvent = {
             getId: jest.fn().mockReturnValue("$foo:bar"),
         } as unknown as Mocked<MatrixEvent>;
-        const mockPlayback = new MockEventEmitter({
-            clockInfo: {
-                liveData: new SimpleObservable<number[]>(),
-            },
-            skipTo: jest.fn(),
-        }) as unknown as Mocked<Playback>;
+        const mockPlayback = new MockedPlayback(PlaybackState.Playing, 0, 0) as unknown as Mocked<Playback>;
 
         // Enqueue
         playbackQueue.unsortedEnqueue(mockEvent, mockPlayback);
@@ -70,5 +64,25 @@ describe("PlaybackQueue", () => {
         mockPlayback.emit(UPDATE_EVENT as any, PlaybackState.Stopped);
 
         expect(mockPlayback.skipTo).toHaveBeenCalledWith(1);
+    });
+
+    it("should ignore the nullish clock state when loading", () => {
+        const clockStates = new Map([
+            ["a", 1],
+            ["b", null],
+            ["c", 3],
+        ]);
+        localStorage.setItem(
+            `mx_voice_message_clocks_${mockRoom.roomId}`,
+            JSON.stringify(Array.from(clockStates.entries())),
+        );
+        playbackQueue = new PlaybackQueue(mockRoom, SdkContextClass.instance.roomViewStore);
+
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("a")).toBe(true);
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("b")).toBe(false);
+        // @ts-ignore
+        expect(playbackQueue.clockStates.has("c")).toBe(true);
     });
 });
