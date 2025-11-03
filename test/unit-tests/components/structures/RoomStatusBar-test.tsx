@@ -250,7 +250,7 @@ describe("RoomStatusBar", () => {
             expect(container).toMatchSnapshot();
 
             // assert dismiss button exists, and press it
-            const dismissButton = container.querySelector<HTMLDivElement>('div[role="button"]');
+            const dismissButton = container.querySelector<HTMLDivElement>('button[role="button"]');
             expect(dismissButton).not.toBeNull();
             fireEvent.click(dismissButton!);
 

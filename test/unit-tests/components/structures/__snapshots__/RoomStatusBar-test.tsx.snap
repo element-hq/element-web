@@ -166,11 +166,12 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should render d
           Messages you send will be shared with new members invited to this room.
         </div>
         <a
-          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-          href="https://examplecom"
+          as="a"
+          class="_link_1v5rz_8"
+          data-kind="primary"
+          data-size="medium"
+          href="https://example.com"
           rel="noreferrer noopener"
-          role="button"
-          tabindex="0"
           target="_blank"
         >
           Learn more
@@ -179,13 +180,15 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should render d
       <div
         class="mx_RoomStatusBar_historyVisibilityButtonBar"
       >
-        <div
-          class="mx_AccessibleButton mx_RoomStatusBar_historyVisibilityButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        <button
+          class="_button_vczzf_8"
+          data-kind="primary"
+          data-size="sm"
           role="button"
           tabindex="0"
         >
           Dismiss
-        </div>
+        </button>
       </div>
     </div>
   </div>
