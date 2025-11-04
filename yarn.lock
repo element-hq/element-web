@@ -1599,7 +1599,7 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@file:packages/shared-components":
-  version "0.0.0-test.6"
+  version "0.0.0-test.7"
   dependencies:
     classnames "^2.5.1"
     counterpart "^0.18.6"
@@ -4098,7 +4098,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.40.0.tgz#53c9ca5ea907d91e4515da64f20a82e5586b882c"
   integrity sha512-8LRFLs5PEKYs4lOL7aJ4lL/hGCrvEvOYkCR3JggXYXDVMtX4LmfdlKYucSAe98pCmqAAbLRvlRcR1bTOYvM8ug==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@vitest/expect@3.2.4":
   version "3.2.4"
@@ -9679,8 +9679,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "39.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/dd7394c14c687d91aff1b589f905aeee673b855a"
+  version "39.1.2"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b489bb15cf3f5de8024a3e31ccb36cf294f82887"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^15.3.0"
@@ -9693,7 +9693,7 @@ matrix-events-sdk@0.0.1:
     matrix-widget-api "^1.10.0"
     oidc-client-ts "^3.0.1"
     p-retry "7"
-    sdp-transform "^2.14.1"
+    sdp-transform "^3.0.0"
     unhomoglyph "^1.0.6"
     uuid "13"
 
@@ -12149,10 +12149,10 @@ schema-utils@^4.3.0, schema-utils@^4.3.3:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
-sdp-transform@^2.14.1:
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.2.tgz#d2cee6a1f7abe44e6332ac6cbb94e8600f32d813"
-  integrity sha512-icY6jVao7MfKCieyo1AyxFYm1baiM+fA00qW/KrNNVlkxHAd34riEKuEkUe4bBb3gJwLJZM+xT60Yj1QL8rHiA==
+sdp-transform@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-3.0.0.tgz#863dd2d781c468d7d6a2f9c70fedcf0538f3e76c"
+  integrity sha512-gfYVRGxjHkGF2NPeUWHw5u6T/KGFtS5/drPms73gaSuMaVHKCY3lpLnGDfswVQO0kddeePoti09AwhYP4zA8dQ==
 
 seedrandom@^3.0.5:
   version "3.0.5"

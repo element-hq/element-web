@@ -1,3 +1,27 @@
+Changes in [1.12.3](https://github.com/element-hq/element-web/releases/tag/v1.12.3) (2025-11-04)
+================================================================================================
+## 🦖 Deprecations
+
+* Remove allowVoipWithNoMedia feature flag ([#31087](https://github.com/element-hq/element-web/pull/31087)). Contributed by @Half-Shot.
+
+## ✨ Features
+
+* Change module API to be an instance getter ([#31025](https://github.com/element-hq/element-web/pull/31025)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Show hover elements when keyboard focus is within an event tile ([#31078](https://github.com/element-hq/element-web/pull/31078)). Contributed by @t3chguy.
+* Ensure toolbar navigation pattern works in MessageActionBar ([#31080](https://github.com/element-hq/element-web/pull/31080)). Contributed by @t3chguy.
+* Ensure sent markers are hidden when showing thread summary. ([#31076](https://github.com/element-hq/element-web/pull/31076)). Contributed by @Half-Shot.
+* Fix translation in dev mode ([#31045](https://github.com/element-hq/element-web/pull/31045)). Contributed by @florianduros.
+* Fix sort order in space hierarchy ([#30975](https://github.com/element-hq/element-web/pull/30975)). Contributed by @t3chguy.
+* New Room list: don't display message preview of thread ([#31043](https://github.com/element-hq/element-web/pull/31043)). Contributed by @florianduros.
+* Revert "A11y: move focus to right panel when opened" ([#30999](https://github.com/element-hq/element-web/pull/30999)). Contributed by @florianduros.
+* Fix highlights in messages (or search results) breaking links ([#30264](https://github.com/element-hq/element-web/pull/30264)). Contributed by @bojidar-bg.
+* Add prepare script ([#31030](https://github.com/element-hq/element-web/pull/31030)). Contributed by @dbkr.
+* Fix html exports by adding SDKContext ([#30987](https://github.com/element-hq/element-web/pull/30987)). Contributed by @t3chguy.
+
+
 Changes in [1.12.2](https://github.com/element-hq/element-web/releases/tag/v1.12.2) (2025-10-21)
 ================================================================================================
 ## ✨ Features

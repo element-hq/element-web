@@ -1,15 +1,15 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MPollBody renders a finished poll 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -151,20 +151,20 @@ exports[`MPollBody renders a finished poll 1`] = `
     >
       Final result based on 3 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a finished poll with multiple winners 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -309,20 +309,20 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
     >
       Final result based on 4 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a finished poll with no votes 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -461,20 +461,20 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
     >
       Final result based on 0 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a poll that I have not voted in 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -661,20 +661,20 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
     >
       3 votes cast. Vote to see the results
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -869,20 +869,20 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
     >
       Based on 5 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a poll with no votes 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -1069,20 +1069,20 @@ exports[`MPollBody renders a poll with no votes 1`] = `
     >
       No votes cast
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders a poll with only non-local votes 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -1277,20 +1277,20 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
     >
       Based on 3 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders an undisclosed, finished poll 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -1435,20 +1435,20 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
     >
       Final result based on 4 votes
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
 
 exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
 <div>
-  <div
+  <fieldset
     class="mx_MPollBody"
   >
-    <h2
+    <legend
       data-testid="pollQuestion"
     >
       What should we order for the party?
-    </h2>
+    </legend>
     <div
       class="mx_MPollBody_allOptions"
     >
@@ -1635,6 +1635,6 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
     >
       Results will be visible when the poll is ended
     </div>
-  </div>
+  </fieldset>
 </div>
 `;
