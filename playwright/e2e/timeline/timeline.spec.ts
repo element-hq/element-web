@@ -153,7 +153,7 @@ test.describe("Timeline", () => {
                 ).toBeVisible();
 
                 // wait for the date separator to appear to have a stable screenshot
-                await expect(page.locator(".mx_TimelineSeparator")).toHaveText("today");
+                await expect(page.locator(".mx_DateSeparator")).toHaveText("today");
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("configured-room-irc-layout.png");
             },

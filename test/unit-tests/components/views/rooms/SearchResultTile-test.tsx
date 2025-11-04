@@ -93,7 +93,7 @@ describe("SearchResultTile", () => {
             ),
         });
 
-        const separators = container.querySelectorAll(".mx_TimelineSeparator");
+        const separators = container.querySelectorAll(".mx_DateSeparator");
         // One separator is always rendered at the top, we don't want any
         // between messages.
         expect(separators.length).toBe(1);
