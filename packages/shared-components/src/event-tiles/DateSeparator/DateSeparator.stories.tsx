@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { Meta, StoryObj } from "@storybook/react";
-
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DateSeparator } from "./DateSeparator";
 
 const now = Date.now();

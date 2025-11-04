@@ -12,7 +12,6 @@ import classNames from "classnames";
 
 import { _t } from "../../utils/i18n";
 import { formatFullDateNoTime, getDaysArray, DAY_MS } from "../../utils/DateUtils";
-
 import styles from "./DateSeparator.module.css";
 
 export interface Props {

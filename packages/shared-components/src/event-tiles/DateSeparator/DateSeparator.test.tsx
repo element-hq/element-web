@@ -57,9 +57,7 @@ describe("DateSeparator", () => {
     });
 
     it("applies custom className", () => {
-        const { container } = render(
-            <DateSeparator ts={Date.now()} locale="en" className="custom-class" />,
-        );
+        const { container } = render(<DateSeparator ts={Date.now()} locale="en" className="custom-class" />);
         expect(container.querySelector(".mx_DateSeparator.custom-class")).toBeTruthy();
     });
 
