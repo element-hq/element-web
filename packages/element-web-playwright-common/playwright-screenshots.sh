@@ -24,6 +24,20 @@ build_image() {
   docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
 }
 
+# Find the docker socket on the host
+case "$DOCKER_HOST" in
+    unix://*)
+        docker_sock="${DOCKER_HOST:7}"
+        ;;
+    "")
+        docker_sock="/var/run/docker.sock"
+        ;;
+    *)
+        echo "$0: unsupported DOCKER_HOST setting '${DOCKER_HOST}'" >&2
+        exit 1;
+        ;;
+esac
+
 RUN_ARGS=(
   --rm
   --network host
@@ -33,7 +47,7 @@ RUN_ARGS=(
   # Bind mount the working directory into the container
   -v $(pwd):/work/
   # Bind mount the docker socket so we can run docker commands from the container
-  -v /var/run/docker.sock:/var/run/docker.sock
+  -v "${docker_sock}":/var/run/docker.sock
   # Bind mount /tmp so we can store temporary files
   -v /tmp/:/tmp/
   -it
