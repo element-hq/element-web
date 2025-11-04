@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../utils/i18n";
@@ -26,57 +26,58 @@ export interface Props {
 }
 
 /**
- * Timeline separator component to render within a MessagePanel bearing the date of the ts given
+ * Get the label for a date separator
+ * @param ts - The timestamp (in milliseconds) to display
+ * @param locale - The locale to use for formatting
+ * @param disableRelativeTimestamps - Whether to disable relative timestamps
+ * @returns The formatted label string
  */
-export class DateSeparator extends React.Component<Props> {
-    private get relativeTimeFormat(): Intl.RelativeTimeFormat {
-        return new Intl.RelativeTimeFormat(this.props.locale ?? "en", { style: "long", numeric: "auto" });
-    }
+function getLabel(ts: number, locale: string, disableRelativeTimestamps: boolean): string {
+    try {
+        const date = new Date(ts);
 
-    public getLabel(): string {
-        try {
-            const date = new Date(this.props.ts);
-            const { disableRelativeTimestamps = false, locale = "en" } = this.props;
+        // If relative timestamps are disabled, return the full date
+        if (disableRelativeTimestamps) return formatFullDateNoTime(date, locale);
 
-            // If relative timestamps are disabled, return the full date
-            if (disableRelativeTimestamps) return formatFullDateNoTime(date, locale);
+        const today = new Date();
+        const yesterday = new Date();
+        const days = getDaysArray("long", locale);
+        const relativeTimeFormat = new Intl.RelativeTimeFormat(locale, { style: "long", numeric: "auto" });
+        yesterday.setDate(today.getDate() - 1);
 
-            const today = new Date();
-            const yesterday = new Date();
-            const days = getDaysArray("long", locale);
-            yesterday.setDate(today.getDate() - 1);
-
-            if (date.toDateString() === today.toDateString()) {
-                return this.relativeTimeFormat.format(0, "day"); // Today
-            } else if (date.toDateString() === yesterday.toDateString()) {
-                return this.relativeTimeFormat.format(-1, "day"); // Yesterday
-            } else if (today.getTime() - date.getTime() < 6 * DAY_MS) {
-                return days[date.getDay()]; // Sunday-Saturday
-            } else {
-                return formatFullDateNoTime(date, locale);
-            }
-        } catch {
-            return _t("common|message_timestamp_invalid");
+        if (date.toDateString() === today.toDateString()) {
+            return relativeTimeFormat.format(0, "day"); // Today
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return relativeTimeFormat.format(-1, "day"); // Yesterday
+        } else if (today.getTime() - date.getTime() < 6 * DAY_MS) {
+            return days[date.getDay()]; // Sunday-Saturday
+        } else {
+            return formatFullDateNoTime(date, locale);
         }
-    }
-
-    public render(): React.ReactNode {
-        const label = this.getLabel();
-
-        return (
-            <div
-                className={classNames(styles.dateSeparator, "mx_DateSeparator", this.props.className)}
-                role="separator"
-                aria-label={label}
-            >
-                <hr role="none" />
-                <div className={classNames(styles.dateContent, "mx_DateSeparator_dateContent")}>
-                    <h2 className={classNames(styles.dateHeading, "mx_DateSeparator_dateHeading")} aria-hidden="true">
-                        {label}
-                    </h2>
-                </div>
-                <hr role="none" />
-            </div>
-        );
+    } catch {
+        return _t("common|message_timestamp_invalid");
     }
 }
+
+/**
+ * Timeline separator component to render within a MessagePanel bearing the date of the ts given
+ */
+export const DateSeparator: React.FC<Props> = ({ ts, locale = "en", disableRelativeTimestamps = false, className }) => {
+    const label = useMemo(() => getLabel(ts, locale, disableRelativeTimestamps), [ts, locale, disableRelativeTimestamps]);
+
+    return (
+        <div
+            className={classNames(styles.dateSeparator, "mx_DateSeparator", className)}
+            role="separator"
+            aria-label={label}
+        >
+            <hr role="none" />
+            <div className={classNames(styles.dateContent, "mx_DateSeparator_dateContent")}>
+                <h2 className={classNames(styles.dateHeading, "mx_DateSeparator_dateHeading")} aria-hidden="true">
+                    {label}
+                </h2>
+            </div>
+            <hr role="none" />
+        </div>
+    );
+};
