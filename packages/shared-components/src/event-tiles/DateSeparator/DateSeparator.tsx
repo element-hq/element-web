@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2025 Element Creations Ltd.
  * Copyright 2015-2021 The Matrix.org Foundation C.I.C.
  * Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
  *
