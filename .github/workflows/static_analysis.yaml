@@ -35,10 +35,6 @@ jobs:
             - name: Typecheck
               run: "yarn run lint:types"
 
-            - name: Build Element Web resources
-              # Needed to prepare language files for shared components
-              run: "yarn build:res"
-
             - name: Install Shared Component Dependencies
               run: "yarn --cwd packages/shared-components install"
 
@@ -90,10 +86,6 @@ jobs:
 
             - name: Run Linter
               run: "yarn run lint:js"
-
-            - name: Build Element Web resources
-              # Needed to prepare language files for shared components
-              run: "yarn build:res"
 
             - name: Install Shared Component Deps
               run: "yarn --cwd packages/shared-components install --frozen-lockfile"

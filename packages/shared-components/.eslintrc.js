@@ -1,4 +1,5 @@
 module.exports = {
+    root: true,
     plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: [
         "plugin:matrix-org/babel",

@@ -21,12 +21,17 @@ export * from "./utils/Box";
 export * from "./utils/Flex";
 
 // Utils
-export { setLanguage } from "./utils/i18n";
+export * from "./utils/i18n";
 export * from "./utils/humanize";
 export * from "./utils/DateUtils";
 export * from "./utils/numbers";
+export * from "./utils/FormattingUtils";
 
 // MVVM
 export * from "./viewmodel";
 export * from "./useMockedViewModel";
 export * from "./useViewModel";
+
+// i18n (we must export this directly in order to not confuse the type bundler, it seems,
+// otherwise it will leave it as a relative import rather than bundling it)
+export type * from "./i18nKeys.d.ts";

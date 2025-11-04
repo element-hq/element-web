@@ -6,6 +6,6 @@
  */
 
 .button {
-    border-radius: 32px;
-    background-color: var(--cpd-color-bg-subtle-primary);
+    border-radius: 32px !important;
+    background-color: var(--cpd-color-bg-subtle-primary) !important;
 }

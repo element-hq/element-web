@@ -8,13 +8,18 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_MPollBody {
     margin-top: 8px;
+    min-width: 0; /* Override fieldset default min-width: min-content */
+    width: 100%; /* Ensure fieldset takes full available width */
+    border: none; /* Remove default fieldset border */
+    padding: 0; /* Remove default fieldset padding */
 
-    h2 {
+    legend {
         font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
         margin-top: 0;
         margin-bottom: 8px;
+        letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
 
         .mx_MPollBody_edited {
             color: $roomtopic-color;
@@ -23,7 +28,7 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    h2::before {
+    legend::before {
         content: "";
         position: relative;
         display: inline-block;

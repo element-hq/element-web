@@ -142,5 +142,10 @@ describe("ReadReceiptGroup", () => {
                 }),
             );
         });
+
+        it("should fall back to userId if roomMember unspecified", async () => {
+            const { container } = renderReadReceipt({ roomMember: null });
+            expect(container).toMatchSnapshot();
+        });
     });
 });

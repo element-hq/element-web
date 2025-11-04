@@ -747,7 +747,8 @@ function createMenu(
     // @ts-ignore illegally set private prop
     room.currentState.beacons = beacons;
 
-    mxEvent.setStatus(EventStatus.SENT);
+    // The base case is that we have received the remote echo and have an eventId. No sending status.
+    mxEvent.setStatus(null);
 
     client.getUserId = jest.fn().mockReturnValue("@user:example.com");
     client.getRoom = jest.fn().mockReturnValue(room);
