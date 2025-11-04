@@ -11,7 +11,7 @@ import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import { stubClient } from "../../../../test-utils";
+import { clearAllModals, stubClient } from "../../../../test-utils";
 import { ManualDeviceKeyVerificationDialog } from "../../../../../src/components/views/dialogs/ManualDeviceKeyVerificationDialog";
 
 describe("ManualDeviceKeyVerificationDialog", () => {
@@ -21,9 +21,10 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         return render(<ManualDeviceKeyVerificationDialog onFinished={onFinished} />);
     }
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockClient = stubClient();
         mockExistingDevices();
+        await clearAllModals();
     });
 
     it("should render correctly", () => {
