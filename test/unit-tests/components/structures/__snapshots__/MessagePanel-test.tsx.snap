@@ -39,18 +39,18 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
         >
           <div
             aria-label="Thu, Jan 1, 1970"
-            class="_dateSeparator_15xjf_9 mx_DateSeparator"
+            class="_dateSeparator_134y1_9 mx_DateSeparator"
             role="separator"
           >
             <hr
               role="none"
             />
             <div
-              class="_dateContent_15xjf_25 mx_DateSeparator_dateContent"
+              class="_dateContent_134y1_25 mx_DateSeparator_dateContent"
             >
               <h2
                 aria-hidden="true"
-                class="_dateHeading_15xjf_29 mx_DateSeparator_dateHeading"
+                class="_dateHeading_134y1_29 mx_DateSeparator_dateHeading"
               >
                 Thu, Jan 1, 1970
               </h2>
