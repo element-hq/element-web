@@ -91,6 +91,18 @@ popd > /dev/null
 for LINK in $SYMLINKS; do
   TARGET=$(readlink -f "node_modules/$LINK") || true
   if [ -d "$TARGET" ]; then
+     if docker --version | grep -q podman; then
+        echo -e "\033[31m" >&2
+        cat <<'EOF' >&2
+WARNING: `node_modules` contains symlinks, and the support for this in
+`playwright-screenshots.sh` is broken under podman due to
+https://github.com/containers/podman/issues/25947.
+
+If you get errors such as 'Error: crun: creating `<path>`', then retry this
+having `yarn unlink`ed the relevant node modules.
+EOF
+      echo -e "\033[0m" >&2
+    fi
     echo "mounting linked package ${LINK:2} in container"
     RUN_ARGS+=( "-v" "$TARGET:/work/node_modules/${LINK:2}" )
   fi
