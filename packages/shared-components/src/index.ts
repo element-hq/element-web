@@ -11,6 +11,7 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
+export * from "./event-tiles/FileBody";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";

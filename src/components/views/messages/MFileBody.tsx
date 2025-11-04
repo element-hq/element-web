@@ -6,21 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type AllHTMLAttributes, createRef } from "react";
+import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
-import { Button } from "@vector-im/compound-web";
-import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { FileBody as SharedFileBody, type FileInfo } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { downloadLabelForFile, presentableTextForFile } from "../../../utils/FileUtils";
 import { type IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
-import TextWithTooltip from "../elements/TextWithTooltip";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 export let DOWNLOAD_ICON_URL: string; // cached copy of the download.svg asset for the sandboxed iframe later on
@@ -188,146 +185,111 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 this.context.timelineRenderingType !== TimelineRenderingType.Search &&
                 this.context.timelineRenderingType !== TimelineRenderingType.Pinned);
 
-        let placeholder: React.ReactNode = null;
-        if (showGenericPlaceholder) {
-            placeholder = (
-                <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
-                    <span className="mx_MFileBody_info_icon" />
-                    <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("common|attachment"), true)}>
-                        <span className="mx_MFileBody_info_filename">
-                            {presentableTextForFile(this.content, _t("common|attachment"), true, true)}
-                        </span>
-                    </TextWithTooltip>
-                </AccessibleButton>
-            );
-            showDownloadLink = false;
-        }
-
-        if (this.props.forExport) {
-            const content = this.props.mxEvent.getContent();
-            // During export, the content url will point to the MSC, which will later point to a local url
-            return (
-                <span className="mx_MFileBody">
-                    <a href={content.file?.url || content.url}>{placeholder}</a>
-                </span>
-            );
-        }
-
         if (this.context.timelineRenderingType === TimelineRenderingType.Thread) {
             showDownloadLink = false;
         }
 
-        if (isEncrypted) {
-            if (!this.state.decryptedBlob) {
-                // Need to decrypt the attachment
-                // Wait for the user to click on the link before downloading
-                // and decrypting the attachment.
+        const fileInfo: FileInfo = {
+            filename: presentableTextForFile(this.content, _t("common|attachment"), true, true),
+            tooltip: presentableTextForFile(this.content, _t("common|attachment"), true),
+            mimeType: fileType,
+        };
 
-                // This button should actually Download because usercontent/ will try to click itself
-                // but it is not guaranteed between various browsers' settings.
-                return (
-                    <span className="mx_MFileBody">
-                        {placeholder}
-                        {showDownloadLink && (
-                            <div className="mx_MFileBody_download">
-                                <Button size="sm" kind="secondary" Icon={DownloadIcon} onClick={this.decryptFile}>
-                                    {this.linkText}
-                                </Button>
-                            </div>
-                        )}
-                    </span>
-                );
-            }
-
-            const url = "usercontent/"; // XXX: this path should probably be passed from the skin
-
-            // If the attachment is encrypted then put the link inside an iframe.
+        // Export mode
+        if (this.props.forExport) {
+            const content = this.props.mxEvent.getContent();
             return (
-                <span className="mx_MFileBody">
-                    {placeholder}
-                    {showDownloadLink && (
-                        <div className="mx_MFileBody_download">
-                            <div aria-hidden style={{ display: "none" }}>
-                                {/*
-                                 * Add dummy copy of the button
-                                 * We'll use it to learn how the download button
-                                 * would have been styled if it was rendered inline.
-                                 */}
-                                {/* this violates multiple eslint rules
-                            so ignore it completely */}
-                                <Button size="sm" kind="secondary" Icon={DownloadIcon} as="a" ref={this.dummyLink} />
-                            </div>
-                            {/*
-                            TODO: Move iframe (and dummy link) into FileDownloader.
-                            We currently have it set up this way because of styles applied to the iframe
-                            itself which cannot be easily handled/overridden by the FileDownloader. In
-                            future, the download link may disappear entirely at which point it could also
-                            be suitable to just remove this bit of code.
-                         */}
-                            <iframe
-                                aria-hidden
-                                title={presentableTextForFile(this.content, _t("common|attachment"), true, true)}
-                                src={url}
-                                onLoad={() => this.downloadFile(this.fileName, this.linkText)}
-                                ref={this.iframe}
-                                sandbox="allow-scripts allow-downloads"
-                            />
-                        </div>
-                    )}
-                </span>
-            );
-        } else if (contentUrl) {
-            const downloadProps: Pick<
-                AllHTMLAttributes<HTMLAnchorElement>,
-                "target" | "rel" | "href" | "onClick" | "download"
-            > = {
-                target: "_blank",
-                rel: "noreferrer noopener",
-
-                // We cannot rely on href+download to download media due to the authenticated media API as it relies
-                // on authentication via headers, so we'll have to download the file into memory and then download it.
-                onClick: (e) => {
-                    logger.log(`Downloading ${fileType} as blob (unencrypted)`);
-
-                    // Avoid letting the <a> do its thing
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    // Start a fetch for the download
-                    // Based upon https://stackoverflow.com/a/49500465
-                    this.props.mediaEventHelper?.sourceBlob.value.then((blob) => {
-                        const blobUrl = URL.createObjectURL(blob);
-
-                        // We have to create an anchor to download the file
-                        const tempAnchor = document.createElement("a");
-                        tempAnchor.download = this.fileName;
-                        tempAnchor.href = blobUrl;
-                        document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
-                        tempAnchor.click();
-                        tempAnchor.remove();
-                    });
-                },
-            };
-
-            return (
-                <span className="mx_MFileBody">
-                    {placeholder}
-                    {showDownloadLink && (
-                        <div className="mx_MFileBody_download">
-                            <Button size="sm" kind="secondary" Icon={DownloadIcon} as="a" {...downloadProps}>
-                                {this.linkText}
-                            </Button>
-                        </div>
-                    )}
-                </span>
-            );
-        } else {
-            return (
-                <span className="mx_MFileBody">
-                    {placeholder}
-                    {_t("timeline|m.file|error_invalid")}
-                </span>
+                <SharedFileBody
+                    fileInfo={fileInfo}
+                    downloadLabel={this.linkText}
+                    showGenericPlaceholder={showGenericPlaceholder}
+                    showDownloadLink={showDownloadLink}
+                    forExport={true}
+                    exportUrl={content.file?.url || content.url}
+                />
             );
         }
+
+        // Error state
+        if (!isEncrypted && !contentUrl) {
+            return (
+                <SharedFileBody
+                    fileInfo={fileInfo}
+                    downloadLabel={this.linkText}
+                    showGenericPlaceholder={showGenericPlaceholder}
+                    showDownloadLink={showDownloadLink}
+                    error={_t("timeline|m.file|error_invalid")}
+                />
+            );
+        }
+
+        // Encrypted file not yet decrypted
+        if (isEncrypted && !this.state.decryptedBlob) {
+            return (
+                <SharedFileBody
+                    fileInfo={fileInfo}
+                    downloadLabel={this.linkText}
+                    showGenericPlaceholder={showGenericPlaceholder}
+                    showDownloadLink={showDownloadLink}
+                    isEncrypted={true}
+                    isDecrypted={false}
+                    onPlaceholderClick={this.onPlaceholderClick}
+                    onDecryptClick={this.decryptFile}
+                />
+            );
+        }
+
+        // Encrypted file that has been decrypted
+        if (isEncrypted && this.state.decryptedBlob) {
+            return (
+                <SharedFileBody
+                    fileInfo={fileInfo}
+                    downloadLabel={this.linkText}
+                    showGenericPlaceholder={showGenericPlaceholder}
+                    showDownloadLink={showDownloadLink}
+                    isEncrypted={true}
+                    isDecrypted={true}
+                    iframeSrc="usercontent/"
+                    iframeRef={this.iframe}
+                    dummyLinkRef={this.dummyLink}
+                    onPlaceholderClick={this.onPlaceholderClick}
+                    onIframeLoad={() => this.downloadFile(this.fileName, this.linkText)}
+                />
+            );
+        }
+
+        // Unencrypted file
+        return (
+            <SharedFileBody
+                fileInfo={fileInfo}
+                downloadLabel={this.linkText}
+                showGenericPlaceholder={showGenericPlaceholder}
+                showDownloadLink={showDownloadLink}
+                onPlaceholderClick={this.onPlaceholderClick}
+                onDownloadClick={this.onUnencryptedDownloadClick}
+            />
+        );
     }
+
+    private onUnencryptedDownloadClick = (e: React.MouseEvent): void => {
+        logger.log(`Downloading ${this.content.info?.mimetype ?? "application/octet-stream"} as blob (unencrypted)`);
+
+        // Avoid letting the <a> do its thing
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Start a fetch for the download
+        // Based upon https://stackoverflow.com/a/49500465
+        this.props.mediaEventHelper?.sourceBlob.value.then((blob) => {
+            const blobUrl = URL.createObjectURL(blob);
+
+            // We have to create an anchor to download the file
+            const tempAnchor = document.createElement("a");
+            tempAnchor.download = this.fileName;
+            tempAnchor.href = blobUrl;
+            document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
+            tempAnchor.click();
+            tempAnchor.remove();
+        });
+    };
 }
