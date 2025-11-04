@@ -3,7 +3,7 @@
 exports[`FileBody renders decrypt button for encrypted file that hasn't been decrypted 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <button
       class="mx_MediaBody info mx_MFileBody_info"
@@ -51,7 +51,7 @@ exports[`FileBody renders decrypt button for encrypted file that hasn't been dec
 exports[`FileBody renders error message 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <button
       class="mx_MediaBody info mx_MFileBody_info"
@@ -67,7 +67,9 @@ exports[`FileBody renders error message 1`] = `
         test-file.pdf
       </span>
     </button>
-    Invalid file
+    <span>
+      Invalid file
+    </span>
   </span>
 </div>
 `;
@@ -75,7 +77,7 @@ exports[`FileBody renders error message 1`] = `
 exports[`FileBody renders export mode with link 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <a
       href="mxc://server/file"
@@ -102,7 +104,7 @@ exports[`FileBody renders export mode with link 1`] = `
 exports[`FileBody renders iframe for encrypted file that has been decrypted 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <button
       class="mx_MediaBody info mx_MFileBody_info"
@@ -160,7 +162,7 @@ exports[`FileBody renders iframe for encrypted file that has been decrypted 1`] 
 exports[`FileBody renders with placeholder and download button for unencrypted file 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <button
       class="mx_MediaBody info mx_MFileBody_info"
@@ -208,7 +210,7 @@ exports[`FileBody renders with placeholder and download button for unencrypted f
 exports[`FileBody renders without download link when showDownloadLink is false 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <button
       class="mx_MediaBody info mx_MFileBody_info"
@@ -231,7 +233,7 @@ exports[`FileBody renders without download link when showDownloadLink is false 1
 exports[`FileBody renders without placeholder when showGenericPlaceholder is false 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="root mx_MFileBody"
   >
     <div
       class="download mx_MFileBody_download"

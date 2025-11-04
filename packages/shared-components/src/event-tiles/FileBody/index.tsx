@@ -5,4 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-export { FileBody, type FileBodyProps, type FileInfo } from "./FileBody";
+export {
+    FileBody,
+    type FileBodyProps,
+    type FileInfo,
+    type FileBodyViewSnapshot,
+    type FileBodyActions,
+    type FileBodyViewModel,
+} from "./FileBody";
