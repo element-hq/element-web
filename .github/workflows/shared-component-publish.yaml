@@ -26,6 +26,10 @@ jobs:
             - name: Update npm
               run: npm install -g npm@latest
 
+            # Need to setup element web too as it needs the translations
+            - name: 🛠️ Setup EW
+              run: yarn install --pure-lockfile
+
             - name: 🛠️ Setup
               # When running `install` it also calls the `prepare` step which generates
               # a build
