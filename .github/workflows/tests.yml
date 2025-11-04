@@ -71,7 +71,7 @@ jobs:
                       --ci \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
                       --shard ${{ matrix.runner }}/${{ strategy.job-total }} \
-                      --cacheDirectory /tmp/jest_cache
+                      --no-cache
               env:
                   JEST_SONAR_UNIQUE_OUTPUT_NAME: true
 
