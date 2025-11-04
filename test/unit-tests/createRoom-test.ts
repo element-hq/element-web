@@ -10,6 +10,7 @@ import { mocked, type Mocked } from "jest-mock";
 import { type MatrixClient, type Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { act } from "jest-matrix-react";
 
 import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg, getMockClientWithEventEmitter } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -41,6 +42,56 @@ describe("createRoom", () => {
             visibility: "private",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
         });
+    });
+
+    it("creates a private with encryption", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PrivateChat }, encryption: true });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        algorithm: "m.megolm.v1.aes-sha2",
+                    },
+                },
+            ],
+        });
+    });
+
+    it("creates a private room with state event encryption", async () => {
+        await act(
+            async () =>
+                await createRoom(client, {
+                    createOpts: { preset: Preset.PrivateChat },
+                    encryption: true,
+                    stateEncryption: true,
+                    name: "Super-Secret Super-colliding Super Room",
+                }),
+        );
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc3414.encrypt_state_events": true,
+                    },
+                },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+        });
+
+        expect(client.setRoomName).toHaveBeenCalledWith("!1:example.org", "Super-Secret Super-colliding Super Room");
     });
 
     it("creates a private room in a space", async () => {
