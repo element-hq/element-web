@@ -22,6 +22,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
     }
 
     beforeEach(() => {
+        // foo
         mockClient = stubClient();
         mockExistingDevices();
     });
