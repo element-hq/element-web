@@ -22,6 +22,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
+import { RoomStatusBarHistoryVisible } from "../../../packages/shared-components/src/structures/RoomStatusBarHistoryVisible";
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
 import dis from "../../dispatcher/dispatcher";
@@ -33,7 +34,6 @@ import InlineSpinner from "../views/elements/InlineSpinner";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import ExternalLink from "../views/elements/ExternalLink";
-import { RoomStatusBarHistoryVisible } from "./RoomStatusBarHistoryVisible";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 

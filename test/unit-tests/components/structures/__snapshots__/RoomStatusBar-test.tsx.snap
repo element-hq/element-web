@@ -134,54 +134,60 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should not rend
 exports[`RoomStatusBar Shared History Visibility Acknowledgement should render dismissable history visibility acknowledgement in encrypted rooms with non-join history visibility 1`] = `
 <div>
   <div
-    class="mx_RoomStatusBar mx_RoomStatusBar_historyVisibility"
+    class="_alert_zx76t_10 historyVisibility"
+    data-type="info"
   >
+    <svg
+      aria-hidden="true"
+      class="_icon_zx76t_48"
+      fill="currentColor"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.288 7.288A.97.97 0 0 1 12 7q.424 0 .713.287Q13 7.576 13 8t-.287.713A.97.97 0 0 1 12 9a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 8q0-.424.287-.713m.001 4.001A.97.97 0 0 1 12 11q.424 0 .713.287.287.288.287.713v4q0 .424-.287.712A.97.97 0 0 1 12 17a.97.97 0 0 1-.713-.288A.97.97 0 0 1 11 16v-4q0-.424.287-.713"
+      />
+      <path
+        clip-rule="evenodd"
+        d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+        fill-rule="evenodd"
+      />
+    </svg>
     <div
-      role="alert"
+      class="_content_zx76t_37"
     >
       <div
-        class="mx_RoomStatusBar_historyVisibilityBadge"
+        class="_text-content_zx76t_44"
       >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M11.288 7.288A.97.97 0 0 1 12 7q.424 0 .713.287Q13 7.576 13 8t-.287.713A.97.97 0 0 1 12 9a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 8q0-.424.287-.713m.001 4.001A.97.97 0 0 1 12 11q.424 0 .713.287.287.288.287.713v4q0 .424-.287.712A.97.97 0 0 1 12 17a.97.97 0 0 1-.713-.288A.97.97 0 0 1 11 16v-4q0-.424.287-.713"
-          />
-          <path
-            clip-rule="evenodd"
-            d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </div>
-      <div>
-        <div
-          class="mx_RoomStatusBar_historyVisibilityDescription"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
         >
           Messages you send will be shared with new members invited to this room.
-        </div>
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          room|status_bar|history_visible_description
+        </p>
+      </div>
+      <div
+        class="_actions_zx76t_64"
+      >
         <a
-          as="a"
-          class="_link_1v5rz_8"
-          data-kind="primary"
-          data-size="medium"
+          class="_button_vczzf_8 historyVisibilityButton"
+          data-kind="tertiary"
+          data-size="sm"
           href="https://example.com"
-          rel="noreferrer noopener"
+          role="link"
+          tabindex="0"
           target="_blank"
         >
           Learn more
         </a>
-      </div>
-      <div
-        class="mx_RoomStatusBar_historyVisibilityButtonBar"
-      >
         <button
-          class="_button_vczzf_8"
+          class="_button_vczzf_8 historyVisibilityButton"
           data-kind="primary"
           data-size="sm"
           role="button"

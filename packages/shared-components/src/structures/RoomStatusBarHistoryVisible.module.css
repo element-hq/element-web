@@ -1,0 +1,10 @@
+.historyVisibility {
+    border-radius: 0px;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.historyVisibilityButton {
+    white-space: nowrap;
+}

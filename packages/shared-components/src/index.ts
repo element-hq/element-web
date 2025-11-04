@@ -17,6 +17,7 @@ export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
+export * from "./structures/RoomStatusBarHistoryVisible";
 export * from "./utils/Box";
 export * from "./utils/Flex";
 
