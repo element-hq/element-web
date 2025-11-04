@@ -63,7 +63,10 @@ function getLabel(ts: number, locale: string, disableRelativeTimestamps: boolean
  * Timeline separator component to render within a MessagePanel bearing the date of the ts given
  */
 export const DateSeparator: React.FC<Props> = ({ ts, locale = "en", disableRelativeTimestamps = false, className }) => {
-    const label = useMemo(() => getLabel(ts, locale, disableRelativeTimestamps), [ts, locale, disableRelativeTimestamps]);
+    const label = useMemo(
+        () => getLabel(ts, locale, disableRelativeTimestamps),
+        [ts, locale, disableRelativeTimestamps],
+    );
 
     return (
         <div
