@@ -87,51 +87,51 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
           class="mx_PollListItem"
           data-testid="pollListItem-$2"
         >
-          <span
-            tabindex="0"
+          <div
+            class="mx_PollListItem_content"
           >
+            <span>
+              02/02/23
+            </span>
             <div
-              aria-labelledby="_r_a_"
-              class="mx_PollListItem_content"
+              class="mx_PollListItem_icon"
+            />
+            <span
+              tabindex="0"
             >
-              <span>
-                02/02/23
-              </span>
-              <div
-                class="mx_PollListItem_icon"
-              />
               <span
+                aria-labelledby="_r_a_"
                 class="mx_PollListItem_question"
               >
                 Where?
               </span>
-            </div>
-          </span>
+            </span>
+          </div>
         </li>
         <li
           class="mx_PollListItem"
           data-testid="pollListItem-$1"
         >
-          <span
-            tabindex="0"
+          <div
+            class="mx_PollListItem_content"
           >
+            <span>
+              02/02/23
+            </span>
             <div
-              aria-labelledby="_r_f_"
-              class="mx_PollListItem_content"
+              class="mx_PollListItem_icon"
+            />
+            <span
+              tabindex="0"
             >
-              <span>
-                02/02/23
-              </span>
-              <div
-                class="mx_PollListItem_icon"
-              />
               <span
+                aria-labelledby="_r_f_"
                 class="mx_PollListItem_question"
               >
                 Question?
               </span>
-            </div>
-          </span>
+            </span>
+          </div>
         </li>
       </ol>
     </div>

@@ -31,16 +31,16 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
 
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
-            <div 
+            <div
                 className="mx_PollListItem_content"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
             >
                 <span>{formattedDate}</span>
                 <PollIcon className="mx_PollListItem_icon" />
-                <Tooltip 
-                    label={_t("right_panel|poll|view_poll")} 
-                    placement="top" 
+                <Tooltip
+                    label={_t("right_panel|poll|view_poll")}
+                    placement="top"
                     isTriggerInteractive={false}
                     open={showTooltip}
                 >
