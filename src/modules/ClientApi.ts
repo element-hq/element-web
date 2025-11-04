@@ -10,16 +10,11 @@ import { AccountDataApi } from "./AccountDataApi";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export class ClientApi implements IClientApi {
-    private accountDataApi?: AccountDataApi;
+    public readonly accountData = new AccountDataApi();
 
     public getRoom(roomId: string): Room | null {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);
         return null;
-    }
-
-    public get accountData(): AccountDataApi {
-        this.accountDataApi ??= new AccountDataApi();
-        return this.accountDataApi;
     }
 }
