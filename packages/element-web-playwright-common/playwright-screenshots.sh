@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Handle symlinks here as we tend to be executed as an npm binary
 SCRIPT_PATH=$(readlink -f "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
@@ -83,11 +85,11 @@ done
 build_image
 
 # Ensure we pass all symlinked node_modules to the container
-pushd node_modules || exit > /dev/null
+pushd node_modules > /dev/null
 SYMLINKS=$(find . -maxdepth 2 -type l -not -path "./.bin/*")
-popd || exit > /dev/null
+popd > /dev/null
 for LINK in $SYMLINKS; do
-  TARGET=$(readlink -f "node_modules/$LINK")
+  TARGET=$(readlink -f "node_modules/$LINK") || true
   if [ -d "$TARGET" ]; then
     echo "mounting linked package ${LINK:2} in container"
     RUN_ARGS+=( "-v" "$TARGET:/work/node_modules/${LINK:2}" )
