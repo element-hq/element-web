@@ -7,17 +7,17 @@
 
 import { type ChangeEvent, type KeyboardEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-
 import {
+    percentageOf,
+    BaseViewModel,
     type AudioPlayerViewSnapshot,
     type AudioPlayerViewModel as AudioPlayerViewModelInterface,
-} from "../../../packages/shared-components/src/audio/AudioPlayerView";
+} from "@element-hq/web-shared-components";
+
 import { type Playback } from "../../audio/Playback";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { percentageOf } from "../../../packages/shared-components/src/utils/numbers";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { BaseViewModel } from "../../../packages/shared-components/src/viewmodel";
 
 /**
  * The number of seconds to skip when the user presses the left or right arrow keys.

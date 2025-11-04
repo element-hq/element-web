@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type Dispatch } from "react";
 import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { clamp } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
@@ -27,7 +28,6 @@ import {
     Type,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
-import { clamp } from "../../../../packages/shared-components/src/utils/numbers";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 
 export const CATEGORY_HEADER_HEIGHT = 20;

@@ -6,29 +6,28 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -45,97 +44,6 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           </div>
         </div>
       </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="_r_g1_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="_r_g6_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="_r_gb_"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <div
       class="mx_RoomView_body"
@@ -171,29 +79,28 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -210,97 +117,6 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </div>
         </div>
       </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="_r_gj_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="_r_go_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="_r_gt_"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -422,29 +238,28 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -461,97 +276,6 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           </div>
         </div>
       </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="_r_c1_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="_r_c6_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="_r_cb_"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -639,7 +363,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_ck_"
+                aria-labelledby="_r_bj_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -769,29 +493,28 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
         class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -808,97 +531,6 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           </div>
         </div>
       </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="_r_e1_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="_r_e6_"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="_r_eb_"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -1178,7 +810,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -1200,7 +832,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1390,7 +1022,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -1412,7 +1044,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1780,7 +1412,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -1802,7 +1434,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div

@@ -17,4 +17,10 @@ else
 fi
 
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")
+
+yarn --cwd packages/shared-components install
+yarn --cwd packages/shared-components link
+
+yarn link @element-hq/web-shared-components
+
 VERSION=$DIST_VERSION yarn build

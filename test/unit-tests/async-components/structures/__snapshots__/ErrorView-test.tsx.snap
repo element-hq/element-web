@@ -98,7 +98,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         </span>
       </p>
       <div
-        class="flex mx_ErrorView_flexContainer mx_ErrorView_buttons"
+        class="_flex_4dswl_9 mx_ErrorView_flexContainer mx_ErrorView_buttons"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <button
@@ -139,7 +139,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       Use Element Desktop instead
     </h2>
     <div
-      class="flex mx_ErrorView_flexContainer"
+      class="_flex_4dswl_9 mx_ErrorView_flexContainer"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <a
@@ -209,7 +209,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       Or use our mobile app
     </h2>
     <div
-      class="flex mx_ErrorView_flexContainer"
+      class="_flex_4dswl_9 mx_ErrorView_flexContainer"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
     >
       <a
