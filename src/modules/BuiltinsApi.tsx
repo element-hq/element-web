@@ -12,6 +12,9 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import type { Room } from "matrix-js-sdk/src/matrix";
 
 interface RoomViewPropsWithRoomId extends RoomViewProps {
+    /**
+     * The ID of the room to display
+     */
     roomId?: string;
 }
 
@@ -26,9 +29,8 @@ interface Components {
 }
 
 export class ElementWebBuiltinsApi implements BuiltinsApi {
-    private _roomView?: React.ComponentType<RoomViewPropsWithRoomId>;
-    private _roomAvatar?: React.ComponentType<RoomAvatarProps>;
-
+    private _roomView?: Components["roomView"];
+    private _roomAvatar?: Components["roomAvatar"];
     /**
      * Sets the components used by the API.
      *
