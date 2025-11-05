@@ -68,6 +68,8 @@ import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
+import { ModuleApi } from "../../../modules/Api.ts";
+import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
@@ -290,6 +292,8 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
         const [invites, metaSpaces, actualSpaces, activeSpace] = useSpaces();
         const activeSpaces = activeSpace ? [activeSpace] : [];
 
+        const moduleSpaceItems = useModuleSpacePanelItems(ModuleApi.instance.extras);
+
         const metaSpacesSection = metaSpaces
             .filter((key) => !(key === MetaSpace.VideoRooms && !SettingsStore.getValue("feature_video_rooms")))
             .map((key) => {
@@ -341,6 +345,27 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                     </Draggable>
                 ))}
                 {children}
+                {moduleSpaceItems.map((item) => (
+                    <li
+                        key={item.spaceKey}
+                        className={classNames("mx_SpaceItem", {
+                            collapsed: isPanelCollapsed,
+                        })}
+                        role="treeitem"
+                        aria-selected={false} // TODO
+                    >
+                        <SpaceButton
+                            {...item}
+                            isNarrow={isPanelCollapsed}
+                            size="32px"
+                            selected={activeSpace === item.spaceKey}
+                            onClick={() => {
+                                SpaceStore.instance.setActiveSpace(item.spaceKey);
+                                item.onSelected?.();
+                            }}
+                        />
+                    </li>
+                ))}
                 {shouldShowComponent(UIComponent.CreateSpaces) && (
                     <CreateSpaceButton isPanelCollapsed={isPanelCollapsed} setPanelCollapsed={setPanelCollapsed} />
                 )}

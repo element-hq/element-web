@@ -26,6 +26,10 @@ import { WatchableProfile } from "./Profile.ts";
 import { NavigationApi } from "./Navigation.ts";
 import { openDialog } from "./Dialog.tsx";
 import { overwriteAccountAuth } from "./Auth.ts";
+import { ElementWebExtrasApi } from "./ExtrasApi.ts";
+import { ElementWebBuiltinsApi } from "./BuiltinsApi.tsx";
+import { ClientApi } from "./ClientApi.ts";
+import { StoresApi } from "./StoresApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -79,7 +83,11 @@ export class ModuleApi implements Api {
     public readonly config = new ConfigApi();
     public readonly i18n = new I18nApi();
     public readonly customComponents = new CustomComponentsApi();
+    public readonly extras = new ElementWebExtrasApi();
+    public readonly builtins = new ElementWebBuiltinsApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
+    public readonly client = new ClientApi();
+    public readonly stores = new StoresApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);

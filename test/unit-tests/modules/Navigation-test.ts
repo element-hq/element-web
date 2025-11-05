@@ -37,5 +37,25 @@ describe("NavigationApi", () => {
                 }),
             );
         });
+
+        it("should dispatch correct action on openRoom", () => {
+            const spy = jest.spyOn(defaultDispatcher, "dispatch");
+            // Non alias
+            api.openRoom("!foo:m.org");
+            expect(spy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: "!foo:m.org",
+                }),
+            );
+            // Alias
+            api.openRoom("#bar:m.org");
+            expect(spy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_alias: "#bar:m.org",
+                }),
+            );
+        });
     });
 });
