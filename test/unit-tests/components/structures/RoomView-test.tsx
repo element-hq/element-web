@@ -75,7 +75,7 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
-import Modal from "../../../../src/Modal.tsx";
+import Modal, { type ComponentProps } from "../../../../src/Modal.tsx";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 
 // Used by group calls
@@ -127,7 +127,10 @@ describe("RoomView", () => {
         cleanup();
     });
 
-    const mountRoomView = async (ref?: RefObject<RoomView | null>): Promise<RenderResult> => {
+    const mountRoomView = async (
+        ref?: RefObject<RoomView | null>,
+        props?: Partial<ComponentProps<typeof RoomView>>,
+    ): Promise<RenderResult> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
@@ -159,6 +162,7 @@ describe("RoomView", () => {
                         threepidInvite={undefined as any}
                         forceTimeline={false}
                         ref={ref}
+                        {...props}
                     />
                 </SDKContext.Provider>
             </MatrixClientContext.Provider>,
@@ -248,6 +252,25 @@ describe("RoomView", () => {
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
         expect(instance.getHiddenHighlightCount()).toBe(0);
+    });
+
+    it("should hide the composer when hideComposer=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment } = await mountRoomView(undefined, { hideComposer: true });
+
+        expect(screen.queryByRole("textbox", { name: "Send an unencrypted message…" })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should hide the header when hideHeader=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment } = await mountRoomView(undefined, { hideHeader: true });
+
+        // Check that the room name button in the header is not rendered
+        expect(screen.queryByRole("button", { name: room.name })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("invites", () => {
