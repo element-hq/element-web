@@ -108,4 +108,24 @@ EOF
   fi
 done
 
+# Our Playwright fixtures use Testcontainers [1], which in uses a docker image
+# called Ryuk [2], which will clean up any dangling containers/networks/etc
+# after a timeout, if the parent process dies unexpectedly.
+#
+# To do this, Ryuk requires access to the docker socket, so Testcontainers
+# starts the Ryuk container with a bind-mount of `/var/run/docker.sock`.
+# However, we're going to be running Playwright (and hence Testcontainers)
+# itself in a container, but talking to the Docker daemon on the *host*, which
+# means that bind mounts will be relative to the *host* filesystem. In short,
+# it will try to bind-mount the *host's* `/var/run/docker.sock` rather than
+# that from inside the element-web-playwright-common container.
+#
+# To solve this problem, we start Ryuk ourselves (with the correct docker
+# socket) rather than waiting for Testcontainers to do so. Testcontainers will
+# find the running Ryuk instance and connect to it rather than start a new one.
+#
+# [1] https://testcontainers.com/
+# [2] https://github.com/testcontainers/moby-ryuk
+docker run -d --rm --label org.testcontainers.ryuk=true -v "${docker_sock}":/var/run/docker.sock -p 8080 --name="playwright-ryuk" testcontainers/ryuk:0.14.0
+
 docker run "${RUN_ARGS[@]}" "$IMAGE_NAME" "${DEFAULT_ARGS[@]}" "$@"
