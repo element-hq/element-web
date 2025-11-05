@@ -29,8 +29,7 @@ import {
     makeBeaconInfoEvent,
 } from "../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
+import RoomContext, { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -115,8 +114,8 @@ describe("<MessageActionBar />", () => {
         canSendMessages: true,
         canReact: true,
         room,
-    } as unknown as IRoomState;
-    const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) =>
+    } as unknown as RoomContextType;
+    const getComponent = (props = {}, roomContext: Partial<RoomContextType> = {}) =>
         render(
             <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
                 <MessageActionBar {...defaultProps} {...props} />

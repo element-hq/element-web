@@ -11,10 +11,10 @@ import { render, screen, waitFor } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { createTestClient, getRoomContext, mkStubRoom } from "../../../../test-utils";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../../src/components/views/rooms/MessageComposerButtons";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 
 describe("MessageComposerButtons", () => {
     // @ts-ignore - we're deliberately not implementing the whole interface here, but
@@ -50,7 +50,7 @@ describe("MessageComposerButtons", () => {
 
     function wrapAndRender(component: React.ReactElement, narrow: boolean) {
         const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
-        const defaultRoomContext: IRoomState = getRoomContext(mockRoom, { narrow });
+        const defaultRoomContext: RoomContextType = getRoomContext(mockRoom, { narrow });
 
         return render(
             <MatrixClientContext.Provider value={mockClient}>

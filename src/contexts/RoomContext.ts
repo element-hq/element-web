@@ -10,6 +10,7 @@ import { createContext } from "react";
 
 import { type IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
+import { type RoomViewStore } from "../stores/RoomViewStore";
 
 export enum TimelineRenderingType {
     Room = "Room",
@@ -29,11 +30,12 @@ export enum MainSplitContentType {
     Call,
 }
 
-const RoomContext = createContext<
-    IRoomState & {
-        threadId?: string;
-    }
->({
+export interface RoomContextType extends IRoomState {
+    threadId?: string;
+    roomViewStore: RoomViewStore;
+}
+
+const RoomContext = createContext<RoomContextType>({
     roomLoading: true,
     peekLoading: false,
     shouldPeek: true,
