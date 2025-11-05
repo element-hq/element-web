@@ -50,4 +50,20 @@ describe("<PollListItem />", () => {
 
         expect(onClick).toHaveBeenCalled();
     });
+
+    it("handles tooltip mouse events", () => {
+        const { container } = getComponent();
+        const contentDiv = container.querySelector(".mx_PollListItem_content");
+        const questionSpan = container.querySelector(".mx_PollListItem_question");
+        
+        expect(contentDiv).toBeTruthy();
+        expect(questionSpan?.textContent).toBe("Question?");
+        
+        // Test that mouse events work without error
+        fireEvent.mouseEnter(contentDiv!);
+        fireEvent.mouseLeave(contentDiv!);
+        
+        // Component should still be functional after state changes
+        expect(container.querySelector(".mx_PollListItem")).toBeTruthy();
+    });
 });
