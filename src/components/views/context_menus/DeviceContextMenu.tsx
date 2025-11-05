@@ -59,6 +59,7 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
     return (
         <IconizedContextMenuOptionList label={_t(SECTION_NAMES[deviceKind])}>
             {devices.map(({ label, deviceId }) => {
+                console.log("!! Rendering device", label, deviceId);
                 return (
                     <DeviceContextMenuDevice
                         key={deviceId}
