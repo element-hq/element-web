@@ -5,15 +5,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { renderHook } from "jest-matrix-react";
+
 import { BaseViewModel } from "../BaseViewModel";
 import { useCreateAutoDisposedViewModel } from "../useCreateAutoDisposedViewModel";
 
 class TestViewModel extends BaseViewModel<{ count: number }, { initial: number }> {
-    constructor(props: { initial: number }) {
+    public constructor(props: { initial: number }) {
         super(props, { count: props.initial });
     }
 
-    public increment() {
+    public increment(): void {
         const newCount = this.getSnapshot().count + 1;
         this.snapshot.set({ count: newCount });
     }
@@ -21,7 +22,7 @@ class TestViewModel extends BaseViewModel<{ count: number }, { initial: number }
 
 describe("useAutoDisposedViewModel", () => {
     it("should return view-model", () => {
-        const vmCreator = () => new TestViewModel({ initial: 0 });
+        const vmCreator = (): TestViewModel => new TestViewModel({ initial: 0 });
         const { result } = renderHook(() => useCreateAutoDisposedViewModel(vmCreator));
         const vm = result.current;
         expect(vm).toBeInstanceOf(TestViewModel);
@@ -29,7 +30,7 @@ describe("useAutoDisposedViewModel", () => {
     });
 
     it("should dispose view-model on unmount", () => {
-        const vmCreator = () => new TestViewModel({ initial: 0 });
+        const vmCreator = (): TestViewModel => new TestViewModel({ initial: 0 });
         const { result, unmount } = renderHook(() => useCreateAutoDisposedViewModel(vmCreator));
         const vm = result.current;
         vm.increment();
@@ -38,7 +39,7 @@ describe("useAutoDisposedViewModel", () => {
     });
 
     it("should recreate view-model on react strict mode", async () => {
-        const vmCreator = () => new TestViewModel({ initial: 0 });
+        const vmCreator = (): TestViewModel => new TestViewModel({ initial: 0 });
         const output = renderHook(() => useCreateAutoDisposedViewModel(vmCreator), { reactStrictMode: true });
         const vm = output.result.current;
         expect(vm.isDisposed).toStrictEqual(false);

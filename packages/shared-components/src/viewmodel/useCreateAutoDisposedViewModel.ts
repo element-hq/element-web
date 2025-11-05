@@ -5,6 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
+
 import type { BaseViewModel } from "./BaseViewModel";
 
 type VmCreator<B extends BaseViewModel<unknown, unknown>> = () => B;
