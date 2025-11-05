@@ -202,6 +202,8 @@ export class ElementAppPage {
     /**
      * Opens the room info panel if it is not already open.
      *
+     * TODO: fix this so that it works correctly if, say, the member list was open instead of the room info panel.
+     *
      * @returns locator to the right panel
      */
     public async openRoomInfoPanel(): Promise<Locator> {
