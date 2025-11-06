@@ -269,4 +269,131 @@ describe("EmojiPicker", function () {
         await userEvent.keyboard("[ArrowDown]");
         expect(getEmoji()).toEqual("🙂");
     });
+
+    describe("Category keyboard selection", () => {
+        beforeEach(() => {
+            // mock offsetParent
+            Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+                get() {
+                    return this.parentNode;
+                },
+            });
+        });
+
+        it("check tabindex for the first category when no recent emojis", async () => {
+            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+            await waitFor(() => {
+                expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
+            });
+
+            // People category should have tabindex="0"
+            const peopleTab = container.querySelector('[title*="Smileys"]');
+            expect(peopleTab).toHaveAttribute("tabindex", "0");
+            expect(peopleTab).toHaveAttribute("aria-selected", "true");
+
+            // Other categories should have tabindex="-1"
+            const natureTab = container.querySelector('[title*="Animals"]');
+            expect(natureTab).toHaveAttribute("tabindex", "-1");
+        });
+
+        it("check tabindex for recent category when recent emojis exist", async () => {
+            // Mock recent emojis
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                if (settingName === "recent_emoji") return ["😀", "🎉"] as any;
+                return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
+            });
+
+            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+            await waitFor(() => {
+                expect(container.querySelector('[data-category-id="recent"]')).toBeInTheDocument();
+            });
+
+            // Recent category should have tabindex="0"
+            const recentTab = container.querySelector('[title*="Frequently"]');
+            expect(recentTab).toHaveAttribute("tabindex", "0");
+            expect(recentTab).toHaveAttribute("aria-selected", "true");
+
+            // People category should have tabindex="-1"
+            const peopleTab = container.querySelector('[title*="Smileys"]');
+            expect(peopleTab).toHaveAttribute("tabindex", "-1");
+        });
+
+        it("should update table position when clicking on a different category tab", async () => {
+            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+            await waitFor(() => {
+                expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
+            });
+
+            // Initially, people category should be visible
+            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            expect(peopleTab).toHaveAttribute("tabindex", "0");
+
+            // Click on nature category tab
+            const natureTab = container.querySelector('[title*="Animals"]') as HTMLButtonElement;
+            await userEvent.click(natureTab);
+
+            // Wait for scroll and visibility update
+            await waitFor(() => {
+                const natureCategory = container.querySelector('[data-category-id="nature"]');
+                expect(natureCategory).toBeInTheDocument();
+            });
+        });
+
+        it("should navigate between category tabs using arrow keys", async () => {
+            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+            await waitFor(() => {
+                expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
+            });
+
+            // Focus on the category header
+            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            peopleTab.focus();
+            expect(peopleTab).toHaveFocus();
+
+            // Press ArrowRight to move to next category
+            await userEvent.keyboard("[ArrowRight]");
+
+            // Should focus on next enabled category and trigger scroll
+            await waitFor(() => {
+                // Verify focus moved away from people tab
+                expect(peopleTab).not.toHaveFocus();
+
+                // Verify some other category tab now has focus
+                const focusedTab = document.activeElement;
+                expect(focusedTab?.getAttribute("role")).toBe("tab");
+                expect(focusedTab).not.toBe(peopleTab);
+            });
+        });
+
+        it("should navigate to first/last category using Home/End keys", async () => {
+            const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+            await waitFor(() => {
+                expect(container.querySelector('[data-category-id="people"]')).toBeInTheDocument();
+            });
+
+            // Focus on the category header
+            const peopleTab = container.querySelector('[title*="Smileys"]') as HTMLButtonElement;
+            peopleTab.focus();
+
+            // Press End to jump to last category
+            await userEvent.keyboard("[End]");
+
+            await waitFor(() => {
+                const flagsTab = container.querySelector('[title*="Flags"]') as HTMLButtonElement;
+                expect(flagsTab).toHaveFocus();
+            });
+
+            // Press Home to jump to first category
+            await userEvent.keyboard("[Home]");
+
+            await waitFor(() => {
+                expect(peopleTab).toHaveFocus();
+            });
+        });
+    });
 });
