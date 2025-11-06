@@ -22,6 +22,7 @@ export * from "./rich-list/RichList";
 export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./right-panel/WidgetContextMenu";
 
 // Utils
 export * from "./utils/i18n";

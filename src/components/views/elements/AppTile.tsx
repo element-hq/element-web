@@ -43,7 +43,7 @@ import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
-import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
+import { showContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
@@ -61,6 +61,7 @@ import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { parseUrl } from "../../../utils/UrlUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
 
 // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
 // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -771,6 +772,15 @@ export default class AppTile extends React.Component<IProps, IState> {
         let contextMenu;
         if (this.state.menuDisplayed) {
             contextMenu = (
+                // <WidgetContextMenu
+                //     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
+                //     app={this.props.app}
+                //     onFinished={this.closeContextMenu}
+                //     showUnpin={!this.props.userWidget}
+                //     userWidget={this.props.userWidget}
+                //     onEditClick={this.props.onEditClick}
+                //     onDeleteClick={this.props.onDeleteClick}
+                // />
                 <WidgetContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
                     app={this.props.app}
@@ -779,6 +789,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     userWidget={this.props.userWidget}
                     onEditClick={this.props.onEditClick}
                     onDeleteClick={this.props.onDeleteClick}
+                    menuDisplayed={this.state.menuDisplayed}
                 />
             );
         }
