@@ -1520,6 +1520,8 @@
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
+        "element_call_video_rooms_element_call_exclusive": "Element is configured to use Element Call exlusively, so this cannot be disabled.",
+        "element_call_video_rooms_missing_video_rooms": "You must enable video rooms to enable this feature.",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
@@ -3390,24 +3392,10 @@
         "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
     },
     "time": {
-        "about_day_ago": "about a day ago",
-        "about_hour_ago": "about an hour ago",
-        "about_minute_ago": "about a minute ago",
         "date_at_time": "%(date)s at %(time)s",
-        "few_seconds_ago": "a few seconds ago",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
-        "in_about_day": "about a day from now",
-        "in_about_hour": "about an hour from now",
-        "in_about_minute": "about a minute from now",
-        "in_few_seconds": "a few seconds from now",
-        "in_n_days": "%(num)s days from now",
-        "in_n_hours": "%(num)s hours from now",
-        "in_n_minutes": "%(num)s minutes from now",
         "left": "%(timeRemaining)s left",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss left",
-        "n_days_ago": "%(num)s days ago",
-        "n_hours_ago": "%(num)s hours ago",
-        "n_minutes_ago": "%(num)s minutes ago",
         "seconds_left": "%(seconds)ss left",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3462,11 +3450,9 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
-            "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
-            "error_processing_voice_message": "Error processing voice message",
-            "unnamed_audio": "Unnamed audio"
+            "error_processing_voice_message": "Error processing voice message"
         },
         "m.beacon_info": {
             "view_live_location": "View live location"
