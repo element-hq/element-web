@@ -574,25 +574,19 @@ describe("StopGapWidgetDriver", () => {
         it("fails to cancel scheduled delayed events", async () => {
             const errorMessage = "Cannot cancel this delayed event";
             client._unstable_cancelScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
-            await expect(driver.cancelScheduledDelayedEvent("id")).rejects.toThrow(
-                errorMessage,
-            );
+            await expect(driver.cancelScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
         });
 
         it("fails to restart scheduled delayed events", async () => {
             const errorMessage = "Cannot restart this delayed event";
             client._unstable_restartScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
-            await expect(driver.restartScheduledDelayedEvent("id")).rejects.toThrow(
-                errorMessage,
-            );
+            await expect(driver.restartScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
         });
 
         it("fails to send scheduled delayed events", async () => {
             const errorMessage = "Cannot send this delayed event";
             client._unstable_sendScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
-            await expect(driver.sendScheduledDelayedEvent("id")).rejects.toThrow(
-                errorMessage,
-            );
+            await expect(driver.sendScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
         });
     });
 
