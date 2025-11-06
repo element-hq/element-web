@@ -54,13 +54,17 @@ describe("<PollListItem />", () => {
 
     it("shows and hides tooltip on hover", async () => {
         const user = userEvent.setup();
-        const { getByRole } = getComponent();
+        const { getByRole, getByText } = getComponent();
         const listItem = getByRole("listitem", { name: "01/01/70 Question?" });
 
-        // Test that hover interactions work
+        // Verify tooltip content is present
+        const tooltip = getByText("View poll");
+        expect(tooltip).toBeInTheDocument();
+
+        // Test that hover and unhover interactions work
         await user.hover(listItem);
         await user.unhover(listItem);
 
-        expect(listItem).toBeInTheDocument();
+        expect(tooltip).toBeInTheDocument();
     });
 });
