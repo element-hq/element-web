@@ -15,11 +15,11 @@ import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
-import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import UIStore from "../../../stores/UIStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel";
 
 interface IProps {
     room: Room;
@@ -52,12 +52,17 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         const rightMargin = rect ? rect.right : 0;
         const bottomMargin = rect ? rect.bottom : 0;
         contextMenu = (
+            // <WidgetContextMenu
+            //     chevronFace={ChevronFace.None}
+            //     right={UIStore.instance.windowWidth - rightMargin - 12}
+            //     top={bottomMargin + 12}
+            //     onFinished={closeMenu}
+            //     app={app}
+            // />
             <WidgetContextMenu
-                chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rightMargin - 12}
-                top={bottomMargin + 12}
                 onFinished={closeMenu}
                 app={app}
+                menuDisplayed={menuDisplayed}
             />
         );
     }
