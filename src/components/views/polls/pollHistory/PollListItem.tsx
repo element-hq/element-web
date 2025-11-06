@@ -30,12 +30,15 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
     const formattedDate = formatLocalDateShort(event.getTs());
 
     return (
-        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItem" onClick={onClick}>
-            <div
-                className="mx_PollListItem_content"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-            >
+        <li
+            data-testid={`pollListItem-${event.getId()!}`}
+            className="mx_PollListItem"
+            onClick={onClick}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            aria-label={`${formattedDate} ${pollEvent.question.text}`}
+        >
+            <div className="mx_PollListItem_content">
                 <span>{formattedDate}</span>
                 <PollIcon className="mx_PollListItem_icon" />
                 <Tooltip

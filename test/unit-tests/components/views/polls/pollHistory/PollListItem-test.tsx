@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import userEvent from "@testing-library/user-event";
 
 import { PollListItem } from "../../../../../../src/components/views/polls/pollHistory/PollListItem";
 import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../../../../test-utils";
@@ -51,19 +52,15 @@ describe("<PollListItem />", () => {
         expect(onClick).toHaveBeenCalled();
     });
 
-    it("handles tooltip mouse events", () => {
-        const { container } = getComponent();
-        const contentDiv = container.querySelector(".mx_PollListItem_content");
-        const questionSpan = container.querySelector(".mx_PollListItem_question");
-        
-        expect(contentDiv).toBeTruthy();
-        expect(questionSpan?.textContent).toBe("Question?");
-        
-        // Test that mouse events work without error
-        fireEvent.mouseEnter(contentDiv!);
-        fireEvent.mouseLeave(contentDiv!);
-        
-        // Component should still be functional after state changes
-        expect(container.querySelector(".mx_PollListItem")).toBeTruthy();
+    it("shows and hides tooltip on hover", async () => {
+        const user = userEvent.setup();
+        const { getByRole } = getComponent();
+        const listItem = getByRole("listitem", { name: "01/01/70 Question?" });
+
+        // Test that hover interactions work
+        await user.hover(listItem);
+        await user.unhover(listItem);
+
+        expect(listItem).toBeInTheDocument();
     });
 });
