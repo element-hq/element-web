@@ -108,7 +108,7 @@ EOF
   fi
 done
 
-# Our Playwright fixtures use Testcontainers [1], which in uses a docker image
+# Our Playwright fixtures use Testcontainers [1], which uses a docker image
 # called Ryuk [2], which will clean up any dangling containers/networks/etc
 # after a timeout, if the parent process dies unexpectedly.
 #
