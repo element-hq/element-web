@@ -33,6 +33,101 @@ describe("EmojiPicker", function () {
         jest.restoreAllMocks();
     });
 
+    it("should initialize categories with correct state when no recent emojis", () => {
+        const ref = createRef<EmojiPicker>();
+        render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />);
+
+        //@ts-ignore private access
+        const categories = ref.current!.categories;
+
+        // Verify we have all expected categories
+        expect(categories).toHaveLength(9);
+        expect(categories.map((c) => c.id)).toEqual([
+            "recent",
+            "people",
+            "nature",
+            "foods",
+            "activity",
+            "places",
+            "objects",
+            "symbols",
+            "flags",
+        ]);
+
+        // Recent category should be disabled when empty
+        const recentCategory = categories.find((c) => c.id === "recent");
+        expect(recentCategory).toMatchObject({
+            id: "recent",
+            enabled: false,
+            visible: false,
+            firstVisible: false,
+        });
+
+        // People category should be the first visible when no recent emojis
+        const peopleCategory = categories.find((c) => c.id === "people");
+        expect(peopleCategory).toMatchObject({
+            id: "people",
+            enabled: true,
+            visible: true,
+            firstVisible: true,
+        });
+
+        // Other categories should start as not visible and not firstVisible
+        const natureCategory = categories.find((c) => c.id === "nature");
+        expect(natureCategory).toMatchObject({
+            id: "nature",
+            enabled: true,
+            visible: false,
+            firstVisible: false,
+        });
+
+        const flagsCategory = categories.find((c) => c.id === "flags");
+        expect(flagsCategory).toMatchObject({
+            id: "flags",
+            enabled: true,
+            visible: false,
+            firstVisible: false,
+        });
+
+        // All categories should have refs and names
+        categories.forEach((cat) => {
+            expect(cat.ref).toBeTruthy();
+            expect(cat.name).toBeTruthy();
+        });
+    });
+
+    it("should initialize categories with recent as firstVisible when recent emojis exist", () => {
+        // Mock recent emojis
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+            if (settingName === "recent_emoji") return ["😀", "🎉", "❤️"] as any;
+            return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
+        });
+
+        const ref = createRef<EmojiPicker>();
+        render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />);
+
+        //@ts-ignore private access
+        const categories = ref.current!.categories;
+
+        // Recent category should be enabled and firstVisible
+        const recentCategory = categories.find((c) => c.id === "recent");
+        expect(recentCategory).toMatchObject({
+            id: "recent",
+            enabled: true,
+            visible: true,
+            firstVisible: true,
+        });
+
+        // People category should be visible but NOT firstVisible when recent exists
+        const peopleCategory = categories.find((c) => c.id === "people");
+        expect(peopleCategory).toMatchObject({
+            id: "people",
+            enabled: true,
+            visible: true,
+            firstVisible: false,
+        });
+    });
+
     it("should not mangle default order after filtering", async () => {
         const ref = createRef<EmojiPicker>();
         const { container } = render(

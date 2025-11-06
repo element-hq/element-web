@@ -80,80 +80,34 @@ class EmojiPicker extends React.Component<IProps, IState> {
         };
 
         const hasRecentlyUsed = this.recentlyUsed.length > 0;
-        this.categories = [
-            {
-                id: "recent",
-                name: _t("emoji|category_frequently_used"),
-                enabled: hasRecentlyUsed,
-                visible: hasRecentlyUsed,
-                firstVisible: hasRecentlyUsed,
-                ref: React.createRef(),
-            },
-            {
-                id: "people",
-                name: _t("emoji|category_smileys_people"),
-                enabled: true,
-                visible: true,
-                firstVisible: !hasRecentlyUsed,
-                ref: React.createRef(),
-            },
-            {
-                id: "nature",
-                name: _t("emoji|category_animals_nature"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "foods",
-                name: _t("emoji|category_food_drink"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "activity",
-                name: _t("emoji|category_activities"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "places",
-                name: _t("emoji|category_travel_places"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "objects",
-                name: _t("emoji|category_objects"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "symbols",
-                name: _t("emoji|category_symbols"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "flags",
-                name: _t("emoji|category_flags"),
-                enabled: true,
-                visible: false,
-                firstVisible: false,
-                ref: React.createRef(),
-            },
+
+        const categoryConfig: Array<{
+            id: CategoryKey;
+            name: string;
+        }> = [
+            { id: "recent", name: _t("emoji|category_frequently_used") },
+            { id: "people", name: _t("emoji|category_smileys_people") },
+            { id: "nature", name: _t("emoji|category_animals_nature") },
+            { id: "foods", name: _t("emoji|category_food_drink") },
+            { id: "activity", name: _t("emoji|category_activities") },
+            { id: "places", name: _t("emoji|category_travel_places") },
+            { id: "objects", name: _t("emoji|category_objects") },
+            { id: "symbols", name: _t("emoji|category_symbols") },
+            { id: "flags", name: _t("emoji|category_flags") },
         ];
+
+        this.categories = categoryConfig.map((config) => {
+            const isRecent = config.id === "recent";
+            const isPeople = config.id === "people";
+            return {
+                id: config.id,
+                name: config.name,
+                enabled: isRecent ? hasRecentlyUsed : true,
+                visible: isRecent ? hasRecentlyUsed : isPeople,
+                firstVisible: isRecent ? hasRecentlyUsed : isPeople && !hasRecentlyUsed,
+                ref: React.createRef(),
+            };
+        });
     }
 
     private onScroll = (): void => {
