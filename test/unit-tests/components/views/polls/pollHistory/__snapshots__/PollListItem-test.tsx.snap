@@ -3,6 +3,7 @@
 exports[`<PollListItem /> renders a poll 1`] = `
 <div>
   <li
+    aria-label="01/01/70 Question?"
     class="mx_PollListItem"
     data-testid="pollListItem-$mypoll"
   >
