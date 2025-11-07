@@ -97,14 +97,23 @@ class EmojiPicker extends React.Component<IProps, IState> {
         ];
 
         this.categories = categoryConfig.map((config) => {
-            const isRecent = config.id === "recent";
-            const isPeople = config.id === "people";
+            let isEnabled = true;
+            let isVisible = false;
+            let firstVisible = false;
+            if (config.id === "recent") {
+                isEnabled = hasRecentlyUsed;
+                isVisible = hasRecentlyUsed;
+                firstVisible = hasRecentlyUsed;
+            } else if (config.id === "people") {
+                isVisible = true;
+                firstVisible = !hasRecentlyUsed;
+            }
             return {
                 id: config.id,
                 name: config.name,
-                enabled: isRecent ? hasRecentlyUsed : true,
-                visible: isRecent ? hasRecentlyUsed : isPeople,
-                firstVisible: isRecent ? hasRecentlyUsed : isPeople && !hasRecentlyUsed,
+                enabled: isEnabled,
+                visible: isVisible,
+                firstVisible: firstVisible,
                 ref: React.createRef(),
             };
         });
