@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import { type ComponentType } from "react";
+import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 
 import type React from "react";
 import Modal from "../Modal";
@@ -26,7 +27,6 @@ import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
 import { PosthogAnalytics } from "../PosthogAnalytics";
-import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 
 const TOAST_KEY = "setupencryption";
 
