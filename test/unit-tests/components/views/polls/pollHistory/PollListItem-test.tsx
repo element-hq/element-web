@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "jest-matrix-react";
+import { fireEvent, render, waitFor } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
@@ -53,18 +53,18 @@ describe("<PollListItem />", () => {
     });
 
     it("shows and hides tooltip on hover", async () => {
-        const user = userEvent.setup();
         const { getByRole, getByText } = getComponent();
         const listItem = getByRole("listitem", { name: "01/01/70 Question?" });
 
-        // Verify tooltip content is present
-        const tooltip = getByText("View poll");
-        expect(tooltip).toBeInTheDocument();
+        await userEvent.hover(listItem);
 
-        // Test that hover and unhover interactions work
-        await user.hover(listItem);
-        await user.unhover(listItem);
-
-        expect(tooltip).toBeInTheDocument();
+        // Wait for the tooltip to open
+        const questionSpan = getByText("Question?");
+        const tooltip = await waitFor(() => {
+            const tooltip = document.getElementById(questionSpan.getAttribute("aria-labelledby")!);
+            expect(tooltip).toBeVisible();
+            return tooltip;
+        });
+        expect(tooltip).toHaveTextContent("View poll");
     });
 });
