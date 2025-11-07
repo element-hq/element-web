@@ -22,7 +22,6 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkEvent, stubClient, upsertRoomStateEvents } from "../../../test-utils/test-utils";
 import { mkThread } from "../../../test-utils/threads";
-import { flushPromises } from "../../../test-utils";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { type Settings } from "../../../../src/settings/Settings";
