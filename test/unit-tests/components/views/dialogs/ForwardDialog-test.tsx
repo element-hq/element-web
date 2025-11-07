@@ -255,7 +255,7 @@ describe("ForwardDialog", () => {
             const sendButton = container.querySelector(".mx_ForwardList_sendButton");
             fireEvent.click(sendButton!);
         });
-        const makeMessage = (body: string, mentions: Object, formattedBody?: string) => {
+        const makeMessage = (body: string, mentions: object, formattedBody?: string) => {
             return mkEvent({
                 type: "m.room.message",
                 room: sourceRoom,
@@ -281,6 +281,18 @@ describe("ForwardDialog", () => {
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
                 ...message.getContent(),
                 "m.mentions": {},
+            });
+        });
+        
+        // TODO: mock room membership
+        it("recalculates mention pills", async () => {
+            const message = makeMessage("Hi Alice", {user_ids: [aliceId]}, `Hi <a href=\"https://matrix.to/#/${aliceId}\">Alice</a>`);
+            const { container } = mountForwardDialog(message);
+            sendClick(container);
+            // Expected content should have mentions empty.
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
+                ...message.getContent(),
+                "m.mentions": {user_ids: [aliceId]},
             });
         });
         
