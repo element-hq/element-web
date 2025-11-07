@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
+import React, { type MouseEventHandler, type ReactElement } from "react";
 import classNames from "classnames";
 import { Alert, Button } from "@vector-im/compound-web";
 
@@ -17,14 +17,16 @@ interface RoomStatusBarHistoryVisibleProps {
     /**
      * Called when the user presses the "dismiss" button.
      */
-    onClose: () => void;
+    onClose: MouseEventHandler<HTMLButtonElement>;
 }
 
 /**
- * RoomStatusBarHistoryVisible component.
+ * A component to alert that history is shared to new members of the room.
  *
- * @param props - Props for the RoomStatusBarHistoryVisible component. See {@link RoomStatusBarHistoryVisibleProps}.
- * @returns A ReactElement representing the status bar.
+ * @example
+ * ```tsx
+ *   <RoomStatusBarHistoryVisible onClose={onCloseHandler} />
+ * ```
  */
 export function RoomStatusBarHistoryVisible(props: RoomStatusBarHistoryVisibleProps): ReactElement {
     return (
@@ -38,18 +40,13 @@ export function RoomStatusBarHistoryVisible(props: RoomStatusBarHistoryVisiblePr
                         as="a"
                         href="https://example.com"
                         target="_blank"
-                        className={classNames(styles.historyVisibilityButton)}
+                        className={styles.historyVisibilityButton}
                         kind="tertiary"
                         size="sm"
                     >
                         {_t("action|learn_more")}
                     </Button>
-                    <Button
-                        className={classNames(styles.historyVisibilityButton)}
-                        kind="primary"
-                        size="sm"
-                        onClick={props.onClose}
-                    >
+                    <Button className={styles.historyVisibilityButton} kind="primary" size="sm" onClick={props.onClose}>
                         {_t("action|dismiss")}
                     </Button>
                 </>

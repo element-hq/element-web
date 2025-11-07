@@ -6,6 +6,7 @@
  */
 
 import { type Meta, type StoryObj } from "@storybook/react-vite/*";
+import { fn } from "storybook/test";
 
 import { RoomStatusBarHistoryVisible } from "./RoomStatusBarHistoryVisible";
 
@@ -14,7 +15,13 @@ const meta = {
     component: RoomStatusBarHistoryVisible,
     tags: ["autodocs"],
     args: {
-        onClose: () => {},
+        onClose: fn(),
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/96hBf15is3HCxTt3X7nnLW/ER-144--Encrypted-Room-History?node-id=1-62053&t=zFsl3I946nBW8qq0-4",
+        },
     },
 } satisfies Meta<typeof RoomStatusBarHistoryVisible>;
 
