@@ -5,11 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { mocked } from "jest-mock";
-
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import { LISTS_UPDATE_EVENT, RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
@@ -29,6 +28,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
 import { Action } from "../../../../src/dispatcher/actions";
+import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -218,7 +218,6 @@ describe("RoomListStoreV3", () => {
             dispatcher.dispatch(
                 {
                     action: "MatrixActions.Room.myMembership",
-                    oldMembership: KnownMembership.Invite,
                     membership: KnownMembership.Join,
                     room: newRoom,
                 },
@@ -253,7 +252,6 @@ describe("RoomListStoreV3", () => {
             dispatcher.dispatch(
                 {
                     action: "MatrixActions.Room.myMembership",
-                    oldMembership: KnownMembership.Invite,
                     membership: KnownMembership.Join,
                     room: newRoom,
                 },
@@ -758,6 +756,35 @@ describe("RoomListStoreV3", () => {
                 ]).rooms;
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
+            });
+
+            it("should update filters on membership change", async () => {
+                await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, true);
+                const { store, client, dispatcher } = await getRoomListStore();
+                const room = new Room("!fooknock:matrix.org", client, client.getSafeUserId(), {});
+
+                room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Knock);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.myMembership",
+                        membership: KnownMembership.Knock,
+                        room,
+                    },
+                    true,
+                );
+                expect(store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms).not.toContain(room);
+
+                room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.myMembership",
+                        oldMembership: KnownMembership.Knock,
+                        membership: KnownMembership.Invite,
+                        room,
+                    },
+                    true,
+                );
+                expect(store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms).toContain(room);
             });
         });
     });

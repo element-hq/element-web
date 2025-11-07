@@ -260,7 +260,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     }
                 }
 
-                this.addRoomAndEmit(payload.room, !oldMembership || oldMembership === EffectiveMembership.Leave);
+                this.addRoomAndEmit(payload.room, oldMembership === EffectiveMembership.Leave);
                 break;
             }
 
