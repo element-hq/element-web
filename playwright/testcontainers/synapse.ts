@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { SynapseContainer as BaseSynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 
-const TAG = "develop@sha256:b533a18575d8bc501c2be655da28eadd49df5614a3e5f403688420c02cb227d5";
+const TAG = "develop@sha256:d509c329e188149a3991222c69be52351065678e5b3eea07481526aa616352ee";
 
 /**
  * SynapseContainer which freezes the docker digest to stabilise tests,
