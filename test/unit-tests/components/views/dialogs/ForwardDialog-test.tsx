@@ -248,36 +248,42 @@ describe("ForwardDialog", () => {
         expect(firstButton.getAttribute("aria-disabled")).toBeTruthy();
         expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
     });
-
-    it("strips mentions from forwarded messages", async () => {
-        const messageWithMention = mkEvent({
-            type: "m.room.message",
-            room: sourceRoom,
-            user: "@bob:example.org",
-            content: {
-                "msgtype": "m.text",
-                "body": "Hi @alice:example.org",
-                "m.mentions": {
-                    user_ids: ["@alice:example.org"],
-                },
-            },
-            event: true,
-        });
-
-        const { container } = mountForwardDialog(messageWithMention);
+    
+    describe("Mention recalculation", () => {
         const roomId = "a";
-
-        // Click the send button.
-        act(() => {
+        const sendClick = (container: HTMLElement): void => act(() => {
             const sendButton = container.querySelector(".mx_ForwardList_sendButton");
             fireEvent.click(sendButton!);
         });
-
-        // Expected content should have mentions empty.
-        expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, messageWithMention.getType(), {
-            ...messageWithMention.getContent(),
-            "m.mentions": {},
+        const makeMessage = (body: string, mentions: Object, formattedBody?: string) => {
+            return mkEvent({
+                type: "m.room.message",
+                room: sourceRoom,
+                user: "@bob:example.org",
+                content: {
+                    "msgtype": "m.text",
+                    "body": body,
+                    "m.mentions": mentions,
+                    ...(formattedBody && {
+                        "format": "org.matrix.custom.html",
+                        "formatted_body": formattedBody,
+                    }),
+                },
+                event: true,
+            });
+        };
+        
+        it("strips extra mentions", async () => {
+            const message = makeMessage("Hi Alice", {user_ids: [aliceId]});
+            const { container } = mountForwardDialog(message);
+            sendClick(container);
+            // Expected content should have mentions empty.
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
+                ...message.getContent(),
+                "m.mentions": {},
+            });
         });
+        
     });
 
     describe("Location events", () => {
