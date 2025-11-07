@@ -1,17 +1,15 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2022 The Matrix.org Foundation C.I.C.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import React, { type MouseEventHandler, type ReactElement } from "react";
-import classNames from "classnames";
 import { Alert, Button } from "@vector-im/compound-web";
 
 import styles from "./RoomStatusBarHistoryVisible.module.css";
-import { _t } from "../utils/i18n";
+import { _t } from "../../utils/i18n";
 
 interface RoomStatusBarHistoryVisibleProps {
     /**

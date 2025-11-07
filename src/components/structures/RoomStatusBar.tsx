@@ -22,7 +22,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { RoomStatusBarHistoryVisible } from "../../../packages/shared-components/src/structures/RoomStatusBarHistoryVisible";
+import { RoomStatusBarHistoryVisible } from "../../../packages/shared-components/src/room/RoomStatusBarHistoryVisible";
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
 import dis from "../../dispatcher/dispatcher";
