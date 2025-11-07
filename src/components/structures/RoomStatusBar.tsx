@@ -136,6 +136,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         if (client) {
             client.removeListener(ClientEvent.Sync, this.onSyncStateChange);
             client.removeListener(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
+            client.removeListener(RoomStateEvent.Update, this.onRoomStateEventUpdate);
         }
     }
 
@@ -198,9 +199,11 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     private getSize(): number {
         if (this.shouldShowConnectionError()) {
             return STATUS_BAR_EXPANDED;
-        } else if (this.state.unsentMessages.length > 0 || this.state.isResending) {
-            return STATUS_BAR_EXPANDED_LARGE;
-        } else if (this.shouldShowHistoryVisibilityContent()) {
+        } else if (
+            this.state.unsentMessages.length > 0 ||
+            this.state.isResending ||
+            this.shouldShowHistoryVisibilityContent()
+        ) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -291,6 +294,12 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         );
     }
 
+    /**
+     * Gets the latest acknowledgement flag from the setting store.
+     *
+     * If the room history visibility was changed to `HistoryVisibility.Joined` since this method
+     * was last called, the flag is cleared in both the component state and settings.
+     */
     private getUpdatedAcknowledgedHistoryVisibility(): boolean {
         let acknowledgedHistoryVisibility = SettingsStore.getValue(
             "acknowledgedHistoryVisibility",
@@ -310,6 +319,14 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         return acknowledgedHistoryVisibility;
     }
 
+    /**
+     * Returns true if the history visibility acknowledgement banner should be shown.
+     *
+     * Shown when:
+     * - The room is encrypted
+     * - The room's history visibility is not set to `HistoryVisibility.Joined`
+     * - The user has not already acknowledged the alert
+     */
     private shouldShowHistoryVisibilityContent(): boolean {
         return (
             this.state.roomHasEncryptionStateEvent &&
@@ -318,11 +335,17 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         );
     }
 
+    /**
+     * Get the content for the history visibility acknowledgement banner.
+     *
+     * When the user closes the banner, the acknowledgement is saved in SettingsStore
+     * for this room, and the banner will not be shown again unless the history visibility changes.
+     */
     private getHistoryVisibilityContent(): JSX.Element {
         return (
             <RoomStatusBarHistoryVisible
                 onClose={async () => {
-                    await SettingsStore.setValue(
+                    void SettingsStore.setValue(
                         "acknowledgedHistoryVisibility",
                         this.props.room.roomId,
                         SettingLevel.ROOM_ACCOUNT,

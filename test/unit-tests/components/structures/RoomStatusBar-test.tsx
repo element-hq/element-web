@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import {
     type MatrixClient,
     PendingEventOrdering,
@@ -250,13 +250,11 @@ describe("RoomStatusBar", () => {
             expect(container).toMatchSnapshot();
 
             // assert dismiss button exists, and press it
-            const dismissButton = container.querySelector<HTMLDivElement>('button[role="button"]');
+            const dismissButton = screen.getByRole<HTMLButtonElement>("button", { name: "Dismiss" });
             expect(dismissButton).not.toBeNull();
             fireEvent.click(dismissButton!);
 
-            await flushPromises();
-
-            expect(container).toBeEmptyDOMElement();
+            await waitFor(() => expect(container).toBeEmptyDOMElement());
         });
     });
 });
