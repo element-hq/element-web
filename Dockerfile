@@ -15,8 +15,8 @@ RUN /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=200000 install
 RUN /src/scripts/docker-package.sh
 
-# Copy the config now so that we don't create another layer in the app image
-RUN cp /src/config.sample.json /src/webapp/config.json
+# Copy the Clap config now so that we don't create another layer in the app image
+RUN cp /src/config.clap.json /src/webapp/config.json
 
 # App
 FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:8e23ab31c214ee1d7f832d63b2ee768d5cbc270a94a2cba0752fed93ad83e345
@@ -37,8 +37,8 @@ COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html
 
-# Run as nginx user by default
-USER nginx
+# Run as root user to bind to port 80
+USER root
 
 # HTTP listen port
 ENV ELEMENT_WEB_PORT=80
