@@ -100,7 +100,6 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="New conversation"
           aria-labelledby="_r_1d_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
@@ -116,6 +115,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -237,7 +237,6 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
-          aria-label="New conversation"
           aria-labelledby="_r_25_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
@@ -250,6 +249,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -374,7 +374,6 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="New conversation"
           aria-labelledby="_r_j_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
@@ -390,6 +389,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -514,7 +514,6 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="New conversation"
           aria-labelledby="_r_51_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
@@ -530,6 +529,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -622,7 +622,6 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="New conversation"
           aria-labelledby="_r_5p_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
@@ -638,6 +637,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
