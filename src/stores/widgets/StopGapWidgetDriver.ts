@@ -121,6 +121,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4354SendStickyEvent);
 
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomName).raw,
@@ -345,6 +346,31 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     /**
+     * @experimental Part of MSC4354
+     * @see {@link WidgetDriver#sendStickyEvent}
+     */
+    public async sendStickyEvent(
+        stickyDurationMs: number,
+        eventType: string,
+        content: unknown,
+        targetRoomId?: string | null,
+    ): Promise<ISendEventDetails> {
+        const client = MatrixClientPeg.get();
+        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
+
+        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+
+        const r = await client._unstable_sendStickyEvent(
+            roomId,
+            stickyDurationMs,
+            null,
+            eventType as keyof TimelineEvents,
+            content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
+        );
+        return { roomId, eventId: r.event_id };
+    }
+
+    /**
      * @experimental Part of MSC4140 & MSC4157
      * @see {@link WidgetDriver#sendDelayedEvent}
      */
@@ -419,6 +445,48 @@ export class StopGapWidgetDriver extends WidgetDriver {
             roomId,
             delayId: r.delay_id,
         };
+    }
+
+    /**
+     * @experimental Part of MSC4354
+     * @see {@link WidgetDriver#sendStickyEvent}
+     */
+    public async sendDelayedStickyEvent(
+        delay: number | null,
+        parentDelayId: string | null,
+        stickyDurationMs: number,
+        eventType: string,
+        content: unknown,
+        targetRoomId?: string | null,
+    ): Promise<ISendDelayedEventDetails> {
+        const client = MatrixClientPeg.get();
+        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
+
+        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+
+        let delayOpts;
+        if (delay !== null) {
+            delayOpts = {
+                delay,
+                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
+            };
+        } else if (parentDelayId !== null) {
+            delayOpts = {
+                parent_delay_id: parentDelayId,
+            };
+        } else {
+            throw new Error("Must provide at least one of delay or parentDelayId");
+        }
+
+        const r = await client._unstable_sendStickyDelayedEvent(
+            roomId,
+            stickyDurationMs,
+            delayOpts,
+            null,
+            eventType as keyof TimelineEvents,
+            content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
+        );
+        return { roomId, delayId: r.delay_id };
     }
 
     /**
