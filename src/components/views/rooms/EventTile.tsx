@@ -40,7 +40,6 @@ import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
-import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -253,6 +252,7 @@ interface IState {
     reactions?: Relations | null | undefined;
 
     hover: boolean;
+    focusWithin: boolean;
 
     // Position of the context menu
     contextMenu?: {
@@ -299,6 +299,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
+    private readonly id = uniqueId();
 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -316,6 +317,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             reactions: this.getReactions(),
 
             hover: false,
+            focusWithin: false,
 
             thread,
         };
@@ -359,6 +361,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // We only show the 'sent' receipt on the last successful event.
         if (!this.props.lastSuccessful) return false;
+
+        // Don't show this in the thread view as it conflicts with the thread counter.
+        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
 
         // Check to make sure the sending state is appropriate. A null/undefined send status means
         // that the message is 'sent', so we're just double checking that it's explicitly not sent.
@@ -919,7 +924,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
-        const id = uniqueId();
 
         const {
             hasRenderer,
@@ -1119,6 +1123,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             (this.props.alwaysShowTimestamps ||
                 this.props.last ||
                 this.state.hover ||
+                this.state.focusWithin ||
                 this.state.actionBarFocused ||
                 Boolean(this.state.contextMenu));
 
@@ -1132,20 +1137,32 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             ts = this.props.mxEvent.getTs();
         }
 
-        const messageTimestamp = (
+        const messageTimestampProps = {
+            showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
+            showTwelveHour: this.props.isTwelveHour,
+            ts,
+            receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
+        };
+        const messageTimestamp = <MessageTimestamp {...messageTimestampProps} />;
+        const linkedMessageTimestamp = (
             <MessageTimestamp
-                showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
-                showTwelveHour={this.props.isTwelveHour}
-                ts={ts}
-                receivedTs={getLateEventInfo(this.props.mxEvent)?.received_ts}
+                {...messageTimestampProps}
+                href={permalink}
+                onClick={this.onPermalinkClicked}
+                onContextMenu={this.onTimestampContextMenu}
             />
         );
 
-        const timestamp = showTimestamp && ts ? messageTimestamp : null;
+        const useIRCLayout = this.props.layout === Layout.IRC;
+        // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
+        const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
+        const timestamp = showTimestamp && ts ? messageTimestamp : dummyTimestamp;
+        const linkedTimestamp =
+            timestamp !== dummyTimestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : dummyTimestamp;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
-            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={id} tabIndex={0} />;
+            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
         }
 
         let reactionsRow: JSX.Element | undefined;
@@ -1162,21 +1179,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // If we have reactions or a pinned message badge, we need a footer
         const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
 
-        const linkedTimestamp = !this.props.hideTimestamp ? (
-            <a
-                href={permalink}
-                onClick={this.onPermalinkClicked}
-                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-                onContextMenu={this.onTimestampContextMenu}
-            >
-                {timestamp}
-            </a>
-        ) : null;
-
-        const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
-        const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : undefined;
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
@@ -1207,7 +1211,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
                     layout={this.props.layout}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover || this.state.focusWithin}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}
@@ -1234,13 +1238,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-event-id": this.props.mxEvent.getId(),
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
                             {avatar}
                             {sender}
                         </div>,
-                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div
+                            id={this.id}
+                            className={lineClasses}
+                            key="mx_EventTile_line"
+                            onContextMenu={this.onContextMenu}
+                        >
                             {this.renderContextMenu()}
                             {replyChain}
                             {renderTile(TimelineRenderingType.Thread, {
@@ -1257,9 +1268,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 showHiddenEvents: this.context.showHiddenEvents,
                             })}
                             {actionBar}
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                {timestamp}
-                            </a>
+                            {linkedTimestamp}
                             {msgOption}
                         </div>,
                         hasFooter && (
@@ -1291,6 +1300,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1422,13 +1433,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
+                        "onFocus": () => this.setState({ focusWithin: true }),
+                        "onBlur": () => this.setState({ focusWithin: false }),
                     },
                     <>
                         {ircTimestamp}
                         {sender}
                         {ircPadlock}
                         {avatar}
-                        <div id={id} className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        <div
+                            id={this.id}
+                            className={lineClasses}
+                            key="mx_EventTile_line"
+                            onContextMenu={this.onContextMenu}
+                        >
                             {this.renderContextMenu()}
                             {groupTimestamp}
                             {groupPadlock}
@@ -1439,7 +1457,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 // overrides
                                 ref: this.tile,
                                 isSeeingThroughMessageHiddenForModeration,
-                                timestamp: bubbleTimestamp,
 
                                 // appease TS
                                 highlights: this.props.highlights,

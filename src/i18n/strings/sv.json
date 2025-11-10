@@ -1451,7 +1451,6 @@
         "upload_file": "Ladda upp en fil"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Tillåt läge med endast skärmdelning",
         "ask_to_join": "Aktivera fråga om att gå med",
         "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
         "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
@@ -1893,7 +1892,6 @@
         "thread_list": {
             "context_menu_label": "Trådalternativ"
         },
-        "title": "Högerpanel",
         "video_room_chat": {
             "title": "Chatt"
         }

@@ -30,7 +30,7 @@ import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import ModuleApi from "../modules/Api";
+import { ModuleApi } from "../modules/Api";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -70,7 +70,9 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
 
     if (
         !isCancellable ||
-        mxEvent.status === EventStatus.CANCELLED ||
+        // Editing local echos is not supported(results in send a message that references the local ID).
+        // We need to ensure the event is not local, and therefore has no send status.
+        mxEvent.status !== null ||
         mxEvent.isRedacted() ||
         mxEvent.isRelation(RelationType.Replace) ||
         mxEvent.getSender() !== matrixClient.getUserId()
@@ -78,7 +80,7 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
         return false;
     }
 
-    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)?.allowEditingEvent === false) {
+    if (ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)?.allowEditingEvent === false) {
         return false;
     }
 

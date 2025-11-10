@@ -140,6 +140,7 @@ import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/ShareP
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
+import { ModuleApi } from "../../modules/Api.ts";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -175,9 +176,11 @@ interface IProps {
 interface IState {
     // the master view we are showing.
     view: Views;
-    // What the LoggedInView would be showing if visible
+    // What the LoggedInView would be showing if visible.
+    // A member of the enum for standard pages or a string for those provided by
+    // a module.
     // eslint-disable-next-line camelcase
-    page_type?: PageType;
+    page_type?: PageType | string;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
     // what ID an alias points at.
@@ -1921,8 +1924,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 userId: userId,
                 subAction: params?.action,
             });
-        } else {
-            logger.info(`Ignoring showScreen for '${screen}'`);
+        } else if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
+            this.setState({ page_type: screen });
         }
     }
 

@@ -39,7 +39,12 @@ test.describe("Threads", () => {
 
         const ThreadViewGroupSpacingStart = "56px"; // --ThreadView_group_spacing-start
         // Exclude timestamp and read marker from snapshots
-        const mask = [page.locator(".mx_MessageTimestamp"), page.locator(".mx_MessagePanel_myReadMarker")];
+        const mask = [page.locator(".mx_MessagePanel_myReadMarker")];
+        const css = `
+            .mx_MessageTimestamp {
+                visibility: hidden;
+            }
+        `;
 
         const roomViewLocator = page.locator(".mx_RoomView_body");
         // User sends message
@@ -74,13 +79,15 @@ test.describe("Threads", () => {
 
         // Take snapshots in group layout and bubble layout (IRC layout is not available on ThreadView)
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("Initial_ThreadView_on_group_layout.png", {
-            mask: mask,
+            mask,
+            css,
         });
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
         await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']")).toHaveCount(2);
 
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("Initial_ThreadView_on_bubble_layout.png", {
-            mask: mask,
+            mask,
+            css,
         });
 
         // Set the group layout
@@ -154,7 +161,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_reaction_and_a_hidden_event_on_group_layout.png",
             {
-                mask: mask,
+                mask,
+                css,
             },
         );
 
@@ -178,7 +186,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_reaction_and_a_hidden_event_on_bubble_layout.png",
             {
-                mask: mask,
+                mask,
+                css,
             },
         );
 
@@ -214,7 +223,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_redacted_messages_on_group_layout.png",
             {
-                mask: mask,
+                mask,
+                css,
             },
         );
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
@@ -222,7 +232,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
             "ThreadView_with_redacted_messages_on_bubble_layout.png",
             {
-                mask: mask,
+                mask,
+                css,
             },
         );
 
@@ -445,7 +456,7 @@ test.describe("Threads", () => {
         await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeAttached();
     });
 
-    test("navigate through right panel", async ({ page, app, user }) => {
+    test("navigate through right panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
         // Create room
         const roomId = await app.client.createRoom({});
         await page.goto("/#/room/" + roomId);
@@ -497,6 +508,9 @@ test.describe("Threads", () => {
         await expect(
             threadPanel.locator(".mx_EventTile_last").getByText("Hello again Mr. User in a thread"),
         ).toBeVisible();
+        await expect(threadPanel).toMatchScreenshot("thread-panel.png", {
+            css: ".mx_MessageTimestamp { visibility: hidden !important; }",
+        });
 
         const rightPanel = page.locator(".mx_RightPanel");
         // Check that the threads are listed

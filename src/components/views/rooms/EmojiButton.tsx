@@ -34,7 +34,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
         };
 
         contextMenu = (
-            <ContextMenu {...position} onFinished={onFinished} managed={false}>
+            <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
                 <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
             </ContextMenu>
         );

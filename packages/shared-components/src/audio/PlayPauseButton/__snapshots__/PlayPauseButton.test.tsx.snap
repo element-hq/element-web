@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`PlayPauseButton renders the button in default state 1`] = `
 <div>
   <button
     aria-disabled="false"
     aria-label="Play"
-    aria-labelledby="«r0»"
+    aria-labelledby="_r_0_"
     class="_icon-button_1pz9o_8 button"
     data-kind="primary"
     role="button"
@@ -37,7 +37,7 @@ exports[`PlayPauseButton renders the button in playing state 1`] = `
   <button
     aria-disabled="false"
     aria-label="Pause"
-    aria-labelledby="«r6»"
+    aria-labelledby="_r_6_"
     class="_icon-button_1pz9o_8 button"
     data-kind="primary"
     role="button"

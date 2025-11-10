@@ -9,7 +9,7 @@ import React from "react";
 import { type Meta, type StoryFn } from "@storybook/react-vite";
 
 import { TextualEventView as TextualEventComponent } from "./TextualEventView";
-import { MockViewModel } from "../../MockViewModel";
+import { MockViewModel } from "../../viewmodel/MockViewModel";
 
 export default {
     title: "Event/TextualEvent",

@@ -10,6 +10,7 @@ import { createContext } from "react";
 
 import { type IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
+import { type RoomViewStore } from "../stores/RoomViewStore";
 
 export enum TimelineRenderingType {
     Room = "Room",
@@ -29,11 +30,12 @@ export enum MainSplitContentType {
     Call,
 }
 
-const RoomContext = createContext<
-    IRoomState & {
-        threadId?: string;
-    }
->({
+export interface RoomContextType extends IRoomState {
+    threadId?: string;
+    roomViewStore: RoomViewStore;
+}
+
+const RoomContext = createContext<RoomContextType>({
     roomLoading: true,
     peekLoading: false,
     shouldPeek: true,
@@ -75,6 +77,9 @@ const RoomContext = createContext<
     promptAskToJoin: false,
     viewRoomOpts: { buttons: [] },
     isRoomEncrypted: null,
+    // roomViewStore should always be present as it is passed to RoomView constructor.
+    // In time when we migrate the RoomView to MVVM it will cease to exist(become a ViewModel).
+    roomViewStore: undefined!,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;

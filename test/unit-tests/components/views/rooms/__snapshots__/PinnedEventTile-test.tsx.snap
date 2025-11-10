@@ -25,13 +25,13 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          aria-labelledby="«r1»"
+          aria-labelledby="_r_1_"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>
         <button
-          aria-describedby="«r0»"
+          aria-describedby="_r_0_"
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
@@ -39,7 +39,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r6»"
+          id="radix-_r_6_"
           role="button"
           style="--cpd-icon-button-size: 24px;"
           tabindex="0"
@@ -65,7 +65,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
       </div>
       <div
         class="mx_MTextBody mx_EventTile_content"
-        id="«r0»"
+        id="_r_0_"
       >
         <div
           class="mx_EventTile_body translate"
@@ -104,13 +104,13 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          aria-labelledby="«ra»"
+          aria-labelledby="_r_a_"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>
         <button
-          aria-describedby="«r9»"
+          aria-describedby="_r_9_"
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
@@ -118,7 +118,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rf»"
+          id="radix-_r_f_"
           role="button"
           style="--cpd-icon-button-size: 24px;"
           tabindex="0"
@@ -144,7 +144,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
       </div>
       <div
         class="mx_MTextBody mx_EventTile_content"
-        id="«r9»"
+        id="_r_9_"
       >
         <div
           class="mx_EventTile_body translate"
@@ -187,7 +187,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
 exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-«r14»"
+  aria-labelledby="radix-_r_14_"
   aria-orientation="vertical"
   class="_menu_1glhz_8"
   data-align="start"
@@ -196,7 +196,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-«r15»"
+  id="radix-_r_15_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
@@ -378,7 +378,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-«ro»"
+  aria-labelledby="radix-_r_o_"
   aria-orientation="vertical"
   class="_menu_1glhz_8"
   data-align="start"
@@ -387,7 +387,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-«rp»"
+  id="radix-_r_p_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"

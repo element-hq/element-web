@@ -57,6 +57,7 @@ import {
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { OverflowTileView } from "../rooms/OverflowTileView";
+import { attachMentions } from "../../../utils/messages";
 
 const AVATAR_SIZE = 30;
 
@@ -178,7 +179,18 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
     );
 };
 
-const transformEvent = (event: MatrixEvent): { type: string; content: IContent } => {
+/**
+ * Transform content of a MatrixEvent before forwarding:
+ * 1. Strip all relations.
+ * 2. Convert location events into a static pin-drop location share,
+ *    and remove description from self-location shares.
+ * 3. Pass through attachMentions() to strip mentions (as no EditorModel is present to recalculate from).
+ *
+ * @param event - The MatrixEvent to transform.
+ * @param userId - Current user MXID (passed through to attachMentions()).
+ * @returns The transformed event type and content.
+ */
+const transformEvent = (event: MatrixEvent, userId: string): { type: string; content: IContent } => {
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
@@ -213,6 +225,13 @@ const transformEvent = (event: MatrixEvent): { type: string; content: IContent }
         };
     }
 
+    // Mentions can leak information about the context of the original message,
+    // so pass through attachMentions() to recalculate mentions.
+    // Currently, this strips all mentions (forces an empty m.mentions),
+    // as there is no EditorModel to parse pills from.
+    // Future improvements could actually recalculate mentions based on the message body.
+    attachMentions(userId, content, null, undefined);
+
     return { type, content };
 };
 
@@ -223,7 +242,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
-    const { type, content } = transformEvent(event);
+    const { type, content } = transformEvent(event, userId);
 
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({

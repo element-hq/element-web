@@ -3,14 +3,14 @@
 exports[`<RoomListPrimaryFilters /> should renders all filters correctly 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_RoomListPrimaryFilters"
+    class="_flex_4dswl_9 mx_RoomListPrimaryFilters"
     data-testid="primary-filters"
     style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <div
       aria-label="Room list filters"
-      class="flex mx_RoomListPrimaryFilters_list"
-      id="«r0»"
+      class="_flex_4dswl_9 mx_RoomListPrimaryFilters_list"
+      id="_r_0_"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >

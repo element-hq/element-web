@@ -4,8 +4,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
 [
   {
     "props": {
-      "height": 32,
-      "width": 32,
+      "height": 144,
+      "width": 144,
       "x": 0,
       "y": 0,
     },
@@ -21,16 +21,16 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
   },
   {
     "props": {
-      "dHeight": 32,
-      "dWidth": 32,
+      "dHeight": 144,
+      "dWidth": 144,
       "dx": 0,
       "dy": 0,
       "img": <img
-        height="32"
-        width="32"
+        height="144"
+        width="144"
       />,
-      "sHeight": 32,
-      "sWidth": 32,
+      "sHeight": 144,
+      "sWidth": 144,
       "sx": 0,
       "sy": 0,
     },
@@ -62,8 +62,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
         },
         {
           "props": {
-            "x": 16.159999999999997,
-            "y": 12.8,
+            "x": 72.72,
+            "y": 57.6,
           },
           "transform": [
             1,
@@ -77,8 +77,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
         },
         {
           "props": {
-            "x": 22.4,
-            "y": 12.8,
+            "x": 100.79999999999998,
+            "y": 57.6,
           },
           "transform": [
             1,
@@ -92,8 +92,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
         },
         {
           "props": {
-            "x": 31.999999999999996,
-            "y": 22.4,
+            "x": 143.99999999999997,
+            "y": 100.80000000000001,
           },
           "transform": [
             1,
@@ -107,8 +107,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
         },
         {
           "props": {
-            "x": 9.92,
-            "y": 32,
+            "x": 44.64,
+            "y": 144,
           },
           "transform": [
             1,
@@ -122,8 +122,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
         },
         {
           "props": {
-            "x": 0.3200000000000003,
-            "y": 22.4,
+            "x": 1.4400000000000048,
+            "y": 100.8,
           },
           "transform": [
             1,
@@ -178,8 +178,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
     "props": {
       "maxWidth": null,
       "text": "123",
-      "x": 16,
-      "y": 29,
+      "x": 72,
+      "y": 131,
     },
     "transform": [
       1,
@@ -193,8 +193,8 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
   },
   {
     "props": {
-      "height": 32,
-      "width": 32,
+      "height": 144,
+      "width": 144,
       "x": 0,
       "y": 0,
     },
@@ -210,16 +210,16 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
   },
   {
     "props": {
-      "dHeight": 32,
-      "dWidth": 32,
+      "dHeight": 144,
+      "dWidth": 144,
       "dx": 0,
       "dy": 0,
       "img": <img
-        height="32"
-        width="32"
+        height="144"
+        width="144"
       />,
-      "sHeight": 32,
-      "sWidth": 32,
+      "sHeight": 144,
+      "sWidth": 144,
       "sx": 0,
       "sy": 0,
     },
@@ -240,8 +240,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
 [
   {
     "props": {
-      "height": 32,
-      "width": 32,
+      "height": 144,
+      "width": 144,
       "x": 0,
       "y": 0,
     },
@@ -257,16 +257,16 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
   },
   {
     "props": {
-      "dHeight": 32,
-      "dWidth": 32,
+      "dHeight": 144,
+      "dWidth": 144,
       "dx": 0,
       "dy": 0,
       "img": <img
-        height="32"
-        width="32"
+        height="144"
+        width="144"
       />,
-      "sHeight": 32,
-      "sWidth": 32,
+      "sHeight": 144,
+      "sWidth": 144,
       "sx": 0,
       "sy": 0,
     },
@@ -298,8 +298,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
         },
         {
           "props": {
-            "x": 16.159999999999997,
-            "y": 12.8,
+            "x": 72.72,
+            "y": 57.6,
           },
           "transform": [
             1,
@@ -313,8 +313,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
         },
         {
           "props": {
-            "x": 22.4,
-            "y": 12.8,
+            "x": 100.79999999999998,
+            "y": 57.6,
           },
           "transform": [
             1,
@@ -328,8 +328,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
         },
         {
           "props": {
-            "x": 31.999999999999996,
-            "y": 22.4,
+            "x": 143.99999999999997,
+            "y": 100.80000000000001,
           },
           "transform": [
             1,
@@ -343,8 +343,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
         },
         {
           "props": {
-            "x": 9.92,
-            "y": 32,
+            "x": 44.64,
+            "y": 144,
           },
           "transform": [
             1,
@@ -358,8 +358,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
         },
         {
           "props": {
-            "x": 0.3200000000000003,
-            "y": 22.4,
+            "x": 1.4400000000000048,
+            "y": 100.8,
           },
           "transform": [
             1,
@@ -414,8 +414,8 @@ exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
     "props": {
       "maxWidth": null,
       "text": "123",
-      "x": 16,
-      "y": 29,
+      "x": 72,
+      "y": 131,
     },
     "transform": [
       1,

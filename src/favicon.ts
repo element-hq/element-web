@@ -192,6 +192,10 @@ export class BadgeOverlayRenderer extends IconRenderer {
     }
 }
 
+// multiple of 48 as per Google guidelines
+// multiple of 16 for higher quality scaling for small display
+const DEFAULT_FAVICON_SIZE = 144;
+
 // Allows dynamic rendering of a circular badge atop the loaded favicon
 // supports colour, font and basic positioning parameters.
 // Based upon https://github.com/ejci/favico.js/blob/master/favico.js [MIT license]
@@ -218,14 +222,14 @@ export default class Favicon extends IconRenderer {
             baseImage.setAttribute("crossOrigin", "anonymous");
             baseImage.onload = (): void => {
                 // get height and width of the favicon
-                this.canvas.height = baseImage.height > 0 ? baseImage.height : 32;
-                this.canvas.width = baseImage.width > 0 ? baseImage.width : 32;
+                this.canvas.height = baseImage.height > 0 ? baseImage.height : DEFAULT_FAVICON_SIZE;
+                this.canvas.width = baseImage.width > 0 ? baseImage.width : DEFAULT_FAVICON_SIZE;
                 this.ready();
             };
             baseImage.setAttribute("src", lastIcon.getAttribute("href")!);
         } else {
-            this.canvas.height = baseImage.height = 32;
-            this.canvas.width = baseImage.width = 32;
+            this.canvas.height = baseImage.height = DEFAULT_FAVICON_SIZE;
+            this.canvas.width = baseImage.width = DEFAULT_FAVICON_SIZE;
             this.ready();
         }
     }
@@ -302,10 +306,6 @@ export default class Favicon extends IconRenderer {
             elms[0].setAttribute("rel", "icon");
             window.document.getElementsByTagName("head")[0].appendChild(elms[0]);
         }
-
-        elms.forEach((item) => {
-            item.setAttribute("type", "image/png");
-        });
         return elms;
     }
 }

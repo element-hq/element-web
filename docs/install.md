@@ -14,48 +14,48 @@ The release tarball contains a pre-built, production-ready version of Element We
 
 1. **Download the latest release**
 
-   Download from <https://github.com/element-hq/element-web/releases>
+    Download from <https://github.com/element-hq/element-web/releases>
 
-   Releases are signed using GPG and the OpenPGP standard. You can verify the signature against the public key at <https://packages.element.io/element-release-key.asc>
+    Releases are signed using GPG and the OpenPGP standard. You can verify the signature against the public key at <https://packages.element.io/element-release-key.asc>
 
 2. **Extract the tarball**
 
-   ```bash
-   tar -xzf element-v*.tar.gz
-   ```
+    ```bash
+    tar -xzf element-v*.tar.gz
+    ```
 
-   This creates a directory named `element-x.x.x` containing all the static files.
+    This creates a directory named `element-x.x.x` containing all the static files.
 
 3. **Deploy to your web server**
 
-   Move or symlink the directory to your web server's document root:
+    Move or symlink the directory to your web server's document root:
 
-   ```bash
-   # Example: Move to /var/www/element
-   sudo mv element-x.x.x /var/www/element
+    ```bash
+    # Example: Move to /var/www/element
+    sudo mv element-x.x.x /var/www/element
 
-   # Or create a symlink for easier version management
-   sudo ln -s /var/www/element-x.x.x /var/www/element
-   ```
+    # Or create a symlink for easier version management
+    sudo ln -s /var/www/element-x.x.x /var/www/element
+    ```
 
 4. **Configure Element Web**
 
-   Copy the sample configuration and customize it:
+    Copy the sample configuration and customize it:
 
-   ```bash
-   cd /var/www/element
-   cp config.sample.json config.json
-   ```
+    ```bash
+    cd /var/www/element
+    cp config.sample.json config.json
+    ```
 
-   Edit `config.json` to configure your homeserver and other settings. See the [configuration docs](config.md) for details.
+    Edit `config.json` to configure your homeserver and other settings. See the [configuration docs](config.md) for details.
 
 5. **Configure your web server**
 
-   Set up proper caching headers and security settings. See the [web server configuration examples](#web-server-configuration) below.
+    Set up proper caching headers and security settings. See the [web server configuration examples](#web-server-configuration) below.
 
 6. **Access Element Web**
 
-   Navigate to your server's URL (e.g., `https://element.example.com`) and log in!
+    Navigate to your server's URL (e.g., `https://element.example.com`) and log in!
 
 ### Web Server Configuration
 

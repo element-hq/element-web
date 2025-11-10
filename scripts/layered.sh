@@ -44,3 +44,11 @@ fi
 yarn link matrix-js-sdk
 [ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
 yarn install --frozen-lockfile $@
+
+# Link shared components
+pushd packages/shared-components
+yarn link
+yarn install --frozen-lockfile
+popd
+
+yarn link @element-hq/web-shared-components

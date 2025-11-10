@@ -38,22 +38,22 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
           class="mx_SettingsFlag_label"
         >
           <div
-            id="mx_LabelledToggleSwitch_«r7»"
+            id="mx_LabelledToggleSwitch__r_7_"
           >
             Ignore user
           </div>
           <span
             class="mx_Caption"
-            id="mx_LabelledToggleSwitch_«r7»_caption"
+            id="mx_LabelledToggleSwitch__r_7__caption"
           >
             You will not see any messages or room invites from this user.
           </span>
         </span>
         <div
           aria-checked="true"
-          aria-describedby="mx_LabelledToggleSwitch_«r7»_caption"
+          aria-describedby="mx_LabelledToggleSwitch__r_7__caption"
           aria-disabled="false"
-          aria-labelledby="mx_LabelledToggleSwitch_«r7»"
+          aria-labelledby="mx_LabelledToggleSwitch__r_7_"
           class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
           role="switch"
           tabindex="0"
@@ -70,22 +70,22 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
           class="mx_SettingsFlag_label"
         >
           <div
-            id="mx_LabelledToggleSwitch_«r8»"
+            id="mx_LabelledToggleSwitch__r_8_"
           >
             Report room
           </div>
           <span
             class="mx_Caption"
-            id="mx_LabelledToggleSwitch_«r8»_caption"
+            id="mx_LabelledToggleSwitch__r_8__caption"
           >
             Report this room to your account provider.
           </span>
         </span>
         <div
           aria-checked="true"
-          aria-describedby="mx_LabelledToggleSwitch_«r8»_caption"
+          aria-describedby="mx_LabelledToggleSwitch__r_8__caption"
           aria-disabled="false"
-          aria-labelledby="mx_LabelledToggleSwitch_«r8»"
+          aria-labelledby="mx_LabelledToggleSwitch__r_8_"
           class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
           role="switch"
           tabindex="0"

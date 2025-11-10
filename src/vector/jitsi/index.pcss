@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 /* TODO: Match the user's theme: https://github.com/element-hq/element-web/issues/12794 */
 
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
 /* Path to `res` dir in the source tree */
 $res: ../../../res;
 
@@ -70,16 +71,22 @@ html {
 }
 
 #joinButton {
-    /* A mix of AccessibleButton styles */
-    cursor: pointer;
-    padding: 7px 18px;
+    /* Copy of Compound Button styles */
+    border: 1px solid var(--cpd-color-bg-action-primary-rest);
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    padding-block: var(--cpd-space-2x);
+    padding-inline: var(--cpd-space-8x);
+    min-block-size: var(--cpd-space-12x);
     text-align: center;
-    border-radius: 4px;
-    display: inline-block;
-    font-size: 14px;
-    color: #ffffff;
-    background-color: #03b381;
-    border: 0;
+    border-radius: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font: var(--cpd-font-body-lg-semibold);
+    border: none;
+    word-break: keep-all;
+    cursor: pointer;
 }
 
 .icon {

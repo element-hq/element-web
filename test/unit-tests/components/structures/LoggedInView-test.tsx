@@ -584,4 +584,34 @@ describe("<LoggedInView />", () => {
             expect(window.localStorage.getItem("mx_lhs_size")).toBe("224");
         });
     });
+
+    describe("create a new resizer when page_type changes", () => {
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("should call loadResizer when page_type changes", () => {
+            const component = getComponent({ page_type: "room" });
+
+            // Re-render with different page_type
+            component.rerender(<LoggedInView {...defaultProps} page_type="home" />);
+
+            // Verify that detach was called (from loadResizer)
+            expect(mockResizerInstance.detach).toHaveBeenCalledTimes(1);
+            // Verify that attach was called (from loadResizer)
+            // 1 (when page_type = "room") + 1 (when page_type = "home")
+            expect(mockResizerInstance.attach).toHaveBeenCalledTimes(2);
+        });
+
+        it("should not call loadResizer when page_type remains the same", () => {
+            const component = getComponent({ page_type: "room" });
+
+            // Re-render with same page_type but different other props
+            component.rerender(<LoggedInView {...defaultProps} page_type="room" currentRoomId="!different:room.id" />);
+
+            // Verify that resizer methods were not called
+            expect(mockResizerInstance.detach).not.toHaveBeenCalled();
+            expect(mockResizerInstance.attach).toHaveBeenCalledTimes(1);
+        });
+    });
 });

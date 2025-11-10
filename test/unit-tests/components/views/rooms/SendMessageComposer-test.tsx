@@ -8,17 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { type IContent, type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
 import SendMessageComposer, {
-    attachMentions,
     createMessageContent,
     isQuickReaction,
 } from "../../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
@@ -26,18 +25,20 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { type IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
+import { MainSplitContentType } from "../../../../../src/components/structures/RoomView";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
 }));
 
 describe("<SendMessageComposer/>", () => {
-    const defaultRoomContext: IRoomState = {
+    const defaultRoomContext: RoomContextType = {
+        roomViewStore: SdkContextClass.instance.roomViewStore,
         roomLoading: true,
         peekLoading: false,
         shouldPeek: true,
@@ -153,186 +154,6 @@ describe("<SendMessageComposer/>", () => {
                 "body": "/dev/null is my favourite place",
                 "msgtype": "m.text",
                 "m.mentions": {},
-            });
-        });
-    });
-
-    describe("attachMentions", () => {
-        const partsCreator = createPartCreator();
-
-        it("no mentions", () => {
-            const model = new EditorModel([], partsCreator);
-            const content: IContent = {};
-            attachMentions("@alice:test", content, model, undefined);
-            expect(content).toEqual({
-                "m.mentions": {},
-            });
-        });
-
-        it("test user mentions", () => {
-            const model = new EditorModel([partsCreator.userPill("Bob", "@bob:test")], partsCreator);
-            const content: IContent = {};
-            attachMentions("@alice:test", content, model, undefined);
-            expect(content).toEqual({
-                "m.mentions": { user_ids: ["@bob:test"] },
-            });
-        });
-
-        it("test reply", () => {
-            // Replying to an event adds the sender to the list of mentioned users.
-            const model = new EditorModel([], partsCreator);
-            let replyToEvent = mkEvent({
-                type: "m.room.message",
-                user: "@bob:test",
-                room: "!abc:test",
-                content: { "m.mentions": {} },
-                event: true,
-            });
-            let content: IContent = {};
-            attachMentions("@alice:test", content, model, replyToEvent);
-            expect(content).toEqual({
-                "m.mentions": { user_ids: ["@bob:test"] },
-            });
-
-            // It no longer adds any other mentioned users
-            replyToEvent = mkEvent({
-                type: "m.room.message",
-                user: "@bob:test",
-                room: "!abc:test",
-                content: { "m.mentions": { user_ids: ["@alice:test", "@charlie:test"] } },
-                event: true,
-            });
-            content = {};
-            attachMentions("@alice:test", content, model, replyToEvent);
-            expect(content).toEqual({
-                "m.mentions": { user_ids: ["@bob:test"] },
-            });
-        });
-
-        it("test room mention", () => {
-            const model = new EditorModel([partsCreator.atRoomPill("@room")], partsCreator);
-            const content: IContent = {};
-            attachMentions("@alice:test", content, model, undefined);
-            expect(content).toEqual({
-                "m.mentions": { room: true },
-            });
-        });
-
-        it("test reply to room mention", () => {
-            // Replying to a room mention shouldn't automatically be a room mention.
-            const model = new EditorModel([], partsCreator);
-            const replyToEvent = mkEvent({
-                type: "m.room.message",
-                user: "@alice:test",
-                room: "!abc:test",
-                content: { "m.mentions": { room: true } },
-                event: true,
-            });
-            const content: IContent = {};
-            attachMentions("@alice:test", content, model, replyToEvent);
-            expect(content).toEqual({
-                "m.mentions": {},
-            });
-        });
-
-        it("test broken mentions", () => {
-            // Replying to a room mention shouldn't automatically be a room mention.
-            const model = new EditorModel([], partsCreator);
-            const replyToEvent = mkEvent({
-                type: "m.room.message",
-                user: "@alice:test",
-                room: "!abc:test",
-                // @ts-ignore - Purposefully testing invalid data.
-                content: { "m.mentions": { user_ids: "@bob:test" } },
-                event: true,
-            });
-            const content: IContent = {};
-            attachMentions("@alice:test", content, model, replyToEvent);
-            expect(content).toEqual({
-                "m.mentions": {},
-            });
-        });
-
-        describe("attachMentions with edit", () => {
-            it("no mentions", () => {
-                const model = new EditorModel([], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = {};
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": {},
-                    "m.new_content": { "m.mentions": {} },
-                });
-            });
-
-            it("mentions do not propagate", () => {
-                const model = new EditorModel([], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = {
-                    "m.mentions": { user_ids: ["@bob:test"], room: true },
-                };
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": {},
-                    "m.new_content": { "m.mentions": {} },
-                });
-            });
-
-            it("test user mentions", () => {
-                const model = new EditorModel([partsCreator.userPill("Bob", "@bob:test")], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = {};
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": { user_ids: ["@bob:test"] },
-                    "m.new_content": { "m.mentions": { user_ids: ["@bob:test"] } },
-                });
-            });
-
-            it("test prev user mentions", () => {
-                const model = new EditorModel([partsCreator.userPill("Bob", "@bob:test")], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = { "m.mentions": { user_ids: ["@bob:test"] } };
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": {},
-                    "m.new_content": { "m.mentions": { user_ids: ["@bob:test"] } },
-                });
-            });
-
-            it("test room mention", () => {
-                const model = new EditorModel([partsCreator.atRoomPill("@room")], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = {};
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": { room: true },
-                    "m.new_content": { "m.mentions": { room: true } },
-                });
-            });
-
-            it("test prev room mention", () => {
-                const model = new EditorModel([partsCreator.atRoomPill("@room")], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                const prevContent: IContent = { "m.mentions": { room: true } };
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": {},
-                    "m.new_content": { "m.mentions": { room: true } },
-                });
-            });
-
-            it("test broken mentions", () => {
-                // Replying to a room mention shouldn't automatically be a room mention.
-                const model = new EditorModel([], partsCreator);
-                const content: IContent = { "m.new_content": {} };
-                // @ts-ignore - Purposefully testing invalid data.
-                const prevContent: IContent = { "m.mentions": { user_ids: "@bob:test" } };
-                attachMentions("@alice:test", content, model, undefined, prevContent);
-                expect(content).toEqual({
-                    "m.mentions": {},
-                    "m.new_content": { "m.mentions": {} },
-                });
             });
         });
     });

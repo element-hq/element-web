@@ -13,7 +13,7 @@ import { fireEvent } from "@testing-library/dom";
 
 import * as stories from "./AudioPlayerView.stories.tsx";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
-import { MockViewModel } from "../../MockViewModel";
+import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 
 const { Default, NoMediaName, NoSize, HasError } = composeStories(stories);
 

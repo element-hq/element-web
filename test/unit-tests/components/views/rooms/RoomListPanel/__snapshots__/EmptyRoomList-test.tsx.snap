@@ -3,7 +3,7 @@
 exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -24,7 +24,7 @@ exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] =
 exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -45,7 +45,7 @@ exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -66,7 +66,7 @@ exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 exports[`<EmptyRoomList /> should display the empty state for the invite filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -91,7 +91,7 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
 exports[`<EmptyRoomList /> should display the empty state for the low priority filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -116,7 +116,7 @@ exports[`<EmptyRoomList /> should display the empty state for the low priority f
 exports[`<EmptyRoomList /> should display the empty state for the mention filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -141,7 +141,7 @@ exports[`<EmptyRoomList /> should display the empty state for the mention filter
 exports[`<EmptyRoomList /> should display the empty state for the unread filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -166,7 +166,7 @@ exports[`<EmptyRoomList /> should display the empty state for the unread filter 
 exports[`<EmptyRoomList /> should not render the new room button if the user doesn't have the rights to create a room 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -181,7 +181,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
       Get started by messaging someone
     </span>
     <div
-      class="flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="_flex_4dswl_9 mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
@@ -213,7 +213,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
 exports[`<EmptyRoomList /> should render the default placeholder when there is no filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -228,7 +228,7 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
       Get started by messaging someone or by creating a room
     </span>
     <div
-      class="flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="_flex_4dswl_9 mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button

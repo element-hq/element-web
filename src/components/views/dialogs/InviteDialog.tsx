@@ -12,6 +12,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
+import { RichList, RichItem, PillInput, Pill } from "@element-hq/web-shared-components";
 
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
@@ -63,10 +64,6 @@ import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDi
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
-import { RichList } from "../../../../packages/shared-components/src/rich-list/RichList";
-import { RichItem } from "../../../../packages/shared-components/src/rich-list/RichItem";
-import { PillInput } from "../../../../packages/shared-components/src/pill-input/PillInput";
-import { Pill } from "../../../../packages/shared-components/src/pill-input/Pill";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -415,7 +412,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             // We mutate the given set so that any later callers avoid duplicating these users
             excludedTargetIds.add(userId);
         }
-        if (!recents) logger.warn("[Invite:Recents] No recents to suggest!");
+        if (recents.length === 0) logger.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`AudioPlayerView renders the audio player in default state 1`] = `
 <div>
@@ -15,7 +15,7 @@ exports[`AudioPlayerView renders the audio player in default state 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="_icon-button_1pz9o_8 button"
         data-kind="primary"
         role="button"
@@ -106,7 +106,7 @@ exports[`AudioPlayerView renders the audio player in error state 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="«ri»"
+        aria-labelledby="_r_i_"
         class="_icon-button_1pz9o_8 button"
         data-kind="primary"
         role="button"
@@ -202,7 +202,7 @@ exports[`AudioPlayerView renders the audio player without media name 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="«r6»"
+        aria-labelledby="_r_6_"
         class="_icon-button_1pz9o_8 button"
         data-kind="primary"
         role="button"
@@ -293,7 +293,7 @@ exports[`AudioPlayerView renders the audio player without size 1`] = `
       <button
         aria-disabled="false"
         aria-label="Play"
-        aria-labelledby="«rc»"
+        aria-labelledby="_r_c_"
         class="_icon-button_1pz9o_8 button"
         data-kind="primary"
         role="button"

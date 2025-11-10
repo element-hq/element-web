@@ -12,6 +12,7 @@ import { PlaybackQueue } from "../../../src/audio/PlaybackQueue";
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { MockedPlayback } from "./MockedPlayback";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 
 describe("PlaybackQueue", () => {
     let playbackQueue: PlaybackQueue;
@@ -21,7 +22,7 @@ describe("PlaybackQueue", () => {
         mockRoom = {
             getMember: jest.fn(),
         } as unknown as Mocked<Room>;
-        playbackQueue = new PlaybackQueue(mockRoom);
+        playbackQueue = new PlaybackQueue(mockRoom, SdkContextClass.instance.roomViewStore);
     });
 
     it.each([
@@ -75,7 +76,7 @@ describe("PlaybackQueue", () => {
             `mx_voice_message_clocks_${mockRoom.roomId}`,
             JSON.stringify(Array.from(clockStates.entries())),
         );
-        playbackQueue = new PlaybackQueue(mockRoom);
+        playbackQueue = new PlaybackQueue(mockRoom, SdkContextClass.instance.roomViewStore);
 
         // @ts-ignore
         expect(playbackQueue.clockStates.has("a")).toBe(true);

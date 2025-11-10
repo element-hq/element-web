@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
 <div
@@ -26,7 +26,7 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
       class="mx_SettingsFlag_label"
     >
       <div
-        id="mx_LabelledToggleSwitch_«r0»"
+        id="mx_LabelledToggleSwitch__r_0_"
       >
         Enable live location sharing
       </div>
@@ -34,7 +34,7 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
     <div
       aria-checked="false"
       aria-disabled="false"
-      aria-labelledby="mx_LabelledToggleSwitch_«r0»"
+      aria-labelledby="mx_LabelledToggleSwitch__r_0_"
       class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
       role="switch"
       tabindex="0"

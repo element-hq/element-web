@@ -260,7 +260,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     }
                 }
 
-                this.addRoomAndEmit(payload.room, true);
+                this.addRoomAndEmit(payload.room, oldMembership === EffectiveMembership.Leave);
                 break;
             }
 
@@ -373,4 +373,4 @@ export default class RoomListStoreV3 {
     }
 }
 
-window.mxRoomListStoreV3 = RoomListStoreV3.instance;
+window.getRoomListStoreV3 = () => RoomListStoreV3.instance;

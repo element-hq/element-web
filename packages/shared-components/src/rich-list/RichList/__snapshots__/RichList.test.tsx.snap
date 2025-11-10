@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`RichItem renders the list 1`] = `
 <div>
@@ -11,12 +11,12 @@ exports[`RichItem renders the list 1`] = `
     >
       <span
         class="title"
-        id="«r0»"
+        id="_r_0_"
       >
         Rich List Title
       </span>
       <ul
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="content"
         role="listbox"
         tabindex="0"
@@ -174,7 +174,7 @@ exports[`RichItem renders the list with isEmpty=true 1`] = `
     >
       <span
         class="title"
-        id="«r1»"
+        id="_r_1_"
       >
         Rich List Title
       </span>

@@ -213,7 +213,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-«r1»"
+                        for="radix-_r_1_"
                       >
                         Enter a new identity server
                       </label>
@@ -222,7 +222,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                       >
                         <input
                           class="_control_sqdq4_10"
-                          id="radix-«r1»"
+                          id="radix-_r_1_"
                           name="input"
                           placeholder=""
                           title=""
