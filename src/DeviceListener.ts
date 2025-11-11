@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
@@ -142,6 +143,25 @@ export default class DeviceListener {
         this.ourDeviceIdsAtStart = null;
         this.displayingToastsForDeviceIds = new Set();
         this.client = undefined;
+    }
+
+    /**
+     * Pause the device listener while a function runs.
+     *
+     * This can be done if the function makes several changes that would trigger
+     * multiple events, to suppress warning toasts until the process is
+     * finished.
+     */
+    public async pause(fn: () => Promise<void>): Promise<void> {
+        const client = this.client;
+        try {
+            this.stop();
+            await fn();
+        } finally {
+            if (client) {
+                this.start(client);
+            }
+        }
     }
 
     /**
