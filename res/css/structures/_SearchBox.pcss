@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_SearchBox {
     flex: 1 1 0;
     min-width: 0;
+    min-height: 36px; /* to avoid jumping when the X to clear shows/hides */
 
     &.mx_SearchBox_blurred:not(:hover) {
         background-color: transparent;
