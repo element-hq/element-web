@@ -73,7 +73,7 @@
         "@playwright/test": "1.56.1",
         "@types/react": "19.2.2",
         "@types/react-dom": "19.2.2",
-        "@types/serve-static": "1.15.10",
+        "@types/serve-static": "2.2.0",
         "oidc-client-ts": "3.3.0",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001751",
