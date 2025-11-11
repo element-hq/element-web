@@ -3097,7 +3097,7 @@
   resolved "https://registry.yarnpkg.com/@storybook/react-dom-shim/-/react-dom-shim-10.0.6.tgz#164973e0ff84c29aeff653834430a06cbff1055c"
   integrity sha512-UdPSWwgo7WQg8vWIxT379pwrC2uFZX9u12Enap8//zVCJNZYHmjTLbV2P+pQ4zD0UFcqcBljptJEbu7FUMYx+A==
 
-"@storybook/react-vite@^10.0.0":
+"@storybook/react-vite@^10.0.6":
   version "10.0.6"
   resolved "https://registry.yarnpkg.com/@storybook/react-vite/-/react-vite-10.0.6.tgz#5aee53da2e7bc79bb610c705be092b812ccb02d6"
   integrity sha512-zDnOk89LDOpN0yhTCYRb8bkm6LdchGMfcCxKLQhEnSmkMmPwXsj/CADUc1Oipqih7D0JR/gxuadx+3y41znmSg==
@@ -12539,7 +12539,7 @@ stop-iteration-iterator@^1.1.0:
     es-errors "^1.3.0"
     internal-slot "^1.1.0"
 
-storybook@^10.0.0:
+storybook@^10.0.6:
   version "10.0.6"
   resolved "https://registry.yarnpkg.com/storybook/-/storybook-10.0.6.tgz#e5a46745857df3990f25d86d0accecf8d87271b4"
   integrity sha512-s3qY17stuSxU9TFdSHWF2VWJiDKrhZsdlM9M9/APBLT+3kbTlfCPuaNONE0UETgz5tiZLIrC9K4RYjJ8c6PHPA==
