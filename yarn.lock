@@ -1598,16 +1598,9 @@
     testcontainers "^11.0.0"
     yaml "^2.7.0"
 
-"@element-hq/web-shared-components@file:packages/shared-components":
-  version "0.0.0-test.7"
-  dependencies:
-    classnames "^2.5.1"
-    counterpart "^0.18.6"
-    lodash "^4.17.21"
-    matrix-web-i18n "^3.4.0"
-    patch-package "^8.0.1"
-    react-merge-refs "^3.0.2"
-    temporal-polyfill "^0.3.0"
+"@element-hq/web-shared-components@link:packages/shared-components":
+  version "0.0.0"
+  uid ""
 
 "@emnapi/core@^1.5.0":
   version "1.5.0"
