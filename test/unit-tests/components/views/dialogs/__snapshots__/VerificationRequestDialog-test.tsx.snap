@@ -103,7 +103,7 @@ exports[`VerificationRequestDialog After we started verification here, says we a
       Once accepted you'll be able to continue with the verification.
     </div>
     <div
-      aria-describedby="«r6»"
+      aria-describedby="_r_6_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -369,6 +369,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐶
@@ -383,6 +384,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐱

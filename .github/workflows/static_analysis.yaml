@@ -24,7 +24,7 @@ jobs:
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -34,6 +34,12 @@ jobs:
 
             - name: Typecheck
               run: "yarn run lint:types"
+
+            - name: Install Shared Component Dependencies
+              run: "yarn --cwd packages/shared-components install"
+
+            - name: Typecheck Shared Components
+              run: "yarn --cwd packages/shared-components run lint:types"
 
     i18n_lint:
         name: "i18n Check"
@@ -69,7 +75,7 @@ jobs:
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -81,13 +87,19 @@ jobs:
             - name: Run Linter
               run: "yarn run lint:js"
 
+            - name: Install Shared Component Deps
+              run: "yarn --cwd packages/shared-components install --frozen-lockfile"
+
+            - name: Run Linter
+              run: "yarn --cwd packages/shared-components run lint:js"
+
     style_lint:
         name: "Style Lint"
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -105,7 +117,7 @@ jobs:
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -123,7 +135,7 @@ jobs:
         steps:
             - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"

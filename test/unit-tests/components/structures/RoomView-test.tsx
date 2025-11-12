@@ -75,7 +75,7 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
-import Modal from "../../../../src/Modal.tsx";
+import Modal, { type ComponentProps } from "../../../../src/Modal.tsx";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 
 // Used by group calls
@@ -89,7 +89,6 @@ describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
     let rooms: Map<string, Room>;
-    let roomCount = 0;
     let stores: SdkContextClass;
     let crypto: CryptoApi;
 
@@ -100,7 +99,9 @@ describe("RoomView", () => {
         mockPlatformPeg({ reload: () => {} });
         cli = mocked(stubClient());
 
-        room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+        const roomName = (expect.getState().currentTestName ?? "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+
+        room = new Room(`!${roomName}:example.org`, cli, "@alice:example.org");
         jest.spyOn(room, "findPredecessor");
         room.getPendingEvents = () => [];
         rooms = new Map();
@@ -126,7 +127,10 @@ describe("RoomView", () => {
         cleanup();
     });
 
-    const mountRoomView = async (ref?: RefObject<RoomView | null>): Promise<RenderResult> => {
+    const mountRoomView = async (
+        ref?: RefObject<RoomView | null>,
+        props?: Partial<ComponentProps<typeof RoomView>>,
+    ): Promise<RenderResult> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
@@ -158,6 +162,7 @@ describe("RoomView", () => {
                         threepidInvite={undefined as any}
                         forceTimeline={false}
                         ref={ref}
+                        {...props}
                     />
                 </SDKContext.Provider>
             </MatrixClientContext.Provider>,
@@ -209,6 +214,26 @@ describe("RoomView", () => {
         return ref.current!;
     };
 
+    it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
+        stores.multiRoomViewStore.getRoomViewStoreForRoom = jest.fn().mockReturnValue(stores.roomViewStore);
+
+        const ref = createRef<RoomView>();
+        render(
+            <MatrixClientContext.Provider value={cli}>
+                <SDKContext.Provider value={stores}>
+                    <RoomView
+                        threepidInvite={undefined as any}
+                        forceTimeline={false}
+                        ref={ref}
+                        roomId="!room:example.dummy"
+                    />
+                </SDKContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(stores.multiRoomViewStore.getRoomViewStoreForRoom).toHaveBeenCalledWith("!room:example.dummy");
+    });
+
     it("should show member list right panel phase on Action.ViewUser without `payload.member`", async () => {
         const spy = jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
         await renderRoomView(false);
@@ -227,6 +252,25 @@ describe("RoomView", () => {
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
         expect(instance.getHiddenHighlightCount()).toBe(0);
+    });
+
+    it("should hide the composer when hideComposer=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment } = await mountRoomView(undefined, { hideComposer: true });
+
+        expect(screen.queryByRole("textbox", { name: "Send an unencrypted message…" })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should hide the header when hideHeader=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment } = await mountRoomView(undefined, { hideHeader: true });
+
+        // Check that the room name button in the header is not rendered
+        expect(screen.queryByRole("button", { name: room.name })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("invites", () => {
@@ -705,7 +749,7 @@ describe("RoomView", () => {
         });
 
         it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-            const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+            const room2 = new Room(`!roomswitchtest:example.org`, cli, "@alice:example.org");
             rooms.set(room2.roomId, room2);
 
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);

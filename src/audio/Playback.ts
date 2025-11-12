@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { clamp } from "@element-hq/web-shared-components";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../shared-components/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 
@@ -202,6 +202,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     private onPlaybackEnd = async (): Promise<void> => {
         await this.context.suspend();
         this.emit(PlaybackState.Stopped);
+        this.clock.flagStop();
     };
 
     public async play(): Promise<void> {
@@ -248,9 +249,8 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.emit(PlaybackState.Paused);
     }
 
-    public async stop(): Promise<void> {
-        await this.onPlaybackEnd();
-        this.clock.flagStop();
+    public stop(): Promise<void> {
+        return this.onPlaybackEnd();
     }
 
     public async toggle(): Promise<void> {

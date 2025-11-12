@@ -15,10 +15,9 @@ import RecordingPlayback, {
     PlaybackLayout,
 } from "../../../../../src/components/views/audio_messages/RecordingPlayback";
 import { Playback } from "../../../../../src/audio/Playback";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { createAudioContext } from "../../../../../src/audio/compat";
 import { flushPromises } from "../../../../test-utils";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/WorkerManager", () => ({
@@ -54,7 +53,10 @@ describe("<RecordingPlayback />", () => {
 
     const mockChannelData = new Float32Array();
 
-    const defaultRoom = { roomId: "!room:server.org", timelineRenderingType: TimelineRenderingType.File } as IRoomState;
+    const defaultRoom = {
+        roomId: "!room:server.org",
+        timelineRenderingType: TimelineRenderingType.File,
+    } as RoomContextType;
     const getComponent = (props: React.ComponentProps<typeof RecordingPlayback>, room = defaultRoom) =>
         render(
             <ScopedRoomContextProvider {...room}>

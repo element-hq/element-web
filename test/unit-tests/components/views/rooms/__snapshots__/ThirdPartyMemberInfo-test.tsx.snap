@@ -19,7 +19,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -50,11 +50,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
       tabindex="-1"
     >
       <div
-        class="flex mx_ThirdPartyMemberInfo"
+        class="_flex_4dswl_9 mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="flex"
+          class="_flex_4dswl_9"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
@@ -94,7 +94,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
         </p>
       </div>
       <button
-        aria-labelledby="«r6»"
+        aria-labelledby="_r_6_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -125,11 +125,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
       tabindex="-1"
     >
       <div
-        class="flex mx_ThirdPartyMemberInfo"
+        class="_flex_4dswl_9 mx_ThirdPartyMemberInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
-          class="flex"
+          class="_flex_4dswl_9"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span

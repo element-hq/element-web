@@ -10,6 +10,7 @@ import React, { type JSX, useEffect, useMemo } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { AudioPlayerView } from "@element-hq/web-shared-components";
 
 import { type Playback } from "../../../audio/Playback";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -20,7 +21,6 @@ import { PlaybackManager } from "../../../audio/PlaybackManager";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
-import { AudioPlayerView } from "../../../shared-components/audio/AudioPlayerView";
 
 interface IState {
     error?: boolean;

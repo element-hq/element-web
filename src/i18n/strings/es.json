@@ -2340,7 +2340,6 @@
             "metaspaces_subsection": "Qué espacios mostrar",
             "title": "Barra lateral"
         },
-        "start_automatically": "Abrir automáticamente después de iniciar sesión en el sistema",
         "use_12_hour_format": "Mostrar las horas con el modelo de 12 horas (ej.: 2:30pm)",
         "use_command_enter_send_message": "Usa Comando + Intro para enviar un mensje",
         "use_command_f_search": "Usa Control + F para buscar",

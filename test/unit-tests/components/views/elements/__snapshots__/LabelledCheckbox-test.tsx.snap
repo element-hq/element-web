@@ -18,7 +18,7 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
             class="_container_1hel1_10"
           >
             <input
-              aria-describedby="«r4»"
+              aria-describedby="_r_4_"
               checked=""
               class="_input_1hel1_18"
               id="checkbox_vY7Q4uEh9K"
@@ -57,7 +57,7 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
           </label>
           <span
             class="_message_19upo_85 _help-message_19upo_91"
-            id="«r4»"
+            id="_r_4_"
           >
             this is a byline
           </span>

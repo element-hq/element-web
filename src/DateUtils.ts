@@ -13,7 +13,7 @@ import { type Optional } from "matrix-events-sdk";
 import { _t, getUserLanguage } from "./languageHandler";
 import { getUserTimezone } from "./TimezoneHandler";
 
-export { formatSeconds } from "./shared-components/utils/DateUtils";
+export { formatSeconds } from "@element-hq/web-shared-components";
 
 export const MINUTE_MS = 60000;
 export const HOUR_MS = MINUTE_MS * 60;

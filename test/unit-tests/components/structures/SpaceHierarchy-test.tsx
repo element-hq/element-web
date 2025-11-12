@@ -9,18 +9,19 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { type HierarchyRoom, JoinRule, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../../test-utils";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
-import SpaceHierarchy, { showRoom, toLocalRoom } from "../../../../src/components/structures/SpaceHierarchy";
+import SpaceHierarchy, { showRoom, toLocalRoom, joinRoom } from "../../../../src/components/structures/SpaceHierarchy";
 import { Action } from "../../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { type RoomViewStore } from "../../../../src/stores/RoomViewStore";
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {
@@ -63,6 +64,59 @@ describe("SpaceHierarchy", () => {
                 roomType: undefined,
                 metricsTrigger: "RoomDirectory",
             });
+        });
+    });
+
+    describe("joinRoom", () => {
+        let client: MatrixClient;
+        let hierarchy: RoomHierarchy;
+        let roomViewStore: RoomViewStore;
+        let room: Room;
+        const roomId = "!room:server";
+
+        beforeEach(() => {
+            stubClient();
+            client = MatrixClientPeg.safeGet();
+            room = new Room("space-id", client, "@alice:example.com");
+            hierarchy = new RoomHierarchy(room);
+            roomViewStore = {
+                showJoinRoomError: jest.fn(),
+            } as unknown as RoomViewStore;
+
+            jest.spyOn(client, "isGuest").mockReturnValue(false);
+            jest.spyOn(dispatcher, "dispatch");
+        });
+
+        it("should handle MatrixError exceptions when joining room", async () => {
+            // Mock joinRoom to throw a MatrixError
+            const matrixError = new MatrixError({ errcode: "M_FORBIDDEN", error: "Access denied" });
+            mocked(client.joinRoom).mockRejectedValue(matrixError);
+
+            // Attempt to join the room
+            await expect(joinRoom(client, roomViewStore, hierarchy, roomId)).rejects.toThrow(matrixError);
+
+            // Verify that showJoinRoomError was called with the MatrixError
+            expect(roomViewStore.showJoinRoomError).toHaveBeenCalledWith(matrixError, roomId);
+        });
+
+        it("should handle non-MatrixError exceptions when joining room", async () => {
+            // Mock joinRoom to throw a non-MatrixError
+            const customError = new Error("Custom error");
+            mocked(client.joinRoom).mockRejectedValue(customError);
+
+            // Attempt to join the room
+            await expect(joinRoom(client, roomViewStore, hierarchy, roomId)).rejects.toThrow("Custom error");
+
+            // Verify that showJoinRoomError was called with a MatrixError wrapper
+            expect(roomViewStore.showJoinRoomError).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    errcode: undefined,
+                    data: expect.objectContaining({
+                        error: "Unknown error",
+                    }),
+                }),
+                roomId,
+            );
         });
     });
 
@@ -169,11 +223,14 @@ describe("SpaceHierarchy", () => {
         const room2 = mkStubRoom("room-id-3", "Room 2", client);
         const space1 = mkStubRoom("space-id-4", "Space 2", client);
         const room3 = mkStubRoom("room-id-5", "Room 3", client);
+        const space2 = mkStubRoom("space-id-6", "Space 3", client);
         mocked(client.getRooms).mockReturnValue([root]);
         mocked(client.getRoom).mockImplementation(
             (roomId) => client.getRooms().find((room) => room.roomId === roomId) ?? null,
         );
-        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue(KnownMembership.Leave));
+        [room1, room2, space1, room3, space2].forEach((r) =>
+            mocked(r.getMyMembership).mockReturnValue(KnownMembership.Leave),
+        );
 
         const hierarchyRoot: HierarchyRoom = {
             room_id: root.roomId,
@@ -323,6 +380,37 @@ describe("SpaceHierarchy", () => {
                 hierarchyKnockRoom1.room_id,
                 undefined,
             );
+        });
+
+        it("should not render cycles", async () => {
+            const hierarchySpace2: HierarchyRoom = {
+                room_id: space2.roomId,
+                name: "Space with cycle",
+                num_joined_members: 1,
+                room_type: "m.space",
+                children_state: [
+                    {
+                        state_key: root.roomId,
+                        content: { order: "1" },
+                        origin_server_ts: 111,
+                        type: "m.space.child",
+                        sender: "@other:server",
+                    },
+                ],
+                world_readable: true,
+                guest_can_join: true,
+            };
+
+            mocked(client.getRoomHierarchy).mockResolvedValue({
+                rooms: [hierarchyRoot, hierarchyRoom1, hierarchyRoom2, hierarchySpace1, hierarchySpace2],
+            });
+
+            const { getAllByText, queryByText, asFragment } = render(getComponent());
+            // Wait for spinners to go away
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+            expect(getAllByText("Nested space")).toHaveLength(1);
+            expect(queryByText("Space 1")).not.toBeInTheDocument();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 });

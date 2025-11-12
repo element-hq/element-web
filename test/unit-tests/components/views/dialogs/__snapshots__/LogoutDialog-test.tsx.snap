@@ -74,7 +74,7 @@ exports[`LogoutDialog Prompts user to go to settings if there is a backup on the
       </details>
     </div>
     <div
-      aria-describedby="«rq»"
+      aria-describedby="_r_q_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -163,7 +163,7 @@ exports[`LogoutDialog Prompts user to go to settings if there is no backup on th
       </details>
     </div>
     <div
-      aria-describedby="«r10»"
+      aria-describedby="_r_10_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

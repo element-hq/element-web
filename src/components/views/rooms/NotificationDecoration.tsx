@@ -12,8 +12,8 @@ import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/ic
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
+import { Flex } from "@element-hq/web-shared-components";
 
-import { Flex } from "../../../shared-components/utils/Flex";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";

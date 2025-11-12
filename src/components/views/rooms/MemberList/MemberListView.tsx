@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { type JSX, useCallback } from "react";
+import { Flex } from "@element-hq/web-shared-components";
 
-import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type MemberWithSeparator,
     SEPARATOR,
@@ -45,7 +45,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             index: number,
             item: MemberWithSeparator,
             context: ListContext<any>,
-            onFocus: (e: React.FocusEvent) => void,
+            onFocus: (item: MemberWithSeparator, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const itemKey = getItemKey(item);
             const isRovingItem = itemKey === context.tabIndexKey;
@@ -55,6 +55,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             } else if (item.member) {
                 return (
                     <RoomMemberTileView
+                        item={item}
                         member={item.member}
                         showPresence={isPresenceEnabled}
                         focused={focused}
@@ -67,6 +68,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             } else {
                 return (
                     <ThreePidInviteTileView
+                        item={item}
                         threePidInvite={item.threePidInvite}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}

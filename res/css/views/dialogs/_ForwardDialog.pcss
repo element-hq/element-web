@@ -61,6 +61,11 @@ Please see LICENSE files in the repository root for full details.
             /* To match the space around the title */
             margin: 0 0 15px 0;
             flex-grow: 0;
+
+            &:not(:focus-within) + .mx_ForwardList_content {
+                /* Inhibit the styling if focus is not within the input which handles keyboard accessibility */
+                --mx_ForwardList_entry_selectedBgColor: transparent;
+            }
         }
 
         .mx_ForwardList_content {
@@ -90,7 +95,7 @@ Please see LICENSE files in the repository root for full details.
 
                 &:hover,
                 &.mx_ForwardList_entry_active {
-                    background-color: $spacePanel-bg-color;
+                    background-color: var(--mx_ForwardList_entry_selectedBgColor, $spacePanel-bg-color);
                 }
 
                 .mx_ForwardList_roomButton {

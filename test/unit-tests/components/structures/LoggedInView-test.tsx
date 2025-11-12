@@ -15,6 +15,8 @@ import {
     MatrixEvent,
     ClientEvent,
     PushRuleKind,
+    ProfileKeyTimezone,
+    ProfileKeyMSC4175Timezone,
 } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -470,30 +472,36 @@ describe("<LoggedInView />", () => {
         it("does not update the timezone when userTimezonePublish is off", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
             expect(mockClient.setExtendedProfileProperty).not.toHaveBeenCalled();
         });
         it("should set the user timezone when userTimezonePublish is enabled", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
         });
 
         it("should set the user timezone when the timezone is changed", async () => {
             const newTimezone = "Europe/Paris";
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
             await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, newTimezone);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", newTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, newTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, newTimezone);
         });
 
         it("should clear the timezone when the publish feature is turned off", async () => {
             getComponent();
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
-            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone, userTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone, userTimezone);
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
-            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
         });
     });
 
@@ -574,6 +582,36 @@ describe("<LoggedInView />", () => {
 
             // Verify localStorage was set to the minimum width (224), not 0
             expect(window.localStorage.getItem("mx_lhs_size")).toBe("224");
+        });
+    });
+
+    describe("create a new resizer when page_type changes", () => {
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("should call loadResizer when page_type changes", () => {
+            const component = getComponent({ page_type: "room" });
+
+            // Re-render with different page_type
+            component.rerender(<LoggedInView {...defaultProps} page_type="home" />);
+
+            // Verify that detach was called (from loadResizer)
+            expect(mockResizerInstance.detach).toHaveBeenCalledTimes(1);
+            // Verify that attach was called (from loadResizer)
+            // 1 (when page_type = "room") + 1 (when page_type = "home")
+            expect(mockResizerInstance.attach).toHaveBeenCalledTimes(2);
+        });
+
+        it("should not call loadResizer when page_type remains the same", () => {
+            const component = getComponent({ page_type: "room" });
+
+            // Re-render with same page_type but different other props
+            component.rerender(<LoggedInView {...defaultProps} page_type="room" currentRoomId="!different:room.id" />);
+
+            // Verify that resizer methods were not called
+            expect(mockResizerInstance.detach).not.toHaveBeenCalled();
+            expect(mockResizerInstance.attach).toHaveBeenCalledTimes(1);
         });
     });
 });

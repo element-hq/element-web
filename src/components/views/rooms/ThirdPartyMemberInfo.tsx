@@ -10,6 +10,7 @@ import React, { type JSX } from "react";
 import { EventType, type MatrixEvent, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Button, Text } from "@vector-im/compound-web";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -19,7 +20,6 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BaseCard from "../right_panel/BaseCard";
-import { Flex } from "../../../shared-components/utils/Flex";
 
 interface IProps {
     event: MatrixEvent;

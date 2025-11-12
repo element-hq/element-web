@@ -15,9 +15,9 @@ import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,

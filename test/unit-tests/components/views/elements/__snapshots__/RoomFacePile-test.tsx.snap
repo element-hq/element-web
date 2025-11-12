@@ -3,8 +3,8 @@
 exports[`<RoomFacePile /> renders 1`] = `
 <DocumentFragment>
   <div
-    aria-describedby="«r1»"
-    aria-labelledby="«r0»"
+    aria-describedby="_r_1_"
+    aria-labelledby="_r_0_"
     class="mx_AccessibleButton mx_FacePile"
     role="button"
     tabindex="0"

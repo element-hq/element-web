@@ -52,7 +52,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r6»"
+          aria-labelledby="_r_6_"
           class="mx_E2EIconView"
         >
           <svg
@@ -126,7 +126,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
         class="mx_MemberTileView_right"
       >
         <div
-          aria-labelledby="«r0»"
+          aria-labelledby="_r_0_"
           class="mx_E2EIconView"
         >
           <svg
@@ -251,7 +251,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
           Invited
         </div>
         <div
-          class="flex mx_InvitedIconView"
+          class="_flex_4dswl_9 mx_InvitedIconView"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <svg

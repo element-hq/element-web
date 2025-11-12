@@ -2318,7 +2318,6 @@
             "metaspaces_subsection": "表示するスペース",
             "title": "サイドバー"
         },
-        "start_automatically": "システムログイン後に自動的に起動",
         "use_12_hour_format": "発言時刻を12時間形式で表示（例：2:30午後）",
         "use_command_enter_send_message": "Command+Enterでメッセージを送信",
         "use_command_f_search": "Command+Fでタイムラインを検索",

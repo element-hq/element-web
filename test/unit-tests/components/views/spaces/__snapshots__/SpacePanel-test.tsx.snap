@@ -3,8 +3,8 @@
 exports[`<SpacePanel /> should show all activated MetaSpaces in the correct order 1`] = `
 <DocumentFragment>
   <nav
-    aria-controls="«r2»"
-    aria-describedby="«r2»"
+    aria-controls="_r_2_"
+    aria-describedby="_r_2_"
     aria-haspopup="dialog"
     aria-label="Spaces"
     class="mx_SpacePanel collapsed newUi"
@@ -237,11 +237,11 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="«r16»"
+        aria-labelledby="_r_16_"
         class="_icon-button_1pz9o_8 mx_ThreadsActivityCentreButton"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r14»"
+        id="radix-_r_14_"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -289,7 +289,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     tabindex="0"
   />
   <span
-    aria-owns="«r1j»"
+    aria-owns="_r_1j_"
     data-floating-ui-inert=""
     style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
   />

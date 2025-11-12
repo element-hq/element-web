@@ -25,7 +25,7 @@ import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
-import ModuleApi from "../modules/Api.ts";
+import { ModuleApi } from "../modules/Api.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -145,7 +145,7 @@ export async function loadPlugins(): Promise<void> {
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;
-    const moduleLoader = new ModuleLoader(ModuleApi);
+    const moduleLoader = new ModuleLoader(ModuleApi.instance);
     window.mxModuleLoader = moduleLoader;
     for (const src of modules) {
         // We need to instruct webpack to not mangle this import as it is not available at compile time

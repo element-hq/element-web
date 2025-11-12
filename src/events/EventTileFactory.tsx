@@ -18,6 +18,7 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import { type Optional } from "matrix-events-sdk";
+import { TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -41,9 +42,8 @@ import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
-import ModuleApi from "../modules/Api";
+import { ModuleApi } from "../modules/Api";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
-import { TextualEventView } from "../shared-components/event-tiles/TextualEventView";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
@@ -64,7 +64,6 @@ export interface EventTileTypeProps
         | "inhibitInteraction"
     > {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
-    timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
@@ -266,7 +265,7 @@ export function renderTile(
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
         // Will return null if no custom component can render it.
-        return ModuleApi.customComponents.renderMessage({
+        return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
     }
@@ -288,7 +287,6 @@ export function renderTile(
         callEventGrouper,
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
-        timestamp,
         inhibitInteraction,
         showHiddenEvents,
     } = props;
@@ -297,7 +295,7 @@ export function renderTile(
         case TimelineRenderingType.File:
         case TimelineRenderingType.Notification:
         case TimelineRenderingType.Thread:
-            return ModuleApi.customComponents.renderMessage(
+            return ModuleApi.instance.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
                 },
@@ -318,7 +316,7 @@ export function renderTile(
                     }),
             );
         default:
-            return ModuleApi.customComponents.renderMessage(
+            return ModuleApi.instance.customComponents.renderMessage(
                 {
                     mxEvent: props.mxEvent,
                 },
@@ -336,7 +334,6 @@ export function renderTile(
                         callEventGrouper,
                         getRelationsForEvent,
                         isSeeingThroughMessageHiddenForModeration,
-                        timestamp,
                         inhibitInteraction,
                         showHiddenEvents,
                     }),
@@ -363,7 +360,7 @@ export function renderReplyTile(
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
         // Will return null if no custom component can render it.
-        return ModuleApi.customComponents.renderMessage({
+        return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
         });
     }
@@ -384,7 +381,7 @@ export function renderReplyTile(
         permalinkCreator,
     } = props;
 
-    return ModuleApi.customComponents.renderMessage(
+    return ModuleApi.instance.customComponents.renderMessage(
         {
             mxEvent: props.mxEvent,
         },
@@ -429,7 +426,7 @@ export function haveRendererForEvent(
 
     // Check to see if we have any hints for this message, which indicates
     // there is a custom renderer for the event.
-    if (ModuleApi.customComponents.getHintsForMessage(mxEvent)) {
+    if (ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)) {
         return true;
     }
 

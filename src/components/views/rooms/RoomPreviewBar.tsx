@@ -31,7 +31,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 import Field from "../elements/Field";
-import ModuleApi from "../../../modules/Api.ts";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
@@ -750,7 +750,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
 }
 
 const WrappedRoomPreviewBar = (props: IProps): JSX.Element => {
-    const moduleRenderer = ModuleApi.customComponents.roomPreviewBarRenderer;
+    const moduleRenderer = ModuleApi.instance.customComponents.roomPreviewBarRenderer;
     if (moduleRenderer) {
         return moduleRenderer(
             {

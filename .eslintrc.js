@@ -1,11 +1,13 @@
+/*
+Copyright 2025 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 module.exports = {
     plugins: ["matrix-org", "eslint-plugin-react-compiler"],
-    extends: [
-        "plugin:matrix-org/babel",
-        "plugin:matrix-org/react",
-        "plugin:matrix-org/a11y",
-        "plugin:storybook/recommended",
-    ],
+    extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
         project: ["./tsconfig.json"],
     },

@@ -4,16 +4,16 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
   class="_tooltip_6ode6_8"
   data-floating-ui-focusable=""
-  id="«r6»"
+  id="_r_6_"
   role="tooltip"
-  style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
+  style="position: absolute; left: 0px; top: 0px; transform: translate(5px, -6px);"
   tabindex="-1"
 >
   <svg
     aria-hidden="true"
     class="_arrow_6ode6_33"
     height="10"
-    style="position: absolute; pointer-events: none; top: 100%;"
+    style="position: absolute; pointer-events: none; top: 100%; left: -1px;"
     viewBox="0 0 10 10"
     width="10"
   >
@@ -22,7 +22,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
       stroke="none"
     />
     <clippath
-      id="«r9»"
+      id="_r_9_"
     >
       <rect
         height="10"
@@ -33,22 +33,63 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     </clippath>
   </svg>
   <span
-    id="«r4»"
+    id="_r_4_"
   >
     Alice
   </span>
   <span
     class="_caption_6ode6_28 cpd-theme-dark"
-    id="«r5»"
+    id="_r_5_"
   >
     @alice:example.org
   </span>
 </div>
 `;
 
+exports[`ReadReceiptGroup <ReadReceiptPerson /> should fall back to userId if roomMember unspecified 1`] = `
+<div>
+  <span
+    tabindex="0"
+  >
+    <div
+      class="mx_AccessibleButton mx_ReadReceiptGroup_person"
+      role="menuitem"
+      tabindex="-1"
+    >
+      <span
+        aria-hidden="true"
+        aria-live="off"
+        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 24px;"
+      >
+        a
+      </span>
+      <div
+        class="mx_ReadReceiptGroup_name"
+      >
+        <p>
+          @alice:example.org
+        </p>
+        <p
+          class="mx_ReadReceiptGroup_secondary"
+        >
+          ==MOCK FORMATTED DATE==
+        </p>
+      </div>
+    </div>
+  </span>
+</div>
+`;
+
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
 <div>
-  <div>
+  <span
+    tabindex="0"
+  >
     <div
       class="mx_AccessibleButton mx_ReadReceiptGroup_person"
       role="menuitem"
@@ -88,6 +129,6 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         </p>
       </div>
     </div>
-  </div>
+  </span>
 </div>
 `;

@@ -1,19 +1,19 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<PollHistory /> Poll detail displays poll detail on active poll list item click 1`] = `
-<h2
+<legend
   data-testid="pollQuestion"
 >
   Question?
-</h2>
+</legend>
 `;
 
 exports[`<PollHistory /> Poll detail displays poll detail on past poll list item click 1`] = `
-<h2
+<legend
   data-testid="pollQuestion"
 >
   What?
-</h2>
+</legend>
 `;
 
 exports[`<PollHistory /> Poll detail navigates back to poll list from detail view on header click 1`] = `
@@ -91,7 +91,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
-              aria-labelledby="«ra»"
+              aria-labelledby="_r_a_"
               class="mx_PollListItem_content"
             >
               <span>
@@ -116,7 +116,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
-              aria-labelledby="«rf»"
+              aria-labelledby="_r_f_"
               class="mx_PollListItem_content"
             >
               <span>

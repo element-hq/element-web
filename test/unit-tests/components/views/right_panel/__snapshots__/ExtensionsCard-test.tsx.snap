@@ -19,7 +19,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -71,7 +71,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         Add extensions
       </button>
       <div
-        class="flex mx_EmptyState"
+        class="_flex_4dswl_9 mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg
@@ -120,7 +120,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«r6»"
+        aria-labelledby="_r_6_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"

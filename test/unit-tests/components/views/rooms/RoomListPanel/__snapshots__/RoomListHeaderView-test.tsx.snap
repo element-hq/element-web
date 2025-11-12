@@ -4,12 +4,12 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -25,7 +25,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«rk»"
+        id="radix-_r_k_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -51,7 +51,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
@@ -63,11 +63,11 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«rs»"
+          aria-labelledby="_r_s_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rq»"
+          id="radix-_r_q_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -104,7 +104,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r15»"
+          id="radix-_r_15_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -143,12 +143,12 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -164,7 +164,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r18»"
+        id="radix-_r_18_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -190,7 +190,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
@@ -202,11 +202,11 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r1g»"
+          aria-labelledby="_r_1g_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r1e»"
+          id="radix-_r_1e_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -276,12 +276,12 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -297,7 +297,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r0»"
+        id="radix-_r_0_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -323,7 +323,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
@@ -335,11 +335,11 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r8»"
+          aria-labelledby="_r_8_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r6»"
+          id="radix-_r_6_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -376,7 +376,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rh»"
+          id="radix-_r_h_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -415,12 +415,12 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -436,7 +436,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r3g»"
+        id="radix-_r_3g_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -462,7 +462,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
@@ -474,11 +474,11 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r3o»"
+          aria-labelledby="_r_3o_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r3m»"
+          id="radix-_r_3m_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -515,7 +515,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r41»"
+          id="radix-_r_41_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -554,12 +554,12 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -569,7 +569,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       </h1>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
@@ -581,11 +581,11 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r4a»"
+          aria-labelledby="_r_4a_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r48»"
+          id="radix-_r_48_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -622,7 +622,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r4j»"
+          id="radix-_r_4j_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"

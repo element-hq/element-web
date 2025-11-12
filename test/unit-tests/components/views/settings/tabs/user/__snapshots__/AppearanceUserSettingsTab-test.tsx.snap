@@ -46,7 +46,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r0»"
+                        id="radix-_r_0_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -62,7 +62,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r0»"
+                      for="radix-_r_0_"
                     >
                       Light
                     </label>
@@ -80,7 +80,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r1»"
+                        id="radix-_r_1_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -96,7 +96,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r1»"
+                      for="radix-_r_1_"
                     >
                       Dark
                     </label>
@@ -114,7 +114,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r2»"
+                        id="radix-_r_2_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -130,7 +130,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r2»"
+                      for="radix-_r_2_"
                     >
                       High contrast
                     </label>
@@ -170,7 +170,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Modern"
                     class="_label_19upo_59"
-                    for="radix-«r3»"
+                    for="radix-_r_3_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -181,7 +181,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         <input
                           checked=""
                           class="_input_1e0uz_18"
-                          id="radix-«r3»"
+                          id="radix-_r_3_"
                           name="layout"
                           title=""
                           type="radio"
@@ -298,7 +298,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Message bubbles"
                     class="_label_19upo_59"
-                    for="radix-«rc»"
+                    for="radix-_r_c_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -308,7 +308,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
-                          id="radix-«rc»"
+                          id="radix-_r_c_"
                           name="layout"
                           title=""
                           type="radio"
@@ -425,7 +425,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="IRC (experimental)"
                     class="_label_19upo_59"
-                    for="radix-«rl»"
+                    for="radix-_r_l_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -435,7 +435,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
-                          id="radix-«rl»"
+                          id="radix-_r_l_"
                           name="layout"
                           title=""
                           type="radio"
@@ -467,6 +467,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         data-self="true"
                         tabindex="-1"
                       >
+                        <span
+                          class="mx_MessageTimestamp"
+                        />
                         <div
                           class="mx_DisambiguatedProfile"
                         >
@@ -560,9 +563,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="_container_19o42_10"
                     >
                       <input
-                        aria-describedby="radix-«rv»"
+                        aria-describedby="radix-_r_v_"
                         class="_input_19o42_24"
-                        id="radix-«ru»"
+                        id="radix-_r_u_"
                         name="compactLayout"
                         role="switch"
                         title=""
@@ -578,13 +581,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="radix-«ru»"
+                      for="radix-_r_u_"
                     >
                       Show compact text and messages
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-«rv»"
+                      id="radix-_r_v_"
                     >
                       Modern layout must be selected to use this feature.
                     </span>

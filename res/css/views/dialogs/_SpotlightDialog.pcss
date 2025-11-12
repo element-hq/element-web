@@ -150,6 +150,16 @@ Please see LICENSE files in the repository root for full details.
             height: unset;
             margin-left: $spacing-16;
         }
+
+        &:not(:focus-within) + #mx_SpotlightDialog_content {
+            /* Inhibit the styling if focus is not within the input which handles keyboard accessibility */
+            --mx_SpotlightDialog_option_selectedBgColor: transparent;
+
+            /* Hide the enter prompt as in this state pressing enter would not actuate that option */
+            .mx_SpotlightDialog_enterPrompt {
+                visibility: hidden;
+            }
+        }
     }
 
     #mx_SpotlightDialog_content {
@@ -193,6 +203,17 @@ Please see LICENSE files in the repository root for full details.
             }
         }
 
+        .mx_SpotlightDialog_option {
+            border-radius: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover,
+            &[aria-selected="true"] {
+                background-color: var(--mx_SpotlightDialog_option_selectedBgColor, $quinary-content);
+            }
+        }
+
         .mx_SpotlightDialog_recentlyViewed {
             > div {
                 display: flex;
@@ -202,7 +223,6 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_option {
-                border-radius: 8px;
                 padding: $spacing-4;
                 color: $primary-content;
                 font-size: $font-12px;
@@ -213,8 +233,6 @@ Please see LICENSE files in the repository root for full details.
                 min-width: 58px;
                 box-sizing: border-box;
                 text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
 
                 .mx_DecoratedRoomAvatar {
                     margin: 0 9px $spacing-4; /* maintain centering */
@@ -222,11 +240,6 @@ Please see LICENSE files in the repository root for full details.
 
                 & + .mx_SpotlightDialog_option {
                     margin-left: $spacing-16;
-                }
-
-                &:hover,
-                &[aria-selected="true"] {
-                    background-color: $quinary-content;
                 }
             }
         }
@@ -236,8 +249,9 @@ Please see LICENSE files in the repository root for full details.
         .mx_SpotlightDialog_otherSearches,
         .mx_SpotlightDialog_hiddenResults {
             .mx_SpotlightDialog_option {
+                --mx_SpotlightDialog_option_selectedBgColor: $system;
+
                 padding: 6px $spacing-4;
-                border-radius: 8px;
                 font-size: $font-15px;
                 line-height: $font-24px;
                 color: $primary-content;
@@ -245,8 +259,6 @@ Please see LICENSE files in the repository root for full details.
                 display: flex;
                 align-items: center;
                 white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
 
                 .mx_SpotlightDialog_option--endAdornment {
                     display: inline-flex;
@@ -350,7 +362,7 @@ Please see LICENSE files in the repository root for full details.
                     }
 
                     &:hover::before,
-                    &[aria-selected="true"]::before {
+                    &:focus-visible::before {
                         background-color: $secondary-content;
                     }
                 }
@@ -361,8 +373,6 @@ Please see LICENSE files in the repository root for full details.
 
                 &:hover,
                 &[aria-selected="true"] {
-                    background-color: $system;
-
                     .mx_SpotlightDialog_option--menu,
                     .mx_SpotlightDialog_option--notifications {
                         display: block;
