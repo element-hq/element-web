@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`MLocationBody <MLocationBody> with error displays correct fallback content when map_style_url is misconfigured 1`] = `
 <div

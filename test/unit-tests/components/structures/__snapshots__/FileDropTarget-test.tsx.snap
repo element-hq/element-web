@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`FileDropTarget should not render drop file prompt on mouse over with file if permissions do not allow 1`] = `<DocumentFragment />`;
 

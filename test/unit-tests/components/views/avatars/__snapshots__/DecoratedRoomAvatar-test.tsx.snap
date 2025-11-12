@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DecoratedRoomAvatar shows an avatar with globe icon and tooltip for public room 1`] = `
 <DocumentFragment>

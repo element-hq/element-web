@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RecoveryPanel /> should allow to change the recovery key when everything is good 1`] = `
 <DocumentFragment>
