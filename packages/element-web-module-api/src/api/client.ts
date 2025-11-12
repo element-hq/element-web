@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "../models/Room";
-import { Watchable } from "./watchable";
+import { type Watchable } from "./watchable";
 
 /**
  * Modify account data stored on the homeserver.

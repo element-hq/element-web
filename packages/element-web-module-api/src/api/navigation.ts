@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JSX } from "react";
+import { type JSX } from "react";
 
 /**
  * A function called to render a component when a user navigates to the corresponding
