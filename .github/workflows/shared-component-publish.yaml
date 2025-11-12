@@ -21,8 +21,14 @@ jobs:
                   cache: "yarn"
                   node-version-file: ".node-version"
                   registry-url: "https://registry.npmjs.org"
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.ELEMENT_NPM_TOKEN }}
+
+            # Ensure npm 11.5.1 or later is installed
+            - name: Update npm
+              run: npm install -g npm@latest
+
+            # Need to setup element web too as it needs the translations
+            - name: 🛠️ Setup EW
+              run: yarn install --pure-lockfile
 
             - name: 🛠️ Setup
               # When running `install` it also calls the `prepare` step which generates
@@ -31,4 +37,4 @@ jobs:
 
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
-              run: npm publish --access public --provenance
+              run: npm publish --access public --tag test --provenance

@@ -15,13 +15,17 @@ import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {
     emoji: IEmoji;
+    /**
+     * Set of which emojis are already selected and should be decorated as such.
+     * If specified, emoji will use a checkbox role with aria-checked set appropriately.
+     */
     selectedEmojis?: Set<string>;
     onClick(ev: ButtonEvent, emoji: IEmoji): void;
     onMouseEnter(emoji: IEmoji): void;
     onMouseLeave(emoji: IEmoji): void;
     disabled?: boolean;
     id?: string;
-    role?: string;
+    className?: string;
 }
 
 class Emoji extends React.PureComponent<IProps> {
@@ -34,9 +38,10 @@ class Emoji extends React.PureComponent<IProps> {
                 onClick={(ev: ButtonEvent) => onClick(ev, emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
-                className="mx_EmojiPicker_item_wrapper"
-                disabled={this.props.disabled}
-                role={this.props.role}
+                className={this.props.className}
+                disabled={this.props.disabled || undefined}
+                role={selectedEmojis ? "checkbox" : undefined}
+                aria-checked={this.props.disabled ? undefined : isSelected}
                 focusOnMouseOver
             >
                 <div className={`mx_EmojiPicker_item ${isSelected ? "mx_EmojiPicker_item_selected" : ""}`}>

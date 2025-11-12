@@ -805,6 +805,17 @@
         },
         "developer_mode": "Mode développeur",
         "developer_tools": "Outils de développement",
+        "device_dehydrated_no": "Déshydraté : Non",
+        "device_dehydrated_yes": "Déshydraté : Oui",
+        "device_id": "Identifiant de l'appareil : %(deviceId)s",
+        "device_keys": "Clés d'appareil",
+        "device_verification_status": {
+            "signed_by_owner": "Statut de vérification : <E2EIcon /> Signé par le propriétaire",
+            "unknown": "Statut de vérification : Inconnu",
+            "unverified": "Statut de vérification : <E2EIcon /> Non signé par le propriétaire",
+            "verified": "Statut de vérification : <E2EIcon /> Vérifié par signature croisée"
+        },
+        "devices": "Appareils cryptographiques (%(count)s )",
         "edit_setting": "Modifier le paramètre",
         "edit_values": "Modifier les valeurs",
         "empty_string": "<chaîne de caractères vide>",

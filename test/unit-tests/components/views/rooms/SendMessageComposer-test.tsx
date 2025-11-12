@@ -17,7 +17,7 @@ import SendMessageComposer, {
     isQuickReaction,
 } from "../../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { type IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
+import { MainSplitContentType } from "../../../../../src/components/structures/RoomView";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
@@ -37,7 +37,7 @@ jest.mock("../../../../../src/utils/local-room", () => ({
 }));
 
 describe("<SendMessageComposer/>", () => {
-    const defaultRoomContext: IRoomState = {
+    const defaultRoomContext: RoomContextType = {
         roomViewStore: SdkContextClass.instance.roomViewStore,
         roomLoading: true,
         peekLoading: false,

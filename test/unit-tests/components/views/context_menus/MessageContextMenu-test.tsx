@@ -27,8 +27,7 @@ import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { canEditContent } from "../../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../../src/utils/strings";
 import MessageContextMenu from "../../../../../src/components/views/context_menus/MessageContextMenu";
@@ -711,18 +710,18 @@ describe("MessageContextMenu", () => {
     });
 });
 
-function createRightClickMenuWithContent(eventContent: object, context?: Partial<IRoomState>): RenderResult {
+function createRightClickMenuWithContent(eventContent: object, context?: Partial<RoomContextType>): RenderResult {
     return createMenuWithContent(eventContent, { rightClick: true }, context);
 }
 
-function createRightClickMenu(mxEvent: MatrixEvent, context?: Partial<IRoomState>): RenderResult {
+function createRightClickMenu(mxEvent: MatrixEvent, context?: Partial<RoomContextType>): RenderResult {
     return createMenu(mxEvent, { rightClick: true }, context);
 }
 
 function createMenuWithContent(
     eventContent: object,
     props?: Partial<MessageContextMenu["props"]>,
-    context?: Partial<IRoomState>,
+    context?: Partial<RoomContextType>,
 ): RenderResult {
     // XXX: We probably shouldn't be assuming all events are going to be message events, but considering this
     // test is for the Message context menu, it's a fairly safe assumption.
@@ -739,7 +738,7 @@ function makeDefaultRoom(): Room {
 function createMenu(
     mxEvent: MatrixEvent,
     props?: Partial<MessageContextMenu["props"]>,
-    context: Partial<IRoomState> = {},
+    context: Partial<RoomContextType> = {},
     beacons: Map<BeaconIdentifier, Beacon> = new Map(),
     room: Room = makeDefaultRoom(),
 ): RenderResult {
@@ -748,13 +747,14 @@ function createMenu(
     // @ts-ignore illegally set private prop
     room.currentState.beacons = beacons;
 
-    mxEvent.setStatus(EventStatus.SENT);
+    // The base case is that we have received the remote echo and have an eventId. No sending status.
+    mxEvent.setStatus(null);
 
     client.getUserId = jest.fn().mockReturnValue("@user:example.com");
     client.getRoom = jest.fn().mockReturnValue(room);
 
     return render(
-        <ScopedRoomContextProvider {...(context as IRoomState)}>
+        <ScopedRoomContextProvider {...(context as RoomContextType)}>
             <MessageContextMenu mxEvent={mxEvent} onFinished={jest.fn()} {...props} />
         </ScopedRoomContextProvider>,
     );

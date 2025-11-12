@@ -17,7 +17,7 @@ const config: Config = {
         // This is needed to be able to load dual CJS/ESM WASM packages e.g. rust crypto & matrix-wywiwyg
         customExportConditions: ["browser", "node"],
     },
-    testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)", "<rootDir>/packages/*/src/**/*.test.[t]s?(x)"],
+    testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
@@ -40,6 +40,7 @@ const config: Config = {
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
+        "counterpart": "<rootDir>/node_modules/counterpart",
     },
     transformIgnorePatterns: [
         "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs)).+$",
