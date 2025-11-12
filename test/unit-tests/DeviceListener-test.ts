@@ -126,6 +126,7 @@ describe("DeviceListener", () => {
             getRooms: jest.fn().mockReturnValue([]),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
+            isKeyBackupKeyStored: jest.fn(),
             waitForClientWellKnown: jest.fn(),
             getClientWellKnown: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
@@ -1221,6 +1222,44 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
                     SetupEncryptionToast.Kind.SET_UP_RECOVERY,
                 );
+            });
+        });
+    });
+
+    describe("key storage out of sync", () => {
+        describe("needs backup reset", () => {
+            it("should not need resetting if backup disabled", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: true,
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+            });
+
+            it("should not need resetting if backup key is present locally or in 4S", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+            });
+
+            it("should need resetting if backup key is missing locally and in 4S", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(true);
             });
         });
     });

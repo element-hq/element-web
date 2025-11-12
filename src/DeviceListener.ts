@@ -197,6 +197,30 @@ export default class DeviceListener {
         await this.client?.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: false });
     }
 
+    /**
+     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
+     * requires a reset of key backup.
+     *
+     * and from 4S.  We need to reset backup if:
+     * - the user hasn't disabled backup,
+     * - we don't have the backup key cached locally, *and*
+     * - we don't have the backup key stored in 4S.
+     * (The user should already have a key backup created at this point,
+     * otherwise `doRecheck` would have triggered a `Kind.TURN_ON_KEY_STORAGE`
+     * condition.)
+     */
+    public async keyStorageOutOfSyncNeedsBackupReset(): Promise<boolean> {
+        const crypto = this.client?.getCrypto();
+        if (!crypto) {
+            return false;
+        }
+        const shouldHaveBackup = !(await this.recheckBackupDisabled(this.client!));
+        const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
+        const backupKeyStored = await this.client!.isKeyBackupKeyStored();
+
+        return shouldHaveBackup && !backupKeyCached && !backupKeyStored;
+    }
+
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
         if (this.ourDeviceIdsAtStart === null) {
             this.ourDeviceIdsAtStart = await this.getDeviceIds();
