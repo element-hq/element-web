@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
+import { type Api } from "@element-hq/element-web-module-api";
 
-import type { Api } from "@element-hq/element-web-module-api";
-import { StaticConfig, UniventionConfig } from "../config";
+import { type StaticConfig, type UniventionConfig } from "../config";
 import StaticMenu from "../Menu";
 import { fetchNavigation } from "./navigation";
 import SilentLogin from "./SilentLogin";
