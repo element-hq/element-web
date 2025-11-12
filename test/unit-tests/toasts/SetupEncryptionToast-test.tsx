@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -7,7 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
+import { mocked, type Mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
@@ -16,6 +20,7 @@ import dis from "../../../src/dispatcher/dispatcher";
 import DeviceListener from "../../../src/DeviceListener";
 import Modal from "../../../src/Modal";
 import ConfirmKeyStorageOffDialog from "../../../src/components/views/dialogs/ConfirmKeyStorageOffDialog";
+import { stubClient } from "../../test-utils";
 
 jest.mock("../../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),
@@ -51,10 +56,41 @@ describe("SetupEncryptionToast", () => {
     });
 
     describe("Key storage out of sync (retrieve secrets)", () => {
+        let client: Mocked<MatrixClient>;
+
+        beforeEach(() => {
+            client = mocked(stubClient());
+            mocked(client.getCrypto).mockReturnValue({
+                getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+                resetKeyBackup: jest.fn(),
+                checkKeyBackupAndEnable: jest.fn(),
+            } as unknown as CryptoApi);
+        });
+
         it("should render the toast", async () => {
             act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
             await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
+        });
+
+        it("should reset key backup if needed", async () => {
+            // If the private backup key is missing from both our local cache
+            // and from 4S, when the user enters their recovery key, it should
+            // reset the backup.
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => {
+                    return await func();
+                },
+            );
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(true);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            expect(client.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
         });
 
         it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
@@ -89,6 +125,15 @@ describe("SetupEncryptionToast", () => {
     });
 
     describe("Key storage out of sync (secrets are missing from 4S)", () => {
+        let client: Mocked<MatrixClient>;
+
+        beforeEach(() => {
+            client = mocked(stubClient());
+            mocked(client.getCrypto).mockReturnValue({
+                getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+            } as unknown as CryptoApi);
+        });
+
         it("should render the toast", async () => {
             act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
 
