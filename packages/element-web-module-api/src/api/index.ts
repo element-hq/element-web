@@ -6,19 +6,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Root } from "react-dom/client";
-import { LegacyModuleApiExtension } from "./legacy-modules";
-import { LegacyCustomisationsApiExtension } from "./legacy-customisations";
-import { ConfigApi } from "./config";
-import { I18nApi } from "./i18n";
-import { CustomComponentsApi } from "./custom-components";
-import { NavigationApi } from "./navigation.ts";
-import { DialogApiExtension } from "./dialog.ts";
-import { AccountAuthApiExtension } from "./auth.ts";
-import { ProfileApiExtension } from "./profile.ts";
-import { ExtrasApi } from "./extras.ts";
-import { BuiltinsApi } from "./builtins.ts";
-import { StoresApi } from "./stores.ts";
-import { ClientApi } from "./client.ts";
+import { type LegacyModuleApiExtension } from "./legacy-modules";
+import { type LegacyCustomisationsApiExtension } from "./legacy-customisations";
+import { type ConfigApi } from "./config";
+import { type I18nApi } from "./i18n";
+import { type CustomComponentsApi } from "./custom-components";
+import { type NavigationApi } from "./navigation.ts";
+import { type DialogApiExtension } from "./dialog.ts";
+import { type AccountAuthApiExtension } from "./auth.ts";
+import { type ProfileApiExtension } from "./profile.ts";
+import { type ExtrasApi } from "./extras.ts";
+import { type BuiltinsApi } from "./builtins.ts";
+import { type StoresApi } from "./stores.ts";
+import { type ClientApi } from "./client.ts";
 
 /**
  * Module interface for modules to implement.

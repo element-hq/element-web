@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { satisfies } from "semver";
 
-import { Api, isModule, Module, ModuleExport } from "./api";
+import { type Api, isModule, type Module, type ModuleExport } from "./api";
 
 /**
  * Error thrown when a module is incompatible with the engine version.

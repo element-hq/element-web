@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "../models/Room";
-import { Watchable } from "./watchable";
+import { type Watchable } from "./watchable";
 
 /**
  * Provides some basic functionality of the Room List Store from element-web.

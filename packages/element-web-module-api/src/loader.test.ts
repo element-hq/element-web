@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, test, describe, vi, beforeEach } from "vitest";
 
-import { Api, ModuleIncompatibleError, ModuleLoader } from ".";
+import { type Api, ModuleIncompatibleError, ModuleLoader } from ".";
 
 describe("ModuleIncompatibleError", () => {
     test("should extend Error", () => {
