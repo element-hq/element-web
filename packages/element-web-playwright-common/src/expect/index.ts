@@ -9,10 +9,10 @@ import { mergeExpects, type Expect } from "@playwright/test";
 
 import {
     expect as screenshotExpectations,
-    Expectations as ScreenshotExpectations,
-    ToMatchScreenshotOptions,
+    type Expectations as ScreenshotExpectations,
+    type ToMatchScreenshotOptions,
 } from "./screenshot.js";
-import { expect as axeExpectations, Expectations as AxeExpectations } from "./axe.js";
+import { expect as axeExpectations, type Expectations as AxeExpectations } from "./axe.js";
 
 export const expect = mergeExpects(screenshotExpectations, axeExpectations) as Expect<
     ScreenshotExpectations & AxeExpectations

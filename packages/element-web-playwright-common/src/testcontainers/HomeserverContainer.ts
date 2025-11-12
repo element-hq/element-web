@@ -9,8 +9,8 @@ import { type AbstractStartedContainer, type GenericContainer } from "testcontai
 import { type APIRequestContext, type TestInfo } from "@playwright/test";
 
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas";
-import { ClientServerApi, Credentials } from "../utils/api";
-import { StartedMailpitContainer } from "./mailpit";
+import { type ClientServerApi, type Credentials } from "../utils/api";
+import { type StartedMailpitContainer } from "./mailpit";
 
 export interface HomeserverInstance {
     readonly baseUrl: string;

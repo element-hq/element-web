@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import {
     test,
     expect as baseExpect,
-    ElementHandle,
+    type ElementHandle,
     type ExpectMatcherState,
     type Locator,
     type Page,

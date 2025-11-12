@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { BrowserContext, Page } from "@playwright/test";
+import { type BrowserContext, type Page } from "@playwright/test";
 
-import { Config, CONFIG_JSON } from "../index.js";
+import { type Config, CONFIG_JSON } from "../index.js";
 
 /** Construct a suitable config.json for the given homeserver
  *

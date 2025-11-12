@@ -23,7 +23,7 @@ import { deepCopy } from "../utils/object.js";
 import { type HomeserverContainer, type StartedHomeserverContainer } from "./HomeserverContainer.js";
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas.js";
 import { Api, ClientServerApi, type Verb, type Credentials } from "../utils/api.js";
-import { StartedMailpitContainer } from "./mailpit.js";
+import { type StartedMailpitContainer } from "./mailpit.js";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",

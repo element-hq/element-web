@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Browser } from "playwright-core";
-import { Page } from "@playwright/test";
+import { type Browser } from "playwright-core";
+import { type Page } from "@playwright/test";
 
-import { Credentials } from "./api.js";
-import { Config } from "../index.js";
+import { type Credentials } from "./api.js";
+import { type Config } from "../index.js";
 import { routeConfigJson } from "./config_json.js";
 import { populateLocalStorageWithCredentials } from "../fixtures/user.js";
 
