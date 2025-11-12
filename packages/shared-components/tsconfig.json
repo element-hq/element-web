@@ -7,7 +7,7 @@
         "esModuleInterop": true,
         "useDefineForClassFields": true,
         "module": "es2022",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "target": "es2022",
         "noUnusedLocals": true,
         "sourceMap": false,
@@ -21,11 +21,5 @@
             "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
         }
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"],
-    "ts-node": {
-        "files": true,
-        "moduleTypes": {
-            "*": "cjs"
-        }
-    }
+    "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }

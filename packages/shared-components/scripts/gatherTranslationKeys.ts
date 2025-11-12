@@ -15,7 +15,10 @@ Please see LICENSE files in the repository root for full details.
 
 import * as fs from "fs";
 import * as path from "path";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const i18nStringsPath = path.resolve(__dirname, "../../../src/i18n/strings/en_EN.json");
 const outPath = path.resolve(__dirname, "../src/i18nKeys.d.ts");
 
@@ -56,6 +59,9 @@ function main() {
     console.log(`Wrote ${keys.length} keys to ${outPath}`);
 }
 
-if (require.main === module) {
-    main();
+if (import.meta.url.startsWith("file:")) {
+    const modulePath = fileURLToPath(import.meta.url);
+    if (process.argv[1] === modulePath) {
+        main();
+    }
 }
