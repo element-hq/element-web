@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FC, useState, type JSX, FormEvent } from "react";
+import { type FC, useState, type JSX, type FormEvent } from "react";
 import { type Api, type AccountAuthInfo, type DialogProps } from "@element-hq/element-web-module-api";
 import { Form } from "@vector-im/compound-web";
 
-import { ModuleConfig } from "./config.ts";
+import { type ModuleConfig } from "./config.ts";
 
 interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
     api: Api;

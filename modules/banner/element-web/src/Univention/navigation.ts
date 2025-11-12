@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { z } from "zod/mini";
 
-import { StaticConfig } from "../config";
+import { type StaticConfig } from "../config";
 
 /**
  * Univention Central Navigation API

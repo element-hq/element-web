@@ -10,9 +10,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";
+import { type Api } from "@element-hq/element-web-module-api";
 
-import { StaticConfig } from "./config";
-import type { Api } from "@element-hq/element-web-module-api";
+import { type StaticConfig } from "./config";
 import Logo from "./Logo.tsx";
 import TriggerIcon from "./trigger.svg?react";
 
