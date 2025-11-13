@@ -23,7 +23,10 @@ export interface ICategory {
     id: CategoryKey;
     name: string;
     enabled: boolean;
+    // Whether the category is currently visible
     visible: boolean;
+    // Whether the category is the first visible category
+    firstVisible: boolean;
     ref: RefObject<HTMLButtonElement | null>;
 }
 

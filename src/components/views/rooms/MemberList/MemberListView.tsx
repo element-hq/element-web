@@ -26,6 +26,16 @@ interface IProps {
     onClose: () => void;
 }
 
+/**
+ * Height of a single member list item
+ */
+const MEMBER_LIST_ITEM_HEIGHT = 56;
+/**
+ * Amount to extend the top and bottom of the viewport by.
+ * From manual testing 15 items seems to be enough to never really see the blank space when scrolling.
+ */
+const EXTENDED_VIEWPORT_HEIGHT = 15 * MEMBER_LIST_ITEM_HEIGHT;
+
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const { isPresenceEnabled, memberCount } = vm;
@@ -106,6 +116,11 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     isItemFocusable={isItemFocusable}
                     role="listbox"
                     aria-label={_t("member_list|list_title")}
+                    fixedItemHeight={MEMBER_LIST_ITEM_HEIGHT}
+                    increaseViewportBy={{
+                        bottom: EXTENDED_VIEWPORT_HEIGHT,
+                        top: EXTENDED_VIEWPORT_HEIGHT,
+                    }}
                 />
             </Flex>
         </BaseCard>
