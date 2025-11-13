@@ -134,7 +134,7 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should not rend
 exports[`RoomStatusBar Shared History Visibility Acknowledgement should render dismissable history visibility acknowledgement in encrypted rooms with non-join history visibility 1`] = `
 <div>
   <div
-    class="_alert_zx76t_10 historyVisibility"
+    class="_alert_zx76t_10 _historyVisibility_5ovzz_8"
     data-type="info"
   >
     <svg
@@ -169,17 +169,17 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should render d
         <p
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
-          room|status_bar|history_visible_description
+          Because this room allows sharing history with new members, encrypted messages you send may be shared with people who join later.
         </p>
       </div>
       <div
         class="_actions_zx76t_64"
       >
         <a
-          class="_button_vczzf_8 historyVisibilityButton"
+          class="_button_vczzf_8 _historyVisibilityButton_5ovzz_15"
           data-kind="tertiary"
           data-size="sm"
-          href="https://example.com"
+          href="https://element.io/en/help#e2ee-history-sharing"
           role="link"
           tabindex="0"
           target="_blank"
@@ -187,7 +187,7 @@ exports[`RoomStatusBar Shared History Visibility Acknowledgement should render d
           Learn more
         </a>
         <button
-          class="_button_vczzf_8 historyVisibilityButton"
+          class="_button_vczzf_8 _historyVisibilityButton_5ovzz_15"
           data-kind="primary"
           data-size="sm"
           role="button"
