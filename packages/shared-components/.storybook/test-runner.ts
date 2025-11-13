@@ -5,17 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { waitForPageReady } from "@storybook/test-runner";
+import { waitForPageReady, TestRunnerConfig } from "@storybook/test-runner";
 import { toMatchImageSnapshot } from "jest-image-snapshot";
 
 const customSnapshotsDir = `${process.cwd()}/playwright/snapshots/`;
 const customReceivedDir = `${process.cwd()}/playwright/received/`;
 
-/**
- * @type {import('@storybook/test-runner').TestRunnerConfig}
- */
-const config = {
-    setup(page) {
+const config: TestRunnerConfig = {
+    setup() {
         expect.extend({ toMatchImageSnapshot });
     },
     async postVisit(page, context) {
