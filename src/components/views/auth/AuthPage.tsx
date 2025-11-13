@@ -46,7 +46,9 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         return AuthPage.welcomeBackgroundUrl;
     }
 
-    private autoFocus(element: HTMLElement | null) {
+    // Used for automatically focusing the content element which bears aria-live such that a screen reader
+    // will helpfully read things out as they progress during the auth flow.
+    private autoFocus(element: HTMLElement | null): void {
         element?.focus();
     }
 

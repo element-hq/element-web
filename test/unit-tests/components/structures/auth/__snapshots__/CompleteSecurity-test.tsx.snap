@@ -10,8 +10,10 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
       style="position: relative;"
     >
       <div
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px;"
+        tabindex="-1"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"
@@ -176,8 +178,10 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
       style="position: relative;"
     >
       <div
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px;"
+        tabindex="-1"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"

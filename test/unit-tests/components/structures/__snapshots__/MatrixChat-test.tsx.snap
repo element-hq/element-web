@@ -121,8 +121,10 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
       <div
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        tabindex="-1"
       >
         <div
           class="mx_Welcome"
@@ -239,8 +241,10 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
       <div
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        tabindex="-1"
       >
         <div
           class="mx_AuthHeader"
