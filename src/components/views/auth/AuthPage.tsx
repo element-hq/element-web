@@ -46,6 +46,10 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         return AuthPage.welcomeBackgroundUrl;
     }
 
+    private autoFocus(element: HTMLElement | null) {
+        element?.focus();
+    }
+
     public render(): React.ReactElement {
         const pageStyle = {
             background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
@@ -89,7 +93,13 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             <div className="mx_AuthPage" style={pageStyle}>
                 <div className={modalClasses} style={modalStyle}>
                     {modalBlur}
-                    <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
+                    <div
+                        className="mx_AuthPage_modalContent"
+                        style={modalContentStyle}
+                        tabIndex={-1}
+                        ref={this.autoFocus}
+                        aria-live="polite"
+                    >
                         {this.props.children}
                     </div>
                 </div>
