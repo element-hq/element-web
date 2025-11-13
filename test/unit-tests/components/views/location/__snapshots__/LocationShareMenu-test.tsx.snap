@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
 <div

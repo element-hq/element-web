@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon when the e2E status = Verified 1`] = `
 <div>

@@ -1,0 +1,56 @@
+diff --git a/node_modules/jsdom/lib/jsdom/browser/Window.js b/node_modules/jsdom/lib/jsdom/browser/Window.js
+index 52d011c..f62f6d6 100644
+--- a/node_modules/jsdom/lib/jsdom/browser/Window.js
++++ b/node_modules/jsdom/lib/jsdom/browser/Window.js
+@@ -505,10 +505,10 @@ function installOwnProperties(window, options) {
+     event: makeReplaceablePropertyDescriptor("event", window),
+ 
+     // [LegacyUnforgeable]:
+-    window: { configurable: false },
+-    document: { configurable: false },
+-    location: { configurable: false },
+-    top: { configurable: false }
++    window: { configurable: true },
++    document: { configurable: true },
++    location: { configurable: true },
++    top: { configurable: true }
+   });
+ 
+ 
+diff --git a/node_modules/jsdom/lib/jsdom/living/generated/Location.js b/node_modules/jsdom/lib/jsdom/living/generated/Location.js
+index fc4d1dd..c855bd5 100644
+--- a/node_modules/jsdom/lib/jsdom/living/generated/Location.js
++++ b/node_modules/jsdom/lib/jsdom/living/generated/Location.js
+@@ -322,19 +322,19 @@ function getUnforgeables(globalObject) {
+       }
+     });
+     Object.defineProperties(unforgeables, {
+-      assign: { configurable: false, writable: false },
+-      replace: { configurable: false, writable: false },
+-      reload: { configurable: false, writable: false },
+-      href: { configurable: false },
+-      toString: { configurable: false, writable: false },
+-      origin: { configurable: false },
+-      protocol: { configurable: false },
+-      host: { configurable: false },
+-      hostname: { configurable: false },
+-      port: { configurable: false },
+-      pathname: { configurable: false },
+-      search: { configurable: false },
+-      hash: { configurable: false }
++      assign: { configurable: true, writable: false },
++      replace: { configurable: true, writable: false },
++      reload: { configurable: true, writable: false },
++      href: { configurable: true },
++      toString: { configurable: true, writable: false },
++      origin: { configurable: true },
++      protocol: { configurable: true },
++      host: { configurable: true },
++      hostname: { configurable: true },
++      port: { configurable: true },
++      pathname: { configurable: true },
++      search: { configurable: true },
++      hash: { configurable: true }
+     });
+     unforgeablesMap.set(globalObject, unforgeables);
+   }
