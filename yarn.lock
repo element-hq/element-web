@@ -1586,15 +1586,8 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0-test.7"
-  dependencies:
-    classnames "^2.5.1"
-    counterpart "^0.18.6"
-    lodash "^4.17.21"
-    matrix-web-i18n "^3.4.0"
-    patch-package "^8.0.1"
-    react-merge-refs "^3.0.2"
-    temporal-polyfill "^0.3.0"
+  version "0.0.0"
+  uid ""
 
 "@emnapi/core@^1.4.3":
   version "1.7.0"
@@ -2407,10 +2400,10 @@
     pbf "^4.0.1"
     supercluster "^8.0.1"
 
-"@matrix-org/analytics-events@^0.29.2":
-  version "0.29.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.2.tgz#20d9877f11d5e411f1610f396f9e490673d6da50"
-  integrity sha512-kpCdf6DBxgE7MbBbYr7FvahrktHHtiph3QN10I6nBAAPQ+hmR3aZHBECxjxLQ9RxvtBF9nlKK4bgy2YrNp6j3A==
+"@matrix-org/analytics-events@^0.30.0":
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.30.0.tgz#67e87e56518fec5330978bf1fcc8d7bb66cdd9d1"
+  integrity sha512-RYIgYdYIvJoTzWaTeqskNGYt6w+6wKP43xMcfpdTKhDm/o2s4keuzRnRG9Qkfg10/3dGOjYCPfH78cXPKDzxeg==
 
 "@matrix-org/emojibase-bindings@^1.3.4":
   version "1.3.4"
