@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`] = `
 <DocumentFragment>

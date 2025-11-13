@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 1`] = `
 <div>
