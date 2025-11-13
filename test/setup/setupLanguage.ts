@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "fetch-mock-jest";
 
 import * as languageHandler from "../../src/languageHandler";
+import * as sharedComponentsLanguageHandler from "../../packages/shared-components/src/utils/i18n";
 import en from "../../src/i18n/strings/en_EN.json";
 import de from "../../src/i18n/strings/de_DE.json";
 
@@ -42,4 +43,6 @@ export function setupLanguageMock() {
 setupLanguageMock();
 
 languageHandler.setLanguage("en");
+sharedComponentsLanguageHandler.setLanguage("en");
+
 languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
