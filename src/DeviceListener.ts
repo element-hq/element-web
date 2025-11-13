@@ -201,7 +201,7 @@ export default class DeviceListener {
      * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
      * requires a reset of key backup.
      *
-     * and from 4S.  We need to reset backup if:
+     * If the user has their recovery key, we need to reset backup if:
      * - the user hasn't disabled backup,
      * - we don't have the backup key cached locally, *and*
      * - we don't have the backup key stored in 4S.
