@@ -34,7 +34,6 @@ import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
-import { MPollEndBody } from "./MPollEndBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
@@ -75,8 +74,6 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
     [M_POLL_START.name, MPollBody],
     [M_POLL_START.altName, MPollBody],
-    [M_POLL_END.name, MPollEndBody],
-    [M_POLL_END.altName, MPollEndBody],
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
 ]);
