@@ -1,6 +1,7 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
+        "allowImportingTsExtensions": true,
         "jsx": "preserve",
         "declaration": false,
         "outDir": "./lib/module_system",

@@ -6,8 +6,8 @@ import parseArgs from "minimist";
 import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
-import { util } from "webpack";
-import { Translations } from "matrix-web-i18n";
+import webpack from "webpack";
+import type { Translations } from "matrix-web-i18n";
 
 const I18N_BASE_PATH = "src/i18n/strings/";
 const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH)])]
@@ -58,7 +58,7 @@ function prepareLangFile(lang: string, dest: string): [filename: string, json: s
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
-    const digest = util.createHash("xxhash64").update(jsonBuffer).digest("hex").slice(0, 7);
+    const digest = webpack.util.createHash("xxhash64").update(jsonBuffer).digest("hex").slice(0, 7);
     const filename = `${lang}.${digest}.json`;
 
     return [filename, json];
