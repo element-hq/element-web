@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning when messages are unsent due to consent 1`] = `
 <div>

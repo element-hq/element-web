@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
 <button
