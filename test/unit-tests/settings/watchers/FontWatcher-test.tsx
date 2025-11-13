@@ -131,8 +131,8 @@ describe("FontWatcher", function () {
         it("should migrate from V1 font size to V3", async () => {
             await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 13);
             await watcher!.start();
-            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 14px (default browser font size) = 5px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(5);
+            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 16px (default browser font size) = 3px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(3);
             // baseFontSize should be cleared
             expect(SettingsStore.getValue("baseFontSize")).toBe(0);
         });
@@ -140,8 +140,8 @@ describe("FontWatcher", function () {
         it("should migrate from V2 font size to V3 using browser font size", async () => {
             await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
             await watcher!.start();
-            // 18px - 14px (default browser font size) = 2px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(4);
+            // 18px - 16px (default browser font size) = 2px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
             // baseFontSize should be cleared
             expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
         });

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomList /> should render a room list 1`] = `
 <DocumentFragment>
@@ -7,7 +7,7 @@ exports[`<RoomList /> should render a room list 1`] = `
     data-testid="room-list"
     data-virtuoso-scroller="true"
     role="listbox"
-    style="height: 100%; outline: none; overflow-y: auto; position: relative;"
+    style="height: 100%; outline: none; overflow-y: auto; position: relative; -webkit-overflow-scrolling: touch;"
     tabindex="0"
   >
     <div
@@ -22,6 +22,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="0"
           data-item-index="0"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -76,6 +77,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="1"
           data-item-index="1"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -130,6 +132,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="2"
           data-item-index="2"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -184,6 +187,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="3"
           data-item-index="3"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -238,6 +242,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="4"
           data-item-index="4"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -292,6 +297,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="5"
           data-item-index="5"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -346,6 +352,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="6"
           data-item-index="6"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -400,6 +407,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="7"
           data-item-index="7"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -454,6 +462,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="8"
           data-item-index="8"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"
@@ -508,6 +517,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           data-index="9"
           data-item-index="9"
           data-known-size="48"
+          style="overflow-anchor: none;"
         >
           <button
             aria-haspopup="menu"

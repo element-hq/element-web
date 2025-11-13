@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`SpaceButton metaspace should render notificationState if one is provided 1`] = `
 <DocumentFragment>
