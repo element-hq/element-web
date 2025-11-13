@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`LogoutDialog Prompts user to go to settings if there is a backup on the server 1`] = `
 <div>
