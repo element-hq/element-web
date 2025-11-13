@@ -171,7 +171,7 @@ describe("RoomStatusBar", () => {
                     if (settingName == "feature_share_history_on_invite") {
                         return true;
                     }
-                    return SettingsStore.getDefaultValue(settingName, roomId);
+                    return SettingsStore.getDefaultValue(settingName);
                 },
             );
         });
