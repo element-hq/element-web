@@ -181,7 +181,7 @@
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
         "@babel/runtime": "^7.12.5",
-        "@casualbot/jest-sonar-reporter": "2.2.7",
+        "@casualbot/jest-sonar-reporter": "2.4.0",
         "@element-hq/element-call-embedded": "0.16.1",
         "@element-hq/element-web-playwright-common": "^2.0.0",
         "@peculiar/webcrypto": "^1.4.3",
@@ -314,7 +314,7 @@
         "relativePaths": true
     },
     "engines": {
-        "node": ">=20.0.0"
+        "node": ">=24"
     },
     "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
