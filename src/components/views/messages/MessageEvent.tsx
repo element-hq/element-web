@@ -15,7 +15,6 @@ import {
     MatrixEventEvent,
     M_BEACON_INFO,
     M_LOCATION,
-    M_POLL_END,
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";

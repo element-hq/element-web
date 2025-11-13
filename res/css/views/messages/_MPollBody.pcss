@@ -20,6 +20,14 @@ Please see LICENSE files in the repository root for full details.
         margin-top: 0;
         margin-bottom: 8px;
         letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        svg {
+            flex-shrink: 0;
+            color: inherit;
+        }
 
         .mx_MPollBody_edited {
             color: $roomtopic-color;
@@ -28,26 +36,10 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    legend::before {
-        content: "";
-        position: relative;
-        display: inline-block;
-        margin-right: 12px;
-        top: 3px;
-        left: 3px;
-        height: 20px;
-        width: 20px;
-        background-color: $secondary-content;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
-        mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
-    }
-
     .mx_MPollBody_totalVotes {
         display: flex;
         flex-direction: inline;
-        justify-content: start;
+        justify-content: end;
         color: $secondary-content;
         font-size: $font-12px;
 

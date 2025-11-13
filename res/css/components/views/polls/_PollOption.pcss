@@ -54,7 +54,7 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_PollOption_popularityBackground {
         .mx_PollOption_popularityAmount {
-            background-color: var(--cpd-color-icon-accent-tertiary);
+            background-color: var(--cpd-color-border-interactive-hovered);
         }
     }
 
@@ -62,8 +62,8 @@ Please see LICENSE files in the repository root for full details.
     .mx_StyledRadioButton_checked {
         input[type="radio"]:checked + div {
             border-width: 2px;
-            border-color: var(--cpd-color-icon-accent-tertiary);
-            background-color: var(--cpd-color-icon-accent-tertiary);
+            border-color: var(--cpd-color-border-interactive-hovered);
+            background-color: var(--cpd-color-border-interactive-hovered);
             background-image: url("@vector-im/compound-design-tokens/icons/check.svg");
             background-size: 12px;
             background-repeat: no-repeat;
@@ -72,6 +72,22 @@ Please see LICENSE files in the repository root for full details.
             div {
                 visibility: hidden;
             }
+        }
+    }
+}
+
+.mx_PollOption_ended.mx_PollOption_checked {
+    .mx_PollOption_popularityBackground {
+        .mx_PollOption_popularityAmount {
+            background-color: var(--cpd-color-icon-accent-tertiary);
+        }
+    }
+
+    /* override checked radio button styling to show checkmark instead */
+    .mx_StyledRadioButton_checked {
+        input[type="radio"]:checked + div {
+            border-color: var(--cpd-color-icon-accent-tertiary);
+            background-color: var(--cpd-color-icon-accent-tertiary);
         }
     }
 }

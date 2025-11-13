@@ -100,13 +100,14 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
                     </div>
                     {!!winningAnswers?.length && (
                         <div className="mx_PollListItemEnded_answers">
-                            {winningAnswers?.map(({ answer, voteCount }) => (
+                            {winningAnswers?.map(({ answer, voteCount }, index) => (
                                 <PollOption
                                     key={answer.id}
                                     answer={answer}
                                     voteCount={voteCount}
                                     totalVoteCount={totalVoteCount!}
                                     pollId={poll.pollId}
+                                    optionNumber={pollEvent.answers.findIndex((a) => a.id === answer.id) + 1}
                                     displayVoteCount
                                     isChecked
                                     isEnded

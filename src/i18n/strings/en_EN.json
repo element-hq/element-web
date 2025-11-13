@@ -1760,6 +1760,7 @@
         "end_message": "The poll has ended. Top answer: %(topAnswer)s",
         "end_message_no_votes": "The poll has ended. No votes were cast.",
         "end_title": "End Poll",
+        "ended_poll_label": "Poll ended",
         "error_ending_description": "Sorry, the poll did not end. Please try again.",
         "error_ending_title": "Failed to end poll",
         "error_voting_description": "Sorry, your vote was not registered. Please try again.",
@@ -1771,25 +1772,19 @@
         "options_heading": "Create options",
         "options_label": "Option %(number)s",
         "options_placeholder": "Write an option",
+        "poll_label": "Poll",
         "topic_heading": "What is your poll question or topic?",
         "topic_label": "Question or topic",
         "topic_placeholder": "Write something…",
         "total_decryption_errors": "Due to decryption errors, some votes may not be counted",
-        "total_n_votes": {
-            "one": "%(count)s vote cast. Vote to see the results",
-            "other": "%(count)s votes cast. Vote to see the results"
-        },
-        "total_n_votes_voted": {
-            "one": "Based on %(count)s vote",
-            "other": "Based on %(count)s votes"
-        },
-        "total_no_votes": "No votes cast",
-        "total_not_ended": "Results will be visible when the poll is ended",
+        "total_votes_label": "Total votes: %(count)s",
         "type_closed": "Closed poll",
         "type_heading": "Poll type",
         "type_open": "Open poll",
         "unable_edit_description": "Sorry, you can't edit a poll after votes have been cast.",
-        "unable_edit_title": "Can't edit poll"
+        "unable_edit_title": "Can't edit poll",
+        "winning_option_label": "this option won the vote",
+        "you_voted_for_this": "you voted for this option"
     },
     "power_level": {
         "admin": "Admin",
@@ -3524,7 +3519,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ended a poll",
             "sender_ended": "%(senderName)s has ended a poll"
         },
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",
