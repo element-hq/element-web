@@ -29,7 +29,7 @@
         "UserFriendlyError"
     ],
     "scripts": {
-        "i18n": "matrix-gen-i18n src res packages/shared-components && yarn i18n:sort && yarn i18n:lint",
+        "i18n": "matrix-gen-i18n src res packages/shared-components/src && yarn i18n:sort && yarn i18n:lint",
         "i18n:sort": "jq --sort-keys '.' src/i18n/strings/en_EN.json > src/i18n/strings/en_EN.json.tmp && mv src/i18n/strings/en_EN.json.tmp src/i18n/strings/en_EN.json",
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
@@ -65,6 +65,7 @@
         "coverage": "yarn test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
+        "install": "yarn --cwd packages/shared-components install --frozen-lockfile",
         "postinstall": "patch-package"
     },
     "resolutions": {
@@ -72,10 +73,9 @@
         "@playwright/test": "1.56.1",
         "@types/react": "19.2.2",
         "@types/react-dom": "19.2.2",
-        "@types/serve-static": "1.15.10",
         "oidc-client-ts": "3.3.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001751",
+        "caniuse-lite": "1.0.30001754",
         "testcontainers": "^11.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
@@ -83,7 +83,7 @@
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "1.5.0",
-        "@element-hq/web-shared-components": "file:packages/shared-components",
+        "@element-hq/web-shared-components": "link:packages/shared-components",
         "@fontsource/inconsolata": "^5",
         "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^11.5.7",
@@ -139,7 +139,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.280.1",
+        "posthog-js": "1.290.0",
         "qrcode": "1.5.4",
         "re-resizable": "6.11.2",
         "react": "^19.0.0",

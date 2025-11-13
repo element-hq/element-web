@@ -369,6 +369,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐶
@@ -383,6 +384,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐱
