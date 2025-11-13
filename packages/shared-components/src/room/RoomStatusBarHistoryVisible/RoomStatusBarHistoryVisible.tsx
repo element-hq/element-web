@@ -36,7 +36,7 @@ export function RoomStatusBarHistoryVisible(props: RoomStatusBarHistoryVisiblePr
                 <>
                     <Button
                         as="a"
-                        href="https://example.com"
+                        href="https://element.io/en/help#e2ee-history-sharing"
                         target="_blank"
                         className={styles.historyVisibilityButton}
                         kind="tertiary"
