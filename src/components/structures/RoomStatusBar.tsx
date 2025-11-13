@@ -174,6 +174,11 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     };
 
     private onRoomStateEventUpdate = (state: RoomState): void => {
+        // prevent useless re-renders if the flag is disabled.
+        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
+            return;
+        }
+
         if (state.roomId !== this.props.room.roomId) {
             return;
         }
@@ -299,8 +304,15 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
      *
      * If the room history visibility was changed to `HistoryVisibility.Joined` since this method
      * was last called, the flag is cleared in both the component state and settings.
+     *
+     * Additionally, while this feature is in development, this method will always return true unless
+     * the `feature_share_history_on_invite` lab is enabled.
      */
     private getUpdatedAcknowledgedHistoryVisibility(): boolean {
+        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
+            return true;
+        }
+
         let acknowledgedHistoryVisibility = SettingsStore.getValue(
             "acknowledgedHistoryVisibility",
             this.props.room.roomId,
@@ -326,8 +338,15 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
      * - The room is encrypted
      * - The room's history visibility is not set to `HistoryVisibility.Joined`
      * - The user has not already acknowledged the alert
+     *
+     * Additionally, while this feature is in development, this will always return `false`
+     * unless the `feature_share_history_on_invite` lab is enabled.
      */
     private shouldShowHistoryVisibilityContent(): boolean {
+        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
+            return false;
+        }
+
         return (
             this.state.roomHasEncryptionStateEvent &&
             this.state.roomHistoryVisibility !== HistoryVisibility.Joined &&
