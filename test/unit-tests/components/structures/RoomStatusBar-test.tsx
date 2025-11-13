@@ -156,8 +156,6 @@ describe("RoomStatusBar", () => {
         let acknowledgedHistoryVisibility = false;
 
         beforeAll(async () => {
-            await SettingsStore.setValue("feature_share_history_on_invite", null, SettingLevel.DEVICE, true);
-
             jest.spyOn(SettingsStore, "setValue").mockImplementation(
                 async (settingName: keyof Settings, roomId: string | null = null, level: SettingLevel, value: any) => {
                     if (settingName == "acknowledgedHistoryVisibility") {
@@ -170,7 +168,10 @@ describe("RoomStatusBar", () => {
                     if (settingName == "acknowledgedHistoryVisibility") {
                         return acknowledgedHistoryVisibility;
                     }
-                    return acknowledgedHistoryVisibility;
+                    if (settingName == "feature_share_history_on_invite") {
+                        return true;
+                    }
+                    return SettingsStore.getDefaultValue(settingName, roomId);
                 },
             );
         });
