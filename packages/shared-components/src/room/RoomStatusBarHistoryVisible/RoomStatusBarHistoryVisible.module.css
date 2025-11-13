@@ -6,6 +6,8 @@
  */
 
 .historyVisibility {
+    /* The !important flag is required to ensure these styles are not overridden by
+       @vector-im/compound-web's stylesheets, which *may* be loaded after this bundle. */
     border-radius: 0 !important;
     border-left: none !important;
     border-right: none !important;
@@ -13,5 +15,6 @@
 }
 
 .historyVisibilityButton {
+    /* See above. */
     white-space: nowrap !important;
 }
