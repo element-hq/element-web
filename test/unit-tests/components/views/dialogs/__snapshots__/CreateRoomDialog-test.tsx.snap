@@ -339,7 +339,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           </div>
         </div>
         <p>
-          Enables experimental support for encrypting state events, which hides metadata such as room names and topics from being visible to the server.
+          Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
         </p>
       </div>
     </form>
