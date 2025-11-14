@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<ChangelogDialog /> should fetch github proxy url for each repo with old and new version strings 1`] = `
 <DocumentFragment>

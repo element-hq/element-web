@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not parents of the room 1`] = `
 <DocumentFragment>

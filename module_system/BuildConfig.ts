@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as YAML from "yaml";
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 export type BuildConfig = {
     // Dev note: make everything here optional for user safety. Invalid

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`CompleteSecurity Allows verifying with another device if one is available 1`] = `
 <DocumentFragment>
@@ -9,9 +9,11 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
       class="mx_AuthPage_modal"
       style="position: relative;"
     >
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px;"
+        tabindex="-1"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"
@@ -127,7 +129,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"
@@ -175,9 +177,11 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
       class="mx_AuthPage_modal"
       style="position: relative;"
     >
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px;"
+        tabindex="-1"
       >
         <div
           class="mx_Dialog_border _glass_sepwu_8"
@@ -282,7 +286,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"

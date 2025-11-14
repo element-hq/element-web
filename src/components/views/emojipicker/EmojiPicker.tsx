@@ -79,71 +79,44 @@ class EmojiPicker extends React.Component<IProps, IState> {
             ...DATA_BY_CATEGORY,
         };
 
-        this.categories = [
-            {
-                id: "recent",
-                name: _t("emoji|category_frequently_used"),
-                enabled: this.recentlyUsed.length > 0,
-                visible: this.recentlyUsed.length > 0,
-                ref: React.createRef(),
-            },
-            {
-                id: "people",
-                name: _t("emoji|category_smileys_people"),
-                enabled: true,
-                visible: true,
-                ref: React.createRef(),
-            },
-            {
-                id: "nature",
-                name: _t("emoji|category_animals_nature"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "foods",
-                name: _t("emoji|category_food_drink"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "activity",
-                name: _t("emoji|category_activities"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "places",
-                name: _t("emoji|category_travel_places"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "objects",
-                name: _t("emoji|category_objects"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "symbols",
-                name: _t("emoji|category_symbols"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
-            {
-                id: "flags",
-                name: _t("emoji|category_flags"),
-                enabled: true,
-                visible: false,
-                ref: React.createRef(),
-            },
+        const hasRecentlyUsed = this.recentlyUsed.length > 0;
+
+        const categoryConfig: Array<{
+            id: CategoryKey;
+            name: string;
+        }> = [
+            { id: "recent", name: _t("emoji|category_frequently_used") },
+            { id: "people", name: _t("emoji|category_smileys_people") },
+            { id: "nature", name: _t("emoji|category_animals_nature") },
+            { id: "foods", name: _t("emoji|category_food_drink") },
+            { id: "activity", name: _t("emoji|category_activities") },
+            { id: "places", name: _t("emoji|category_travel_places") },
+            { id: "objects", name: _t("emoji|category_objects") },
+            { id: "symbols", name: _t("emoji|category_symbols") },
+            { id: "flags", name: _t("emoji|category_flags") },
         ];
+
+        this.categories = categoryConfig.map((config) => {
+            let isEnabled = true;
+            let isVisible = false;
+            let firstVisible = false;
+            if (config.id === "recent") {
+                isEnabled = hasRecentlyUsed;
+                isVisible = hasRecentlyUsed;
+                firstVisible = hasRecentlyUsed;
+            } else if (config.id === "people") {
+                isVisible = true;
+                firstVisible = !hasRecentlyUsed;
+            }
+            return {
+                id: config.id,
+                name: config.name,
+                enabled: isEnabled,
+                visible: isVisible,
+                firstVisible: firstVisible,
+                ref: React.createRef(),
+            };
+        });
     }
 
     private onScroll = (): void => {
@@ -259,6 +232,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         const body = this.scrollRef.current?.containerRef.current;
         if (!body) return;
         const rect = body.getBoundingClientRect();
+        let firstVisibleFound = false;
         for (const cat of this.categories) {
             const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
@@ -270,15 +244,24 @@ class EmojiPicker extends React.Component<IProps, IState> {
             const y = elemRect.y - rect.y;
             const yEnd = elemRect.y + elemRect.height - rect.y;
             cat.visible = y < rect.height && yEnd > 0;
+            if (cat.visible && !firstVisibleFound) {
+                firstVisibleFound = true;
+                cat.firstVisible = true;
+            } else {
+                cat.firstVisible = false;
+            }
             // We update this here instead of through React to avoid re-render on scroll.
             if (!cat.ref.current) continue;
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "true");
-                cat.ref.current.setAttribute("tabindex", "0");
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "false");
+            }
+            if (cat.firstVisible) {
+                cat.ref.current.setAttribute("tabindex", "0");
+            } else {
                 cat.ref.current.setAttribute("tabindex", "-1");
             }
         }
