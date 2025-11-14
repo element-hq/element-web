@@ -68,7 +68,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         // TODO: Remove this when the "mobile_register" page is retired.
         const iframes = document.querySelectorAll("iframe");
         for (const iframe of iframes) {
-            if (iframe.src.includes("https://www.recaptcha.net/recaptcha/api2/bframe")) {
+            if (iframe.src.startsWith("https://www.recaptcha.net/recaptcha/api2/bframe")) {
                 let parentBeforeBody: HTMLElement | null = iframe;
                 do {
                     parentBeforeBody = parentBeforeBody.parentElement;
