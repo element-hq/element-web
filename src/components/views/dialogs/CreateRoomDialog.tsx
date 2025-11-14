@@ -386,7 +386,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         let e2eeStateSection: JSX.Element | undefined;
         if (
-            SettingsStore.getValue("feature_msc3414_encrypted_state_events", null, false) &&
+            SettingsStore.getValue("feature_msc4362_encrypted_state_events", null, false) &&
             this.state.joinRule !== JoinRule.Public
         ) {
             let microcopy: string;

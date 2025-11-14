@@ -229,7 +229,7 @@ export interface Settings {
     "feature_new_room_list": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
-    "feature_msc3414_encrypted_state_events": IFeature;
+    "feature_msc4362_encrypted_state_events": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -782,7 +782,7 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_msc3414_encrypted_state_events": {
+    "feature_msc4362_encrypted_state_events": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
         controller: new EncryptedStateEventsController(),
