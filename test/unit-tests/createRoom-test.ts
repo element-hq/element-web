@@ -44,7 +44,7 @@ describe("createRoom", () => {
         });
     });
 
-    it("creates a private with encryption", async () => {
+    it("creates a private room with encryption", async () => {
         await createRoom(client, { createOpts: { preset: Preset.PrivateChat }, encryption: true });
 
         expect(client.createRoom).toHaveBeenCalledWith({
