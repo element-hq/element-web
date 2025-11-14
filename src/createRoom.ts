@@ -47,6 +47,7 @@ import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
+import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -447,6 +448,12 @@ async function enableStateEventEncryption(client: MatrixClient, room: Room, opts
     // Set room name
     if (opts.name) {
         await client.setRoomName(room.roomId, opts.name);
+    }
+
+    // Set room topic
+    if (opts.topic) {
+        const htmlTopic = htmlSerializeFromMdIfNeeded(opts.topic, { forceHTML: false });
+        await client.setRoomTopic(room.roomId, opts.topic, htmlTopic);
     }
 
     // Set room avatar

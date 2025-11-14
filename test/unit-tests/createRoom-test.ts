@@ -71,6 +71,7 @@ describe("createRoom", () => {
                     encryption: true,
                     stateEncryption: true,
                     name: "Super-Secret Super-colliding Super Room",
+                    topic: "super **Topic**",
                 }),
         );
 
@@ -92,6 +93,12 @@ describe("createRoom", () => {
         });
 
         expect(client.setRoomName).toHaveBeenCalledWith("!1:example.org", "Super-Secret Super-colliding Super Room");
+
+        expect(client.setRoomTopic).toHaveBeenCalledWith(
+            "!1:example.org",
+            "super **Topic**",
+            "super <strong>Topic</strong>",
+        );
     });
 
     it("creates a private room in a space", async () => {
