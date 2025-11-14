@@ -6,13 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import PlatformPeg from "../../PlatformPeg";
-import { SettingLevel } from "../SettingLevel";
-import SettingsStore from "../SettingsStore";
+import { type SettingLevel } from "../SettingLevel";
 import SettingController from "./SettingController";
 
 export default class EncryptedStateEventsController extends SettingController {
     public onChange(level: SettingLevel, roomId: string | null, newValue: boolean): void {
-        SettingsStore.setValue("feature_share_history_on_invite", null, SettingLevel.CONFIG, newValue);
         PlatformPeg.get()?.reload();
     }
 }

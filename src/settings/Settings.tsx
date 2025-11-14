@@ -50,7 +50,6 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
-import EncryptedStateEventsController from "./controllers/EncryptedStateEventsController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -785,7 +784,6 @@ export const SETTINGS: Settings = {
     "feature_msc4362_encrypted_state_events": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
-        controller: new EncryptedStateEventsController(),
         displayName: _td("labs|encrypted_state_events"),
         description: _td("labs|encrypted_state_events_description"),
         supportedLevels: LEVELS_ROOM_SETTINGS,
