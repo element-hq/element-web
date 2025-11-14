@@ -439,30 +439,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 }
 
 async function enableStateEventEncryption(client: MatrixClient, room: Room, opts: IOpts): Promise<void> {
-    await new Promise<void>((resolve, reject) => {
-        if (room.hasEncryptionStateEvent()) {
-            return resolve();
-        }
-
-        const roomState = room.getLiveTimeline().getState(Direction.Forward)!;
-
-        // Soft fail, since the room will still be functional if the initial state is not encrypted.
-        const timeout = setTimeout(() => {
-            logger.warn("Timed out while waiting for room to enable encryption");
-            roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
-            resolve();
-        }, 3000);
-
-        const onRoomStateUpdate = (state: RoomState): void => {
-            if (state.getStateEvents(EventType.RoomEncryption, "")) {
-                roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
-                clearTimeout(timeout);
-                resolve();
-            }
-        };
-
-        roomState.on(RoomStateEvent.Update, onRoomStateUpdate);
-    });
+    // Don't send our state events until encryption is enabled.
+    // (If this times out, we will send our initial state events unencrypted,
+    // but the room will still be functional.)
+    await waitForRoomEncryption(room);
 
     // Set room name
     if (opts.name) {
@@ -479,6 +459,36 @@ async function enableStateEventEncryption(client: MatrixClient, room: Room, opts
         }
         await client.sendStateEvent(room.roomId, EventType.RoomAvatar, { url }, "");
     }
+}
+
+/**
+ * Wait until the supplied room has an `m.room.encryption` event, or time out
+ * after 3 seconds.
+ */
+async function waitForRoomEncryption(room: Room): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+        if (room.hasEncryptionStateEvent()) {
+            return resolve();
+        }
+
+        const roomState = room.getLiveTimeline().getState(Direction.Forward)!;
+
+        const timeout = setTimeout(() => {
+            logger.warn("Timed out while waiting for room to enable encryption");
+            roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+            resolve();
+        }, 3000);
+
+        const onRoomStateUpdate = (state: RoomState): void => {
+            if (state.getStateEvents(EventType.RoomEncryption, "")) {
+                roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+                clearTimeout(timeout);
+                resolve();
+            }
+        };
+
+        roomState.on(RoomStateEvent.Update, onRoomStateUpdate);
+    });
 }
 
 /*
