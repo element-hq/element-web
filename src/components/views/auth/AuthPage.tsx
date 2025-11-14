@@ -46,12 +46,6 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         return AuthPage.welcomeBackgroundUrl;
     }
 
-    // Used for automatically focusing the content element which bears aria-live such that a screen reader
-    // will helpfully read things out as they progress during the auth flow.
-    private autoFocus(element: HTMLElement | null): void {
-        element?.focus();
-    }
-
     public render(): React.ReactElement {
         const pageStyle = {
             background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
@@ -95,15 +89,14 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             <div className="mx_AuthPage" style={pageStyle}>
                 <div className={modalClasses} style={modalStyle}>
                     {modalBlur}
-                    <div
+                    <main
                         className="mx_AuthPage_modalContent"
                         style={modalContentStyle}
                         tabIndex={-1}
-                        ref={this.autoFocus}
                         aria-live="polite"
                     >
                         {this.props.children}
-                    </div>
+                    </main>
                 </div>
                 <AuthFooter />
             </div>
