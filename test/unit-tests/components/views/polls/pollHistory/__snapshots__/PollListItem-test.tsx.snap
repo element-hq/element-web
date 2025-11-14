@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PollListItem /> renders a poll 1`] = `
 <div>
@@ -10,7 +10,7 @@ exports[`<PollListItem /> renders a poll 1`] = `
       tabindex="0"
     >
       <div
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="mx_PollListItem_content"
       >
         <span>

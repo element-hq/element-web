@@ -11,6 +11,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -26,7 +27,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { Flex } from "../../../shared-components/utils/Flex";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -203,7 +203,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
             <div className="mx_UserProfileSettings_profile">
                 <AvatarSetting
                     avatar={avatarURL ?? undefined}
-                    avatarAltText={_t("common|user_avatar")}
+                    avatarAccessibleName={_t("common|user_avatar")}
                     onChange={onAvatarChange}
                     removeAvatar={avatarURL ? onAvatarRemove : undefined}
                     placeholderName={displayName}

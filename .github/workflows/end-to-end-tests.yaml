@@ -54,7 +54,7 @@ jobs:
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -74,7 +74,7 @@ jobs:
               run: VERSION=$(scripts/get-version-from-git.sh) yarn build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
               with:
                   name: webapp
                   path: webapp
@@ -128,12 +128,12 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+              uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
               with:
                   name: webapp
                   path: webapp
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               with:
                   cache: "yarn"
                   cache-dependency-path: yarn.lock
@@ -147,7 +147,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
+              uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -172,7 +172,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
                   path: blob-report
@@ -200,7 +200,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
               if: inputs.skip != true
               with:
                   cache: "yarn"
@@ -212,7 +212,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+              uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports
@@ -228,7 +228,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
               with:
                   name: html-report
                   path: playwright-report

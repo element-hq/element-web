@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type HTMLProps, useContext } from "react";
 import { type Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { humanizeTime } from "@element-hq/web-shared-components";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -18,7 +19,6 @@ import BeaconStatus from "./BeaconStatus";
 import { BeaconDisplayStatus } from "./displayStatus";
 import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
 import ShareLatestLocation from "./ShareLatestLocation";
-import { humanizeTime } from "../../../shared-components/utils/humanize";
 
 interface Props {
     beacon: Beacon;

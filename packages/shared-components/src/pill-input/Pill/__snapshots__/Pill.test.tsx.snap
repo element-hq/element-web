@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Pill renders the pill 1`] = `
+<div>
+  <div
+    class="flex pill"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      style="width: 20px; height: 20px; border-radius: 100%; background-color: rgb(204, 204, 204);"
+    />
+    <span
+      class="label"
+      id="_r_0_"
+    >
+      Pill
+    </span>
+    <button
+      aria-describedby="_r_0_"
+      aria-label="Delete"
+      class="_icon-button_1pz9o_8"
+      data-kind="primary"
+      role="button"
+      style="--cpd-icon-button-size: 16px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          color="var(--cpd-color-icon-tertiary)"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+          />
+        </svg>
+      </div>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Pill renders the pill without close button 1`] = `
+<div>
+  <div
+    class="flex pill"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      style="width: 20px; height: 20px; border-radius: 100%; background-color: rgb(204, 204, 204);"
+    />
+    <span
+      class="label"
+      id="_r_1_"
+    >
+      Pill
+    </span>
+  </div>
+</div>
+`;

@@ -12,13 +12,11 @@ import { Resizable } from "re-resizable";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
 import LegacyCallView from "./LegacyCallView";
-import type ResizeNotifier from "../../../utils/ResizeNotifier";
+import { SDKContext } from "../../../contexts/SDKContext";
 
 interface IProps {
     // What room we should display the call for
     roomId: string;
-
-    resizeNotifier: ResizeNotifier;
 
     showApps?: boolean;
 }
@@ -33,8 +31,11 @@ interface IState {
  * or nothing if there is no call in that room.
  */
 export default class LegacyCallViewForRoom extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
-        super(props);
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
         const call = this.getCall();
         this.state = {
             call,
@@ -73,15 +74,15 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
     }
 
     private onResizeStart = (): void => {
-        this.props.resizeNotifier.startResizing();
+        this.context.resizeNotifier.startResizing();
     };
 
     private onResize = (): void => {
-        this.props.resizeNotifier.notifyTimelineHeightChanged();
+        this.context.resizeNotifier.notifyTimelineHeightChanged();
     };
 
     private onResizeStop = (): void => {
-        this.props.resizeNotifier.stopResizing();
+        this.context.resizeNotifier.stopResizing();
     };
 
     private setSidebarShown = (sidebarShown: boolean): void => {

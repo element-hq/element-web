@@ -66,6 +66,7 @@ describe("WysiwygAutocomplete", () => {
     const mockHandleMention = jest.fn();
     const mockHandleCommand = jest.fn();
     const mockHandleAtRoomMention = jest.fn();
+    const mockHandleEmoji = jest.fn();
 
     const renderComponent = (props: Partial<React.ComponentProps<typeof WysiwygAutocomplete>> = {}) => {
         const mockClient = stubClient();
@@ -81,6 +82,7 @@ describe("WysiwygAutocomplete", () => {
                         handleMention={mockHandleMention}
                         handleCommand={mockHandleCommand}
                         handleAtRoomMention={mockHandleAtRoomMention}
+                        handleEmoji={mockHandleEmoji}
                         {...props}
                     />
                 </ScopedRoomContextProvider>
@@ -96,6 +98,7 @@ describe("WysiwygAutocomplete", () => {
                 handleMention={mockHandleMention}
                 handleCommand={mockHandleCommand}
                 handleAtRoomMention={mockHandleAtRoomMention}
+                handleEmoji={mockHandleEmoji}
             />,
         );
         expect(screen.queryByTestId("autocomplete-wrapper")).not.toBeInTheDocument();

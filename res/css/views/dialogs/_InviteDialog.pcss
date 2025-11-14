@@ -24,37 +24,7 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_InviteDialog_editor {
         flex: 1;
-        width: 100%; /* Needed to make the Field inside grow */
-        background-color: $header-panel-bg-color;
-        border-radius: 4px;
-        min-height: 25px;
-        padding-inline-start: $spacing-8;
-        overflow-x: hidden;
-        overflow-y: auto;
-        display: flex;
-        flex-wrap: wrap;
-
-        .mx_InviteDialog_userTile {
-            margin: 6px 6px 0 0;
-            display: inline-block;
-            min-width: max-content; /* prevent manipulation by flexbox */
-        }
-
-        /* overrides bunch of our default text input styles */
-        > input[type="text"] {
-            margin: 6px 0 !important;
-            height: 24px;
-            font: var(--cpd-font-body-md-regular);
-            line-height: $font-24px;
-            padding-inline-start: $spacing-12;
-            border: 0 !important;
-            outline: 0 !important;
-            resize: none;
-            box-sizing: border-box;
-            min-width: 40%;
-            flex: 1 !important;
-            color: $primary-content !important;
-        }
+        margin-left: var(--cpd-space-0-5x);
     }
 
     .mx_InviteDialog_goButton {
@@ -108,51 +78,6 @@ Please see LICENSE files in the repository root for full details.
             flex-shrink: 1;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-    }
-}
-
-/* Many of these styles are stolen from mx_UserPill, but adjusted for the invite dialog. */
-.mx_InviteDialog_userTile {
-    margin-inline-end: $spacing-8;
-
-    .mx_InviteDialog_userTile_pill {
-        background-color: var(--cpd-color-bg-canvas-default);
-        border: 1px solid var(--cpd-color-gray-400);
-        border-radius: 99px;
-        display: inline-block;
-        height: 24px;
-        line-height: $font-24px;
-        padding-inline: $spacing-8;
-        vertical-align: middle;
-        color: var(--cpd-color-gray-1100);
-
-        .mx_SearchResultAvatar {
-            border-radius: 20px;
-            position: relative;
-            left: -5px;
-            top: 2px;
-        }
-
-        img.mx_SearchResultAvatar {
-            vertical-align: top;
-        }
-
-        .mx_InviteDialog_userTile_name {
-            vertical-align: top;
-        }
-
-        .mx_SearchResultAvatar_threepidAvatar {
-            background-color: #ffffff; /* this is fine without a var because it's for both themes */
-        }
-    }
-
-    .mx_InviteDialog_userTile_remove {
-        display: inline-block;
-        vertical-align: middle;
-
-        svg {
-            vertical-align: middle;
         }
     }
 }

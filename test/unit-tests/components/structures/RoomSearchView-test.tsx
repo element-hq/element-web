@@ -20,11 +20,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { stubClient } from "../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient } from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { searchPagination, SearchScope } from "../../../../src/Searching";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import SettingsStore from "../../../../src/settings/SettingsStore.ts";
+import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
 jest.mock("../../../../src/Searching", () => ({
     searchPagination: jest.fn(),
@@ -33,13 +35,14 @@ jest.mock("../../../../src/Searching", () => ({
 
 describe("<RoomSearchView/>", () => {
     const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-    const resizeNotifier = new ResizeNotifier();
     let client: MatrixClient;
+    let sdkContext: SdkContextClass;
     let room: Room;
 
     beforeEach(async () => {
         stubClient();
         client = MatrixClientPeg.safeGet();
+        sdkContext = new SdkContextClass();
         client.supportsThreads = jest.fn().mockReturnValue(true);
         room = new Room("!room:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockReturnValue(room);
@@ -60,7 +63,6 @@ describe("<RoomSearchView/>", () => {
                 term="search term"
                 scope={SearchScope.All}
                 promise={deferred.promise}
-                resizeNotifier={resizeNotifier}
                 className="someClass"
                 onUpdate={jest.fn()}
             />,
@@ -71,59 +73,57 @@ describe("<RoomSearchView/>", () => {
 
     it("should render results when the promise resolves", async () => {
         render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={false}
-                    term="search term"
-                    scope={SearchScope.All}
-                    promise={Promise.resolve<ISearchResults>({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        room_id: room.roomId,
-                                        event_id: "$2",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 1,
-                                        content: { body: "Foo Test Bar", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [
-                                            {
-                                                room_id: room.roomId,
-                                                event_id: "$1",
-                                                sender: client.getSafeUserId(),
-                                                origin_server_ts: 1,
-                                                content: { body: "Before", msgtype: "m.text" },
-                                                type: EventType.RoomMessage,
-                                            },
-                                        ],
-                                        events_after: [
-                                            {
-                                                room_id: room.roomId,
-                                                event_id: "$3",
-                                                sender: client.getSafeUserId(),
-                                                origin_server_ts: 1,
-                                                content: { body: "After", msgtype: "m.text" },
-                                                type: EventType.RoomMessage,
-                                            },
-                                        ],
-                                    },
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve<ISearchResults>({
+                    results: [
+                        SearchResult.fromJson(
+                            {
+                                rank: 1,
+                                result: {
+                                    room_id: room.roomId,
+                                    event_id: "$2",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 1,
+                                    content: { body: "Foo Test Bar", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
                                 },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
-                        count: 1,
-                    })}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={jest.fn()}
-                />
-            </MatrixClientContext.Provider>,
+                                context: {
+                                    profile_info: {},
+                                    events_before: [
+                                        {
+                                            room_id: room.roomId,
+                                            event_id: "$1",
+                                            sender: client.getSafeUserId(),
+                                            origin_server_ts: 1,
+                                            content: { body: "Before", msgtype: "m.text" },
+                                            type: EventType.RoomMessage,
+                                        },
+                                    ],
+                                    events_after: [
+                                        {
+                                            room_id: room.roomId,
+                                            event_id: "$3",
+                                            sender: client.getSafeUserId(),
+                                            origin_server_ts: 1,
+                                            content: { body: "After", msgtype: "m.text" },
+                                            type: EventType.RoomMessage,
+                                        },
+                                    ],
+                                },
+                            },
+                            eventMapper,
+                        ),
+                    ],
+                    highlights: [],
+                    count: 1,
+                })}
+                className="someClass"
+                onUpdate={jest.fn()}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         await screen.findByText("Before");
@@ -133,41 +133,39 @@ describe("<RoomSearchView/>", () => {
 
     it("should highlight words correctly", async () => {
         render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={false}
-                    term="search term"
-                    scope={SearchScope.Room}
-                    promise={Promise.resolve<ISearchResults>({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        room_id: room.roomId,
-                                        event_id: "$2",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 1,
-                                        content: { body: "Foo Test Bar", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [],
-                                        events_after: [],
-                                    },
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.Room}
+                promise={Promise.resolve<ISearchResults>({
+                    results: [
+                        SearchResult.fromJson(
+                            {
+                                rank: 1,
+                                result: {
+                                    room_id: room.roomId,
+                                    event_id: "$2",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 1,
+                                    content: { body: "Foo Test Bar", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
                                 },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: ["test"],
-                        count: 1,
-                    })}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={jest.fn()}
-                />
-            </MatrixClientContext.Provider>,
+                                context: {
+                                    profile_info: {},
+                                    events_before: [],
+                                    events_after: [],
+                                },
+                            },
+                            eventMapper,
+                        ),
+                    ],
+                    highlights: ["test"],
+                    count: 1,
+                })}
+                className="someClass"
+                onUpdate={jest.fn()}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const text = await screen.findByText("Test");
@@ -231,17 +229,15 @@ describe("<RoomSearchView/>", () => {
         const onUpdate = jest.fn();
 
         const { rerender } = render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={true}
-                    term="search term"
-                    scope={SearchScope.All}
-                    promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={onUpdate}
-                />
-            </MatrixClientContext.Provider>,
+            <RoomSearchView
+                inProgress={true}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve(searchResults)}
+                className="someClass"
+                onUpdate={onUpdate}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         await screen.findByRole("progressbar");
@@ -249,17 +245,14 @@ describe("<RoomSearchView/>", () => {
         expect(onUpdate).toHaveBeenCalledWith(false, expect.objectContaining({}), null);
 
         rerender(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={false}
-                    term="search term"
-                    scope={SearchScope.All}
-                    promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={jest.fn()}
-                />
-            </MatrixClientContext.Provider>,
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve(searchResults)}
+                className="someClass"
+                onUpdate={jest.fn()}
+            />,
         );
 
         expect(screen.queryByRole("progressbar")).toBeFalsy();
@@ -275,7 +268,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -299,7 +291,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={jest.fn()}
                 />
@@ -324,7 +315,6 @@ describe("<RoomSearchView/>", () => {
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
-                    resizeNotifier={resizeNotifier}
                     className="someClass"
                     onUpdate={onUpdate}
                 />
@@ -424,17 +414,15 @@ describe("<RoomSearchView/>", () => {
         };
 
         render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={false}
-                    term="search term"
-                    scope={SearchScope.All}
-                    promise={Promise.resolve(searchResults)}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={jest.fn()}
-                />
-            </MatrixClientContext.Provider>,
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve(searchResults)}
+                className="someClass"
+                onUpdate={jest.fn()}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const beforeNode = await screen.findByText("Before");
@@ -452,6 +440,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should pass appropriate permalink creator for all rooms search", async () => {
+        await SettingsStore.setValue("alwaysShowTimestamps", null, SettingLevel.DEVICE, true);
         const room2 = new Room("!room2:server", client, client.getSafeUserId());
         const room3 = new Room("!room3:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockImplementation(
@@ -459,98 +448,96 @@ describe("<RoomSearchView/>", () => {
         );
 
         render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomSearchView
-                    inProgress={false}
-                    term="search term"
-                    scope={SearchScope.All}
-                    promise={Promise.resolve<ISearchResults>({
-                        results: [
-                            SearchResult.fromJson(
-                                {
-                                    rank: 1,
-                                    result: {
-                                        room_id: room.roomId,
-                                        event_id: "$2",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 1,
-                                        content: { body: "Room 1", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [],
-                                        events_after: [],
-                                    },
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve<ISearchResults>({
+                    results: [
+                        SearchResult.fromJson(
+                            {
+                                rank: 1,
+                                result: {
+                                    room_id: room.roomId,
+                                    event_id: "$2",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 1,
+                                    content: { body: "Room 1", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
                                 },
-                                eventMapper,
-                            ),
-                            SearchResult.fromJson(
-                                {
-                                    rank: 2,
-                                    result: {
-                                        room_id: room2.roomId,
-                                        event_id: "$22",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 1,
-                                        content: { body: "Room 2", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [],
-                                        events_after: [],
-                                    },
+                                context: {
+                                    profile_info: {},
+                                    events_before: [],
+                                    events_after: [],
                                 },
-                                eventMapper,
-                            ),
-                            SearchResult.fromJson(
-                                {
-                                    rank: 2,
-                                    result: {
-                                        room_id: room2.roomId,
-                                        event_id: "$23",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 2,
-                                        content: { body: "Room 2 message 2", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [],
-                                        events_after: [],
-                                    },
+                            },
+                            eventMapper,
+                        ),
+                        SearchResult.fromJson(
+                            {
+                                rank: 2,
+                                result: {
+                                    room_id: room2.roomId,
+                                    event_id: "$22",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 1,
+                                    content: { body: "Room 2", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
                                 },
-                                eventMapper,
-                            ),
-                            SearchResult.fromJson(
-                                {
-                                    rank: 3,
-                                    result: {
-                                        room_id: room3.roomId,
-                                        event_id: "$32",
-                                        sender: client.getSafeUserId(),
-                                        origin_server_ts: 1,
-                                        content: { body: "Room 3", msgtype: "m.text" },
-                                        type: EventType.RoomMessage,
-                                    },
-                                    context: {
-                                        profile_info: {},
-                                        events_before: [],
-                                        events_after: [],
-                                    },
+                                context: {
+                                    profile_info: {},
+                                    events_before: [],
+                                    events_after: [],
                                 },
-                                eventMapper,
-                            ),
-                        ],
-                        highlights: [],
-                        count: 1,
-                    })}
-                    resizeNotifier={resizeNotifier}
-                    className="someClass"
-                    onUpdate={jest.fn()}
-                />
-            </MatrixClientContext.Provider>,
+                            },
+                            eventMapper,
+                        ),
+                        SearchResult.fromJson(
+                            {
+                                rank: 2,
+                                result: {
+                                    room_id: room2.roomId,
+                                    event_id: "$23",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 2,
+                                    content: { body: "Room 2 message 2", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
+                                },
+                                context: {
+                                    profile_info: {},
+                                    events_before: [],
+                                    events_after: [],
+                                },
+                            },
+                            eventMapper,
+                        ),
+                        SearchResult.fromJson(
+                            {
+                                rank: 3,
+                                result: {
+                                    room_id: room3.roomId,
+                                    event_id: "$32",
+                                    sender: client.getSafeUserId(),
+                                    origin_server_ts: 1,
+                                    content: { body: "Room 3", msgtype: "m.text" },
+                                    type: EventType.RoomMessage,
+                                },
+                                context: {
+                                    profile_info: {},
+                                    events_before: [],
+                                    events_after: [],
+                                },
+                            },
+                            eventMapper,
+                        ),
+                    ],
+                    highlights: [],
+                    count: 1,
+                })}
+                className="someClass"
+                onUpdate={jest.fn()}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         const event1 = await screen.findByText("Room 1");

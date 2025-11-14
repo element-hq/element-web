@@ -642,28 +642,6 @@ describe("ElementCall", () => {
             expect(urlParams.get("analyticsID")).toBeFalsy();
         });
 
-        it("passes feature_allow_screen_share_only_mode setting to allowVoipWithNoMedia url param", async () => {
-            // Now test with the preference set to true
-            const originalGetValue = SettingsStore.getValue;
-            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
-                switch (name) {
-                    case "feature_allow_screen_share_only_mode":
-                        return true;
-                    default:
-                        return excludeDefault
-                            ? originalGetValue(name, roomId, excludeDefault)
-                            : originalGetValue(name, roomId, excludeDefault);
-                }
-            };
-            ElementCall.create(room);
-            const call = Call.get(room);
-            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
-
-            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("allowVoipWithNoMedia")).toBe("true");
-            SettingsStore.getValue = originalGetValue;
-        });
-
         it("passes empty analyticsID if the id is not in the account data", async () => {
             client.getAccountData.mockImplementation((eventType: string) => {
                 if (eventType === PosthogAnalytics.ANALYTICS_EVENT_TYPE) {

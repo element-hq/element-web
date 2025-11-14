@@ -49,7 +49,6 @@ import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
-import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
@@ -141,6 +140,7 @@ import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/ShareP
 import Markdown from "../../Markdown";
 import { sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
+import { ModuleApi } from "../../modules/Api.ts";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -176,9 +176,11 @@ interface IProps {
 interface IState {
     // the master view we are showing.
     view: Views;
-    // What the LoggedInView would be showing if visible
+    // What the LoggedInView would be showing if visible.
+    // A member of the enum for standard pages or a string for those provided by
+    // a module.
     // eslint-disable-next-line camelcase
-    page_type?: PageType;
+    page_type?: PageType | string;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
     // what ID an alias points at.
@@ -199,7 +201,6 @@ interface IState {
     // and disable it when there are no dialogs
     hideToSRUsers: boolean;
     syncError: Error | null;
-    resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
     threepidInvite?: IThreepidInvite;
@@ -254,7 +255,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             isMobileRegistration: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
-            resizeNotifier: new ResizeNotifier(),
             ready: false,
         };
 
@@ -459,7 +459,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
 
         // For PersistentElement
-        this.state.resizeNotifier.on("middlePanelResized", this.dispatchTimelineResize);
+        this.stores.resizeNotifier.on("middlePanelResized", this.dispatchTimelineResize);
 
         RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatusIndicator);
 
@@ -511,7 +511,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher?.stop();
         this.fontWatcher?.stop();
         UIStore.destroy();
-        this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
+        this.stores.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
     }
 
@@ -828,7 +828,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         collapseLhs: true,
                     },
                     () => {
-                        this.state.resizeNotifier.notifyLeftHandleResized();
+                        this.stores.resizeNotifier.notifyLeftHandleResized();
                     },
                 );
                 break;
@@ -838,7 +838,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         collapseLhs: false,
                     },
                     () => {
-                        this.state.resizeNotifier.notifyLeftHandleResized();
+                        this.stores.resizeNotifier.notifyLeftHandleResized();
                     },
                 );
                 break;
@@ -1924,8 +1924,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 userId: userId,
                 subAction: params?.action,
             });
-        } else {
-            logger.info(`Ignoring showScreen for '${screen}'`);
+        } else if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
+            this.setState({ page_type: screen });
         }
     }
 
@@ -1957,7 +1957,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         this.prevWindowWidth = width;
-        this.state.resizeNotifier.notifyWindowResized();
+        this.stores.resizeNotifier.notifyWindowResized();
     };
 
     private dispatchTimelineResize(): void {

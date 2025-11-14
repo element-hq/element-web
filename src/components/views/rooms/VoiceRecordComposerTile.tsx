@@ -29,7 +29,7 @@ import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { attachMentions, attachRelation } from "./SendMessageComposer";
+import { attachMentions, attachRelation } from "../../../utils/messages";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";

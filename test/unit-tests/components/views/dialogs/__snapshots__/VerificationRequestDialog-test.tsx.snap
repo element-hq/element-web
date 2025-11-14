@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 1`] = `
 <DocumentFragment>
@@ -22,17 +22,14 @@ exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Confirm that you see a green shield on your other device
       </h1>
     </div>
     <div
       class="mx_UserInfo_container mx_VerificationPanel_reciprocate_section"
     >
-      <h3>
-        Verify by scanning
-      </h3>
       <p>
-        Almost there! Is your other device showing the same shield?
+        Check again on your other device to finish verification.
       </p>
       <div
         class="mx_E2EIcon mx_E2EIcon_verified"
@@ -47,18 +44,18 @@ exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 
         class="mx_VerificationPanel_reciprocateButtons"
       >
         <div
-          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
-          role="button"
-          tabindex="0"
-        >
-          No
-        </div>
-        <div
           class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
           role="button"
           tabindex="0"
         >
-          Yes
+          Yes, I see a green shield
+        </div>
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          No, I don't see a green shield
         </div>
       </div>
     </div>
@@ -99,14 +96,14 @@ exports[`VerificationRequestDialog After we started verification here, says we a
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Start verification on the other device
       </h1>
     </div>
     <div>
-      To proceed, please accept the verification request on your other device.
+      Once accepted you'll be able to continue with the verification.
     </div>
     <div
-      aria-describedby="«r6»"
+      aria-describedby="_r_6_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -143,11 +140,11 @@ exports[`VerificationRequestDialog Initially, asks how you would like to verify 
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Choose how to verify
       </h1>
     </div>
     <div>
-      Verify this device by completing one of the following:
+      Verify by completing one of the following:
       <div
         class="mx_VerificationPanel_QRPhase_startOptions"
       >
@@ -236,17 +233,14 @@ exports[`VerificationRequestDialog Shows a failure message if verification was c
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Verification failed
       </h1>
     </div>
     <div
       class="mx_UserInfo_container"
     >
-      <h3>
-        Verification cancelled
-      </h3>
       <p>
-        You cancelled verification on your other device. Start verification again from the notification.
+        Either the request timed out, the request was denied, or there was a verification mismatch.
       </p>
       <div
         class="mx_AccessibleButton mx_UserInfo_wideButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
@@ -293,14 +287,14 @@ exports[`VerificationRequestDialog Shows a successful message if verification fi
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Device verified
       </h1>
     </div>
     <div
       class="mx_UserInfo_container mx_VerificationPanel_verified_section"
     >
       <p>
-        You've successfully verified your device!
+        Now you can read or send messages securely, and anyone you chat with can also trust this device.
       </p>
       <div
         class="mx_E2EIcon mx_E2EIcon_verified"
@@ -356,7 +350,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Verify other device
+        Compare emojis
       </h1>
     </div>
     <div
@@ -366,7 +360,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
         class="mx_VerificationShowSas"
       >
         <p>
-          Confirm the emoji below are displayed on both devices, in the same order:
+          Confirm that the emojis below match those shown on your other device.
         </p>
         <div
           class="mx_VerificationShowSas_emojiSas"
@@ -375,6 +369,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐶
@@ -389,6 +384,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐱

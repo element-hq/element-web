@@ -12,7 +12,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
-import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { RichList, RichItem, PillInput, Pill } from "@element-hq/web-shared-components";
 
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
@@ -64,8 +64,6 @@ import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDi
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
-import { RichList } from "../../../shared-components/rich-list/RichList";
-import { RichItem } from "../../../shared-components/rich-list/RichItem";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -121,27 +119,10 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         const avatarSize = "20px";
         const avatar = <SearchResultAvatar user={this.props.member} size={avatarSize} />;
 
-        let closeButton;
-        if (this.props.onRemove) {
-            closeButton = (
-                <AccessibleButton
-                    className="mx_InviteDialog_userTile_remove"
-                    onClick={this.onRemove}
-                    aria-label={_t("action|remove")}
-                >
-                    <CloseIcon width="16px" height="16px" />
-                </AccessibleButton>
-            );
-        }
-
         return (
-            <span className="mx_InviteDialog_userTile">
-                <span className="mx_InviteDialog_userTile_pill">
-                    {avatar}
-                    <span className="mx_InviteDialog_userTile_name">{this.props.member.name}</span>
-                </span>
-                {closeButton}
-            </span>
+            <Pill label={this.props.member.name} onClick={this.onRemove}>
+                {avatar}
+            </Pill>
         );
     }
 }
@@ -431,7 +412,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             // We mutate the given set so that any later callers avoid duplicating these users
             excludedTargetIds.add(userId);
         }
-        if (!recents) logger.warn("[Invite:Recents] No recents to suggest!");
+        if (recents.length === 0) logger.warn("[Invite:Recents] No recents to suggest!");
 
         // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);
@@ -609,13 +590,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
         switch (action) {
-            case KeyBindingAction.Backspace:
-                if (value || this.state.targets.length <= 0) break;
-
-                // when the field is empty and the user hits backspace remove the right-most target
-                this.removeMember(this.state.targets[this.state.targets.length - 1]);
-                handled = true;
-                break;
             case KeyBindingAction.Space:
                 if (!value || !value.includes("@") || value.includes(" ")) break;
 
@@ -908,16 +882,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onClickInputArea = (e: React.MouseEvent): void => {
-        // Stop the browser from highlighting text
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (this.editorRef && this.editorRef.current) {
-            this.editorRef.current.focus();
-        }
-    };
-
     private onUseDefaultIdentityServerClick = (e: ButtonEvent): void => {
         e.preventDefault();
 
@@ -1041,35 +1005,33 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     private renderEditor(): JSX.Element {
-        const hasPlaceholder =
-            this.props.kind == InviteKind.CallTransfer &&
-            this.state.targets.length === 0 &&
-            this.state.filterText.length === 0;
         const targets = this.state.targets.map((t) => (
             <DMUserTile member={t} onRemove={this.state.busy ? undefined : this.removeMember} key={t.userId} />
         ));
-        const input = (
-            <input
-                type="text"
-                onKeyDown={this.onKeyDown}
-                onChange={this.updateFilter}
-                value={this.state.filterText}
-                ref={this.editorRef}
-                onPaste={this.onPaste}
-                autoFocus={true}
-                disabled={
-                    this.state.busy || (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0)
-                }
-                autoComplete="off"
-                placeholder={hasPlaceholder ? _t("action|search") : undefined}
-                data-testid="invite-dialog-input"
-            />
-        );
+
         return (
-            <div className="mx_InviteDialog_editor" onClick={this.onClickInputArea}>
+            <PillInput
+                data-testid="invite-dialog-input-wrapper"
+                className="mx_InviteDialog_editor"
+                inputProps={{
+                    "ref": this.editorRef,
+                    "value": this.state.filterText,
+                    "onKeyDown": this.onKeyDown,
+                    "onChange": this.updateFilter,
+                    "onPaste": this.onPaste,
+                    "placeholder": _t("action|search"),
+                    "autoFocus": true,
+                    "disabled":
+                        this.state.busy ||
+                        (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0),
+                    "data-testid": "invite-dialog-input",
+                }}
+                onRemoveChildren={() =>
+                    !this.state.busy && this.removeMember(this.state.targets[this.state.targets.length - 1])
+                }
+            >
                 {targets}
-                {input}
-            </div>
+            </PillInput>
         );
     }
 

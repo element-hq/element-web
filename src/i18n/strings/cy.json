@@ -603,7 +603,6 @@
         "user": "Defnyddwyr",
         "user_avatar": "Llun proffil",
         "username": "Enw defnyddiwr",
-        "verification_cancelled": "Dilysiad wedi'i ddiddymu",
         "verified": "Wedi ei wirio",
         "version": "Fersiwn",
         "video": "Fideo",
@@ -811,6 +810,10 @@
         },
         "developer_mode": "Modd datblygwr",
         "developer_tools": "Offer Datblygwr",
+        "device_dehydrated_no": "Dadhydredig: Na",
+        "device_dehydrated_yes": "Dadhydredig: Ydyw",
+        "device_id": "ID dyfais: %(deviceId)s",
+        "device_keys": "Allweddi dyfais",
         "edit_setting": "Golygu gosodiad",
         "edit_values": "Golygu gwerthoedd",
         "empty_string": "<empty string>",
@@ -1000,9 +1003,6 @@
                 "skip_verification": "Hepgor dilysu am y tro",
                 "verify_this_device": "Dilyswch y ddyfais hon"
             },
-            "cancelled": "Rydych chi wedi diddymu'r dilysiad.",
-            "cancelled_self": "Rydych chi wedi diddymu dilysiad ar eich dyfais arall.",
-            "cancelled_user": "%(displayName)s dilysiad wedi'i ddiddymu.",
             "cancelling": "Wrthi'n diddymu…",
             "cant_confirm": "Methu cadarnhau?",
             "complete_action": "Iawn",
@@ -1038,34 +1038,24 @@
             "no_support_qr_emoji": "Nid yw'r ddyfais rydych chi'n ceisio'i dilysu yn cefnogi sganio cod QR na dilysiad emoji, sef yr hyn y mae %(brand)s yn ei gefnogi. Ceisiwch gyda chleient gwahanol.",
             "other_party_cancelled": "Mae'r parti arall wedi diddymu'r dilysiad.",
             "prompt_encrypted": "Gwiriwch yr holl ddefnyddwyr mewn ystafell i sicrhau ei bod yn ddiogel.",
-            "prompt_self": "Dechreuwch ddilysu eto o'r hysbysiad.",
             "prompt_unencrypted": "Mewn ystafelloedd wedi'u hamgryptio, gwiriwch bob defnyddiwr i sicrhau ei fod yn ddiogel.",
-            "prompt_user": "Dechrau dilysu eto o'u proffil.",
             "qr_or_sas": "%(qrCode)s neu %(emojiCompare)s",
-            "qr_or_sas_header": "Dilyswch y ddyfais hon trwy gwblhau un o'r canlynol:",
             "qr_prompt": "Sganiwch y cod unigryw hwn",
-            "qr_reciprocate_same_shield_device": "Bron yno! A yw eich dyfais arall yn dangos yr un darian?",
             "qr_reciprocate_same_shield_user": "Bron yno! Ydy %(displayName)s yn dangos yr un darian?",
-            "request_toast_accept": "Dilysu Sesiwn",
             "request_toast_accept_user": "Dilysu Defnyddiwr",
             "request_toast_decline_counter": "Anwybyddu (%(counter)s)",
             "request_toast_detail": "%(deviceId)s oddi wrth %(ip)s",
             "sas_caption_self": "Dilyswch y ddyfais hon trwy gadarnhau bod y rhif canlynol yn ymddangos ar ei sgrin.",
             "sas_caption_user": "Dilyswch y defnyddiwr hwn trwy gadarnhau bod y rhif canlynol yn ymddangos ar eu sgrin.",
             "sas_description": "Cymharwch set unigryw o emoji os nad oes gennych gamera ar y naill ddyfais na'r llall",
-            "sas_emoji_caption_self": "Cadarnhewch fod yr emoji isod yn cael eu harddangos ar y ddwy ddyfais, yn yr un drefn:",
             "sas_emoji_caption_user": "Dilyswch y defnyddiwr hwn trwy gadarnhau bod yr emoji canlynol yn ymddangos ar eu sgrin.",
             "sas_match": "Maen nhw'n cyfateb",
             "sas_no_match": "D'yn nhw ddim yn cyfateb",
             "sas_prompt": "Cymharu emoji unigryw",
             "scan_qr": "Gwirio trwy sganio",
             "scan_qr_explainer": "Gofynnwch i %(displayName)s sganio'ch cod:",
-            "self_verification_hint": "I symud ymlaen, derbyniwch y cais dilysu ar eich dyfais arall.",
             "start_button": "Dechrau Dilysu",
-            "successful_device": "Rydych chi wedi dilysu %(deviceName)s (%(deviceId)s) yn llwyddiannus!",
-            "successful_own_device": "Rydych chi wedi dilysu'ch dyfais yn llwyddiannus!",
             "successful_user": "Rydych chi wedi dilysu %(displayName)s yn llwyddiannus!",
-            "timed_out": "Daeth y cyfnod dilysu i ben.",
             "unsupported_method": "Methu dod o hyd i ddull dilysu a gefnogir.",
             "unverified_session_toast_accept": "Ie, fi wnaeth",
             "unverified_session_toast_title": "Mewngofnod newydd. Ai chi oedd hwn?",
@@ -1075,6 +1065,7 @@
             "use_another_device": "Defnyddiwch ddyfais arall",
             "use_recovery_key": "Defnyddiwch yr allwedd adfer",
             "verification_dialog_title_device": "Dilysu dyfais arall",
+            "verification_dialog_title_failed": "Methodd y dilysu",
             "verification_dialog_title_user": "Cais Dilysu",
             "verification_skip_warning": "Heb ddilysu, ni fydd gennych fynediad i'ch holl negeseuon a gallech ymddangos fel rhai nad ydych yn ymddiried ynddynt i eraill.",
             "verification_success_with_backup": "Mae eich dyfais newydd bellach wedi'i dilysu. Mae ganddo fynediad i'ch negeseuon wedi'u hamgryptio, a bydd defnyddwyr eraill yn ei ystyried yn rhai y mae modd ymddiried ynddynt.",
@@ -1487,7 +1478,6 @@
         "upload_file": "Llwytho ffeil i fyny"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Caniatáu modd rhannu sgrin yn unig",
         "ask_to_join": "Galluogi gofyn i ymuno",
         "automatic_debug_logs": "Anfon logiau dadfygio yn awtomatig ar unrhyw wall",
         "automatic_debug_logs_decryption": "Anfon logiau dadgryptio yn awtomatig ar wallau dadgryptio",
@@ -1934,7 +1924,6 @@
         "thread_list": {
             "context_menu_label": "Dewisiadau edafedd"
         },
-        "title": "Panel dde",
         "video_room_chat": {
             "title": "Sgwrs"
         }
@@ -1987,20 +1976,13 @@
         "error_jump_to_date_send_logs_prompt": "Cyflwynwch <debugLogsLink>logiau dadfygio</debugLogsLink> i'n helpu i ddod o hyd i'r broblem.",
         "error_jump_to_date_title": "Methu dod o hyd i ddigwyddiad ar y dyddiad hwnnw",
         "face_pile_summary": {
-            "zero": "Y %(count)s personau rydych chi'n ei adnabod sydd eisoes wedi ymuno",
-            "one": "Yr %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno",
-            "two": "Y %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno",
-            "few": "Y %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno",
-            "many": "Y %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno",
-            "other": "Y %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno"
+            "Y %(count)s personau rydych chi'n ei adnabod sydd eisoes wedi ymuno": "zero",
+            "Yr %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno": "one",
+            "Y %(count)s person rydych chi'n ei adnabod sydd eisoes wedi ymuno": "other"
         },
         "face_pile_tooltip_label": {
-            "zero": "Gweld y cyfan o'r %(count)s aelod",
-            "one": "Gweld 1 aelod",
-            "two": "Gweld y cyfan o'r %(count)s aelod",
-            "few": "Gweld y cyfan o'r %(count)s aelod",
-            "many": "Gweld y cyfan o'r %(count)s aelod",
-            "other": "Gweld y cyfan o'r %(count)s aelod"
+            "Gweld y cyfan o'r %(count)s aelod": "other",
+            "Gweld 1 aelod": "one"
         },
         "face_pile_tooltip_shortcut": "Gan gynnwys %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Gan eich cynnwys chi, %(commaSeparatedMembers)s",
@@ -2010,12 +1992,9 @@
         "forget_space": "Anghofiwch y gofod hwn",
         "header": {
             "n_people_asking_to_join": {
-                "zero": "%(count)s personau'n gofyn i ymuno",
-                "one": "Yn gofyn i ymuno",
-                "two": "%(count)s person yn gofyn i ymuno",
-                "few": "%(count)s person yn gofyn i ymuno",
-                "many": "%(count)s person yn gofyn i ymuno",
-                "other": "%(count)s person yn gofyn i ymuno"
+                "%(count)s personau'n gofyn i ymuno": "zero",
+                "Yn gofyn i ymuno": "one",
+                "%(count)s person yn gofyn i ymuno": "other"
             },
             "room_is_public": "Mae'r ystafell hon yn gyhoeddus"
         },
@@ -2107,12 +2086,8 @@
             "all_rooms_button": "Chwiliwch bob ystafell",
             "placeholder": "Chwilio negeseuon…",
             "summary": {
-                "zero": "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\"",
-                "one": "1 canlyniad wedi'i ganfod ar gyfer “<query/>\"",
-                "two": "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\"",
-                "few": "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\"",
-                "many": "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\"",
-                "other": "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\""
+                "%(count)s canlyniad wedi'u canfod ar gyfer “<query/>\"": "other",
+                "1 canlyniad wedi'i ganfod ar gyfer “<query/>\"": "one"
             },
             "this_room_button": "Chwiliwch yr ystafell hon"
         },
@@ -2130,12 +2105,9 @@
         },
         "unknown_status_code_for_timeline_jump": "cod statws anhysbys",
         "unread_notifications_predecessor": {
-            "zero": "Does gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon",
-            "one": "Mae gennych %(count)s hysbysiad heb ei ddarllen mewn fersiwn flaenorol o'r ystafell hon.",
-            "two": "Mae gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon",
-            "few": "Mae gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon",
-            "many": "Mae gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon",
-            "other": "Mae gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon"
+            "Does gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon": "zero",
+            "Mae gennych %(count)s hysbysiad heb ei ddarllen mewn fersiwn flaenorol o'r ystafell hon.": "one",
+            "Mae gennych %(count)s hysbysiad heb eu darllen mewn fersiwn flaenorol o'r ystafell hon": "other"
         },
         "upgrade_error_description": "Gwiriwch ddwywaith bod eich gweinydd yn cefnogi'r fersiwn ystafell a ddewiswyd a rhowch gynnig arall arni.",
         "upgrade_error_title": "Gwall wrth uwchraddio'r ystafell",
@@ -2145,12 +2117,7 @@
         "upgrade_warning_bar_upgraded": "Mae'r ystafell hon eisoes wedi'i huwchraddio.",
         "upload": {
             "uploading_multiple_file": {
-                "zero": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall",
-                "one": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall",
-                "two": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall",
-                "few": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall",
-                "many": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall",
-                "other": "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall"
+                "Wrthi'n llwytho i fyny %(filename)s a %(count)s arall": "other"
             },
             "uploading_single_file": "Wrthi'n llwytho %(filematere)s"
         },
@@ -2197,12 +2164,7 @@
         "home_menu_label": "Dewisiadau cartref",
         "join_public_room_label": "Ymuno â'r ystafell gyhoeddus",
         "joining_rooms_status": {
-            "zero": "Yn ymuno â %(count)s ystafell ar hyn o bryd",
-            "one": "Yn ymuno â %(count)s ystafell ar hyn o bryd",
-            "two": "Yn ymuno â %(count)s ystafell ar hyn o bryd",
-            "few": "Yn ymuno â %(count)s ystafell ar hyn o bryd",
-            "many": "Yn ymuno â %(count)s ystafell ar hyn o bryd",
-            "other": "Yn ymuno â %(count)s ystafell ar hyn o bryd"
+            "Yn ymuno â %(count)s ystafell ar hyn o bryd": "other"
         },
         "list_title": "Rhestr ystafelloedd",
         "more_options": {
@@ -2217,12 +2179,7 @@
         "open_space_menu": "Agor dewislen gofod",
         "primary_filters": "Hidlau rhestr ystafelloedd",
         "redacting_messages_status": {
-            "zero": "Yn tynnu negeseuon mewn %(count)s ystafell",
-            "one": "Yn tynnu negeseuon mewn %(count)s ystafell",
-            "two": "Yn tynnu negeseuon mewn %(count)s ystafell",
-            "few": "Yn tynnu negeseuon mewn %(count)s ystafell",
-            "many": "Yn tynnu negeseuon mewn %(count)s ystafell",
-            "other": "Yn tynnu negeseuon mewn %(count)s ystafell"
+            "Yn tynnu negeseuon mewn %(count)s ystafell": "other"
         },
         "release_announcement": {
             "done": "Gorffen",
@@ -2251,12 +2208,7 @@
         "room_options": "Dewisiadau Ystafelloedd",
         "show_less": "Dangos llai",
         "show_n_more": {
-            "zero": "Dangos %(count)s yn rhagor",
-            "one": "Dangos %(count)s yn rhagor",
-            "two": "Dangos %(count)s yn rhagor",
-            "few": "Dangos %(count)s yn rhagor",
-            "many": "Dangos %(count)s yn rhagor",
-            "other": "Dangos %(count)s yn rhagor"
+            "Dangos %(count)s yn rhagor": "other"
         },
         "show_previews": "Dangos rhagolwg o negeseuon",
         "sort": "Trefnu",
@@ -2481,40 +2433,23 @@
             "join_rule_restricted_dialog_heading_unknown": "Mae'r rhain yn debygol o fod yn rhai y mae gweinyddwyr ystafell eraill yn rhan ohonyn nhw.",
             "join_rule_restricted_dialog_title": "Dewiswch ofodau",
             "join_rule_restricted_n_more": {
-                "zero": "a %(count)s yn rhagor",
-                "one": "a %(count)s yn rhagor",
-                "two": "a %(count)s yn rhagor",
-                "few": "a %(count)s yn rhagor",
-                "many": "a %(count)s yn rhagor",
-                "other": "a %(count)s yn rhagor"
+                "a %(count)s yn rhagor": "other"
             },
             "join_rule_restricted_summary": {
-                "zero": "Ar hyn o bryd, mae gan %(count)s gofod fynediad",
-                "one": "Ar hyn o bryd, mae gan ofod fynediad",
-                "two": "Ar hyn o bryd, mae gan %(count)s gofod fynediad",
-                "few": "Ar hyn o bryd, mae gan %(count)s gofod fynediad",
-                "many": "Ar hyn o bryd, mae gan %(count)s gofod fynediad",
-                "other": "Ar hyn o bryd, mae gan %(count)s gofod fynediad"
+                "Ar hyn o bryd, mae gan %(count)s gofod fynediad": "other",
+                "Ar hyn o bryd, mae gan ofod fynediad": "one"
             },
             "join_rule_restricted_upgrade_description": "Bydd yr uwchraddiad hwn yn caniatáu i aelodau o ofodau penodol gael mynediad i'r ystafell hon heb wahoddiad.",
             "join_rule_restricted_upgrade_warning": "Mae'r ystafell hon mewn rhai gofodau nad ydych chi'n weinyddwr iddynt. Yn y gofodau hynny, bydd yr hen ystafell yn dal i gael ei dangos, ond bydd pobl yn cael eu hannog i ymuno â'r un newydd.",
             "join_rule_upgrade_awaiting_room": "Wrthi'n llwytho ystafell newydd",
             "join_rule_upgrade_required": "Angen uwchraddio",
             "join_rule_upgrade_sending_invites": {
-                "zero": "Yn anfon gwahoddiad... (%(progress)s o %(count)s)",
-                "one": "Yn anfon gwahoddiad...",
-                "two": "Yn anfon gwahoddiad... (%(progress)s o %(count)s)",
-                "few": "Yn anfon gwahoddiad... (%(progress)s o %(count)s)",
-                "many": "Yn anfon gwahoddiad... (%(progress)s o %(count)s)",
-                "other": "Yn anfon gwahoddiad... (%(progress)s o %(count)s)"
+                "Yn anfon gwahoddiad... (%(progress)s o %(count)s)": "other",
+                "Yn anfon gwahoddiad...": "one"
             },
             "join_rule_upgrade_updating_spaces": {
-                "zero": "Yn diweddaru gofod... (%(progress)s o %(count)s)",
-                "one": "Yn diweddaru gofod...",
-                "two": "Yn diweddaru gofod... (%(progress)s o %(count)s)",
-                "few": "Yn diweddaru gofod... (%(progress)s o %(count)s)",
-                "many": "Yn diweddaru gofod... (%(progress)s o %(count)s)",
-                "other": "Yn diweddaru gofod... (%(progress)s o %(count)s)"
+                "Yn diweddaru gofod... (%(progress)s o %(count)s)": "other",
+                "Yn diweddaru gofod...": "one"
             },
             "join_rule_upgrade_upgrading_room": "Ystafell uwchraddio",
             "join_rule_world_readable_description": "Bydd newid pwy all ymuno â'r ystafell yn newid gwelededd negeseuon yn y dyfodol hefyd.",
@@ -2978,12 +2913,7 @@
             "message_search_disable_warning": "Os yw wedi'i analluogi, ni fydd negeseuon o ystafelloedd wedi'u hamgryptio yn ymddangos yn y canlyniadau chwilio.",
             "message_search_disabled": "Cadwch negeseuon wedi'u hamgryptio'n ddiogel yn lleol er mwyn iddyn nhw ymddangos yn y canlyniadau chwilio.",
             "message_search_enabled": {
-                "zero": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.",
-                "one": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.",
-                "two": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.",
-                "few": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.",
-                "many": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.",
-                "other": "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell."
+                "Cadw negeseuon wedi'u hamgryptio yn ddiogel yn y storfa leol er mwyn iddyn nhw ymddangos mewn canlyniadau chwilio, gan ddefnyddio %(size)s i storio negeseuon o %(rooms)s ystafell.": "other"
             },
             "message_search_failed": "Methwyd cychwyn chwiliad neges",
             "message_search_indexed_messages": "Negeseuon wedi'u mynegeio:",
@@ -2999,7 +2929,7 @@
             "message_search_unsupported_web": "Ni all %(brand)s storio negeseuon wedi'u hamgryptio'n ddiogel yn lleol tra'n rhedeg mewn porwr gwe. Defnydd<desktopLink> %(brand)s Bwrdd Gwaith</desktopLink> i negeseuon wedi'u hamgryptio ymddangos yn y canlyniadau chwilio.",
             "record_session_details": "Cofnodwch enw'r cleient, y fersiwn, a'r url i adnabod sesiynau'n haws yn y rheolwr sesiwn",
             "send_analytics": "Anfon data dadansoddeg",
-            "strict_encryption": "Anfon negeseuon dim ond at ddefnyddwyr sydd wedi'u dilysu."
+            "strict_encryption": "Anfon negeseuon dim ond at ddefnyddwyr sydd wedi'u dilysu"
         },
         "send_read_receipts": "Anfon derbynebau darllen",
         "send_read_receipts_unsupported": "Nid yw eich gweinydd yn cefnogi analluogi anfon derbynebau wedi'u darllen.",
@@ -3008,36 +2938,20 @@
             "best_security_note": "Er mwyn sicrhau'r diogelwch gorau, gwiriwch eich sesiynau ac allgofnodwch o unrhyw sesiwn nad ydych yn ei hadnabod nac yn ei defnyddio mwyach.",
             "browser": "Porwr",
             "confirm_sign_out": {
-                "zero": "Cadarnhau allgofnodi o'r ddyfeisiau hyn",
-                "one": "Cadarnhau allgofnodi o'r ddyfais hon",
-                "two": "Cadarnhau allgofnodi o'r ddyfeisiau hyn",
-                "few": "Cadarnhau allgofnodi o'r ddyfeisiau hyn",
-                "many": "Cadarnhau allgofnodi o'r ddyfeisiau hyn",
-                "other": "Cadarnhau allgofnodi o'r ddyfeisiau hyn"
+                "Cadarnhau allgofnodi o'r ddyfeisiau hyn": "other",
+                "Cadarnhau allgofnodi o'r ddyfais hon": "one"
             },
             "confirm_sign_out_body": {
-                "zero": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.",
-                "one": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r ddyfais hon.",
-                "two": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.",
-                "few": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.",
-                "many": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.",
-                "other": "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn."
+                "Cliciwch y botwm isod i gadarnhau allgofnodi o'r dyfeisiau hyn.": "other",
+                "Cliciwch y botwm isod i gadarnhau allgofnodi o'r ddyfais hon.": "one"
             },
             "confirm_sign_out_continue": {
-                "zero": "Allgofnodi o ddyfeisiau",
-                "one": "Allgofnodi o ddyfais",
-                "two": "Allgofnodi o ddyfeisiau",
-                "few": "Allgofnodi o ddyfeisiau",
-                "many": "Allgofnodi o ddyfeisiau",
-                "other": "Allgofnodi o ddyfeisiau"
+                "Allgofnodi o ddyfeisiau": "other",
+                "Allgofnodi o ddyfais": "one"
             },
             "confirm_sign_out_sso": {
-                "zero": "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
-                "one": "Cadarnhau allgofnodi o'r ddyfais hon trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
-                "two": "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
-                "few": "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
-                "many": "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.",
-                "other": "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi."
+                "Cadarnhau allgofnodi o'r ddyfeisiau hyn trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.": "other",
+                "Cadarnhau allgofnodi o'r ddyfais hon trwy ddefnyddio Mewngofnodi Sengl i brofi pwy ydych chi.": "one"
             },
             "current_session": "Y sesiwn gyfredol",
             "desktop_session": "Sesiwn bwrdd gwaith",
@@ -3066,12 +2980,8 @@
             "manage": "Rheoli'r sesiwn hon",
             "mobile_session": "Sesiwn symudol",
             "n_sessions_selected": {
-                "zero": "%(count)s sesiwn wedi'u dewis",
-                "one": "%(count)s sesiwn wedi'i ddewis",
-                "two": "%(count)s sesiwn wedi'u dewis",
-                "few": "%(count)s sesiwn wedi'u dewis",
-                "many": "%(count)s sesiwn wedi'u dewis",
-                "other": "%(count)s sesiwn wedi'u dewis"
+                "%(count)s sesiwn wedi'u dewis": "other",
+                "%(count)s sesiwn wedi'i ddewis": "one"
             },
             "no_inactive_sessions": "Heb ganfod unrhyw sesiynau anweithredol.",
             "no_sessions": "Heb ganfod sesiynau.",
@@ -3098,20 +3008,10 @@
             "sign_out": "Allgofnodwch o'r sesiwn hon",
             "sign_out_all_other_sessions": "Allgofnodi o bob sesiwn arall (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "zero": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?",
-                "one": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?",
-                "two": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?",
-                "few": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?",
-                "many": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?",
-                "other": "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?"
+                "Ydych chi'n siŵr eich bod chi eisiau allgofnodi o %(count)s sesiwn?": "other"
             },
             "sign_out_n_sessions": {
-                "zero": "Allgofnodi o %(count)s sesiwn",
-                "one": "Allgofnodi o %(count)s sesiwn",
-                "two": "Allgofnodi o %(count)s sesiwn",
-                "few": "Allgofnodi o %(count)s sesiwn",
-                "many": "Allgofnodi o %(count)s sesiwn",
-                "other": "Allgofnodi o %(count)s sesiwn"
+                "Allgofnodi o %(count)s sesiwn": "other"
             },
             "title": "Sesiynau",
             "unknown_session": "Math o sesiwn anhysbys",
@@ -3160,7 +3060,6 @@
             "spaces_explainer": "Mae gofodau yn ffyrdd o grwpio ystafelloedd a phobl. Ochr yn ochr â'r lleoedd rydych chi ynddynt, gallwch chi ddefnyddio rhai sydd wedi'u hadeiladu ymlaen llaw hefyd.",
             "title": "Bar Ochr"
         },
-        "start_automatically": "Dechrau'n awtomatig ar ôl mewngofnodi i'r system",
         "tac_only_notifications": "Dim ond dangos hysbysiadau yng nghanolfan gweithgaredd yr edefyn",
         "use_12_hour_format": "Dangos stampiau amser mewn fformat 12 awr (e.e. 2:30pm)",
         "use_command_enter_send_message": "Defnyddiwch Command + Enter i anfon neges",
@@ -3298,12 +3197,8 @@
             "dm_heading": "Negeseuon Uniongyrchol",
             "error_heading": "Ni ychwanegwyd pob un a ddewiswyd",
             "progress_text": {
-                "zero": "Yn ychwanegu ystafell...(%(progress)s o %(count)s)",
-                "one": "Yn ychwanegu ystafell...",
-                "two": "Yn ychwanegu ystafell...(%(progress)s o %(count)s)",
-                "few": "Yn ychwanegu ystafell...(%(progress)s o %(count)s)",
-                "many": "Yn ychwanegu ystafell...(%(progress)s o %(count)s)",
-                "other": "Yn ychwanegu ystafell...(%(progress)s o %(count)s)"
+                "Yn ychwanegu ystafell...(%(progress)s o %(count)s)": "other",
+                "Yn ychwanegu ystafell...": "one"
             },
             "space_dropdown_label": "Dewis gofod",
             "space_dropdown_title": "Ychwanegu ystafelloedd presennol",
@@ -3388,12 +3283,7 @@
         "cant_find_room_helpful_hint": "Os na allwch ddod o hyd i'r ystafell yr ydych yn chwilio amdani, gofynnwch am wahoddiad neu crëwch ystafell newydd.",
         "copy_link_text": "Copïo dolen y gwahoddiad",
         "count_of_members": {
-            "zero": "%(count)s Aelod",
-            "one": "%(count)s Aelod",
-            "two": "%(count)s Aelod",
-            "few": "%(count)s Aelod",
-            "many": "%(count)s Aelod",
-            "other": "%(count)s Aelod"
+            "%(count)s Aelod": "other"
         },
         "create_new_room_button": "Creu ystafell newydd",
         "failed_querying_public_rooms": "Wedi methu â holi ystafelloedd cyhoeddus",
@@ -3446,12 +3336,7 @@
         "all_threads": "Pob edefyn",
         "all_threads_description": "Yn dangos pob edefyn o'r ystafell gyfredol",
         "count_of_reply": {
-            "zero": "%(count)s ateb",
-            "one": "%(count)s ateb",
-            "two": "%(count)s ateb",
-            "few": "%(count)s ateb",
-            "many": "%(count)s ateb",
-            "other": "%(count)s ateb"
+            "%(count)s ateb": "other"
         },
         "empty_description": "Defnyddio “%(replyInThread)s” wrth hofran dros neges.",
         "empty_title": "Mae edafedd yn helpu i gadw'ch sgyrsiau ar y pwnc ac yn hawdd eu holrhain.",
@@ -3597,12 +3482,7 @@
         },
         "m.poll": {
             "count_of_votes": {
-                "zero": "%(count)s pleidlais",
-                "one": "%(count)s pleidlais",
-                "two": "%(count)s pleidlais",
-                "few": "%(count)s pleidlais",
-                "many": "%(count)s pleidlais",
-                "other": "%(count)s pleidlais"
+                "%(count)s pleidlais": "other"
             }
         },
         "m.poll.end": {
@@ -3618,20 +3498,12 @@
         },
         "m.room.canonical_alias": {
             "alt_added": {
-                "zero": "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "one": "Mae %(senderName)s wedi ychwanegu cyfeiriad arall %(addresses)s ar gyfer yr ystafell hon.",
-                "two": "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "few": "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "many": "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "other": "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon."
+                "Mae %(senderName)s wedi ychwanegu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.": "other",
+                "Mae %(senderName)s wedi ychwanegu cyfeiriad arall %(addresses)s ar gyfer yr ystafell hon.": "one"
             },
             "alt_removed": {
-                "zero": "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "one": "Mae %(senderName)s wedi tynnu cyfeiriad arall %(addresses)s ar gyfer yr ystafell hon.",
-                "two": "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "few": "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "many": "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.",
-                "other": "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon."
+                "Mae %(senderName)s wedi tynnu cyfeiriadau eraill %(addresses)s ar gyfer yr ystafell hon.": "other",
+                "Mae %(senderName)s wedi tynnu cyfeiriad arall %(addresses)s ar gyfer yr ystafell hon.": "one"
             },
             "changed": "Newidiodd %(senderName)s y cyfeiriadau ar gyfer yr ystafell hon.",
             "changed_alternative": "Mae %(senderName)s wedi newid y cyfeiriadau amgen ar gyfer yr ystafell hon.",
@@ -3785,12 +3657,7 @@
             "tooltip_caption": "wedi ymateb gyda %(shortName)s"
         },
         "read_receipt_title": {
-            "zero": "Wedi'i weld gan %(count)s person",
-            "one": "Wedi'i weld gan %(count)s person",
-            "two": "Wedi'i weld gan %(count)s person",
-            "few": "Wedi'i weld gan %(count)s person",
-            "many": "Wedi'i weld gan %(count)s person",
-            "other": "Wedi'i weld gan %(count)s person"
+            "Wedi'i weld gan %(count)s person": "other"
         },
         "read_receipts_label": "Derbynebau darllen",
         "redacted": {
@@ -3823,53 +3690,32 @@
                 "wedi&#39;u gwahardd %(count)s gwaith": "other"
             },
             "changed_avatar": {
-                "zero": "Does %(count)s %(oneUser)s wedi newid eu llun proffil",
-                "one": "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith",
-                "two": "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith",
-                "few": "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith",
-                "many": "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith",
-                "other": "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith"
+                "Does %(count)s %(oneUser)s wedi newid eu llun proffil": "zero",
+                "Mae %(oneUser)s wedi newid eu llun proffil %(count)s gwaith": "other"
             },
             "changed_avatar_multiple": {
-                "zero": "Does %(count)s o %(severalUsers)s wedi newid eu llun proffil",
-                "one": "Mae %(severalUsers)s wedi newid ei lun proffil",
-                "two": "Mae %(severalUsers)s wedi newid eu llun proffil %(count)s gwaith",
-                "few": "Mae %(severalUsers)s wedi newid eu llun proffil %(count)s gwaith",
-                "many": "Mae %(severalUsers)s wedi newid eu llun proffil %(count)s gwaith",
-                "other": "Mae %(severalUsers)s wedi newid eu llun proffil %(count)s gwaith"
+                "Does %(count)s o %(severalUsers)s wedi newid eu llun proffil": "zero",
+                "Mae %(severalUsers)s wedi newid ei lun proffil": "one",
+                "Mae %(severalUsers)s wedi newid eu llun proffil %(count)s gwaith": "other"
             },
             "changed_name": {
-                "zero": "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith",
-                "one": "Mae %(oneUser)s wedi newid ei enw",
-                "two": "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith",
-                "few": "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith",
-                "many": "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith",
-                "other": "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith"
+                "Mae %(oneUser)s wedi newid ei enw %(count)s gwaith": "other",
+                "Mae %(oneUser)s wedi newid ei enw": "one"
             },
             "changed_name_multiple": {
-                "zero": "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith",
-                "one": "Mae %(severalUsers)s wedi newid ei enw",
-                "two": "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith",
-                "few": "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith",
-                "many": "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith",
-                "other": "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith"
+                "Mae %(severalUsers)s wedi newid eu henwau %(count)s gwaith": "other",
+                "Mae %(severalUsers)s wedi newid ei enw": "one"
             },
             "format": "%(matereList)s %(transitionList)s",
             "hidden_event": {
-                "zero": "Anfonodd %(oneUser)s %(count)s negeseuon cudd",
-                "one": "Anfonodd %(oneUser)s neges gudd",
-                "two": "Anfonodd %(oneUser)s %(count)s neges gudd",
-                "few": "Anfonodd %(oneUser)s %(count)s neges gudd",
-                "many": "Anfonodd %(oneUser)s %(count)s neges gudd",
-                "other": "Anfonodd %(oneUser)s %(count)s neges gudd"
+                "Anfonodd %(oneUser)s %(count)s negeseuon cudd": "zero",
+                "Anfonodd %(oneUser)s neges gudd": "one",
+                "Anfonodd %(oneUser)s %(count)s neges gudd": "other"
             },
             "hidden_event_multiple": {
-                "zero": "Anfonodd %(severalUsers)s %(count)s negeseuon cudd ",
-                "one": "Anfonodd %(severalUsers)s neges gudd",
-                "two": "Anfonodd %(severalUsers)s %(count)s neges gudd",
-                "few": "Anfonodd %(severalUsers)s %(count)s neges gudd",
-                "many": "Anfonodd %(severalUsers)s %(count)s neges gudd",
-                "other": "Anfonodd %(severalUsers)s %(count)s neges gudd"
+                "Anfonodd %(severalUsers)s %(count)s negeseuon cudd ": "zero",
+                "Anfonodd %(severalUsers)s neges gudd": "one",
+                "Anfonodd %(severalUsers)s %(count)s neges gudd": "other"
             },
             "invite_withdrawn": {
                 "Mae %(oneUser)swedi cael eu gwahoddiadau wedi&#39;i dynnu&#39;n ôl": "zero",
@@ -3906,20 +3752,12 @@
                 "Ymunodd %(severalUsers)s %(count)s gwaith": "other"
             },
             "kicked": {
-                "zero": "wedi'u tynnu %(count)s gwaith",
-                "one": "wedi'u tynnu",
-                "two": "wedi'u tynnu %(count)s gwaith",
-                "few": "wedi'u tynnu %(count)s gwaith",
-                "many": "wedi'u tynnu %(count)s gwaith",
-                "other": "wedi'u tynnu %(count)s gwaith"
+                "wedi'u tynnu %(count)s gwaith": "other",
+                "wedi'u tynnu": "one"
             },
             "kicked_multiple": {
-                "zero": "wedi'u tynnu %(count)s gwaith",
-                "one": "wedi'u tynnu",
-                "two": "wedi'u tynnu %(count)s gwaith",
-                "few": "wedi'u tynnu %(count)s gwaith",
-                "many": "wedi'u tynnu %(count)s gwaith",
-                "other": "wedi'u tynnu %(count)s gwaith"
+                "wedi'u tynnu %(count)s gwaith": "other",
+                "wedi'u tynnu": "one"
             },
             "left": {
                 "Gadawodd %(oneUser)s": "one",
@@ -3930,52 +3768,28 @@
                 "Gadawodd %(severalUsers)s %(count)s gwaith": "other"
             },
             "no_change": {
-                "zero": "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "one": "Dyw %(oneUser)s heb wneud unrhyw newidiadau",
-                "two": "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "few": "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "many": "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "other": "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith"
+                "Dyw %(oneUser)s heb wneud unrhyw newidiadau %(count)s gwaith": "other",
+                "Dyw %(oneUser)s heb wneud unrhyw newidiadau": "one"
             },
             "no_change_multiple": {
-                "zero": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "one": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau",
-                "two": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "few": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "many": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith",
-                "other": "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith"
+                "Dyw %(severalUsers)s heb wneud unrhyw newidiadau %(count)s gwaith": "other",
+                "Dyw %(severalUsers)s heb wneud unrhyw newidiadau": "one"
             },
             "pinned_events": {
-                "zero": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "one": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell",
-                "two": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "few": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "many": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "other": "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith"
+                "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith": "other",
+                "Newidiodd %(oneUser)s y <a>negeseuon wedi'u pinio</a> yr ystafell": "one"
             },
             "pinned_events_multiple": {
-                "zero": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "one": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell",
-                "two": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "few": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "many": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith",
-                "other": "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith"
+                "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell %(count)s gwaith": "other",
+                "Newidiodd %(severalUsers)s y <a>negeseuon wedi'u pinio</a> yr ystafell": "one"
             },
             "redacted": {
-                "zero": "Tynnodd %(oneUser)s %(count)s neges",
-                "one": "Tynnodd %(oneUser)s neges",
-                "two": "Tynnodd %(oneUser)s %(count)s neges",
-                "few": "Tynnodd %(oneUser)s %(count)s neges",
-                "many": "Tynnodd %(oneUser)s %(count)s neges",
-                "other": "Tynnodd %(oneUser)s %(count)s neges"
+                "Tynnodd %(oneUser)s %(count)s neges": "other",
+                "Tynnodd %(oneUser)s neges": "one"
             },
             "redacted_multiple": {
-                "zero": "Tynnodd %(severalUsers)s %(count)s neges",
-                "one": "Tynnodd %(severalUsers)s neges",
-                "two": "Tynnodd %(severalUsers)s %(count)s neges",
-                "few": "Tynnodd %(severalUsers)s %(count)s neges",
-                "many": "Tynnodd %(severalUsers)s %(count)s neges",
-                "other": "Tynnodd %(severalUsers)s %(count)s neges"
+                "Tynnodd %(severalUsers)s %(count)s neges": "other",
+                "Tynnodd %(severalUsers)s neges": "one"
             },
             "rejected_invite": {
                 "Gwrthododd %(severalUsers)s eu gwahoddiadau": "zero",
@@ -3995,36 +3809,21 @@
                 "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith": "other"
             },
             "server_acls": {
-                "zero": "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "one": "Mae %(oneUser)s wedi newid ACLs y gweinydd",
-                "two": "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "few": "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "many": "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "other": "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith"
+                "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith": "other",
+                "Mae %(oneUser)s wedi newid ACLs y gweinydd": "one"
             },
             "server_acls_multiple": {
-                "zero": "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "one": "Mae %(severalUsers)s wedi newid ACLs y gweinydd",
-                "two": "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "few": "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "many": "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith",
-                "other": "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith"
+                "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith": "other",
+                "Mae %(severalUsers)s wedi newid ACLs y gweinydd": "one"
             },
             "unbanned": {
-                "zero": "wedi'u dadwahardd %(count)s gwaith",
-                "one": "wedi'u dadwahardd",
-                "two": "wedi'u dadwahardd %(count)s gwaith",
-                "few": "wedi'u dadwahardd %(count)s gwaith",
-                "many": "wedi'u dadwahardd %(count)s gwaith",
-                "other": "wedi'u dadwahardd %(count)s gwaith"
+                "wedi'u dadwahardd %(count)s gwaith": "other",
+                "wedi'u dadwahardd": "one"
             },
             "unbanned_multiple": {
-                "zero": "wedi'u dadwahardd %(count)s gwaith\n ",
-                "one": "wedi'i ddadwahardd",
-                "two": "wedi'u dadwahardd %(count)s gwaith",
-                "few": "wedi'u dadwahardd %(count)s gwaith",
-                "many": "wedi'u dadwahardd %(count)s gwaith",
-                "other": "wedi'u dadwahardd %(count)s gwaith"
+                "wedi'u dadwahardd %(count)s gwaith\n ": "zero",
+                "wedi'i ddadwahardd": "one",
+                "wedi'u dadwahardd %(count)s gwaith": "other"
             }
         },
         "thread_info_basic": "O edefyn",
@@ -4040,22 +3839,12 @@
         "url_preview": {
             "close": "Cau rhagolwg",
             "show_n_more": {
-                "zero": "Dangos %(count)s rhagolwg arall",
-                "one": "Dangos %(count)s rhagolwg arall",
-                "two": "Dangos %(count)s rhagolwg arall",
-                "few": "Dangos %(count)s rhagolwg arall",
-                "many": "Dangos %(count)s rhagolwg arall",
-                "other": "Dangos %(count)s rhagolwg arall"
+                "Dangos %(count)s rhagolwg arall": "other"
             }
         }
     },
     "truncated_list_n_more": {
-        "zero": "A %(count)s yn rhagor...",
-        "one": "A %(count)s yn rhagor...",
-        "two": "A %(count)s yn rhagor...",
-        "few": "A %(count)s yn rhagor...",
-        "many": "A %(count)s yn rhagor...",
-        "other": "A %(count)s yn rhagor..."
+        "A %(count)s yn rhagor...": "other"
     },
     "unsupported_browser": {
         "description": "Os byddwch yn parhau, efallai na fydd rhai nodweddion yn gweithio ac mae risg y gallech golli data yn y dyfodol. Diweddarwch eich porwr i barhau i ddefnyddio %(brand)s.",
@@ -4099,12 +3888,7 @@
         "title_progress": "Llwytho ffeiliau (%(current)s o %(total)s)",
         "upload_all_button": "Llwytho'r cyfan",
         "upload_n_others_button": {
-            "zero": "Llwytho %(count)s ffeil arall",
-            "one": "Llwytho %(count)s ffeil arall",
-            "two": "Llwytho %(count)s ffeil arall",
-            "few": "Llwytho %(count)s ffeil arall",
-            "many": "Llwytho %(count)s ffeil arall",
-            "other": "Llwytho %(count)s ffeil arall"
+            "Llwytho %(count)s ffeil arall": "other"
         }
     },
     "user_info": {
@@ -4144,20 +3928,11 @@
         "promote_warning": "Fyddwch chi ddim yn gallu dadwneud y newid hwn gan eich bod yn hyrwyddo'r defnyddiwr i gael yr un lefel pŵer â chi'ch hun.",
         "redact": {
             "confirm_button": {
-                "zero": "Tynnu %(count)s neges",
-                "one": "Tynnu 1 neges",
-                "two": "Tynnu %(count)s neges",
-                "few": "Tynnu %(count)s neges",
-                "many": "Tynnu %(count)s neges",
-                "other": "Tynnu %(count)s neges"
+                "Tynnu %(count)s neges": "other",
+                "Tynnu 1 neges": "one"
             },
             "confirm_description_1": {
-                "zero": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?",
-                "one": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?",
-                "two": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?",
-                "few": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?",
-                "many": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?",
-                "other": "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?"
+                "Rydych chi ar fin tynnu %(count)s neges gan %(user)s. Bydd hyn yn eu tynnu'n barhaol i bawb yn y sgwrs. ​​Ydych chi am barhau?": "other"
             },
             "confirm_description_2": "Ar gyfer llawer iawn o negeseuon, gallai hyn gymryd peth amser. Peidiwch ag adnewyddu eich cleient yn y cyfamser.",
             "confirm_keep_state_explainer": "Dad-diciwch a ydych hefyd am ddileu negeseuon system ar y defnyddiwr hwn (e.e. newid aelodaeth, newid proffil…)",
@@ -4250,12 +4025,8 @@
         "msisdn_lookup_failed_description": "Bu gwall wrth chwilio am y rhif ffôn",
         "msisdn_transfer_failed": "Methu trosglwyddo galwad",
         "n_people_joined": {
-            "zero": "Does %(count)s person wedi ymuno",
-            "one": "Mae %(count)s person wedi ymuno",
-            "two": "Mae %(count)s person wedi ymuno",
-            "few": "Mae %(count)s person wedi ymuno",
-            "many": "Mae %(count)s person wedi ymuno",
-            "other": "Mae %(count)s person wedi ymuno"
+            "Does %(count)s person wedi ymuno": "zero",
+            "Mae %(count)s person wedi ymuno": "other"
         },
         "no_audio_input_description": "Heb ddod o hyd i feicroffon ar eich dyfais. Gwiriwch eich gosodiadau a cheisiwch eto.",
         "no_audio_input_title": "Heb ganfod meicroffon",

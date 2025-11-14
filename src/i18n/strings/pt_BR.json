@@ -598,7 +598,6 @@
         "user": "Usuário",
         "user_avatar": "Foto de perfil",
         "username": "Nome de usuário",
-        "verification_cancelled": "Confirmação cancelada",
         "verified": "Verificado",
         "version": "Versão",
         "video": "Vídeo",
@@ -993,9 +992,6 @@
                 "skip_verification": "Ignorar a verificação por enquanto",
                 "verify_this_device": "Verifique este dispositivo"
             },
-            "cancelled": "Você cancelou a confirmação.",
-            "cancelled_self": "Você cancelou a verificação em seu outro dispositivo.",
-            "cancelled_user": "%(displayName)s cancelou a confirmação.",
             "cancelling": "Cancelando…",
             "cant_confirm": "Não consegue confirmar?",
             "complete_action": "Ok, entendi",
@@ -1031,34 +1027,24 @@
             "no_support_qr_emoji": "O dispositivo que você está tentando verificar não suporta a leitura de um código QR ou verificação de emoji, que é o que %(brand)s suporta. Tente com um cliente diferente.",
             "other_party_cancelled": "Seu contato cancelou a confirmação.",
             "prompt_encrypted": "Verifique todos os usuários em uma sala para se certificar de que ela está segura.",
-            "prompt_self": "Iniciar a confirmação novamente, após a notificação.",
             "prompt_unencrypted": "Em salas criptografadas, verifique todos os usuários para garantir a segurança.",
-            "prompt_user": "Iniciar a confirmação novamente, a partir do perfil deste usuário.",
             "qr_or_sas": "%(qrCode)s ou %(emojiCompare)s",
-            "qr_or_sas_header": "Verifique este dispositivo concluindo um dos seguintes procedimentos:",
             "qr_prompt": "Escaneie este código único",
-            "qr_reciprocate_same_shield_device": "Quase lá! O seu outro dispositivo está mostrando o mesmo escudo?",
             "qr_reciprocate_same_shield_user": "Quase lá! Este escudo também aparece para %(displayName)s?",
-            "request_toast_accept": "Verificar sessão",
             "request_toast_accept_user": "Verificar usuário",
             "request_toast_decline_counter": "Ignorar (%(counter)s)",
             "request_toast_detail": "%(deviceId)s de %(ip)s",
             "sas_caption_self": "Verifique este dispositivo confirmando que o seguinte número aparece em sua tela.",
             "sas_caption_user": "Confirme este usuário, comparando os números a seguir que serão exibidos na sua e na tela dele.",
             "sas_description": "Compare um conjunto único de emojis se você não tem uma câmera em nenhum dos dois aparelhos",
-            "sas_emoji_caption_self": "Confirme se os emojis abaixo são exibidos em ambos os dispositivos, na mesma ordem:",
             "sas_emoji_caption_user": "Confirme este usuário confirmando os emojis a seguir exibidos na tela dele.",
             "sas_match": "São coincidentes",
             "sas_no_match": "Elas não são correspondentes",
             "sas_prompt": "Comparar emojis únicos",
             "scan_qr": "Confirmar através de QR Code",
             "scan_qr_explainer": "Peça para %(displayName)s escanear o seu código:",
-            "self_verification_hint": "Para continuar, aceite a solicitação de verificação em seu outro dispositivo.",
             "start_button": "Iniciar confirmação",
-            "successful_device": "Você confirmou %(deviceName)s (%(deviceId)s) com êxito!",
-            "successful_own_device": "Você confirmou o seu aparelho com êxito!",
             "successful_user": "Você confirmou %(displayName)s com sucesso!",
-            "timed_out": "O tempo de confirmação se esgotou.",
             "unsupported_method": "Nenhuma opção de confirmação é suportada.",
             "unverified_session_toast_accept": "Sim, fui eu",
             "unverified_session_toast_title": "Novo login. Foi você?",
@@ -1068,6 +1054,7 @@
             "use_another_device": "Usar outro dispositivo",
             "use_recovery_key": "Usar chave de recuperação",
             "verification_dialog_title_device": "Verifique outro dispositivo",
+            "verification_dialog_title_failed": "A verificação falhou",
             "verification_dialog_title_user": "Solicitação de confirmação",
             "verification_skip_warning": "Sem verificar, você não terá acesso a todas as suas mensagens e poderá aparecer como não confiável para outras pessoas.",
             "verification_success_with_backup": "O seu novo dispositivo agora está verificado. Ele tem acesso às suas mensagens criptografadas, e outros usuários o verão como confiável.",
@@ -1473,7 +1460,6 @@
         "upload_file": "Enviar um arquivo"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Permitir somente o modo de compartilhamento de tela",
         "ask_to_join": "Habilitar pedir para participar",
         "automatic_debug_logs": "Enviar automaticamente logs de depuração em qualquer erro",
         "automatic_debug_logs_decryption": "Enviar automaticamente logs sobre erros de descriptografia",
@@ -1915,7 +1901,6 @@
         "thread_list": {
             "context_menu_label": "Opções de tópico"
         },
-        "title": "Painel direito",
         "video_room_chat": {
             "title": "Bate-papo"
         }
@@ -3057,7 +3042,6 @@
             "spaces_explainer": "Os espaços são formas de agrupar salas e pessoas. Além dos espaços em que você está, você também pode usar alguns pré-construídos.",
             "title": "Barra lateral"
         },
-        "start_automatically": "Iniciar automaticamente ao iniciar o sistema",
         "tac_only_notifications": "Mostrar apenas notificações no centro de atividades do tópico",
         "use_12_hour_format": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
         "use_command_enter_send_message": "Usar Command + Enter para enviar uma mensagem",
@@ -3779,8 +3763,8 @@
                 "other": "%(severalUsers)salterado o <a>mensagens fixadas</a> para a sala %(count)s vezes"
             },
             "redacted": {
-                "one": "%(oneUser)sremoveu uma mensagem",
-                "other": "%(oneUser)sremoveu %(count)s mensagens"
+                "one": "%(oneUser)s removeu uma mensagem",
+                "other": "%(oneUser)s removeu %(count)s mensagens"
             },
             "redacted_multiple": {
                 "one": "%(severalUsers)s removeu uma mensagem",

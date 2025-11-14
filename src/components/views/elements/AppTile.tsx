@@ -476,6 +476,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         // Delete the widget from the persisted store for good measure.
+        // XXX: This removes persistent elements from the DOM entirely, which feels like
+        // a lot more than this function claims to be doing.
         PersistedElement.destroyElement(this.persistKey);
         ActiveWidgetStore.instance.destroyPersistentWidget(
             this.props.app.id,
@@ -586,7 +588,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // reset messaging
         this.resetWidget(this.props);
         this.iframeParent?.querySelector("iframe")?.remove();
-        this.startMessaging();
+        // iframeParent will now be re-mounted, at which point startMessaging will be called
     }
 
     // TODO replace with full screen interactions

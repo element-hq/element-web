@@ -15,6 +15,7 @@ import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close"
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -32,7 +33,6 @@ import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import { AvatarWithDetails } from "../shared-components/avatar/AvatarWithDetails";
 import DMRoomMap from "../utils/DMRoomMap";
 
 /**

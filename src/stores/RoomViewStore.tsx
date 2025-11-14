@@ -153,6 +153,7 @@ export class RoomViewStore extends EventEmitter {
     public constructor(
         dis: MatrixDispatcher,
         private readonly stores: SdkContextClass,
+        private readonly lockedToRoomId?: string,
     ) {
         super();
         this.resetDispatcher(dis);
@@ -187,7 +188,7 @@ export class RoomViewStore extends EventEmitter {
 
         const lastRoomId = this.state.roomId;
         this.state = Object.assign(this.state, newState);
-        if (lastRoomId !== this.state.roomId) {
+        if (!this.lockedToRoomId && lastRoomId !== this.state.roomId) {
             if (lastRoomId) this.emitForRoom(lastRoomId, false);
             if (this.state.roomId) this.emitForRoom(this.state.roomId, true);
 
@@ -204,6 +205,9 @@ export class RoomViewStore extends EventEmitter {
     }
 
     private onDispatch(payload: ActionPayload): void {
+        if (this.lockedToRoomId && payload.room_id && this.lockedToRoomId !== payload.room_id) {
+            return;
+        }
         // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
@@ -324,7 +328,7 @@ export class RoomViewStore extends EventEmitter {
         }
     }
 
-    private async viewRoom(payload: ViewRoomPayload): Promise<void> {
+    public async viewRoom(payload: ViewRoomPayload): Promise<void> {
         if (payload.room_id) {
             const room = MatrixClientPeg.safeGet().getRoom(payload.room_id);
 

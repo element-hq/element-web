@@ -329,8 +329,8 @@ const SpaceSetupFirstRooms: React.FC<{
                     return createRoom(space.client, {
                         createOpts: {
                             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
-                            name,
                         },
+                        name,
                         spinner: false,
                         encryption: false,
                         andView: false,
@@ -423,7 +423,7 @@ const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
         <div className="mx_SpaceRoomView_publicShare">
             <h1>
                 {_t("create_space|share_heading", {
-                    name: justCreatedOpts?.createOpts?.name || space.name,
+                    name: justCreatedOpts?.name || space.name,
                 })}
             </h1>
             <div className="mx_SpaceRoomView_description">{_t("create_space|share_description")}</div>
@@ -449,7 +449,7 @@ const SpaceSetupPrivateScope: React.FC<{
             <h1>{_t("create_space|private_personal_heading")}</h1>
             <div className="mx_SpaceRoomView_description">
                 {_t("create_space|private_personal_description", {
-                    name: justCreatedOpts?.createOpts?.name || space.name,
+                    name: justCreatedOpts?.name || space.name,
                 })}
             </div>
 
@@ -686,7 +686,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     <SpaceSetupFirstRooms
                         space={this.props.space}
                         title={_t("create_space|setup_rooms_community_heading", {
-                            spaceName: this.props.justCreatedOpts?.createOpts?.name || this.props.space.name,
+                            spaceName: this.props.justCreatedOpts?.name || this.props.space.name,
                         })}
                         description={
                             <>
@@ -763,7 +763,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         return (
             <main className="mx_SpaceRoomView">
                 <ErrorBoundary>
-                    <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier} analyticsRoomType="space">
+                    <MainSplit panel={rightPanel} analyticsRoomType="space">
                         {this.renderBody()}
                     </MainSplit>
                 </ErrorBoundary>

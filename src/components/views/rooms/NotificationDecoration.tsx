@@ -14,8 +14,8 @@ import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { Flex } from "@element-hq/web-shared-components";
 
-import { Flex } from "../../../shared-components/utils/Flex";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";

@@ -1,16 +1,15 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
-      data-floating-ui-inert=""
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -26,7 +25,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«rm»"
+        id="radix-_r_k_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -52,24 +51,23 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«ru»"
+          aria-labelledby="_r_s_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rs»"
+          id="radix-_r_q_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -95,11 +93,8 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         </button>
       </div>
       <div
-        aria-controls="«r15»"
-        aria-describedby="«r15»"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
@@ -109,7 +104,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r17»"
+          id="radix-_r_15_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -139,31 +134,6 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           </div>
         </button>
       </div>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«r19»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
   </header>
 </DocumentFragment>
@@ -173,13 +143,12 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
-      data-floating-ui-inert=""
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -195,7 +164,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r1c»"
+        id="radix-_r_18_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -221,24 +190,23 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r1k»"
+          aria-labelledby="_r_1g_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r1i»"
+          id="radix-_r_1e_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -264,11 +232,8 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         </button>
       </div>
       <div
-        aria-controls="«r1r»"
-        aria-describedby="«r1r»"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-label="Start chat"
@@ -302,31 +267,6 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           </div>
         </button>
       </div>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«r1t»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
   </header>
 </DocumentFragment>
@@ -336,13 +276,12 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
-      data-floating-ui-inert=""
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -358,7 +297,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r0»"
+        id="radix-_r_0_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -384,24 +323,23 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r8»"
+          aria-labelledby="_r_8_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r6»"
+          id="radix-_r_6_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -427,11 +365,8 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         </button>
       </div>
       <div
-        aria-controls="«rf»"
-        aria-describedby="«rf»"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
@@ -441,7 +376,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rh»"
+          id="radix-_r_h_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -471,31 +406,6 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           </div>
         </button>
       </div>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«rj»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
   </header>
 </DocumentFragment>
@@ -505,13 +415,12 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
-      data-floating-ui-inert=""
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -527,7 +436,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-«r3q»"
+        id="radix-_r_3g_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -553,24 +462,23 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       </button>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r42»"
+          aria-labelledby="_r_3o_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r40»"
+          id="radix-_r_3m_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -596,11 +504,8 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         </button>
       </div>
       <div
-        aria-controls="«r49»"
-        aria-describedby="«r49»"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
@@ -610,7 +515,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r4b»"
+          id="radix-_r_41_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -640,31 +545,6 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           </div>
         </button>
       </div>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«r4d»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
   </header>
 </DocumentFragment>
@@ -674,13 +554,12 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
 <DocumentFragment>
   <header
     aria-label="Room options"
-    class="flex mx_RoomListHeaderView"
+    class="_flex_4dswl_9 mx_RoomListHeaderView"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex mx_RoomListHeaderView_title"
-      data-floating-ui-inert=""
+      class="_flex_4dswl_9 mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
@@ -690,24 +569,23 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       </h1>
     </div>
     <div
-      class="flex"
+      class="_flex_4dswl_9"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="«r4m»"
+          aria-labelledby="_r_4a_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r4k»"
+          id="radix-_r_48_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -733,11 +611,8 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
         </button>
       </div>
       <div
-        aria-controls="«r4t»"
-        aria-describedby="«r4t»"
         aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
-        data-floating-ui-inert=""
       >
         <button
           aria-disabled="false"
@@ -747,7 +622,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r4v»"
+          id="radix-_r_4j_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -777,31 +652,6 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           </div>
         </button>
       </div>
-      <span
-        aria-hidden="true"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="-1"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
-      <span
-        aria-owns="«r51»"
-        data-floating-ui-inert=""
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-      />
-      <span
-        data-floating-ui-focus-guard=""
-        data-type="outside"
-        role="button"
-        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-        tabindex="0"
-      />
     </div>
   </header>
 </DocumentFragment>

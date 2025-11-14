@@ -8,8 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentType } from "react";
 import { Text } from "@vector-im/compound-web";
-
-import { Flex } from "../../../shared-components/utils/Flex";
+import { Flex } from "@element-hq/web-shared-components";
 
 interface Props {
     Icon: ComponentType<React.SVGAttributes<SVGElement>>;

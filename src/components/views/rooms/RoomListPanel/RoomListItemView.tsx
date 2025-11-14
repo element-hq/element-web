@@ -8,15 +8,15 @@
 import React, { type JSX, memo, useCallback, useEffect, useRef, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
 import { NotificationDecoration } from "../NotificationDecoration";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { RoomListItemContextMenuView } from "./RoomListItemContextMenuView";
 
-interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onFocus"> {
     /**
      * The room to display
      */
@@ -32,7 +32,7 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
     /**
      * A callback that indicates the item has received focus
      */
-    onFocus: (e: React.FocusEvent) => void;
+    onFocus: (room: Room, e: React.FocusEvent) => void;
     /**
      * The index of the room in the list
      */
@@ -41,10 +41,6 @@ interface RoomListItemViewProps extends React.HTMLAttributes<HTMLButtonElement> 
      * The total number of rooms in the list
      */
     roomCount: number;
-    /**
-     * Whether the list is currently scrolling
-     */
-    listIsScrolling: boolean;
 }
 
 /**
@@ -57,7 +53,6 @@ export const RoomListItemView = memo(function RoomListItemView({
     onFocus,
     roomIndex: index,
     roomCount: count,
-    listIsScrolling,
     ...props
 }: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
@@ -100,7 +95,7 @@ export const RoomListItemView = memo(function RoomListItemView({
             aria-selected={isSelected}
             aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
-            onFocus={onFocus}
+            onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(room, e)}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
             onBlur={() => setHover(false)}
@@ -148,9 +143,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     // Rendering multiple context menus can causes crashes in radix upstream,
     // See https://github.com/radix-ui/primitives/issues/2717.
-    // We also don't need the context menu while scrolling so can improve scroll performance
-    // by not rendering it.
-    if (!vm.showContextMenu || listIsScrolling) return content;
+    if (!vm.showContextMenu) return content;
 
     return (
         <RoomListItemContextMenuView

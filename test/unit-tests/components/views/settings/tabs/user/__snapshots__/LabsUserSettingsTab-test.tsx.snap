@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1`] = `
 <div

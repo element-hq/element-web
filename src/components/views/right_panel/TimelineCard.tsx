@@ -37,7 +37,6 @@ import JumpToBottomButton from "../rooms/JumpToBottomButton";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
@@ -88,7 +87,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
         this.readReceiptsSettingWatcher = SettingsStore.watchSetting("showReadReceipts", null, (...[, , , value]) =>
             this.setState({ showReadReceipts: value as boolean }),
@@ -99,7 +98,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        SdkContextClass.instance.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         SettingsStore.unwatchSetting(this.readReceiptsSettingWatcher);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
@@ -109,9 +108,9 @@ export default class TimelineCard extends React.Component<IProps, IState> {
 
     private onRoomViewStoreUpdate = async (_initial?: boolean): Promise<void> => {
         const newState: Pick<IState, any> = {
-            initialEventId: SdkContextClass.instance.roomViewStore.getInitialEventId(),
-            isInitialEventHighlighted: SdkContextClass.instance.roomViewStore.isInitialEventHighlighted(),
-            replyToEvent: SdkContextClass.instance.roomViewStore.getQuotingEvent(),
+            initialEventId: this.context.roomViewStore.getInitialEventId(),
+            isInitialEventHighlighted: this.context.roomViewStore.isInitialEventHighlighted(),
+            replyToEvent: this.context.roomViewStore.getQuotingEvent(),
         };
 
         this.setState(newState);
@@ -234,7 +233,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                             membersLoaded={true}
                             editState={this.state.editState}
                             eventId={this.state.initialEventId}
-                            resizeNotifier={this.props.resizeNotifier}
                             highlightedEventId={highlightedEventId}
                             onScroll={this.onScroll}
                         />

@@ -27,7 +27,6 @@ import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from "../../languageHandler";
 import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
 import BaseCard from "../views/right_panel/BaseCard";
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
@@ -39,7 +38,6 @@ import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx"
 interface IProps {
     roomId: string;
     onClose: () => void;
-    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
@@ -294,7 +292,6 @@ class FilePanel extends React.Component<IProps, IState> {
                             timelineSet={this.state.timelineSet}
                             showUrlPreview={false}
                             onPaginationRequest={this.onPaginationRequest}
-                            resizeNotifier={this.props.resizeNotifier}
                             empty={emptyState}
                             layout={Layout.Group}
                         />

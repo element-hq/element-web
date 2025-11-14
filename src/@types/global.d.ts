@@ -98,7 +98,7 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
-        mxRoomListStoreV3: RoomListStoreV3Class;
+        getRoomListStoreV3: () => RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;

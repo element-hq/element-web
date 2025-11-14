@@ -26,7 +26,6 @@ import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
 import { type IApp } from "../../stores/WidgetStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
@@ -36,6 +35,8 @@ import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
+import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 
 export enum PlatformCallType {
     ElementCall,
@@ -83,7 +84,7 @@ const enum State {
  * @returns the call button attributes for the given room
  */
 export const useRoomCall = (
-    room: Room,
+    room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
     voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
@@ -97,6 +98,7 @@ export const useRoomCall = (
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
+    const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
@@ -123,9 +125,9 @@ export const useRoomCall = (
     const hasGroupCall = groupCall !== null;
     const hasActiveCallSession = useParticipantCount(groupCall) > 0;
     const isViewingCall = useEventEmitterState(
-        SdkContextClass.instance.roomViewStore,
+        roomViewStore,
         UPDATE_EVENT,
-        () => SdkContextClass.instance.roomViewStore.isViewingCall() || isVideoRoom(room),
+        () => roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     // room
@@ -274,6 +276,8 @@ export const useRoomCall = (
         });
     }, [isViewingCall, room.roomId]);
 
+    const roomDoesNotExist = room instanceof LocalRoom && room.state !== LocalRoomState.CREATED;
+
     // We hide the voice call button if it'd have the same effect as the video call button
     let hideVoiceCallButton =
         isManagedHybridWidgetEnabled(room) ||
@@ -283,8 +287,11 @@ export const useRoomCall = (
             (!callOptions.includes(PlatformCallType.ElementCall) || memberCount > 2));
 
     let hideVideoCallButton = false;
-    // We hide both buttons if they require widgets but widgets are disabled, or if the Voip feature is disabled.
-    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled) {
+    // We hide both buttons if:
+    // - they require widgets but widgets are disabled
+    // - if the Voip feature is disabled.
+    // - The room is not created yet (rendering "send first message view")
+    if ((memberCount > 2 && !widgetsFeatureEnabled) || !voipFeatureEnabled || roomDoesNotExist) {
         hideVoiceCallButton = true;
         hideVideoCallButton = true;
     }

@@ -5,9 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
+import { renderHook, waitFor } from "jest-matrix-react";
 import { act } from "react";
 import { mocked } from "jest-mock";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { BackupTrustInfo, KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -35,6 +36,23 @@ describe("KeyStoragePanelViewModel", () => {
         });
         expect(result.current.isEnabled).toBe(true);
         expect(result.current.busy).toBe(true);
+    });
+
+    it("should update if a KeyBackupStatus event is received", async () => {
+        const { result } = renderHook(
+            () => useKeyStoragePanelViewModel(),
+            withClientContextRenderOptions(matrixClient),
+        );
+        await waitFor(() => expect(result.current.isEnabled).toBe(false));
+
+        const mock = mocked(matrixClient.getCrypto()!.getActiveSessionBackupVersion);
+        mock.mockResolvedValue("1");
+        matrixClient.emit(CryptoEvent.KeyBackupStatus, true);
+        await waitFor(() => expect(result.current.isEnabled).toBe(true));
+
+        mock.mockResolvedValue(null);
+        matrixClient.emit(CryptoEvent.KeyBackupStatus, false);
+        await waitFor(() => expect(result.current.isEnabled).toBe(false));
     });
 
     it("should call resetKeyBackup if there is no backup currently", async () => {

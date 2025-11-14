@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`VerificationRequestToast should render a cross-user verification 1`] = `
 <div>
@@ -28,7 +28,7 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>
@@ -68,7 +68,7 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>

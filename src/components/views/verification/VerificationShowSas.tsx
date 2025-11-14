@@ -107,7 +107,9 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         if (this.props.sas.emoji) {
             const emojiBlocks = this.props.sas.emoji.map((emoji, i) => (
                 <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
-                    <div className="mx_VerificationShowSas_emojiSas_emoji">{emoji[0]}</div>
+                    <div className="mx_VerificationShowSas_emojiSas_emoji" aria-hidden={true}>
+                        {emoji[0]}
+                    </div>
                     <div className="mx_VerificationShowSas_emojiSas_label">{tEmoji(emoji, locale)}</div>
                 </div>
             ));
@@ -119,7 +121,7 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 </div>
             );
             sasCaption = this.props.isSelf
-                ? _t("encryption|verification|sas_emoji_caption_self")
+                ? _t("encryption|verification|confirm_the_emojis")
                 : _t("encryption|verification|sas_emoji_caption_user");
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);

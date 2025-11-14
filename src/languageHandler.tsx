@@ -5,19 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import counterpart from "counterpart";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
-
-import SettingsStore from "./settings/SettingsStore";
-import PlatformPeg from "./PlatformPeg";
-import { SettingLevel } from "./settings/SettingLevel";
-import { retry } from "./utils/promise";
-import SdkConfig from "./SdkConfig";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import {
     _t,
     normalizeLanguageKey,
@@ -25,7 +17,18 @@ import {
     type IVariables,
     KEY_SEPARATOR,
     getLangsJson,
-} from "./shared-components/utils/i18n";
+    registerTranslations,
+    setLocale,
+    getLocale,
+    setMissingEntryGenerator as setMissingEntryGeneratorSharedComponents,
+} from "@element-hq/web-shared-components";
+
+import SettingsStore from "./settings/SettingsStore";
+import PlatformPeg from "./PlatformPeg";
+import { SettingLevel } from "./settings/SettingLevel";
+import { retry } from "./utils/promise";
+import SdkConfig from "./SdkConfig";
+import { ModuleRunner } from "./modules/ModuleRunner";
 
 export {
     _t,
@@ -40,7 +43,7 @@ export {
     normalizeLanguageKey,
     getNormalizedLanguageKeys,
     substitute,
-} from "./shared-components/utils/i18n";
+} from "@element-hq/web-shared-components";
 
 const i18nFolder = "i18n/";
 
@@ -100,7 +103,7 @@ export function getUserLanguage(): string {
 // Currently only used in unit tests to avoid having to load
 // the translations in element-web
 export function setMissingEntryGenerator(f: (value: string) => void): void {
-    counterpart.setMissingEntryGenerator(f);
+    setMissingEntryGeneratorSharedComponents(f);
 }
 
 export async function setLanguage(...preferredLangs: string[]): Promise<void> {
@@ -116,8 +119,8 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
 
     const languageData = await getLanguageRetry(i18nFolder + availableLanguages[chosenLanguage]);
 
-    counterpart.registerTranslations(chosenLanguage, languageData);
-    counterpart.setLocale(chosenLanguage);
+    registerTranslations(chosenLanguage, languageData);
+    setLocale(chosenLanguage);
 
     await SettingsStore.setValue("language", null, SettingLevel.DEVICE, chosenLanguage);
     // Adds a lot of noise to test runs, so disable logging there.
@@ -128,7 +131,7 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
     // Set 'en' as fallback language:
     if (chosenLanguage !== "en") {
         const fallbackLanguageData = await getLanguageRetry(i18nFolder + availableLanguages["en"]);
-        counterpart.registerTranslations("en", fallbackLanguageData);
+        registerTranslations("en", fallbackLanguageData);
     }
 
     await registerCustomTranslations();
@@ -166,7 +169,7 @@ export function getLanguageFromBrowser(): string {
 }
 
 export function getCurrentLanguage(): string {
-    return counterpart.getLocale();
+    return getLocale();
 }
 
 /**
@@ -258,7 +261,7 @@ function doRegisterTranslations(customTranslations: TranslationStringsObject): v
 
     // Finally, tell counterpart about our translations
     for (const [lang, translations] of langs) {
-        counterpart.registerTranslations(lang, translations);
+        registerTranslations(lang, translations);
     }
 }
 

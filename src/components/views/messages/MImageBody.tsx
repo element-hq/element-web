@@ -311,10 +311,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                     // then we need to check if the image is animated by downloading it.
                     if (
                         content.info?.["org.matrix.msc4230.is_animated"] === false ||
-                        !(await blobIsAnimated(
-                            content.info?.mimetype,
-                            await this.props.mediaEventHelper!.sourceBlob.value,
-                        ))
+                        (await blobIsAnimated(await this.props.mediaEventHelper!.sourceBlob.value)) === false
                     ) {
                         isAnimated = false;
                     }

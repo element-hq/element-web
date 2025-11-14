@@ -307,6 +307,30 @@ describe("<MatrixChat />", () => {
         });
     });
 
+    it("should notify resizenotifier when left panel hidden", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "hide_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
+    });
+
+    it("should notify resizenotifier when left panel shown", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "show_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
+    });
+
     describe("when query params have a OIDC params", () => {
         const issuer = "https://auth.com/";
         const homeserverUrl = "https://matrix.org";
@@ -1106,7 +1130,7 @@ describe("<MatrixChat />", () => {
                 act(() => verify.click());
 
                 // And close the device verification dialog
-                const closeButton = await screen.findByRole("button", { name: "Close dialog" });
+                const closeButton = screen.getByRole("button", { name: "Close dialog" });
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
@@ -1179,7 +1203,7 @@ describe("<MatrixChat />", () => {
                         .fn()
                         .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
                     isCrossSigningReady: jest.fn().mockReturnValue(false),
-                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn() }),
+                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
                 } as any;
             }
         });

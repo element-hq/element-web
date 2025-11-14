@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<FilteredDeviceList /> displays no results message when there are no devices 1`] = `
 HTMLCollection [

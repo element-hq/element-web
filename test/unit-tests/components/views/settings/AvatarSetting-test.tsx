@@ -25,18 +25,18 @@ describe("<AvatarSetting />", () => {
         stubClient();
     });
 
-    it("renders avatar with specified alt text", async () => {
-        const { queryByAltText } = render(
+    it("renders avatar with specified accessible name", async () => {
+        const { getByRole } = render(
             <AvatarSetting
                 placeholderId="blee"
                 placeholderName="boo"
-                avatarAltText="Avatar of Peter Fox"
+                avatarAccessibleName="Avatar of Peter Fox"
                 avatar="mxc://example.org/my-avatar"
             />,
         );
 
-        const imgElement = queryByAltText("Avatar of Peter Fox");
-        expect(imgElement).toBeInTheDocument();
+        const avatarButton = getByRole("button", { name: "Avatar of Peter Fox" });
+        expect(avatarButton).toBeInTheDocument();
     });
 
     it("renders a file as the avatar when supplied", async () => {
@@ -44,12 +44,13 @@ describe("<AvatarSetting />", () => {
             <AvatarSetting
                 placeholderId="blee"
                 placeholderName="boo"
-                avatarAltText="Avatar of Peter Fox"
+                avatarAccessibleName="Avatar of Peter Fox"
                 avatar={AVATAR_FILE}
             />,
         );
 
-        const imgElement = await screen.findByRole("button", { name: "Avatar of Peter Fox" });
+        const avatarButton = await screen.findByRole("button", { name: "Avatar of Peter Fox" });
+        const imgElement = avatarButton.querySelector("img");
         expect(imgElement).toBeInTheDocument();
         expect(imgElement).toHaveAttribute("src", "data:image/gif;base64," + BASE64_GIF);
     });
@@ -63,7 +64,7 @@ describe("<AvatarSetting />", () => {
                 placeholderId="blee"
                 placeholderName="boo"
                 avatar="mxc://example.org/my-avatar"
-                avatarAltText="Avatar of Peter Fox"
+                avatarAccessibleName="Avatar of Peter Fox"
                 onChange={onChange}
             />,
         );
@@ -82,7 +83,7 @@ describe("<AvatarSetting />", () => {
                 placeholderId="blee"
                 placeholderName="boo"
                 avatar="mxc://example.org/my-avatar"
-                avatarAltText="Avatar of Peter Fox"
+                avatarAccessibleName="Avatar of Peter Fox"
                 onChange={onChange}
             />,
         );
@@ -102,7 +103,7 @@ describe("<AvatarSetting />", () => {
                 placeholderId="blee"
                 placeholderName="boo"
                 avatar="mxc://example.org/my-avatar"
-                avatarAltText="Avatar of Peter Fox"
+                avatarAccessibleName="Avatar of Peter Fox"
                 onChange={onChange}
             />,
         );

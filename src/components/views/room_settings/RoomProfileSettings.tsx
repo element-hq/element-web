@@ -262,7 +262,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                                 ? undefined
                                 : (this.state.avatarFile ?? this.state.originalAvatarUrl ?? undefined)
                         }
-                        avatarAltText={_t("room_settings|general|avatar_field_label")}
+                        avatarAccessibleName={_t("room_settings|general|avatar_field_label")}
                         disabled={!this.state.canSetAvatar}
                         onChange={this.onAvatarChanged}
                         removeAvatar={canRemove ? this.removeAvatar : undefined}

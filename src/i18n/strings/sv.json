@@ -113,7 +113,7 @@
         "rename": "Döp om",
         "reply": "Svara",
         "reply_in_thread": "Svara i tråd",
-        "report_content": "Rapportera innehåll",
+        "report_content": "Anmäl innehåll",
         "report_room": "Anmäl rum",
         "resend": "Skicka igen",
         "reset": "Återställ",
@@ -123,7 +123,7 @@
         "revoke": "Återkalla",
         "save": "Spara",
         "search": "Sök",
-        "send_report": "Skicka rapport",
+        "send_report": "Skicka anmälan",
         "set_avatar": "Ställ in profilbild",
         "share": "Dela",
         "show": "Visa",
@@ -598,7 +598,6 @@
         "user": "Användare",
         "user_avatar": "Profilbild",
         "username": "Användarnamn",
-        "verification_cancelled": "Verifiering avbruten",
         "verified": "Verifierad",
         "version": "Version",
         "video": "Video",
@@ -991,9 +990,6 @@
                 "skip_verification": "Hoppa över verifiering för tillfället",
                 "verify_this_device": "Verifiera den här enheten"
             },
-            "cancelled": "Du avbröt verifiering.",
-            "cancelled_self": "Du avbröt verifiering på din andra enhet.",
-            "cancelled_user": "%(displayName)s avbröt verifiering.",
             "cancelling": "Avbryter…",
             "complete_action": "Uppfattat",
             "complete_description": "Du har verifierat den här användaren.",
@@ -1026,34 +1022,24 @@
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "other_party_cancelled": "Den andra parten avbröt verifieringen.",
             "prompt_encrypted": "Verifiera alla användare i ett rum för att försäkra att det är säkert.",
-            "prompt_self": "Starta verifiering igen från aviseringen.",
             "prompt_unencrypted": "I krypterade rum, verifiera alla användare för att försäkra att det är säkert.",
-            "prompt_user": "Starta verifiering igen från deras profil.",
             "qr_or_sas": "%(qrCode)s eller %(emojiCompare)s",
-            "qr_or_sas_header": "Verifiera den här enheten genom att slutföra ett av följande:",
             "qr_prompt": "Skanna den här unika koden",
-            "qr_reciprocate_same_shield_device": "Nästan klar! Visar din andra enhet samma sköld?",
             "qr_reciprocate_same_shield_user": "Nästan klar! Visar %(displayName)s samma sköld?",
-            "request_toast_accept": "Verifiera session",
             "request_toast_accept_user": "Verifiera användare",
             "request_toast_decline_counter": "Ignorera (%(counter)s)",
             "request_toast_detail": "%(deviceId)s från %(ip)s",
             "sas_caption_self": "Verifiera den här enheten genom att bekräfta att det följande numret visas på dess skärm.",
             "sas_caption_user": "Verifiera den här användaren genom att bekräfta att följande nummer visas på deras skärm.",
             "sas_description": "Jämför en unik uppsättning emojier om du inte har en kamera på någon av enheterna",
-            "sas_emoji_caption_self": "Bekräfta att emojierna nedan visas på båda enheterna i samma ordning:",
             "sas_emoji_caption_user": "Verifiera den här användaren genom att bekräfta att följande emojier visas på deras skärm.",
             "sas_match": "De matchar",
             "sas_no_match": "De matchar inte",
             "sas_prompt": "Jämför unika emojier",
             "scan_qr": "Verifiera med skanning",
             "scan_qr_explainer": "Be %(displayName)s att skanna din kod:",
-            "self_verification_hint": "För att fortsätta, acceptera verifieringsförfrågan på din andra enhet.",
             "start_button": "Starta verifiering",
-            "successful_device": "Du har verifierat %(deviceName)s (%(deviceId)s) framgångsrikt!",
-            "successful_own_device": "Du har verifierat din enhet framgångsrikt!",
             "successful_user": "Du har verifierat %(displayName)s framgångsrikt!",
-            "timed_out": "Verifieringen löpte ut.",
             "unsupported_method": "Kunde inte hitta en verifieringsmetod som stöds.",
             "unverified_session_toast_accept": "Ja, det var jag",
             "unverified_session_toast_title": "Ny inloggning. Var det du?",
@@ -1465,7 +1451,6 @@
         "upload_file": "Ladda upp en fil"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Tillåt läge med endast skärmdelning",
         "ask_to_join": "Aktivera fråga om att gå med",
         "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
         "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
@@ -1907,7 +1892,6 @@
         "thread_list": {
             "context_menu_label": "Trådalternativ"
         },
-        "title": "Högerpanel",
         "video_room_chat": {
             "title": "Chatt"
         }
@@ -2716,8 +2700,8 @@
                 "enter_phrase_description": "Ange en säkerhetsfras som bara du känner till, eftersom den används för att säkra din data. För att vara säker, bör du inte återanvända ditt kontolösenord.",
                 "enter_phrase_title": "Ange en säkerhetsfras",
                 "enter_phrase_to_confirm": "Ange din säkerhetsfras igen för att bekräfta den.",
-                "generate_security_key_description": "Vi kommer att generera en säkerhetsnyckel så du kan lagra någonstans säkert, som en lösenordshanterare eller ett kassaskåp.",
-                "generate_security_key_title": "Generera en säkerhetsnyckel",
+                "generate_security_key_description": "Vi kommer att generera en återställningsnyckel så du kan lagra någonstans säkert, som en lösenordshanterare eller ett kassaskåp.",
+                "generate_security_key_title": "Generera en återställningsnyckel",
                 "pass_phrase_match_failed": "Det matchar inte.",
                 "pass_phrase_match_success": "Det matchar!",
                 "phrase_strong_enough": "Fantastiskt! Den här säkerhetsfrasen ser tillräckligt stark ut.",
@@ -2730,7 +2714,7 @@
                 "title_set_phrase": "Sätt en säkerhetsfras",
                 "unable_to_setup": "Kunde inte sätta upp hemlig lagring",
                 "use_different_passphrase": "Använd en annan lösenfras?",
-                "use_phrase_only_you_know": "Använd en hemlig fras endast du känner till, och spara valfritt en säkerhetsnyckel att använda för säkerhetskopiering."
+                "use_phrase_only_you_know": "Använd en hemlig fras endast du känner till, och spara valfritt en återställningsnyckel att använda för säkerhetskopiering."
             }
         },
         "key_export_import": {
@@ -2886,7 +2870,7 @@
             "message_search_unsupported_web": "%(brand)s kan inte säkert cacha krypterade meddelanden lokalt när den kör i en webbläsare. Använd <desktopLink>%(brand)s Skrivbord</desktopLink> för att krypterade meddelanden ska visas i sökresultaten.",
             "record_session_details": "Spara klientens namn, version och URL för att lättare känna igen sessioner i sessionshanteraren",
             "send_analytics": "Skicka statistik",
-            "strict_encryption": "Skicka aldrig krypterade meddelanden till overifierade sessioner från den här sessionen"
+            "strict_encryption": "Skicka bara meddelanden till verifierade användare"
         },
         "send_read_receipts": "Skicka läskvitton",
         "send_read_receipts_unsupported": "Din server stöder inte inaktivering av läskvitton.",
@@ -3019,7 +3003,6 @@
             "spaces_explainer": "Utrymmen är sätt att gruppera rum och personer. Vid sidan av de utrymmen du befinner dig i kan du också använda några förbyggda.",
             "title": "Sidofält"
         },
-        "start_automatically": "Starta automatiskt vid systeminloggning",
         "tac_only_notifications": "Visa endast notiser i aktivitetscentret för trådar",
         "use_12_hour_format": "Visa tidsstämplar i 12-timmarsformat (t.ex. 2:30em)",
         "use_command_enter_send_message": "Använd Kommando + Enter för att skicka ett meddelande",

@@ -66,7 +66,7 @@ describe("SlashCommands", () => {
 
     describe("/topic", () => {
         it("sets topic", async () => {
-            const command = getCommand("/topic pizza");
+            const command = getCommand(roomId, "/topic pizza");
             expect(command.cmd).toBeDefined();
             expect(command.args).toBeDefined();
             await command.cmd!.run(client, "room-id", null, command.args);
@@ -75,7 +75,7 @@ describe("SlashCommands", () => {
 
         it("should show topic modal if no args passed", async () => {
             const spy = jest.spyOn(Modal, "createDialog");
-            const command = getCommand("/topic")!;
+            const command = getCommand(roomId, "/topic")!;
             await command.cmd!.run(client, roomId, null);
             expect(spy).toHaveBeenCalled();
         });
@@ -109,12 +109,12 @@ describe("SlashCommands", () => {
         describe("isEnabled", () => {
             it("should return true for Room", () => {
                 setCurrentRoom();
-                expect(command.isEnabled(client)).toBe(true);
+                expect(command.isEnabled(client, roomId)).toBe(true);
             });
 
             it("should return false for LocalRoom", () => {
                 setCurrentLocalRoom();
-                expect(command.isEnabled(client)).toBe(false);
+                expect(command.isEnabled(client, roomId)).toBe(false);
             });
         });
     });
@@ -126,7 +126,7 @@ describe("SlashCommands", () => {
         });
 
         it("should be enabled by default", () => {
-            expect(command.isEnabled(client)).toBe(true);
+            expect(command.isEnabled(client, roomId)).toBe(true);
         });
     });
 
@@ -199,11 +199,11 @@ describe("SlashCommands", () => {
             room2.getCanonicalAlias = jest.fn().mockReturnValue("#baz:bar");
             mocked(client.getRooms).mockReturnValue([room1, room2]);
 
-            const command = getCommand("/part #foo:bar");
+            const command = getCommand(room1.roomId, "/part #foo:bar");
             expect(command.cmd).toBeDefined();
             expect(command.args).toBeDefined();
-            await command.cmd!.run(client, "room-id", null, command.args);
-            expect(client.leaveRoomChain).toHaveBeenCalledWith("room-id", expect.anything());
+            await command.cmd!.run(client, room1.roomId, null, command.args);
+            expect(client.leaveRoomChain).toHaveBeenCalledWith(room1.roomId, expect.anything());
         });
 
         it("should part room matching alt alias if found", async () => {
@@ -213,11 +213,11 @@ describe("SlashCommands", () => {
             room2.getAltAliases = jest.fn().mockReturnValue(["#baz:bar"]);
             mocked(client.getRooms).mockReturnValue([room1, room2]);
 
-            const command = getCommand("/part #foo:bar");
+            const command = getCommand(room1.roomId, "/part #foo:bar");
             expect(command.cmd).toBeDefined();
             expect(command.args).toBeDefined();
-            await command.cmd!.run(client, "room-id", null, command.args!);
-            expect(client.leaveRoomChain).toHaveBeenCalledWith("room-id", expect.anything());
+            await command.cmd!.run(client, room1.roomId, null, command.args!);
+            expect(client.leaveRoomChain).toHaveBeenCalledWith(room1.roomId, expect.anything());
         });
     });
 

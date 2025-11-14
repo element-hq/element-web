@@ -30,33 +30,42 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
         });
     });
 
-    test("sends and displays pin drop location message successfully", async ({ page, user, app }) => {
-        const roomId = await app.client.createRoom({});
-        await page.goto(`/#/room/${roomId}`);
+    test(
+        "sends and displays pin drop location message successfully",
+        { tag: "@screenshot" },
+        async ({ page, user, app }) => {
+            const roomId = await app.client.createRoom({});
+            await page.goto(`/#/room/${roomId}`);
 
-        const composerOptions = await app.openMessageComposerOptions();
-        await composerOptions.getByRole("menuitem", { name: "Location", exact: true }).click();
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Location", exact: true }).click();
 
-        await selectLocationShareTypeOption(page, "Pin").click();
+            await selectLocationShareTypeOption(page, "Pin").click();
 
-        await page.locator("#mx_LocationPicker_map").click();
+            await page.locator("#mx_LocationPicker_map").click();
 
-        await submitShareLocation(page);
+            await submitShareLocation(page);
 
-        await page.locator(".mx_RoomView_body .mx_EventTile .mx_MLocationBody").click({
-            position: {
-                x: 225,
-                y: 150,
-            },
-        });
+            await page.locator(".mx_RoomView_body .mx_EventTile .mx_MLocationBody").click({
+                position: {
+                    x: 225,
+                    y: 150,
+                },
+            });
 
-        // clicking location tile opens maximised map
-        await expect(page.getByRole("dialog")).toBeVisible();
+            // Wait for map to load
+            await expect(page.getByRole("region", { name: "Map" })).toMatchScreenshot(
+                "location-pin-drop-message-map.png",
+            );
 
-        await app.closeDialog();
+            // clicking location tile opens maximised map
+            await expect(page.getByRole("dialog")).toBeVisible();
 
-        await expect(page.locator(".mx_Marker")).toBeVisible();
-    });
+            await app.closeDialog();
+
+            await expect(page.locator(".mx_Marker")).toBeVisible();
+        },
+    );
 
     test(
         "is prompted for and can consent to live location sharing",

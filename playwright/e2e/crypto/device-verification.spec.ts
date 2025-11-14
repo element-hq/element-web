@@ -146,8 +146,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         );
 
         // Confirm that the bot user scanned successfully
-        await expect(infoDialog.getByText("Almost there! Is your other device showing the same shield?")).toBeVisible();
-        await infoDialog.getByRole("button", { name: "Yes" }).click();
+        await expect(infoDialog.getByText("Confirm that you see a green shield on your other device")).toBeVisible();
+        await infoDialog.getByRole("button", { name: "Yes, I see a green shield" }).click();
         await infoDialog.getByRole("button", { name: "Got it" }).click();
 
         // wait for the bot to see we have finished
@@ -270,7 +270,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // it should contain the device ID of the requesting device
         await expect(toast.getByText(`${aliceBotClient.credentials.deviceId} from `)).toBeVisible();
         // Accept
-        await toast.getByRole("button", { name: "Verify Session" }).click();
+        await toast.getByRole("button", { name: "Start verification" }).click();
 
         /* Click 'Start' to start SAS verification */
         await page.getByRole("button", { name: "Start" }).click();
@@ -285,10 +285,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* And we're all done! */
         const infoDialog = page.locator(".mx_InfoDialog");
         await infoDialog.getByRole("button", { name: "They match" }).click();
-        // We don't assert the full string as the device name is unset on Synapse but set to the user ID on Dendrite
-        await expect(infoDialog.getByText(`You've successfully verified`)).toContainText(
-            `(${aliceBotClient.credentials.deviceId})`,
-        );
+        await expect(infoDialog.getByText("Device verified")).toBeVisible();
         await infoDialog.getByRole("button", { name: "Got it" }).click();
     });
 });

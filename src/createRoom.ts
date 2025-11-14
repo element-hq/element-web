@@ -49,7 +49,19 @@ import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
 
 export interface IOpts {
     dmUserId?: string;
-    createOpts?: ICreateRoomOpts;
+    /**
+     * The name of the room to be created.
+     */
+    name?: string;
+    /**
+     * The topic for the room.
+     */
+    topic?: string;
+    /**
+     * Additional options to pass to the room creation API.
+     * Note: "name", "topic", and "avatar" should be set via their respective properties in IOpts.
+     */
+    createOpts?: Omit<ICreateRoomOpts, "name" | "topic" | "avatar">;
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
@@ -249,6 +261,14 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             type: EventType.RoomJoinRules,
             content: { join_rule: opts.joinRule },
         });
+    }
+
+    if (opts.name) {
+        createOpts.name = opts.name;
+    }
+
+    if (opts.topic) {
+        createOpts.topic = opts.topic;
     }
 
     if (opts.avatar) {

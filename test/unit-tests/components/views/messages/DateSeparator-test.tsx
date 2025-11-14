@@ -14,7 +14,6 @@ import { type TimestampToEventResponse, ConnectionError, HTTPError, MatrixError 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { type ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { formatFullDateNoTime } from "../../../../../src/DateUtils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
@@ -26,6 +25,8 @@ import {
     waitEnoughCyclesForModal,
 } from "../../../../test-utils";
 import DateSeparator from "../../../../../src/components/views/messages/DateSeparator";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../../src/settings/SettingsStore");
 
@@ -40,13 +41,25 @@ describe("DateSeparator", () => {
         roomId,
     };
 
+    const mockRoomViewStore = {
+        getRoomId: jest.fn().mockReturnValue(roomId),
+    };
+
+    const defaultRoomContext = {
+        ...RoomContext,
+        roomId,
+        roomViewStore: mockRoomViewStore,
+    } as unknown as RoomContextType;
+
     const mockClient = getMockClientWithEventEmitter({
         timestampToEvent: jest.fn(),
     });
     const getComponent = (props = {}) =>
         render(
             <MatrixClientContext.Provider value={mockClient}>
-                <DateSeparator {...defaultProps} {...props} />
+                <ScopedRoomContextProvider {...defaultRoomContext}>
+                    <DateSeparator {...defaultProps} {...props} />
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
 
@@ -74,7 +87,7 @@ describe("DateSeparator", () => {
                 return true;
             }
         });
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
+        mockRoomViewStore.getRoomId.mockReturnValue(roomId);
     });
 
     afterAll(() => {
@@ -200,7 +213,7 @@ describe("DateSeparator", () => {
             // network request is taking a while, so we got bored, switched rooms; we
             // shouldn't jump back to the previous room after the network request
             // happens to finish later.
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!some-other-room");
+            mockRoomViewStore.getRoomId.mockReturnValue("!some-other-room");
 
             // Jump to "last week"
             mockClient.timestampToEvent.mockResolvedValue({
@@ -230,7 +243,7 @@ describe("DateSeparator", () => {
             // network request is taking a while, so we got bored, switched rooms; we
             // shouldn't jump back to the previous room after the network request
             // happens to finish later.
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!some-other-room");
+            mockRoomViewStore.getRoomId.mockReturnValue("!some-other-room");
 
             // Try to jump to "last week" but we want an error to occur and ensure that
             // we don't show an error dialog for it since we already switched away to

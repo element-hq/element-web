@@ -18,7 +18,13 @@ import ToastStore from "./ToastStore";
 /**
  * The features are shown in the array order.
  */
-const FEATURES = ["newRoomList_intro", "newRoomList_sort", "newRoomList_filter", "newRoomList_settings"] as const;
+const FEATURES = [
+    "newNotificationSounds",
+    "newRoomList_intro",
+    "newRoomList_sort",
+    "newRoomList_filter",
+    "newRoomList_settings",
+] as const;
 /**
  * All the features that can be shown in the release announcements.
  */

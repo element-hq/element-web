@@ -40,6 +40,12 @@ interface WysiwygAutocompleteProps {
      */
     handleAtRoomMention: FormattingFunctions["mentionAtRoom"];
 
+    /**
+     * This handler will be called with the emoji character on clicking
+     * an emoji in the autocomplete list or pressing enter on a selected item
+     */
+    handleEmoji: FormattingFunctions["emoji"];
+
     ref?: Ref<Autocomplete>;
 }
 
@@ -55,6 +61,7 @@ const WysiwygAutocomplete = ({
     handleMention,
     handleCommand,
     handleAtRoomMention,
+    handleEmoji,
     ref,
 }: WysiwygAutocompleteProps): JSX.Element | null => {
     const { room } = useScopedRoomContext("room");
@@ -89,7 +96,14 @@ const WysiwygAutocomplete = ({
                 return;
             }
             // TODO - handle "community" type
+            case "community": {
+                return; // no-op until we decide how to handle community in the wysiwyg composer
+            }
             default:
+                {
+                    // similar to the cider editor we handle emoji and other plain text replacement in the default case
+                    handleEmoji(completion.completion);
+                }
                 return;
         }
     }

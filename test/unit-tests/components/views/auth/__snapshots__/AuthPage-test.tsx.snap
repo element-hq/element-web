@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<AuthPage /> should match snapshot 1`] = `
 <DocumentFragment>
@@ -13,9 +13,11 @@ exports[`<AuthPage /> should match snapshot 1`] = `
         class="mx_AuthPage_modalBlur"
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        tabindex="-1"
       />
     </div>
     <footer

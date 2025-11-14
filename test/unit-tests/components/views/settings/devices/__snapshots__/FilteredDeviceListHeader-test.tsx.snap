@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<FilteredDeviceListHeader /> renders correctly when all devices are selected 1`] = `
 <div>
@@ -23,7 +23,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when all devices are sel
             >
               <input
                 aria-label="Deselect all"
-                aria-labelledby="«r9»"
+                aria-labelledby="_r_9_"
                 checked=""
                 class="_input_1hel1_18"
                 data-testid="device-select-all-checkbox"
@@ -89,7 +89,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when no devices are sele
             >
               <input
                 aria-label="Select all"
-                aria-labelledby="«r0»"
+                aria-labelledby="_r_0_"
                 class="_input_1hel1_18"
                 data-testid="device-select-all-checkbox"
                 id="device-select-all-checkbox"

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "jest-matrix-react";
+import { fireEvent, render, screen, findByText } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -401,7 +401,7 @@ describe("InviteDialog", () => {
         const btn = await screen.findByRole("option", { name: aliceId });
         fireEvent.click(btn);
 
-        const tile = await screen.findByText(aliceId, { selector: ".mx_InviteDialog_userTile_name" });
+        const tile = await findByText(screen.getByTestId("invite-dialog-input-wrapper"), aliceId);
         expect(tile).toBeInTheDocument();
     });
 

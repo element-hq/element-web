@@ -40,6 +40,8 @@ import { filterConsole, stubClient } from "../../../../../test-utils";
 import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/RoomHeader";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
 import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
 import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
@@ -52,7 +54,6 @@ import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
 import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
-import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
@@ -65,14 +66,6 @@ jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
     },
 }));
 
-function getWrapper(): RenderOptions {
-    return {
-        wrapper: ({ children }) => (
-            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>{children}</MatrixClientContext.Provider>
-        ),
-    };
-}
-
 describe("RoomHeader", () => {
     filterConsole(
         "[getType] Room !1:example.org does not have an m.room.create event",
@@ -83,6 +76,25 @@ describe("RoomHeader", () => {
     const ROOM_ID = "!1:example.org";
 
     let setCardSpy: jest.SpyInstance | undefined;
+
+    const mockRoomViewStore = {
+        isViewingCall: jest.fn().mockReturnValue(false),
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+    };
+
+    let roomContext: RoomContextType;
+
+    function getWrapper(): RenderOptions {
+        return {
+            wrapper: ({ children }) => (
+                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>
+            ),
+        };
+    }
 
     beforeEach(async () => {
         stubClient();
@@ -99,6 +111,16 @@ describe("RoomHeader", () => {
         // Mock CallStore.instance.getCall to return null by default
         // Individual tests can override this when they need a specific Call object
         jest.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
+
+        // Reset the mock RoomViewStore
+        mockRoomViewStore.isViewingCall.mockReturnValue(false);
+
+        // Create a stable room context for this test
+        roomContext = {
+            ...RoomContext,
+            roomId: ROOM_ID,
+            roomViewStore: mockRoomViewStore,
+        } as unknown as RoomContextType;
     });
 
     afterEach(() => {
@@ -581,7 +603,7 @@ describe("RoomHeader", () => {
         it("close lobby button is shown", async () => {
             mockRoomMembers(room, 3);
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+            mockRoomViewStore.isViewingCall.mockReturnValue(true);
             render(<RoomHeader room={room} />, getWrapper());
             getByLabelText(document.body, "Close lobby");
         });
@@ -590,21 +612,21 @@ describe("RoomHeader", () => {
             mockRoomMembers(room, 3);
             // Mock CallStore to return a call with 3 participants
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+            mockRoomViewStore.isViewingCall.mockReturnValue(true);
 
             render(<RoomHeader room={room} />, getWrapper());
             getByLabelText(document.body, "Close lobby");
         });
 
         it("don't show external conference button if the call is not shown", () => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(false);
+            mockRoomViewStore.isViewingCall.mockReturnValue(false);
             jest.spyOn(SdkConfig, "get").mockImplementation((key) => {
                 return { guest_spa_url: "https://guest_spa_url.com", url: "https://spa_url.com" };
             });
             render(<RoomHeader room={room} />, getWrapper());
             expect(screen.queryByLabelText(_t("voip|get_call_link"))).not.toBeInTheDocument();
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+            mockRoomViewStore.isViewingCall.mockReturnValue(true);
 
             render(<RoomHeader room={room} />, getWrapper());
 
