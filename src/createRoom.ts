@@ -69,6 +69,9 @@ export interface IOpts {
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
+    /**
+     * Encrypt state events as per MSC4362
+     */
     stateEncryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
