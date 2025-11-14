@@ -805,6 +805,8 @@
         },
         "developer_mode": "Arendusrežiim",
         "developer_tools": "Arendusvahendid",
+        "device_dehydrated_no": "Virtuaalne seade serveris (dehüdreeritud): ei",
+        "device_dehydrated_yes": "Virtuaalne seade serveris (dehüdreeritud): jah",
         "device_id": "Seadme tunnus: %(deviceId)s",
         "device_keys": "Seadme võtmed",
         "device_verification_status": {
