@@ -132,7 +132,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                             <NotificationDecoration
                                 notificationState={vm.notificationState}
                                 aria-hidden={true}
-                                hasVideoCall={vm.hasParticipantInCall}
+                                callType={vm.callType}
                             />
                         )}
                     </>
