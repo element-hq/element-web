@@ -522,10 +522,8 @@ export class StopGapWidget extends EventEmitter {
         });
     };
 
-    private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
-        const { message, encryptionInfo } = payload;
-        // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
-        await this.messaging?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+    private onToDeviceMessage = async ({ message, encryptionInfo }: ReceivedToDeviceMessage): Promise<void> => {
+        await this.messaging?.feedToDevice(message, encryptionInfo != null);
     };
 
     /**
