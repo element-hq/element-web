@@ -384,6 +384,7 @@ class MermaidFlowchartPrinter {
     private static INDENT = 4;
     private currentIndent = 0;
     private text = "";
+    private readonly markdown: boolean;
     public readonly idGenerator = new IdGenerator();
 
     private print(text: string): void {
@@ -400,11 +401,8 @@ class MermaidFlowchartPrinter {
         this.currentIndent += delta * MermaidFlowchartPrinter.INDENT;
     }
 
-    public constructor(
-        direction: "TD" | "TB" | "BT" | "RL" | "LR",
-        title?: string,
-        private readonly markdown = false,
-    ) {
+    public constructor(direction: "TD" | "TB" | "BT" | "RL" | "LR", title?: string, markdown = false) {
+        this.markdown = markdown;
         if (this.markdown) {
             this.print("```mermaid");
         }
