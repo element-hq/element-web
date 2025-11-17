@@ -358,6 +358,8 @@ export interface RoomViewProps {
     hideComposer?: boolean;
     // (undocumented)
     hideHeader?: boolean;
+    // (undocumented)
+    hideRightPanel?: boolean;
 }
 
 // @alpha @deprecated (undocumented)
