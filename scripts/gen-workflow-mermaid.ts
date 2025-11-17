@@ -5,7 +5,7 @@ import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
 import cronstrue from "cronstrue";
-import { partition } from "lodash";
+import _ from "lodash";
 
 const argv = parseArgs<{
     debug: boolean;
@@ -81,7 +81,7 @@ class Graph<T extends Node> {
     public removeNode(node: T): Edge<T>[] {
         if (!this.nodes.has(node.id)) return [];
         this.nodes.delete(node.id);
-        const [removedEdges, keptEdges] = partition(
+        const [removedEdges, keptEdges] = _.partition(
             this.edges,
             ([source, destination]) => source === node || destination === node,
         );
