@@ -202,6 +202,12 @@ Please see LICENSE files in the repository root for full details.
     &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
         background-color: $alert;
     }
+
+    svg {
+        --size: 20px;
+        width: var(--size);
+        height: var(--size);
+    }
 }
 .mx_MessageComposer_wysiwyg {
     .mx_MessageComposer_wrapper {
@@ -244,37 +250,9 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_MessageComposer_upload::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/attach.svg");
-}
-
-.mx_MessageComposer_poll::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
-}
-
-.mx_MessageComposer_voiceMessage::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/mic-on-solid.svg");
-}
-
-.mx_MessageComposer_plain_text::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/plain_text.svg");
-}
-
-.mx_MessageComposer_rich_text::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/text-formatting.svg");
-}
-
-.mx_MessageComposer_location::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/location-pin-solid.svg");
-}
-
-.mx_MessageComposer_stickers::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/sticker.svg");
-}
-
-.mx_MessageComposer_buttonMenu::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-    mask-size: 24px;
+.mx_MessageComposer_buttonMenu svg {
+    width: 24px;
+    height: 24px;
 }
 
 .mx_MessageComposer_sendMessage {
@@ -285,20 +263,11 @@ Please see LICENSE files in the repository root for full details.
     border-radius: 100%;
     background-color: var(--cpd-color-icon-accent-tertiary);
 
-    &::before {
-        position: absolute;
+    svg {
         height: 16px;
         width: 16px;
-        top: 8px;
-        left: 9px;
 
-        mask-image: url("@vector-im/compound-design-tokens/icons/send-solid.svg");
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
-
-        background-color: var(--cpd-color-icon-on-solid-primary);
-        content: "";
+        color: var(--cpd-color-icon-on-solid-primary);
     }
 }
 

@@ -19,7 +19,7 @@ import {
 import { type Optional } from "matrix-events-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -73,7 +73,9 @@ function SendButton(props: ISendButtonProps): JSX.Element {
             onClick={props.onClick}
             title={props.title ?? _t("composer|send_button_title")}
             data-testid="sendmessagebtn"
-        />
+        >
+            <SendSolidIcon />
+        </AccessibleButton>
     );
 }
 

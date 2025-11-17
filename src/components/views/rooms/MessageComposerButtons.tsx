@@ -15,6 +15,11 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
+import {
+    MicOnSolidIcon,
+    OverflowHorizontalIcon,
+    TextFormattingIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -35,6 +40,10 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { Icon as PlainTextIcon } from "../../../../res/img/element-icons/room/composer/plain_text.svg";
+import { Icon as UploadIcon } from "../../../../res/img/element-icons/room/composer/attach.svg";
+import { Icon as StickersIcon } from "../../../../res/img/element-icons/room/composer/sticker.svg";
+import { Icon as PollIcon } from "../../../../res/img/element-icons/room/composer/poll.svg";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -125,7 +134,9 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     className={moreOptionsClasses}
                     onClick={props.toggleButtonMenu}
                     title={_t("quick_settings|sidebar_settings")}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </AccessibleButton>
             )}
             {props.isMenuOpen && (
                 <IconizedContextMenu
@@ -235,12 +246,9 @@ const UploadButton: React.FC = () => {
     };
 
     return (
-        <CollapsibleButton
-            className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_upload"
-            onClick={onClick}
-            title={_t("common|attachment")}
-        />
+        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={_t("common|attachment")}>
+            <UploadIcon />
+        </CollapsibleButton>
     );
 };
 
@@ -250,10 +258,11 @@ function showStickersButton(props: IProps): ReactElement | null {
             id="stickersButton"
             key="controls_stickers"
             className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_stickers"
             onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
             title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
-        />
+        >
+            <StickersIcon />
+        </CollapsibleButton>
     ) : null;
 }
 
@@ -263,10 +272,11 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
         <CollapsibleButton
             key="voice_message_send"
             className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_voiceMessage"
             onClick={props.onRecordStartEndClick}
             title={_t("composer|voice_message_button")}
-        />
+        >
+            <MicOnSolidIcon />
+        </CollapsibleButton>
     );
 }
 
@@ -318,10 +328,11 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
         return (
             <CollapsibleButton
                 className="mx_MessageComposer_button"
-                iconClassName="mx_MessageComposer_poll"
                 onClick={this.onCreateClick}
                 title={_t("composer|poll_button")}
-            />
+            >
+                <PollIcon />
+            </CollapsibleButton>
         );
     }
 }
@@ -348,16 +359,17 @@ interface WysiwygToggleButtonProps {
 function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonProps): JSX.Element {
     const title = isRichTextEnabled ? _t("composer|mode_plain") : _t("composer|mode_rich_text");
 
+    let icon: JSX.Element;
+    if (isRichTextEnabled) {
+        icon = <TextFormattingIcon />;
+    } else {
+        icon = <PlainTextIcon />;
+    }
+
     return (
-        <CollapsibleButton
-            className="mx_MessageComposer_button"
-            iconClassName={classNames({
-                mx_MessageComposer_plain_text: !isRichTextEnabled,
-                mx_MessageComposer_rich_text: isRichTextEnabled,
-            })}
-            onClick={onClick}
-            title={title}
-        />
+        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={title}>
+            {icon}
+        </CollapsibleButton>
     );
 }
 

@@ -14,6 +14,7 @@ import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../
 import EmojiPicker from "../emojipicker/EmojiPicker";
 import { CollapsibleButton } from "./CollapsibleButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
+import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/composer/emoji.svg";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
@@ -50,11 +51,12 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
         <>
             <CollapsibleButton
                 className={computedClassName}
-                iconClassName="mx_EmojiButton_icon"
                 onClick={openMenu}
                 title={_t("common|emoji")}
                 inputRef={button}
-            />
+            >
+                <EmojiIcon />
+            </CollapsibleButton>
 
             {contextMenu}
         </>
