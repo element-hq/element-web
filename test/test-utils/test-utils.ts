@@ -276,7 +276,9 @@ export function createTestClient(): MatrixClient {
 
         _unstable_sendDelayedEvent: jest.fn(),
         _unstable_sendDelayedStateEvent: jest.fn(),
-        _unstable_updateDelayedEvent: jest.fn(),
+        _unstable_cancelScheduledDelayedEvent: jest.fn(),
+        _unstable_restartScheduledDelayedEvent: jest.fn(),
+        _unstable_sendScheduledDelayedEvent: jest.fn(),
 
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
