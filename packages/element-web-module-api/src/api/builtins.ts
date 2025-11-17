@@ -18,6 +18,10 @@ export interface RoomViewProps {
      * If true, the message composer will be hidden.
      */
     hideComposer?: boolean;
+    /*
+     * If true, the right panel will be hidden.
+     */
+    hideRightPanel?: boolean;
 }
 
 /**
