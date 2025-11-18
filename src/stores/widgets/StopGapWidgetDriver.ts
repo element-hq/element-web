@@ -39,6 +39,7 @@ import {
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
+    SendDelayedEventRequestOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -285,6 +286,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return allAllowed;
     }
 
+    private getSendEventTarget(roomId: string | null = null) {
+        const client = MatrixClientPeg.safeGet();
+        roomId = roomId || SdkContextClass.instance.roomViewStore.getRoomId() || null;
+        if (!roomId) throw new Error("No room specified and no room in RoomViewStore focus.");
+        return { client, roomId };
+    }
+
     public async sendEvent<K extends keyof StateEvents>(
         eventType: K,
         content: StateEvents[K],
@@ -303,10 +311,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
 
         let r: { event_id: string } | null;
         if (stateKey !== null) {
@@ -355,10 +360,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         content: unknown,
         targetRoomId?: string | null,
     ): Promise<ISendEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
 
         const r = await client._unstable_sendStickyEvent(
             roomId,
@@ -368,6 +370,20 @@ export class StopGapWidgetDriver extends WidgetDriver {
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
         );
         return { roomId, eventId: r.event_id };
+    }
+
+    private getSendDelayedEventOpts(delay: number | null, parentDelayId: string | null): SendDelayedEventRequestOpts {
+        if (delay !== null) {
+            return {
+                delay,
+                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
+            };
+        } else if (parentDelayId !== null) {
+            return {
+                parent_delay_id: parentDelayId,
+            };
+        }
+        throw new Error("Must provide at least one of delay or parentDelayId");
     }
 
     /**
@@ -401,24 +417,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
-
-        let delayOpts;
-        if (delay !== null) {
-            delayOpts = {
-                delay,
-                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
-            };
-        } else if (parentDelayId !== null) {
-            delayOpts = {
-                parent_delay_id: parentDelayId,
-            };
-        } else {
-            throw new Error("Must provide at least one of delay or parentDelayId");
-        }
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
+        let delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
@@ -459,24 +459,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
         content: unknown,
         targetRoomId?: string | null,
     ): Promise<ISendDelayedEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
-
-        let delayOpts;
-        if (delay !== null) {
-            delayOpts = {
-                delay,
-                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
-            };
-        } else if (parentDelayId !== null) {
-            delayOpts = {
-                parent_delay_id: parentDelayId,
-            };
-        } else {
-            throw new Error("Must provide at least one of delay or parentDelayId");
-        }
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
+        let delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
 
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
@@ -495,7 +479,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     public async cancelScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_cancelScheduledDelayedEvent(delayId);
     }
@@ -506,7 +490,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     public async restartScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_restartScheduledDelayedEvent(delayId);
     }
@@ -517,7 +501,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     public async sendScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_sendScheduledDelayedEvent(delayId);
     }

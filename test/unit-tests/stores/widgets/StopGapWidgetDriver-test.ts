@@ -646,6 +646,27 @@ describe("StopGapWidgetDriver", () => {
                 {},
             );
         });
+        it("sends child action delayed sticky message events", async () => {
+            client._unstable_sendStickyDelayedEvent.mockResolvedValue({
+                delay_id: "id-child",
+            });
+
+            await expect(
+                driver.sendDelayedStickyEvent(null, "id-parent", 2000, EventType.RoomMessage, {}),
+            ).resolves.toEqual({
+                roomId,
+                delayId: "id-child",
+            });
+
+            expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
+                roomId,
+                2000,
+                { parent_delay_id: "id-parent" },
+                null,
+                EventType.RoomMessage,
+                {},
+            );
+        });
     });
 
     describe("If the feature_dynamic_room_predecessors feature is not enabled", () => {
