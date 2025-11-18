@@ -53,7 +53,13 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
                 {label}
             </span>
             {onClick && (
-                <IconButton aria-describedby={id} size="16px" onClick={onClick} aria-label={_t("action|delete")}>
+                <IconButton
+                    aria-describedby={id}
+                    size="16px"
+                    onClick={onClick}
+                    aria-label={_t("action|delete")}
+                    className="mx_Dialog_nonDialogButton"
+                >
                     <CloseIcon color="var(--cpd-color-icon-tertiary)" />
                 </IconButton>
             )}

@@ -175,6 +175,11 @@ interface IRoomProps extends RoomViewProps {
      * If true, hide the composer
      */
     hideComposer?: boolean;
+
+    /*
+     * If true, hide the right panel
+     */
+    hideRightPanel?: boolean;
 }
 
 export { MainSplitContentType };
@@ -2557,7 +2562,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        const showRightPanel = !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
+        const showRightPanel =
+            !this.props.hideRightPanel && !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
 
         const rightPanel = showRightPanel ? (
             <RightPanel

@@ -27,7 +27,6 @@ import {
     SimpleObservable,
     OpenIDRequestState,
     type IOpenIDUpdate,
-    UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     type ApprovalOpts,
@@ -554,24 +553,40 @@ describe("StopGapWidgetDriver", () => {
             driver = mkDefaultDriver();
         });
 
-        it("updates delayed events", async () => {
-            client._unstable_updateDelayedEvent.mockResolvedValue({});
-            for (const action of [
-                UpdateDelayedEventAction.Cancel,
-                UpdateDelayedEventAction.Restart,
-                UpdateDelayedEventAction.Send,
-            ]) {
-                await expect(driver.updateDelayedEvent("id", action)).resolves.toBeUndefined();
-                expect(client._unstable_updateDelayedEvent).toHaveBeenCalledWith("id", action);
-            }
+        it("can cancel scheduled delayed events", async () => {
+            client._unstable_cancelScheduledDelayedEvent.mockResolvedValue({});
+            await expect(driver.cancelScheduledDelayedEvent("id")).resolves.toBeUndefined();
+            expect(client._unstable_cancelScheduledDelayedEvent).toHaveBeenCalledWith("id");
         });
 
-        it("fails to update delayed events", async () => {
+        it("can restart scheduled delayed events", async () => {
+            client._unstable_restartScheduledDelayedEvent.mockResolvedValue({});
+            await expect(driver.restartScheduledDelayedEvent("id")).resolves.toBeUndefined();
+            expect(client._unstable_restartScheduledDelayedEvent).toHaveBeenCalledWith("id");
+        });
+
+        it("can send scheduled delayed events", async () => {
+            client._unstable_sendScheduledDelayedEvent.mockResolvedValue({});
+            await expect(driver.sendScheduledDelayedEvent("id")).resolves.toBeUndefined();
+            expect(client._unstable_sendScheduledDelayedEvent).toHaveBeenCalledWith("id");
+        });
+
+        it("fails to cancel scheduled delayed events", async () => {
+            const errorMessage = "Cannot cancel this delayed event";
+            client._unstable_cancelScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
+            await expect(driver.cancelScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
+        });
+
+        it("fails to restart scheduled delayed events", async () => {
             const errorMessage = "Cannot restart this delayed event";
-            client._unstable_updateDelayedEvent.mockRejectedValue(new Error(errorMessage));
-            await expect(driver.updateDelayedEvent("id", UpdateDelayedEventAction.Restart)).rejects.toThrow(
-                errorMessage,
-            );
+            client._unstable_restartScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
+            await expect(driver.restartScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
+        });
+
+        it("fails to send scheduled delayed events", async () => {
+            const errorMessage = "Cannot send this delayed event";
+            client._unstable_sendScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
+            await expect(driver.sendScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
         });
     });
 
