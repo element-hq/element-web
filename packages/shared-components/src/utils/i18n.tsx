@@ -189,7 +189,7 @@ export function lookupString(key: TranslationKey): string {
 }
 
 /*
- * Wraps normal _t function and adds atttribution for translations that used a fallback locale
+ * Wraps normal _t function and adds attribution for translations that used a fallback locale
  * Wraps translations that fell back from active locale to fallback locale with a `<span lang=<fallback locale>>`
  * @param {string} text The untranslated text, e.g "click <a>here</a> now to %(foo)s".
  * @param {object} variables Variable substitutions, e.g { foo: 'bar' }
