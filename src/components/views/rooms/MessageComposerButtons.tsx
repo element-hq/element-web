@@ -359,16 +359,9 @@ interface WysiwygToggleButtonProps {
 function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonProps): JSX.Element {
     const title = isRichTextEnabled ? _t("composer|mode_plain") : _t("composer|mode_rich_text");
 
-    let icon: JSX.Element;
-    if (isRichTextEnabled) {
-        icon = <TextFormattingIcon />;
-    } else {
-        icon = <PlainTextIcon />;
-    }
-
     return (
         <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={title}>
-            {icon}
+            {isRichTextEnabled ? <TextFormattingIcon /> : <PlainTextIcon />}
         </CollapsibleButton>
     );
 }
