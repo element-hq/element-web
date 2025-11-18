@@ -133,6 +133,7 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc3819.receive.to_device:m.call.replaces",
             "org.matrix.msc4157.send.delayed_event",
             "org.matrix.msc4157.update_delayed_event",
+            "org.matrix.msc4354.send_sticky_event",
             // RTC decline events
             "org.matrix.msc2762.send.event:org.matrix.msc4310.rtc.decline",
             "org.matrix.msc2762.receive.event:org.matrix.msc4310.rtc.decline",
@@ -587,6 +588,63 @@ describe("StopGapWidgetDriver", () => {
             const errorMessage = "Cannot send this delayed event";
             client._unstable_sendScheduledDelayedEvent.mockRejectedValue(new Error(errorMessage));
             await expect(driver.sendScheduledDelayedEvent("id")).rejects.toThrow(errorMessage);
+        });
+    });
+
+    describe("sendStickyEvent", () => {
+        let driver: WidgetDriver;
+        const roomId = "!this-room-id";
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("sends sticky message events", async () => {
+            client._unstable_sendStickyEvent.mockResolvedValue({
+                event_id: "id",
+            });
+
+            await expect(driver.sendStickyEvent(2000, EventType.RoomMessage, {})).resolves.toEqual({
+                roomId,
+                eventId: "id",
+            });
+
+            expect(client._unstable_sendStickyEvent).toHaveBeenCalledWith(
+                roomId,
+                2000,
+                null,
+                EventType.RoomMessage,
+                {},
+            );
+        });
+    });
+
+    describe("sendDelayedStickyEvent", () => {
+        let driver: WidgetDriver;
+        const roomId = "!this-room-id";
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("sends delayed sticky message events", async () => {
+            client._unstable_sendStickyDelayedEvent.mockResolvedValue({
+                delay_id: "id",
+            });
+
+            await expect(driver.sendDelayedStickyEvent(1000, null, 2000, EventType.RoomMessage, {})).resolves.toEqual({
+                roomId,
+                delayId: "id",
+            });
+
+            expect(client._unstable_sendStickyDelayedEvent).toHaveBeenCalledWith(
+                roomId,
+                2000,
+                { delay: 1000 },
+                null,
+                EventType.RoomMessage,
+                {},
+            );
         });
     });
 
