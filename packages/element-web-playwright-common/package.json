@@ -31,7 +31,7 @@
     "dependencies": {
         "@axe-core/playwright": "^4.10.1",
         "@testcontainers/postgresql": "^11.0.0",
-        "glob": "^11.0.3",
+        "glob": "^11.1.0",
         "lodash-es": "^4.17.21",
         "mailpit-api": "^1.2.0",
         "strip-ansi": "^7.1.0",
