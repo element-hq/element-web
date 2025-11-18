@@ -457,22 +457,38 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <div />
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <div />
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -688,22 +704,38 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <div />
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <div />
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -1184,22 +1216,38 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <div />
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <div />
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -1756,22 +1804,38 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <div />
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <div />
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -2189,22 +2253,38 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   >
                     <div
                       aria-label="Emoji"
-                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <div />
+                    </div>
                     <div
                       aria-label="Attachment"
-                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                      class="mx_AccessibleButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <div />
+                    </div>
                     <div
                       aria-label="More options"
                       class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                        />
+                      </svg>
+                    </div>
                     <input
                       multiple=""
                       style="display: none;"
