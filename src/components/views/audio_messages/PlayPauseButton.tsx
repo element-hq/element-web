@@ -6,14 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
-import { PauseSolidIcon, PlaySolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import React, { type HTMLAttributes, type ReactNode } from "react";
+import { PlayPauseButton as SharedPlayPauseButton } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../languageHandler";
 import { type Playback, PlaybackState } from "../../../audio/Playback";
-import AccessibleButton, { type ButtonProps } from "../elements/AccessibleButton";
 
-type Props = Omit<ButtonProps<"div">, "title" | "onClick" | "disabled" | "element" | "ref"> & {
+type Props = HTMLAttributes<HTMLButtonElement> & {
     // Playback instance to manipulate. Cannot change during the component lifecycle.
     playback: Playback;
 
@@ -27,8 +25,7 @@ type Props = Omit<ButtonProps<"div">, "title" | "onClick" | "disabled" | "elemen
  */
 export default class PlayPauseButton extends React.PureComponent<Props> {
     private onClick = (): void => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.toggleState();
+        void this.toggleState();
     };
 
     public async toggleState(): Promise<void> {
@@ -37,27 +34,16 @@ export default class PlayPauseButton extends React.PureComponent<Props> {
 
     public render(): ReactNode {
         const { playback, playbackPhase, ...restProps } = this.props;
-        const isPlaying = playback.isPlaying;
-        const isDisabled = playbackPhase === PlaybackState.Decoding;
-
-        let icon: JSX.Element;
-        if (isPlaying) {
-            icon = <PauseSolidIcon />;
-        } else {
-            icon = <PlaySolidIcon />;
-        }
 
         return (
-            <AccessibleButton
+            <SharedPlayPauseButton
                 data-testid="play-pause-button"
                 className="mx_PlayPauseButton"
-                title={isPlaying ? _t("action|pause") : _t("action|play")}
-                onClick={this.onClick}
-                disabled={isDisabled}
+                togglePlay={this.onClick}
+                playing={playback.isPlaying}
+                disabled={playbackPhase === PlaybackState.Decoding}
                 {...restProps}
-            >
-                {icon}
-            </AccessibleButton>
+            />
         );
     }
 }
