@@ -35,6 +35,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
 import AccessibleButton from "../elements/AccessibleButton";
+import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     room: Room;
@@ -275,7 +276,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     className="mx_VoiceRecordComposerTile_delete"
                     title={_t("action|delete")}
                     onClick={this.onCancel}
-                />
+                >
+                    <DeleteIcon />
+                </AccessibleButton>
             );
         }
 

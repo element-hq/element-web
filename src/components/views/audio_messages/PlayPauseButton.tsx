@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
-import classNames from "classnames";
+import React, { type JSX, type ReactNode } from "react";
+import { PauseSolidIcon, PlaySolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { type Playback, PlaybackState } from "../../../audio/Playback";
@@ -39,21 +39,25 @@ export default class PlayPauseButton extends React.PureComponent<Props> {
         const { playback, playbackPhase, ...restProps } = this.props;
         const isPlaying = playback.isPlaying;
         const isDisabled = playbackPhase === PlaybackState.Decoding;
-        const classes = classNames("mx_PlayPauseButton", {
-            mx_PlayPauseButton_play: !isPlaying,
-            mx_PlayPauseButton_pause: isPlaying,
-            mx_PlayPauseButton_disabled: isDisabled,
-        });
+
+        let icon: JSX.Element;
+        if (isPlaying) {
+            icon = <PauseSolidIcon />;
+        } else {
+            icon = <PlaySolidIcon />;
+        }
 
         return (
             <AccessibleButton
                 data-testid="play-pause-button"
-                className={classes}
+                className="mx_PlayPauseButton"
                 title={isPlaying ? _t("action|pause") : _t("action|play")}
                 onClick={this.onClick}
                 disabled={isDisabled}
                 {...restProps}
-            />
+            >
+                {icon}
+            </AccessibleButton>
         );
     }
 }
