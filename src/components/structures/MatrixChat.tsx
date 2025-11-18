@@ -1437,7 +1437,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 logger.debug("onShowPostLoginScreen: Showing home page after registration");
                 dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
             }
-        } else if (!(await this.shouldForceVerification())) {
+        } else {
             logger.debug("onShowPostLoginScreen: showScreenAfterLogin");
             this.showScreenAfterLogin();
         }
