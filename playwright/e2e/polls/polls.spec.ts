@@ -132,9 +132,7 @@ test.describe("Polls", () => {
         await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
 
         // no votes shown until I vote, check bots vote has arrived
-        await expect(
-            page.locator(".mx_MPollBody_totalVotes").getByText("1 vote cast. Vote to see the results"),
-        ).toBeAttached();
+        await expect(page.locator(".mx_MPollBody_totalVotes").getByText("Total votes: 1")).toBeAttached();
 
         // vote 'Maybe'
         await getPollOption(page, pollId, pollParams.options[2]).click();
