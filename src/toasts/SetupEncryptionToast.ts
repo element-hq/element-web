@@ -27,6 +27,7 @@ import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 
 const TOAST_KEY = "setupencryption";
 
@@ -167,24 +168,27 @@ export const showToast = (kind: Kind): void => {
                     /* priority */ false,
                     /* static */ true,
                 );
-                const deviceListener = DeviceListener.sharedInstance();
 
                 const matrixClient = MatrixClientPeg.safeGet();
                 const crypto = matrixClient.getCrypto()!;
 
                 try {
+                    const deviceListener = DeviceListener.sharedInstance();
+
+                    // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                    // deviceListener.pause() sets its client to undefined, so
+                    // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                    // the backup state.
+                    const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset();
+
                     // pause the device listener because we could be making lots
                     // of changes, and don't want toasts to pop up and disappear
                     // while we're doing it
                     await deviceListener.pause(async () => {
                         await accessSecretStorage(async () => {
                             // Reset backup if needed.
-                            if (await deviceListener.keyStorageOutOfSyncNeedsBackupReset()) {
-                                await crypto.resetKeyBackup();
-
-                                // resetKeyBackup fires this off in the background without waiting, so we need to do it
-                                // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
-                                await crypto.checkKeyBackupAndEnable();
+                            if (needsBackupReset) {
+                                await resetKeyBackupAndWait(crypto);
                             }
                         });
                     });

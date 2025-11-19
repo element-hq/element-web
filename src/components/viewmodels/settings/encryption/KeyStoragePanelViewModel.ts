@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 import { useEventEmitterAsyncState } from "../../../../hooks/useEventEmitter";
+import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 interface KeyStoragePanelState {
     /**
@@ -108,10 +109,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                         // If there is no usable key backup on the server, create one.
                         // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
                         if (currentKeyBackup === null) {
-                            await crypto.resetKeyBackup();
-                            // resetKeyBackup fires this off in the background without waiting, so we need to do it
-                            // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
-                            await crypto.checkKeyBackupAndEnable();
+                            await resetKeyBackupAndWait(crypto);
                         }
 
                         // Set the flag so that EX no longer thinks the user wants backup disabled
