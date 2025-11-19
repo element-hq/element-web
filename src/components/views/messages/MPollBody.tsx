@@ -308,10 +308,18 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         let totalText: string;
         if (showResults && poll.undecryptableRelationsCount) {
             totalText = _t("poll|total_decryption_errors");
+        } else if (poll.isEnded) {
+            totalText = _t("right_panel|poll|final_result", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("poll|total_not_ended");
+        } else if (myVote === undefined) {
+            if (totalVotes === 0) {
+                totalText = _t("poll|total_no_votes");
+            } else {
+                totalText = _t("poll|total_n_votes", { count: totalVotes });
+            }
         } else {
-            totalText = _t("poll|total_votes_label", { count: totalVotes });
+            totalText = _t("poll|total_n_votes_voted", { count: totalVotes });
         }
 
         const editedSpan = this.props.mxEvent.replacingEvent() ? (

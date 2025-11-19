@@ -1778,7 +1778,15 @@
         "topic_label": "Question or topic",
         "topic_placeholder": "Write something…",
         "total_decryption_errors": "Due to decryption errors, some votes may not be counted",
-        "total_votes_label": "Total votes: %(count)s",
+        "total_n_votes": {
+            "one": "%(count)s vote cast. Vote to see the results",
+            "other": "%(count)s votes cast. Vote to see the results"
+        },
+        "total_n_votes_voted": {
+            "one": "Based on %(count)s vote",
+            "other": "Based on %(count)s votes"
+        },
+        "total_no_votes": "No votes cast",
         "total_not_ended": "Results will be visible when the poll is ended",
         "type_closed": "Closed poll",
         "type_heading": "Poll type",

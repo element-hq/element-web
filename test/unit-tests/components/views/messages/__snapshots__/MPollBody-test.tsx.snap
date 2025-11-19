@@ -244,7 +244,7 @@ exports[`MPollBody renders a finished poll 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 3
+      Final result based on 3 votes
     </div>
   </fieldset>
 </div>
@@ -497,7 +497,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 4
+      Final result based on 4 votes
     </div>
   </fieldset>
 </div>
@@ -744,7 +744,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 0
+      Final result based on 0 votes
     </div>
   </fieldset>
 </div>
@@ -976,7 +976,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 3
+      3 votes cast. Vote to see the results
     </div>
   </fieldset>
 </div>
@@ -1216,7 +1216,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 5
+      Based on 5 votes
     </div>
   </fieldset>
 </div>
@@ -1448,7 +1448,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 0
+      No votes cast
     </div>
   </fieldset>
 </div>
@@ -1688,7 +1688,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 3
+      Based on 3 votes
     </div>
   </fieldset>
 </div>
@@ -1941,7 +1941,7 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Results will be visible when the poll is ended
+      Final result based on 4 votes
     </div>
   </fieldset>
 </div>

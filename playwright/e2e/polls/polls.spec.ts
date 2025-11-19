@@ -132,7 +132,9 @@ test.describe("Polls", () => {
         await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
 
         // no votes shown until I vote, check bots vote has arrived
-        await expect(page.locator(".mx_MPollBody_totalVotes").getByText("Total votes: 1")).toBeAttached();
+        await expect(
+            page.locator(".mx_MPollBody_totalVotes").getByText("1 vote cast. Vote to see the results"),
+        ).toBeAttached();
 
         // vote 'Maybe'
         await getPollOption(page, pollId, pollParams.options[2]).click();
@@ -212,7 +214,7 @@ test.describe("Polls", () => {
         await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
 
         // wait for bot's vote to arrive
-        await expect(page.locator(".mx_MPollBody_totalVotes")).toContainText("Total votes: 1");
+        await expect(page.locator(".mx_MPollBody_totalVotes")).toContainText("1 vote cast");
 
         // Open context menu
         await getPollTile(page, pollId).click({ button: "right" });
@@ -277,12 +279,16 @@ test.describe("Polls", () => {
 
             // no votes shown until I vote, check votes have arrived in main tl
             await expect(
-                page.locator(".mx_RoomView_body .mx_MPollBody_totalVotes").getByText("Total votes: 2"),
+                page
+                    .locator(".mx_RoomView_body .mx_MPollBody_totalVotes")
+                    .getByText("2 votes cast. Vote to see the results"),
             ).toBeAttached();
 
             // and thread view
             await expect(
-                page.locator(".mx_ThreadView .mx_MPollBody_totalVotes").getByText("Total votes: 2"),
+                page
+                    .locator(".mx_ThreadView .mx_MPollBody_totalVotes")
+                    .getByText("2 votes cast. Vote to see the results"),
             ).toBeAttached();
 
             // Take snapshots of poll on ThreadView
