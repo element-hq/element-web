@@ -199,6 +199,35 @@ export default class DeviceListener {
 
     /**
      * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
+     * requires a reset of cross-signing keys.
+     *
+     * We will reset cross-signing keys if both our local cache and 4S don't
+     * have all cross-signing keys.
+     *
+     * In theory, if the set of keys in our cache and in 4S are different, and
+     * we have a complete set between the two, we could be OK, but that
+     * should be exceptionally rare, and is more complicated to detect.
+     */
+    public async keyStorageOutOfSyncNeedsCrossSigningReset(forgotRecovery: boolean): Promise<boolean> {
+        const crypto = this.client?.getCrypto();
+        if (!crypto) {
+            return false;
+        }
+        const crossSigningStatus = await crypto.getCrossSigningStatus();
+        const allCrossSigningSecretsCached =
+            crossSigningStatus.privateKeysCachedLocally.masterKey &&
+            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
+            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
+
+        if (forgotRecovery) {
+            return !allCrossSigningSecretsCached;
+        } else {
+            return !allCrossSigningSecretsCached && !crossSigningStatus.privateKeysInSecretStorage;
+        }
+    }
+
+    /**
+     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
      * requires a reset of key backup.
      *
      * If the user has their recovery key, we need to reset backup if:
@@ -459,7 +488,11 @@ export default class DeviceListener {
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
                 });
-                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+                // We use the right toast variant based on whether the backup
+                // key is missing locally.  If any of the cross-signing keys are
+                // missing locally, that is handled by the
+                // `!allCrossSigningSecretsCached` branch above.
+                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             }
         } else {
             logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");

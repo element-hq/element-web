@@ -55,7 +55,7 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Key storage out of sync (retrieve secrets)", () => {
+    describe("Key storage out of sync", () => {
         let client: Mocked<MatrixClient>;
 
         beforeEach(() => {
@@ -93,8 +93,12 @@ describe("SetupEncryptionToast", () => {
             expect(client.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
         });
 
-        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
+        it("should open settings to the reset flow when 'forgot recovery key' clicked and identity reset needed", async () => {
             act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                true,
+            );
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Forgot recovery key?"));
@@ -106,10 +110,31 @@ describe("SetupEncryptionToast", () => {
             });
         });
 
-        it("should open settings to the reset flow when recovering fails", async () => {
+        it("should open settings to the change recovery key flow when 'forgot recovery key' clicked and identity reset not needed", async () => {
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                false,
+            );
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Forgot recovery key?"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "change_recovery_key" },
+            });
+        });
+
+        it("should open settings to the reset flow when recovering fails and identity reset needed", async () => {
             jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
                 throw new Error("Something went wrong while recovering!");
             });
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                true,
+            );
 
             act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
@@ -122,43 +147,17 @@ describe("SetupEncryptionToast", () => {
                 props: { initialEncryptionState: "reset_identity_sync_failed" },
             });
         });
-    });
 
-    describe("Key storage out of sync (secrets are missing from 4S)", () => {
-        let client: Mocked<MatrixClient>;
-
-        beforeEach(() => {
-            client = mocked(stubClient());
-            mocked(client.getCrypto).mockReturnValue({
-                getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
-            } as unknown as CryptoApi);
-        });
-
-        it("should render the toast", async () => {
-            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
-
-            await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
-        });
-
-        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
-
-            const user = userEvent.setup();
-            await user.click(await screen.findByText("Forgot recovery key?"));
-
-            expect(dis.dispatch).toHaveBeenCalledWith({
-                action: "view_user_settings",
-                initialTabId: "USER_ENCRYPTION_TAB",
-                props: { initialEncryptionState: "reset_identity_forgot" },
-            });
-        });
-
-        it("should open settings to the reset flow when recovering fails", async () => {
+        it("should open settings to the change recovery key flow when recovering fails and identity reset not needed", async () => {
             jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
                 throw new Error("Something went wrong while recovering!");
             });
 
-            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE));
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                false,
+            );
+
+            act(() => showToast(Kind.KEY_STORAGE_OUT_OF_SYNC));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Enter recovery key"));

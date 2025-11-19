@@ -454,7 +454,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
                     );
                 });
             });
@@ -1260,6 +1260,75 @@ describe("DeviceListener", () => {
                 mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
                 mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
                 expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(true);
+            });
+        });
+
+        describe("needs cross-signing reset", () => {
+            it("should not need resetting if cross-signing keys are present locally or in 4S, and user has 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+            });
+
+            it("should not need resetting if cross-signing keys are present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(false);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(true);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and in 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(true);
             });
         });
     });
