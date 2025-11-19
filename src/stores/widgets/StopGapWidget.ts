@@ -155,7 +155,6 @@ export class ElementWidget extends Widget {
 export class StopGapWidget extends EventEmitter {
     private client: MatrixClient;
     private iframe: HTMLIFrameElement | null = null;
-    private messaging: ClientWidgetApi | null = null;
     private mockWidget: ElementWidget;
     private scalarToken?: string;
     private roomId?: string;
@@ -189,8 +188,12 @@ export class StopGapWidget extends EventEmitter {
         this.stickyPromise = appTileProps.stickyPromise;
     }
 
+    private _widgetApi: ClientWidgetApi | null = null;
+    private set widgetApi(value: ClientWidgetApi | null) {
+        this._widgetApi = value;
+    }
     public get widgetApi(): ClientWidgetApi | null {
-        return this.messaging;
+        return this._widgetApi;
     }
 
     /**
@@ -244,16 +247,16 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private onThemeChange = (theme: string): void => {
-        this.messaging?.updateTheme({ name: theme });
+        this.widgetApi?.updateTheme({ name: theme });
     };
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
             ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget, this.roomId);
-            this.messaging?.transport.reply(ev.detail, {}); // ack
+            this.widgetApi?.transport.reply(ev.detail, {}); // ack
         } else {
-            this.messaging?.transport.reply(ev.detail, {
+            this.widgetApi?.transport.reply(ev.detail, {
                 error: {
                     message: "Unable to open modal at this time",
                 },
@@ -266,7 +269,7 @@ export class StopGapWidget extends EventEmitter {
     private onRoomViewStoreUpdate = (): void => {
         const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
         if (roomId !== this.viewedRoomId) {
-            this.messaging!.setViewedRoomId(roomId);
+            this.widgetApi!.setViewedRoomId(roomId);
             this.viewedRoomId = roomId;
         }
     };
@@ -275,8 +278,8 @@ export class StopGapWidget extends EventEmitter {
      * This starts the messaging for the widget if it is not in the state `started` yet.
      * @param iframe the iframe the widget should use
      */
-    public startMessaging(iframe: HTMLIFrameElement): void {
-        if (this.messaging !== null) return;
+    public start(iframe: HTMLIFrameElement): void {
+        if (this.widgetApi !== null) return;
 
         this.iframe = iframe;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
@@ -288,11 +291,11 @@ export class StopGapWidget extends EventEmitter {
             this.roomId,
         );
 
-        this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
-        this.messaging.on("preparing", () => this.emit("preparing"));
-        this.messaging.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
-        this.messaging.once("ready", () => {
-            WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging!);
+        this.widgetApi = new ClientWidgetApi(this.mockWidget, iframe, driver);
+        this.widgetApi.on("preparing", () => this.emit("preparing"));
+        this.widgetApi.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
+        this.widgetApi.once("ready", () => {
+            WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.widgetApi!);
             this.emit("ready");
 
             this.themeWatcher.start();
@@ -300,35 +303,35 @@ export class StopGapWidget extends EventEmitter {
             // Theme may have changed while messaging was starting
             this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         });
-        this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
-        this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
+        this.widgetApi.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
+        this.widgetApi.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
 
         // When widgets are listening to events, we need to make sure they're only
         // receiving events for the right room
         if (this.roomId === undefined) {
             // Account widgets listen to the currently active room
-            this.messaging.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
+            this.widgetApi.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
             SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         } else {
             // Room widgets get locked to the room they were added in
-            this.messaging.setViewedRoomId(this.roomId);
+            this.widgetApi.setViewedRoomId(this.roomId);
         }
 
         // Always attach a handler for ViewRoom, but permission check it internally
-        this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
+        this.widgetApi.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
             ev.preventDefault(); // stop the widget API from auto-rejecting this
 
             // Check up front if this is even a valid request
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
-                return this.messaging?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
                     error: { message: "Room ID not supplied." },
                 });
             }
 
             // Check the widget's permission
-            if (!this.messaging?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
-                return this.messaging?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+            if (!this.widgetApi?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
+                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
                     error: { message: "This widget does not have permission for this action (denied)." },
                 });
             }
@@ -341,7 +344,7 @@ export class StopGapWidget extends EventEmitter {
             });
 
             // acknowledge so the widget doesn't freak out
-            this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+            this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
         });
 
         // Populate the map of "read up to" events for this widget with the current event in every room.
@@ -361,10 +364,10 @@ export class StopGapWidget extends EventEmitter {
         this.client.on(RoomStateEvent.Events, this.onStateUpdate);
         this.client.on(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
 
-        this.messaging.on(
+        this.widgetApi.on(
             `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
             async (ev: CustomEvent<IStickyActionRequest>) => {
-                if (this.messaging?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                if (this.widgetApi?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                     ev.preventDefault();
                     if (ev.detail.data.value) {
                         // If the widget wants to become sticky we wait for the stickyPromise to resolve
@@ -377,20 +380,20 @@ export class StopGapWidget extends EventEmitter {
                         ev.detail.data.value,
                     );
                     // Send the ack after the widget actually has become sticky.
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
                 }
             },
         );
 
         // TODO: Replace this event listener with appropriate driver functionality once the API
         // establishes a sane way to send events back and forth.
-        this.messaging.on(
+        this.widgetApi.on(
             `action:${WidgetApiFromWidgetAction.SendSticker}`,
             (ev: CustomEvent<IStickerActionRequest>) => {
-                if (this.messaging?.hasCapability(MatrixCapabilities.StickerSending)) {
+                if (this.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)) {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
 
                     // Send the sticker
                     defaultDispatcher.dispatch({
@@ -403,12 +406,12 @@ export class StopGapWidget extends EventEmitter {
         );
 
         if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
-            this.messaging.on(
+            this.widgetApi.on(
                 `action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.messaging?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
 
                     // First close the stickerpicker
                     defaultDispatcher.dispatch({ action: "stickerpicker_close" });
@@ -430,7 +433,7 @@ export class StopGapWidget extends EventEmitter {
         }
 
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-            this.messaging.on(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IHangupCallApiRequest>) => {
+            this.widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IHangupCallApiRequest>) => {
                 ev.preventDefault();
                 if (ev.detail.data?.errorMessage) {
                     Modal.createDialog(ErrorDialog, {
@@ -440,7 +443,7 @@ export class StopGapWidget extends EventEmitter {
                         }),
                     });
                 }
-                this.messaging?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
             });
         }
     }
@@ -451,7 +454,7 @@ export class StopGapWidget extends EventEmitter {
 
         if (this.scalarToken) return;
         const existingMessaging = WidgetMessagingStore.instance.getMessaging(this.mockWidget, this.roomId);
-        if (existingMessaging) this.messaging = existingMessaging;
+        if (existingMessaging) this.widgetApi = existingMessaging;
         try {
             if (WidgetUtils.isScalarUrl(this.mockWidget.templateUrl)) {
                 const managers = IntegrationManagers.sharedInstance();
@@ -475,8 +478,8 @@ export class StopGapWidget extends EventEmitter {
      * widget.
      * @param opts
      */
-    public stopMessaging(opts = { forceDestroy: false }): void {
-        if (this.messaging === null || this.iframe === null) return;
+    public stop(opts = { forceDestroy: false }): void {
+        if (this.widgetApi === null || this.iframe === null) return;
         if (opts.forceDestroy) {
             // HACK: This is a really dirty way to ensure that Jitsi cleans up
             // its hold on the webcam. Without this, the widget holds a media
@@ -493,8 +496,8 @@ export class StopGapWidget extends EventEmitter {
         }
 
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget, this.roomId);
-        this.messaging?.removeAllListeners(); // Guard against the 'ready' event firing after stopping
-        this.messaging = null;
+        this.widgetApi?.removeAllListeners(); // Guard against the 'ready' event firing after stopping
+        this.widgetApi = null;
         this.iframe = null;
 
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
@@ -515,9 +518,9 @@ export class StopGapWidget extends EventEmitter {
     };
 
     private onStateUpdate = (ev: MatrixEvent): void => {
-        if (this.messaging === null) return;
+        if (this.widgetApi === null) return;
         const raw = ev.getEffectiveEvent();
-        this.messaging.feedStateUpdate(raw as IRoomEvent).catch((e) => {
+        this.widgetApi.feedStateUpdate(raw as IRoomEvent).catch((e) => {
             logger.error("Error sending state update to widget: ", e);
         });
     };
@@ -525,7 +528,7 @@ export class StopGapWidget extends EventEmitter {
     private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
         const { message, encryptionInfo } = payload;
         // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
-        await this.messaging?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+        await this.widgetApi?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
     };
 
     /**
@@ -592,7 +595,7 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private feedEvent(ev: MatrixEvent): void {
-        if (this.messaging === null) return;
+        if (this.widgetApi === null) return;
         if (
             // If we had decided earlier to feed this event to the widget, but
             // it just wasn't ready, give it another try
@@ -621,7 +624,7 @@ export class StopGapWidget extends EventEmitter {
                 this.eventsToFeed.add(ev);
             } else {
                 const raw = ev.getEffectiveEvent();
-                this.messaging.feedEvent(raw as IRoomEvent).catch((e) => {
+                this.widgetApi.feedEvent(raw as IRoomEvent).catch((e) => {
                     logger.error("Error sending event to widget: ", e);
                 });
             }

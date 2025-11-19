@@ -61,13 +61,13 @@ describe("StopGapWidget", () => {
             userWidget: false,
         });
         // Start messaging without an iframe, since ClientWidgetApi is mocked
-        widget.startMessaging(null as unknown as HTMLIFrameElement);
+        widget.start(null as unknown as HTMLIFrameElement);
         messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
         messaging.feedStateUpdate.mockResolvedValue();
     });
 
     afterEach(() => {
-        widget.stopMessaging();
+        widget.stop();
     });
 
     it("should replace parameters in widget url template", () => {
@@ -304,7 +304,7 @@ describe("StopGapWidget with stickyPromise", () => {
     });
 
     afterEach(() => {
-        widget.stopMessaging();
+        widget.stop();
     });
     it("should wait for the sticky promise to resolve before starting messaging", async () => {
         jest.useFakeTimers();
@@ -334,7 +334,7 @@ describe("StopGapWidget with stickyPromise", () => {
         const setPersistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
 
         // Start messaging without an iframe, since ClientWidgetApi is mocked
-        widget.startMessaging(null as unknown as HTMLIFrameElement);
+        widget.start(null as unknown as HTMLIFrameElement);
         const emitSticky = async () => {
             messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
             messaging?.hasCapability.mockReturnValue(true);
@@ -386,12 +386,12 @@ describe("StopGapWidget as an account widget", () => {
             userWidget: false,
         });
         // Start messaging without an iframe, since ClientWidgetApi is mocked
-        widget.startMessaging(null as unknown as HTMLIFrameElement);
+        widget.start(null as unknown as HTMLIFrameElement);
         messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
     });
 
     afterEach(() => {
-        widget.stopMessaging();
+        widget.stop();
         getRoomId.mockRestore();
     });
 

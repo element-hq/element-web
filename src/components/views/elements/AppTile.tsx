@@ -291,7 +291,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 isAppWidget(this.props.app) ? this.props.app.roomId : null,
             );
             PersistedElement.destroyElement(this.persistKey);
-            this.sgWidget?.stopMessaging();
+            this.sgWidget?.stop();
         }
 
         this.setState({ hasPermissionToLoad });
@@ -391,7 +391,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private resetWidget(newProps: IProps): void {
-        this.sgWidget?.stopMessaging();
+        this.sgWidget?.stop();
         this.stopSgListeners();
 
         try {
@@ -434,7 +434,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // is added and then removed before we enter this callback
             if (iframe.parentElement === null) return;
             try {
-                this.sgWidget?.startMessaging(iframe);
+                this.sgWidget?.start(iframe);
             } catch (e) {
                 logger.error("Failed to start widget", e);
             }
@@ -484,7 +484,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             isAppWidget(this.props.app) ? this.props.app.roomId : null,
         );
 
-        this.sgWidget?.stopMessaging({ forceDestroy: true });
+        this.sgWidget?.stop({ forceDestroy: true });
     }
 
     private onWidgetReady = (): void => {
