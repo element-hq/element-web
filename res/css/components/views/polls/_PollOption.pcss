@@ -50,11 +50,9 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_PollOption_checked {
-    border-color: var(--cpd-color-border-interactive-hovered);
-
     .mx_PollOption_popularityBackground {
         .mx_PollOption_popularityAmount {
-            background-color: var(--cpd-color-border-interactive-hovered);
+            background-color: var(--cpd-color-icon-primary);
         }
     }
 
@@ -62,8 +60,8 @@ Please see LICENSE files in the repository root for full details.
     .mx_StyledRadioButton_checked {
         input[type="radio"]:checked + div {
             border-width: 2px;
-            border-color: var(--cpd-color-border-interactive-hovered);
-            background-color: var(--cpd-color-border-interactive-hovered);
+            border-color: var(--cpd-color-icon-primary);
+            background-color: var(--cpd-color-icon-primary);
             background-image: url("@vector-im/compound-design-tokens/icons/check.svg");
             background-size: 12px;
             background-repeat: no-repeat;
@@ -110,6 +108,6 @@ Please see LICENSE files in the repository root for full details.
         width: 0%;
         height: 8px;
         border-radius: 8px;
-        background-color: $quaternary-content;
+        background-color: var(--cpd-color-icon-primary);
     }
 }
