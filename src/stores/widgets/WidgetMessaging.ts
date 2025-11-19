@@ -64,7 +64,7 @@ import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../AsyncStore";
 
-// TODO: Destroy all of this code
+// TODO: Purge this code of its overgrown hacks and compatibility shims.
 
 interface IAppTileProps {
     // Note: these are only the props we care about
@@ -78,7 +78,8 @@ interface IAppTileProps {
     stickyPromise?: () => Promise<void>;
 }
 
-// TODO: Don't use this because it's wrong
+// TODO: Don't use this. We should avoid overriding/mocking matrix-widget-api
+// behavior and instead strive to use widgets in more transparent ways.
 export class ElementWidget extends Widget {
     public constructor(private rawDefinition: IWidget) {
         super(rawDefinition);
@@ -152,7 +153,10 @@ export class ElementWidget extends Widget {
     }
 }
 
-export class StopGapWidget extends EventEmitter {
+/**
+ * A running instance of a widget, associated with an iframe and a messaging transport.
+ */
+export class WidgetMessaging extends EventEmitter {
     private client: MatrixClient;
     private iframe: HTMLIFrameElement | null = null;
     private mockWidget: ElementWidget;

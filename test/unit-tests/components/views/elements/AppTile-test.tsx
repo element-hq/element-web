@@ -35,7 +35,7 @@ import AppTile from "../../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../../../src/stores/widgets/ElementWidgetCapabilities";
-import { ElementWidget } from "../../../../../src/stores/widgets/StopGapWidget";
+import { ElementWidget } from "../../../../../src/stores/widgets/WidgetMessaging";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";

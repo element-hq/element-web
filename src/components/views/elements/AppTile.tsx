@@ -41,7 +41,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget, WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
@@ -155,7 +155,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframeParent: HTMLElement | null = null; // parent div of the iframe
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
-    private sgWidget?: StopGapWidget;
+    private sgWidget?: WidgetMessaging;
     private dispatcherRef?: string;
     private unmounted = false;
 
@@ -165,7 +165,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
         try {
-            this.sgWidget = new StopGapWidget(this.props);
+            this.sgWidget = new WidgetMessaging(this.props);
         } catch (e) {
             logger.log("Failed to construct widget", e);
             this.sgWidget = undefined;
@@ -395,7 +395,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.stopSgListeners();
 
         try {
-            this.sgWidget = new StopGapWidget(newProps);
+            this.sgWidget = new WidgetMessaging(newProps);
             this.setupSgListeners();
             this.startWidget();
         } catch (e) {

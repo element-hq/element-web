@@ -31,7 +31,7 @@ import { ElementWidgetDriver } from "../../../stores/widgets/ElementWidgetDriver
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
-import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget } from "../../../stores/widgets/WidgetMessaging";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../../settings/watchers/ThemeWatcher";
 

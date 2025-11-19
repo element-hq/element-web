@@ -28,7 +28,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget } from "../../../stores/widgets/WidgetMessaging";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {

@@ -24,7 +24,7 @@ import { type Optional } from "matrix-events-sdk";
 
 import { stubClient, mkRoom, mkEvent } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { StopGapWidget } from "../../../../src/stores/widgets/StopGapWidget";
+import { WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
@@ -37,16 +37,16 @@ jest.mock("matrix-widget-api", () => ({
     ClientWidgetApi: (jest.createMockFromModule("matrix-widget-api") as any).ClientWidgetApi,
 }));
 
-describe("StopGapWidget", () => {
+describe("WidgetMessaging", () => {
     let client: MockedObject<MatrixClient>;
-    let widget: StopGapWidget;
+    let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
 
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
 
-        widget = new StopGapWidget({
+        widget = new WidgetMessaging({
             app: {
                 id: "test",
                 creatorUserId: "@alice:example.org",
@@ -293,9 +293,9 @@ describe("StopGapWidget", () => {
     });
 });
 
-describe("StopGapWidget with stickyPromise", () => {
+describe("WidgetMessaging with stickyPromise", () => {
     let client: MockedObject<MatrixClient>;
-    let widget: StopGapWidget;
+    let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
 
     beforeEach(() => {
@@ -315,7 +315,7 @@ describe("StopGapWidget with stickyPromise", () => {
                 }, 1000);
             });
         };
-        widget = new StopGapWidget({
+        widget = new WidgetMessaging({
             app: {
                 id: "test",
                 creatorUserId: "@alice:example.org",
@@ -359,8 +359,8 @@ describe("StopGapWidget with stickyPromise", () => {
     });
 });
 
-describe("StopGapWidget as an account widget", () => {
-    let widget: StopGapWidget;
+describe("WidgetMessaging as an account widget", () => {
+    let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
     let getRoomId: MockedFunction<() => Optional<string>>;
 
@@ -372,7 +372,7 @@ describe("StopGapWidget as an account widget", () => {
         >;
         getRoomId.mockReturnValue("!1:example.org");
 
-        widget = new StopGapWidget({
+        widget = new WidgetMessaging({
             app: {
                 id: "test",
                 creatorUserId: "@alice:example.org",
