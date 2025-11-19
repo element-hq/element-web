@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+$poll-max-width: 550px;
+
 .mx_MPollBody {
-    margin-top: 8px;
+    margin-top: var(--cpd-space-2x);
     min-width: 0; /* Override fieldset default min-width: min-content */
     width: 100%; /* Ensure fieldset takes full available width */
     border: none; /* Remove default fieldset border */
@@ -18,15 +20,15 @@ Please see LICENSE files in the repository root for full details.
         font-size: $font-15px;
         line-height: $font-24px;
         margin-top: 0;
-        margin-bottom: 8px;
+        margin-bottom: var(--cpd-space-2x);
         letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: var(--cpd-space-3x);
 
         svg {
             flex-shrink: 0;
-            color: inherit;
+            color: var(--cpd-color-icon-primary);
         }
 
         .mx_MPollBody_edited {
@@ -42,7 +44,7 @@ Please see LICENSE files in the repository root for full details.
         justify-content: end;
         color: $secondary-content;
         font-size: $font-12px;
-        max-width: 550px;
+        max-width: $poll-max-width;
 
         .mx_Spinner {
             flex: 0;
@@ -60,5 +62,5 @@ Please see LICENSE files in the repository root for full details.
     display: grid;
     gap: $spacing-16;
     margin-bottom: $spacing-8;
-    max-width: 550px;
+    max-width: $poll-max-width;
 }
