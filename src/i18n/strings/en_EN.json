@@ -1779,6 +1779,7 @@
         "topic_placeholder": "Write something…",
         "total_decryption_errors": "Due to decryption errors, some votes may not be counted",
         "total_votes_label": "Total votes: %(count)s",
+        "total_not_ended": "Results will be visible when the poll is ended",
         "type_closed": "Closed poll",
         "type_heading": "Poll type",
         "type_open": "Open poll",

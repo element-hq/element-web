@@ -308,6 +308,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         let totalText: string;
         if (showResults && poll.undecryptableRelationsCount) {
             totalText = _t("poll|total_decryption_errors");
+        } else if (!disclosed) {
+            totalText = _t("poll|total_not_ended");
         } else {
             totalText = _t("poll|total_votes_label", { count: totalVotes });
         }

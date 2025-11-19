@@ -1941,7 +1941,7 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 4
+      Results will be visible when the poll is ended
     </div>
   </fieldset>
 </div>
@@ -2173,7 +2173,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
       class="mx_MPollBody_totalVotes"
       data-testid="totalVotes"
     >
-      Total votes: 4
+      Results will be visible when the poll is ended
     </div>
   </fieldset>
 </div>

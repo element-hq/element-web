@@ -391,7 +391,7 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("");
         expect(votesCount(renderResult, "italian")).toBe("");
         expect(votesCount(renderResult, "wings")).toBe("");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Total votes: 5");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Results will be visible when the poll is ended");
     });
 
     it("highlights my vote if the poll is undisclosed", async () => {
@@ -425,7 +425,7 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Total votes: 5");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Results will be visible when the poll is ended");
     });
 
     it("sends a vote event when I choose an option", async () => {
