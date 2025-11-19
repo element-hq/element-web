@@ -1227,7 +1227,6 @@
         "upload_file": "Augšupielādēt datni"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Atļaut tikai ekrāna kopīgošanas režīmu",
         "ask_to_join": "Iespējot aicinājumus pievienoties",
         "automatic_debug_logs": "Automātiski nosūtīt atkļūdošanas žurnālus par jebkuru kļūdu",
         "automatic_debug_logs_decryption": "Automātiski nosūtīt atkļūdošanas žurnālus par atšifrēšanas kļūdām",

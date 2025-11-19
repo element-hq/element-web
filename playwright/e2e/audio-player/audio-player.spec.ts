@@ -92,7 +92,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             css: `
                 /* The timestamp is of inconsistent width depending on the time the test runs at */
                 .mx_MessageTimestamp {
-                    display: none !important;
+                    visibility: hidden;
                 }
                 /* The MAB showing up on hover is not needed for the test */
                 .mx_MessageActionBar {

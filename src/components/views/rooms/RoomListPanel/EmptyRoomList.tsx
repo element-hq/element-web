@@ -9,9 +9,9 @@ import React, { type JSX, type PropsWithChildren } from "react";
 import { Button } from "@vector-im/compound-web";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
+import { Flex } from "@element-hq/web-shared-components";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { type PrimaryFilter } from "../../../viewmodels/roomlist/useFilteredRooms";

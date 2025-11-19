@@ -13,10 +13,13 @@ import {
     JSONEventFactory,
     MessageEventFactory,
     pickFactory,
+    renderTile,
     RoomCreateEventFactory,
 } from "../../../src/events/EventTileFactory";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { createTestClient, mkEvent } from "../../test-utils";
+import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
+import { ModuleApi } from "../../../src/modules/Api";
 
 const roomId = "!room:example.com";
 
@@ -202,6 +205,57 @@ describe("pickFactory", () => {
 
         it("should return a MessageEventFactory for a UTD event", () => {
             expect(pickFactory(utdEvent, client, false)).toBe(MessageEventFactory);
+        });
+    });
+});
+
+describe("renderTile", () => {
+    let client: MatrixClient;
+
+    beforeEach(() => {
+        client = createTestClient();
+    });
+
+    it("rendering a tile defers to the module API", () => {
+        ModuleApi.instance.customComponents.renderMessage = jest.fn();
+
+        const messageEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: client.getUserId()!,
+            room: roomId,
+            content: {
+                msgtype: MsgType.Text,
+            },
+        });
+
+        renderTile(TimelineRenderingType.Room, { mxEvent: messageEvent, showHiddenEvents: false }, client);
+
+        expect(ModuleApi.instance.customComponents.renderMessage).toHaveBeenCalledWith(
+            {
+                mxEvent: messageEvent,
+            },
+            expect.any(Function),
+        );
+    });
+
+    it("rendering a tile for a message of unknown type defers to the module API", () => {
+        ModuleApi.instance.customComponents.renderMessage = jest.fn();
+
+        const messageEvent = mkEvent({
+            event: true,
+            type: "weird.type",
+            user: client.getUserId()!,
+            room: roomId,
+            content: {
+                msgtype: MsgType.Text,
+            },
+        });
+
+        renderTile(TimelineRenderingType.Room, { mxEvent: messageEvent, showHiddenEvents: false }, client);
+
+        expect(ModuleApi.instance.customComponents.renderMessage).toHaveBeenCalledWith({
+            mxEvent: messageEvent,
         });
     });
 });

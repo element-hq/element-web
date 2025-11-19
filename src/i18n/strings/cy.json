@@ -810,6 +810,10 @@
         },
         "developer_mode": "Modd datblygwr",
         "developer_tools": "Offer Datblygwr",
+        "device_dehydrated_no": "Dadhydredig: Na",
+        "device_dehydrated_yes": "Dadhydredig: Ydyw",
+        "device_id": "ID dyfais: %(deviceId)s",
+        "device_keys": "Allweddi dyfais",
         "edit_setting": "Golygu gosodiad",
         "edit_values": "Golygu gwerthoedd",
         "empty_string": "<empty string>",
@@ -1474,7 +1478,6 @@
         "upload_file": "Llwytho ffeil i fyny"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Caniatáu modd rhannu sgrin yn unig",
         "ask_to_join": "Galluogi gofyn i ymuno",
         "automatic_debug_logs": "Anfon logiau dadfygio yn awtomatig ar unrhyw wall",
         "automatic_debug_logs_decryption": "Anfon logiau dadgryptio yn awtomatig ar wallau dadgryptio",
@@ -1921,7 +1924,6 @@
         "thread_list": {
             "context_menu_label": "Dewisiadau edafedd"
         },
-        "title": "Panel dde",
         "video_room_chat": {
             "title": "Sgwrs"
         }

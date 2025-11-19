@@ -81,6 +81,9 @@ export default class PinningUtils {
         const room = matrixClient.getRoom(mxEvent.getRoomId());
         if (!room) return false;
 
+        // Should have a non-local event id
+        if (mxEvent.status !== null) return false;
+
         return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room) && PinningUtils.isPinnable(mxEvent);
     }
 
@@ -93,6 +96,9 @@ export default class PinningUtils {
     public static canUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
         const room = matrixClient.getRoom(mxEvent.getRoomId());
         if (!room) return false;
+
+        // Should have a non-local event id
+        if (mxEvent.status !== null) return false;
 
         return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room) && PinningUtils.isUnpinnable(mxEvent);
     }
@@ -122,6 +128,9 @@ export default class PinningUtils {
 
         const eventId = mxEvent.getId();
         if (!eventId) return;
+
+        // Should have a non-local event id
+        if (mxEvent.status !== null) return;
 
         // Get the current pinned events of the room
         const pinnedIds: Array<string> =

@@ -276,7 +276,9 @@ export function createTestClient(): MatrixClient {
 
         _unstable_sendDelayedEvent: jest.fn(),
         _unstable_sendDelayedStateEvent: jest.fn(),
-        _unstable_updateDelayedEvent: jest.fn(),
+        _unstable_cancelScheduledDelayedEvent: jest.fn(),
+        _unstable_restartScheduledDelayedEvent: jest.fn(),
+        _unstable_sendScheduledDelayedEvent: jest.fn(),
 
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
@@ -650,6 +652,7 @@ export function mkStubRoom(
         getJoinedMembers: jest.fn().mockReturnValue([]),
         getLiveTimeline: jest.fn().mockReturnValue(stubTimeline),
         getLastLiveEvent: jest.fn().mockReturnValue(undefined),
+        getLastActiveTimestamp: jest.fn().mockReturnValue(1183140000),
         getMember: jest.fn().mockReturnValue({
             userId: "@member:domain.bla",
             name: "Member",

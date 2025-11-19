@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<MPollEndBody /> when poll start event does not exist in current timeline fetches the related poll start event and displays a poll tile 1`] = `
 <div>
@@ -18,14 +18,14 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
     >
       Ended a poll
     </span>
-    <div
+    <fieldset
       class="mx_MPollBody"
     >
-      <h2
+      <legend
         data-testid="pollQuestion"
       >
         Question?
-      </h2>
+      </legend>
       <div
         class="mx_MPollBody_allOptions"
       >
@@ -111,7 +111,7 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
           />
         </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </div>
 `;

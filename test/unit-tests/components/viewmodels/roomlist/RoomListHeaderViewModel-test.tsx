@@ -48,6 +48,9 @@ describe("useRoomListHeaderViewModel", () => {
     beforeEach(() => {
         matrixClient = stubClient();
         space = mkStubRoom("spaceId", "spaceName", matrixClient);
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
+            if (name === "RoomList.preferredSorting") return SortingAlgorithm.Recency;
+        });
     });
 
     afterEach(() => {

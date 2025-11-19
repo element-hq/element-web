@@ -1188,7 +1188,6 @@
         "upload_file": "Tải lên một tài liệu"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Cho phép chế độ chỉ-chia sẻ màn hình",
         "ask_to_join": "Bật yêu cầu để tham gia",
         "automatic_debug_logs": "Tự động gửi debug log khi có bất kỳ lỗi nào",
         "automatic_debug_logs_decryption": "Tự động gửi nhật ký gỡ lỗi mỗi lúc gặp lỗi khi giải mã",

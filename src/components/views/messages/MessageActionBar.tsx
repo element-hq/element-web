@@ -80,8 +80,8 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
     onFocusChange,
     getRelationsForEvent,
 }) => {
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-    const [onFocus, isActive] = useRovingTabIndex(button);
+    const [onFocus, isActive, buttonRefCallback, buttonRef] = useRovingTabIndex();
+    const [menuDisplayed, , openMenu, closeMenu] = useContextMenu(buttonRef);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -101,11 +101,11 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
     );
 
     let contextMenu: ReactElement | undefined;
-    if (menuDisplayed && button.current) {
+    if (menuDisplayed && buttonRef.current) {
         const tile = getTile?.();
         const replyChain = getReplyChain();
 
-        const buttonRect = button.current.getBoundingClientRect();
+        const buttonRect = buttonRef.current.getBoundingClientRect();
         contextMenu = (
             <MessageContextMenu
                 {...aboveLeftOf(buttonRect)}
@@ -127,7 +127,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
                 onClick={onOptionsClick}
                 onContextMenu={onOptionsClick}
                 isExpanded={menuDisplayed}
-                ref={button}
+                ref={buttonRefCallback}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
                 placement="left"
@@ -146,17 +146,17 @@ interface IReactButtonProps {
 }
 
 const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusChange }) => {
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-    const [onFocus, isActive] = useRovingTabIndex(button);
+    const [onFocus, isActive, buttonRefCallback, buttonRef] = useRovingTabIndex();
+    const [menuDisplayed, , openMenu, closeMenu] = useContextMenu(buttonRef);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
 
     let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed && button.current) {
-        const buttonRect = button.current.getBoundingClientRect();
+    if (menuDisplayed && buttonRef.current) {
+        const buttonRect = buttonRef.current.getBoundingClientRect();
         contextMenu = (
-            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false} focusLock>
                 <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
             </ContextMenu>
         );
@@ -185,7 +185,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
                 onClick={onClick}
                 onContextMenu={onClick}
                 isExpanded={menuDisplayed}
-                ref={button}
+                ref={buttonRefCallback}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
                 placement="left"

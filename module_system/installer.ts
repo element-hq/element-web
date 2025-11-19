@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as fs from "fs";
-import * as childProcess from "child_process";
+import * as fs from "node:fs";
+import * as childProcess from "node:child_process";
 import * as semver from "semver";
 
-import { type BuildConfig } from "./BuildConfig";
+import { type BuildConfig } from "./BuildConfig.ts";
 
 // This expects to be run from ./scripts/install.ts
 

@@ -805,6 +805,17 @@
         },
         "developer_mode": "Entwicklungsmodus",
         "developer_tools": "Entwicklungswerkzeuge",
+        "device_dehydrated_no": "Dehydriert: Nein",
+        "device_dehydrated_yes": "Dehydriert: Ja",
+        "device_id": "Geräte-ID:%(deviceId)s",
+        "device_keys": "Geräteschlüssel",
+        "device_verification_status": {
+            "signed_by_owner": "Verifizierungsstatus:<E2EIcon /> Vom Eigentümer signiert",
+            "unknown": "Verifizierungsstatus: Unbekannt",
+            "unverified": "Verifizierungsstatus:<E2EIcon /> Nicht vom Eigentümer signiert",
+            "verified": "Verifizierungsstatus:<E2EIcon /> Durch Cross-Signing bestätigt"
+        },
+        "devices": "Kryptografische Geräte (%(count)s )",
         "edit_setting": "Einstellung bearbeiten",
         "edit_values": "Werte bearbeiten",
         "empty_string": "<Leere Zeichenkette>",
@@ -820,6 +831,7 @@
         "failed_to_save": "Speichern der Einstellungen fehlgeschlagen.",
         "failed_to_send": "Übertragung des Ereignisses fehlgeschlagen!",
         "id": "ID: ",
+        "invalid_device_key_id": "Ungültige Geräteschlüssel-ID",
         "invalid_json": "Scheint kein gültiges JSON zu sein.",
         "level": "Level",
         "low_bandwidth_mode": "Modus für geringe Bandbreite",
@@ -876,10 +888,23 @@
         "toggle_event": "Event umschalten",
         "toolbox": "Werkzeugkasten",
         "use_at_own_risk": "Diese Benutzeroberfläche prüft nicht auf richtige Datentypen. Benutzung auf eigene Gefahr.",
+        "user_avatar": "Avatar: %(avatar)s",
+        "user_displayname": "Anzeigename: %(displayname)s",
+        "user_id": "Nutzer-ID: %(userId)s",
+        "user_no_avatar": "Avatar: <i> Keiner</i>",
+        "user_no_displayname": "Anzeigename: <i> Keiner</i>",
         "user_read_up_to": "Der Benutzer hat gelesen bis: ",
         "user_read_up_to_ignore_synthetic": "Der Nutzer hat bis (ignoreSynthetic) gelesen: ",
         "user_read_up_to_private": "Benutzer las bis (m.read.private): ",
         "user_read_up_to_private_ignore_synthetic": "Der Nutzer hat bis (m.read.private;ignoreSynthetic) gelesen: ",
+        "user_room_membership": "Mitgliedschaft: %(membership)s",
+        "user_verification_status": {
+            "identity_changed": "Verifizierungsstatus: <E2EIcon /> Nicht verifiziert und Identität geändert",
+            "unverified": "Verifizierungsstatus: <E2EIcon /> Nicht verifiziert",
+            "verified": "Verifizierungsstatus: <E2EIcon /> Verifiziert",
+            "was_verified": "Verifizierungsstatus: <E2EIcon /> Wurde verifiziert, aber die Identität hat sich geändert."
+        },
+        "users": "Nutzer",
         "value": "Wert",
         "value_colon": "Wert:",
         "value_in_this_room": "Wert in diesem Chat",
@@ -1474,7 +1499,6 @@
         "upload_file": "Eine Datei hochladen"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Nur-Bildschirm-Teilen-Modus erlauben",
         "ask_to_join": "Beitrittsanfragen erlauben",
         "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
         "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
@@ -1916,7 +1940,6 @@
         "thread_list": {
             "context_menu_label": "Thread-Optionen"
         },
-        "title": "Rechte Seitenleiste",
         "video_room_chat": {
             "title": "Unterhaltung"
         }
@@ -4071,9 +4094,11 @@
         "user_busy_description": "Die angerufene Person ist momentan beschäftigt.",
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
+        "video_call_incoming": "Eingehender Videoanruf",
         "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
+        "voice_call_incoming": "Eingehender Anruf",
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",

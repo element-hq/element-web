@@ -124,11 +124,12 @@ test.describe("HTML Export", () => {
             const zip = await extractZipFileToPath(zipPath, dirPath);
             await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
             await expect(page).toMatchScreenshot("html-export.png", {
-                mask: [
-                    // We need to mask the whole thing because the width of the time part changes
-                    page.locator(".mx_TimelineSeparator"),
-                    page.locator(".mx_MessageTimestamp"),
-                ],
+                mask: [page.locator(".mx_TimelineSeparator")],
+                css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
+                `,
             });
         },
     );

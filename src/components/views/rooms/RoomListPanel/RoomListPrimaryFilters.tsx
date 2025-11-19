@@ -8,9 +8,9 @@
 import React, { type JSX, useEffect, useId, useRef, useState, type RefObject } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
+import { Flex } from "@element-hq/web-shared-components";
 
 import type { RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 
 interface RoomListPrimaryFiltersProps {

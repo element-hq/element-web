@@ -13,7 +13,7 @@ import { useIdColorHash } from "@vector-im/compound-web";
 import { _t, getCurrentLanguage, getUserLanguage } from "../languageHandler";
 import { jsxJoin } from "./ReactUtils";
 
-export { formatBytes } from "../shared-components/utils/FormattingUtils";
+export { formatBytes } from "@element-hq/web-shared-components";
 
 const locale = getCurrentLanguage();
 

@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { percentageOf } from "@element-hq/web-shared-components";
 
 import { arraySeed, arrayTrimFill } from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import { type Playback } from "../../../audio/Playback";
-import { percentageOf } from "../../../shared-components/utils/numbers";
 import { PLAYBACK_WAVEFORM_SAMPLES } from "../../../audio/consts";
 
 interface IProps {

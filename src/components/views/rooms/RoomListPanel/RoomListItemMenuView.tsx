@@ -19,9 +19,9 @@ import NotificationIcon from "@vector-im/compound-design-tokens/assets/web/icons
 import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-off-solid";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListItemMenuViewState,
     useRoomListItemMenuViewModel,

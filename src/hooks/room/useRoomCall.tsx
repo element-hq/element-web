@@ -26,7 +26,6 @@ import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
 import { type IApp } from "../../stores/WidgetStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
@@ -37,6 +36,7 @@ import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 
 export enum PlatformCallType {
     ElementCall,
@@ -98,6 +98,7 @@ export const useRoomCall = (
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
+    const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
@@ -124,9 +125,9 @@ export const useRoomCall = (
     const hasGroupCall = groupCall !== null;
     const hasActiveCallSession = useParticipantCount(groupCall) > 0;
     const isViewingCall = useEventEmitterState(
-        SdkContextClass.instance.roomViewStore,
+        roomViewStore,
         UPDATE_EVENT,
-        () => SdkContextClass.instance.roomViewStore.isViewingCall() || isVideoRoom(room),
+        () => roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     // room
@@ -141,11 +142,6 @@ export const useRoomCall = (
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
-        if (memberCount <= 2) {
-            options.push(PlatformCallType.LegacyCall);
-        } else if (mayEditWidgets || hasJitsiWidget) {
-            options.push(PlatformCallType.JitsiCall);
-        }
         if (groupCallsEnabled) {
             if (hasGroupCall || mayCreateElementCalls) {
                 options.push(PlatformCallType.ElementCall);
@@ -153,6 +149,11 @@ export const useRoomCall = (
             if (useElementCallExclusively && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
             }
+        }
+        if (memberCount <= 2) {
+            options.push(PlatformCallType.LegacyCall);
+        } else if (mayEditWidgets || hasJitsiWidget) {
+            options.push(PlatformCallType.JitsiCall);
         }
         if (hasGroupCall && WidgetType.CALL.matches(groupCall.widget.type)) {
             // only allow joining the ongoing Element call if there is one.
@@ -230,7 +231,7 @@ export const useRoomCall = (
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined);
+                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined, true);
             }
         },
         [promptPinWidget, room, widget],
@@ -243,7 +244,7 @@ export const useRoomCall = (
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined);
+                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined, false);
             }
         },
         [widget, promptPinWidget, room],
@@ -278,7 +279,13 @@ export const useRoomCall = (
     const roomDoesNotExist = room instanceof LocalRoom && room.state !== LocalRoomState.CREATED;
 
     // We hide the voice call button if it'd have the same effect as the video call button
-    let hideVoiceCallButton = isManagedHybridWidgetEnabled(room) || !callOptions.includes(PlatformCallType.LegacyCall);
+    let hideVoiceCallButton =
+        isManagedHybridWidgetEnabled(room) ||
+        // Disable voice calls if Legacy calls are disabled
+        (!callOptions.includes(PlatformCallType.LegacyCall) &&
+            // Disable voice calls in ECall if the room is a group (we only present video calls for groups of users)
+            (!callOptions.includes(PlatformCallType.ElementCall) || memberCount > 2));
+
     let hideVideoCallButton = false;
     // We hide both buttons if:
     // - they require widgets but widgets are disabled

@@ -188,7 +188,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <a href="https://matrix.to/#/@user:example.com" rel="noreferrer noopener" class="linkified">@user:example.com</a>"`,
+                `"Chat with <a href="https://matrix.to/#/@user:example.com" class="linkified" rel="noreferrer noopener">@user:example.com</a>"`,
             );
         });
 
@@ -206,7 +206,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Visit <a href="https://matrix.to/#/#room:example.com" rel="noreferrer noopener" class="linkified">#room:example.com</a>"`,
+                `"Visit <a href="https://matrix.to/#/#room:example.com" class="linkified" rel="noreferrer noopener">#room:example.com</a>"`,
             );
         });
 

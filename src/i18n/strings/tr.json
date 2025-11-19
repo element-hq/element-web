@@ -1392,7 +1392,6 @@
         "upload_file": "Dosya yükle"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Yalnızca ekran paylaşımına izin ver modu",
         "ask_to_join": "Katılma isteğini etkinleştir",
         "automatic_debug_logs": "Herhangi bir hatada otomatik olarak hata ayıklama günlükleri gönder",
         "automatic_debug_logs_decryption": "Şifre çözme hatalarında otomatik olarak hata ayıklama günlükleri gönder",

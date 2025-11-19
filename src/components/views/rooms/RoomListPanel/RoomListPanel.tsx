@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useCallback } from "react";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListHeaderView } from "./RoomListHeaderView";
 import { RoomListView } from "./RoomListView";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";

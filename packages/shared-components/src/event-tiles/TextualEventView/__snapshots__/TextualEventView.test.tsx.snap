@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TextualEventView renders a textual event 1`] = `
+<div>
+  <div
+    class="mx_TextualEvent"
+  >
+    Dummy textual event text
+  </div>
+</div>
+`;

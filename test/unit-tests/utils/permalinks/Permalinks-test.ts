@@ -334,6 +334,33 @@ describe("Permalinks", function () {
         expect(creator.serverCandidates![0]).toEqual("evilcorp.com");
     });
 
+    it("should handle when ACL allow is not an array", function () {
+        const roomId = "!fake:example.org";
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)], {
+            deny: ["*.evilcorp.com"],
+            allow: "not-an-array" as any, // Test malformed data
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        // Should fall back to default behavior (no allowed servers list = allow none)
+        expect(creator.serverCandidates).toBeTruthy();
+        expect(creator.serverCandidates!.length).toBe(0);
+    });
+
+    it("should handle when ACL deny is not an array", function () {
+        const roomId = "!fake:example.org";
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:goodcorp.com", 100)], {
+            deny: "not-an-array" as any, // Test malformed data
+            allow: ["*"],
+        });
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        // Should not crash and still allow the server
+        expect(creator.serverCandidates).toBeTruthy();
+        expect(creator.serverCandidates!.length).toBe(1);
+        expect(creator.serverCandidates![0]).toEqual("goodcorp.com");
+    });
+
     it("should generate an event permalink for room IDs with no candidate servers", function () {
         const room = mockRoom("!somewhere:example.org", []);
         const creator = new RoomPermalinkCreator(room);

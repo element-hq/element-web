@@ -603,6 +603,7 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
+        "voice": "Voice",
         "warning": "Warning"
     },
     "composer": {
@@ -805,6 +806,17 @@
         },
         "developer_mode": "Developer mode",
         "developer_tools": "Developer Tools",
+        "device_dehydrated_no": "Dehydrated: No",
+        "device_dehydrated_yes": "Dehydrated: Yes",
+        "device_id": "Device ID: %(deviceId)s",
+        "device_keys": "Device keys",
+        "device_verification_status": {
+            "signed_by_owner": "Verification status: <E2EIcon /> Signed by owner",
+            "unknown": "Verification status: Unknown",
+            "unverified": "Verification status: <E2EIcon /> Not signed by owner",
+            "verified": "Verification status: <E2EIcon /> Verified by cross-signing"
+        },
+        "devices": "Cryptographic devices (%(count)s)",
         "edit_setting": "Edit setting",
         "edit_values": "Edit values",
         "empty_string": "<empty string>",
@@ -820,6 +832,7 @@
         "failed_to_save": "Failed to save settings.",
         "failed_to_send": "Failed to send event!",
         "id": "ID: ",
+        "invalid_device_key_id": "Invalid device key ID",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",
         "low_bandwidth_mode": "Low bandwidth mode",
@@ -830,6 +843,7 @@
         "notification_state": "Notification state is <strong>%(notificationState)s</strong>",
         "notifications_debug": "Notifications debug",
         "number_of_users": "Number of users",
+        "only_joined_members": "Only joined users",
         "original_event_source": "Original event source",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
@@ -876,10 +890,23 @@
         "toggle_event": "toggle event",
         "toolbox": "Toolbox",
         "use_at_own_risk": "This UI does NOT check the types of the values. Use at your own risk.",
+        "user_avatar": "Avatar: %(avatar)s",
+        "user_displayname": "Displayname: %(displayname)s",
+        "user_id": "User ID: %(userId)s",
+        "user_no_avatar": "Avatar: <i>None</i>",
+        "user_no_displayname": "Displayname: <i>None</i>",
         "user_read_up_to": "User read up to: ",
         "user_read_up_to_ignore_synthetic": "User read up to (ignoreSynthetic): ",
         "user_read_up_to_private": "User read up to (m.read.private): ",
         "user_read_up_to_private_ignore_synthetic": "User read up to (m.read.private;ignoreSynthetic): ",
+        "user_room_membership": "Membership: %(membership)s",
+        "user_verification_status": {
+            "identity_changed": "Verification status: <E2EIcon /> Unverified, and identity changed",
+            "unverified": "Verification status: <E2EIcon /> Unverified",
+            "verified": "Verification status: <E2EIcon /> Verified",
+            "was_verified": "Verification status: <E2EIcon /> Was verified, but identity changed"
+        },
+        "users": "Users",
         "value": "Value",
         "value_colon": "Value:",
         "value_in_this_room": "Value in this room",
@@ -1474,7 +1501,6 @@
         "upload_file": "Upload a file"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Allow screen share only mode",
         "ask_to_join": "Enable ask to join",
         "automatic_debug_logs": "Automatically send debug logs on any error",
         "automatic_debug_logs_decryption": "Automatically send debug logs on decryption errors",
@@ -1917,7 +1943,6 @@
         "thread_list": {
             "context_menu_label": "Thread options"
         },
-        "title": "Right panel",
         "video_room_chat": {
             "title": "Chat"
         }
@@ -2595,7 +2620,7 @@
                 "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
-                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.",
+                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.",
                 "other_people_device_label": "In encrypted rooms, only send messages to verified users",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
@@ -4072,9 +4097,11 @@
         "user_busy_description": "The user you called is busy.",
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
+        "video_call_incoming": "Incoming video call",
         "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
+        "voice_call_incoming": "Incoming voice call",
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",

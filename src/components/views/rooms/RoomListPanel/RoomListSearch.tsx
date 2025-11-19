@@ -10,6 +10,7 @@ import { Button } from "@vector-im/compound-web";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { IS_MAC, Key } from "../../../../Keyboard";
 import { _t } from "../../../../languageHandler";
@@ -20,7 +21,6 @@ import { MetaSpace } from "../../../../stores/spaces";
 import { Action } from "../../../../dispatcher/actions";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../../LegacyCallHandler";
 

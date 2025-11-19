@@ -11,6 +11,7 @@ import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
+import { clamp } from "@element-hq/web-shared-components";
 
 import MediaDeviceHandler from "../MediaDeviceHandler";
 import { type IDestroyable } from "../utils/IDestroyable";
@@ -19,7 +20,6 @@ import { PayloadEvent, WORKLET_NAME } from "./consts";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { createAudioContext } from "./compat";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
-import { clamp } from "../shared-components/utils/numbers";
 import recorderWorkletFactory from "./recorderWorkletFactory";
 
 const CHANNELS = 1; // stereo isn't important
