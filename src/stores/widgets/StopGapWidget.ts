@@ -38,7 +38,7 @@ import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, getUserLanguage } from "../../languageHandler";
-import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
+import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
@@ -283,7 +283,7 @@ export class StopGapWidget extends EventEmitter {
 
         this.iframe = iframe;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new StopGapWidgetDriver(
+        const driver = new ElementWidgetDriver(
             allowedCapabilities,
             this.mockWidget,
             this.kind,

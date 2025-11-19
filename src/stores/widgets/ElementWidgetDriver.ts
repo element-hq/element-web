@@ -65,8 +65,6 @@ import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 
-// TODO: Purge this from the universe
-
 function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
 }
@@ -81,7 +79,15 @@ const normalizeTurnServer = ({ urls, username, credential }: IClientTurnServer):
     password: credential,
 });
 
-export class StopGapWidgetDriver extends WidgetDriver {
+/**
+ * Element Web's implementation of a widget driver (the object that
+ * matrix-widget-api uses to retrieve information from the client and carry out
+ * authorized actions on the widget's behalf). Essentially this is a glorified
+ * set of callbacks.
+ */
+// TODO: Consider alternative designs for matrix-widget-api?
+// Replace with matrix-rust-sdk?
+export class ElementWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
 
     // TODO: Refactor widgetKind into the Widget class
