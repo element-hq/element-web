@@ -1,15 +1,8 @@
-/*
- * Copyright (c) 2025 Element Creations Ltd.
- *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
- * Please see LICENSE files in the repository root for full details.
- */
-
 import React from "react";
-import { render } from "jest-matrix-react";
 import { composeStories } from "@storybook/react-vite";
 
 import * as stories from "./Banner.stories.tsx";
+import { render } from "jest-matrix-react";
 
 const { Default, Info, Success, WithAction, WithAvatarImage, Critical } = composeStories(stories);
 
