@@ -120,7 +120,7 @@ test.describe("Poll history", () => {
         await dialog.getByText(pollParams1.title).click();
         await dialog.getByText("Yes").click();
         // vote in the poll
-        await expect(dialog.getByTestId("totalVotes").getByText("Total votes: 2")).toBeAttached();
+        await expect(dialog.getByTestId("totalVotes").getByText("Based on 2 votes")).toBeAttached();
         // navigate back to list
         await dialog.locator(".mx_PollHistory_header").getByRole("button", { name: "Active polls" }).click();
 
