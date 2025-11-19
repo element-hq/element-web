@@ -603,6 +603,7 @@
         "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
+        "voice": "Hääl",
         "warning": "Hoiatus"
     },
     "composer": {
@@ -4096,9 +4097,11 @@
         "user_busy_description": "Kasutaja, kellele sa helistasid, on hõivatud.",
         "user_is_presenting": "%(sharerName)s esitab",
         "video_call": "Videokõne",
+        "video_call_incoming": "Saabuv videokõne",
         "video_call_started": "Videokõne algas",
         "video_call_using": "Videokõne, kus on kasutusel:",
         "voice_call": "Häälkõne",
+        "voice_call_incoming": "Saaduv häälkõne",
         "you_are_presenting": "Sina esitad"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",

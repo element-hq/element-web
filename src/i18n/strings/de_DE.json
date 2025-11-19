@@ -4094,9 +4094,11 @@
         "user_busy_description": "Die angerufene Person ist momentan beschäftigt.",
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
+        "video_call_incoming": "Eingehender Videoanruf",
         "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
+        "voice_call_incoming": "Eingehender Anruf",
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
