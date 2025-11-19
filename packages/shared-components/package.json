@@ -91,5 +91,10 @@
     "peerDependencies": {
         "@vector-im/compound-design-tokens": "^6.0.0",
         "@vector-im/compound-web": "^8.2.5"
+    },
+    "resolutions": {
+        "strip-ansi": "7.1.0",
+        "string-width": "5.1.2",
+        "wrap-ansi": "8.1.0"
     }
 }
