@@ -193,8 +193,6 @@ export default class UserActivity {
         dis.dispatch({ action: "user_activity" });
         if (!this.activeNowTimeout.isRunning()) {
             this.activeNowTimeout.start();
-            dis.dispatch({ action: "user_activity_start" });
-
             UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
         } else {
             this.activeNowTimeout.restart();
