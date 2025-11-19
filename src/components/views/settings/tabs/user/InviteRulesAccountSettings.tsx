@@ -16,31 +16,50 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 
 export const InviteRulesAccountSetting: FC = () => {
-    const rules = useSettingValue("inviteRules");
-    const settingsDisabled = SettingsStore.disabledMessage("inviteRules");
+    const msc4155Rules = useSettingValue("inviteRules");
+    const msc4380BlockInvites = useSettingValue("blockInvites");
+
+    const msc4155Disabled = SettingsStore.disabledMessage("inviteRules");
+    const msc4380Disabled = SettingsStore.disabledMessage("blockInvites");
+
     const [busy, setBusy] = useState(false);
 
-    const onChange = useCallback(async (checked: boolean) => {
-        try {
-            setBusy(true);
-            await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, {
-                allBlocked: !checked,
-            });
-        } catch (ex) {
-            logger.error(`Unable to set invite rules`, ex);
-        } finally {
-            setBusy(false);
-        }
-    }, []);
+    const onChange = useCallback(
+        async (allowInvites: boolean) => {
+            try {
+                setBusy(true);
+                if (allowInvites) {
+                    // When allowing invites, clear the block setting on both bits of account data.
+                    await SettingsStore.setValue("blockInvites", null, SettingLevel.ACCOUNT, false);
+                    await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, { allBlocked: false });
+                } else {
+                    // When blocking invites, prefer MSC4380 over MSC4155.
+                    if (!msc4380Disabled) {
+                        await SettingsStore.setValue("blockInvites", null, SettingLevel.ACCOUNT, true);
+                    } else if (!msc4155Disabled) {
+                        await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, { allBlocked: true });
+                    }
+                }
+            } catch (ex) {
+                logger.error(`Unable to set invite rules`, ex);
+            } finally {
+                setBusy(false);
+            }
+        },
+        [msc4155Disabled, msc4380Disabled, setBusy],
+    );
+
+    const disabledMessage = msc4155Disabled && msc4380Disabled;
+    const invitesBlocked = (!msc4155Disabled && msc4155Rules.allBlocked) || (!msc4380Disabled && msc4380BlockInvites);
     return (
         <Root className="mx_MediaPreviewAccountSetting_Form">
             <LabelledToggleSwitch
                 className="mx_MediaPreviewAccountSetting_ToggleSwitch"
                 label={_t("settings|invite_controls|default_label")}
-                value={!rules.allBlocked}
+                value={!invitesBlocked}
                 onChange={onChange}
-                tooltip={settingsDisabled}
-                disabled={!!settingsDisabled || busy}
+                tooltip={disabledMessage}
+                disabled={!!disabledMessage || busy}
             />
         </Root>
     );
