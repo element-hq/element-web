@@ -603,6 +603,7 @@
         "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
+        "voice": "Hääl",
         "warning": "Hoiatus"
     },
     "composer": {
@@ -805,6 +806,8 @@
         },
         "developer_mode": "Arendusrežiim",
         "developer_tools": "Arendusvahendid",
+        "device_dehydrated_no": "Virtuaalne seade serveris (dehüdreeritud): ei",
+        "device_dehydrated_yes": "Virtuaalne seade serveris (dehüdreeritud): jah",
         "device_id": "Seadme tunnus: %(deviceId)s",
         "device_keys": "Seadme võtmed",
         "device_verification_status": {
@@ -4094,9 +4097,11 @@
         "user_busy_description": "Kasutaja, kellele sa helistasid, on hõivatud.",
         "user_is_presenting": "%(sharerName)s esitab",
         "video_call": "Videokõne",
+        "video_call_incoming": "Saabuv videokõne",
         "video_call_started": "Videokõne algas",
         "video_call_using": "Videokõne, kus on kasutusel:",
         "voice_call": "Häälkõne",
+        "voice_call_incoming": "Saaduv häälkõne",
         "you_are_presenting": "Sina esitad"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",

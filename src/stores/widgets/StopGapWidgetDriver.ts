@@ -26,7 +26,6 @@ import {
     type IWidgetApiErrorResponseDataDetails,
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
-    type UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -425,12 +424,34 @@ export class StopGapWidgetDriver extends WidgetDriver {
     /**
      * @experimental Part of MSC4140 & MSC4157
      */
-    public async updateDelayedEvent(delayId: string, action: UpdateDelayedEventAction): Promise<void> {
+    public async cancelScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
         if (!client) throw new Error("Not in a room or not attached to a client");
 
-        await client._unstable_updateDelayedEvent(delayId, action);
+        await client._unstable_cancelScheduledDelayedEvent(delayId);
+    }
+
+    /**
+     * @experimental Part of MSC4140 & MSC4157
+     */
+    public async restartScheduledDelayedEvent(delayId: string): Promise<void> {
+        const client = MatrixClientPeg.get();
+
+        if (!client) throw new Error("Not in a room or not attached to a client");
+
+        await client._unstable_restartScheduledDelayedEvent(delayId);
+    }
+
+    /**
+     * @experimental Part of MSC4140 & MSC4157
+     */
+    public async sendScheduledDelayedEvent(delayId: string): Promise<void> {
+        const client = MatrixClientPeg.get();
+
+        if (!client) throw new Error("Not in a room or not attached to a client");
+
+        await client._unstable_sendScheduledDelayedEvent(delayId);
     }
 
     /**

@@ -84,6 +84,7 @@ export enum CallEvent {
     Participants = "participants",
     Close = "close",
     Destroy = "destroy",
+    CallTypeChanged = "call_type_changed",
 }
 
 interface CallEventHandlerMap {
@@ -94,6 +95,7 @@ interface CallEventHandlerMap {
     ) => void;
     [CallEvent.Close]: () => void;
     [CallEvent.Destroy]: () => void;
+    [CallEvent.CallTypeChanged]: (callType: CallType) => void;
 }
 
 /**
@@ -102,6 +104,18 @@ interface CallEventHandlerMap {
 export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandlerMap> {
     protected readonly widgetUid: string;
     protected readonly room: Room;
+
+    private _callType: CallType = CallType.Video;
+    public get callType(): CallType {
+        return this._callType;
+    }
+
+    protected set callType(callType: CallType) {
+        if (this._callType !== callType) {
+            this.emit(CallEvent.CallTypeChanged, callType);
+        }
+        this._callType = callType;
+    }
 
     /**
      * The time after which device member state should be considered expired.
@@ -544,7 +558,24 @@ export enum ElementCallIntent {
     StartCall = "start_call",
     JoinExisting = "join_existing",
     StartCallDM = "start_call_dm",
+    StartCallDMVoice = "start_call_dm_voice",
     JoinExistingDM = "join_existing_dm",
+    JoinExistingDMVoice = "join_existing_dm_voice",
+}
+
+/**
+ * Parameters to be passed during widget creation.
+ * These parameters are hints only, and may not be accepted by the implementation.
+ */
+export interface WidgetGenerationParameters {
+    /**
+     * Skip showing the lobby screen of a call.
+     */
+    skipLobby?: boolean;
+    /**
+     * Does the user intent to start a voice call?
+     */
+    voiceOnly?: boolean;
 }
 
 /**
@@ -586,7 +617,12 @@ export class ElementCall extends Call {
      * @param client The current client.
      * @param roomId The room ID for the call.
      */
-    private static appendRoomParams(params: URLSearchParams, client: MatrixClient, roomId: string): void {
+    private static appendRoomParams(
+        params: URLSearchParams,
+        client: MatrixClient,
+        roomId: string,
+        { voiceOnly }: WidgetGenerationParameters,
+    ): void {
         const room = client.getRoom(roomId);
         if (!room) {
             // If the room isn't known, or the room is a video room then skip setting an intent.
@@ -610,13 +646,17 @@ export class ElementCall extends Call {
         // is released and upgraded.
         if (isDM) {
             if (hasCallStarted) {
-                params.append("intent", ElementCallIntent.JoinExistingDM);
+                params.append(
+                    "intent",
+                    voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM,
+                );
                 params.append("preload", "false");
             } else {
-                params.append("intent", ElementCallIntent.StartCallDM);
+                params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
                 params.append("preload", "false");
             }
         } else {
+            // Group chats do not have a voice option.
             if (hasCallStarted) {
                 params.append("intent", ElementCallIntent.JoinExisting);
                 params.append("preload", "false");
@@ -717,7 +757,7 @@ export class ElementCall extends Call {
                 .forEach((font) => params.append("font", font));
         }
         this.appendAnalyticsParams(params, client);
-        this.appendRoomParams(params, client, roomId);
+        this.appendRoomParams(params, client, roomId, opts);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
@@ -751,11 +791,43 @@ export class ElementCall extends Call {
         );
     }
 
+    /**
+     * Get the correct intent for a widget, so that Element Call presents the correct
+     * default config.
+     * @param client The matrix client.
+     * @param roomId
+     * @param voiceOnly Should the call be voice-only, or video (default).
+     */
+    public static getWidgetIntent(client: MatrixClient, roomId: string, voiceOnly?: boolean): ElementCallIntent {
+        const room = client.getRoom(roomId);
+        if (room !== null && !isVideoRoom(room)) {
+            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
+            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
+            if (isDM) {
+                if (hasCallStarted) {
+                    return voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM;
+                } else {
+                    return voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM;
+                }
+            } else {
+                if (hasCallStarted) {
+                    return ElementCallIntent.JoinExisting;
+                } else {
+                    return ElementCallIntent.StartCall;
+                }
+            }
+        }
+        // If unknown, default to joining an existing call.
+        return ElementCallIntent.JoinExisting;
+    }
+
     private static getWidgetData(
         client: MatrixClient,
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
+        voiceOnly?: boolean,
     ): IWidgetData {
         let perParticipantE2EE = false;
         if (
@@ -763,9 +835,13 @@ export class ElementCall extends Call {
             !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
         )
             perParticipantE2EE = true;
+
+        const intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
+
         return {
             ...currentData,
             ...overwriteData,
+            intent,
             perParticipantE2EE,
         };
     }
@@ -791,7 +867,7 @@ export class ElementCall extends Call {
         this.updateParticipants();
     }
 
-    public static get(room: Room): ElementCall | null {
+    public static get(room: Room, voiceOnly?: boolean): ElementCall | null {
         const apps = WidgetStore.instance.getApps(room.roomId);
         const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
         const session = room.client.matrixRTC.getRoomSession(room);
@@ -874,7 +950,10 @@ export class ElementCall extends Call {
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
 
-    private readonly onMembershipChanged = (): void => this.updateParticipants();
+    private readonly onMembershipChanged = (): void => {
+        this.updateParticipants();
+        this.callType = this.session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video;
+    };
 
     private updateParticipants(): void {
         const participants = new Map<RoomMember, Set<string>>();

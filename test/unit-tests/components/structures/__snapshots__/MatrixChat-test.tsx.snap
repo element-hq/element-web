@@ -120,9 +120,11 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         class="mx_AuthPage_modalBlur"
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        tabindex="-1"
       >
         <div
           class="mx_Welcome"
@@ -166,7 +168,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"
@@ -238,9 +240,11 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         class="mx_AuthPage_modalBlur"
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
         style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        tabindex="-1"
       >
         <div
           class="mx_AuthHeader"
@@ -280,7 +284,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
             </div>
           </div>
         </div>
-        <main
+        <div
           class="mx_AuthBody"
         >
           <h1>
@@ -341,8 +345,8 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
               Clear all data
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"

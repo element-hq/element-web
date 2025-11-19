@@ -2578,7 +2578,7 @@
                 "do_not_close_warning": "Não feche essa janela até que a redefinição seja concluída",
                 "export_keys": "Exportar chaves",
                 "import_keys": "Importar chaves",
-                "other_people_device_description": "Por padrão, em salas criptografadas, não envie mensagens criptografadas para ninguém até que você as tenha verificado",
+                "other_people_device_description": "Aviso: usuários que não verificaram explicitamente sua identidade com você (por exemplo, usando emojis) não receberão suas mensagens criptografadas. Além disso, dispositivos não verificados de usuários verificados também não receberão suas mensagens criptografadas. As alterações exigem a reinicialização do aplicativo para entrarem em vigor.",
                 "other_people_device_label": "Nunca envie mensagens criptografadas para dispositivos não verificados",
                 "other_people_device_title": "Dispositivos de outras pessoas",
                 "reset_identity": "Redefinir identidade criptográfica",

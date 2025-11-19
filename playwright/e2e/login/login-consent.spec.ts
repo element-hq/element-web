@@ -129,6 +129,7 @@ test.describe("Login", () => {
             await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
 
             // Start the login process
+            await expect(axe).toHaveNoViolations();
             await page.getByRole("link", { name: "Sign in" }).click();
 
             // first pick the homeserver, as otherwise the user picker won't be visible
@@ -148,8 +149,6 @@ test.describe("Login", () => {
             await selectHomeserver(page, homeserver.baseUrl);
 
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
-            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
-            // cy.percySnapshot("Login");
             await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);

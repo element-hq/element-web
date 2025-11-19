@@ -154,18 +154,21 @@ describe("RoomView", () => {
         }
 
         const roomView = render(
-            <MatrixClientContext.Provider value={cli}>
-                <SDKContext.Provider value={stores}>
-                    <RoomView
-                        // threepidInvite should be optional on RoomView props
-                        // it is treated as optional in RoomView
-                        threepidInvite={undefined as any}
-                        forceTimeline={false}
-                        ref={ref}
-                        {...props}
-                    />
-                </SDKContext.Provider>
-            </MatrixClientContext.Provider>,
+            <RoomView
+                // threepidInvite should be optional on RoomView props
+                // it is treated as optional in RoomView
+                threepidInvite={undefined as any}
+                forceTimeline={false}
+                ref={ref}
+                {...props}
+            />,
+            {
+                wrapper: ({ children }) => (
+                    <MatrixClientContext.Provider value={cli}>
+                        <SDKContext.Provider value={stores}>{children}</SDKContext.Provider>
+                    </MatrixClientContext.Provider>
+                ),
+            },
         );
         await flushPromises();
         return roomView;
@@ -270,6 +273,28 @@ describe("RoomView", () => {
 
         // Check that the room name button in the header is not rendered
         expect(screen.queryByRole("button", { name: room.name })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should hide the right panel when hideRightPanel=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment, rerender } = await mountRoomView(undefined);
+
+        defaultDispatcher.dispatch<ViewUserPayload>(
+            {
+                action: Action.ViewUser,
+                member: undefined,
+            },
+            true,
+        );
+
+        // Check that the right panel is rendered
+        await expect(screen.findByTestId("right-panel")).resolves.toBeTruthy();
+        // Now rerender with hideRightPanel=true
+        rerender(<RoomView threepidInvite={undefined} forceTimeline={false} hideRightPanel={true} />);
+        // Check that the right panel is not rendered
+        await expect(screen.findByTestId("right-panel")).rejects.toThrow();
         expect(asFragment()).toMatchSnapshot();
     });
 
