@@ -15,6 +15,12 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 
+/**
+ * A settings component which allows the user to enable/disable invite blocking.
+ *
+ * Uses whichever of MSC4155 and MSC4380 is available on the server; if neither is available, the toggle is disabled. If
+ * both are available, the toggle will use MSC4380 to block invites.
+ */
 export const InviteRulesAccountSetting: FC = () => {
     const msc4155Rules = useSettingValue("inviteRules");
     const msc4380BlockInvites = useSettingValue("blockInvites");
