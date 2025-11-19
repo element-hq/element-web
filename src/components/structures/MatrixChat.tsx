@@ -815,13 +815,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case "view_last_screen":
-                // This function does what we want, despite the name. The idea is that it shows
-                // the last room we were looking at or some reasonable default/guess. We don't
-                // have to worry about email invites or similar being re-triggered because the
-                // function will have cleared that state and not execute that path.
-                this.showScreenAfterLogin();
-                break;
             case "hide_left_panel":
                 this.setState(
                     {
