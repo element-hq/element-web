@@ -380,4 +380,10 @@ export enum Action {
      * Open the create room dialog
      */
     CreateRoom = "view_create_room",
+
+    /**
+     * The `UserActivity` tracker determined that there was some activity from the user (typically a mouse movement
+     * or keyboard event).
+     */
+    UserActivity = "user_activity",
 }
