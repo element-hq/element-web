@@ -2104,7 +2104,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
-            view = <E2eSetup onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+            view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
