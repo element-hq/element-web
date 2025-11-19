@@ -9,7 +9,7 @@ import { type SettingLevel } from "../SettingLevel.ts";
 import { MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE } from "../../@types/invite-rules.ts";
 import { _td } from "../../languageHandler.tsx";
 import ServerSupportUnstableFeatureController from "./ServerSupportUnstableFeatureController.ts";
-import { defaultWatchManager, SettingKey } from "../Settings.tsx";
+import { defaultWatchManager, type SettingKey } from "../Settings.tsx";
 
 /**
  * Handles invite filtering rules provided by MSC4380.
