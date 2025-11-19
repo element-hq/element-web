@@ -427,10 +427,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
-        } else if (
-            (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) &&
-            !(await shouldSkipSetupEncryption(cli))
-        ) {
+        } else if (!(await shouldSkipSetupEncryption(cli))) {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
