@@ -39,6 +39,7 @@ interface BaseViewRoomPayload extends Pick<ActionPayload, "action"> {
     clear_search?: boolean; // Whether to clear the room list search
     view_call?: boolean; // Whether to view the call or call lobby for the room
     skipLobby?: boolean; // Whether to skip the call lobby when showing the call (only supported for element calls)
+    voiceOnly?: boolean; // Whether the call is voice only (only supported for element calls)
     opts?: JoinRoomPayload["opts"];
 
     deferred_action?: ActionPayload; // Action to fire after MatrixChat handles this ViewRoom action

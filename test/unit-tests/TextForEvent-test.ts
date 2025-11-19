@@ -21,7 +21,7 @@ import { render } from "jest-matrix-react";
 import { type ReactElement } from "react";
 import { type Mocked, mocked } from "jest-mock";
 
-import { textForEvent } from "../../src/TextForEvent";
+import { hasText, textForEvent } from "../../src/TextForEvent";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -698,6 +698,22 @@ describe("TextForEvent", () => {
                     mockClient,
                 ),
             ).toEqual(result);
+        });
+    });
+
+    describe("hasText", () => {
+        it("should return true for a known handler given an invalid event", async () => {
+            const cli = stubClient();
+            const ev = new MatrixEvent({
+                type: "m.room.name",
+                content: {
+                    name: { foo: "bar" },
+                },
+                state_key: "",
+                room_id: "!roomId",
+                sender: cli.getUserId()!,
+            });
+            expect(hasText(ev, cli, false)).toBe(true);
         });
     });
 });

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<UntrustedDeviceDialog /> should display the dialog for the device of another user 1`] = `
 <DocumentFragment>

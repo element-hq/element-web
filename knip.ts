@@ -5,6 +5,7 @@ export default {
         "src/serviceworker/index.ts",
         "src/workers/*.worker.ts",
         "src/utils/exportUtils/exportJS.js",
+        "src/vector/localstorage-fix.ts",
         "scripts/**",
         "playwright/**",
         "test/**",
@@ -55,7 +56,6 @@ export default {
     ignoreBinaries: [
         // Used in scripts & workflows
         "jq",
-        "wait-on",
     ],
     ignoreExportsUsedInFile: true,
 } satisfies KnipConfig;

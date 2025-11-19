@@ -89,9 +89,14 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             <div className="mx_AuthPage" style={pageStyle}>
                 <div className={modalClasses} style={modalStyle}>
                     {modalBlur}
-                    <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
+                    <main
+                        className="mx_AuthPage_modalContent"
+                        style={modalContentStyle}
+                        tabIndex={-1}
+                        aria-live="polite"
+                    >
                         {this.props.children}
-                    </div>
+                    </main>
                 </div>
                 <AuthFooter />
             </div>

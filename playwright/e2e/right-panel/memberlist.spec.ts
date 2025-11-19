@@ -80,13 +80,12 @@ test.describe("Memberlist", () => {
         await app.scrollListToBottom(memberListContainer);
 
         // Wait for the target member to be visible after scrolling
-        const targetName = "Member14";
+        // Member9 is the last in the list as they are lexicographically sorted
+        const targetName = "Member9";
         const targetMember = memberlist.locator(".mx_MemberTileView_name").filter({ hasText: targetName });
         await targetMember.waitFor({ state: "visible" });
-
-        // Verify Alice is not visible at this point
-        await expect(memberlist.locator(".mx_MemberTileView_name").filter({ hasText: "Alice" })).toHaveCount(0);
-
+        // Alice is not visible and will require scrolling to,
+        // but is likely in the dom as we have an overscan on the top and bottom of the list.
         // Click on a member near the bottom of the list
         await expect(targetMember).toBeVisible();
         await targetMember.click();

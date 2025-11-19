@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`QuickSettingsButton should render the quick settings button in expanded mode 1`] = `
 <DocumentFragment>

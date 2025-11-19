@@ -276,13 +276,6 @@ describe("DeviceListener", () => {
     });
 
     describe("recheck", () => {
-        it("does nothing when cross signing feature is not supported", async () => {
-            mockClient!.isVersionSupported.mockResolvedValue(false);
-            await createAndStart();
-
-            expect(mockClient!.isVersionSupported).toHaveBeenCalledWith("v1.1");
-            expect(mockCrypto!.isCrossSigningReady).not.toHaveBeenCalled();
-        });
         it("does nothing when crypto is not enabled", async () => {
             mockClient!.getCrypto.mockReturnValue(undefined);
             await createAndStart();

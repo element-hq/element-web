@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DecryptionFailureBody Should display "The sender has blocked you from receiving this message" 1`] = `
 <div>

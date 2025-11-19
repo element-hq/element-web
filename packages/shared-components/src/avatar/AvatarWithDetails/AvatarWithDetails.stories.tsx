@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { type Meta, type StoryObj } from "@storybook/react-vite/*";
+import { type Meta, type StoryObj } from "@storybook/react-vite";
 
 import { AvatarWithDetails } from "./AvatarWithDetails";
 

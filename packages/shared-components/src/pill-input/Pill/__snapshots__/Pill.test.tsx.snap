@@ -18,7 +18,7 @@ exports[`Pill renders the pill 1`] = `
     <button
       aria-describedby="_r_0_"
       aria-label="Delete"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1pz9o_8 mx_Dialog_nonDialogButton"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 16px;"

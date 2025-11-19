@@ -1,3 +1,35 @@
+Changes in [1.12.4](https://github.com/element-hq/element-web/releases/tag/v1.12.4) (2025-11-18)
+================================================================================================
+## ✨ Features
+
+* Apply aria-hidden to emoji in SAS verification ([#31204](https://github.com/element-hq/element-web/pull/31204)). Contributed by @t3chguy.
+* Add options to hide header and composer of room view for the module api ([#31095](https://github.com/element-hq/element-web/pull/31095)). Contributed by @florianduros.
+* Experimental Module API Additions ([#30863](https://github.com/element-hq/element-web/pull/30863)). Contributed by @dbkr.
+* Change polls to use fieldset/legend markup ([#31160](https://github.com/element-hq/element-web/pull/31160)). Contributed by @langleyd.
+* Use compound Button styles for Jitsi button ([#31159](https://github.com/element-hq/element-web/pull/31159)). Contributed by @Half-Shot.
+* Add FocusLock to emoji picker ([#31146](https://github.com/element-hq/element-web/pull/31146)). Contributed by @langleyd.
+* Move room name, avatar, and topic to IOpts. ([#30981](https://github.com/element-hq/element-web/pull/30981)). Contributed by @kaylendog.
+* Add a devtool for looking at users and their devices ([#30983](https://github.com/element-hq/element-web/pull/30983)). Contributed by @uhoreg.
+
+## 🐛 Bug Fixes
+
+* Fix room list handling of membership changes ([#31197](https://github.com/element-hq/element-web/pull/31197)). Contributed by @t3chguy.
+* Fix room list unable to be resized when displayed after a module ([#31186](https://github.com/element-hq/element-web/pull/31186)). Contributed by @florianduros.
+* Inhibit keyboard highlights in dialogs when effector is not in focus ([#31181](https://github.com/element-hq/element-web/pull/31181)). Contributed by @t3chguy.
+* Strip mentions from forwarded messages ([#30884](https://github.com/element-hq/element-web/pull/30884)). Contributed by @twassman.
+* Don't allow pin or edit of messages with a send status ([#31158](https://github.com/element-hq/element-web/pull/31158)). Contributed by @langleyd.
+* Hide room header buttons if the room hasn't been created yet. ([#31092](https://github.com/element-hq/element-web/pull/31092)). Contributed by @Half-Shot.
+* Fix screen readers not indicating the emoji picker search field is focused. ([#31128](https://github.com/element-hq/element-web/pull/31128)). Contributed by @langleyd.
+* Fix emoji picker highlight missing when not active element ([#31148](https://github.com/element-hq/element-web/pull/31148)). Contributed by @t3chguy.
+* Add relevant aria attribute for selected emoji in the emoji picker ([#31125](https://github.com/element-hq/element-web/pull/31125)). Contributed by @t3chguy.
+* Fix tooltips within context menu portals being unreliable ([#31129](https://github.com/element-hq/element-web/pull/31129)). Contributed by @t3chguy.
+* Avoid excessive re-render of room list and member list ([#31131](https://github.com/element-hq/element-web/pull/31131)). Contributed by @florianduros.
+* Make emoji picker height responsive. ([#31130](https://github.com/element-hq/element-web/pull/31130)). Contributed by @langleyd.
+* Emoji Picker: Focused emoji does not move with the arrow keys ([#30893](https://github.com/element-hq/element-web/pull/30893)). Contributed by @langleyd.
+* Fix audio player seek bar position  ([#31127](https://github.com/element-hq/element-web/pull/31127)). Contributed by @florianduros.
+* Add aria label to emoji picker search ([#31126](https://github.com/element-hq/element-web/pull/31126)). Contributed by @langleyd.
+
+
 Changes in [1.12.3](https://github.com/element-hq/element-web/releases/tag/v1.12.3) (2025-11-04)
 ================================================================================================
 ## 🦖 Deprecations

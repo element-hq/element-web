@@ -399,12 +399,6 @@ export default class DeviceListener {
 
         const cli = this.client;
 
-        // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
-        if (!(await cli.isVersionSupported("v1.1"))) {
-            logSpan.debug("cross-signing not supported");
-            return;
-        }
-
         const crypto = cli.getCrypto();
         if (!crypto) {
             logSpan.debug("crypto not enabled");
