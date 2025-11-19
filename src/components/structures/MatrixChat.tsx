@@ -852,13 +852,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onLoggedIn();
                 }
                 break;
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
                 this.onSoftLogout();
                 break;
             case Action.OnLoggedOut:
                 this.onLoggedOut();
                 break;
-            case "will_start_client":
+            case Action.WillStartClient:
                 this.setState({ ready: false }, () => {
                     // if the client is about to start, we are, by definition, not ready.
                     // Set ready to false now, then it'll be set to true when the sync
@@ -866,7 +866,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onWillStartClient();
                 });
                 break;
-            case "client_started":
+            case Action.ClientStarted:
                 // No need to make this handler async to wait for the result of this
                 this.onClientStarted().catch((e) => {
                     logger.error("Exception in onClientStarted", e);

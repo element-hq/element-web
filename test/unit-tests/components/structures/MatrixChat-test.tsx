@@ -547,11 +547,11 @@ describe("<MatrixChat />", () => {
                 getComponent({ realQueryParams });
 
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
                 // client successfully started
                 await waitFor(() =>
-                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                 );
 
                 // check we get to logged in view
@@ -1170,10 +1170,10 @@ describe("<MatrixChat />", () => {
                     getComponent({ realQueryParams });
 
                     defaultDispatcher.dispatch({
-                        action: "will_start_client",
+                        action: Action.WillStartClient,
                     });
                     await waitFor(() =>
-                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                     );
 
                     // Then we are not allowed in - we are being asked to verify
@@ -1584,7 +1584,7 @@ describe("<MatrixChat />", () => {
             it("should continue to post login setup when no session is found in local storage", async () => {
                 getComponent({ realQueryParams });
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
 
                 // logged in but waiting for sync screen
@@ -1844,7 +1844,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
@@ -1867,7 +1867,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
