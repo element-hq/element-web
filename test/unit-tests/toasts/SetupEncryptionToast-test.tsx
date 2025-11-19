@@ -64,6 +64,7 @@ describe("SetupEncryptionToast", () => {
                 getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
                 resetKeyBackup: jest.fn(),
                 checkKeyBackupAndEnable: jest.fn(),
+                loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
             } as unknown as CryptoApi);
         });
 
@@ -74,9 +75,6 @@ describe("SetupEncryptionToast", () => {
         });
 
         it("should reset key backup if needed", async () => {
-            // If the private backup key is missing from both our local cache
-            // and from 4S, when the user enters their recovery key, it should
-            // reset the backup.
             showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
 
             jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
@@ -91,6 +89,28 @@ describe("SetupEncryptionToast", () => {
             await user.click(await screen.findByText("Enter recovery key"));
 
             expect(client.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
+        });
+
+        it("should not reset key backup if not needed", async () => {
+            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => {
+                    return await func();
+                },
+            );
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+            // if the backup key is stored in 4S
+            client.isKeyBackupKeyStored.mockResolvedValue({});
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            // we shouldn't have reset the key backup, but should have fetched
+            // the key from 4S
+            expect(client.getCrypto()!.resetKeyBackup).not.toHaveBeenCalled();
+            expect(client.getCrypto()!.loadSessionBackupPrivateKeyFromSecretStorage).toHaveBeenCalled();
         });
 
         it("should open settings to the reset flow when 'forgot recovery key' clicked and identity reset needed", async () => {

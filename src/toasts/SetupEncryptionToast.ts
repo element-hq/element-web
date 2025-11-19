@@ -189,6 +189,8 @@ export const showToast = (kind: Kind): void => {
                             // Reset backup if needed.
                             if (needsBackupReset) {
                                 await resetKeyBackupAndWait(crypto);
+                            } else if (await matrixClient.isKeyBackupKeyStored()) {
+                                await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
                             }
                         });
                     });

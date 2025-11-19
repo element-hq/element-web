@@ -436,7 +436,10 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady = isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk;
+        const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
+
+        const allSystemsReady =
+            isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk && backupKeyCached;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
@@ -480,13 +483,16 @@ export default class DeviceListener {
                 }
             } else {
                 // If we get here, then we are verified, have key backup, and
-                // 4S, but crypto.isSecretStorageReady returned false, which
-                // means that 4S doesn't have all the secrets.
-                logSpan.warn("4S is missing secrets", {
+                // 4S, but allSystemsReady is false, which means that either
+                // secretStorageStatus.ready is false (which means that 4S
+                // doesn't have all the secrets), or we don't have the backup
+                // key cached locally.
+                logSpan.warn("4S is missing secrets or backup key not cached", {
                     crossSigningReady,
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
+                    backupKeyCached,
                 });
                 // We use the right toast variant based on whether the backup
                 // key is missing locally.  If any of the cross-signing keys are
