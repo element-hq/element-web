@@ -179,7 +179,7 @@ export const showToast = (kind: Kind): void => {
                     // deviceListener.pause() sets its client to undefined, so
                     // keyStorageOutOfSyncNeedsBackupReset won't be able to check
                     // the backup state.
-                    const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset();
+                    const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
 
                     // pause the device listener because we could be making lots
                     // of changes, and don't want toasts to pop up and disappear

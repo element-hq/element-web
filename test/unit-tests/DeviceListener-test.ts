@@ -1233,10 +1233,11 @@ describe("DeviceListener", () => {
                 mockClient.getAccountDataFromServer.mockResolvedValue({
                     disabled: true,
                 });
-                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
             });
 
-            it("should not need resetting if backup key is present locally or in 4S", async () => {
+            it("should not need resetting if backup key is present locally or in 4S, and user has 4S key", async () => {
                 const deviceListener = await createAndStart();
                 mockClient.getAccountDataFromServer.mockResolvedValue({
                     disabled: false,
@@ -1244,14 +1245,36 @@ describe("DeviceListener", () => {
 
                 mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
                 mockClient.isKeyBackupKeyStored.mockResolvedValue({});
-                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
 
                 mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
                 mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
-                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
             });
 
-            it("should need resetting if backup key is missing locally and in 4S", async () => {
+            it("should not need resetting if backup key is present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
+            });
+
+            it("should need resetting if backup key is missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(true);
+            });
+
+            it("should need resetting if backup key is missing locally and in 4s", async () => {
                 const deviceListener = await createAndStart();
                 mockClient.getAccountDataFromServer.mockResolvedValue({
                     disabled: false,
@@ -1259,7 +1282,7 @@ describe("DeviceListener", () => {
 
                 mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
                 mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
-                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset()).toBe(true);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(true);
             });
         });
 

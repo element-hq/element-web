@@ -237,8 +237,12 @@ export default class DeviceListener {
      * (The user should already have a key backup created at this point,
      * otherwise `doRecheck` would have triggered a `Kind.TURN_ON_KEY_STORAGE`
      * condition.)
+     *
+     * If the user has forgotten their recovery key, we need to reset backup if:
+     * - the user hasn't disabled backup, and
+     * - we don't have the backup key locally.
      */
-    public async keyStorageOutOfSyncNeedsBackupReset(): Promise<boolean> {
+    public async keyStorageOutOfSyncNeedsBackupReset(forgotRecovery: boolean): Promise<boolean> {
         const crypto = this.client?.getCrypto();
         if (!crypto) {
             return false;
@@ -247,7 +251,11 @@ export default class DeviceListener {
         const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
         const backupKeyStored = await this.client!.isKeyBackupKeyStored();
 
-        return shouldHaveBackup && !backupKeyCached && !backupKeyStored;
+        if (forgotRecovery) {
+            return shouldHaveBackup && !backupKeyCached;
+        } else {
+            return shouldHaveBackup && !backupKeyCached && !backupKeyStored;
+        }
     }
 
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
