@@ -152,7 +152,7 @@ export default class DeviceListener {
      * multiple events, to suppress warning toasts until the process is
      * finished.
      */
-    public async pause(fn: () => Promise<void>): Promise<void> {
+    public async whilePaused(fn: () => Promise<void>): Promise<void> {
         const client = this.client;
         try {
             this.stop();

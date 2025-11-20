@@ -183,7 +183,7 @@ export const showToast = (kind: Kind): void => {
                     const deviceListener = DeviceListener.sharedInstance();
 
                     // we need to call keyStorageOutOfSyncNeedsBackupReset here because
-                    // deviceListener.pause() sets its client to undefined, so
+                    // deviceListener.whilePaused() sets its client to undefined, so
                     // keyStorageOutOfSyncNeedsBackupReset won't be able to check
                     // the backup state.
                     const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
@@ -191,7 +191,7 @@ export const showToast = (kind: Kind): void => {
                     // pause the device listener because we could be making lots
                     // of changes, and don't want toasts to pop up and disappear
                     // while we're doing it
-                    await deviceListener.pause(async () => {
+                    await deviceListener.whilePaused(async () => {
                         await accessSecretStorage(async () => {
                             // Reset backup if needed.
                             if (needsBackupReset) {

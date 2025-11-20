@@ -79,7 +79,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                 // pause the device listener since enabling or (especially) disabling key storage must be
                 // done with a sequence of API calls that will put the account in a slightly different
                 // state each time, so suppress any warning toasts until the process is finished
-                await DeviceListener.sharedInstance().pause(async () => {
+                await DeviceListener.sharedInstance().whilePaused(async () => {
                     const crypto = matrixClient.getCrypto();
                     if (!crypto) {
                         logger.error("Can't change key backup status: no crypto module available");

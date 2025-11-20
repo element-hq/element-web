@@ -128,11 +128,11 @@ export function ChangeRecoveryKey({
                             const deviceListener = DeviceListener.sharedInstance();
 
                             // we need to call keyStorageOutOfSyncNeedsBackupReset here because
-                            // deviceListener.pause() sets its client to undefined, so
+                            // deviceListener.whilePaused() sets its client to undefined, so
                             // keyStorageOutOfSyncNeedsBackupReset won't be able to check
                             // the backup state.
                             const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true);
-                            await deviceListener.pause(async () => {
+                            await deviceListener.whilePaused(async () => {
                                 // We need to enable the cache to avoid to prompt the user to enter the new key
                                 // when we will try to access the secret storage during the bootstrap
                                 await withSecretStorageKeyCache(async () => {
