@@ -4218,7 +4218,7 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
 
 "@vector-im/matrix-wysiwyg@2.40.0":
@@ -9686,6 +9686,14 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     lodash "^4.17.21"
     minimist "^1.2.8"
     walk "^2.3.15"
+
+matrix-widget-api@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.14.0.tgz#aa90c40ace27d3165299f7dbc760a53001ce1446"
+  integrity sha512-DDvZGOQhI/rilPWg5VlLN7pHIsPt0Jt14lsuHDP+KU+fmpAQNITJ6aIld1ZoXWsrVGv2PS3x6K/MHtfruIOQJQ==
+  dependencies:
+    "@types/events" "^3.0.0"
+    events "^3.2.0"
 
 matrix-widget-api@^1.14.0:
   version "1.14.0"

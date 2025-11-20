@@ -427,10 +427,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
-        } else if (
-            (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) &&
-            !(await shouldSkipSetupEncryption(cli))
-        ) {
+        } else if (!(await shouldSkipSetupEncryption(cli))) {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
@@ -815,13 +812,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case "view_last_screen":
-                // This function does what we want, despite the name. The idea is that it shows
-                // the last room we were looking at or some reasonable default/guess. We don't
-                // have to worry about email invites or similar being re-triggered because the
-                // function will have cleared that state and not execute that path.
-                this.showScreenAfterLogin();
-                break;
             case "hide_left_panel":
                 this.setState(
                     {
@@ -859,13 +849,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onLoggedIn();
                 }
                 break;
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
                 this.onSoftLogout();
                 break;
             case Action.OnLoggedOut:
                 this.onLoggedOut();
                 break;
-            case "will_start_client":
+            case Action.WillStartClient:
                 this.setState({ ready: false }, () => {
                     // if the client is about to start, we are, by definition, not ready.
                     // Set ready to false now, then it'll be set to true when the sync
@@ -873,7 +863,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onWillStartClient();
                 });
                 break;
-            case "client_started":
+            case Action.ClientStarted:
                 // No need to make this handler async to wait for the result of this
                 this.onClientStarted().catch((e) => {
                     logger.error("Exception in onClientStarted", e);
@@ -2104,7 +2094,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
-            view = <E2eSetup onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+            view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
