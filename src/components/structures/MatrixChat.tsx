@@ -47,7 +47,6 @@ import PageType from "../../PageTypes";
 import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
-import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
@@ -983,8 +982,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         newState.isMobileRegistration = isMobileRegistration;
 
         this.setStateForNewView(newState);
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
         this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
@@ -1056,8 +1053,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             },
             () => {
-                ThemeController.isLogin = false;
-                this.themeWatcher?.recheck();
                 this.notifyNewScreen("room/" + presentedId, replaceLast);
             },
         );
@@ -1081,8 +1076,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.WELCOME,
         });
         this.notifyNewScreen("welcome");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewLogin(otherState?: any): void {
@@ -1091,8 +1084,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ...otherState,
         });
         this.notifyNewScreen("login");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewHome(justRegistered = false): void {
@@ -1104,8 +1095,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.setPage(PageType.HomePage);
         this.notifyNewScreen("home");
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
     }
 
     private viewUser(userId: string, subAction: string): void {
@@ -1372,8 +1361,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when a new logged in session has started
      */
     private async onLoggedIn(): Promise<void> {
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
         StorageManager.tryPersistStorage();
 
         await this.onShowPostLoginScreen();
