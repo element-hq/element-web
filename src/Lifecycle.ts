@@ -1001,7 +1001,7 @@ export function softLogout(): void {
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({ action: "on_client_not_viable" }); // generic version of on_logged_out
+    dis.dispatch({ action: Action.ClientNotViable }); // generic version of on_logged_out
     stopMatrixClient(/*unsetClient=*/ false);
 
     // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
@@ -1034,7 +1034,7 @@ async function startMatrixClient(
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
     // to work).
-    dis.dispatch({ action: "will_start_client" }, true);
+    dis.dispatch({ action: Action.WillStartClient }, true);
 
     // reset things first just in case
     SdkContextClass.instance.typingStore.reset();
@@ -1080,7 +1080,7 @@ async function startMatrixClient(
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
-    dis.dispatch({ action: "client_started" });
+    dis.dispatch({ action: Action.ClientStarted });
 
     if (isSoftLogout()) {
         softLogout();

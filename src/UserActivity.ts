@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import dis from "./dispatcher/dispatcher";
 import Timer from "./utils/Timer";
+import { Action } from "./dispatcher/actions.ts";
 
 // important these are larger than the timeouts of timers
 // used with UserActivity.timeWhileActive*,
@@ -190,11 +191,9 @@ export default class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
-        dis.dispatch({ action: "user_activity" });
+        dis.dispatch({ action: Action.UserActivity });
         if (!this.activeNowTimeout.isRunning()) {
             this.activeNowTimeout.start();
-            dis.dispatch({ action: "user_activity_start" });
-
             UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
         } else {
             this.activeNowTimeout.restart();
