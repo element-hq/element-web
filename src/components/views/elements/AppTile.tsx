@@ -769,31 +769,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
         appTileClasses = classNames(appTileClasses);
 
-        let contextMenu;
-        if (this.state.menuDisplayed) {
-            contextMenu = (
-                // <WidgetContextMenu
-                //     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                //     app={this.props.app}
-                //     onFinished={this.closeContextMenu}
-                //     showUnpin={!this.props.userWidget}
-                //     userWidget={this.props.userWidget}
-                //     onEditClick={this.props.onEditClick}
-                //     onDeleteClick={this.props.onDeleteClick}
-                // />
-                <WidgetContextMenu
-                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                    app={this.props.app}
-                    onFinished={this.closeContextMenu}
-                    showUnpin={!this.props.userWidget}
-                    userWidget={this.props.userWidget}
-                    onEditClick={this.props.onEditClick}
-                    onDeleteClick={this.props.onDeleteClick}
-                    menuDisplayed={this.state.menuDisplayed}
-                />
-            );
-        }
-
         const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
             const isMaximised =
@@ -850,23 +825,32 @@ export default class AppTile extends React.Component<IProps, IState> {
                                     </AccessibleButton>
                                 )}
                                 {this.state.hasContextMenuOptions && (
-                                    <ContextMenuButton
-                                        className="mx_AppTileMenuBar_widgets_button"
-                                        label={_t("common|options")}
-                                        isExpanded={this.state.menuDisplayed}
-                                        ref={this.contextMenuButton}
-                                        onClick={this.onContextMenuClick}
-                                    >
-                                        <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
-                                    </ContextMenuButton>
+                                    <WidgetContextMenu
+                                        trigger={
+                                            <ContextMenuButton
+                                                className="mx_AppTileMenuBar_widgets_button"
+                                                label={_t("common|options")}
+                                                isExpanded={this.state.menuDisplayed}
+                                                ref={this.contextMenuButton}
+                                                onClick={() => {}}
+                                            >
+                                                <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                            </ContextMenuButton>
+                                        }
+                                        app={this.props.app}
+                                        onFinished={() => this.state.menuDisplayed ? this.closeContextMenu() : this.onContextMenuClick()}
+                                        showUnpin={!this.props.userWidget}
+                                        userWidget={this.props.userWidget}
+                                        onEditClick={this.props.onEditClick}
+                                        onDeleteClick={this.props.onDeleteClick}
+                                        menuDisplayed={this.state.menuDisplayed}
+                                    />
                                 )}
                             </span>
                         </div>
                     )}
                     {appTileBody}
                 </div>
-
-                {contextMenu}
             </React.Fragment>
         );
     }
