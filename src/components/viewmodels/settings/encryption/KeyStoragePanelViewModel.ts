@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 import { useEventEmitterAsyncState } from "../../../../hooks/useEventEmitter";
+import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 interface KeyStoragePanelState {
     /**
@@ -75,63 +76,58 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
         async (enable: boolean) => {
             setPendingValue(enable);
             try {
-                // stop the device listener since enabling or (especially) disabling key storage must be
+                // pause the device listener since enabling or (especially) disabling key storage must be
                 // done with a sequence of API calls that will put the account in a slightly different
-                // state each time, so suppress any warning toasts until the process is finished (when
-                // we'll turn it back on again.)
-                DeviceListener.sharedInstance().stop();
-
-                const crypto = matrixClient.getCrypto();
-                if (!crypto) {
-                    logger.error("Can't change key backup status: no crypto module available");
-                    return;
-                }
-                if (enable) {
-                    const childLogger = logger.getChild("[enable key storage]");
-                    childLogger.info("User requested enabling key storage");
-                    let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
-                    if (currentKeyBackup) {
-                        logger.info(
-                            `Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`,
-                            currentKeyBackup.trustInfo,
-                        );
-                        // Check if the current key backup can be used. Either of these properties causes the key backup to be used.
-                        if (currentKeyBackup.trustInfo.trusted || currentKeyBackup.trustInfo.matchesDecryptionKey) {
-                            logger.info("Existing key backup can be used");
+                // state each time, so suppress any warning toasts until the process is finished
+                await DeviceListener.sharedInstance().whilePaused(async () => {
+                    const crypto = matrixClient.getCrypto();
+                    if (!crypto) {
+                        logger.error("Can't change key backup status: no crypto module available");
+                        return;
+                    }
+                    if (enable) {
+                        const childLogger = logger.getChild("[enable key storage]");
+                        childLogger.info("User requested enabling key storage");
+                        let currentKeyBackup = await crypto.checkKeyBackupAndEnable();
+                        if (currentKeyBackup) {
+                            logger.info(
+                                `Existing key backup is present. version: ${currentKeyBackup.backupInfo.version}`,
+                                currentKeyBackup.trustInfo,
+                            );
+                            // Check if the current key backup can be used. Either of these properties causes the key backup to be used.
+                            if (currentKeyBackup.trustInfo.trusted || currentKeyBackup.trustInfo.matchesDecryptionKey) {
+                                logger.info("Existing key backup can be used");
+                            } else {
+                                logger.warn("Existing key backup cannot be used, creating new backup");
+                                // There aren't any *usable* backups, so we need to create a new one.
+                                currentKeyBackup = null;
+                            }
                         } else {
-                            logger.warn("Existing key backup cannot be used, creating new backup");
-                            // There aren't any *usable* backups, so we need to create a new one.
-                            currentKeyBackup = null;
+                            logger.info("No existing key backup versions are present, creating new backup");
                         }
+
+                        // If there is no usable key backup on the server, create one.
+                        // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
+                        if (currentKeyBackup === null) {
+                            await resetKeyBackupAndWait(crypto);
+                        }
+
+                        // Set the flag so that EX no longer thinks the user wants backup disabled
+                        await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
                     } else {
-                        logger.info("No existing key backup versions are present, creating new backup");
+                        logger.info("User requested disabling key backup");
+                        // This method will delete the key backup as well as server side recovery keys and other
+                        // server-side crypto data.
+                        await crypto.disableKeyStorage();
+
+                        // Set a flag to say that the user doesn't want key backup.
+                        // Element X uses this to determine whether to set up automatically,
+                        // so this will stop EX turning it back on spontaneously.
+                        await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
                     }
-
-                    // If there is no usable key backup on the server, create one.
-                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no usable backup.
-                    if (currentKeyBackup === null) {
-                        await crypto.resetKeyBackup();
-                        // resetKeyBackup fires this off in the background without waiting, so we need to do it
-                        // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
-                        await crypto.checkKeyBackupAndEnable();
-                    }
-
-                    // Set the flag so that EX no longer thinks the user wants backup disabled
-                    await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
-                } else {
-                    logger.info("User requested disabling key backup");
-                    // This method will delete the key backup as well as server side recovery keys and other
-                    // server-side crypto data.
-                    await crypto.disableKeyStorage();
-
-                    // Set a flag to say that the user doesn't want key backup.
-                    // Element X uses this to determine whether to set up automatically,
-                    // so this will stop EX turning it back on spontaneously.
-                    await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
-                }
+                });
             } finally {
                 setPendingValue(undefined);
-                DeviceListener.sharedInstance().start(matrixClient);
             }
         },
         [setPendingValue, matrixClient],
