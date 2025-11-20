@@ -7,86 +7,104 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ComponentProps } from "react";
+import React from "react";
 import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { MatrixWidgetType } from "matrix-widget-api";
-import {
-    type ApprovalOpts,
-    type WidgetInfo,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import { WidgetContextMenuAction, WidgetContextMenuSnapshot, WidgetContextMenuView } from "./WidgetContextMenuView";
+import * as stories from "./WidgetContextMenuView.stories.tsx";
+import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
+import { IconButton } from "@vector-im/compound-web";
+import { composeStories } from "@storybook/react-vite";
+import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { WidgetContextMenu } from "../../../../../src/components/views/context_menus/WidgetContextMenu";
-import { type IApp } from "../../../../../src/stores/WidgetStore";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import WidgetUtils from "../../../../../src/utils/WidgetUtils";
-import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
+const { Default, OnlyBasicModification } = composeStories(stories);
 
-describe("<WidgetContextMenu />", () => {
-    const widgetId = "w1";
-    const eventId = "e1";
-    const roomId = "r1";
-    const userId = "@user-id:server";
-
-    const app: IApp = {
-        id: widgetId,
-        eventId,
-        roomId,
-        type: MatrixWidgetType.Custom,
-        url: "https://example.com",
-        name: "Example 1",
-        creatorUserId: userId,
-        avatar_url: undefined,
-    };
-
-    let mockClient: MatrixClient;
-
-    let onFinished: () => void;
-
-    beforeEach(() => {
-        onFinished = jest.fn();
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
-
-        mockClient = {
-            getUserId: jest.fn().mockReturnValue(userId),
-        } as unknown as MatrixClient;
-    });
+describe("<WidgetContextMenuView />", () => {
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        jest.resetAllMocks();
     });
 
-    function getComponent(props: Partial<ComponentProps<typeof WidgetContextMenu>> = {}): JSX.Element {
-        return (
-            <MatrixClientContext.Provider value={mockClient}>
-                <WidgetContextMenu app={app} onFinished={onFinished} {...props} />
-            </MatrixClientContext.Provider>
-        );
-    }
 
-    it("renders revoke button", async () => {
-        const { rerender } = render(getComponent());
-
-        const revokeButton = screen.getByLabelText("Revoke permissions");
-        expect(revokeButton).toBeInTheDocument();
-
-        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-            if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === widgetId) {
-                (opts as ApprovalOpts).approved = true;
-            }
-        });
-
-        rerender(getComponent());
-        expect(revokeButton).not.toBeInTheDocument();
+    it("renders widget contextmenu with all options", () => {
+        const { container } = render(<Default />);
+        expect(container).toMatchSnapshot();
     });
 
-    it("revokes permissions", async () => {
-        render(getComponent());
-        await userEvent.click(screen.getByLabelText("Revoke permissions"));
-        expect(onFinished).toHaveBeenCalled();
-        expect(SettingsStore.getValue("allowedWidgets", roomId)[eventId]).toBe(false);
+    it("renders widget contextmenu without only basic modification", () => {
+        const { container } = render(<OnlyBasicModification />);
+        expect(container).toMatchSnapshot();
+    });
+
+    const onKeyDown = jest.fn();
+    const togglePlay = jest.fn();
+    const onSeekbarChange = jest.fn();
+
+    const onStreamAudioClick = jest.fn();
+    const onEditClick = jest.fn();
+    const onSnapshotClick = jest.fn();
+    const onDeleteClick = jest.fn();
+    const onRevokeClick = jest.fn();
+    const onFinished = jest.fn();
+    const onMoveButton = jest.fn();
+    class WidgetContextMenuViewModel
+        extends MockViewModel<WidgetContextMenuSnapshot>
+        implements WidgetContextMenuAction
+    {
+        public onKeyDown = onKeyDown;
+        public togglePlay = togglePlay;
+        public onSeekbarChange = onSeekbarChange;
+
+        public onStreamAudioClick = onStreamAudioClick;
+        public onEditClick = onEditClick;
+        public onSnapshotClick = onSnapshotClick;
+        public onDeleteClick = onDeleteClick;
+        public onRevokeClick = onRevokeClick;
+        public onFinished = onFinished;
+        public onMoveButton = onMoveButton;
+    };
+
+    const defaultValue: WidgetContextMenuSnapshot = {
+        showStreamAudioStreamButton: true,
+        showEditButton: true,
+        showRevokeButton: true,
+        showDeleteButton: true,
+        showSnapshotButton: true,
+        showMoveButtons: [true, true],
+        canModify: true,
+        widgetMessaging: undefined,
+        isMenuOpened: true,
+        trigger: (
+            <IconButton size="24px">
+                <TriggerIcon />
+            </IconButton>
+        ),
+    };
+
+    it("should attach vm methods", async () => {
+        const vm = new WidgetContextMenuViewModel(defaultValue);
+
+        render(<WidgetContextMenuView vm={vm} />);
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Start audio stream" }));
+        expect(onStreamAudioClick).toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+        expect(onEditClick).toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Take a picture" }));
+        expect(onSnapshotClick).toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Revoke permissions" }));
+        expect(onRevokeClick).toHaveBeenCalled();
+        
+        await userEvent.click(screen.getByRole("menuitem", { name: "Remove for everyone" }));
+        expect(onDeleteClick).toHaveBeenCalled();
+        
+        await userEvent.click(screen.getByRole("menuitem", { name: "Move left" }));
+        expect(onMoveButton).toHaveBeenCalledWith(-1);
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Move right" }));
+        expect(onMoveButton).toHaveBeenCalledWith(1);
     });
 });

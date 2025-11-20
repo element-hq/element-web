@@ -107,12 +107,13 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             {canModifyWidget && (
                 <WidgetContextMenu
                     app={app}
-                    onFinished={closeMenu}
+                    onFinished={() => menuDisplayed ? closeMenu() : openMenu()}
                     menuDisplayed={menuDisplayed}
                     trigger={
                         <AccessibleButton
+                            ref={handle}
                             className="mx_ExtensionsCard_app_options"
-                            onClick={openMenu}
+                            onClick={() => {}}
                             title={_t("common|options")}
                          />
                     }

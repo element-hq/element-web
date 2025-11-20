@@ -5,10 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import React, { useContext, useMemo, useEffect, type ReactElement, type ReactNode } from "react";
 import { logger } from "@sentry/browser";
 import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type ClientWidgetApi, type IWidget, MatrixCapabilities } from "matrix-widget-api";
-import React, { useContext, useMemo, useEffect, type ReactElement, ReactNode } from "react";
 import {
     BaseViewModel,
     type WidgetContextMenuSnapshot,
@@ -95,7 +95,7 @@ export class WidgetContextMenuViewModel
         userWidget: boolean | undefined,
         showUnpin: boolean | undefined,
         menuDisplayed: boolean,
-        trigger: React.RefObject<HTMLDivElement | null>,
+        trigger: ReactNode,
         onDeleteClick?: () => void,
     ): WidgetContextMenuSnapshot => {
         const showStreamAudioStreamButton = !!getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type);
