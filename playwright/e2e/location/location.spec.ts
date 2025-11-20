@@ -53,13 +53,15 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
                 },
             });
 
-            // Wait for map to load
-            await expect(page.getByRole("region", { name: "Map" })).toMatchScreenshot(
+            let dialog = page.getByRole("dialog");
+
+            // wait for the dialog to be visible
+            await expect(dialog).toBeVisible();
+
+            // screenshot the map within the dialog
+            await expect(dialog.getByRole("region", { name: "Map" })).toMatchScreenshot(
                 "location-pin-drop-message-map.png",
             );
-
-            // clicking location tile opens maximised map
-            await expect(page.getByRole("dialog")).toBeVisible();
 
             await app.closeDialog();
 
