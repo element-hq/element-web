@@ -10,7 +10,7 @@ import { throttle } from "lodash";
 import classNames from "classnames";
 
 import style from "./SeekBar.module.css";
-import { _t } from "../../utils/i18n";
+import { _t } from "__i18nAPI";
 
 export interface SeekBarProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /**

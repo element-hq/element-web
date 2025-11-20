@@ -20,16 +20,13 @@ import {
     registerCustomTranslations,
     setLanguage,
     setMissingEntryGenerator,
-    substitute,
-    type TranslatedString,
     UserFriendlyError,
     type TranslationKey,
-    type IVariables,
-    type Tags,
     getLanguagesFromBrowser,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
 import { setupLanguageMock } from "../setup/setupLanguage";
+import { substitute, type IVariables, type Tags, type TranslatedString } from "../../src/i18n/i18n";
 
 async function setupTranslationOverridesForTests(overrides: TranslationStringsObject) {
     const lookupUrl = "/translations.json";

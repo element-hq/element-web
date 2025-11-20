@@ -24,13 +24,14 @@
 import React from "react";
 import { KEY_SEPARATOR } from "matrix-web-i18n";
 import counterpart from "counterpart";
+import { type TranslationKey as TranslationKeyType } from "matrix-web-i18n";
 
-import type { TranslationKey } from "../index";
+import type Translations from "../i18n/strings/en_EN.json";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 
-export { KEY_SEPARATOR, normalizeLanguageKey, getNormalizedLanguageKeys } from "matrix-web-i18n";
+export type TranslationKey = TranslationKeyType<typeof Translations>;
 
 const i18nFolder = "i18n/";
 

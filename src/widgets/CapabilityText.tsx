@@ -21,10 +21,11 @@ import {
 import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { _t, _td, type TranslatedString, type TranslationKey } from "../languageHandler";
+import { _t, _td, type TranslationKey } from "../languageHandler";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";
+import { type TranslatedString } from "../i18n/i18n";
 
 type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/naming-convention
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";

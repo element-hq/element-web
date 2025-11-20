@@ -1,0 +1,17 @@
+{
+    "a11y": {
+        "seek_bar_label": "a11y|seek_bar_label"
+    },
+    "action": {
+        "delete": "action|delete",
+        "pause": "action|pause",
+        "play": "action|play"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "timeline|m.audio|audio_player",
+            "error_downloading_audio": "timeline|m.audio|error_downloading_audio",
+            "unnamed_audio": "timeline|m.audio|unnamed_audio"
+        }
+    }
+}

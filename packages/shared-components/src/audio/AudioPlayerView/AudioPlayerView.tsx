@@ -14,7 +14,7 @@ import { Flex } from "../../utils/Flex";
 import styles from "./AudioPlayerView.module.css";
 import { PlayPauseButton } from "../PlayPauseButton";
 import { type PlaybackState } from "../playback";
-import { _t } from "../../utils/i18n";
+import { _t } from "__i18nAPI";
 import { formatBytes } from "../../utils/FormattingUtils";
 import { Clock } from "../Clock";
 import { SeekBar } from "../SeekBar";

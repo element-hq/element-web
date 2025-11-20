@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import "@types/modernizr";
 
-import type { ModuleLoader } from "@element-hq/element-web-module-api";
+import type { I18nApi, ModuleLoader } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
 import type ContentMessages from "../ContentMessages";
 import { type IMatrixClientPeg } from "../MatrixClientPeg";
@@ -125,6 +125,7 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
+        mxI18nAPI: I18nApi;
 
         // electron-only
         electron?: Electron;

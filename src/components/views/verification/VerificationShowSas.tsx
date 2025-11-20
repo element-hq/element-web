@@ -10,8 +10,9 @@ import React from "react";
 import { type Device } from "matrix-js-sdk/src/matrix";
 import { type GeneratedSas, type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 import SasEmoji from "@matrix-org/spec/sas-emoji.json";
+import { getNormalizedLanguageKeys } from "matrix-web-i18n";
 
-import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
+import { _t, getUserLanguage } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 

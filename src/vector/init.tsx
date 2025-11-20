@@ -12,6 +12,7 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
+import { getNormalizedLanguageKeys } from "matrix-web-i18n";
 
 import type { QueryDict } from "matrix-js-sdk/src/utils";
 import * as languageHandler from "../languageHandler";
@@ -69,7 +70,7 @@ export async function loadLanguage(): Promise<void> {
 
     if (!prefLang) {
         languageHandler.getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+            langs.push(...getNormalizedLanguageKeys(l));
         });
     } else {
         langs = [prefLang];
@@ -142,6 +143,7 @@ export async function loadPlugins(): Promise<void> {
     // every single module to ship its own copy of React. This also makes it easier to access via the console
     // and incidentally means we can forget our React imports in JSX files without penalty.
     window.React = React;
+    window.mxI18nAPI = ModuleApi.instance.i18n;
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;
@@ -154,7 +156,5 @@ export async function loadPlugins(): Promise<void> {
     }
     await moduleLoader.start();
 }
-
-export { _t } from "../languageHandler";
 
 export { extractErrorMessageFromError } from "../components/views/dialogs/ErrorDialog";

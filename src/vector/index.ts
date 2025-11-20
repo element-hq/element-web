@@ -16,6 +16,7 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
 import "./modernizr";
+import { _t } from "../languageHandler";
 
 // Import shared components CSS
 import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
@@ -122,7 +123,6 @@ async function start(): Promise<void> {
         loadPlugins,
         showError,
         showIncompatibleBrowser,
-        _t,
         extractErrorMessageFromError,
     } = await import(
         /* webpackChunkName: "init" */

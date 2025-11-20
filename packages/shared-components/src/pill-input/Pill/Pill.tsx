@@ -12,7 +12,7 @@ import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close"
 
 import { Flex } from "../../utils/Flex";
 import styles from "./Pill.module.css";
-import { _t } from "../../utils/i18n";
+import { _t } from "__i18nAPI";
 
 export interface PillProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
     /**
