@@ -53,7 +53,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
                 },
             });
 
-            let dialog = page.getByRole("dialog");
+            const dialog = page.getByRole("dialog");
 
             // wait for the dialog to be visible
             await expect(dialog).toBeVisible();
