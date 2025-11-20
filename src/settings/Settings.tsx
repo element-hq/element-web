@@ -48,8 +48,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
-import { type TranslationKey } from "../i18n/i18n.ts";
-import { _t, _td } from "../i18n/i18n.ts";
+import { type TranslationKey, _t, _td } from "../i18n/i18n.tsx";
 
 export const defaultWatchManager = new WatchManager();
 

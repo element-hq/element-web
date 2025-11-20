@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { type I18nApi as II18nApi, type Variables, type Translations } from "@element-hq/element-web-module-api";
 
-import { registerTranslations, _t } from "../i18n/i18n.ts";
 import { getCurrentLanguage } from "../languageHandler.tsx";
 import { humanizeTime } from "../i18n/humanize.ts";
-import { type TranslationKey } from "../i18n/i18n.tsx";
+import { registerTranslations, _t, type TranslationKey } from "../i18n/i18n.tsx";
 
 export class I18nApi implements II18nApi {
     /**
