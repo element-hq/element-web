@@ -52,6 +52,7 @@ import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
+import { ModuleApi } from "../modules/Api";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -292,10 +293,15 @@ export class RoomViewStore extends EventEmitter {
             case "reply_to_event":
                 // Thread timeline view handles its own reply-to-state
                 if (TimelineRenderingType.Thread !== payload.context) {
+                    const roomId: string | undefined = payload.event?.getRoomId();
+
                     // If currently viewed room does not match the room in which we wish to reply then change rooms this
                     // can happen when performing a search across all rooms. Persist the data from this event for both
                     // room and search timeline rendering types, search will get auto-closed by RoomView at this time.
-                    if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
+                    if (payload.event && roomId !== this.state.roomId) {
+                        // if the room is displayed in a module, we don't want to change the room view
+                        if (roomId && this.isRoomDisplayedInModule(roomId)) return;
+
                         this.dis?.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
@@ -801,5 +807,16 @@ export class RoomViewStore extends EventEmitter {
         const viewRoomOpts: ViewRoomOpts = { buttons: [] };
         ModuleRunner.instance.invoke(RoomViewLifecycle.ViewRoom, viewRoomOpts, this.getRoomId());
         this.setState({ viewRoomOpts });
+    }
+
+    /**
+     * Checks if a room is already displayed in the current active space module.
+     * @param roomId
+     */
+    public isRoomDisplayedInModule(roomId: string): boolean {
+        const currentSpace = this.stores.spaceStore.activeSpace;
+        const roomIdsFromModule = ModuleApi.instance.extras.spaceRoomIds.get(currentSpace);
+        // Room is already open in the module, ignore
+        return Boolean(roomIdsFromModule?.has(roomId));
     }
 }
