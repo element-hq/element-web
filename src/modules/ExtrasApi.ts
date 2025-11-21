@@ -25,18 +25,15 @@ interface EmittedEvents {
 
 export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> implements ExtrasApi {
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
-    /**
-     * Mapping of space keys to room IDs contained in those spaces.
-     */
-    public spaceRoomIds = new Map<string, Set<string>>();
+    public visibleRoomBySpaceKey = new Map<string, () => string[]>();
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
         this.emit(ExtrasApiEvent.SpacePanelItemsChanged);
     }
 
-    public setRoomIdsForSpace(spaceKey: string, roomIds: string[]): void {
-        this.spaceRoomIds.set(spaceKey, new Set(roomIds));
+    public getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void {
+        this.visibleRoomBySpaceKey.set(spaceKey, cb);
     }
 }
 

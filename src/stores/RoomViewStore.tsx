@@ -815,8 +815,9 @@ export class RoomViewStore extends EventEmitter {
      */
     public isRoomDisplayedInModule(roomId: string): boolean {
         const currentSpace = this.stores.spaceStore.activeSpace;
-        const roomIdsFromModule = ModuleApi.instance.extras.spaceRoomIds.get(currentSpace);
-        // Room is already open in the module, ignore
-        return Boolean(roomIdsFromModule?.has(roomId));
+        const cb = ModuleApi.instance.extras.visibleRoomBySpaceKey.get(currentSpace);
+        if (!cb) return false;
+
+        return cb().includes(roomId);
     }
 }
