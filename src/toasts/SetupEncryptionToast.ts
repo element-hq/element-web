@@ -43,6 +43,8 @@ const getTitle = (kind: Kind): string => {
             return _t("encryption|key_storage_out_of_sync");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage");
+        case Kind.IDENTITY_NEEDS_RESET:
+            return _t("encryption|identity_needs_reset");
     }
 };
 
@@ -52,6 +54,7 @@ const getIcon = (kind: Kind): string | undefined => {
             return undefined;
         case Kind.VERIFY_THIS_SESSION:
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
+        case Kind.IDENTITY_NEEDS_RESET:
             return "verification_warning";
         case Kind.TURN_ON_KEY_STORAGE:
             return "key_storage";
@@ -68,6 +71,8 @@ const getSetupCaption = (kind: Kind): string => {
             return _t("encryption|enter_recovery_key");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("action|continue");
+        case Kind.IDENTITY_NEEDS_RESET:
+            return _t("encryption|reset_identity");
     }
 };
 
@@ -94,6 +99,8 @@ const getSecondaryButtonLabel = (kind: Kind): string => {
             return _t("encryption|forgot_recovery_key");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("action|dismiss");
+        case Kind.IDENTITY_NEEDS_RESET:
+            return "";
     }
 };
 
@@ -107,6 +114,8 @@ const getDescription = (kind: Kind): string => {
             return _t("encryption|key_storage_out_of_sync_description");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage_description");
+        case Kind.IDENTITY_NEEDS_RESET:
+            return _t("encryption|identity_needs_reset_description");
     }
 };
 
@@ -130,6 +139,10 @@ export enum Kind {
      * Prompt the user to turn on key storage
      */
     TURN_ON_KEY_STORAGE = "turn_on_key_storage",
+    /**
+     * Prompt the user to reset their identity
+     */
+    IDENTITY_NEEDS_RESET = "identity_needs_reset",
 }
 
 /**
@@ -206,6 +219,18 @@ export const showToast = (kind: Kind): void => {
                 } finally {
                     modal.close();
                 }
+                break;
+            }
+            case Kind.IDENTITY_NEEDS_RESET: {
+                // Open the user settings dialog to reset identity
+                const payload: OpenToTabPayload = {
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Encryption,
+                    props: {
+                        initialEncryptionState: "reset_identity_cant_recover",
+                    },
+                };
+                defaultDispatcher.dispatch(payload);
                 break;
             }
         }

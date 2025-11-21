@@ -425,11 +425,9 @@ export default class DeviceListener {
 
         const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled;
 
-        const isCurrentDeviceTrusted =
-            crossSigningReady &&
-            Boolean(
-                (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
-            );
+        const isCurrentDeviceTrusted = Boolean(
+            (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
+        );
 
         const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
         const backupDisabled = await this.recheckBackupDisabled(cli);
@@ -464,8 +462,13 @@ export default class DeviceListener {
                 logSpan.info(
                     "Some secrets not cached: showing KEY_STORAGE_OUT_OF_SYNC toast",
                     crossSigningStatus.privateKeysCachedLocally,
+                    crossSigningStatus.privateKeysInSecretStorage,
                 );
-                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
+                showSetupEncryptionToast(
+                    crossSigningStatus.privateKeysInSecretStorage
+                        ? SetupKind.KEY_STORAGE_OUT_OF_SYNC
+                        : SetupKind.IDENTITY_NEEDS_RESET,
+                );
             } else if (!keyBackupIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: showing TURN_ON_KEY_STORAGE toast");
                 showSetupEncryptionToast(SetupKind.TURN_ON_KEY_STORAGE);
@@ -488,7 +491,9 @@ export default class DeviceListener {
                 // 4S, but allSystemsReady is false, which means that either
                 // secretStorageStatus.ready is false (which means that 4S
                 // doesn't have all the secrets), or we don't have the backup
-                // key cached locally.
+                // key cached locally. If any of the cross-signing keys are
+                // missing locally, that is handled by the
+                // `!allCrossSigningSecretsCached` branch above.
                 logSpan.warn("4S is missing secrets or backup key not cached", {
                     crossSigningReady,
                     secretStorageStatus,
@@ -496,10 +501,6 @@ export default class DeviceListener {
                     isCurrentDeviceTrusted,
                     backupKeyCached,
                 });
-                // We use the right toast variant based on whether the backup
-                // key is missing locally.  If any of the cross-signing keys are
-                // missing locally, that is handled by the
-                // `!allCrossSigningSecretsCached` branch above.
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             }
         } else {

@@ -41,6 +41,7 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
+ *  - "reset_identity_cant_recover": The panel to show when the user is resetting their identity, in the case where they can't use recovery.
  *  - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
  *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
@@ -55,6 +56,7 @@ export type State =
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
+    | "reset_identity_cant_recover"
     | "secrets_not_cached"
     | "key_storage_delete";
 
@@ -124,6 +126,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
         case "reset_identity_compromised":
         case "reset_identity_forgot":
         case "reset_identity_sync_failed":
+        case "reset_identity_cant_recover":
             content = (
                 <ResetIdentityPanel
                     variant={findResetVariant(state)}
@@ -154,6 +157,8 @@ function findResetVariant(state: State): ResetIdentityBodyVariant {
             return "compromised";
         case "reset_identity_sync_failed":
             return "sync_failed";
+        case "reset_identity_cant_recover":
+            return "no_verification_method";
 
         default:
         case "reset_identity_forgot":

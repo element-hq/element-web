@@ -385,6 +385,24 @@ describe("DeviceListener", () => {
                     );
                 });
 
+                it("shows an identity reset toast when one of the cross-signing secrets is missing locally and in 4S", async () => {
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: false,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.IDENTITY_NEEDS_RESET,
+                    );
+                });
+
                 it("hides the out-of-sync toast after we receive the missing secrets", async () => {
                     mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                     mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
