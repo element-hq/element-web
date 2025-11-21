@@ -46,12 +46,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await submitShareLocation(page);
 
-            await page.locator(".mx_RoomView_body .mx_EventTile .mx_MLocationBody").click({
-                position: {
-                    x: 225,
-                    y: 150,
-                },
-            });
+            await page.getByRole("button", { name: "Map marker" }).click();
 
             const dialog = page.getByRole("dialog");
 
@@ -65,7 +60,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await app.closeDialog();
 
-            await expect(page.locator(".mx_Marker")).toBeVisible();
+            await expect(page.getByRole("button", { name: "Map marker" })).toBeVisible();
         },
     );
 
