@@ -46,24 +46,21 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
 
             await submitShareLocation(page);
 
-            await page.locator(".mx_RoomView_body .mx_EventTile .mx_MLocationBody").click({
-                position: {
-                    x: 225,
-                    y: 150,
-                },
-            });
+            await page.getByRole("button", { name: "Map marker" }).click();
 
-            // Wait for map to load
-            await expect(page.getByRole("region", { name: "Map" })).toMatchScreenshot(
+            const dialog = page.getByRole("dialog");
+
+            // wait for the dialog to be visible
+            await expect(dialog).toBeVisible();
+
+            // screenshot the map within the dialog
+            await expect(dialog.getByRole("region", { name: "Map" })).toMatchScreenshot(
                 "location-pin-drop-message-map.png",
             );
 
-            // clicking location tile opens maximised map
-            await expect(page.getByRole("dialog")).toBeVisible();
-
             await app.closeDialog();
 
-            await expect(page.locator(".mx_Marker")).toBeVisible();
+            await expect(page.getByRole("button", { name: "Map marker" })).toBeVisible();
         },
     );
 
