@@ -167,6 +167,7 @@ export interface DirectoryCustomisations {
 
 // @alpha
 export interface ExtrasApi {
+    getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
