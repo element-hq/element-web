@@ -355,11 +355,9 @@ export interface RoomListStoreApi {
 
 // @alpha
 export interface RoomViewProps {
-    // (undocumented)
     hideComposer?: boolean;
-    // (undocumented)
     hideHeader?: boolean;
-    // (undocumented)
+    hidePinnedMessageBanner?: boolean;
     hideRightPanel?: boolean;
 }
 

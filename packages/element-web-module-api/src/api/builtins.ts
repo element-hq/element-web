@@ -10,18 +10,22 @@ Please see LICENSE files in the repository root for full details.
  * @alpha Subject to change.
  */
 export interface RoomViewProps {
-    /*
+    /**
      * If true, the room header will be hidden.
      */
     hideHeader?: boolean;
-    /*
+    /**
      * If true, the message composer will be hidden.
      */
     hideComposer?: boolean;
-    /*
+    /**
      * If true, the right panel will be hidden.
      */
     hideRightPanel?: boolean;
+    /**
+     * If true, the pinned message banner will be hidden.
+     */
+    hidePinnedMessageBanner?: boolean;
 }
 
 /**
