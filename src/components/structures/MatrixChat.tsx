@@ -867,20 +867,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
             case Action.OnLoggedIn:
-                this.stores.client = MatrixClientPeg.safeGet();
-                StorageManager.tryPersistStorage();
-
-                if (
-                    // Skip this handling for token login as that always calls onShowPostLoginScreen itself
-                    !this.tokenLogin &&
-                    !Lifecycle.isSoftLogout() &&
-                    this.state.view !== Views.LOGIN &&
-                    this.state.view !== Views.REGISTER &&
-                    this.state.view !== Views.COMPLETE_SECURITY &&
-                    this.state.view !== Views.E2E_SETUP
-                ) {
-                    this.onShowPostLoginScreen();
-                }
+                this.onLoggedIn();
                 break;
             case Action.ClientNotViable:
                 this.onSoftLogout();
@@ -1510,6 +1497,28 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             room_id: localStorage.getItem("mx_last_room_id") ?? undefined,
             metricsTrigger: undefined, // other
         });
+    }
+
+    /**
+     * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
+     */
+    private onLoggedIn(): void {
+        this.stores.client = MatrixClientPeg.safeGet();
+        StorageManager.tryPersistStorage();
+
+        // If we're in the middle of a login/registration, we wait for it to complete before transitioning to the logged
+        // in view the login flow will call `postLoginSetup` when it's done, which will arrange for `onShowPostLoginScreen`
+        // to be called.
+        if (
+            !this.tokenLogin &&
+            !Lifecycle.isSoftLogout() &&
+            this.state.view !== Views.LOGIN &&
+            this.state.view !== Views.REGISTER &&
+            this.state.view !== Views.COMPLETE_SECURITY &&
+            this.state.view !== Views.E2E_SETUP
+        ) {
+            this.onShowPostLoginScreen();
+        }
     }
 
     /**
