@@ -368,7 +368,7 @@ describe("RoomViewStore", function () {
         await untilDispatch(Action.ActiveRoomChanged, dis);
         expect(roomViewStore.getRoomId()).toEqual(roomId);
 
-        ModuleApi.instance.extras.setRoomIdsForSpace("space1", [roomId, roomId2]);
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [roomId, roomId2]);
         // @ts-ignore
         stores.spaceStore.activeSpace = "space1";
 

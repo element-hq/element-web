@@ -1020,7 +1020,7 @@ describe("RoomView", () => {
         // Mock the spaceStore activeSpace and ModuleApi setup
         jest.spyOn(stores.spaceStore, "activeSpace", "get").mockReturnValue("space1");
         // Mock that room2 is displayed in a module
-        ModuleApi.instance.extras.setRoomIdsForSpace("space1", [room2.roomId]);
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [room2.roomId]);
 
         // Mock the roomViewStore method
         jest.spyOn(stores.roomViewStore, "isRoomDisplayedInModule").mockReturnValue(true);
