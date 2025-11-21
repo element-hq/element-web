@@ -78,6 +78,8 @@ import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDe
 import Modal, { type ComponentProps } from "../../../../src/Modal.tsx";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
+import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import { ModuleApi } from "../../../../src/modules/Api";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -1005,5 +1007,53 @@ describe("RoomView", () => {
                 itShouldNotRemoveTheLastWidget();
             });
         });
+    });
+
+    it("should not change room when editing event in a room displayed in module", async () => {
+        const room2 = new Room("!room2:example.org", cli, "@alice:example.org");
+        rooms.set(room2.roomId, room2);
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        room2.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+        await mountRoomView();
+
+        // Mock the spaceStore activeSpace and ModuleApi setup
+        jest.spyOn(stores.spaceStore, "activeSpace", "get").mockReturnValue("space1");
+        // Mock that room2 is displayed in a module
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [room2.roomId]);
+
+        // Mock the roomViewStore method
+        jest.spyOn(stores.roomViewStore, "isRoomDisplayedInModule").mockReturnValue(true);
+
+        // Create an event in room2 to edit
+        const eventInRoom2 = new MatrixEvent({
+            type: "m.room.message",
+            event_id: "$edit-event:example.org",
+            room_id: room2.roomId,
+            sender: "@alice:example.org",
+            content: {
+                body: "Original message",
+                msgtype: "m.text",
+            },
+        });
+
+        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+
+        // Dispatch EditEvent for event in room2 (which is displayed in module)
+        defaultDispatcher.dispatch({
+            action: Action.EditEvent,
+            event: eventInRoom2,
+            timelineRenderingType: TimelineRenderingType.Room,
+        });
+
+        await flushPromises();
+
+        // Should not dispatch ViewRoom action since room2 is displayed in module
+        expect(dispatchSpy).not.toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: Action.ViewRoom,
+                room_id: room2.roomId,
+            }),
+        );
     });
 });
