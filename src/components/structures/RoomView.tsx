@@ -180,6 +180,11 @@ interface IRoomProps extends RoomViewProps {
      * If true, hide the right panel
      */
     hideRightPanel?: boolean;
+
+    /**
+     * If true, hide the pinned messages banner
+     */
+    hidePinnedMessageBanner?: boolean;
 }
 
 export { MainSplitContentType };
@@ -2464,7 +2469,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const pinnedMessageBanner = (
+        const pinnedMessageBanner = !this.props.hidePinnedMessageBanner && (
             <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
         );
 
