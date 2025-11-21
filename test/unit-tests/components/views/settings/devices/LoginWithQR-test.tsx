@@ -36,7 +36,7 @@ function makeClient() {
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
         isUserIgnored: jest.fn(),
-        getUserId: jest.fn(),
+        getUserId: jest.fn().mockReturnValue("@user:server"),
         on: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),

@@ -297,26 +297,15 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(queryParams);
 
-        const {
-            user_id: userId,
-            device_id: deviceId,
-            is_guest: isGuest,
-        } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
-
-        const credentials = {
+        await configureFromCompletedOAuthLogin({
             accessToken,
             refreshToken,
             homeserverUrl,
             identityServerUrl,
-            deviceId,
-            userId,
-            isGuest,
-        };
-
-        logger.debug("Logged in via OIDC native flow");
-        await onSuccessfulDelegatedAuthLogin(credentials);
-        // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+            clientId,
+            issuer,
+            idToken,
+        })
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
@@ -324,6 +313,47 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
+}
+
+export async function configureFromCompletedOAuthLogin({
+    accessToken,
+    refreshToken,
+    homeserverUrl,
+    identityServerUrl,
+    clientId,
+    issuer,
+    idToken,
+}: {
+    accessToken: string;
+    refreshToken?: string;
+    homeserverUrl: string;
+    identityServerUrl?: string;
+    clientId: string;
+    issuer: string;
+    idToken: string;
+}): Promise<IMatrixClientCreds> {
+    const {
+        user_id: userId,
+        device_id: deviceId,
+        is_guest: guest,
+    } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
+
+    const credentials = {
+        accessToken,
+        refreshToken,
+        homeserverUrl,
+        identityServerUrl,
+        deviceId,
+        userId,
+        guest,
+    } satisfies IMatrixClientCreds;
+
+    logger.debug("Logged in via OIDC native flow");
+    await onSuccessfulDelegatedAuthLogin(credentials);
+    // this needs to happen after success handler which clears storages
+    persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+
+    return credentials;
 }
 
 /**

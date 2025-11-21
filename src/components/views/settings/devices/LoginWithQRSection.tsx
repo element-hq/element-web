@@ -11,7 +11,7 @@ import {
     type IServerVersions,
     type OidcClientConfig,
     type MatrixClient,
-    DEVICE_CODE_SCOPE,
+    DEVICE_AUTHORIZATION_GRANT_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
@@ -28,7 +28,7 @@ interface IProps {
     isCrossSigningReady?: boolean;
 }
 
-export function shouldShowQr(
+export function shouldShowQrForReciprocate(
     cli: MatrixClient,
     isCrossSigningReady: boolean,
     oidcClientConfig?: OidcClientConfig,
@@ -36,7 +36,7 @@ export function shouldShowQr(
 ): boolean {
     const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
 
-    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
+    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_AUTHORIZATION_GRANT_TYPE);
 
     return (
         !!deviceAuthorizationGrantSupported &&
@@ -48,7 +48,7 @@ export function shouldShowQr(
 
 const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, versions, oidcClientConfig, isCrossSigningReady }) => {
     const cli = useMatrixClientContext();
-    const offerShowQr = shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions);
+    const offerShowQr = shouldShowQrForReciprocate(cli, !!isCrossSigningReady, oidcClientConfig, versions);
 
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>

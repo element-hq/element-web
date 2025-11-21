@@ -15,6 +15,8 @@ import {
     type ILoginFlow,
     type LoginRequest,
     type OidcClientConfig,
+    DEVICE_AUTHORIZATION_GRANT_TYPE,
+    type IServerVersions,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -30,7 +32,12 @@ import { isUserRegistrationSupported } from "./utils/oidc/isUserRegistrationSupp
  * LoginFlow type use the client API /login endpoint
  * OidcNativeFlow is specific to this client
  */
-export type ClientLoginFlow = LoginFlow | OidcNativeFlow;
+export type ClientLoginFlow = LoginFlow | OidcNativeFlow | LoginWithQrFlow;
+
+export interface LoginWithQrFlow {
+    type: "loginWithQrFlow";
+    clientId: string;
+}
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
@@ -115,7 +122,17 @@ export default class Login {
                     SdkConfig.get().oidc_static_clients,
                     isRegistration,
                 );
-                return [oidcFlow];
+
+                let possibleQrFlow: LoginWithQrFlow | undefined;
+                try {
+                    const versions = await this.createTemporaryClient().getVersions();
+                    // we reuse the clientId from the oidcFlow for QR login
+                    // it might be that we later find that the homeserver is different and we initialise a new client
+                    possibleQrFlow = tryInitLoginWithQRFlow(this.delegatedAuthentication, versions, oidcFlow.clientId);
+                } catch (e) {
+                    logger.warn("Could not fetch server versions for login with QR support, assuming unsupported", e);
+                }
+                return possibleQrFlow ? [possibleQrFlow, oidcFlow] : [oidcFlow];
             } catch (error) {
                 logger.error(error);
             }
@@ -234,6 +251,30 @@ const tryInitOidcNativeFlow = async (
         type: "oidcNativeFlow",
         clientId,
     } as OidcNativeFlow;
+
+    return flow;
+};
+
+const tryInitLoginWithQRFlow = (
+    oidcClientConfig: OidcClientConfig,
+    versions: IServerVersions,
+    clientId: string,
+): LoginWithQrFlow | undefined => {
+    const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
+
+    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(
+        DEVICE_AUTHORIZATION_GRANT_TYPE,
+    );
+
+    const qrFeatureEnabled = !!deviceAuthorizationGrantSupported && msc4108Supported;
+
+    console.log("qrFeatureEnabled", qrFeatureEnabled);
+    if (!qrFeatureEnabled) return undefined;
+
+    const flow = {
+        type: "loginWithQrFlow",
+        clientId
+    } satisfies LoginWithQrFlow;
 
     return flow;
 };

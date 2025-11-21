@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { DEVICE_CODE_SCOPE, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { DEVICE_AUTHORIZATION_GRANT_TYPE, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
@@ -113,7 +113,7 @@ describe("<UserMenu>", () => {
     it("should render 'Link new device' button in OIDC native mode", async () => {
         sdkContext.client = stubClient();
         const openIdMetadata = mockOpenIdConfiguration("https://issuer/");
-        openIdMetadata.grant_types_supported.push(DEVICE_CODE_SCOPE);
+        openIdMetadata.grant_types_supported.push(DEVICE_AUTHORIZATION_GRANT_TYPE);
         fetchMock.get("https://issuer/.well-known/openid-configuration", openIdMetadata);
         fetchMock.get("https://issuer/jwks", {
             status: 200,

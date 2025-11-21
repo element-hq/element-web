@@ -132,11 +132,6 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         message = _t("auth|qr_code_login|error_rate_limited");
                         break;
 
-                    case ClientRendezvousFailureReason.ETagMissing:
-                        title = _t("error|something_went_wrong");
-                        message = _t("auth|qr_code_login|error_etag_missing");
-                        break;
-
                     case ClientRendezvousFailureReason.HomeserverLacksSupport:
                         success = null;
                         Icon = QrCodeIcon;

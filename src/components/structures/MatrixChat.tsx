@@ -2044,9 +2044,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
+    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, alreadySignedIn = false): Promise<void> => {
         // Create and start the client
-        await Lifecycle.setLoggedIn(credentials);
+        if (!alreadySignedIn) {
+            await Lifecycle.setLoggedIn(credentials);
+        }
         await this.postLoginSetup();
 
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
