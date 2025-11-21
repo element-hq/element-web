@@ -195,6 +195,7 @@ export function createTestClient(): MatrixClient {
                 content: {},
             });
         }),
+        getAccountDataFromServer: jest.fn(),
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         setAccountData: jest.fn(),
         deleteAccountData: jest.fn(),

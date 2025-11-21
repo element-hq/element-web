@@ -132,7 +132,7 @@ describe("ElectronPlatform", () => {
         new ElectronPlatform();
         dispatcher.dispatch(
             {
-                action: "client_started",
+                action: Action.ClientStarted,
             },
             true,
         );

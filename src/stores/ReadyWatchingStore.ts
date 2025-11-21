@@ -77,7 +77,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
                 this.matrixClient = payload.matrixClient;
                 await this.onReady();
             }
-        } else if (payload.action === "on_client_not_viable" || payload.action === Action.OnLoggedOut) {
+        } else if (payload.action === Action.ClientNotViable || payload.action === Action.OnLoggedOut) {
             if (this.matrixClient) {
                 await this.onNotReady();
                 this.matrixClient = undefined;
