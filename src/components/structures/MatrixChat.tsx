@@ -869,6 +869,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case Action.OnLoggedIn:
                 this.stores.client = MatrixClientPeg.safeGet();
+                StorageManager.tryPersistStorage();
+
                 if (
                     // Skip this handling for token login as that always calls onLoggedIn itself
                     !this.tokenLogin &&
@@ -1403,8 +1405,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * crypto is disabled.) XXX: is this a bug or a feature?
      */
     private async onLoggedIn(): Promise<void> {
-        StorageManager.tryPersistStorage();
-
         await this.onShowPostLoginScreen();
     }
 
