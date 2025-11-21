@@ -438,7 +438,7 @@ export async function sendMessageInCurrentRoom(page: Page, message: string): Pro
  * @param isEncrypted - Whether the room should be encrypted
  */
 export async function createRoom(page: Page, roomName: string, isEncrypted: boolean): Promise<void> {
-    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+    await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "New conversation" }).click();
     await page.getByRole("menuitem", { name: "New room" }).click();
 
     const dialog = page.locator(".mx_Dialog");
