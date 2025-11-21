@@ -632,6 +632,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
     }
 
+    private isLoggedInViewPageDisplayed(): boolean {
+        return this.loggedInView.current !== null && this.state.page_type !== undefined;
+    }
+
     private setStateForNewView(state: Partial<IState>): void {
         if (state.view === undefined) {
             throw new Error("setStateForNewView with no view!");
@@ -1097,7 +1101,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.viewWelcome();
             return;
         }
-        if (!this.state.currentRoomId && !this.state.currentUserId) {
+
+        if (!this.state.currentRoomId && !this.state.currentUserId && !this.isLoggedInViewPageDisplayed()) {
             this.viewHome();
         }
     }
@@ -1852,7 +1857,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if we weren't already coming at this from an existing screen
             // and we're logged in, then explicitly default to home.
             // if we're not logged in, then the login flow will do the right thing.
-            if (!this.state.currentRoomId && !this.state.currentUserId) {
+            if (!this.state.currentRoomId && !this.state.currentUserId && !this.isLoggedInViewPageDisplayed()) {
                 this.viewHome();
             }
         } else if (screen === "settings") {
