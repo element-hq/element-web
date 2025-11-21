@@ -600,6 +600,9 @@ async function abortLogin(): Promise<void> {
 
 /** Attempt to restore the session from localStorage or indexeddb.
  *
+ * If the credentials are found, and the session is successfully restored,
+ * emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
+ *
  * @returns true if a session was found; false if no existing session was found.
  *
  * N.B. Lifecycle.js should not maintain any further localStorage state, we
@@ -786,6 +789,8 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
 /**
  * optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
+ *
+ * Emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
  *
  * @param {IMatrixClientCreds} credentials The credentials to use
  * @param {Boolean} clearStorageEnabled True to clear storage before starting the new client
@@ -1018,6 +1023,12 @@ export function isLoggingOut(): boolean {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ *
+ * By the time this method is called, we have successfully logged in if necessary, and the client has been set up with
+ * the access token.
+ *
+ * Emits {@link Acction.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
+ * been started.
  *
  * @param client the matrix client to start
  * @param startSyncing - `true` to actually start syncing the client.

@@ -202,7 +202,10 @@ interface IState {
     hideToSRUsers: boolean;
     syncError: Error | null;
     serverConfig?: ValidatedServerConfig;
+
+    /** Has our MatrixClient started? */
     ready: boolean;
+
     threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     pendingInitialSync?: boolean;
@@ -225,7 +228,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
+
+    /** True if we have successfully completed an OIDC or token login.
+     *
+     * XXX it's unclear if this is ever cleared, so what happens if the user logs out and then logs back in?
+     */
     private tokenLogin?: boolean;
+
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
     private subTitleStatus: string;
@@ -386,6 +395,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await Lifecycle.onSessionLockStolen();
     }
 
+    /**
+     * Perform actions that are specific to a user that has just logged in (compare {@link onLoggedIn}, which, despite
+     * its name, is called when an already-logged-in client is restored at session startup).
+     *
+     * Called when:
+     *
+     *  - We successfully completed an OIDC or token login, via {@link initSession}.
+     *  - The {@link Login} or {@link Register} components notify us that we successfully completed a non-OIDC login or
+     *    registration.
+     *
+     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onLoggedIn} will
+     * have been suppressed (by either {@link tokenLogin} being set, or the view being set to {@link Views.LOGIN} or
+     * {@link Views.REGISTER}).
+     *
+     * {@link onWillStartClient} and {@link onClientStarted} will already have been called (but not necessarily
+     * completed).
+     *
+     * This method either calls {@link onLiggedIn} directly, or switches to {@link Views.E2E_SETUP} or
+     * {@link Views.COMPLETE_SECURITY}, which will later call {@link onCompleteSecurityE2eSetupFinished}.
+     */
     private async postLoginSetup(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
         const cryptoEnabled = Boolean(cli.getCrypto());
@@ -1369,7 +1398,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Called when a new logged in session has started
+     * Called when a new logged in session has started.
+     *
+     * Called:
+     *
+     *  - on {@link Action.OnLoggedIn}, but only when we don't expect a separate call to {@link postLoginSetup}.
+     *  - from {@link postLoginSetup}, when we don't have crypto setup tasks to perform after the login.
+     *
+     * It's never actually called if we have crypto setup tasks to perform after login (which we normally do, unless
+     * crypto is disabled.) XXX: is this a bug or a feature?
      */
     private async onLoggedIn(): Promise<void> {
         ThemeController.isLogin = false;
@@ -1379,6 +1416,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await this.onShowPostLoginScreen();
     }
 
+    /**
+     * Show the first screen after the application is successfully loaded in a logged-in state.
+     *
+     * Called:
+     *
+     *  - by {@link onLoggedIn}
+     *  - by {@link onCompleteSecurityE2eSetupFinished}
+     *
+     * In other words, whenever we think we have completed the login and E2E setup tasks.
+     */
     private async onShowPostLoginScreen(): Promise<void> {
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
@@ -2043,7 +2090,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
-    // complete security / e2e setup has finished
+    /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
     private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
         const forceVerify = await this.shouldForceVerification();
         if (forceVerify) {
