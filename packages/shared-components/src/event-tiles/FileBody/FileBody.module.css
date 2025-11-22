@@ -1,0 +1,84 @@
+/*
+Copyright 2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.root {
+    display: block;
+}
+
+.root > span {
+    display: block;
+    margin-top: var(--cpd-space-2x);
+}
+
+.download {
+    color: var(--cpd-color-text-action-accent);
+    height: var(--cpd-space-9x);
+    margin-top: var(--cpd-space-2x);
+}
+
+.download object {
+    margin-left: -16px;
+    padding-right: 4px;
+    margin-top: -4px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+/* Remove the border and padding for iframes for download links. */
+.download iframe {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    width: 100%;
+}
+
+.info {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font: inherit;
+    display: inline-block;
+}
+
+.infoIcon {
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    border-radius: 20px;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 12px;
+}
+
+.infoIcon::before {
+    content: "";
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+    /* Using a data URL for the attachment icon to avoid external dependencies */
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M12.207 2.793a1 1 0 0 0-1.414 0l-8 8a1 1 0 1 0 1.414 1.414L11 5.414V19a1 1 0 1 0 2 0V5.414l6.793 6.793a1 1 0 0 0 1.414-1.414l-8-8Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-color: var(--cpd-color-icon-secondary);
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
+
+.infoFilename {
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-primary);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    width: calc(100% - 32px - 12px); /* 32px icon, 12px margin on the icon */
+    vertical-align: middle;
+}

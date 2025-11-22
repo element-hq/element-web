@@ -3,19 +3,17 @@
 exports[`<MFileBody/> should show a download button in file rendering type 1`] = `
 <div>
   <span
-    class="mx_MFileBody"
+    class="_root_crpne_8 mx_MFileBody"
   >
     <div
-      class="mx_MFileBody_download"
+      class="_download_crpne_17 mx_MFileBody_download"
     >
       <a
         class="_button_vczzf_8 _has-icon_vczzf_57"
         data-kind="secondary"
         data-size="sm"
-        rel="noreferrer noopener"
         role="link"
         tabindex="0"
-        target="_blank"
       >
         <svg
           aria-hidden="true"

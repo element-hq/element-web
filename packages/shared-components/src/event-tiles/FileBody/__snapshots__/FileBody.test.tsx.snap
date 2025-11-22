@@ -1,0 +1,265 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`FileBody renders decrypt button for encrypted file that hasn't been decrypted 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <button
+      class="mx_MediaBody info mx_MFileBody_info"
+      type="button"
+    >
+      <span
+        class="infoIcon mx_MFileBody_info_icon"
+      />
+      <span
+        class="infoFilename mx_MFileBody_info_filename"
+        title="test-file.pdf"
+      >
+        test-file.pdf
+      </span>
+    </button>
+    <div
+      class="download mx_MFileBody_download"
+    >
+      <button
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+          />
+        </svg>
+        Download
+      </button>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders error message 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <button
+      class="mx_MediaBody info mx_MFileBody_info"
+      type="button"
+    >
+      <span
+        class="infoIcon mx_MFileBody_info_icon"
+      />
+      <span
+        class="infoFilename mx_MFileBody_info_filename"
+        title="test-file.pdf"
+      >
+        test-file.pdf
+      </span>
+    </button>
+    <span>
+      Invalid file
+    </span>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders export mode with link 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <a
+      href="mxc://server/file"
+    >
+      <button
+        class="mx_MediaBody info mx_MFileBody_info"
+        type="button"
+      >
+        <span
+          class="infoIcon mx_MFileBody_info_icon"
+        />
+        <span
+          class="infoFilename mx_MFileBody_info_filename"
+          title="test-file.pdf"
+        >
+          test-file.pdf
+        </span>
+      </button>
+    </a>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders iframe for encrypted file that has been decrypted 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <button
+      class="mx_MediaBody info mx_MFileBody_info"
+      type="button"
+    >
+      <span
+        class="infoIcon mx_MFileBody_info_icon"
+      />
+      <span
+        class="infoFilename mx_MFileBody_info_filename"
+        title="test-file.pdf"
+      >
+        test-file.pdf
+      </span>
+    </button>
+    <div
+      class="download mx_MFileBody_download"
+    >
+      <div
+        aria-hidden="true"
+        style="display: none;"
+      >
+        <a
+          class="_button_vczzf_8 _has-icon_vczzf_57"
+          data-kind="secondary"
+          data-size="sm"
+          role="link"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+            />
+          </svg>
+        </a>
+      </div>
+      <iframe
+        aria-hidden="true"
+        sandbox="allow-scripts allow-downloads"
+        src="usercontent/"
+        title="test-file.pdf"
+      />
+    </div>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders with placeholder and download button for unencrypted file 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <button
+      class="mx_MediaBody info mx_MFileBody_info"
+      type="button"
+    >
+      <span
+        class="infoIcon mx_MFileBody_info_icon"
+      />
+      <span
+        class="infoFilename mx_MFileBody_info_filename"
+        title="test-file.pdf"
+      >
+        test-file.pdf
+      </span>
+    </button>
+    <div
+      class="download mx_MFileBody_download"
+    >
+      <a
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="link"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+          />
+        </svg>
+        Download
+      </a>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders without download link when showDownloadLink is false 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <button
+      class="mx_MediaBody info mx_MFileBody_info"
+      type="button"
+    >
+      <span
+        class="infoIcon mx_MFileBody_info_icon"
+      />
+      <span
+        class="infoFilename mx_MFileBody_info_filename"
+        title="test-file.pdf"
+      >
+        test-file.pdf
+      </span>
+    </button>
+  </span>
+</div>
+`;
+
+exports[`FileBody renders without placeholder when showGenericPlaceholder is false 1`] = `
+<div>
+  <span
+    class="root mx_MFileBody"
+  >
+    <div
+      class="download mx_MFileBody_download"
+    >
+      <a
+        class="_button_vczzf_8 _has-icon_vczzf_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="link"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+          />
+        </svg>
+        Download
+      </a>
+    </div>
+  </span>
+</div>
+`;
