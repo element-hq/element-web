@@ -11,6 +11,7 @@ import React, { type JSX } from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
+import { DateSeparator as SharedDateSeparator } from "@element-hq/web-shared-components";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
@@ -31,7 +32,6 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from "./JumpToDatePicker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import TimelineSeparator from "./TimelineSeparator";
 import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
@@ -267,7 +267,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         this.closeMenu();
     };
 
-    private renderJumpToDateMenu(): React.ReactElement {
+    private renderJumpToDateMenu(label: string): React.ReactElement {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
             const relativeTimeFormat = this.relativeTimeFormat;
@@ -310,7 +310,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 title={_t("room|jump_to_date")}
             >
                 <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
-                    {this.getLabel()}
+                    {label}
                 </h2>
                 <div className="mx_DateSeparator_chevron" />
                 {contextMenu}
@@ -319,21 +319,29 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const label = this.getLabel();
+        const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
 
-        let dateHeaderContent: JSX.Element;
+        // If jump to date is enabled and we're not exporting, we need to wrap the content
+        // in our custom jump-to-date menu button
         if (this.state.jumpToDateEnabled && !this.props.forExport) {
-            dateHeaderContent = this.renderJumpToDateMenu();
-        } else {
-            dateHeaderContent = (
-                <div className="mx_DateSeparator_dateContent">
-                    <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
-                        {label}
-                    </h2>
+            const label = this.getLabel();
+
+            return (
+                <div className="mx_DateSeparator" role="separator" aria-label={label}>
+                    <hr role="none" />
+                    {this.renderJumpToDateMenu(label)}
+                    <hr role="none" />
                 </div>
             );
         }
 
-        return <TimelineSeparator label={label}>{dateHeaderContent}</TimelineSeparator>;
+        // Otherwise, just use the shared component directly
+        return (
+            <SharedDateSeparator
+                ts={this.props.ts}
+                locale={getUserLanguage()}
+                disableRelativeTimestamps={this.props.forExport || disableRelativeTimestamps}
+            />
+        );
     }
 }

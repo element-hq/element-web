@@ -124,7 +124,7 @@ test.describe("HTML Export", () => {
             const zip = await extractZipFileToPath(zipPath, dirPath);
             await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
             await expect(page).toMatchScreenshot("html-export.png", {
-                mask: [page.locator(".mx_TimelineSeparator")],
+                mask: [page.locator(".mx_DateSeparator")],
                 css: `
                     .mx_MessageTimestamp {
                         visibility: hidden;

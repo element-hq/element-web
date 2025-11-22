@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`DateSeparator renders a weekday for dates within the last 6 days 1`] = `
+<div>
+  <div
+    aria-label="Wednesday"
+    class="dateSeparator mx_DateSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading mx_DateSeparator_dateHeading"
+      >
+        Wednesday
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparator renders full date for dates older than 6 days 1`] = `
+<div>
+  <div
+    aria-label="Tue, Oct 1, 2024"
+    class="dateSeparator mx_DateSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading mx_DateSeparator_dateHeading"
+      >
+        Tue, Oct 1, 2024
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparator renders full date when relative timestamps are disabled 1`] = `
+<div>
+  <div
+    aria-label="Sun, Nov 3, 2024"
+    class="dateSeparator mx_DateSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading mx_DateSeparator_dateHeading"
+      >
+        Sun, Nov 3, 2024
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparator renders today's date 1`] = `
+<div>
+  <div
+    aria-label="today"
+    class="dateSeparator mx_DateSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading mx_DateSeparator_dateHeading"
+      >
+        today
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparator renders yesterday's date 1`] = `
+<div>
+  <div
+    aria-label="yesterday"
+    class="dateSeparator mx_DateSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading mx_DateSeparator_dateHeading"
+      >
+        yesterday
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
