@@ -65,7 +65,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             if (monospace) {
                 // Assert that the monospace timer is visible
-                await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", "Fira Code");
+                await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", "\"Fira Code\"");
             }
         };
 
