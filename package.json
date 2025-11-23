@@ -84,7 +84,7 @@
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "1.5.0",
         "@element-hq/web-shared-components": "link:packages/shared-components",
-        "@fontsource/inconsolata": "^5",
+        "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/analytics-events": "^0.30.0",
