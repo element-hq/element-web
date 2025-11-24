@@ -1802,9 +1802,7 @@
         "type_heading": "Poll type",
         "type_open": "Open poll",
         "unable_edit_description": "Sorry, you can't edit a poll after votes have been cast.",
-        "unable_edit_title": "Can't edit poll",
-        "winning_option_label": "this option won the vote",
-        "you_voted_for_this": "you voted for this option"
+        "unable_edit_title": "Can't edit poll"
     },
     "power_level": {
         "admin": "Admin",
