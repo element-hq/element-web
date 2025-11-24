@@ -316,9 +316,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return Promise.reject(err);
             }
         })
-        .finally(function () {
-            if (modal) modal.close();
-        })
         .then(async (res): Promise<void> => {
             roomId = res.room_id;
 
@@ -339,6 +336,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             });
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
+        })
+        .finally(function () {
+            if (modal) modal.close();
         })
         .then(() => {
             if (opts.parentSpace) {
