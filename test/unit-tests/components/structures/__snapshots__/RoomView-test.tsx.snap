@@ -11,7 +11,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -84,7 +84,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -162,7 +162,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -243,7 +243,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -321,7 +321,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -498,7 +498,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -571,7 +571,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -735,7 +735,7 @@ exports[`RoomView invites renders an invite room 1`] = `
         </h3>
         <p>
           <span
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -816,7 +816,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -973,7 +973,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -1245,7 +1245,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1402,7 +1402,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -1612,7 +1612,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1769,7 +1769,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -1979,7 +1979,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2136,7 +2136,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -2196,7 +2196,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2353,7 +2353,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -2591,7 +2591,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -2721,7 +2721,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1jp1e_107"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>

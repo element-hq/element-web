@@ -84,7 +84,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -211,7 +211,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -341,7 +341,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"

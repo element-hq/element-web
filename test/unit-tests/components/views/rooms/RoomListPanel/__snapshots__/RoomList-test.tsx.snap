@@ -39,7 +39,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"
@@ -47,7 +47,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -94,7 +94,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -102,7 +102,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -149,7 +149,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="4"
               data-testid="avatar-img"
               data-type="round"
@@ -157,7 +157,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -204,7 +204,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="5"
               data-testid="avatar-img"
               data-type="round"
@@ -212,7 +212,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -259,7 +259,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="6"
               data-testid="avatar-img"
               data-type="round"
@@ -267,7 +267,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -314,7 +314,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="1"
               data-testid="avatar-img"
               data-type="round"
@@ -322,7 +322,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -369,7 +369,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"
@@ -377,7 +377,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -424,7 +424,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -432,7 +432,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -479,7 +479,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="4"
               data-testid="avatar-img"
               data-type="round"
@@ -487,7 +487,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"
@@ -534,7 +534,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <span
               aria-label="Avatar"
-              class="_avatar_1jp1e_8 mx_BaseAvatar"
+              class="_avatar_zysgz_8 mx_BaseAvatar"
               data-color="5"
               data-testid="avatar-img"
               data-type="round"
@@ -542,7 +542,7 @@ exports[`<RoomList /> should render a room list 1`] = `
             >
               <img
                 alt=""
-                class="_image_1jp1e_43"
+                class="_image_zysgz_43"
                 data-type="round"
                 height="32px"
                 loading="lazy"

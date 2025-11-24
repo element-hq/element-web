@@ -25,7 +25,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
           class="mx_UserMenu_userAvatar"
         >
           <span
-            class="_avatar_1jp1e_8 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="5"
             data-testid="avatar-img"
             data-type="round"

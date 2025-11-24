@@ -10,10 +10,10 @@ exports[`<RoomFacePile /> renders 1`] = `
     tabindex="0"
   >
     <div
-      class="_stacked-avatars_1jp1e_107"
+      class="_stacked-avatars_zysgz_109"
     >
       <span
-        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="4"
         data-testid="avatar-img"
         data-type="round"

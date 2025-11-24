@@ -9,7 +9,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     <button
       aria-label="Open room settings"
       aria-live="off"
-      class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"

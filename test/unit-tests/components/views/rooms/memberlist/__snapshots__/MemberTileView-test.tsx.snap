@@ -19,7 +19,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
           class="mx_MemberTileView_avatar"
         >
           <span
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -93,7 +93,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
           class="mx_MemberTileView_avatar"
         >
           <span
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -167,7 +167,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
           class="mx_MemberTileView_avatar"
         >
           <span
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -224,7 +224,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
         >
           <span
             aria-hidden="true"
-            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
