@@ -4217,10 +4217,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.0.tgz#2e51f39f79ebda985a2f6cf80d567b9307aff03a"
-  integrity sha512-93nYQZMgUt6apjCwwnMhMxN8VYQXN3GYOnwovwJjavImwsCGwI/e853BV/DstrWumYh6k5pZsP9e6AF+nz3SIQ==
+"@vector-im/compound-design-tokens@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.0.0.tgz#a07975ee46307fc31c2ec64a216b6be2b3b27fb3"
+  integrity sha512-Jk0NsLPCvdcuZi6an1cfyf4MDcIuoPlvja5ZWgJcORyGQZV1eLMHPYKShq9gj+EYk/BXZoPvQ1d6/T+/LSCNPA==
 
 "@vector-im/compound-web@^8.3.1":
   version "8.3.1"
@@ -9706,6 +9706,14 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     lodash "^4.17.21"
     minimist "^1.2.8"
     walk "^2.3.15"
+
+matrix-widget-api@^1.10.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
+  integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==
+  dependencies:
+    "@types/events" "^3.0.0"
+    events "^3.2.0"
 
 matrix-widget-api@^1.14.0:
   version "1.14.0"
