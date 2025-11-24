@@ -15,6 +15,7 @@ import {
     RoomStateEvent,
     type SyncState,
     ClientStoppedError,
+    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger as baseLogger, type BaseLogger, LogSpan } from "matrix-js-sdk/src/logger";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -29,7 +30,6 @@ import {
 } from "./toasts/BulkUnverifiedSessionsToast";
 import {
     hideToast as hideSetupEncryptionToast,
-    Kind as SetupKind,
     showToast as showSetupEncryptionToast,
 } from "./toasts/SetupEncryptionToast";
 import {
@@ -65,7 +65,48 @@ export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
-export default class DeviceListener {
+/**
+ * The state of the device and the user's account.
+ */
+export enum DeviceState {
+    /**
+     * The device is in a good state.
+     */
+    OK = "ok",
+    /**
+     * The user needs to set up recovery.
+     */
+    SET_UP_RECOVERY = "set_up_recovery",
+    /**
+     * The device is not verified.
+     */
+    VERIFY_THIS_SESSION = "verify_this_session",
+    /**
+     * Key storage is out of sync (keys are missing locally, from recovery, or both).
+     */
+    KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
+    /**
+     * Key storage is not enabled, and has not been marked as purposely disabled.
+     */
+    TURN_ON_KEY_STORAGE = "turn_on_key_storage",
+    /**
+     * The user's identity needs resetting, due to missing keys.
+     */
+    IDENTITY_NEEDS_RESET = "identity_needs_reset",
+}
+
+/**
+ * The events emitted by {@link DeviceListener}
+ */
+export enum DeviceListenerEvents {
+    DeviceState = "device_state",
+}
+
+type EventHandlerMap = {
+    [DeviceListenerEvents.DeviceState]: (state: DeviceState) => void;
+};
+
+export default class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, EventHandlerMap> {
     private dispatcherRef?: string;
     // device IDs for which the user has dismissed the verify toast ('Later')
     private dismissed = new Set<string>();
@@ -87,6 +128,7 @@ export default class DeviceListener {
     private shouldRecordClientInformation = false;
     private enableBulkUnverifiedSessionsReminder = true;
     private deviceClientInformationSettingWatcherRef: string | undefined;
+    private deviceState: DeviceState = DeviceState.OK;
 
     // Remember the current analytics state to avoid sending the same event multiple times.
     private analyticsVerificationState?: string;
@@ -198,8 +240,8 @@ export default class DeviceListener {
     }
 
     /**
-     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
-     * requires a reset of cross-signing keys.
+     * If the device is in a `DeviceState.KEY_STORAGE_OUT_OF_SYNC` state, check if
+     * it requires a reset of cross-signing keys.
      *
      * We will reset cross-signing keys if both our local cache and 4S don't
      * have all cross-signing keys.
@@ -227,16 +269,15 @@ export default class DeviceListener {
     }
 
     /**
-     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
-     * requires a reset of key backup.
+     * If the device is in a `DeviceState.KEY_STORAGE_OUT_OF_SYNC` state, check if
+     * it requires a reset of key backup.
      *
      * If the user has their recovery key, we need to reset backup if:
      * - the user hasn't disabled backup,
      * - we don't have the backup key cached locally, *and*
      * - we don't have the backup key stored in 4S.
-     * (The user should already have a key backup created at this point,
-     * otherwise `doRecheck` would have triggered a `Kind.TURN_ON_KEY_STORAGE`
-     * condition.)
+     * (The user should already have a key backup created at this point, the
+     * device state would be `DeviceState.TURN_ON_KEY_STORAGE`.)
      *
      * If the user has forgotten their recovery key, we need to reset backup if:
      * - the user hasn't disabled backup, and
@@ -443,9 +484,9 @@ export default class DeviceListener {
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
-        if (this.dismissedThisDeviceToast || allSystemsReady) {
+        if (allSystemsReady) {
             logSpan.info("No toast needed");
-            hideSetupEncryptionToast();
+            this.setDeviceState(DeviceState.OK);
 
             this.checkKeyBackupStatus();
         } else if (await this.shouldShowSetupEncryptionToast()) {
@@ -455,7 +496,7 @@ export default class DeviceListener {
             if (!isCurrentDeviceTrusted) {
                 // the current device is not trusted: prompt the user to verify
                 logSpan.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
-                showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
+                this.setDeviceState(DeviceState.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
@@ -464,27 +505,27 @@ export default class DeviceListener {
                     crossSigningStatus.privateKeysCachedLocally,
                     crossSigningStatus.privateKeysInSecretStorage,
                 );
-                showSetupEncryptionToast(
+                this.setDeviceState(
                     crossSigningStatus.privateKeysInSecretStorage
-                        ? SetupKind.KEY_STORAGE_OUT_OF_SYNC
-                        : SetupKind.IDENTITY_NEEDS_RESET,
+                        ? DeviceState.KEY_STORAGE_OUT_OF_SYNC
+                        : DeviceState.IDENTITY_NEEDS_RESET,
                 );
             } else if (!keyBackupIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: showing TURN_ON_KEY_STORAGE toast");
-                showSetupEncryptionToast(SetupKind.TURN_ON_KEY_STORAGE);
+                this.setDeviceState(DeviceState.TURN_ON_KEY_STORAGE);
             } else if (secretStorageStatus.defaultKeyId === null) {
                 // The user just hasn't set up 4S yet: if they have key
                 // backup, prompt them to turn on recovery too. (If not, they
                 // have explicitly opted out, so don't hassle them.)
                 if (recoveryDisabled) {
                     logSpan.info("Recovery disabled: no toast needed");
-                    hideSetupEncryptionToast();
+                    this.setDeviceState(DeviceState.OK);
                 } else if (keyBackupUploadActive) {
                     logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
-                    showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                    this.setDeviceState(DeviceState.SET_UP_RECOVERY);
                 } else {
                     logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    hideSetupEncryptionToast();
+                    this.setDeviceState(DeviceState.OK);
                 }
             } else {
                 // If we get here, then we are verified, have key backup, and
@@ -501,7 +542,10 @@ export default class DeviceListener {
                     isCurrentDeviceTrusted,
                     backupKeyCached,
                 });
-                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
+                this.setDeviceState(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+            }
+            if (this.dismissedThisDeviceToast) {
+                this.checkKeyBackupStatus();
             }
         } else {
             logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
@@ -594,6 +638,20 @@ export default class DeviceListener {
         // not-disabled, and will prompt the user to create recovery (if
         // missing).
         return recoveryStatus?.enabled === false;
+    }
+
+    public getDeviceState(): DeviceState {
+        return this.deviceState;
+    }
+
+    private setDeviceState(newState: DeviceState): void {
+        this.deviceState = newState;
+        this.emit(DeviceListenerEvents.DeviceState, newState);
+        if (newState === DeviceState.OK || this.dismissedThisDeviceToast) {
+            hideSetupEncryptionToast();
+        } else {
+            showSetupEncryptionToast(newState);
+        }
     }
 
     /**

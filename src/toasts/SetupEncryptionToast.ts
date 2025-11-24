@@ -14,7 +14,7 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 import type React from "react";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
-import DeviceListener from "../DeviceListener";
+import DeviceListener, { DeviceState } from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
@@ -33,127 +33,115 @@ import { PosthogAnalytics } from "../PosthogAnalytics";
 
 const TOAST_KEY = "setupencryption";
 
-const getTitle = (kind: Kind): string => {
-    switch (kind) {
-        case Kind.SET_UP_RECOVERY:
+const getTitle = (state: DeviceState): string => {
+    switch (state) {
+        case DeviceState.SET_UP_RECOVERY:
             return _t("encryption|set_up_recovery");
-        case Kind.VERIFY_THIS_SESSION:
+        case DeviceState.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|key_storage_out_of_sync");
-        case Kind.TURN_ON_KEY_STORAGE:
+        case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage");
-        case Kind.IDENTITY_NEEDS_RESET:
+        case DeviceState.IDENTITY_NEEDS_RESET:
             return _t("encryption|identity_needs_reset");
+        case DeviceState.OK:
+            return "";
     }
 };
 
-const getIcon = (kind: Kind): string | undefined => {
-    switch (kind) {
-        case Kind.SET_UP_RECOVERY:
+const getIcon = (state: DeviceState): string | undefined => {
+    switch (state) {
+        case DeviceState.SET_UP_RECOVERY:
             return undefined;
-        case Kind.VERIFY_THIS_SESSION:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.IDENTITY_NEEDS_RESET:
+        case DeviceState.VERIFY_THIS_SESSION:
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.IDENTITY_NEEDS_RESET:
             return "verification_warning";
-        case Kind.TURN_ON_KEY_STORAGE:
+        case DeviceState.TURN_ON_KEY_STORAGE:
             return "key_storage";
+        case DeviceState.OK:
+            return "";
     }
 };
 
-const getSetupCaption = (kind: Kind): string => {
-    switch (kind) {
-        case Kind.SET_UP_RECOVERY:
+const getSetupCaption = (state: DeviceState): string => {
+    switch (state) {
+        case DeviceState.SET_UP_RECOVERY:
             return _t("action|continue");
-        case Kind.VERIFY_THIS_SESSION:
+        case DeviceState.VERIFY_THIS_SESSION:
             return _t("action|verify");
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|enter_recovery_key");
-        case Kind.TURN_ON_KEY_STORAGE:
+        case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("action|continue");
-        case Kind.IDENTITY_NEEDS_RESET:
+        case DeviceState.IDENTITY_NEEDS_RESET:
             return _t("encryption|reset_identity");
+        case DeviceState.OK:
+            return "";
     }
 };
 
 /**
  * Get the icon to show on the primary button.
- * @param kind
+ * @param state
  */
-const getPrimaryButtonIcon = (kind: Kind): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
-    switch (kind) {
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+const getPrimaryButtonIcon = (state: DeviceState): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
+    switch (state) {
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
             return KeyIcon;
         default:
             return;
     }
 };
 
-const getSecondaryButtonLabel = (kind: Kind): string => {
-    switch (kind) {
-        case Kind.SET_UP_RECOVERY:
+const getSecondaryButtonLabel = (state: DeviceState): string => {
+    switch (state) {
+        case DeviceState.SET_UP_RECOVERY:
             return _t("action|dismiss");
-        case Kind.VERIFY_THIS_SESSION:
+        case DeviceState.VERIFY_THIS_SESSION:
             return _t("encryption|verification|unverified_sessions_toast_reject");
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|forgot_recovery_key");
-        case Kind.TURN_ON_KEY_STORAGE:
+        case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("action|dismiss");
-        case Kind.IDENTITY_NEEDS_RESET:
+        case DeviceState.IDENTITY_NEEDS_RESET:
+            return "";
+        case DeviceState.OK:
             return "";
     }
 };
 
-const getDescription = (kind: Kind): string => {
-    switch (kind) {
-        case Kind.SET_UP_RECOVERY:
+const getDescription = (state: DeviceState): string => {
+    switch (state) {
+        case DeviceState.SET_UP_RECOVERY:
             return _t("encryption|set_up_recovery_toast_description");
-        case Kind.VERIFY_THIS_SESSION:
+        case DeviceState.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
-        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|key_storage_out_of_sync_description");
-        case Kind.TURN_ON_KEY_STORAGE:
+        case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage_description");
-        case Kind.IDENTITY_NEEDS_RESET:
+        case DeviceState.IDENTITY_NEEDS_RESET:
             return _t("encryption|identity_needs_reset_description");
+        case DeviceState.OK:
+            return "";
     }
 };
 
 /**
- * The kind of toast to show.
- */
-export enum Kind {
-    /**
-     * Prompt the user to set up a recovery key
-     */
-    SET_UP_RECOVERY = "set_up_recovery",
-    /**
-     * Prompt the user to verify this session
-     */
-    VERIFY_THIS_SESSION = "verify_this_session",
-    /**
-     * Prompt the user to enter their recovery key
-     */
-    KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
-    /**
-     * Prompt the user to turn on key storage
-     */
-    TURN_ON_KEY_STORAGE = "turn_on_key_storage",
-    /**
-     * Prompt the user to reset their identity
-     */
-    IDENTITY_NEEDS_RESET = "identity_needs_reset",
-}
-
-/**
  * Show a toast prompting the user for some action related to setting up their encryption.
  *
- * @param kind The kind of toast to show
+ * @param state The state of the device
  */
-export const showToast = (kind: Kind): void => {
+export const showToast = (state: DeviceState): void => {
+    if (state === DeviceState.OK) {
+        return hideToast();
+    }
+
     if (
         ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
-            kind: kind as any,
+            kind: state as any,
             storeProvider: { getInstance: () => SetupEncryptionStore.sharedInstance() },
         })
     ) {
@@ -161,13 +149,16 @@ export const showToast = (kind: Kind): void => {
     }
 
     const onPrimaryClick = async (): Promise<void> => {
-        switch (kind) {
-            case Kind.SET_UP_RECOVERY:
-            case Kind.TURN_ON_KEY_STORAGE: {
+        switch (state) {
+            case DeviceState.SET_UP_RECOVERY:
+            case DeviceState.TURN_ON_KEY_STORAGE: {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
-                    name: kind === Kind.SET_UP_RECOVERY ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
+                    name:
+                        state === DeviceState.SET_UP_RECOVERY
+                            ? "ToastSetUpRecoveryClick"
+                            : "ToastTurnOnKeyStorageClick",
                 });
                 // Open the user settings dialog to the encryption tab
                 const payload: OpenToTabPayload = {
@@ -177,10 +168,10 @@ export const showToast = (kind: Kind): void => {
                 defaultDispatcher.dispatch(payload);
                 break;
             }
-            case Kind.VERIFY_THIS_SESSION:
+            case DeviceState.VERIFY_THIS_SESSION:
                 Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
                 break;
-            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
+            case DeviceState.KEY_STORAGE_OUT_OF_SYNC: {
                 const modal = Modal.createDialog(
                     Spinner,
                     undefined,
@@ -221,7 +212,7 @@ export const showToast = (kind: Kind): void => {
                 }
                 break;
             }
-            case Kind.IDENTITY_NEEDS_RESET: {
+            case DeviceState.IDENTITY_NEEDS_RESET: {
                 // Open the user settings dialog to reset identity
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -237,8 +228,8 @@ export const showToast = (kind: Kind): void => {
     };
 
     const onSecondaryClick = async (): Promise<void> => {
-        switch (kind) {
-            case Kind.SET_UP_RECOVERY: {
+        switch (state) {
+            case DeviceState.SET_UP_RECOVERY: {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
@@ -250,7 +241,7 @@ export const showToast = (kind: Kind): void => {
                 deviceListener.dismissEncryptionSetup();
                 break;
             }
-            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
+            case DeviceState.KEY_STORAGE_OUT_OF_SYNC: {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
                 const deviceListener = DeviceListener.sharedInstance();
                 const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
@@ -266,7 +257,7 @@ export const showToast = (kind: Kind): void => {
                 defaultDispatcher.dispatch(payload);
                 break;
             }
-            case Kind.TURN_ON_KEY_STORAGE: {
+            case DeviceState.TURN_ON_KEY_STORAGE: {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
@@ -321,19 +312,19 @@ export const showToast = (kind: Kind): void => {
 
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: getTitle(kind),
-        icon: getIcon(kind),
+        title: getTitle(state),
+        icon: getIcon(state),
         props: {
-            description: getDescription(kind),
-            primaryLabel: getSetupCaption(kind),
-            PrimaryIcon: getPrimaryButtonIcon(kind),
+            description: getDescription(state),
+            primaryLabel: getSetupCaption(state),
+            PrimaryIcon: getPrimaryButtonIcon(state),
             onPrimaryClick,
-            secondaryLabel: getSecondaryButtonLabel(kind),
+            secondaryLabel: getSecondaryButtonLabel(state),
             onSecondaryClick,
-            overrideWidth: kind === Kind.KEY_STORAGE_OUT_OF_SYNC ? "366px" : undefined,
+            overrideWidth: state === DeviceState.KEY_STORAGE_OUT_OF_SYNC ? "366px" : undefined,
         },
         component: GenericToast,
-        priority: kind === Kind.VERIFY_THIS_SESSION ? 95 : 40,
+        priority: state === DeviceState.VERIFY_THIS_SESSION ? 95 : 40,
     });
 };
 
