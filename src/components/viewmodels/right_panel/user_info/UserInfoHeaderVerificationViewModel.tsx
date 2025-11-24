@@ -29,16 +29,6 @@ export interface UserInfoVerificationSectionState {
     verifySelectedUser: () => Promise<void>;
 }
 
-const useHomeserverSupportsCrossSigning = (cli: MatrixClient): boolean => {
-    return useAsyncMemo<boolean>(
-        async () => {
-            return cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
-        },
-        [cli],
-        false,
-    );
-};
-
 const useHasCrossSigningKeys = (cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined => {
     return useAsyncMemo(async () => {
         if (!canVerify) return undefined;
@@ -56,8 +46,6 @@ export const useUserInfoVerificationViewModel = (
 ): UserInfoVerificationSectionState => {
     const cli = useContext(MatrixClientContext);
 
-    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-
     const userTrust = useAsyncMemo<UserVerificationStatus | undefined>(
         async () => cli.getCrypto()?.getUserVerificationStatus(member.userId),
         [member.userId],
@@ -67,13 +55,7 @@ export const useUserInfoVerificationViewModel = (
     const hasUserVerificationStatus = Boolean(userTrust);
     const isUserVerified = Boolean(userTrust?.isVerified());
     const isMe = member.userId === cli.getUserId();
-    const canVerify =
-        hasUserVerificationStatus &&
-        homeserverSupportsCrossSigning &&
-        !isUserVerified &&
-        !isMe &&
-        devices &&
-        devices.length > 0;
+    const canVerify = hasUserVerificationStatus && !isUserVerified && !isMe && devices && devices.length > 0;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
     const verifySelectedUser = (): Promise<void> => verifyUser(cli, member as User);

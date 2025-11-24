@@ -13,15 +13,19 @@ import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
 import { InitialCryptoSetupDialog } from "../../views/dialogs/security/InitialCryptoSetupDialog";
 
 interface IProps {
-    onFinished: () => void;
+    /** Callback which is called if the crypto setup failed, and the user clicked the 'cancel' button */
+    onCancelled: () => void;
 }
 
+/**
+ * An {@link AuthPage} which shows the {@link InitialCryptoSetupDialog}.
+ */
 export default class E2eSetup extends React.Component<IProps> {
     public render(): React.ReactNode {
         return (
             <AuthPage>
                 <CompleteSecurityBody>
-                    <InitialCryptoSetupDialog onFinished={this.props.onFinished} />
+                    <InitialCryptoSetupDialog onCancelled={this.props.onCancelled} />
                 </CompleteSecurityBody>
             </AuthPage>
         );

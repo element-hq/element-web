@@ -23,7 +23,10 @@ test.describe("Key storage out of sync toast", () => {
         await deleteCachedSecrets(page);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await page
+            .getByRole("navigation", { name: "Room list" })
+            .getByRole("button", { name: "New conversation" })
+            .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();
@@ -68,7 +71,10 @@ test.describe("'Turn on key storage' toast", () => {
         await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await page
+            .getByRole("navigation", { name: "Room list" })
+            .getByRole("button", { name: "New conversation" })
+            .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2025 Element Creations Ltd.
  * Copyright 2024 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
@@ -29,7 +30,8 @@ import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydra
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
-import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
+import DeviceListener, { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
+import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 /**
  * The possible states of the component.
@@ -123,14 +125,27 @@ export function ChangeRecoveryKey({
                         if (!crypto) return onFinish();
 
                         try {
-                            // We need to enable the cache to avoid to prompt the user to enter the new key
-                            // when we will try to access the secret storage during the bootstrap
-                            await withSecretStorageKeyCache(async () => {
-                                await crypto.bootstrapSecretStorage({
-                                    setupNewSecretStorage: true,
-                                    createSecretStorageKey: async () => recoveryKey,
+                            const deviceListener = DeviceListener.sharedInstance();
+
+                            // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                            // deviceListener.whilePaused() sets its client to undefined, so
+                            // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                            // the backup state.
+                            const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true);
+                            await deviceListener.whilePaused(async () => {
+                                // We need to enable the cache to avoid to prompt the user to enter the new key
+                                // when we will try to access the secret storage during the bootstrap
+                                await withSecretStorageKeyCache(async () => {
+                                    await crypto.bootstrapSecretStorage({
+                                        setupNewSecretStorage: true,
+                                        createSecretStorageKey: async () => recoveryKey,
+                                    });
+                                    // Reset the key backup if needed
+                                    if (needsBackupReset) {
+                                        await resetKeyBackupAndWait(crypto);
+                                    }
+                                    await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                                 });
-                                await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
                             });
 
                             // Record the fact that the user explicitly enabled recovery.

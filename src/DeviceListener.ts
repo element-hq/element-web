@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
@@ -145,6 +146,25 @@ export default class DeviceListener {
     }
 
     /**
+     * Pause the device listener while a function runs.
+     *
+     * This can be done if the function makes several changes that would trigger
+     * multiple events, to suppress warning toasts until the process is
+     * finished.
+     */
+    public async whilePaused(fn: () => Promise<void>): Promise<void> {
+        const client = this.client;
+        try {
+            this.stop();
+            await fn();
+        } finally {
+            if (client) {
+                this.start(client);
+            }
+        }
+    }
+
+    /**
      * Dismiss notifications about our own unverified devices
      *
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
@@ -175,6 +195,67 @@ export default class DeviceListener {
      */
     public async recordRecoveryDisabled(): Promise<void> {
         await this.client?.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: false });
+    }
+
+    /**
+     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
+     * requires a reset of cross-signing keys.
+     *
+     * We will reset cross-signing keys if both our local cache and 4S don't
+     * have all cross-signing keys.
+     *
+     * In theory, if the set of keys in our cache and in 4S are different, and
+     * we have a complete set between the two, we could be OK, but that
+     * should be exceptionally rare, and is more complicated to detect.
+     */
+    public async keyStorageOutOfSyncNeedsCrossSigningReset(forgotRecovery: boolean): Promise<boolean> {
+        const crypto = this.client?.getCrypto();
+        if (!crypto) {
+            return false;
+        }
+        const crossSigningStatus = await crypto.getCrossSigningStatus();
+        const allCrossSigningSecretsCached =
+            crossSigningStatus.privateKeysCachedLocally.masterKey &&
+            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
+            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
+
+        if (forgotRecovery) {
+            return !allCrossSigningSecretsCached;
+        } else {
+            return !allCrossSigningSecretsCached && !crossSigningStatus.privateKeysInSecretStorage;
+        }
+    }
+
+    /**
+     * If a `Kind.KEY_STORAGE_OUT_OF_SYNC` condition from {@link doRecheck}
+     * requires a reset of key backup.
+     *
+     * If the user has their recovery key, we need to reset backup if:
+     * - the user hasn't disabled backup,
+     * - we don't have the backup key cached locally, *and*
+     * - we don't have the backup key stored in 4S.
+     * (The user should already have a key backup created at this point,
+     * otherwise `doRecheck` would have triggered a `Kind.TURN_ON_KEY_STORAGE`
+     * condition.)
+     *
+     * If the user has forgotten their recovery key, we need to reset backup if:
+     * - the user hasn't disabled backup, and
+     * - we don't have the backup key locally.
+     */
+    public async keyStorageOutOfSyncNeedsBackupReset(forgotRecovery: boolean): Promise<boolean> {
+        const crypto = this.client?.getCrypto();
+        if (!crypto) {
+            return false;
+        }
+        const shouldHaveBackup = !(await this.recheckBackupDisabled(this.client!));
+        const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
+        const backupKeyStored = await this.client!.isKeyBackupKeyStored();
+
+        if (forgotRecovery) {
+            return shouldHaveBackup && !backupKeyCached;
+        } else {
+            return shouldHaveBackup && !backupKeyCached && !backupKeyStored;
+        }
     }
 
     private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
@@ -318,12 +399,6 @@ export default class DeviceListener {
 
         const cli = this.client;
 
-        // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
-        if (!(await cli.isVersionSupported("v1.1"))) {
-            logSpan.debug("cross-signing not supported");
-            return;
-        }
-
         const crypto = cli.getCrypto();
         if (!crypto) {
             logSpan.debug("crypto not enabled");
@@ -363,7 +438,10 @@ export default class DeviceListener {
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const allSystemsReady = isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk;
+        const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
+
+        const allSystemsReady =
+            isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk && backupKeyCached;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
@@ -407,15 +485,22 @@ export default class DeviceListener {
                 }
             } else {
                 // If we get here, then we are verified, have key backup, and
-                // 4S, but crypto.isSecretStorageReady returned false, which
-                // means that 4S doesn't have all the secrets.
-                logSpan.warn("4S is missing secrets", {
+                // 4S, but allSystemsReady is false, which means that either
+                // secretStorageStatus.ready is false (which means that 4S
+                // doesn't have all the secrets), or we don't have the backup
+                // key cached locally.
+                logSpan.warn("4S is missing secrets or backup key not cached", {
                     crossSigningReady,
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
+                    backupKeyCached,
                 });
-                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+                // We use the right toast variant based on whether the backup
+                // key is missing locally.  If any of the cross-signing keys are
+                // missing locally, that is handled by the
+                // `!allCrossSigningSecretsCached` branch above.
+                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             }
         } else {
             logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
