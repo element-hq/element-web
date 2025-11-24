@@ -441,8 +441,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 
 async function enableStateEventEncryption(client: MatrixClient, room: Room, opts: IOpts): Promise<void> {
     // Don't send our state events until encryption is enabled.
-    // (If this times out, we will send our initial state events unencrypted,
-    // but the room will still be functional.)
+    // If this times out, we throw since we don't want to send the events unencrypted.
     await waitForRoomEncryption(room);
 
     // Set room name
@@ -483,8 +482,8 @@ async function waitForRoomEncryption(room: Room): Promise<void> {
         const timeout = setTimeout(() => {
             logger.warn("Timed out while waiting for room to enable encryption");
             roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
-            resolve();
-        }, 3000);
+            reject("Timed out while waiting for room to enable encryption");
+        }, 30000);
 
         const onRoomStateUpdate = (state: RoomState): void => {
             if (state.getStateEvents(EventType.RoomEncryption, "")) {
