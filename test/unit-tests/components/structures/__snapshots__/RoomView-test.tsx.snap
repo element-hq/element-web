@@ -11,7 +11,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -84,7 +84,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -162,7 +162,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -243,7 +243,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -321,7 +321,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -498,7 +498,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     >
       <span
         aria-label="Open room settings"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -571,7 +571,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -735,7 +735,7 @@ exports[`RoomView invites renders an invite room 1`] = `
         </h3>
         <p>
           <span
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -774,7 +774,7 @@ exports[`RoomView invites renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_vczzf_8 _destructive_vczzf_107"
+          class="_button_187yx_8 _destructive_187yx_107"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -816,7 +816,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -859,7 +859,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -887,7 +887,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -913,7 +913,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -925,7 +925,12 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -940,7 +945,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -968,7 +973,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -1240,7 +1245,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1283,7 +1288,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1311,7 +1316,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1337,7 +1342,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1349,7 +1354,12 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -1364,7 +1374,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1392,7 +1402,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -1602,7 +1612,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -1645,7 +1655,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1673,7 +1683,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1699,7 +1709,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1711,7 +1721,12 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -1726,7 +1741,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1754,7 +1769,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -1964,7 +1979,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2007,7 +2022,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2035,7 +2050,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2061,7 +2076,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2073,7 +2088,12 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -2088,7 +2108,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2116,7 +2136,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -2176,7 +2196,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -2219,7 +2239,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2247,7 +2267,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2273,7 +2293,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2285,7 +2305,12 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -2300,7 +2325,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2328,7 +2353,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -2566,7 +2591,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            class="_avatar_1jp1e_8 mx_BaseAvatar _avatar-imageless_1jp1e_54"
             data-color="2"
             data-testid="avatar-img"
             data-type="round"
@@ -2609,7 +2634,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2636,7 +2661,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2648,7 +2673,12 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                  clip-rule="evenodd"
+                  d="M15.792 3A4 4 0 0 0 22 7.621V17a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2zM7 12a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .425.287.713Q6.575 14 7 14h6a.97.97 0 0 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12zm0-4a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .425.287.713Q6.575 10 7 10h10a.97.97 0 0 0 .713-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 17 8z"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
                 />
               </svg>
             </div>
@@ -2663,7 +2693,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2691,7 +2721,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_1jp1e_107"
               />
               0
             </div>
@@ -2768,7 +2798,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 tabindex="0"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg

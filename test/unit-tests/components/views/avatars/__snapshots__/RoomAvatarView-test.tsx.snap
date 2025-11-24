@@ -4,7 +4,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
 <DocumentFragment>
   <span
     aria-label="Avatar"
-    class="_avatar_1qbcf_8 mx_BaseAvatar"
+    class="_avatar_1jp1e_8 mx_BaseAvatar"
     data-color="1"
     data-testid="avatar-img"
     data-type="round"
@@ -12,7 +12,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
   >
     <img
       alt=""
-      class="_image_1qbcf_41"
+      class="_image_1jp1e_43"
       data-type="round"
       height="32px"
       loading="lazy"
@@ -31,7 +31,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -39,7 +39,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -74,7 +74,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -82,7 +82,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -117,7 +117,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -125,7 +125,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -160,7 +160,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -168,7 +168,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -216,7 +216,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -224,7 +224,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -274,7 +274,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -282,7 +282,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -332,7 +332,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_1jp1e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -340,7 +340,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"

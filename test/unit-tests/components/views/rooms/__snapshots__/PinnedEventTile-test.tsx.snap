@@ -8,7 +8,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
   >
     <div>
       <span
-        class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1jp1e_54"
         data-color="2"
         data-testid="avatar-img"
         data-type="round"
@@ -46,7 +46,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -87,7 +87,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
   >
     <div>
       <span
-        class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_1jp1e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1jp1e_54"
         data-color="2"
         data-testid="avatar-img"
         data-type="round"
@@ -125,7 +125,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -164,10 +164,13 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M7 10a.97.97 0 0 1-.713-.287A.97.97 0 0 1 6 9q0-.424.287-.713A.97.97 0 0 1 7 8h10q.424 0 .712.287Q18 8.576 18 9t-.288.713A.97.97 0 0 1 17 10zm0 4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 6 13q0-.424.287-.713A.97.97 0 0 1 7 12h6q.424 0 .713.287.287.288.287.713 0 .424-.287.713A.97.97 0 0 1 13 14z"
+            d="M13 14H7a.97.97 0 0 1-.713-.287A.97.97 0 0 1 6 13q0-.424.287-.713A.97.97 0 0 1 7 12h6q.424 0 .713.287.287.288.287.713 0 .424-.287.713A.97.97 0 0 1 13 14m4-4H7a.97.97 0 0 1-.713-.287A.97.97 0 0 1 6 9q0-.424.287-.713A.97.97 0 0 1 7 8h10q.424 0 .712.287Q18 8.576 18 9t-.288.713A.97.97 0 0 1 17 10"
           />
           <path
-            d="M3.707 21.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6zM6 17h14V5H4v13.172l.586-.586A2 2 0 0 1 6 17"
+            d="M15.792 3a4 4 0 0 0-.26 2H4v13.172l.586-.586.146-.133A2 2 0 0 1 6 17h14V8.468a4 4 0 0 0 2-.847V17a2 2 0 0 1-2 2H6l-2.293 2.293-.123.105a1 1 0 0 1-1.571-.65L2 20.585V5a2 2 0 0 1 2-2z"
+          />
+          <path
+            d="M19.5 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5"
           />
         </svg>
         <span>
@@ -327,7 +330,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <div
-    class="_separator_7ckbw_8"
+    class="_separator_cqpyv_8"
     data-kind="primary"
     data-orientation="horizontal"
     role="separator"

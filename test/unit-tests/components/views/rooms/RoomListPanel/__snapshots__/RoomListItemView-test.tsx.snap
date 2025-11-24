@@ -15,7 +15,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar"
+      class="_avatar_1jp1e_8 mx_BaseAvatar"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"
@@ -23,7 +23,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -66,7 +66,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar"
+      class="_avatar_1jp1e_8 mx_BaseAvatar"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"
@@ -74,7 +74,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -115,7 +115,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
           />
         </svg>
         <span
-          class="_unread-counter_9mg0k_8"
+          class="_unread-counter_1147r_8"
         >
           1
         </span>
@@ -140,7 +140,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar"
+      class="_avatar_1jp1e_8 mx_BaseAvatar"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"
@@ -148,7 +148,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -191,7 +191,7 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
   >
     <span
       aria-label="Avatar"
-      class="_avatar_1qbcf_8 mx_BaseAvatar"
+      class="_avatar_1jp1e_8 mx_BaseAvatar"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"
@@ -199,7 +199,7 @@ exports[`<RoomListItemView /> should render a room item with a message preview 1
     >
       <img
         alt=""
-        class="_image_1qbcf_41"
+        class="_image_1jp1e_43"
         data-type="round"
         height="32px"
         loading="lazy"
