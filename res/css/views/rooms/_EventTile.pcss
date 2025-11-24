@@ -296,13 +296,11 @@ $left-gutter: 64px;
             display: flex;
             align-items: center;
 
-            /* Need to use important to override the js provided height and width values. */
+            /* Need to use important to override the js calculated values. */
             > .mx_BaseAvatar,
             > .mx_BaseAvatar > * {
-                height: $font-14px !important;
-                width: $font-14px !important;
                 font-size: $font-10px !important;
-                line-height: $font-15px !important;
+                line-height: calc($font-15px - 2px) !important;
             }
         }
 
