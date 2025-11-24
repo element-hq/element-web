@@ -1814,10 +1814,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.10.tgz#a2a1e3812d14525f725d011a73eceb41fef5bc1c"
   integrity sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==
 
-"@fontsource/inconsolata@^5":
-  version "5.2.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.2.8.tgz#593859a9229939558219efb9c894f9f5ee6c491a"
-  integrity sha512-lIZW+WOZYpUH91g9r6rYYhfTmptF3YPPM54ZOs8IYVeeL4SeiAu4tfj7mdr8llYEq31DLYgi6JtGIJa192gB0Q==
+"@fontsource/fira-code@^5":
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/fira-code/-/fira-code-5.2.7.tgz#9ecbd909d53e7196a5d895b601747fe34491fc6a"
+  integrity sha512-tnB9NNund9TwIym8/7DMJe573nlPEQb+fKUV5GL8TBYXjIhDvL0D7mgmNVNQUPhXp+R7RylQeiBdkA4EbOHPGQ==
 
 "@fontsource/inter@^5":
   version "5.2.8"
@@ -4218,8 +4218,9 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.40.0":
   version "2.40.0"
@@ -9686,14 +9687,6 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     lodash "^4.17.21"
     minimist "^1.2.8"
     walk "^2.3.15"
-
-matrix-widget-api@^1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.14.0.tgz#aa90c40ace27d3165299f7dbc760a53001ce1446"
-  integrity sha512-DDvZGOQhI/rilPWg5VlLN7pHIsPt0Jt14lsuHDP+KU+fmpAQNITJ6aIld1ZoXWsrVGv2PS3x6K/MHtfruIOQJQ==
-  dependencies:
-    "@types/events" "^3.0.0"
-    events "^3.2.0"
 
 matrix-widget-api@^1.14.0:
   version "1.14.0"
