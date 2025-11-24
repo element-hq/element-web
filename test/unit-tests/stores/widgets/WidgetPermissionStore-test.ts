@@ -93,7 +93,7 @@ describe("WidgetPermissionStore", () => {
         expect(store2).toStrictEqual(store);
     });
     it("auto-approves OIDC requests for element-call", async () => {
-        new ElementWidgetDriver([], elementCallWidget, WidgetKind.Room, true, roomId);
+        new ElementWidgetDriver(elementCallWidget, WidgetKind.Room, true, roomId);
         expect(widgetPermissionStore.getOIDCState(elementCallWidget, WidgetKind.Room, roomId)).toEqual(
             OIDCState.Allowed,
         );

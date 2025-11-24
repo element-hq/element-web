@@ -92,7 +92,6 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     // TODO: Refactor widgetKind into the Widget class
     public constructor(
-        allowedCapabilities: Capability[],
         private forWidget: Widget,
         private forWidgetKind: WidgetKind,
         virtual: boolean,
@@ -103,11 +102,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
-        this.allowedCapabilities = new Set([
-            ...allowedCapabilities,
-            MatrixCapabilities.Screenshots,
-            ElementWidgetCapabilities.RequiresClient,
-        ]);
+        this.allowedCapabilities = new Set([MatrixCapabilities.Screenshots, ElementWidgetCapabilities.RequiresClient]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {

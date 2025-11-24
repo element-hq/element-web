@@ -49,7 +49,6 @@ describe("ElementWidgetDriver", () => {
 
     const mkDefaultDriver = (): WidgetDriver =>
         new ElementWidgetDriver(
-            [],
             new Widget({
                 id: "test",
                 creatorUserId: "@alice:example.org",
@@ -74,7 +73,6 @@ describe("ElementWidgetDriver", () => {
 
     it("auto-approves capabilities of virtual Element Call widgets", async () => {
         const driver = new ElementWidgetDriver(
-            [],
             new Widget({
                 id: "group_call",
                 creatorUserId: "@alice:example.org",

@@ -14,6 +14,7 @@ import {
     ClientEvent,
     RoomStateEvent,
     type ReceivedToDeviceMessage,
+    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
@@ -34,7 +35,6 @@ import {
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
-import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, getUserLanguage } from "../../languageHandler";
@@ -46,12 +46,11 @@ import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
-import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
-import { type IApp, isAppWidget } from "../WidgetStore";
+import { isAppWidget } from "../WidgetStore";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
@@ -65,18 +64,6 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Purge this code of its overgrown hacks and compatibility shims.
-
-interface IAppTileProps {
-    // Note: these are only the props we care about
-    app: IApp | IWidget;
-    room?: Room; // without a room it is a user widget
-    userId: string;
-    creatorUserId: string;
-    waitForIframeLoad: boolean;
-    whitelistCapabilities?: string[];
-    userWidget: boolean;
-    stickyPromise?: () => Promise<void>;
-}
 
 // TODO: Don't use this. We should avoid overriding/mocking matrix-widget-api
 // behavior and instead strive to use widgets in more transparent ways.
@@ -153,13 +140,38 @@ export class ElementWidget extends Widget {
     }
 }
 
+export enum WidgetMessagingEvent {
+    Start = "start",
+    Stop = "stop",
+}
+
+interface WidgetMessagingEventMap {
+    [WidgetMessagingEvent.Start]: (widgetApi: ClientWidgetApi) => void;
+    [WidgetMessagingEvent.Stop]: (widgetApi: ClientWidgetApi) => void;
+}
+
+interface WidgetMessagingOptions {
+    app: IWidget;
+    room?: Room; // without a room it is a user widget
+    userId: string;
+    creatorUserId: string;
+    waitForIframeLoad: boolean;
+    userWidget: boolean;
+    /**
+     * If defined this async method will be called when the widget requests to become sticky.
+     * It will only become sticky once the returned promise resolves.
+     * This is useful because: Widget B is sticky. Making widget A sticky will kill widget B immediately.
+     * This promise allows to do Widget B related cleanup before Widget A becomes sticky. (e.g. hangup a Voip call)
+     */
+    stickyPromise?: () => Promise<void>;
+}
+
 /**
  * A running instance of a widget, associated with an iframe and a messaging transport.
  */
-export class WidgetMessaging extends EventEmitter {
+export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
     private client: MatrixClient;
     private iframe: HTMLIFrameElement | null = null;
-    private mockWidget: ElementWidget;
     private scalarToken?: string;
     private roomId?: string;
     // The room that we're currently allowing the widget to interact with. Only
@@ -174,22 +186,16 @@ export class WidgetMessaging extends EventEmitter {
     // Holds events that should be fed to the widget once they finish decrypting
     private readonly eventsToFeed = new WeakSet<MatrixEvent>();
 
-    public constructor(private appTileProps: IAppTileProps) {
+    public constructor(
+        private readonly widget: ElementWidget,
+        options: WidgetMessagingOptions,
+    ) {
         super();
         this.client = MatrixClientPeg.safeGet();
-
-        let app = appTileProps.app;
-        // Backwards compatibility: not all old widgets have a creatorUserId
-        if (!app.creatorUserId) {
-            app = objectShallowClone(app); // clone to prevent accidental mutation
-            app.creatorUserId = this.client.getUserId()!;
-        }
-
-        this.mockWidget = new ElementWidget(app);
-        this.roomId = appTileProps.room?.roomId;
-        this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
-        this.virtual = isAppWidget(app) && app.eventId === undefined;
-        this.stickyPromise = appTileProps.stickyPromise;
+        this.roomId = options.room?.roomId;
+        this.kind = options.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
+        this.virtual = isAppWidget(options.app) && options.app.eventId === undefined;
+        this.stickyPromise = options.stickyPromise;
     }
 
     private _widgetApi: ClientWidgetApi | null = null;
@@ -227,7 +233,7 @@ export class WidgetMessaging extends EventEmitter {
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
         };
-        const templated = this.mockWidget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
+        const templated = this.widget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
 
         const parsed = new URL(templated);
 
@@ -235,7 +241,7 @@ export class WidgetMessaging extends EventEmitter {
         // TODO: Replace these with proper widget params
         // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
         if (!opts?.asPopout) {
-            parsed.searchParams.set("widgetId", this.mockWidget.id);
+            parsed.searchParams.set("widgetId", this.widget.id);
             parsed.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
 
             // Give the widget a scalar token if we're supposed to (more legacy)
@@ -257,7 +263,7 @@ export class WidgetMessaging extends EventEmitter {
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
-            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget, this.roomId);
+            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.widget, this.roomId);
             this.widgetApi?.transport.reply(ev.detail, {}); // ack
         } else {
             this.widgetApi?.transport.reply(ev.detail, {
@@ -286,28 +292,15 @@ export class WidgetMessaging extends EventEmitter {
         if (this.widgetApi !== null) return;
 
         this.iframe = iframe;
-        const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new ElementWidgetDriver(
-            allowedCapabilities,
-            this.mockWidget,
-            this.kind,
-            this.virtual,
-            this.roomId,
-        );
+        const driver = new ElementWidgetDriver(this.widget, this.kind, this.virtual, this.roomId);
 
-        this.widgetApi = new ClientWidgetApi(this.mockWidget, iframe, driver);
-        this.widgetApi.on("preparing", () => this.emit("preparing"));
-        this.widgetApi.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
+        this.widgetApi = new ClientWidgetApi(this.widget, iframe, driver);
         this.widgetApi.once("ready", () => {
-            WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.widgetApi!);
-            this.emit("ready");
-
             this.themeWatcher.start();
             this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
             // Theme may have changed while messaging was starting
             this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         });
-        this.widgetApi.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.widgetApi.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
 
         // When widgets are listening to events, we need to make sure they're only
@@ -379,7 +372,7 @@ export class WidgetMessaging extends EventEmitter {
                     }
                     // Stop being persistent can be done instantly
                     ActiveWidgetStore.instance.setWidgetPersistence(
-                        this.mockWidget.id,
+                        this.widget.id,
                         this.roomId ?? null,
                         ev.detail.data.value,
                     );
@@ -403,13 +396,13 @@ export class WidgetMessaging extends EventEmitter {
                     defaultDispatcher.dispatch({
                         action: "m.sticker",
                         data: ev.detail.data,
-                        widgetId: this.mockWidget.id,
+                        widgetId: this.widget.id,
                     });
                 }
             },
         );
 
-        if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
+        if (WidgetType.STICKERPICKER.matches(this.widget.type)) {
             this.widgetApi.on(
                 `action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
@@ -436,7 +429,7 @@ export class WidgetMessaging extends EventEmitter {
             );
         }
 
-        if (WidgetType.JITSI.matches(this.mockWidget.type)) {
+        if (WidgetType.JITSI.matches(this.widget.type)) {
             this.widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IHangupCallApiRequest>) => {
                 ev.preventDefault();
                 if (ev.detail.data?.errorMessage) {
@@ -450,6 +443,8 @@ export class WidgetMessaging extends EventEmitter {
                 this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
             });
         }
+
+        this.emit(WidgetMessagingEvent.Start, this.widgetApi);
     }
 
     public async prepare(): Promise<void> {
@@ -457,10 +452,8 @@ export class WidgetMessaging extends EventEmitter {
         await (WidgetVariableCustomisations?.isReady?.() ?? Promise.resolve());
 
         if (this.scalarToken) return;
-        const existingMessaging = WidgetMessagingStore.instance.getMessaging(this.mockWidget, this.roomId);
-        if (existingMessaging) this.widgetApi = existingMessaging;
         try {
-            if (WidgetUtils.isScalarUrl(this.mockWidget.templateUrl)) {
+            if (WidgetUtils.isScalarUrl(this.widget.templateUrl)) {
                 const managers = IntegrationManagers.sharedInstance();
                 if (managers.hasManager()) {
                     // TODO: Pick the right manager for the widget
@@ -494,15 +487,16 @@ export class WidgetMessaging extends EventEmitter {
             // at a page that is reasonably safe to use in the event the iframe
             // doesn't wink away.
             this.iframe!.src = "about:blank";
-        } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.mockWidget.id, this.roomId ?? null)) {
+        } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.widget.id, this.roomId ?? null)) {
             logger.log("Skipping destroy - persistent widget");
             return;
         }
 
-        WidgetMessagingStore.instance.stopMessaging(this.mockWidget, this.roomId);
-        this.widgetApi?.removeAllListeners(); // Guard against the 'ready' event firing after stopping
+        this.emit(WidgetMessagingEvent.Stop, this.widgetApi);
+        this.widgetApi?.removeAllListeners(); // Insurance against resource leaks
         this.widgetApi = null;
         this.iframe = null;
+        WidgetMessagingStore.instance.stopMessaging(this.widget, this.roomId);
 
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 

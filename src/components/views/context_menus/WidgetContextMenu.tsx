@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ComponentProps, useContext } from "react";
-import { type ClientWidgetApi, type IWidget, MatrixCapabilities } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
@@ -28,7 +28,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { ElementWidget } from "../../../stores/widgets/WidgetMessaging";
+import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {
@@ -69,10 +69,10 @@ const showDeleteButton = (canModify: boolean, onDeleteClick: undefined | (() => 
     return !!onDeleteClick || canModify;
 };
 
-const showSnapshotButton = (widgetMessaging: ClientWidgetApi | undefined): boolean => {
+const showSnapshotButton = (widgetMessaging: WidgetMessaging | undefined): boolean => {
     return (
         SettingsStore.getValue("enableWidgetScreenshots") &&
-        !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)
+        !!widgetMessaging?.widgetApi?.hasCapability(MatrixCapabilities.Screenshots)
     );
 };
 
@@ -123,7 +123,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     if (roomId && showStreamAudioStreamButton(app)) {
         const onStreamAudioClick = async (): Promise<void> => {
             try {
-                await startJitsiAudioLivestream(cli, widgetMessaging!, roomId);
+                await startJitsiAudioLivestream(cli, widgetMessaging!.widgetApi!, roomId);
             } catch (err) {
                 logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
@@ -161,7 +161,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     let snapshotButton: JSX.Element | undefined;
     if (showSnapshotButton(widgetMessaging)) {
         const onSnapshotClick = (): void => {
-            widgetMessaging
+            widgetMessaging?.widgetApi
                 ?.takeScreenshot()
                 .then((data) => {
                     dis.dispatch({

@@ -24,13 +24,14 @@ import { type Optional } from "matrix-events-sdk";
 
 import { stubClient, mkRoom, mkEvent } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
+import { ElementWidget, WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
+import { type IApp } from "../../../../src/utils/WidgetUtils-types";
 
 jest.mock("matrix-widget-api", () => ({
     ...jest.requireActual("matrix-widget-api"),
@@ -46,14 +47,15 @@ describe("WidgetMessaging", () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
 
-        widget = new WidgetMessaging({
-            app: {
-                id: "test",
-                creatorUserId: "@alice:example.org",
-                type: "example",
-                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
-                roomId: "!1:example.org",
-            },
+        const app: IApp = {
+            id: "test",
+            creatorUserId: "@alice:example.org",
+            type: "example",
+            url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+            roomId: "!1:example.org",
+        };
+        widget = new WidgetMessaging(new ElementWidget(app), {
+            app,
             room: mkRoom(client, "!1:example.org"),
             userId: "@alice:example.org",
             creatorUserId: "@alice:example.org",
@@ -315,14 +317,15 @@ describe("WidgetMessaging with stickyPromise", () => {
                 }, 1000);
             });
         };
-        widget = new WidgetMessaging({
-            app: {
-                id: "test",
-                creatorUserId: "@alice:example.org",
-                type: "example",
-                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
-                roomId: "!1:example.org",
-            },
+        const app: IApp = {
+            id: "test",
+            creatorUserId: "@alice:example.org",
+            type: "example",
+            url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
+            roomId: "!1:example.org",
+        };
+        widget = new WidgetMessaging(new ElementWidget(app), {
+            app,
             room: mkRoom(client, "!1:example.org"),
             userId: "@alice:example.org",
             creatorUserId: "@alice:example.org",
@@ -372,14 +375,15 @@ describe("WidgetMessaging as an account widget", () => {
         >;
         getRoomId.mockReturnValue("!1:example.org");
 
-        widget = new WidgetMessaging({
-            app: {
-                id: "test",
-                creatorUserId: "@alice:example.org",
-                type: "example",
-                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
-                roomId: "!1:example.org",
-            },
+        const app: IApp = {
+            id: "test",
+            creatorUserId: "@alice:example.org",
+            type: "example",
+            url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+            roomId: "!1:example.org",
+        };
+        widget = new WidgetMessaging(new ElementWidget(app), {
+            app,
             userId: "@alice:example.org",
             creatorUserId: "@alice:example.org",
             waitForIframeLoad: true,
