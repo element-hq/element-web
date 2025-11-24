@@ -55,20 +55,25 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { chi
     answer,
     onOptionSelected,
 }) => {
-    // Build comprehensive aria-label
-    let ariaLabel = `${_t("poll|options_label", { number: optionNumber })}, ${answer.text}`;
+    let ariaLabel: string;
 
-    if (displayVoteCount) {
-        const votesText = _t("timeline|m.poll|count_of_votes", { count: voteCount });
-        if (isWinner) {
-            ariaLabel += `, ${_t("poll|winning_option_label")}, ${votesText}`;
-        } else {
-            ariaLabel += `, ${votesText}`;
-        }
-    }
-
-    if (isChecked) {
-        ariaLabel += `, ${_t("poll|you_voted_for_this")}`;
+    if (displayVoteCount && isWinner) {
+        ariaLabel = _t("poll|option_label_winning_with_total", {
+            number: optionNumber,
+            answer: answer.text,
+            count: voteCount,
+        });
+    } else if (displayVoteCount) {
+        ariaLabel = _t("poll|option_label_with_total", {
+            number: optionNumber,
+            answer: answer.text,
+            count: voteCount,
+        });
+    } else {
+        ariaLabel = _t("poll|option_label", {
+            number: optionNumber,
+            answer: answer.text,
+        });
     }
 
     return (

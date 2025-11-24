@@ -140,7 +140,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 3, Italian, this option won the vote, 2 votes, you voted for this option"
+            aria-label="Option 3, Italian, winning option, 2 votes"
             disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
@@ -286,7 +286,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 1, Pizza, this option won the vote, 2 votes, you voted for this option"
+            aria-label="Option 1, Pizza, winning option, 2 votes"
             disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
@@ -445,7 +445,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 4, Wings, this option won the vote, 2 votes, you voted for this option"
+            aria-label="Option 4, Wings, winning option, 2 votes"
             disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
@@ -1117,7 +1117,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 3, Italian, 3 votes, you voted for this option"
+            aria-label="Option 3, Italian, 3 votes"
             name="poll_answer_select-$mypoll"
             type="radio"
             value="italian"
@@ -1640,7 +1640,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 4, Wings, 1 vote, you voted for this option"
+            aria-label="Option 4, Wings, 1 vote"
             name="poll_answer_select-$mypoll"
             type="radio"
             value="wings"
@@ -1730,7 +1730,7 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 1, Pizza, this option won the vote, 2 votes, you voted for this option"
+            aria-label="Option 1, Pizza, winning option, 2 votes"
             disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
@@ -1889,7 +1889,7 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
           class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
-            aria-label="Option 4, Wings, this option won the vote, 2 votes, you voted for this option"
+            aria-label="Option 4, Wings, winning option, 2 votes"
             disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"

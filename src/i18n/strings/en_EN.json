@@ -1773,6 +1773,15 @@
         "options_add_button": "Add option",
         "options_heading": "Create options",
         "options_label": "Option %(number)s",
+        "option_label": "Option %(number)s, %(answer)s",
+        "option_label_with_total": {
+            "one": "Option %(number)s, %(answer)s, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, %(count)s votes"
+        },
+        "option_label_winning_with_total": {
+            "one": "Option %(number)s, %(answer)s, winning option, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, winning option, %(count)s votes"
+        },
         "options_placeholder": "Write an option",
         "poll_label": "Poll",
         "topic_heading": "What is your poll question or topic?",
