@@ -252,6 +252,7 @@ export interface Settings {
     "showJoinLeaves": IBaseSetting<boolean>;
     "showAvatarChanges": IBaseSetting<boolean>;
     "showDisplaynameChanges": IBaseSetting<boolean>;
+    "showServerAclChanges": IBaseSetting<boolean>;
     "showReadReceipts": IBaseSetting<boolean>;
     "showTwelveHourTimestamps": IBaseSetting<boolean>;
     "alwaysShowTimestamps": IBaseSetting<boolean>;
@@ -809,6 +810,12 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|show_displayname_changes"),
         default: true,
         invertedSettingName: "hideDisplaynameChanges",
+    },
+    "showServerAclChanges": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        displayName: _td("settings|show_server_acl_changes"),
+        default: true,
+        invertedSettingName: "hideServerAclChanges",
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,

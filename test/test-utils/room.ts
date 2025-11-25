@@ -75,6 +75,7 @@ export function getRoomContext(room: Room, override: Partial<RoomContextType>): 
         showJoinLeaves: true,
         showAvatarChanges: true,
         showDisplaynameChanges: true,
+        showServerAclChanges: true,
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
         mainSplitContentType: MainSplitContentType.Timeline,

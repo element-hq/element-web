@@ -3068,6 +3068,7 @@
         "show_chat_effects": "Show chat effects (animations when receiving e.g. confetti)",
         "show_displayname_changes": "Show display name changes",
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
+        "show_server_acl_changes": "Show server ACL changes",
         "show_message_previews": "Show message previews",
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",

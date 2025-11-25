@@ -90,6 +90,7 @@ describe("MessagePanel", function () {
         showJoinLeaves: false,
         showAvatarChanges: false,
         showDisplaynameChanges: true,
+        showServerAclChanges: true,
         showHiddenEvents: false,
     } as unknown as RoomContextType;
 

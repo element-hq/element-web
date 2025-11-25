@@ -252,6 +252,7 @@ export interface IRoomState {
     showJoinLeaves: boolean;
     showAvatarChanges: boolean;
     showDisplaynameChanges: boolean;
+    showServerAclChanges: boolean;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
@@ -461,6 +462,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
+            showServerAclChanges: true,
             matrixClientIsReady: context.client?.isInitialSyncComplete(),
             mainSplitContentType: MainSplitContentType.Timeline,
             timelineRenderingType: TimelineRenderingType.Room,
@@ -616,6 +618,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
+            showServerAclChanges: SettingsStore.getValue("showServerAclChanges", roomId),
             wasContextSwitch: wasContextSwitch,
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
@@ -689,6 +692,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("showDisplaynameChanges", roomId, (...[, , , value]) =>
                 this.setState({ showDisplaynameChanges: value as boolean }),
+            ),
+            SettingsStore.watchSetting("showServerAclChanges", roomId, (...[, , , value]) =>
+                this.setState({ showServerAclChanges: value as boolean }),
             ),
         ]);
 
