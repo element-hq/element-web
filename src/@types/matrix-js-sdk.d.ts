@@ -96,7 +96,7 @@ declare module "matrix-js-sdk/src/types" {
         // MSC4155: Invite filtering
         [INVITE_RULES_ACCOUNT_DATA_TYPE]: InviteConfigAccountData;
 
-        [MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE]: { block_all: boolean };
+        [MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE]: { default_action?: "allow" | "block" };
 
         "io.element.msc4278.media_preview_config": MediaPreviewConfig;
 

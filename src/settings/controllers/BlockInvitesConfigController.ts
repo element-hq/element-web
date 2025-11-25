@@ -22,14 +22,15 @@ export default class BlockInvitesConfigController extends ServerSupportUnstableF
 
     public getValueOverride(_level: SettingLevel): boolean {
         const accountData = this.client?.getAccountData(MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE)?.getContent();
-        return accountData?.block_all == true;
+        return accountData?.default_action == "block";
     }
 
     public async beforeChange(_level: SettingLevel, _roomId: string | null, newValue: boolean): Promise<boolean> {
         if (!this.client) {
             return false;
         }
-        await this.client.setAccountData(MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE, { block_all: newValue });
+        const newDefault = newValue ? "block" : "allow";
+        await this.client.setAccountData(MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE, { default_action: newDefault });
         return true;
     }
 }
