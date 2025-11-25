@@ -119,7 +119,7 @@
         "html-entities": "^2.0.0",
         "html-react-parser": "^5.2.2",
         "is-ip": "^3.1.0",
-        "js-xxhash": "^4.0.0",
+        "js-xxhash": "^5.0.0",
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
