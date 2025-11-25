@@ -134,7 +134,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_BaseAvatar {
-            line-height: 14px; /* To match size */
+            /* Prevent crushing by the flexbox */
+            flex-shrink: 0;
         }
     }
 }

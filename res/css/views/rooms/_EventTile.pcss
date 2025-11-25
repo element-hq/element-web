@@ -1164,11 +1164,11 @@ $left-gutter: 64px;
         &.mx_EventTile_info {
             .mx_EventTile_avatar {
                 position: absolute;
-                top: 1.5px; /* Align with hidden event content */
-                margin-top: 0;
+                /* Align with hidden event content */
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: -2px;
                 margin-bottom: 0;
-                width: 14px; /* avatar img size */
-                height: 14px; /* avatar img size */
             }
 
             &.mx_EventTile_selected .mx_EventTile_line,
