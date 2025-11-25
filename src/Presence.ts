@@ -15,6 +15,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
 import Timer from "./utils/Timer";
 import { type ActionPayload } from "./dispatcher/payloads";
+import { Action } from "./dispatcher/actions.ts";
 
 // Time in ms after that a user is considered as unavailable/away
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
@@ -61,7 +62,7 @@ class Presence {
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === "user_activity") {
+        if (payload.action === Action.UserActivity) {
             this.setState(SetPresence.Online);
             this.unavailableTimer?.restart();
         }

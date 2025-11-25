@@ -218,7 +218,7 @@ export default class ElectronPlatform extends BasePlatform {
             this.electron.send("app_onAction", payload);
         }
 
-        if (payload.action === "client_started") {
+        if (payload.action === Action.ClientStarted) {
             this.clientStartedPromiseWithResolvers.resolve();
         }
     }
