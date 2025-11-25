@@ -85,7 +85,9 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         });
 
         // And an error is displayed
-        expect(screen.getByText("Failed to verify 'VERIFIED_DEVICEID': This device is already verified")).toBeVisible();
+        await expect(
+            screen.findByText("Failed to verify 'VERIFIED_DEVICEID': This device is already verified"),
+        ).resolves.toBeVisible();
     });
 
     it("should not call crossSignDevice if device is already verified and fingerprint is wrong", async () => {

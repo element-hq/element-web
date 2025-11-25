@@ -22,6 +22,12 @@ describe("theme", () => {
         let spyQuerySelectorAll: jest.MockInstance<NodeListOf<Element>, [selectors: string]>;
         let spyClassList: jest.SpyInstance<void, string[], any>;
 
+        beforeAll(() => {
+            const meta = document.createElement("meta");
+            meta.name = "theme-color";
+            document.head.appendChild(meta);
+        });
+
         beforeEach(() => {
             const styles = ["light", "dark", "light-custom", "dark-custom"].map(
                 (theme) =>

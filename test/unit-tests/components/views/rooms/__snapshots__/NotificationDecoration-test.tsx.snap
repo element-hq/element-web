@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<NotificationDecoration /> should render the activity decoration 1`] = `
 <DocumentFragment>
@@ -12,6 +12,28 @@ exports[`<NotificationDecoration /> should render the activity decoration 1`] = 
     >
       <div />
     </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the audio call decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="_flex_4dswl_9"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      fill="var(--cpd-color-icon-accent-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+      />
+    </svg>
   </div>
 </DocumentFragment>
 `;
@@ -142,7 +164,7 @@ exports[`<NotificationDecoration /> should render the unset message decoration 1
 </DocumentFragment>
 `;
 
-exports[`<NotificationDecoration /> should render the video decoration 1`] = `
+exports[`<NotificationDecoration /> should render the video call decoration 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9"

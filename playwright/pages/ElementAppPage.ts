@@ -53,7 +53,10 @@ export class ElementAppPage {
      */
 
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
-        await this.page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await this.page
+            .getByRole("navigation", { name: "Room list" })
+            .getByRole("button", { name: "New conversation" })
+            .click();
         await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }

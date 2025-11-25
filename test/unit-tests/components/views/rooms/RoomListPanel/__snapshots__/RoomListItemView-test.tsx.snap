@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
 <DocumentFragment>
@@ -103,6 +103,17 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
         data-testid="notification-decoration"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
+        <svg
+          fill="var(--cpd-color-icon-accent-primary)"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+          />
+        </svg>
         <span
           class="_unread-counter_9mg0k_8"
         >

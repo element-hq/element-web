@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`MVideoBody does not crash when given portrait dimensions 1`] = `
 <DocumentFragment>
@@ -7,7 +7,7 @@ exports[`MVideoBody does not crash when given portrait dimensions 1`] = `
   >
     <div
       class="mx_MVideoBody_container"
-      style="max-width: 182px; max-height: 324px;"
+      style="max-width: 182px; max-height: 324px; aspect-ratio: 720/1280;"
     >
       <video
         class="mx_MVideoBody"
@@ -31,7 +31,7 @@ exports[`MVideoBody should show poster for encrypted media before downloading it
   >
     <div
       class="mx_MVideoBody_container"
-      style="max-width: 40px; max-height: 50px;"
+      style="max-width: 40px; max-height: 50px; aspect-ratio: 40/50;"
     >
       <video
         class="mx_MVideoBody"
@@ -56,7 +56,7 @@ exports[`MVideoBody with video previews/thumbnails disabled should download vide
   >
     <div
       class="mx_MVideoBody_container"
-      style="max-width: 40px; max-height: 50px;"
+      style="max-width: 40px; max-height: 50px; aspect-ratio: 40/50;"
     >
       <video
         class="mx_MVideoBody"

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 and 2 should render both contents 1`] = `
 <div>

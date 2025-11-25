@@ -15,6 +15,7 @@ import { setupLanguageMock } from "../../../setup/setupLanguage";
 import ToastStore from "../../../../src/stores/ToastStore.ts";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher.ts";
 import { emitPromise } from "../../../test-utils";
+import { Action } from "../../../../src/dispatcher/actions.ts";
 
 fetchMock.config.overwriteRoutes = true;
 
@@ -49,7 +50,7 @@ describe("WebPlatform", () => {
             };
             new WebPlatform();
 
-            defaultDispatcher.dispatch({ action: "client_started" });
+            defaultDispatcher.dispatch({ action: Action.ClientStarted });
             await emitPromise(ToastStore.sharedInstance(), "update");
             const toasts = ToastStore.sharedInstance().getToasts();
             expect(toasts).toHaveLength(1);

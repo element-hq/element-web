@@ -21,11 +21,5 @@
             "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
         }
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"],
-    "ts-node": {
-        "files": true,
-        "moduleTypes": {
-            "*": "cjs"
-        }
-    }
+    "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }

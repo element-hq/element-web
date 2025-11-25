@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
@@ -8,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import { type ComponentType } from "react";
+import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 
 import type React from "react";
 import Modal from "../Modal";
@@ -25,6 +27,9 @@ import { Action } from "../dispatcher/actions";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeyStorageOffDialog";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
+import { PosthogAnalytics } from "../PosthogAnalytics";
 
 const TOAST_KEY = "setupencryption";
 
@@ -35,7 +40,6 @@ const getTitle = (kind: Kind): string => {
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return _t("encryption|key_storage_out_of_sync");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage");
@@ -48,7 +52,6 @@ const getIcon = (kind: Kind): string | undefined => {
             return undefined;
         case Kind.VERIFY_THIS_SESSION:
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return "verification_warning";
         case Kind.TURN_ON_KEY_STORAGE:
             return "key_storage";
@@ -62,7 +65,6 @@ const getSetupCaption = (kind: Kind): string => {
         case Kind.VERIFY_THIS_SESSION:
             return _t("action|verify");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return _t("encryption|enter_recovery_key");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("action|continue");
@@ -76,7 +78,6 @@ const getSetupCaption = (kind: Kind): string => {
 const getPrimaryButtonIcon = (kind: Kind): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
     switch (kind) {
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return KeyIcon;
         default:
             return;
@@ -90,7 +91,6 @@ const getSecondaryButtonLabel = (kind: Kind): string => {
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verification|unverified_sessions_toast_reject");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return _t("encryption|forgot_recovery_key");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("action|dismiss");
@@ -104,7 +104,6 @@ const getDescription = (kind: Kind): string => {
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-        case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE:
             return _t("encryption|key_storage_out_of_sync_description");
         case Kind.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage_description");
@@ -124,13 +123,9 @@ export enum Kind {
      */
     VERIFY_THIS_SESSION = "verify_this_session",
     /**
-     * Prompt the user to enter their recovery key, to retrieve secrets
+     * Prompt the user to enter their recovery key
      */
     KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
-    /**
-     * Prompt the user to enter their recovery key, to store secrets
-     */
-    KEY_STORAGE_OUT_OF_SYNC_STORE = "key_storage_out_of_sync_store",
     /**
      * Prompt the user to turn on key storage
      */
@@ -156,6 +151,11 @@ export const showToast = (kind: Kind): void => {
         switch (kind) {
             case Kind.SET_UP_RECOVERY:
             case Kind.TURN_ON_KEY_STORAGE: {
+                PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+                    eventName: "Interaction",
+                    interactionType: "Pointer",
+                    name: kind === Kind.SET_UP_RECOVERY ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
+                });
                 // Open the user settings dialog to the encryption tab
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -167,8 +167,7 @@ export const showToast = (kind: Kind): void => {
             case Kind.VERIFY_THIS_SESSION:
                 Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
                 break;
-            case Kind.KEY_STORAGE_OUT_OF_SYNC:
-            case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
+            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
                 const modal = Modal.createDialog(
                     Spinner,
                     undefined,
@@ -176,10 +175,34 @@ export const showToast = (kind: Kind): void => {
                     /* priority */ false,
                     /* static */ true,
                 );
+
+                const matrixClient = MatrixClientPeg.safeGet();
+                const crypto = matrixClient.getCrypto()!;
+
                 try {
-                    await accessSecretStorage();
+                    const deviceListener = DeviceListener.sharedInstance();
+
+                    // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                    // deviceListener.whilePaused() sets its client to undefined, so
+                    // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                    // the backup state.
+                    const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
+
+                    // pause the device listener because we could be making lots
+                    // of changes, and don't want toasts to pop up and disappear
+                    // while we're doing it
+                    await deviceListener.whilePaused(async () => {
+                        await accessSecretStorage(async () => {
+                            // Reset backup if needed.
+                            if (needsBackupReset) {
+                                await resetKeyBackupAndWait(crypto);
+                            } else if (await matrixClient.isKeyBackupKeyStored()) {
+                                await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                            }
+                        });
+                    });
                 } catch (error) {
-                    onAccessSecretStorageFailed(kind, error as Error);
+                    await onAccessSecretStorageFailed(error as Error);
                 } finally {
                     modal.close();
                 }
@@ -191,24 +214,39 @@ export const showToast = (kind: Kind): void => {
     const onSecondaryClick = async (): Promise<void> => {
         switch (kind) {
             case Kind.SET_UP_RECOVERY: {
+                PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+                    eventName: "Interaction",
+                    interactionType: "Pointer",
+                    name: "ToastSetUpRecoveryDismiss",
+                });
                 // Record that the user doesn't want to set up recovery
                 const deviceListener = DeviceListener.sharedInstance();
                 await deviceListener.recordRecoveryDisabled();
                 deviceListener.dismissEncryptionSetup();
                 break;
             }
-            case Kind.KEY_STORAGE_OUT_OF_SYNC:
-            case Kind.KEY_STORAGE_OUT_OF_SYNC_STORE: {
-                // Open the user settings dialog to the encryption tab and start the flow to reset encryption
+            case Kind.KEY_STORAGE_OUT_OF_SYNC: {
+                // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
+                const deviceListener = DeviceListener.sharedInstance();
+                const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Encryption,
-                    props: { initialEncryptionState: "reset_identity_forgot" },
+                    props: {
+                        initialEncryptionState: needsCrossSigningReset
+                            ? "reset_identity_forgot"
+                            : "change_recovery_key",
+                    },
                 };
                 defaultDispatcher.dispatch(payload);
                 break;
             }
             case Kind.TURN_ON_KEY_STORAGE: {
+                PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+                    eventName: "Interaction",
+                    interactionType: "Pointer",
+                    name: "ToastTurnOnKeyStorageDismiss",
+                });
                 // The user clicked "Dismiss": offer them "Are you sure?"
                 const modal = Modal.createDialog(
                     ConfirmKeyStorageOffDialog,
@@ -233,25 +271,23 @@ export const showToast = (kind: Kind): void => {
      * recovery key, but this failed. If the user just gave up, that is fine,
      * but if not, that means downloading encryption info from 4S did not fix
      * the problem we identified. Presumably, something is wrong with what they
-     * have in 4S.  If we were trying to fetch secrets from 4S, we tell them to
-     * reset their identity, to reset everything.  If we were trying to store
-     * secrets in 4S, or set up recovery, we tell them to change their recovery
-     * key, to create a new 4S that we can store the secrets in.
+     * have in 4S.
      */
-    const onAccessSecretStorageFailed = (
-        kind: Kind.KEY_STORAGE_OUT_OF_SYNC | Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
-        error: Error,
-    ): void => {
+    const onAccessSecretStorageFailed = async (error: Error): Promise<void> => {
         if (error instanceof AccessCancelledError) {
             // The user cancelled the dialog - just allow it to close
         } else {
-            // A real error happened - jump to the reset identity tab
+            // A real error happened - jump to the reset identity or change
+            // recovery tab
+            const needsCrossSigningReset =
+                await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(true);
             const payload: OpenToTabPayload = {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,
                 props: {
-                    initialEncryptionState:
-                        kind === Kind.KEY_STORAGE_OUT_OF_SYNC ? "reset_identity_sync_failed" : "change_recovery_key",
+                    initialEncryptionState: needsCrossSigningReset
+                        ? "reset_identity_sync_failed"
+                        : "change_recovery_key",
                 },
             };
             defaultDispatcher.dispatch(payload);

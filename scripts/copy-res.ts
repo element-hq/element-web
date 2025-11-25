@@ -7,7 +7,6 @@ import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
 import webpack from "webpack";
-
 import type { Translations } from "matrix-web-i18n";
 
 const I18N_BASE_PATH = "src/i18n/strings/";

@@ -77,6 +77,9 @@ import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
 import Modal, { type ComponentProps } from "../../../../src/Modal.tsx";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
+import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
+import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import { ModuleApi } from "../../../../src/modules/Api";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -124,6 +127,11 @@ describe("RoomView", () => {
     afterEach(() => {
         unmockPlatformPeg();
         jest.clearAllMocks();
+
+        // Can't jest.restoreAllMocks() because some tests will break
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockRestore();
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockRestore();
+
         cleanup();
     });
 
@@ -154,18 +162,21 @@ describe("RoomView", () => {
         }
 
         const roomView = render(
-            <MatrixClientContext.Provider value={cli}>
-                <SDKContext.Provider value={stores}>
-                    <RoomView
-                        // threepidInvite should be optional on RoomView props
-                        // it is treated as optional in RoomView
-                        threepidInvite={undefined as any}
-                        forceTimeline={false}
-                        ref={ref}
-                        {...props}
-                    />
-                </SDKContext.Provider>
-            </MatrixClientContext.Provider>,
+            <RoomView
+                // threepidInvite should be optional on RoomView props
+                // it is treated as optional in RoomView
+                threepidInvite={undefined as any}
+                forceTimeline={false}
+                ref={ref}
+                {...props}
+            />,
+            {
+                wrapper: ({ children }) => (
+                    <MatrixClientContext.Provider value={cli}>
+                        <SDKContext.Provider value={stores}>{children}</SDKContext.Provider>
+                    </MatrixClientContext.Provider>
+                ),
+            },
         );
         await flushPromises();
         return roomView;
@@ -270,6 +281,57 @@ describe("RoomView", () => {
 
         // Check that the room name button in the header is not rendered
         expect(screen.queryByRole("button", { name: room.name })).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should hide the right panel when hideRightPanel=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        const { asFragment, rerender } = await mountRoomView(undefined);
+
+        defaultDispatcher.dispatch<ViewUserPayload>(
+            {
+                action: Action.ViewUser,
+                member: undefined,
+            },
+            true,
+        );
+
+        // Check that the right panel is rendered
+        await expect(screen.findByTestId("right-panel")).resolves.toBeTruthy();
+        // Now rerender with hideRightPanel=true
+        rerender(<RoomView threepidInvite={undefined} forceTimeline={false} hideRightPanel={true} />);
+        // Check that the right panel is not rendered
+        await expect(screen.findByTestId("right-panel")).rejects.toThrow();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should hide the pinned message banner when hidePinnedMessageBanner=true", async () => {
+        // Join the room
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+
+        const pinnedEvent = new MatrixEvent({
+            type: EventType.RoomMessage,
+            sender: "@alice:example.org",
+            content: {
+                body: "First pinned message",
+                msgtype: "m.text",
+            },
+            room_id: room.roomId,
+            origin_server_ts: 0,
+            event_id: "$eventId",
+        });
+
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([pinnedEvent.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([pinnedEvent]);
+
+        const { asFragment, rerender } = await mountRoomView(undefined);
+        // Check that the pinned message banner is rendered
+        await expect(screen.findByTestId("pinned-message-banner")).resolves.toBeTruthy();
+        // Now rerender with hidePinnedMessagesBanner=true
+        rerender(<RoomView threepidInvite={undefined} forceTimeline={false} hidePinnedMessageBanner={true} />);
+        // Check that the pinned message banner is not rendered
+        await expect(screen.findByTestId("pinned-message-banner")).rejects.toThrow();
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -945,5 +1007,53 @@ describe("RoomView", () => {
                 itShouldNotRemoveTheLastWidget();
             });
         });
+    });
+
+    it("should not change room when editing event in a room displayed in module", async () => {
+        const room2 = new Room("!room2:example.org", cli, "@alice:example.org");
+        rooms.set(room2.roomId, room2);
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        room2.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+        await mountRoomView();
+
+        // Mock the spaceStore activeSpace and ModuleApi setup
+        jest.spyOn(stores.spaceStore, "activeSpace", "get").mockReturnValue("space1");
+        // Mock that room2 is displayed in a module
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [room2.roomId]);
+
+        // Mock the roomViewStore method
+        jest.spyOn(stores.roomViewStore, "isRoomDisplayedInModule").mockReturnValue(true);
+
+        // Create an event in room2 to edit
+        const eventInRoom2 = new MatrixEvent({
+            type: "m.room.message",
+            event_id: "$edit-event:example.org",
+            room_id: room2.roomId,
+            sender: "@alice:example.org",
+            content: {
+                body: "Original message",
+                msgtype: "m.text",
+            },
+        });
+
+        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+
+        // Dispatch EditEvent for event in room2 (which is displayed in module)
+        defaultDispatcher.dispatch({
+            action: Action.EditEvent,
+            event: eventInRoom2,
+            timelineRenderingType: TimelineRenderingType.Room,
+        });
+
+        await flushPromises();
+
+        // Should not dispatch ViewRoom action since room2 is displayed in module
+        expect(dispatchSpy).not.toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: Action.ViewRoom,
+                room_id: room2.roomId,
+            }),
+        );
     });
 });
