@@ -567,6 +567,96 @@ describe("ElementCall", () => {
             SettingsStore.getValue = originalGetValue;
         });
 
+        describe("Echo cancellation & Noise Suppression", () => {
+            it("passes echo cancellation settings through widget URL if needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_echoCancellation":
+                            return false;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("echoCancellation")).toBe("false");
+
+                SettingsStore.getValue = originalGetValue;
+            });
+
+            it("does not pass echo cancellation settings through widget URL if not needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_echoCancellation":
+                            return true;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("echoCancellation")).toBeNull();
+
+                SettingsStore.getValue = originalGetValue;
+            });
+
+            it("passes noise suppression settings through widget URL if needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_noiseSuppression":
+                            return false;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("noiseSuppression")).toBe("false");
+
+                SettingsStore.getValue = originalGetValue;
+            });
+
+            it("does not pass noise suppression settings through widget URL if not needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_noiseSuppression":
+                            return true;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("noiseSuppression")).toBeNull();
+
+                SettingsStore.getValue = originalGetValue;
+            });
+        });
+
         it("passes ICE fallback preference through widget URL", async () => {
             // Test with the preference set to false
             ElementCall.create(room);
