@@ -182,7 +182,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     aria-live="off"
-                    size="14px"
+                    size="16px"
                     style={style}
                     hideTitle
                     tabIndex={-1}
