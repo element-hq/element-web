@@ -300,7 +300,7 @@
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
-        "webpack-bundle-analyzer": "^4.8.0",
+        "webpack-bundle-analyzer": "^5.0.0",
         "webpack-cli": "^6.0.0",
         "webpack-dev-server": "^5.0.0",
         "webpack-retry-chunk-load-plugin": "^3.1.1",
