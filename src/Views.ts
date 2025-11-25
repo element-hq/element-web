@@ -6,7 +6,76 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-/** constants for MatrixChat.state.view */
+/**
+ * Constants for MatrixChat.state.view.
+ *
+ * The `View` is the primary state machine of the application: it has different states for the various setup flows
+ * that the user may find themselves in. Once we have a functioning client, we can transition to the `LOGGED_IN` state
+ * which is the "normal" state of the application.
+ *
+ * An incomplete state transition diagram follows.
+ *
+ *                      (initial state)
+ *                    ┌─────────────────┐ Lock held by other instance  ┌─────────────────┐
+ *                    │    LOADING      │─────────────────────────────►│ CONFIRM_LOCK_   │
+ *                    │                 │◄─────────────────────────────│     THEFT       │
+ *                    └─────────────────┘ Lock theft confirmed         └─────────────────┘
+ *     Session recovered │ │         │
+ *        ┌──────────────┘ │         └────────────────┐
+ *        │  ┌─────────────┘                          │  No previous session
+ *        │  │  Token/OIDC login succeeded            │
+ *        │  │                                        ▼
+ *        │  │                               ┌─────────────────┐
+ *        │  │                               │     WELCOME     │           (from all other states
+ *        │  │                               │                 │             except LOCK_STOLEN)
+ *        │  │                               └─────────────────┘                   │
+ *        │  │                  "Create Account" │       │ "Sign in"               │ Client logged out
+ *        │  │          ┌────────────────────────┘       │                         │
+ *        │  │          │                                │    ┌────────────────────┘
+ *        │  │          │                                │    │
+ *        │  │          ▼          "Create an            ▼    ▼        "Forgot
+ *        │  │ ┌─────────────────┐  account"      ┌─────────────────┐   password"    ┌─────────────────┐
+ *        │  │ │    REGISTER     │◄───────────────│      LOGIN      │───────────────►│ FORGOT_PASSWORD │
+ *        │  │ │                 │───────────────►│                 │◄───────────────│                 │
+ *        │  │ └─────────────────┘ "Sign in here" └─────────────────┘ Complete /     └─────────────────┘
+ *        │  │          │                                   │         "Sign in instead"       ▲
+ *        │  │          └────────────────────────────────┐  │                                 │
+ *        │  └────────────────────────────────────────┐  │  │                                 │
+ *        │                                           ▼  ▼  ▼                                 │
+ *        │                                       ┌──────────────────┐                        │
+ *        │                                       │ (postLoginSetup) │                        │
+ *        │                                       └──────────────────┘                        │
+ *        │     ┌────────────────────────────────────┘     │      │                           │
+ *        │     │ E2EE not enabled           ┌─────────────┘      └──────┐                    │
+ *        │     │                            │ Account has               │ Account lacks      │
+ *        │     │                            │ cross-signing             │ cross-signing      │
+ *        │     │                            │ keys                      │ keys               │
+ *        │     │  Client started and        ▼                           ▼                    │
+ *        │     │  force_verification ┌─────────────────┐         ┌─────────────────┐         │
+ *        │     │  pending            │  COMPLETE_      │         │   E2E_SETUP     │         │
+ *        │     │  ┌─────────────────►│      SECURITY   │         │                 │         │
+ *        │     │  │                  └─────────────────┘         └─────────────────┘         │ "Forgotten
+ *        │     │  │  ┌───────────────────────┘                           │                   │  your
+ *        │     │  │  │   ┌───────────────────────────────────────────────┘                   │  password?"
+ *        │     │  │  │   │                                                                   │
+ *        │     │  │  │   │                                  (from all other states           │
+ *        │     │  │  │   │                                    except LOCK_STOLEN)            │
+ *        │     │  │  │   │                                               └──────────────┐    │
+ *        ▼     ▼  │  ▼   ▼                                         Soft logout error    ▼    │
+ *       ┌─────────────────┐                                                         ┌─────────────────┐
+ *       │   LOGGED_IN     │                         Re-authentication succeeded     │  SOFT_LOGOUT    │
+ *       │                 │◄────────────────────────────────────────────────────────│                 │
+ *       └─────────────────┘                                                         └─────────────────┘
+ *
+ *       (from all other states)
+ *                │
+ *                │ Session lock stolen
+ *                ▼
+ *       ┌─────────────────┐
+ *       │  LOCK_STOLEN    │
+ *       │                 │
+ *       └─────────────────┘
+ */
 enum Views {
     // a special initial state which is only used at startup, while we are
     // trying to re-animate a matrix client or register as a guest.
