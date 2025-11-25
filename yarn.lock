@@ -3176,12 +3176,12 @@
     "@storybook/react-dom-shim" "10.0.7"
 
 "@stylistic/eslint-plugin@^5.0.0":
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/@stylistic/eslint-plugin/-/eslint-plugin-5.5.0.tgz#44c2e5454ff827f962b1908f0b5939130a6b18b3"
-  integrity sha512-IeZF+8H0ns6prg4VrkhgL+yrvDXWDH2cKchrbh80ejG9dQgZWp10epHMbgRuQvgchLII/lfh6Xn3lu6+6L86Hw==
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/@stylistic/eslint-plugin/-/eslint-plugin-5.6.1.tgz#98e1371757881eecce69b1ec497ef6fc7d6470c9"
+  integrity sha512-JCs+MqoXfXrRPGbGmho/zGS/jMcn3ieKl/A8YImqib76C8kjgZwq5uUFzc30lJkMvcchuRn6/v8IApLxli3Jyw==
   dependencies:
     "@eslint-community/eslint-utils" "^4.9.0"
-    "@typescript-eslint/types" "^8.46.1"
+    "@typescript-eslint/types" "^8.47.0"
     eslint-visitor-keys "^4.2.1"
     espree "^10.4.0"
     estraverse "^5.3.0"
@@ -4029,6 +4029,11 @@
   version "8.46.2"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.46.2.tgz#2bad7348511b31e6e42579820e62b73145635763"
   integrity sha512-lNCWCbq7rpg7qDsQrd3D6NyWYu+gkTENkG5IKYhUIcxSb59SQC/hEQ+MrG4sTgBVghTonNWq42bA/d4yYumldQ==
+
+"@typescript-eslint/types@^8.47.0":
+  version "8.48.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.48.0.tgz#f0dc5cf27217346e9b0d90556911e01d90d0f2a5"
+  integrity sha512-cQMcGQQH7kwKoVswD1xdOytxQR60MWKM1di26xSUtxehaDs/32Zpqsu5WJlXTtTTqyAVK8R7hvsUnIXRS+bjvA==
 
 "@typescript-eslint/typescript-estree@8.46.1":
   version "8.46.1"
