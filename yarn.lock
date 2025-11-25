@@ -2405,9 +2405,9 @@
     "@babel/runtime" "^7.17.9"
 
 "@matrix-org/spec@^1.7.0":
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.14.0.tgz#cedc4f9cc86c9e623ccd4f643629bac97bc0fed2"
-  integrity sha512-UI4kY6WXniRV++ZeMesmCvZMH8lANLc12rnca1/M+nkPgJgU9GQd5X9ezFoOLabG6tGdEUPPKr5/S2EP1FdGLA==
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.16.0.tgz#c88f4ed521e4c0bd3a4c108bcaf13f25173a0fdc"
+  integrity sha512-xUKHkwGXXISMCfTrx6JW6uGEK5O8IeZVOjBm7FX1h/ihpK6l50nlSIMRYdtz4V6q3pvOVBOCft4hPYTJVeTZDA==
 
 "@napi-rs/wasm-runtime@^0.2.11":
   version "0.2.12"
@@ -9683,18 +9683,10 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.10.0:
+matrix-widget-api@^1.10.0, matrix-widget-api@^1.14.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==
-  dependencies:
-    "@types/events" "^3.0.0"
-    events "^3.2.0"
-
-matrix-widget-api@^1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.14.0.tgz#aa90c40ace27d3165299f7dbc760a53001ce1446"
-  integrity sha512-DDvZGOQhI/rilPWg5VlLN7pHIsPt0Jt14lsuHDP+KU+fmpAQNITJ6aIld1ZoXWsrVGv2PS3x6K/MHtfruIOQJQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
