@@ -361,7 +361,17 @@ export class RoomViewStore extends EventEmitter {
                 });
             }
 
-            if (room && (payload.view_call || isVideoRoom(room))) {
+            let viewingCall = payload.view_call;
+            if (viewingCall === undefined) {
+                // Default behavior: keep the same call state as before if viewing the same room
+                if (payload.room_id === this.state.roomId) viewingCall = this.state.viewingCall;
+                // Always view the call in video rooms
+                else if (room && isVideoRoom(room)) viewingCall = true;
+                // Otherwise, only view if actively connected
+                else viewingCall = CallStore.instance.getActiveCall(payload.room_id) !== null;
+            }
+
+            if (room && viewingCall) {
                 let call = CallStore.instance.getCall(payload.room_id);
                 // Start a call if not already there
                 if (call === null) {
@@ -421,11 +431,7 @@ export class RoomViewStore extends EventEmitter {
                 replyingToEvent: null,
                 viaServers: payload.via_servers ?? [],
                 wasContextSwitch: payload.context_switch ?? false,
-                viewingCall:
-                    payload.view_call ??
-                    (payload.room_id === this.state.roomId
-                        ? this.state.viewingCall
-                        : CallStore.instance.getActiveCall(payload.room_id) !== null),
+                viewingCall,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
