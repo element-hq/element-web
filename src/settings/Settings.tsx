@@ -815,7 +815,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("settings|show_server_acl_changes"),
         default: true,
-        invertedSettingName: "hideServerAclChanges",
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
