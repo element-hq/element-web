@@ -18,6 +18,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { type ActionPayload } from "../../dispatcher/payloads";
+import { Action } from "../../dispatcher/actions.ts";
 
 interface IProps {
     // URL to request embedded page content from
@@ -109,7 +110,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
 
     private onAction = (payload: ActionPayload): void => {
         // HACK: Workaround for the context's MatrixClient not being set up at render time.
-        if (payload.action === "client_started") {
+        if (payload.action === Action.ClientStarted) {
             this.forceUpdate();
         }
     };
