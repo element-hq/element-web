@@ -989,13 +989,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show chat effects (animations when receiving e.g. confetti)
+                    Show server ACL changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
+                  aria-label="Show server ACL changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_enFRaTjdsFou"
                   role="switch"
@@ -1016,13 +1016,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show profile picture changes
+                    Show chat effects (animations when receiving e.g. confetti)
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show profile picture changes"
+                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_bfwnd5rz4XNX"
                   role="switch"
@@ -1043,13 +1043,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show avatars in user, room and event mentions
+                    Show profile picture changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show avatars in user, room and event mentions"
+                  aria-label="Show profile picture changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_gs5uWEzYzZrS"
                   role="switch"
@@ -1070,13 +1070,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Enable big emoji in chat
+                    Show avatars in user, room and event mentions
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Enable big emoji in chat"
+                  aria-label="Show avatars in user, room and event mentions"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_qWg7OgID1yRR"
                   role="switch"
@@ -1097,13 +1097,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Jump to the bottom of the timeline when you send a message
+                    Enable big emoji in chat
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Jump to the bottom of the timeline when you send a message"
+                  aria-label="Enable big emoji in chat"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_pOPewl7rtMbV"
                   role="switch"
@@ -1124,6 +1124,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
+                    Jump to the bottom of the timeline when you send a message
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Jump to the bottom of the timeline when you send a message"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_cmt3PZSyNp3v"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_dJJz3lHUv9XX"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
                     Show current profile picture and name for users in message history
                   </span>
                 </label>
@@ -1132,7 +1159,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show current profile picture and name for users in message history"
                   class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_cmt3PZSyNp3v"
+                  id="mx_SettingsFlag_dJJz3lHUv9XX"
                   role="switch"
                   tabindex="0"
                 >
@@ -1355,7 +1382,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_dJJz3lHUv9XX"
+                  for="mx_SettingsFlag_SBSSOZDRlzlA"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1368,7 +1395,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show NSFW content"
                   class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_dJJz3lHUv9XX"
+                  id="mx_SettingsFlag_SBSSOZDRlzlA"
                   role="switch"
                   tabindex="0"
                 >
@@ -1399,7 +1426,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_SBSSOZDRlzlA"
+                  for="mx_SettingsFlag_FLEpLCb0jpp6"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1412,7 +1439,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Prompt before sending invites to potentially invalid matrix IDs"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_SBSSOZDRlzlA"
+                  id="mx_SettingsFlag_FLEpLCb0jpp6"
                   role="switch"
                   tabindex="0"
                 >
