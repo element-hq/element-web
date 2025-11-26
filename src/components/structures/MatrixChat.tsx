@@ -1535,18 +1535,27 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.stores.client = MatrixClientPeg.safeGet();
         StorageManager.tryPersistStorage();
 
-        // If we're in the middle of a login/registration, we wait for it to complete before transitioning to the logged
-        // in view the login flow will call `postLoginSetup` when it's done, which will arrange for `onShowPostLoginScreen`
-        // to be called.
+        // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the
+        // client to start. The exceptions are:
+        //
+        //   - If there is a token login in flight: in that case we wait for the login to complete (which hits
+        //     `postLoginSetup`).
+        //
+        //   - Lifecycle emits an `Action.OnLoggedIn` event during startup even if the localstorage flag indicating a
+        //     previous soft logout is set. In that situation we actually want to wait for the `Action.ClientNotViable`
+        //     event, which will transition us into Views.SOFT_LOGOUT. We therefore have to check for !isSoftLogout().
+        //     There will be a subsequent `Action.OnLoggedIn` event once the reauthentication completes.
+        //
+        //     XXX: fix this properly by having Lifecycle not emit OnLoggedIn when it knows it is about to emit a
+        //     ClientNotViable.
+        //
+        // If we're already in the SOFT_LOGOUT view, that means that reauthentication has succeeded, and we can
+        // transition to the splash screen.
         if (
-            !this.tokenLogin &&
-            !Lifecycle.isSoftLogout() &&
-            this.state.view !== Views.LOGIN &&
-            this.state.view !== Views.REGISTER &&
-            this.state.view !== Views.COMPLETE_SECURITY &&
-            this.state.view !== Views.E2E_SETUP
+            (this.state.view === Views.LOADING && !Lifecycle.isSoftLogout() && !this.tokenLogin) ||
+            this.state.view === Views.SOFT_LOGOUT
         ) {
-            this.onShowPostLoginScreen();
+            this.setStateForNewView({ view: Views.PENDING_CLIENT_START });
         }
     }
 
@@ -1779,15 +1788,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
 
         const shouldForceVerification = await this.shouldForceVerification();
-        // XXX: Don't replace the screen if it's already one of these: postLoginSetup
-        // changes to these screens in certain circumstances so we shouldn't clobber it.
-        // We should probably have one place where we decide what the next screen is after
-        // login.
-        if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
-            if (shouldForceVerification) {
-                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-            }
-        }
 
         const crypto = cli.getCrypto();
         if (crypto) {
@@ -1804,6 +1804,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({
             ready: true,
         });
+
+        // If the view is PENDING_CLIENT_START, that means we recovered the session from localstorage, or from
+        // soft-logout: we can now transition to the logged-in view.
+        //
+        // If the view is something else, that probably means it's a login or registration view; we handle that in
+        // `postLoginSetup`.
+        if (this.state.view === Views.PENDING_CLIENT_START) {
+            if (shouldForceVerification) {
+                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            } else {
+                await this.onShowPostLoginScreen();
+            }
+        }
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
@@ -2162,6 +2175,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
             view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
+        } else if (this.state.view === Views.PENDING_CLIENT_START) {
+            // we think we are logged in, but are still waiting for the /sync to complete
+            view = (
+                <LoginSplashView
+                    matrixClient={MatrixClientPeg.safeGet()}
+                    onLogoutClick={this.onLogoutClick}
+                    syncError={this.state.syncError}
+                />
+            );
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
